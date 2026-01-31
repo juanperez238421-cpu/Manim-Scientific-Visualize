@@ -4,39 +4,47 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Una suite avanzada de visualización computacional diseñada para la comunicación técnica en **Ingeniería Mecánica**, **Investigación de Fluidos** y **Ciencias de la Computación**. Este repositorio contiene una infraestructura modular para transformar datos experimentales y algoritmos complejos en explicaciones visuales de alto impacto.
+An advanced computational visualization suite designed for high-level technical communication in **Mechanical Engineering**, **Fluid Dynamics Research**, and **Computer Science**. This repository provides a modular infrastructure to transform experimental datasets and complex algorithms into high-fidelity visual assets.
 
 ---
 
-## 🌟 Módulos Destacados
+## 🌟 Core Research & Modules
 
-### 1. Investigación de Fluidos (PIV & GWVT)
-Visualización de datos reales de la investigación sobre **Turbinas de Vórtice Gravitacional**. 
-* **Integración NumPy:** Procesa campos de velocidad experimentales de *Particle Image Velocimetry* (PIV) directamente desde archivos `.npy`.
-* **Líneas de Corriente Dinámicas:** Implementación de flujos vectoriales animados para validar perfiles de velocidad y trayectorias de partículas.
+### 1. Fluid Dynamics (PIV & GWVT)
+Visual validation of research on **Gravitational Vortex Turbines (GWVT)**.
+* **NumPy Integration:** Native processing of experimental *Particle Image Velocimetry* (PIV) vector fields from `.npy` files.
+* **Flow Reconstruction:** Dynamic streamline implementation to validate velocity profiles and vortex core stability.
 
-### 2. Ingeniería Mecánica & Estática
-Soluciones visuales para problemas estructurales y mecánicos.
-* **Simulador de Vigas:** Incluye una **GUI interactiva** en Tkinter que permite definir parámetros físicos y generar automáticamente diagramas de cortante ($V$) y momento ($M$).
-* **Mecánica 3D:** Renderizado isométrico de máquinas (tambores, soportes) y vectores espaciales utilizando cámaras dinámicas y precisión milimétrica.
+### 2. Statics & Structural Mechanics
+Comprehensive visualization of structural analysis and mechanical equilibrium.
+* **Beam Theory:** Automated generation of internal force diagrams (Shear $V$ and Bending Moment $M$) using parametric section analysis.
+* **Vector Mechanics:** 3D isometric rendering of machine components, spatial vector decomposition, and multi-body equilibrium (Clamps, Drums, and Pins).
+* **Centroid Analysis:** Parametric tracking of composite shapes' centers of mass with real-time coordinate updates.
 
-### 3. Computer Science & Software
-Visualización de la "anatomía" del código y la gestión de memoria.
-* **UML Engine:** Generador automático de diagramas de clase que ajustan su tamaño dinámicamente según atributos y métodos.
-* **Estructuras de Datos:** Animaciones detalladas de Listas (SLL, DLL, Circulares), Pilas, Colas y Árboles BST con punteros animados.
-* **Análisis Algorítmico:** Comparativas de complejidad Big O, Teorema Maestro y ejecución paso a paso con un **Code Cursor** personalizado.
+### 3. Computer Science & Software Theory
+Visual "white-box" analysis of code execution and memory management.
+* **Software Architecture:** Dynamic UML Engine for automated class diagram generation with inheritance/composition mapping.
+* **Memory & Pointers:** Low-level visualization of stack/heap allocation, pointer arithmetic, and modern C++ smart pointers (`unique_ptr`, `shared_ptr`).
+* **Data Structures:** Animated logic for Lists (SLL, DLL, Circular), FIFO Queues, and BST recursive traversals.
+* **Code Debugger:** High-precision **Code Cursor** system for line-by-line algorithm execution tracing.
 
 ---
 
-## 📂 Estructura del Proyecto
+## 📂 Meticulous Project Structure
 
 ```text
 /
-├── core/                   # El motor visual (Librerías reutilizables)
-│   ├── visual_engine.py    # Estilos de consolas, códigos y badges
-│   ├── software_tools.py   # Motores UML y visualizadores de estructuras
-│   └── physics_tools.py    # Funciones para PIV, vigas y estática
-├── engineering/            # Aplicaciones de Ingeniería Física y Mecánica
-├── computer_science/       # Teoría de la Computación y Arquitectura de Software
-├── assets/                 # Recursos externos (Imágenes, SVGs, datos .npy)
-└── README.md               # Documentación maestra
+├── 📂 core/                    # Visualization Engine (The Library)
+│   ├── visual_engine.py        # Academic themes, Consoles, and Code cursors
+│   ├── software_tools.py       # UML generators and Data Structure nodes
+│   └── physics_tools.py        # PIV parsers, Beam loads, and 3D Vectors
+├── 📂 engineering/             # Physics-Based Applications
+│   ├── 📂 fluid_research/      # GWVT Thesis & PIV dataset processing
+│   ├── 📂 statics_mechanics/   # Vector systems, Beams, and Equilibrium
+│   └── 📂 centroids_geometry/  # Parametric center of mass analysis
+├── 📂 computer_science/        # Software & Algorithmic Theory
+│   ├── 📂 memory_pointers/     # Memory management and pointer logic
+│   ├── 📂 data_structures/     # Linear/Non-linear structures implementation
+│   └── 📂 oop_series/          # Inheritance, Polymorphism, and UML design
+├── 📂 assets/                  # Scientific datasets (.npy), SVGs, and Images
+└── README.md                   # Master Documentation
