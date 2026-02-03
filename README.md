@@ -21,7 +21,10 @@ Comprehensive visualization of structural analysis and mechanical equilibrium.
 * **Vector Mechanics:** 3D isometric rendering of machine components, spatial vector decomposition, and multi-body equilibrium (Clamps, Drums, and Pins).
 * **Centroid Analysis:** Parametric tracking of composite shapes' centers of mass with real-time coordinate updates.
 
-  ![Center of Mass](Centerofmass1.gif)
+<p align="center">
+  <img src="Centerofmass1.gif" alt="Center of Mass" width="400"/>
+</p>
+
 
 ### 3. Computer Science & Software Theory
 Visual "white-box" analysis of code execution and memory management.
