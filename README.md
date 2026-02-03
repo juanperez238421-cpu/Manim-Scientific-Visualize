@@ -44,13 +44,6 @@ Visual "white-box" analysis of code execution and memory management.
   <img src="BSTExplainer.gif" alt="Center of Mass" width="1280"/>
 </p>
 
-<p align="center">
-  <img src="BSTOperations.gif" alt="BST Operations Animation" width="1280"/>
-</p>
-
-<p align="center">
-  <img src="BSTSearchDeep.gif" alt="BST Search Deep Animation" width="1280"/>
-</p>
 
 ---
 
