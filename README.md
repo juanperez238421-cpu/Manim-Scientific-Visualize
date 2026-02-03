@@ -16,8 +16,7 @@ Visual validation of research on **Gravitational Vortex Turbines (GWVT)**.
 * **Flow Reconstruction:** Dynamic streamline implementation to validate velocity profiles and vortex core stability.
 
 ### 2. Statics & Structural Mechanics
-Comprehensive visualization of structural analysis and mechanical equilibrium.
-* **Beam Theory:** Automated generation of internal force diagrams (Shear $V$ and Bending Moment $M$) using parametric section analysis.
+
 * **Vector Mechanics:** 3D isometric rendering of machine components, spatial vector decomposition, and multi-body equilibrium (Clamps, Drums, and Pins).
 
 <p align="center">
