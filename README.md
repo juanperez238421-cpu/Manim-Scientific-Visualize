@@ -37,8 +37,26 @@ Visual validation of research on **Gravitational Vortex Turbines (GWVT)**.
 Visual "white-box" analysis of code execution and memory management.
 * **Software Architecture:** Dynamic UML Engine for automated class diagram generation with inheritance/composition mapping.
 * **Memory & Pointers:** Low-level visualization of stack/heap allocation, pointer arithmetic, and modern C++ smart pointers (`unique_ptr`, `shared_ptr`).
-* **Data Structures:** Animated logic for Lists (SLL, DLL, Circular), FIFO Queues, and BST recursive traversals.
-* **Code Debugger:** High-precision **Code Cursor** system for line-by-line algorithm execution tracing.
+* **Data Structures:** List
+
+ <p align="center">
+  <img src="CircularDoubleListScene.gif" alt="Circular Double Linked List Animation" width="1280"/>
+</p>
+
+<p align="center">
+  <img src="CircularSimpleListScene.gif" alt="Circular Simple Linked List Animation" width="1280"/>
+</p>
+
+<p align="center">
+  <img src="DoubleLinkedListScene.gif" alt="Double Linked List Animation" width="1280"/>
+</p>
+
+<p align="center">
+  <img src="SimpleLinkedListScene.gif" alt="Simple Linked List Animation" width="1280"/>
+</p>
+ 
+
+* **Arboles:** 
 
 <p align="center">
   <img src="BSTExplainer.gif" alt="Center of Mass" width="1280"/>
