@@ -48,3 +48,6 @@ Visual "white-box" analysis of code execution and memory management.
 │   └── 📂 oop_series/          # Inheritance, Polymorphism, and UML design
 ├── 📂 assets/                  # Scientific datasets (.npy), SVGs, and Images
 └── README.md                   # Master Documentation
+
+
+![Center of Mass](Centerofmass1.gif)
