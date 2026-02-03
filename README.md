@@ -22,9 +22,12 @@ Comprehensive visualization of structural analysis and mechanical equilibrium.
 * **Centroid Analysis:** Parametric tracking of composite shapes' centers of mass with real-time coordinate updates.
 
 <p align="center">
-  <img src="Centerofmass1.gif" alt="Center of Mass" width="400"/>
+  <img src="Centerofmass1.gif" alt="Center of Mass" width="1280"/>
 </p>
 
+<p align="center">
+  <img src="DynamicCombinedCentroid_1280.gif" alt="Center of Mass" width="1280"/>
+</p>
 
 ### 3. Computer Science & Software Theory
 Visual "white-box" analysis of code execution and memory management.
