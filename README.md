@@ -21,6 +21,8 @@ Comprehensive visualization of structural analysis and mechanical equilibrium.
 * **Vector Mechanics:** 3D isometric rendering of machine components, spatial vector decomposition, and multi-body equilibrium (Clamps, Drums, and Pins).
 * **Centroid Analysis:** Parametric tracking of composite shapes' centers of mass with real-time coordinate updates.
 
+  ![Center of Mass](Centerofmass1.gif)
+
 ### 3. Computer Science & Software Theory
 Visual "white-box" analysis of code execution and memory management.
 * **Software Architecture:** Dynamic UML Engine for automated class diagram generation with inheritance/composition mapping.
@@ -29,6 +31,7 @@ Visual "white-box" analysis of code execution and memory management.
 * **Code Debugger:** High-precision **Code Cursor** system for line-by-line algorithm execution tracing.
 
 ---
+
 
 ## 📂 Meticulous Project Structure
 
@@ -50,4 +53,4 @@ Visual "white-box" analysis of code execution and memory management.
 └── README.md                   # Master Documentation
 
 
-![Center of Mass](Centerofmass1.gif)
+
