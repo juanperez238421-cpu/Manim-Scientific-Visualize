@@ -19,6 +19,11 @@ Visual validation of research on **Gravitational Vortex Turbines (GWVT)**.
 Comprehensive visualization of structural analysis and mechanical equilibrium.
 * **Beam Theory:** Automated generation of internal force diagrams (Shear $V$ and Bending Moment $M$) using parametric section analysis.
 * **Vector Mechanics:** 3D isometric rendering of machine components, spatial vector decomposition, and multi-body equilibrium (Clamps, Drums, and Pins).
+
+<p align="center">
+  <img src="TresPlanosCoordenados.gif" alt="Center of Mass" width="1280"/>
+</p>
+
 * **Centroid Analysis:** Parametric tracking of composite shapes' centers of mass with real-time coordinate updates.
 
 <p align="center">
