@@ -40,6 +40,17 @@ Visual "white-box" analysis of code execution and memory management.
 * **Data Structures:** Animated logic for Lists (SLL, DLL, Circular), FIFO Queues, and BST recursive traversals.
 * **Code Debugger:** High-precision **Code Cursor** system for line-by-line algorithm execution tracing.
 
+<p align="center">
+  <img src="BSTExplainer.gif" alt="Center of Mass" width="1280"/>
+</p>
+
+<p align="center">
+  <img src="BSTOperations.gif" alt="Center of Mass" width="1280"/>
+</p>
+
+<p align="center">
+  <img src="BSTSearchDeep.gif" alt="Center of Mass" width="1280"/>
+</p>
 ---
 
 
