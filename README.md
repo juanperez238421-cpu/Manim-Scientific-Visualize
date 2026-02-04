@@ -35,7 +35,17 @@ Visual validation of research on **Gravitational Vortex Turbines (GWVT)**.
 
 ### 3. Computer Science & Software Theory
 Visual "white-box" analysis of code execution and memory management.
-* **Software Architecture:** Dynamic UML Engine for automated class diagram generation with inheritance/composition mapping.
+## 🌀 Iterative and Recursive Algorithms
+
+<p align="center">
+  <img src="FibonacciComparison.gif" alt="Fibonacci Comparison Animation" width="1280"/>
+</p>
+
+<p align="center">
+  <img src="FibonacciBuildScene.gif" alt="Fibonacci Build Scene Animation" width="1280"/>
+</p>
+
+
 * **Memory & Pointers:** Low-level visualization of stack/heap allocation, pointer arithmetic, and modern C++ smart pointers (`unique_ptr`, `shared_ptr`).
 
 <p align="center">
