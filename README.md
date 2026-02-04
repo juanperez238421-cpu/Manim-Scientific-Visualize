@@ -37,6 +37,12 @@ Visual validation of research on **Gravitational Vortex Turbines (GWVT)**.
 Visual "white-box" analysis of code execution and memory management.
 * **Software Architecture:** Dynamic UML Engine for automated class diagram generation with inheritance/composition mapping.
 * **Memory & Pointers:** Low-level visualization of stack/heap allocation, pointer arithmetic, and modern C++ smart pointers (`unique_ptr`, `shared_ptr`).
+
+<p align="center">
+  <img src="LinkedListEnMemoriaGrid.gif" alt="Linked List En Memoria Grid Animation" width="1280"/>
+</p>
+
+
 * **Data Structures:** List
 
  <p align="center">
