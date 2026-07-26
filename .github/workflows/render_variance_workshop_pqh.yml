@@ -1,0 +1,195 @@
+name: Render Variance Workshop PQH
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout temporary render branch
+        uses: actions/checkout@v4
+
+      - name: Reconstruct and validate exact source
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB_DIR="render_jobs/variance_workshop_20260726"
+          cat "$JOB_DIR"/source_parts/part_*.b64 | base64 --decode > "$JOB_DIR/main.py"
+          test -s "$JOB_DIR/main.py"
+          python -m py_compile "$JOB_DIR/main.py"
+          printf '%s  %s\n' \
+            'b4688502081292dc552a941b217d46acc8023b2045d5208ff0f79ac8df77d041' \
+            "$JOB_DIR/main.py" | sha256sum --check --strict
+          grep -nE '^class VarianceComprehensiveWorkshop\(MovingCameraScene\)' "$JOB_DIR/main.py"
+          mkdir -p media_pql media_pqh delivery control_frames
+
+      - name: Pull official ManimCE 0.20.1 image
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull manimcommunity/manim:v0.20.1
+
+      - name: Native ManimCE low-quality protocol test (-pql)
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH="/tmp/manim-bin:$PATH"
+              manim -pql \
+                render_jobs/variance_workshop_20260726/main.py \
+                VarianceComprehensiveWorkshop \
+                --format=mp4 \
+                --disable_caching \
+                --media_dir media_pql
+            ' 2>&1 | tee pql_render.log
+          status=${PIPESTATUS[0]}
+          set -e
+          test "$status" -eq 0
+          PQL_VIDEO="$(find media_pql -type f -name 'VarianceComprehensiveWorkshop.mp4' -print -quit)"
+          test -n "$PQL_VIDEO"
+          test -s "$PQL_VIDEO"
+          printf '%s\n' "$PQL_VIDEO" > pql_video_path.txt
+
+      - name: Native ManimCE final literal high-quality render (-pqh)
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH="/tmp/manim-bin:$PATH"
+              manim -pqh \
+                render_jobs/variance_workshop_20260726/main.py \
+                VarianceComprehensiveWorkshop \
+                --format=mp4 \
+                --disable_caching \
+                --media_dir media_pqh
+            ' 2>&1 | tee pqh_render.log
+          status=${PIPESTATUS[0]}
+          set -e
+          test "$status" -eq 0
+          PQH_VIDEO="$(find media_pqh -type f -name 'VarianceComprehensiveWorkshop.mp4' -print -quit)"
+          test -n "$PQH_VIDEO"
+          test -s "$PQH_VIDEO"
+          printf '%s\n' "$PQH_VIDEO" > pqh_video_path.txt
+
+      - name: Verify MP4 technically and decode completely
+        id: verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO="$(cat pqh_video_path.txt)"
+          test -s "$VIDEO"
+
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+            -show_entries format=duration,size \
+            -of default=noprint_wrappers=1 \
+            "$VIDEO" | tee ffprobe.txt
+
+          grep -q '^codec_name=h264$' ffprobe.txt
+          grep -q '^width=1920$' ffprobe.txt
+          grep -q '^height=1080$' ffprobe.txt
+          grep -q '^r_frame_rate=30/1$' ffprobe.txt
+          grep -q '^pix_fmt=yuv420p$' ffprobe.txt
+
+          ffmpeg -v error -i "$VIDEO" -f null - 2>&1 | tee full_decode.log
+
+          DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$VIDEO")"
+          MIDPOINT="$(python - "$DURATION" <<'PY'
+import sys
+print(max(0.0, float(sys.argv[1]) / 2.0))
+PY
+)"
+
+          ffmpeg -v error -ss 5 -i "$VIDEO" -frames:v 1 control_frames/frame_start.png
+          ffmpeg -v error -ss "$MIDPOINT" -i "$VIDEO" -frames:v 1 control_frames/frame_middle.png
+          ffmpeg -v error -sseof -5 -i "$VIDEO" -frames:v 1 control_frames/frame_end.png
+          test -s control_frames/frame_start.png
+          test -s control_frames/frame_middle.png
+          test -s control_frames/frame_end.png
+
+          echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
+
+      - name: Stage exact delivery package
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO="${{ steps.verify.outputs.video }}"
+          SOURCE="render_jobs/variance_workshop_20260726/main.py"
+
+          cp "$VIDEO" delivery/VarianceComprehensiveWorkshop_NATIVE_pqh.mp4
+          cp "$SOURCE" delivery/variance_workshop_rendered.py
+          cp pql_render.log delivery/
+          cp pqh_render.log delivery/
+          cp ffprobe.txt delivery/
+          cp full_decode.log delivery/
+          cp -r control_frames delivery/
+
+          cat > delivery/RENDER_INFO.txt <<'EOF'
+Scene: VarianceComprehensiveWorkshop
+Source: variance_workshop_rendered.py
+ManimCE: 0.20.1
+Test command:
+manim -pql main.py VarianceComprehensiveWorkshop --format=mp4 --disable_caching
+Final command:
+manim -pqh main.py VarianceComprehensiveWorkshop --format=mp4 --disable_caching
+Source modification from user upload:
+Only five Unicode em dashes inside Tex strings were replaced by LaTeX-safe double hyphens (--). No dataset, formula, timing, layout, animation, or scene logic was changed.
+EOF
+
+          (
+            cd delivery
+            sha256sum \
+              VarianceComprehensiveWorkshop_NATIVE_pqh.mp4 \
+              variance_workshop_rendered.py \
+              pql_render.log \
+              pqh_render.log \
+              ffprobe.txt \
+              full_decode.log \
+              control_frames/*.png \
+              RENDER_INFO.txt > SHA256SUMS.txt
+          )
+
+          ls -lh delivery
+          cat delivery/ffprobe.txt
+          cat delivery/SHA256SUMS.txt
+
+      - name: Upload validated native PQH artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: VarianceComprehensiveWorkshop_pqh
+          path: delivery/
+          if-no-files-found: error
+          retention-days: 7
