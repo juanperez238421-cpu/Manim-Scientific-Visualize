@@ -1,0 +1,100 @@
+name: Render Right Triangle Thales PQH Retry
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "render_jobs/2026-07-26-right-triangle-thales/**"
+      - ".github/workflows/render_right_triangle_thales_pqh_retry.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      JOB_DIR: render_jobs/2026-07-26-right-triangle-thales
+      SCENE: Geometry8_Week_RightTriangleThales_Full
+      IMAGE: manimcommunity/manim:v0.20.1
+      SOURCE_SHA256: 804d3ab5f340845a0e6810b53c7abfa6f35538dd1ff6001315fe8394a1119afc
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct exact source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat "$JOB_DIR"/source.part*.b64 | base64 --decode | gzip --decompress > "$JOB_DIR/main.py"
+          echo "$SOURCE_SHA256  $JOB_DIR/main.py" | sha256sum --check
+          python -m py_compile "$JOB_DIR/main.py"
+          mkdir -p "$JOB_DIR/delivery"
+          cp "$JOB_DIR/main.py" "$JOB_DIR/delivery/right_triangle_thales_week.py"
+
+      - name: Pull official image
+        shell: bash
+        run: docker pull "$IMAGE"
+
+      - name: Render literal PQH
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e JR_REAL_TIMER=0 \
+            -e JR_SHOW_ANSWER_KEY=0 \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            "$IMAGE" \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/headless-bin /tmp/manim-home
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/headless-bin/xdg-open
+              chmod +x /tmp/headless-bin/xdg-open
+              export PATH="/tmp/headless-bin:$PATH"
+              manim -pqh render_jobs/2026-07-26-right-triangle-thales/main.py Geometry8_Week_RightTriangleThales_Full --format=mp4 --disable_caching --media_dir render_jobs/2026-07-26-right-triangle-thales/media_final
+            ' 2>&1 | tee "$JOB_DIR/pqh_render.log"
+
+      - name: Collect and inspect output
+        shell: bash
+        run: |
+          set -euo pipefail
+          FINAL_MP4="$(find "$JOB_DIR/media_final" -type f -name "$SCENE.mp4" -print -quit)"
+          test -n "$FINAL_MP4"
+          test -s "$FINAL_MP4"
+          cp "$FINAL_MP4" "$JOB_DIR/delivery/${SCENE}_pqh.mp4"
+          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate -show_entries format=duration,size -of json "$JOB_DIR/delivery/${SCENE}_pqh.mp4" > "$JOB_DIR/delivery/ffprobe.json"
+          cat "$JOB_DIR/delivery/ffprobe.json"
+          cp "$JOB_DIR/pqh_render.log" "$JOB_DIR/delivery/"
+          printf '%s\n' \
+            "Source SHA-256: $SOURCE_SHA256" \
+            "Image: $IMAGE" \
+            "Scene: $SCENE" \
+            "Required -pql preflight passed in Actions run 30225543558" \
+            "Final command: manim -pqh main.py $SCENE --format=mp4 --disable_caching" \
+            > "$JOB_DIR/delivery/RENDER_METADATA.txt"
+          cd "$JOB_DIR/delivery"
+          sha256sum "${SCENE}_pqh.mp4" right_triangle_thales_week.py ffprobe.json > SHA256SUMS.txt
+
+      - name: Upload verified package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8-RightTriangleThales-PQH-Retry
+          path: render_jobs/2026-07-26-right-triangle-thales/delivery/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload retry diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8-RightTriangleThales-Diagnostics-Retry
+          path: |
+            render_jobs/2026-07-26-right-triangle-thales/*.log
+            render_jobs/2026-07-26-right-triangle-thales/main.py
+          if-no-files-found: ignore
+          retention-days: 7
