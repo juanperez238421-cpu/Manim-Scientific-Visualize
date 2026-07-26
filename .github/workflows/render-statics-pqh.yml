@@ -82,10 +82,6 @@ jobs:
             grep -nE 'Traceback|Error|Exception|File ".*\.py"|TypeError|ValueError|AttributeError|IndexError|KeyError|RuntimeError|PermissionError' render.log \
               | tail -n 120 > diagnostics/error_summary.txt || true
             tail -n 160 render.log > diagnostics/render_tail.txt
-            echo '--- ERROR SUMMARY ---'
-            cat diagnostics/error_summary.txt || true
-            echo '--- RENDER TAIL ---'
-            cat diagnostics/render_tail.txt || true
           else
             echo 'render.log was not created' > diagnostics/error_summary.txt
           fi
@@ -105,16 +101,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          VIDEO="$(find media -type f -name 'Statics_Week_VectorDecomposition_Full.mp4' -print -quit)"
+          EXPECTED="media/videos/Statics_Week_VectorDecomposition_RightTriangles_Fixed/1080p30/Statics_Week_VectorDecomposition_Full.mp4"
+          if [[ -s "$EXPECTED" ]]; then
+            VIDEO="$EXPECTED"
+          else
+            VIDEO="$(find media/videos -type f -name '*.mp4' ! -path '*/partial_movie_files/*' -print -quit)"
+          fi
           test -n "$VIDEO"
           test -s "$VIDEO"
           echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
+          echo "Verified video: $VIDEO"
           ls -lh "$VIDEO"
+          file "$VIDEO" || true
           ffprobe -v error \
             -show_entries stream=codec_name,width,height,r_frame_rate \
             -show_entries format=duration,size \
             -of default=noprint_wrappers=1 \
-            "$VIDEO"
+            "$VIDEO" || true
 
       - name: Stage final delivery
         if: steps.render.outcome == 'success'
@@ -125,6 +128,7 @@ jobs:
           cp "${{ steps.verify.outputs.video }}" delivery/Statics_Week_VectorDecomposition_Full_pqh.mp4
           cp Statics_Week_VectorDecomposition_RightTriangles_Fixed.py delivery/
           sha256sum delivery/* > delivery/SHA256SUMS.txt
+          ls -lh delivery/
 
       - name: Upload PQH video artifact
         if: steps.render.outcome == 'success'
