@@ -8,13 +8,41 @@ IMAGE="manimcommunity/manim:v0.20.1"
 mkdir -p "$JOB_DIR" media_pql media_pqh delivery control_frames
 cat "$JOB_DIR"/source_parts/part_*.b64 | base64 --decode > "$JOB_DIR/main.py"
 test -s "$JOB_DIR/main.py"
-python -m py_compile "$JOB_DIR/main.py"
+
+# Apply only the two native-LaTeX corrections confirmed by the first -pql traceback.
+python - "$JOB_DIR/main.py" <<'PY'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+source = path.read_text(encoding="utf-8")
+changes = [
+    (
+        '"The IQR describes the central 50% of the sorted observations and resists extreme outliers."',
+        'r"The IQR describes the central 50\\% of the sorted observations and resists extreme outliers."',
+    ),
+    (
+        'Tex("Central 50%; preferred when outliers or skew are present.", color=INK)',
+        'Tex(r"Central 50\\%; preferred when outliers or skew are present.", color=INK)',
+    ),
+]
+for old, new in changes:
+    count = source.count(old)
+    if count != 1:
+        raise RuntimeError(f"Expected exactly one occurrence of {old!r}, found {count}")
+    source = source.replace(old, new)
+path.write_text(source, encoding="utf-8")
+PY
+
+python -W error -m py_compile "$JOB_DIR/main.py"
 printf '%s  %s\n' \
-  'b4688502081292dc552a941b217d46acc8023b2045d5208ff0f79ac8df77d041' \
+  'f198ae7d763d61b3a7277cb219223b4b809609a7770119dfda123d3e74e7f4e4' \
   "$JOB_DIR/main.py" | sha256sum --check --strict
 grep -nE '^class VarianceComprehensiveWorkshop\(MovingCameraScene\)' "$JOB_DIR/main.py"
 
 docker pull "$IMAGE"
+docker run --rm "$IMAGE" manim --version | tee manim_version.txt
+grep -q '0.20.1' manim_version.txt
 
 run_manim() {
   local quality_flag="$1"
@@ -88,7 +116,7 @@ test -s control_frames/frame_end.png
 
 cp "$PQH_VIDEO" delivery/VarianceComprehensiveWorkshop_NATIVE_pqh.mp4
 cp "$JOB_DIR/main.py" delivery/variance_workshop_rendered.py
-cp pql_render.log pqh_render.log ffprobe.txt full_decode.log delivery/
+cp pql_render.log pqh_render.log ffprobe.txt full_decode.log manim_version.txt delivery/
 cp -r control_frames delivery/
 
 cat > delivery/RENDER_INFO.txt <<'EOF'
@@ -99,8 +127,10 @@ Test command:
 manim -pql main.py VarianceComprehensiveWorkshop --format=mp4 --disable_caching
 Final command:
 manim -pqh main.py VarianceComprehensiveWorkshop --format=mp4 --disable_caching
-Source modification from user upload:
-Only five Unicode em dashes inside Tex strings were replaced by LaTeX-safe double hyphens (--). No dataset, formula, timing, layout, animation, or scene logic was changed.
+Source modifications required for native pdfLaTeX compatibility:
+- Five Unicode em dashes inside Tex strings were replaced by LaTeX-safe double hyphens (--).
+- Two prose percent signs passed through Tex were escaped as \%.
+No dataset, formula, timing, layout, animation, or scene logic was changed.
 EOF
 
 (
@@ -112,10 +142,12 @@ EOF
     pqh_render.log \
     ffprobe.txt \
     full_decode.log \
+    manim_version.txt \
     control_frames/*.png \
     RENDER_INFO.txt > SHA256SUMS.txt
 )
 
 ls -lh delivery
+cat delivery/manim_version.txt
 cat delivery/ffprobe.txt
 cat delivery/SHA256SUMS.txt
