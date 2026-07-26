@@ -85,14 +85,10 @@ PQH_VIDEO="$(find media_pqh -type f -name "${SCENE}.mp4" -print -quit)"
 test -n "$PQH_VIDEO"
 test -s "$PQH_VIDEO"
 
-# Run all technical video validation in the same official container.
-docker run --rm \
-  --user "$(id -u):$(id -g)" \
-  -v "$PWD:/manim" \
-  -w /manim \
-  --entrypoint ffprobe \
-  "$IMAGE" \
-  -v error \
+command -v ffprobe
+command -v ffmpeg
+
+ffprobe -v error \
   -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
   -show_entries format=duration,size \
   -of default=noprint_wrappers=1 \
@@ -104,38 +100,18 @@ grep -q '^height=1080$' ffprobe.txt
 grep -q '^r_frame_rate=30/1$' ffprobe.txt
 grep -q '^pix_fmt=yuv420p$' ffprobe.txt
 
-docker run --rm \
-  --user "$(id -u):$(id -g)" \
-  -v "$PWD:/manim" \
-  -w /manim \
-  --entrypoint ffmpeg \
-  "$IMAGE" \
-  -v error -i "$PQH_VIDEO" -f null - 2>&1 | tee full_decode.log
+ffmpeg -v error -i "$PQH_VIDEO" -f null - 2>&1 | tee full_decode.log
 
-DURATION="$(docker run --rm \
-  -v "$PWD:/manim" \
-  -w /manim \
-  --entrypoint ffprobe \
-  "$IMAGE" \
-  -v error -show_entries format=duration -of csv=p=0 "$PQH_VIDEO")"
+DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$PQH_VIDEO")"
 MIDPOINT="$(python - "$DURATION" <<'PY'
 import sys
 print(max(0.0, float(sys.argv[1]) / 2.0))
 PY
 )"
 
-extract_frame() {
-  docker run --rm \
-    --user "$(id -u):$(id -g)" \
-    -v "$PWD:/manim" \
-    -w /manim \
-    --entrypoint ffmpeg \
-    "$IMAGE" "$@"
-}
-
-extract_frame -v error -ss 5 -i "$PQH_VIDEO" -frames:v 1 control_frames/frame_start.png
-extract_frame -v error -ss "$MIDPOINT" -i "$PQH_VIDEO" -frames:v 1 control_frames/frame_middle.png
-extract_frame -v error -sseof -5 -i "$PQH_VIDEO" -frames:v 1 control_frames/frame_end.png
+ffmpeg -v error -ss 5 -i "$PQH_VIDEO" -frames:v 1 control_frames/frame_start.png
+ffmpeg -v error -ss "$MIDPOINT" -i "$PQH_VIDEO" -frames:v 1 control_frames/frame_middle.png
+ffmpeg -v error -sseof -5 -i "$PQH_VIDEO" -frames:v 1 control_frames/frame_end.png
 
 test -s control_frames/frame_start.png
 test -s control_frames/frame_middle.png
@@ -159,7 +135,7 @@ Source modifications required for native pdfLaTeX compatibility:
 - Two prose percent signs passed through Tex were escaped as \%.
 No dataset, formula, timing, layout, animation, or scene logic was changed.
 Verification:
-ffprobe, complete FFmpeg decoding, and control-frame extraction were executed inside manimcommunity/manim:v0.20.1.
+ffprobe, complete FFmpeg decoding, and control-frame extraction were executed on the GitHub Ubuntu runner after explicit installation of FFmpeg tools.
 EOF
 
 (
