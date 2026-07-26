@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - render/thales-pqh-20260726
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "render_jobs/thales_pqh/**"
+      - ".github/workflows/thales-pqh-render.yml"
 
 permissions:
   contents: read
