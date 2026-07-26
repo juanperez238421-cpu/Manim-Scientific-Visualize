@@ -1,0 +1,31 @@
+name: Bootstrap Variance Native PQH Render
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'render/variance-workshop-pqh-20260726'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout pull request render branch
+        uses: actions/checkout@v4
+
+      - name: Run protocol-compliant native ManimCE render
+        shell: bash
+        run: bash render_jobs/variance_workshop_20260726/run_render.sh
+
+      - name: Upload validated native PQH artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: VarianceComprehensiveWorkshop_pqh
+          path: delivery/
+          if-no-files-found: error
+          retention-days: 7
