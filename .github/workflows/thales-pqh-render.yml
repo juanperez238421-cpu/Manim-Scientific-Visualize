@@ -60,17 +60,25 @@ jobs:
           JR_REAL_TIMER: "0"
         run: |
           set -euo pipefail
-          manim -pqh "$SOURCE_DIR/$SOURCE_FILE" "$SCENE_NAME" --format=mp4 --disable_caching
+          manim -pqh "$SOURCE_DIR/$SOURCE_FILE" "$SCENE_NAME" \
+            --format=mp4 \
+            --media_dir "$SOURCE_DIR/media" \
+            --disable_caching
 
       - name: Collect and inspect final MP4
         shell: bash
         run: |
           set -euo pipefail
-          video="$(find media -type f -name "$SCENE_NAME.mp4" -print -quit)"
+          echo "Rendered files:"
+          find "$SOURCE_DIR/media" -type f -maxdepth 8 -print
+          video="$(find "$SOURCE_DIR/media" -type f -name "$SCENE_NAME.mp4" -print -quit)"
           test -n "$video"
           final="$SOURCE_DIR/${SCENE_NAME}_pqh.mp4"
           cp "$video" "$final"
-          ffprobe -v error -show_entries format=filename,duration,size,bit_rate -show_entries stream=index,codec_name,width,height,r_frame_rate,pix_fmt -of json "$final" > "$SOURCE_DIR/ffprobe.json"
+          ffprobe -v error \
+            -show_entries format=filename,duration,size,bit_rate \
+            -show_entries stream=index,codec_name,width,height,r_frame_rate,pix_fmt \
+            -of json "$final" > "$SOURCE_DIR/ffprobe.json"
           cat "$SOURCE_DIR/ffprobe.json"
           test -s "$final"
 
