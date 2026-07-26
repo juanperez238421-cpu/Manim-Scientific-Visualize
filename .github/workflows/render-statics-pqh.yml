@@ -28,6 +28,16 @@ jobs:
             | base64 --decode \
             | gzip --decompress \
             > Statics_Week_VectorDecomposition_RightTriangles_Fixed.py
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('Statics_Week_VectorDecomposition_RightTriangles_Fixed.py')
+          source = path.read_text(encoding='utf-8')
+          source = source.replace(
+              'Calculate ΣFx and ΣFy',
+              'Calculate sum Fx and sum Fy',
+          )
+          path.write_text(source, encoding='utf-8')
+          PY
           python -m py_compile Statics_Week_VectorDecomposition_RightTriangles_Fixed.py
           test -s Statics_Week_VectorDecomposition_RightTriangles_Fixed.py
           mkdir -p media
