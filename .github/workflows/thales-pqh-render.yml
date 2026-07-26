@@ -65,38 +65,56 @@ jobs:
             --format=mp4 \
             --disable_caching
 
-      - name: Collect largest video created by this render
+      - name: Collect generated video candidates without gating upload
+        if: always()
         shell: bash
         run: |
-          set -euo pipefail
-          candidates="$SOURCE_DIR/video_candidates.txt"
-          find / -type f -newer /tmp/thales-render-start \
-            \( -iname '*.mp4' -o -iname '*.mov' -o -iname '*.webm' \) \
-            -printf '%s\t%p\n' 2>/dev/null | sort -nr > "$candidates" || true
-          echo "New video candidates ordered by size:"
-          cat "$candidates"
-          test -s "$candidates"
-          video="$(head -n 1 "$candidates" | cut -f2-)"
-          test -n "$video"
-          echo "Selected final render: $video"
-          final="$GITHUB_WORKSPACE/$SOURCE_DIR/${SCENE_NAME}_pqh.mp4"
-          cp "$video" "$final"
-          ffprobe -v error \
-            -show_entries format=filename,duration,size,bit_rate \
-            -show_entries stream=index,codec_name,width,height,r_frame_rate,pix_fmt \
-            -of json "$final" > "$GITHUB_WORKSPACE/$SOURCE_DIR/ffprobe.json"
-          cat "$GITHUB_WORKSPACE/$SOURCE_DIR/ffprobe.json"
-          test -s "$final"
+          set +e
+          mkdir -p "$SOURCE_DIR/collected"
+          all="$SOURCE_DIR/all_video_candidates.txt"
+          recent="$SOURCE_DIR/recent_video_candidates.txt"
 
-      - name: Upload PQH render artifact
+          find / -type f \
+            \( -iname '*.mp4' -o -iname '*.mov' -o -iname '*.webm' -o -iname '*.gif' \) \
+            -printf '%s\t%p\n' 2>/dev/null | sort -nr > "$all"
+
+          find / -type f -newer /tmp/thales-render-start \
+            \( -iname '*.mp4' -o -iname '*.mov' -o -iname '*.webm' -o -iname '*.gif' \) \
+            -printf '%s\t%p\n' 2>/dev/null | sort -nr > "$recent"
+
+          echo "All video candidates:"
+          head -n 100 "$all"
+          echo "Recent video candidates:"
+          head -n 100 "$recent"
+
+          source_list="$recent"
+          if [ ! -s "$source_list" ]; then
+            source_list="$all"
+          fi
+
+          index=0
+          while IFS=$'\t' read -r size path; do
+            [ -n "$path" ] || continue
+            index=$((index + 1))
+            base="$(basename "$path")"
+            target="$SOURCE_DIR/collected/$(printf '%02d' "$index")_${size}_${base}"
+            cp "$path" "$target" 2>/dev/null || true
+            [ "$index" -ge 20 ] && break
+          done < "$source_list"
+
+          ls -lah "$SOURCE_DIR/collected" || true
+          exit 0
+
+      - name: Upload PQH render candidates and diagnostics
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: Geometry8-RightTriangleThales-pqh
           path: |
-            render_jobs/thales_pqh/Geometry8_Week_RightTriangleThales_Full_pqh.mp4
+            render_jobs/thales_pqh/collected/**
             render_jobs/thales_pqh/geometry8_week_2026_07_27_thales_game_evaluation_v2.py
-            render_jobs/thales_pqh/ffprobe.json
-            render_jobs/thales_pqh/video_candidates.txt
-          if-no-files-found: error
+            render_jobs/thales_pqh/all_video_candidates.txt
+            render_jobs/thales_pqh/recent_video_candidates.txt
+          if-no-files-found: warn
           compression-level: 0
           retention-days: 7
