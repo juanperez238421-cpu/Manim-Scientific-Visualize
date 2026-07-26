@@ -1,0 +1,168 @@
+name: Render Right Triangle Thales PQH
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "render_jobs/2026-07-26-right-triangle-thales/**"
+      - ".github/workflows/render_right_triangle_thales_pqh.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    env:
+      JOB_DIR: render_jobs/2026-07-26-right-triangle-thales
+      SCENE: Geometry8_Week_RightTriangleThales_Full
+      IMAGE: manimcommunity/manim:v0.20.1
+      SOURCE_SHA256: 804d3ab5f340845a0e6810b53c7abfa6f35538dd1ff6001315fe8394a1119afc
+
+    steps:
+      - name: Checkout temporary render branch
+        uses: actions/checkout@v4
+
+      - name: Reconstruct and validate exact Python source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat "$JOB_DIR"/source.part*.b64 | base64 --decode | gzip --decompress > "$JOB_DIR/main.py"
+          echo "$SOURCE_SHA256  $JOB_DIR/main.py" | sha256sum --check
+          python -m py_compile "$JOB_DIR/main.py"
+          grep -q "class Geometry8_Week_RightTriangleThales_Full" "$JOB_DIR/main.py"
+          mkdir -p "$JOB_DIR/delivery"
+          cp "$JOB_DIR/main.py" "$JOB_DIR/delivery/right_triangle_thales_week.py"
+
+      - name: Pull official ManimCE 0.20.1 image
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull "$IMAGE"
+
+      - name: Required low-quality protocol render (-pql)
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e JR_REAL_TIMER=0 \
+            -e JR_SHOW_ANSWER_KEY=0 \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            "$IMAGE" \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/colab-bin /tmp/manim-home
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open
+              chmod +x /tmp/colab-bin/xdg-open
+              export PATH="/tmp/colab-bin:$PATH"
+              manim -pql render_jobs/2026-07-26-right-triangle-thales/main.py Geometry8_Week_RightTriangleThales_Full \
+                --format=mp4 \
+                --disable_caching \
+                --media_dir render_jobs/2026-07-26-right-triangle-thales/media_test
+            ' 2>&1 | tee "$JOB_DIR/pql_render.log"
+          status=${PIPESTATUS[0]}
+          set -e
+          test "$status" -eq 0
+          test -n "$(find "$JOB_DIR/media_test" -type f -name '*.mp4' -print -quit)"
+
+      - name: Final literal high-quality render (-pqh)
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e JR_REAL_TIMER=0 \
+            -e JR_SHOW_ANSWER_KEY=0 \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            "$IMAGE" \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/colab-bin /tmp/manim-home
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open
+              chmod +x /tmp/colab-bin/xdg-open
+              export PATH="/tmp/colab-bin:$PATH"
+              manim -pqh render_jobs/2026-07-26-right-triangle-thales/main.py Geometry8_Week_RightTriangleThales_Full \
+                --format=mp4 \
+                --disable_caching \
+                --media_dir render_jobs/2026-07-26-right-triangle-thales/media_final
+            ' 2>&1 | tee "$JOB_DIR/pqh_render.log"
+          status=${PIPESTATUS[0]}
+          set -e
+          test "$status" -eq 0
+
+      - name: Verify MP4, resolution, FPS, codec and pixel format
+        shell: bash
+        run: |
+          set -euo pipefail
+          FINAL_MP4="$(find "$JOB_DIR/media_final" -type f -name "$SCENE.mp4" -print -quit)"
+          test -n "$FINAL_MP4"
+          test -s "$FINAL_MP4"
+          cp "$FINAL_MP4" "$JOB_DIR/delivery/${SCENE}_pqh.mp4"
+
+          ffprobe -v error \
+            -select_streams v:0 \
+            -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate \
+            -show_entries format=duration,size \
+            -of json \
+            "$JOB_DIR/delivery/${SCENE}_pqh.mp4" > "$JOB_DIR/delivery/ffprobe.json"
+
+          python - <<'PY'
+          import json
+          from fractions import Fraction
+          from pathlib import Path
+
+          path = Path("render_jobs/2026-07-26-right-triangle-thales/delivery/ffprobe.json")
+          data = json.loads(path.read_text())
+          stream = data["streams"][0]
+          assert stream["width"] == 1920, stream
+          assert stream["height"] == 1080, stream
+          assert Fraction(stream["r_frame_rate"]) == 30, stream
+          assert stream["codec_name"] == "h264", stream
+          assert stream["pix_fmt"] == "yuv420p", stream
+          assert float(data["format"]["duration"]) > 0, data
+          assert int(data["format"]["size"]) > 0, data
+          PY
+
+          {
+            echo "Source SHA-256: $SOURCE_SHA256"
+            echo "Image: $IMAGE"
+            echo "Scene: $SCENE"
+            echo "Test command: manim -pql main.py $SCENE --format=mp4 --disable_caching"
+            echo "Final command: manim -pqh main.py $SCENE --format=mp4 --disable_caching"
+          } > "$JOB_DIR/delivery/RENDER_METADATA.txt"
+
+          cp "$JOB_DIR/pql_render.log" "$JOB_DIR/delivery/"
+          cp "$JOB_DIR/pqh_render.log" "$JOB_DIR/delivery/"
+          cd "$JOB_DIR/delivery"
+          sha256sum "${SCENE}_pqh.mp4" right_triangle_thales_week.py ffprobe.json > SHA256SUMS.txt
+
+      - name: Upload verified render package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8-RightTriangleThales-PQH
+          path: render_jobs/2026-07-26-right-triangle-thales/delivery/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload diagnostics if a step fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8-RightTriangleThales-Diagnostics
+          path: |
+            render_jobs/2026-07-26-right-triangle-thales/*.log
+            render_jobs/2026-07-26-right-triangle-thales/main.py
+          if-no-files-found: ignore
+          retention-days: 7
