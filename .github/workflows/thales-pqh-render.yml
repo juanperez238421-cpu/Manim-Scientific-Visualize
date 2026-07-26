@@ -60,21 +60,25 @@ jobs:
           JR_REAL_TIMER: "0"
         run: |
           set -euo pipefail
+          touch /tmp/thales-render-start
           manim -pqh "$SOURCE_DIR/$SOURCE_FILE" "$SCENE_NAME" \
             --format=mp4 \
             --disable_caching
 
-      - name: Collect and inspect final MP4 across container paths
+      - name: Collect largest video created by this render
         shell: bash
         run: |
           set -euo pipefail
-          video="$(find / -type f -name "$SCENE_NAME.mp4" 2>/dev/null | head -n 1)"
-          if [ -z "$video" ]; then
-            echo "Exact filename not found. Available MP4 candidates:"
-            find / -type f -name '*.mp4' 2>/dev/null | head -n 200
-            exit 1
-          fi
-          echo "Located final render: $video"
+          candidates="$SOURCE_DIR/video_candidates.txt"
+          find / -type f -newer /tmp/thales-render-start \
+            \( -iname '*.mp4' -o -iname '*.mov' -o -iname '*.webm' \) \
+            -printf '%s\t%p\n' 2>/dev/null | sort -nr > "$candidates" || true
+          echo "New video candidates ordered by size:"
+          cat "$candidates"
+          test -s "$candidates"
+          video="$(head -n 1 "$candidates" | cut -f2-)"
+          test -n "$video"
+          echo "Selected final render: $video"
           final="$GITHUB_WORKSPACE/$SOURCE_DIR/${SCENE_NAME}_pqh.mp4"
           cp "$video" "$final"
           ffprobe -v error \
@@ -92,6 +96,7 @@ jobs:
             render_jobs/thales_pqh/Geometry8_Week_RightTriangleThales_Full_pqh.mp4
             render_jobs/thales_pqh/geometry8_week_2026_07_27_thales_game_evaluation_v2.py
             render_jobs/thales_pqh/ffprobe.json
+            render_jobs/thales_pqh/video_candidates.txt
           if-no-files-found: error
           compression-level: 0
           retention-days: 7
