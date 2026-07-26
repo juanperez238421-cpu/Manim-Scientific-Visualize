@@ -62,24 +62,26 @@ jobs:
           set -euo pipefail
           manim -pqh "$SOURCE_DIR/$SOURCE_FILE" "$SCENE_NAME" \
             --format=mp4 \
-            --media_dir "$SOURCE_DIR/media" \
             --disable_caching
 
-      - name: Collect and inspect final MP4
+      - name: Collect and inspect final MP4 across container paths
         shell: bash
         run: |
           set -euo pipefail
-          echo "Rendered files:"
-          find "$SOURCE_DIR/media" -type f -maxdepth 8 -print
-          video="$(find "$SOURCE_DIR/media" -type f -name "$SCENE_NAME.mp4" -print -quit)"
-          test -n "$video"
-          final="$SOURCE_DIR/${SCENE_NAME}_pqh.mp4"
+          video="$(find / -type f -name "$SCENE_NAME.mp4" 2>/dev/null | head -n 1)"
+          if [ -z "$video" ]; then
+            echo "Exact filename not found. Available MP4 candidates:"
+            find / -type f -name '*.mp4' 2>/dev/null | head -n 200
+            exit 1
+          fi
+          echo "Located final render: $video"
+          final="$GITHUB_WORKSPACE/$SOURCE_DIR/${SCENE_NAME}_pqh.mp4"
           cp "$video" "$final"
           ffprobe -v error \
             -show_entries format=filename,duration,size,bit_rate \
             -show_entries stream=index,codec_name,width,height,r_frame_rate,pix_fmt \
-            -of json "$final" > "$SOURCE_DIR/ffprobe.json"
-          cat "$SOURCE_DIR/ffprobe.json"
+            -of json "$final" > "$GITHUB_WORKSPACE/$SOURCE_DIR/ffprobe.json"
+          cat "$GITHUB_WORKSPACE/$SOURCE_DIR/ffprobe.json"
           test -s "$final"
 
       - name: Upload PQH render artifact
