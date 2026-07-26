@@ -1,0 +1,81 @@
+name: Temporary Thales PQH Render
+
+on:
+  push:
+    branches:
+      - render/thales-pqh-20260726
+
+permissions:
+  contents: read
+
+env:
+  SOURCE_DIR: render_jobs/thales_pqh
+  SOURCE_FILE: geometry8_week_2026_07_27_thales_game_evaluation_v2.py
+  SCENE_NAME: Geometry8_Week_RightTriangleThales_Full
+  EXPECTED_SHA256: da94415bbf04c166b21737604ce2800984e607e8d934e6d9e095276fbbd14c4a
+
+jobs:
+  render-pqh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - name: Check out isolated render branch
+        uses: actions/checkout@v4
+
+      - name: Reconstruct and validate exact Python source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat "$SOURCE_DIR"/source.py.gz.part*.b64 | tr -d '[:space:]' | base64 --decode > "$SOURCE_DIR/source.py.gz"
+          gzip --decompress --stdout "$SOURCE_DIR/source.py.gz" > "$SOURCE_DIR/$SOURCE_FILE"
+          actual_sha="$(sha256sum "$SOURCE_DIR/$SOURCE_FILE" | awk '{print $1}')"
+          echo "Expected SHA-256: $EXPECTED_SHA256"
+          echo "Actual SHA-256:   $actual_sha"
+          test "$actual_sha" = "$EXPECTED_SHA256"
+          python -m py_compile "$SOURCE_DIR/$SOURCE_FILE"
+
+      - name: Configure headless preview handler
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/manim-headless-bin
+          printf '#!/bin/sh\nexit 0\n' > /tmp/manim-headless-bin/xdg-open
+          chmod +x /tmp/manim-headless-bin/xdg-open
+          echo "/tmp/manim-headless-bin" >> "$GITHUB_PATH"
+
+      - name: Render complete weekly scene with requested -pqh
+        shell: bash
+        env:
+          JR_SHOW_ANSWER_KEY: "0"
+          JR_REAL_TIMER: "0"
+        run: |
+          set -euo pipefail
+          manim -pqh "$SOURCE_DIR/$SOURCE_FILE" "$SCENE_NAME" --format=mp4 --disable_caching
+
+      - name: Collect and inspect final MP4
+        shell: bash
+        run: |
+          set -euo pipefail
+          video="$(find media -type f -name "$SCENE_NAME.mp4" -print -quit)"
+          test -n "$video"
+          final="$SOURCE_DIR/${SCENE_NAME}_pqh.mp4"
+          cp "$video" "$final"
+          ffprobe -v error -show_entries format=filename,duration,size,bit_rate -show_entries stream=index,codec_name,width,height,r_frame_rate,pix_fmt -of json "$final" > "$SOURCE_DIR/ffprobe.json"
+          cat "$SOURCE_DIR/ffprobe.json"
+          test -s "$final"
+
+      - name: Upload PQH render artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8-RightTriangleThales-pqh
+          path: |
+            render_jobs/thales_pqh/Geometry8_Week_RightTriangleThales_Full_pqh.mp4
+            render_jobs/thales_pqh/geometry8_week_2026_07_27_thales_game_evaluation_v2.py
+            render_jobs/thales_pqh/ffprobe.json
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
