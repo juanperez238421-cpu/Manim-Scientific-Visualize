@@ -1,0 +1,1 @@
+Trigger native ManimCE 0.20.1 protocol render after default-branch workflow bootstrap.
