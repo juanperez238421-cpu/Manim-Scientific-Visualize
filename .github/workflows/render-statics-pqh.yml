@@ -1,0 +1,85 @@
+name: Render Statics PQH
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout render branch
+        uses: actions/checkout@v4
+
+      - name: Reconstruct and validate source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat \
+            render_jobs/statics_source.py.gz.b64.part1 \
+            render_jobs/statics_source.py.gz.b64.part2 \
+            | base64 --decode \
+            | gzip --decompress \
+            > Statics_Week_VectorDecomposition_RightTriangles_Fixed.py
+          python -m py_compile Statics_Week_VectorDecomposition_RightTriangles_Fixed.py
+          test -s Statics_Week_VectorDecomposition_RightTriangles_Fixed.py
+          wc -c Statics_Week_VectorDecomposition_RightTriangles_Fixed.py
+
+      - name: Pull official ManimCE image
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull manimcommunity/manim:v0.20.1
+
+      - name: Render full scene with literal -pqh
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            -e JR_REAL_TIMER=0 \
+            -e JR_SHOW_ANSWER_KEY=0 \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -lc 'set -euo pipefail; mkdir -p /tmp/colab-bin; printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open; chmod +x /tmp/colab-bin/xdg-open; export PATH="/tmp/colab-bin:$PATH"; manim -pqh Statics_Week_VectorDecomposition_RightTriangles_Fixed.py Statics_Week_VectorDecomposition_Full --format=mp4 --disable_caching'
+
+      - name: Verify rendered MP4
+        id: verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO="$(find media -type f -name 'Statics_Week_VectorDecomposition_Full.mp4' -print -quit)"
+          test -n "$VIDEO"
+          test -s "$VIDEO"
+          echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
+          ls -lh "$VIDEO"
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,r_frame_rate \
+            -show_entries format=duration,size \
+            -of default=noprint_wrappers=1 \
+            "$VIDEO"
+
+      - name: Stage final delivery
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p delivery
+          cp "${{ steps.verify.outputs.video }}" delivery/Statics_Week_VectorDecomposition_Full_pqh.mp4
+          cp Statics_Week_VectorDecomposition_RightTriangles_Fixed.py delivery/
+          sha256sum delivery/* > delivery/SHA256SUMS.txt
+
+      - name: Upload PQH video artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Statics_Week_VectorDecomposition_Full_pqh
+          path: delivery/
+          if-no-files-found: error
+          retention-days: 7
