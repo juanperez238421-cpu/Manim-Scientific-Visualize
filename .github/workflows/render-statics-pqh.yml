@@ -51,7 +51,7 @@ jobs:
             -w /manim \
             --entrypoint bash \
             manimcommunity/manim:v0.20.1 \
-            -lc 'set -euo pipefail; mkdir -p /tmp/colab-bin; printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open; chmod +x /tmp/colab-bin/xdg-open; export PATH="/tmp/colab-bin:$PATH"; manim -pqh Statics_Week_VectorDecomposition_RightTriangles_Fixed.py Statics_Week_VectorDecomposition_Full --format=mp4 --disable_caching' \
+            -c 'set -euo pipefail; echo "Manim binary: $(command -v manim)"; manim --version; mkdir -p /tmp/colab-bin; printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open; chmod +x /tmp/colab-bin/xdg-open; export PATH="/tmp/colab-bin:$PATH"; manim -pqh Statics_Week_VectorDecomposition_RightTriangles_Fixed.py Statics_Week_VectorDecomposition_Full --format=mp4 --disable_caching' \
             > render.log 2>&1
           STATUS=$?
           echo "exit_code=$STATUS" >> "$GITHUB_OUTPUT"
