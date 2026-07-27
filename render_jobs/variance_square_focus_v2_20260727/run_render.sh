@@ -10,12 +10,12 @@ case "$PHASE" in
   pql)
     QUALITY_FLAG="-pql"
     MEDIA_DIR="media_pql"
-    OUTPUT_NAME="VarianceSquareMeaningMasterclass_FocusV2_PQL.mp4"
+    OUTPUT_NAME="VarianceSquareMeaningMasterclass_FocusV3_PQL.mp4"
     ;;
   pqh)
     QUALITY_FLAG="-pqh"
     MEDIA_DIR="media_pqh"
-    OUTPUT_NAME="VarianceSquareMeaningMasterclass_FocusV2_NATIVE_pqh.mp4"
+    OUTPUT_NAME="VarianceSquareMeaningMasterclass_FocusV3_NATIVE_pqh.mp4"
     ;;
   *)
     echo "Unsupported phase: $PHASE" >&2
@@ -29,7 +29,7 @@ base64 --decode "$JOB_DIR/source.py.gz.b64" | gzip -dc > "$JOB_DIR/main.py"
 test -s "$JOB_DIR/main.py"
 python -W error -m py_compile "$JOB_DIR/main.py"
 printf '%s  %s\n' \
-  '6fe364e4cd216d6f9fb1f31718ffc023bb43202956eb2ece573e8476a6d3c2b0' \
+  'f1b0538da8e72e92f174678829c919b8089bd8585a96c3dcb4cd241e0b74e18b' \
   "$JOB_DIR/main.py" | sha256sum --check --strict
 grep -nE '^class VarianceSquareMeaningMasterclass\(MovingCameraScene\)' "$JOB_DIR/main.py"
 
@@ -91,7 +91,6 @@ ffmpeg -v error -ss 5 -i "$VIDEO" -frames:v 1 control_frames/frame_start.png
 ffmpeg -v error -ss "$MIDPOINT" -i "$VIDEO" -frames:v 1 control_frames/frame_middle.png
 ffmpeg -v error -sseof -5 -i "$VIDEO" -frames:v 1 control_frames/frame_end.png
 
-# Deterministic whole-video sampling without shell timestamp parsing.
 ffmpeg -v error -i "$VIDEO" \
   -vf "fps=12/${DURATION}" \
   review_frames/frame_%02d.png
@@ -102,26 +101,26 @@ ffmpeg -v error -framerate 1 -i review_frames/frame_%02d.png \
   -frames:v 1 delivery/contact_sheet.png
 
 cp "$VIDEO" "delivery/$OUTPUT_NAME"
-cp "$JOB_DIR/main.py" delivery/variance_square_meaning_masterclass_focus_v2.py
+cp "$JOB_DIR/main.py" delivery/variance_square_meaning_masterclass_focus_v3.py
 cp "${PHASE}_render.log" ffprobe.txt full_decode.log manim_version.txt delivery/
 cp -r control_frames review_frames delivery/
 cat > delivery/RENDER_INFO.txt <<EOF
 Scene: VarianceSquareMeaningMasterclass
-Source: variance_square_meaning_masterclass_focus_v2.py
+Source: variance_square_meaning_masterclass_focus_v3.py
 ManimCE: 0.20.1
 Phase: $PHASE
 Command:
 manim ${QUALITY_FLAG} main.py VarianceSquareMeaningMasterclass --format=mp4 --disable_caching
 Source SHA-256:
-6fe364e4cd216d6f9fb1f31718ffc023bb43202956eb2ece573e8476a6d3c2b0
+f1b0538da8e72e92f174678829c919b8089bd8585a96c3dcb4cd241e0b74e18b
 Revision focus:
-Larger headers, subtitles, equations, tables, square figures and unit cards; logical camera zooms for deviations, individual square cards, table/result panel, area redistribution, square-root interpretation, comparison panels and closing formula; corrected closing overlap while preserving the original dataset, mathematical logic, color semantics and nine-scene sequence.
+Larger typography and geometry; clean close-ups with the persistent header hidden rather than clipped; nonfocused cards and comparison panels dimmed; the unit-flow diagram separated from the variance square; table and result-panel focus isolated; closing formula and explanatory rows rebuilt as non-overlapping stages. The original dataset, figures, equations, color semantics and nine-scene teaching logic are preserved.
 EOF
 (
   cd delivery
   sha256sum \
     "$OUTPUT_NAME" \
-    variance_square_meaning_masterclass_focus_v2.py \
+    variance_square_meaning_masterclass_focus_v3.py \
     "${PHASE}_render.log" \
     ffprobe.txt full_decode.log manim_version.txt \
     contact_sheet.png \
