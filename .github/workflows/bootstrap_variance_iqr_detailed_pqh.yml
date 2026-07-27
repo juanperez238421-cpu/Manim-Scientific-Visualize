@@ -1,58 +1,12 @@
 name: Bootstrap Detailed IQR Native PQH Render
 
+# Completed and retained only temporarily until the associated draft PR is closed.
 on:
-  pull_request:
-    branches:
-      - main
-
-permissions:
-  contents: read
+  workflow_dispatch:
 
 jobs:
-  render:
-    if: github.event.pull_request.head.ref == 'render/variance-iqr-detailed-pqh-v2-20260727'
+  disabled:
+    if: false
     runs-on: ubuntu-latest
-    timeout-minutes: 120
-
     steps:
-      - name: Checkout detailed IQR render branch
-        uses: actions/checkout@v4
-
-      - name: Install FFmpeg verification tools
-        shell: bash
-        run: |
-          set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg
-          ffmpeg -version
-          ffprobe -version
-
-      - name: Run protocol-compliant native ManimCE render
-        id: render
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -o pipefail
-          bash -x render_jobs/variance_workshop_20260726/run_render.sh 2>&1 | tee bootstrap_render.log
-
-      - name: Upload native render result or diagnostic logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: VarianceComprehensiveWorkshop_IQR_Detailed_Polished_pqh
-          path: |
-            delivery/
-            render_jobs/variance_workshop_20260726/main.py
-            bootstrap_render.log
-            pql_render.log
-            pqh_render.log
-            ffprobe.txt
-            full_decode.log
-            manim_version.txt
-          if-no-files-found: warn
-          retention-days: 7
-
-      - name: Preserve failure status after diagnostic upload
-        if: steps.render.outcome != 'success'
-        shell: bash
-        run: exit 1
+      - run: echo disabled
