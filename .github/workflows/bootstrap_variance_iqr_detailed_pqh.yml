@@ -31,7 +31,9 @@ jobs:
         id: render
         continue-on-error: true
         shell: bash
-        run: bash render_jobs/variance_workshop_20260726/run_render.sh
+        run: |
+          set -o pipefail
+          bash -x render_jobs/variance_workshop_20260726/run_render.sh 2>&1 | tee bootstrap_render.log
 
       - name: Upload native render result or diagnostic logs
         if: always()
@@ -40,6 +42,7 @@ jobs:
           name: VarianceComprehensiveWorkshop_IQR_Detailed_pqh
           path: |
             delivery/
+            bootstrap_render.log
             pql_render.log
             pqh_render.log
             ffprobe.txt
