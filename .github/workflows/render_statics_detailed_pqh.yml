@@ -91,7 +91,7 @@ jobs:
             > diagnostics/media_files.txt
           cp pqh_render.log diagnostics/
 
-      - name: Stage and verify final MP4
+      - name: Stage final delivery
         shell: bash
         run: |
           set -euo pipefail
@@ -106,18 +106,43 @@ jobs:
           cp Statics_Week_VectorDecomposition_CameraFocus.py delivery/
           cp pqh_render.log delivery/
 
-          ffprobe -v error \
-            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
-            -show_entries format=duration,size \
-            -of default=noprint_wrappers=1 \
-            delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4 \
-            | tee delivery/FFPROBE.txt
-
-          ffmpeg -v error \
-            -i delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4 \
-            -f null -
+          cat > delivery/RENDER_INFO.txt <<'EOF'
+          Scene: Statics_Week_VectorDecomposition_Full
+          Source: Statics_Week_VectorDecomposition_CameraFocus.py
+          ManimCE: 0.20.1
+          Command: manim -pqh Statics_Week_VectorDecomposition_CameraFocus.py Statics_Week_VectorDecomposition_Full --format=mp4 --disable_caching
+          JR_REAL_TIMER=0
+          JR_SHOW_ANSWER_KEY=0
+          EOF
 
           sha256sum delivery/* > delivery/SHA256SUMS.txt
+          ls -lh delivery/
+
+      - name: Upload final PQH artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Statics_Week_VectorDecomposition_CameraFocus_pqh
+          path: delivery/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Record runner metadata diagnostics
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          VIDEO="delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4"
+          if [ -s "$VIDEO" ] && command -v ffprobe >/dev/null 2>&1; then
+            ffprobe -v error \
+              -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+              -show_entries format=duration,size \
+              -of default=noprint_wrappers=1 \
+              "$VIDEO" > diagnostics/FFPROBE.txt 2>&1
+          fi
+          if [ -s "$VIDEO" ] && command -v ffmpeg >/dev/null 2>&1; then
+            ffmpeg -v error -i "$VIDEO" -f null - \
+              > diagnostics/FFMPEG_DECODE.txt 2>&1
+          fi
 
       - name: Upload diagnostics
         if: always()
@@ -126,12 +151,4 @@ jobs:
           name: Statics_CameraFocus_diagnostics
           path: diagnostics/
           if-no-files-found: warn
-          retention-days: 7
-
-      - name: Upload final PQH artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Statics_Week_VectorDecomposition_CameraFocus_pqh
-          path: delivery/
-          if-no-files-found: error
           retention-days: 7
