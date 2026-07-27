@@ -75,7 +75,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          VIDEO="$(find media -type f -name 'Statics_Week_VectorDecomposition_Full.mp4' -path '*480p*' -print -quit)"
+          VIDEO="$(find media -type f -name 'Statics_Week_VectorDecomposition_Full.mp4' -print -quit)"
           test -n "$VIDEO"
           test -s "$VIDEO"
           echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
