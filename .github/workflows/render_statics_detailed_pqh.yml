@@ -30,21 +30,15 @@ jobs:
             > Statics_Week_VectorDecomposition_CameraFocus.py
           python -m py_compile Statics_Week_VectorDecomposition_CameraFocus.py
           test -s Statics_Week_VectorDecomposition_CameraFocus.py
-          wc -c Statics_Week_VectorDecomposition_CameraFocus.py
 
       - name: Pull official ManimCE image
-        shell: bash
-        run: |
-          set -euo pipefail
-          docker pull manimcommunity/manim:v0.20.1
+        run: docker pull manimcommunity/manim:v0.20.1
 
       - name: Render final scene with literal -pqh
-        id: render
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p media diagnostics
-          set +e
           docker run --rm \
             --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home \
@@ -60,21 +54,12 @@ jobs:
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/headless-bin/xdg-open
               chmod +x /tmp/headless-bin/xdg-open
               export PATH="/tmp/headless-bin:$PATH"
-              manim -pqh \
-                Statics_Week_VectorDecomposition_CameraFocus.py \
-                Statics_Week_VectorDecomposition_Full \
-                --format=mp4 \
-                --disable_caching
+              manim -pqh Statics_Week_VectorDecomposition_CameraFocus.py Statics_Week_VectorDecomposition_Full --format=mp4 --disable_caching
             ' 2>&1 | tee pqh_render.log
-          status=${PIPESTATUS[0]}
-          set -e
-          echo "$status" > render_status.txt
-          find media -type f -printf '%s %p\n' | sort -nr | head -100 | tee diagnostics/media_files.txt || true
-          cp pqh_render.log render_status.txt diagnostics/ || true
-          exit "$status"
+          find media -type f -printf '%s %p\n' | sort -nr | head -100 > diagnostics/media_files.txt
+          cp pqh_render.log diagnostics/
 
-      - name: Stage final MP4 before metadata checks
-        id: stage
+      - name: Stage and verify final MP4
         shell: bash
         run: |
           set -euo pipefail
@@ -82,41 +67,12 @@ jobs:
           VIDEO="$(find media -type f -name 'Statics_Week_VectorDecomposition_Full.mp4' -print -quit)"
           test -n "$VIDEO"
           test -s "$VIDEO"
-          echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
           cp "$VIDEO" delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4
           cp Statics_Week_VectorDecomposition_CameraFocus.py delivery/
           cp pqh_render.log delivery/
-          cat > delivery/RENDER_INFO.txt <<'EOF'
-          Scene: Statics_Week_VectorDecomposition_Full
-          Source: Statics_Week_VectorDecomposition_CameraFocus.py
-          ManimCE: 0.20.1
-          Command: manim -pqh Statics_Week_VectorDecomposition_CameraFocus.py Statics_Week_VectorDecomposition_Full --format=mp4 --disable_caching
-          JR_REAL_TIMER=0
-          JR_SHOW_ANSWER_KEY=0
-          EOF
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of default=noprint_wrappers=1 delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4 | tee delivery/FFPROBE.txt
+          ffmpeg -v error -i delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4 -f null -
           sha256sum delivery/* > delivery/SHA256SUMS.txt
-
-      - name: Verify final MP4 metadata and full decoding
-        shell: bash
-        run: |
-          set -euo pipefail
-          VIDEO="delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4"
-          ffprobe -v error \
-            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
-            -show_entries format=duration,size \
-            -of default=noprint_wrappers=1 \
-            "$VIDEO" | tee delivery/FFPROBE.txt
-          ffmpeg -v error -i "$VIDEO" -f null -
-          sha256sum delivery/* > delivery/SHA256SUMS.txt
-
-      - name: Upload diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: Statics_CameraFocus_diagnostics
-          path: diagnostics/
-          if-no-files-found: warn
-          retention-days: 7
 
       - name: Upload final PQH artifact
         uses: actions/upload-artifact@v4
