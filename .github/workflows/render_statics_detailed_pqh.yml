@@ -1,4 +1,4 @@
-name: Render Detailed Statics PQH
+name: Render Statics Camera Focus PQH
 
 on:
   pull_request:
@@ -18,19 +18,37 @@ jobs:
       - name: Checkout render branch
         uses: actions/checkout@v4
 
-      - name: Reconstruct and validate source
+      - name: Reconstruct, patch, and validate source
         shell: bash
         run: |
           set -euo pipefail
+
           cat \
             render_jobs/statics_detailed.py.gz.b64.part1 \
             render_jobs/statics_detailed.py.gz.b64.part2 \
             | base64 --decode \
             | gzip --decompress \
             > Statics_Week_VectorDecomposition_DetailedProblem.py
-          python -m py_compile Statics_Week_VectorDecomposition_DetailedProblem.py
-          test -s Statics_Week_VectorDecomposition_DetailedProblem.py
-          wc -c Statics_Week_VectorDecomposition_DetailedProblem.py
+
+          cat \
+            render_jobs/camera_focus_patch/part00.txt \
+            render_jobs/camera_focus_patch/part01.txt \
+            render_jobs/camera_focus_patch/part02.txt \
+            | base64 --decode \
+            | gzip --decompress \
+            > camera_focus.diff
+
+          patch -p3 < camera_focus.diff
+          mv Statics_Week_VectorDecomposition_DetailedProblem.py \
+             Statics_Week_VectorDecomposition_CameraFocus.py
+
+          python -m py_compile Statics_Week_VectorDecomposition_CameraFocus.py
+          test -s Statics_Week_VectorDecomposition_CameraFocus.py
+
+          ACTUAL_SHA="$(sha256sum Statics_Week_VectorDecomposition_CameraFocus.py | awk '{print $1}')"
+          EXPECTED_SHA="dd004fd0103b667a70b99733063ff7092cfdcd81a2e11f3ee0bb55a92d57626c"
+          test "$ACTUAL_SHA" = "$EXPECTED_SHA"
+          echo "Validated source SHA-256: $ACTUAL_SHA"
 
       - name: Pull official ManimCE image
         shell: bash
@@ -39,12 +57,11 @@ jobs:
           docker pull manimcommunity/manim:v0.20.1
 
       - name: Render final scene with literal -pqh
-        id: render
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p media diagnostics
-          set +e
+
           docker run --rm \
             --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home \
@@ -60,71 +77,53 @@ jobs:
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/headless-bin/xdg-open
               chmod +x /tmp/headless-bin/xdg-open
               export PATH="/tmp/headless-bin:$PATH"
+
               manim -pqh \
-                Statics_Week_VectorDecomposition_DetailedProblem.py \
+                Statics_Week_VectorDecomposition_CameraFocus.py \
                 Statics_Week_VectorDecomposition_Full \
                 --format=mp4 \
                 --disable_caching
             ' 2>&1 | tee pqh_render.log
-          status=${PIPESTATUS[0]}
-          set -e
-          echo "$status" > render_status.txt
-          find media -type f -printf '%s %p\n' | sort -nr | head -100 | tee diagnostics/media_files.txt || true
-          cp pqh_render.log render_status.txt diagnostics/ || true
-          exit "$status"
 
-      - name: Stage final MP4 before metadata checks
-        id: stage
+          find media -type f -printf '%s %p\n' \
+            | sort -nr \
+            | head -100 \
+            > diagnostics/media_files.txt
+          cp pqh_render.log diagnostics/
+
+      - name: Stage and verify final MP4
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p delivery
-          VIDEO="$(find media -type f -name 'Statics_Week_VectorDecomposition_Full.mp4' -print -quit)"
-          if [ -z "$VIDEO" ]; then
-            echo 'Expected scene MP4 not found. Available MP4 files:'
-            find media -type f -name '*.mp4' -print || true
-            exit 1
-          fi
-          test -s "$VIDEO"
-          echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
-          cp "$VIDEO" delivery/Statics_Week_VectorDecomposition_DetailedProblem_pqh.mp4
-          cp Statics_Week_VectorDecomposition_DetailedProblem.py delivery/
-          cp pqh_render.log delivery/
-          cat > delivery/RENDER_INFO.txt <<'EOF'
-          Scene: Statics_Week_VectorDecomposition_Full
-          Source: Statics_Week_VectorDecomposition_DetailedProblem.py
-          ManimCE: 0.20.1
-          Command: manim -pqh Statics_Week_VectorDecomposition_DetailedProblem.py Statics_Week_VectorDecomposition_Full --format=mp4 --disable_caching
-          JR_REAL_TIMER=0
-          JR_SHOW_ANSWER_KEY=0
-          EOF
-          sha256sum delivery/* > delivery/SHA256SUMS.txt
-          ls -lh delivery/Statics_Week_VectorDecomposition_DetailedProblem_pqh.mp4
 
-      - name: Verify final MP4 metadata and full decoding
-        shell: bash
-        run: |
-          set -euo pipefail
-          VIDEO="delivery/Statics_Week_VectorDecomposition_DetailedProblem_pqh.mp4"
-          if command -v ffprobe >/dev/null 2>&1; then
-            ffprobe -v error \
-              -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
-              -show_entries format=duration,size \
-              -of default=noprint_wrappers=1 \
-              "$VIDEO" | tee delivery/FFPROBE.txt
-          else
-            echo 'ffprobe unavailable on runner' | tee delivery/FFPROBE.txt
-          fi
-          if command -v ffmpeg >/dev/null 2>&1; then
-            ffmpeg -v error -i "$VIDEO" -f null -
-          fi
+          VIDEO="$(find media -type f -name 'Statics_Week_VectorDecomposition_Full.mp4' -print -quit)"
+          test -n "$VIDEO"
+          test -s "$VIDEO"
+
+          cp "$VIDEO" \
+            delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4
+          cp Statics_Week_VectorDecomposition_CameraFocus.py delivery/
+          cp pqh_render.log delivery/
+
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+            -show_entries format=duration,size \
+            -of default=noprint_wrappers=1 \
+            delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4 \
+            | tee delivery/FFPROBE.txt
+
+          ffmpeg -v error \
+            -i delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4 \
+            -f null -
+
           sha256sum delivery/* > delivery/SHA256SUMS.txt
 
       - name: Upload diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Statics_DetailedProblem_diagnostics
+          name: Statics_CameraFocus_diagnostics
           path: diagnostics/
           if-no-files-found: warn
           retention-days: 7
@@ -132,7 +131,7 @@ jobs:
       - name: Upload final PQH artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Statics_Week_VectorDecomposition_DetailedProblem_pqh
+          name: Statics_Week_VectorDecomposition_CameraFocus_pqh
           path: delivery/
           if-no-files-found: error
           retention-days: 7
