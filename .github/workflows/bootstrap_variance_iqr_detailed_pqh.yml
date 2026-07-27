@@ -42,6 +42,7 @@ jobs:
           name: VarianceComprehensiveWorkshop_IQR_Detailed_pqh
           path: |
             delivery/
+            render_jobs/variance_workshop_20260726/main.py
             bootstrap_render.log
             pql_render.log
             pqh_render.log
