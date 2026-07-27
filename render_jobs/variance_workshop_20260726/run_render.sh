@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-JOB_DIR="render_jobs/variance_workshop_20260726"
+BASE_JOB_DIR="render_jobs/variance_workshop_20260726"
+IQR_JOB_DIR="render_jobs/variance_iqr_detailed_20260727"
 SCENE="VarianceComprehensiveWorkshop"
 IMAGE="manimcommunity/manim:v0.20.1"
 
-mkdir -p "$JOB_DIR" media_pql media_pqh delivery control_frames
-cat "$JOB_DIR"/source_parts/part_*.b64 | base64 --decode > "$JOB_DIR/main.py"
-test -s "$JOB_DIR/main.py"
+rm -rf media_pql media_pqh delivery control_frames
+mkdir -p "$BASE_JOB_DIR" "$IQR_JOB_DIR" media_pql media_pqh delivery control_frames
+cat "$BASE_JOB_DIR"/source_parts/part_*.b64 | base64 --decode > "$BASE_JOB_DIR/main.py"
+test -s "$BASE_JOB_DIR/main.py"
 
-# Apply only the two native-LaTeX corrections confirmed by the first -pql traceback.
-python - "$JOB_DIR/main.py" <<'PY'
+# Preserve the two native-pdfLaTeX corrections validated in the previous render.
+python - "$BASE_JOB_DIR/main.py" <<'PY'
 from pathlib import Path
 import sys
 
@@ -34,11 +36,29 @@ for old, new in changes:
 path.write_text(source, encoding="utf-8")
 PY
 
-python -W error -m py_compile "$JOB_DIR/main.py"
+# Replace only Scene 4 with the expanded eight-stage IQR construction.
+cat "$IQR_JOB_DIR"/iqr_parts/part_*.b64 | base64 --decode > "$IQR_JOB_DIR/new_iqr_section.txt"
+python - "$BASE_JOB_DIR/main.py" "$IQR_JOB_DIR/new_iqr_section.txt" <<'PY'
+from pathlib import Path
+import sys
+
+source_path = Path(sys.argv[1])
+section_path = Path(sys.argv[2])
+source = source_path.read_text(encoding="utf-8")
+new_section = section_path.read_text(encoding="utf-8")
+start_marker = "    # ========================================================\n    # SCENE 4"
+end_marker = "    # ========================================================\n    # SCENE 5"
+start = source.index(start_marker)
+end = source.index(end_marker, start)
+source_path.write_text(source[:start] + new_section + "\n" + source[end:], encoding="utf-8")
+print(f"Applied detailed IQR replacement: {len(new_section.splitlines())} lines")
+PY
+
+python -W error -m py_compile "$BASE_JOB_DIR/main.py"
 printf '%s  %s\n' \
-  'f198ae7d763d61b3a7277cb219223b4b809609a7770119dfda123d3e74e7f4e4' \
-  "$JOB_DIR/main.py" | sha256sum --check --strict
-grep -nE '^class VarianceComprehensiveWorkshop\(MovingCameraScene\)' "$JOB_DIR/main.py"
+  '962faaae40ddd631abebc1b0b8dea7402c3bd34450fd0e51d2644bc22990430f' \
+  "$BASE_JOB_DIR/main.py" | sha256sum --check --strict
+grep -nE '^class VarianceComprehensiveWorkshop\(MovingCameraScene\)' "$BASE_JOB_DIR/main.py"
 
 docker pull "$IMAGE"
 docker run --rm "$IMAGE" manim --version | tee manim_version.txt
@@ -64,7 +84,7 @@ run_manim() {
       chmod +x /tmp/manim-bin/xdg-open
       export PATH=\"/tmp/manim-bin:\$PATH\"
       manim ${quality_flag} \\
-        ${JOB_DIR}/main.py \\
+        ${BASE_JOB_DIR}/main.py \\
         ${SCENE} \\
         --format=mp4 \\
         --disable_caching \\
@@ -117,32 +137,35 @@ test -s control_frames/frame_start.png
 test -s control_frames/frame_middle.png
 test -s control_frames/frame_end.png
 
-cp "$PQH_VIDEO" delivery/VarianceComprehensiveWorkshop_NATIVE_pqh.mp4
-cp "$JOB_DIR/main.py" delivery/variance_workshop_rendered.py
+cp "$PQH_VIDEO" delivery/VarianceComprehensiveWorkshop_IQR_Detailed_NATIVE_pqh.mp4
+cp "$BASE_JOB_DIR/main.py" delivery/variance_workshop_iqr_detailed.py
 cp pql_render.log pqh_render.log ffprobe.txt full_decode.log manim_version.txt delivery/
 cp -r control_frames delivery/
 
 cat > delivery/RENDER_INFO.txt <<'EOF'
 Scene: VarianceComprehensiveWorkshop
-Source: variance_workshop_rendered.py
+Source: variance_workshop_iqr_detailed.py
 ManimCE: 0.20.1
 Test command:
 manim -pql main.py VarianceComprehensiveWorkshop --format=mp4 --disable_caching
 Final command:
 manim -pqh main.py VarianceComprehensiveWorkshop --format=mp4 --disable_caching
-Source modifications required for native pdfLaTeX compatibility:
-- Five Unicode em dashes inside Tex strings were replaced by LaTeX-safe double hyphens (--).
-- Two prose percent signs passed through Tex were escaped as \%.
-No dataset, formula, timing, layout, animation, or scene logic was changed.
+Instructional update:
+Only scene_iqr_step_by_step was redesigned. It now explicitly animates sorting, ordered positions, Q2 calculation, lower/upper halves, Q1/Q3 calculations, IQR and Tukey fences, number-line classification, box/median/whisker/outlier assembly, and robustness to moving the outlier from 20 to 45.
+Dataset for the detailed construction:
+[2, 3, 4, 5, 6, 7, 8, 20]
+Quartiles and fences:
+Q1=3.5, Q2=5.5, Q3=7.5, IQR=4, lower fence=-2.5, upper fence=13.5.
+All other workshop scenes retain the previously validated code.
 Verification:
-ffprobe, complete FFmpeg decoding, and control-frame extraction were executed on the GitHub Ubuntu runner after explicit installation of FFmpeg tools.
+Native -pql and literal -pqh were executed in manimcommunity/manim:v0.20.1. ffprobe, full FFmpeg decoding, and three control-frame extractions were executed on the GitHub Ubuntu runner.
 EOF
 
 (
   cd delivery
   sha256sum \
-    VarianceComprehensiveWorkshop_NATIVE_pqh.mp4 \
-    variance_workshop_rendered.py \
+    VarianceComprehensiveWorkshop_IQR_Detailed_NATIVE_pqh.mp4 \
+    variance_workshop_iqr_detailed.py \
     pql_render.log \
     pqh_render.log \
     ffprobe.txt \
