@@ -33,13 +33,13 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          bash -x render_jobs/variance_iqr_detailed_20260727/run_final.sh 2>&1 | tee bootstrap_render.log
+          bash -x render_jobs/variance_workshop_20260726/run_render.sh 2>&1 | tee bootstrap_render.log
 
       - name: Upload native render result or diagnostic logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: VarianceComprehensiveWorkshop_IQR_Detailed_pqh
+          name: VarianceComprehensiveWorkshop_IQR_Detailed_Polished_pqh
           path: |
             delivery/
             render_jobs/variance_workshop_20260726/main.py
