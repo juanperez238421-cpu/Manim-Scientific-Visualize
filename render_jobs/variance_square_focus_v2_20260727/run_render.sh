@@ -91,25 +91,19 @@ ffmpeg -v error -ss 5 -i "$VIDEO" -frames:v 1 control_frames/frame_start.png
 ffmpeg -v error -ss "$MIDPOINT" -i "$VIDEO" -frames:v 1 control_frames/frame_middle.png
 ffmpeg -v error -sseof -5 -i "$VIDEO" -frames:v 1 control_frames/frame_end.png
 
-python - "$DURATION" > review_times.txt <<'PY'
-import sys
-D = float(sys.argv[1])
-for i in range(12):
-    print(max(0.0, min(D - 0.15, D * (i + 0.5) / 12)))
-PY
-index=1
-while IFS= read -r timestamp; do
-  printf -v frame_name 'review_frames/frame_%02d.png' "$index"
-  ffmpeg -v error -ss "$timestamp" -i "$VIDEO" -frames:v 1 "$frame_name"
-  index=$((index + 1))
-done < review_times.txt
+# Deterministic whole-video sampling without shell timestamp parsing.
+ffmpeg -v error -i "$VIDEO" \
+  -vf "fps=12/${DURATION}" \
+  review_frames/frame_%02d.png
+count="$(find review_frames -maxdepth 1 -type f -name 'frame_*.png' | wc -l)"
+test "$count" -ge 12
 ffmpeg -v error -framerate 1 -i review_frames/frame_%02d.png \
   -vf "scale=480:-1,tile=4x3:padding=8:margin=8:color=white" \
   -frames:v 1 delivery/contact_sheet.png
 
 cp "$VIDEO" "delivery/$OUTPUT_NAME"
 cp "$JOB_DIR/main.py" delivery/variance_square_meaning_masterclass_focus_v2.py
-cp "${PHASE}_render.log" ffprobe.txt full_decode.log manim_version.txt review_times.txt delivery/
+cp "${PHASE}_render.log" ffprobe.txt full_decode.log manim_version.txt delivery/
 cp -r control_frames review_frames delivery/
 cat > delivery/RENDER_INFO.txt <<EOF
 Scene: VarianceSquareMeaningMasterclass
@@ -129,7 +123,7 @@ EOF
     "$OUTPUT_NAME" \
     variance_square_meaning_masterclass_focus_v2.py \
     "${PHASE}_render.log" \
-    ffprobe.txt full_decode.log manim_version.txt review_times.txt \
+    ffprobe.txt full_decode.log manim_version.txt \
     contact_sheet.png \
     control_frames/*.png review_frames/*.png \
     RENDER_INFO.txt > SHA256SUMS.txt
