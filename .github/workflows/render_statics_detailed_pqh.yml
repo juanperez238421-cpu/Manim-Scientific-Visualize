@@ -80,11 +80,7 @@ jobs:
           set -euo pipefail
           mkdir -p delivery
           VIDEO="$(find media -type f -name 'Statics_Week_VectorDecomposition_Full.mp4' -print -quit)"
-          if [ -z "$VIDEO" ]; then
-            echo 'Expected scene MP4 not found. Available MP4 files:'
-            find media -type f -name '*.mp4' -print || true
-            exit 1
-          fi
+          test -n "$VIDEO"
           test -s "$VIDEO"
           echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
           cp "$VIDEO" delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4
@@ -99,25 +95,18 @@ jobs:
           JR_SHOW_ANSWER_KEY=0
           EOF
           sha256sum delivery/* > delivery/SHA256SUMS.txt
-          ls -lh delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4
 
       - name: Verify final MP4 metadata and full decoding
         shell: bash
         run: |
           set -euo pipefail
           VIDEO="delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4"
-          if command -v ffprobe >/dev/null 2>&1; then
-            ffprobe -v error \
-              -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
-              -show_entries format=duration,size \
-              -of default=noprint_wrappers=1 \
-              "$VIDEO" | tee delivery/FFPROBE.txt
-          else
-            echo 'ffprobe unavailable on runner' | tee delivery/FFPROBE.txt
-          fi
-          if command -v ffmpeg >/dev/null 2>&1; then
-            ffmpeg -v error -i "$VIDEO" -f null -
-          fi
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+            -show_entries format=duration,size \
+            -of default=noprint_wrappers=1 \
+            "$VIDEO" | tee delivery/FFPROBE.txt
+          ffmpeg -v error -i "$VIDEO" -f null -
           sha256sum delivery/* > delivery/SHA256SUMS.txt
 
       - name: Upload diagnostics
