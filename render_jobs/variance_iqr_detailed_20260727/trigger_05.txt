@@ -1,0 +1,1 @@
+Trigger polished detailed-IQR render after visual contact-sheet correction.
