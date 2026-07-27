@@ -1,0 +1,1 @@
+Capture full bootstrap diagnostics for the detailed IQR native render.
