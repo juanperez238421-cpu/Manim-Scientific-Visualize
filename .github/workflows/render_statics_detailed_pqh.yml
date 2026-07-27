@@ -27,10 +27,10 @@ jobs:
             render_jobs/statics_detailed.py.gz.b64.part2 \
             | base64 --decode \
             | gzip --decompress \
-            > Statics_Week_VectorDecomposition_DetailedProblem.py
-          python -m py_compile Statics_Week_VectorDecomposition_DetailedProblem.py
-          test -s Statics_Week_VectorDecomposition_DetailedProblem.py
-          wc -c Statics_Week_VectorDecomposition_DetailedProblem.py
+            > Statics_Week_VectorDecomposition_CameraFocus.py
+          python -m py_compile Statics_Week_VectorDecomposition_CameraFocus.py
+          test -s Statics_Week_VectorDecomposition_CameraFocus.py
+          wc -c Statics_Week_VectorDecomposition_CameraFocus.py
 
       - name: Pull official ManimCE image
         shell: bash
@@ -61,7 +61,7 @@ jobs:
               chmod +x /tmp/headless-bin/xdg-open
               export PATH="/tmp/headless-bin:$PATH"
               manim -pqh \
-                Statics_Week_VectorDecomposition_DetailedProblem.py \
+                Statics_Week_VectorDecomposition_CameraFocus.py \
                 Statics_Week_VectorDecomposition_Full \
                 --format=mp4 \
                 --disable_caching
@@ -87,25 +87,25 @@ jobs:
           fi
           test -s "$VIDEO"
           echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
-          cp "$VIDEO" delivery/Statics_Week_VectorDecomposition_DetailedProblem_pqh.mp4
-          cp Statics_Week_VectorDecomposition_DetailedProblem.py delivery/
+          cp "$VIDEO" delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4
+          cp Statics_Week_VectorDecomposition_CameraFocus.py delivery/
           cp pqh_render.log delivery/
           cat > delivery/RENDER_INFO.txt <<'EOF'
           Scene: Statics_Week_VectorDecomposition_Full
-          Source: Statics_Week_VectorDecomposition_DetailedProblem.py
+          Source: Statics_Week_VectorDecomposition_CameraFocus.py
           ManimCE: 0.20.1
-          Command: manim -pqh Statics_Week_VectorDecomposition_DetailedProblem.py Statics_Week_VectorDecomposition_Full --format=mp4 --disable_caching
+          Command: manim -pqh Statics_Week_VectorDecomposition_CameraFocus.py Statics_Week_VectorDecomposition_Full --format=mp4 --disable_caching
           JR_REAL_TIMER=0
           JR_SHOW_ANSWER_KEY=0
           EOF
           sha256sum delivery/* > delivery/SHA256SUMS.txt
-          ls -lh delivery/Statics_Week_VectorDecomposition_DetailedProblem_pqh.mp4
+          ls -lh delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4
 
       - name: Verify final MP4 metadata and full decoding
         shell: bash
         run: |
           set -euo pipefail
-          VIDEO="delivery/Statics_Week_VectorDecomposition_DetailedProblem_pqh.mp4"
+          VIDEO="delivery/Statics_Week_VectorDecomposition_CameraFocus_pqh.mp4"
           if command -v ffprobe >/dev/null 2>&1; then
             ffprobe -v error \
               -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
@@ -124,7 +124,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Statics_DetailedProblem_diagnostics
+          name: Statics_CameraFocus_diagnostics
           path: diagnostics/
           if-no-files-found: warn
           retention-days: 7
@@ -132,7 +132,7 @@ jobs:
       - name: Upload final PQH artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Statics_Week_VectorDecomposition_DetailedProblem_pqh
+          name: Statics_Week_VectorDecomposition_CameraFocus_pqh
           path: delivery/
           if-no-files-found: error
           retention-days: 7
