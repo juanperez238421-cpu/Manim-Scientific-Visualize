@@ -54,9 +54,43 @@ source_path.write_text(source[:start] + new_section + "\n" + source[end:], encod
 print(f"Applied detailed IQR replacement: {len(new_section.splitlines())} lines")
 PY
 
+# Final visual-polish correction confirmed by contact-sheet inspection:
+# move the off-axis lower-fence note away from quartile labels and stagger Q1/Q2/Q3.
+python - "$BASE_JOB_DIR/main.py" <<'PY'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+source = path.read_text(encoding="utf-8")
+changes = [
+    (
+        'lower_fence_note.move_to([-3.95, 2.04, 0])',
+        'lower_fence_note.move_to([-4.65, -0.12, 0])',
+    ),
+    (
+        'MathTex(r"Q_1=3.5", color=PURPLE).scale(0.43).next_to(q1_guide, UP, buff=0.08),',
+        'MathTex(r"Q_1=3.5", color=PURPLE).scale(0.43).next_to(q1_guide, UP, buff=0.08).shift(LEFT * 0.22 + DOWN * 0.16),',
+    ),
+    (
+        'MathTex(r"Q_2=5.5", color=GOLD).scale(0.43).next_to(q2_guide, UP, buff=0.08),',
+        'MathTex(r"Q_2=5.5", color=GOLD).scale(0.43).next_to(q2_guide, UP, buff=0.08).shift(UP * 0.12),',
+    ),
+    (
+        'MathTex(r"Q_3=7.5", color=TEAL).scale(0.43).next_to(q3_guide, UP, buff=0.08),',
+        'MathTex(r"Q_3=7.5", color=TEAL).scale(0.43).next_to(q3_guide, UP, buff=0.08).shift(RIGHT * 0.22 + DOWN * 0.16),',
+    ),
+]
+for old, new in changes:
+    count = source.count(old)
+    if count != 1:
+        raise RuntimeError(f"Expected exactly one occurrence of {old!r}, found {count}")
+    source = source.replace(old, new)
+path.write_text(source, encoding="utf-8")
+PY
+
 python -W error -m py_compile "$BASE_JOB_DIR/main.py"
 printf '%s  %s\n' \
-  '962faaae40ddd631abebc1b0b8dea7402c3bd34450fd0e51d2644bc22990430f' \
+  '5cfc11e6bfa06bb46547c5140cbaea18a1aa132c804a87ed265de11337374042' \
   "$BASE_JOB_DIR/main.py" | sha256sum --check --strict
 grep -nE '^class VarianceComprehensiveWorkshop\(MovingCameraScene\)' "$BASE_JOB_DIR/main.py"
 
@@ -137,14 +171,14 @@ test -s control_frames/frame_start.png
 test -s control_frames/frame_middle.png
 test -s control_frames/frame_end.png
 
-cp "$PQH_VIDEO" delivery/VarianceComprehensiveWorkshop_IQR_Detailed_NATIVE_pqh.mp4
-cp "$BASE_JOB_DIR/main.py" delivery/variance_workshop_iqr_detailed.py
+cp "$PQH_VIDEO" delivery/VarianceComprehensiveWorkshop_IQR_Detailed_Polished_NATIVE_pqh.mp4
+cp "$BASE_JOB_DIR/main.py" delivery/variance_workshop_iqr_detailed_polished.py
 cp pql_render.log pqh_render.log ffprobe.txt full_decode.log manim_version.txt delivery/
 cp -r control_frames delivery/
 
 cat > delivery/RENDER_INFO.txt <<'EOF'
 Scene: VarianceComprehensiveWorkshop
-Source: variance_workshop_iqr_detailed.py
+Source: variance_workshop_iqr_detailed_polished.py
 ManimCE: 0.20.1
 Test command:
 manim -pql main.py VarianceComprehensiveWorkshop --format=mp4 --disable_caching
@@ -156,6 +190,8 @@ Dataset for the detailed construction:
 [2, 3, 4, 5, 6, 7, 8, 20]
 Quartiles and fences:
 Q1=3.5, Q2=5.5, Q3=7.5, IQR=4, lower fence=-2.5, upper fence=13.5.
+Final visual-polish correction:
+The lower-fence note was moved into the empty lower-left region and Q1/Q2/Q3 labels were staggered to remove overlap found during contact-sheet review.
 All other workshop scenes retain the previously validated code.
 Verification:
 Native -pql and literal -pqh were executed in manimcommunity/manim:v0.20.1. ffprobe, full FFmpeg decoding, and three control-frame extractions were executed on the GitHub Ubuntu runner.
@@ -164,8 +200,8 @@ EOF
 (
   cd delivery
   sha256sum \
-    VarianceComprehensiveWorkshop_IQR_Detailed_NATIVE_pqh.mp4 \
-    variance_workshop_iqr_detailed.py \
+    VarianceComprehensiveWorkshop_IQR_Detailed_Polished_NATIVE_pqh.mp4 \
+    variance_workshop_iqr_detailed_polished.py \
     pql_render.log \
     pqh_render.log \
     ffprobe.txt \
