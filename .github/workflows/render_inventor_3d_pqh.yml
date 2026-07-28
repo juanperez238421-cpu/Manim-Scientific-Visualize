@@ -1,0 +1,119 @@
+name: Render Inventor 3D Extrusion PQH
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "engineering/cad_inventor/**"
+      - ".github/workflows/render_inventor_3d_pqh.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Python syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile engineering/cad_inventor/inventor_sketch_to_volume_3d.py
+
+      - name: Pull pinned ManimCE image
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull manimcommunity/manim:v0.20.1
+
+      - name: Render 3D smoke test in low quality
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH="/tmp/manim-bin:$PATH"
+              manim -pql \
+                engineering/cad_inventor/inventor_sketch_to_volume_3d.py \
+                InventorExtrusionSmokeTest \
+                --format=mp4 \
+                --disable_caching
+            '
+
+      - name: Render final scene with literal -pqh
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH="/tmp/manim-bin:$PATH"
+              manim -pqh \
+                engineering/cad_inventor/inventor_sketch_to_volume_3d.py \
+                InventorSketchToVolume3D \
+                --format=mp4 \
+                --disable_caching
+            ' 2>&1 | tee render.log
+          status=${PIPESTATUS[0]}
+          set -e
+          echo "$status" > render_status.txt
+          exit "$status"
+
+      - name: Verify and stage delivery
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(cat render_status.txt)" -eq 0
+
+          VIDEO="$(find media -type f -name 'InventorSketchToVolume3D.mp4' -print -quit)"
+          test -n "$VIDEO"
+          test -s "$VIDEO"
+
+          mkdir -p delivery
+          cp "$VIDEO" delivery/InventorSketchToVolume3D_pqh.mp4
+          cp engineering/cad_inventor/inventor_sketch_to_volume_3d.py delivery/
+          cp engineering/cad_inventor/README.md delivery/
+          cp render.log delivery/
+
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+            -show_entries format=duration,size \
+            -of default=noprint_wrappers=1 \
+            delivery/InventorSketchToVolume3D_pqh.mp4 \
+            | tee delivery/FFPROBE.txt
+
+          sha256sum delivery/* > delivery/SHA256SUMS.txt
+          ls -lh delivery
+
+      - name: Upload verified render artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: InventorSketchToVolume3D-pqh
+          path: delivery/
+          if-no-files-found: error
+          retention-days: 14
