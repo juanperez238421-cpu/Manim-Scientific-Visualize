@@ -25,6 +25,7 @@ jobs:
           set -euo pipefail
           python -m py_compile engineering/cad_inventor/inventor_sketch_to_volume_3d.py
           python -m py_compile engineering/cad_inventor/inventor_sketch_to_volume_3d_render.py
+          python -m py_compile engineering/cad_inventor/inventor_sketch_to_volume_3d_delivery.py
 
       - name: Pull pinned ManimCE image
         shell: bash
@@ -56,7 +57,7 @@ jobs:
                 --disable_caching
             '
 
-      - name: Render optimized final scene with literal -pqh
+      - name: Render delivery scene with literal -pqh
         shell: bash
         run: |
           set -euo pipefail
@@ -75,8 +76,8 @@ jobs:
               chmod +x /tmp/manim-bin/xdg-open
               export PATH="/tmp/manim-bin:$PATH"
               manim -pqh \
-                engineering/cad_inventor/inventor_sketch_to_volume_3d_render.py \
-                InventorSketchToVolume3DOptimized \
+                engineering/cad_inventor/inventor_sketch_to_volume_3d_delivery.py \
+                InventorSketchToVolume3DDelivery \
                 --format=mp4 \
                 --disable_caching
             ' 2>&1 | tee render.log
@@ -91,7 +92,7 @@ jobs:
           set -euo pipefail
           test "$(cat render_status.txt)" -eq 0
 
-          VIDEO="$(find media -type f -name 'InventorSketchToVolume3DOptimized.mp4' -print -quit)"
+          VIDEO="$(find media -type f -name 'InventorSketchToVolume3DDelivery.mp4' -print -quit)"
           test -n "$VIDEO"
           test -s "$VIDEO"
 
@@ -99,6 +100,7 @@ jobs:
           cp "$VIDEO" delivery/InventorSketchToVolume3D_pqh.mp4
           cp engineering/cad_inventor/inventor_sketch_to_volume_3d.py delivery/
           cp engineering/cad_inventor/inventor_sketch_to_volume_3d_render.py delivery/
+          cp engineering/cad_inventor/inventor_sketch_to_volume_3d_delivery.py delivery/
           cp engineering/cad_inventor/README.md delivery/
           cp render.log delivery/
 
