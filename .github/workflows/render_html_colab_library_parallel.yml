@@ -1,4 +1,4 @@
-name: Render VS Code HTML Tutorial V2 Senior Review
+name: Render VS Code HTML Tutorial V2 Senior Review Fix 2
 
 on:
   workflow_dispatch:
