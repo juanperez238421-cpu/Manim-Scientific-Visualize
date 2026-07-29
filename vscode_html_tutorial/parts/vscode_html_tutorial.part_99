@@ -53,5 +53,36 @@ def _type_code_lines_compat(
     return code_group
 
 
+def _html_colors_compat(line: str) -> dict[str, str]:
+    """Syntax colors with non-overlapping Pango ranges."""
+    colors: dict[str, str] = {}
+    for quoted in re.findall(r'"[^"]*"', line):
+        colors[quoted] = ORANGE
+    for tag in [
+        "<!DOCTYPE", "<html", "</html", "<head", "</head",
+        "<body", "</body", "<meta", "<title", "</title",
+        "<h1", "</h1", "<p", "</p",
+    ]:
+        if tag in line:
+            colors[tag] = BLUE
+    for attribute in ["lang", "charset", "name", "content", "class", "id"]:
+        if attribute in line:
+            colors[attribute] = GREEN
+    return colors
+
+
+def _html_line_compat(line: str, size: float = 22) -> Text:
+    return Text(
+        line,
+        font=FONT_MONO,
+        font_size=size,
+        color=TEXT,
+        t2c=_html_colors_compat(line),
+        disable_ligatures=True,
+    )
+
+
 VSCodeTutorialBase.reset_camera = _reset_camera_compat
 VSCodeTutorialBase.type_code_lines = _type_code_lines_compat
+html_colors = _html_colors_compat
+html_line = _html_line_compat
