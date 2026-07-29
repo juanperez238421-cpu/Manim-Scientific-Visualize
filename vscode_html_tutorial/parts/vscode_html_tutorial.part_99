@@ -20,7 +20,7 @@ def _type_code_lines_compat(
 ) -> VGroup:
     origin = origin if origin is not None else self.editor_code_origin()
     longest_line = max((len(line) for line in lines), default=0)
-    effective_font_size = min(font_size, 15.0) if longest_line > 58 else font_size
+    effective_font_size = min(font_size, 13.5) if longest_line > 58 else font_size
     code_group = VGroup()
     cursor = make_cursor(0.24)
     self.add(cursor)
