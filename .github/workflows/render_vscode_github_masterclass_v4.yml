@@ -29,32 +29,48 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Assemble and validate sources
+      - name: Assemble and validate source syntax
         shell: bash
         run: |
           set -euo pipefail
           python vscode_html_tutorial/build_source.py
           python -m py_compile vscode_html_tutorial/vscode_html_tutorial.py
           python -m py_compile vscode_html_tutorial/masterclass_v4.py
-          python - <<'PY'
-          import importlib.util
-          from pathlib import Path
-          path = Path("vscode_html_tutorial/masterclass_v4.py")
-          spec = importlib.util.spec_from_file_location("masterclass_v4", path)
-          module = importlib.util.module_from_spec(spec)
-          spec.loader.exec_module(module)
-          expected = {"VSCodeHTMLMasterclass", "GitHubGitMasterclass"}
-          missing = [name for name in expected if not hasattr(module, name)]
-          if missing:
-              raise SystemExit(f"Missing scenes: {missing}")
-          print("Validated scenes:", ", ".join(sorted(expected)))
-          PY
 
       - name: Pull pinned ManimCE image
         shell: bash
         run: |
           set -euo pipefail
           docker pull manimcommunity/manim:v0.20.1
+
+      - name: Validate scenes in pinned ManimCE environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              python vscode_html_tutorial/build_source.py
+              python - <<"PY"
+              import importlib.util
+              from pathlib import Path
+              path = Path("vscode_html_tutorial/masterclass_v4.py")
+              spec = importlib.util.spec_from_file_location("masterclass_v4", path)
+              module = importlib.util.module_from_spec(spec)
+              spec.loader.exec_module(module)
+              expected = {"VSCodeHTMLMasterclass", "GitHubGitMasterclass"}
+              missing = [name for name in expected if not hasattr(module, name)]
+              if missing:
+                  raise SystemExit(f"Missing scenes: {missing}")
+              print("Validated scenes:", ", ".join(sorted(expected)))
+              PY
+            '
 
       - name: Native PQL test and literal PQH render
         shell: bash
@@ -146,7 +162,7 @@ jobs:
           cp vscode_html_tutorial/masterclass_v4.py delivery/
           cp vscode_html_tutorial/vscode_html_tutorial.py delivery/
           cp -R vscode_html_tutorial/masterclass_v4_parts delivery/
-          sha256sum delivery/* > delivery/SHA256SUMS_NATIVE.txt || true
+          find delivery -type f -print0 | sort -z | xargs -0 sha256sum > delivery/SHA256SUMS_NATIVE.txt
 
       - name: Upload complete native package
         uses: actions/upload-artifact@v4
