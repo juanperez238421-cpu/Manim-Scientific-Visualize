@@ -1,4 +1,4 @@
-name: Render HTML Colab Visual Library V2 Parallel
+name: Render VS Code HTML Tutorial V2 Senior Review
 
 on:
   workflow_dispatch:
@@ -6,7 +6,6 @@ on:
     branches:
       - main
     paths:
-      - "html_colab_visual_library/**"
       - ".github/workflows/render_html_colab_library_parallel.yml"
 
 permissions:
@@ -15,32 +14,37 @@ permissions:
 jobs:
   render-scene:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
         include:
           - index: "01"
-            scene: HTML01WhatIsHTML
+            scene: VSCode01_InterfaceTourV2
           - index: "02"
-            scene: HTML02HeadAndBody
+            scene: VSCode02_CreateProjectFolderV2
           - index: "03"
-            scene: HTML03SemanticText
+            scene: VSCode03_CreateIndexFileV2
           - index: "04"
-            scene: HTML04LinksListsImages
+            scene: VSCode04_HTMLSkeletonV2
           - index: "05"
-            scene: HTML05LayoutAndForms
+            scene: VSCode05_HelloWorldV2
+          - index: "06"
+            scene: VSCode06_HTMLLogicPracticeV2
 
     steps:
-      - name: Checkout
+      - name: Checkout render branch
         uses: actions/checkout@v4
 
-      - name: Assemble and validate source
+      - name: Fetch reviewed tutorial source
         shell: bash
         run: |
           set -euo pipefail
-          python html_colab_visual_library/build_source.py
-          python -m py_compile html_colab_visual_library/html_colab_visual_library.py
+          git fetch origin agent/vscode-html-tutorial-series-english
+          git checkout FETCH_HEAD -- vscode_html_tutorial
+          python vscode_html_tutorial/build_source.py
+          python -m py_compile vscode_html_tutorial/vscode_html_tutorial.py
+          grep -nE '^class VSCode0[1-6]_.*V2' vscode_html_tutorial/vscode_html_tutorial.py
 
       - name: Pull pinned ManimCE image
         shell: bash
@@ -48,7 +52,7 @@ jobs:
           set -euo pipefail
           docker pull manimcommunity/manim:v0.20.1
 
-      - name: Native PQL test and PQH render
+      - name: Native PQL test and literal PQH render
         shell: bash
         env:
           SCENE: ${{ matrix.scene }}
@@ -64,16 +68,16 @@ jobs:
             manimcommunity/manim:v0.20.1 \
             -c '
               set -euo pipefail
-              mkdir -p /tmp/colab-bin /tmp/manim-home
-              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open
-              chmod +x /tmp/colab-bin/xdg-open
-              export PATH="/tmp/colab-bin:$PATH"
-              SOURCE="html_colab_visual_library/html_colab_visual_library.py"
+              mkdir -p /tmp/vscode-bin /tmp/manim-home
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/vscode-bin/xdg-open
+              chmod +x /tmp/vscode-bin/xdg-open
+              export PATH="/tmp/vscode-bin:$PATH"
+              SOURCE="vscode_html_tutorial/vscode_html_tutorial.py"
               manim -pql "$SOURCE" "$SCENE" --format=mp4 --disable_caching
               manim -pqh "$SOURCE" "$SCENE" --format=mp4 --disable_caching
             ' 2>&1 | tee "${SCENE}_render.log"
 
-      - name: Verify scene with full PyAV decode
+      - name: Stage and fully decode native scene
         shell: bash
         env:
           SCENE: ${{ matrix.scene }}
@@ -81,18 +85,21 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p scene_delivery
-          video="$(find media -type f -name "${SCENE}.mp4" ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
-          test -n "$video"
-          test -s "$video"
+          input="$(find media -type f -name "${SCENE}.mp4" ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$input"
+          test -s "$input"
           output="scene_delivery/${INDEX}_${SCENE}_pqh.mp4"
-          cp "$video" "$output"
-          docker run --rm -e OUTPUT="$output" -v "$PWD:/manim" -w /manim --entrypoint python manimcommunity/manim:v0.20.1 -c 'import av,os; p=os.environ["OUTPUT"]; c=av.open(p); ss=[s for s in c.streams if s.type=="video"]; assert len(ss)==1; s=ss[0]; codec=s.codec_context.name; width=s.codec_context.width; height=s.codec_context.height; rate=s.average_rate; pix=s.codec_context.format.name if s.codec_context.format else "unknown"; duration=float(c.duration/av.time_base) if c.duration is not None else None; frames=sum(1 for _ in c.decode(video=0)); assert frames>0; print(f"file={p}\ncodec_name={codec}\nwidth={width}\nheight={height}\nr_frame_rate={rate}\npix_fmt={pix}\nduration={duration}\nsize={os.path.getsize(p)}\ndecoded_frames={frames}\nfull_decode=success")' | tee "scene_delivery/${INDEX}_${SCENE}_verification.txt"
+          cp "$input" "$output"
+          docker run --rm \
+            -e OUTPUT="$output" -v "$PWD:/manim" -w /manim \
+            --entrypoint python manimcommunity/manim:v0.20.1 \
+            -c 'import av,os; p=os.environ["OUTPUT"]; c=av.open(p); ss=[s for s in c.streams if s.type=="video"]; assert len(ss)==1; s=ss[0]; codec=s.codec_context.name; width=s.codec_context.width; height=s.codec_context.height; rate=s.average_rate; pix=s.codec_context.format.name if s.codec_context.format else "unknown"; duration=float(c.duration/av.time_base) if c.duration is not None else None; frames=sum(1 for _ in c.decode(video=0)); assert frames>0; print(f"file={p}\ncodec_name={codec}\nwidth={width}\nheight={height}\nr_frame_rate={rate}\npix_fmt={pix}\nduration={duration}\nsize={os.path.getsize(p)}\ndecoded_frames={frames}\nfull_decode=success")' | tee "scene_delivery/${INDEX}_${SCENE}_verification.txt"
           cp "${SCENE}_render.log" scene_delivery/
 
       - name: Upload verified scene
         uses: actions/upload-artifact@v4
         with:
-          name: html-colab-${{ matrix.index }}-${{ matrix.scene }}
+          name: vscode-v2-${{ matrix.index }}-${{ matrix.scene }}
           path: scene_delivery/
           if-no-files-found: error
           retention-days: 7
@@ -100,39 +107,40 @@ jobs:
   package:
     needs: render-scene
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
 
     steps:
-      - name: Checkout
+      - name: Checkout render branch
         uses: actions/checkout@v4
 
-      - name: Assemble source
+      - name: Fetch exact reviewed source
         shell: bash
         run: |
           set -euo pipefail
-          python html_colab_visual_library/build_source.py
-          python -m py_compile html_colab_visual_library/html_colab_visual_library.py
+          git fetch origin agent/vscode-html-tutorial-series-english
+          git checkout FETCH_HEAD -- vscode_html_tutorial
+          python vscode_html_tutorial/build_source.py
+          python -m py_compile vscode_html_tutorial/vscode_html_tutorial.py
 
       - name: Download verified scenes
         uses: actions/download-artifact@v4
         with:
-          pattern: html-colab-*
+          pattern: vscode-v2-*
           path: delivery
           merge-multiple: true
 
-      - name: Complete delivery package
+      - name: Complete reviewed delivery package
         shell: bash
         run: |
           set -euo pipefail
-          cp html_colab_visual_library/html_colab_visual_library.py delivery/
-          cp html_colab_visual_library/README.md delivery/
-          test "$(find delivery -maxdepth 1 -name '*_pqh.mp4' | wc -l)" -eq 5
-          sha256sum delivery/* > delivery/SHA256SUMS.txt
+          test "$(find delivery -maxdepth 1 -name '*_pqh.mp4' | wc -l)" -eq 6
+          cp vscode_html_tutorial/vscode_html_tutorial.py delivery/vscode_html_tutorial_v2_render_source.py
+          sha256sum delivery/* > delivery/SHA256SUMS_NATIVE.txt
 
-      - name: Upload complete library
+      - name: Upload complete reviewed series
         uses: actions/upload-artifact@v4
         with:
-          name: HTML-Colab-Visual-Library-V2-Final
+          name: VSCode-HTML-Tutorial-V2-Senior-Reviewed-PQH
           path: delivery/
           if-no-files-found: error
           retention-days: 7
