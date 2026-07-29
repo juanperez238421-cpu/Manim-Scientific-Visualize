@@ -26,3 +26,5 @@ manim -pqh vscode_html_tutorial/vscode_html_tutorial.py VSCode01_InterfaceTour -
 ```
 
 The GitHub Actions workflow renders all six lessons in parallel, normalizes every video to H.264/yuv420p at 1920×1080 and 30 fps, performs a complete frame decode, and creates one concatenated full-series MP4.
+
+The pull request is kept isolated until the rendered artifact passes visual frame inspection.
