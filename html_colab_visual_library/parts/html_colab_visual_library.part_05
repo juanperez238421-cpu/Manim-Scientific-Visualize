@@ -1,0 +1,78 @@
+        "Construir una interfaz completa que recopila y organiza información.",
+        (
+            "header, main, section, aside y footer dividen la responsabilidad visual.",
+            "label conecta el texto con su control mediante for e id.",
+            "name identifica el dato enviado; type define el comportamiento del input.",
+        ),
+        (
+            '<main class="page-layout">',
+            '  <section class="catalog-column">...</section>',
+            '  <aside class="checkout-column">',
+            '    <form id="checkoutForm" novalidate>',
+            '      <label for="customerName">Nombre completo</label>',
+            '      <input id="customerName" name="customerName"',
+            '             type="text" required>',
+            '      <label for="customerEmail">Correo</label>',
+            '      <input id="customerEmail" name="customerEmail"',
+            '             type="email" required>',
+            '      <button type="submit">Generar comprobante</button>',
+            "    </form>",
+            "  </aside>",
+            "</main>",
+        ),
+        (
+            (1, "main contiene el propósito central"),
+            (2, "section agrupa el catálogo"),
+            (3, "aside contiene información complementaria"),
+            (4, "form agrupa controles relacionados"),
+            (5, "for debe coincidir con el id"),
+            (6, "name define la clave del dato"),
+            (9, "type=email activa validación específica"),
+            (11, "submit inicia el procesamiento"),
+        ),
+        (
+            "La estructura semántica facilita CSS Grid y diseño responsive.",
+            "Cada input necesita label, id, name y type coherentes.",
+            "required ayuda, pero la validación completa también necesita JavaScript.",
+        ),
+    )
+
+    def build_output(self) -> VGroup:
+        frame = browser_frame(height=3.55)
+        header = market_header(width=8.80, compact=True)
+        header.move_to(frame[0].get_top() + DOWN * 0.92)
+
+        catalog = rounded_box(5.45, 1.70, fill=COLAB_SURFACE, stroke=MARKET_BORDER, radius=0.08)
+        catalog_title = ui_text("1. Catálogo de productos", 15, MARKET_INK, BOLD)
+        search = market_field("Buscar producto", "Ej.: calculadora, regla...", 2.55)
+        cards = VGroup(
+            product_card("Cuaderno", "$12.500", "▤", 1.65),
+            product_card("Regla", "$4.500", "—", 1.65),
+        ).arrange(RIGHT, buff=0.12)
+        catalog_title.move_to(catalog.get_corner(UL) + [1.05, -0.25, 0])
+        search.move_to(catalog.get_left() + [1.45, 0.20, 0])
+        cards.scale(0.68).move_to(catalog.get_center() + [1.35, -0.16, 0])
+        catalog_group = VGroup(catalog, catalog_title, search, cards)
+
+        checkout = rounded_box(3.05, 1.70, fill=COLAB_SURFACE, stroke=MARKET_BORDER, radius=0.08)
+        checkout_title = ui_text("2. Datos de la orden", 14, MARKET_INK, BOLD)
+        name = market_field("Nombre completo", "Juan Pérez", 2.38)
+        email = market_field("Correo", "juan@colegio.edu.co", 2.38)
+        submit = market_button("Generar comprobante", 2.38, True)
+        checkout_title.move_to(checkout.get_corner(UL) + [0.93, -0.24, 0])
+        name.scale(0.78).move_to(checkout.get_center() + UP * 0.24)
+        email.scale(0.78).next_to(name, DOWN, buff=0.16)
+        submit.scale(0.78).next_to(email, DOWN, buff=0.13)
+        checkout_group = VGroup(checkout, checkout_title, name, email, submit)
+
+        body = VGroup(catalog_group, checkout_group).arrange(RIGHT, buff=0.20)
+        body.next_to(header, DOWN, buff=0.14)
+        return VGroup(frame, header, catalog_group, checkout_group)
+
+    def animate_output_relationships(self, output: VGroup):
+        self.play(Indicate(output[1], color=MARKET_BLUE), run_time=0.8)
+        self.play(Circumscribe(output[2], color=MARKET_BLUE), run_time=1.0)
+        self.play(Circumscribe(output[3], color=COLAB_BLUE), run_time=1.0)
+        self.play(Indicate(output[3][2], color=COLAB_BLUE), run_time=0.7)
+        self.play(Indicate(output[3][3], color=COLAB_BLUE), run_time=0.7)
+        self.play(Indicate(output[3][4], color=MARKET_BLUE_DARK), run_time=0.8)
