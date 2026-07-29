@@ -43,35 +43,6 @@ jobs:
           set -euo pipefail
           docker pull manimcommunity/manim:v0.20.1
 
-      - name: Validate scenes in pinned ManimCE environment
-        shell: bash
-        run: |
-          set -euo pipefail
-          docker run --rm \
-            --user "$(id -u):$(id -g)" \
-            -e HOME=/tmp/manim-home \
-            -v "$PWD:/manim" \
-            -w /manim \
-            --entrypoint bash \
-            manimcommunity/manim:v0.20.1 \
-            -c '
-              set -euo pipefail
-              python vscode_html_tutorial/build_source.py
-              python - <<"PY"
-              import importlib.util
-              from pathlib import Path
-              path = Path("vscode_html_tutorial/masterclass_v4.py")
-              spec = importlib.util.spec_from_file_location("masterclass_v4", path)
-              module = importlib.util.module_from_spec(spec)
-              spec.loader.exec_module(module)
-              expected = {"VSCodeHTMLMasterclass", "GitHubGitMasterclass"}
-              missing = [name for name in expected if not hasattr(module, name)]
-              if missing:
-                  raise SystemExit(f"Missing scenes: {missing}")
-              print("Validated scenes:", ", ".join(sorted(expected)))
-              PY
-            '
-
       - name: Native PQL test and literal PQH render
         shell: bash
         env:
@@ -94,6 +65,7 @@ jobs:
               export PATH="/tmp/vscode-bin:$PATH"
               python vscode_html_tutorial/build_source.py
               SOURCE="vscode_html_tutorial/masterclass_v4.py"
+              python -m py_compile "$SOURCE"
               manim -pql "$SOURCE" "$SCENE" --format=mp4 --disable_caching
               manim -pqh "$SOURCE" "$SCENE" --format=mp4 --disable_caching
             ' 2>&1 | tee "${SCENE}_render.log"
