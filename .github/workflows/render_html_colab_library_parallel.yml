@@ -1,4 +1,4 @@
-name: Render VS Code HTML Tutorial Series Temporary Reviewed
+name: Render VS Code HTML Tutorial Series Final
 
 on:
   workflow_dispatch:
