@@ -1,0 +1,57 @@
+
+
+# ---------------------------------------------------------------------------
+# ManimCE 0.20.1 compatibility overrides
+# ---------------------------------------------------------------------------
+def _reset_camera_compat(self, run_time: float = 0.75) -> None:
+    self.play(self.camera.frame.animate.set_width(16).move_to(ORIGIN), run_time=run_time)
+
+
+def _type_code_lines_compat(
+    self,
+    lines: Sequence[str],
+    start_line: int = 1,
+    origin: np.ndarray | None = None,
+    line_spacing: float = 0.40,
+    font_size: float = 20,
+    time_per_char: float = 0.017,
+    pause_between_lines: float = 0.06,
+    line_callback=None,
+) -> VGroup:
+    origin = origin if origin is not None else self.editor_code_origin()
+    code_group = VGroup()
+    cursor = make_cursor(0.26)
+    self.add(cursor)
+    typing_animation = globals().get("AddTextLetterByLetter")
+    for idx, line in enumerate(lines):
+        row = self.code_row(start_line + idx, line, font_size)
+        row.align_to(origin, LEFT)
+        row.set_y(origin[1] - idx * line_spacing)
+        row[0].set_opacity(0)
+        self.add(row[0])
+        self.play(FadeIn(row[0]), run_time=0.15)
+        if not line:
+            cursor.move_to([row[0].get_right()[0] + 0.40, row.get_y(), 0])
+            self.wait(0.12)
+        else:
+            cursor.move_to(row[1].get_left() + LEFT * 0.01)
+            animation = (
+                typing_animation(row[1], time_per_char=time_per_char)
+                if typing_animation is not None
+                else Write(row[1])
+            )
+            self.play(
+                animation,
+                cursor.animate.next_to(row[1], RIGHT, buff=0.035),
+                run_time=max(0.28, len(line) * time_per_char),
+            )
+        code_group.add(row)
+        if line_callback:
+            line_callback(idx, row, code_group)
+        self.wait(pause_between_lines)
+    self.play(FadeOut(cursor), run_time=0.25)
+    return code_group
+
+
+VSCodeTutorialBase.reset_camera = _reset_camera_compat
+VSCodeTutorialBase.type_code_lines = _type_code_lines_compat
