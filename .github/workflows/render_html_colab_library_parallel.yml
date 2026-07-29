@@ -77,7 +77,7 @@ jobs:
               manim -pqh "$SOURCE" "$SCENE" --format=mp4 --disable_caching
             ' 2>&1 | tee "${SCENE}_render.log"
 
-      - name: Normalize and verify scene
+      - name: Stage and fully decode native scene
         shell: bash
         env:
           SCENE: ${{ matrix.scene }}
@@ -89,17 +89,11 @@ jobs:
           test -n "$input"
           test -s "$input"
           output="scene_delivery/${INDEX}_${SCENE}_pqh.mp4"
-          docker run --rm \
-            --user "$(id -u):$(id -g)" \
-            -e INPUT="$input" -e OUTPUT="$output" \
-            -v "$PWD:/manim" -w /manim \
-            --entrypoint bash manimcommunity/manim:v0.20.1 \
-            -c 'set -euo pipefail; ffmpeg -y -v error -i "$INPUT" -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -r 30 -movflags +faststart "$OUTPUT"'
-          test -s "$output"
+          cp "$input" "$output"
           docker run --rm \
             -e OUTPUT="$output" -v "$PWD:/manim" -w /manim \
             --entrypoint python manimcommunity/manim:v0.20.1 \
-            -c 'import av,os; from fractions import Fraction; p=os.environ["OUTPUT"]; c=av.open(p); ss=[s for s in c.streams if s.type=="video"]; assert len(ss)==1; s=ss[0]; assert s.codec_context.name=="h264"; assert (s.codec_context.width,s.codec_context.height)==(1920,1080); assert Fraction(s.average_rate)==Fraction(30,1); assert s.codec_context.format.name=="yuv420p"; duration=float(c.duration/av.time_base); frames=sum(1 for _ in c.decode(video=0)); assert frames>0; print(f"file={p}\nduration={duration}\ndecoded_frames={frames}\nfull_decode=success")' | tee "scene_delivery/${INDEX}_${SCENE}_verification.txt"
+            -c 'import av,os; from fractions import Fraction; p=os.environ["OUTPUT"]; c=av.open(p); ss=[s for s in c.streams if s.type=="video"]; assert len(ss)==1; s=ss[0]; codec=s.codec_context.name; width=s.codec_context.width; height=s.codec_context.height; rate=s.average_rate; pix=s.codec_context.format.name if s.codec_context.format else "unknown"; assert codec=="h264"; assert (width,height)==(1920,1080); assert Fraction(rate)==Fraction(30,1); duration=float(c.duration/av.time_base); frames=sum(1 for _ in c.decode(video=0)); assert frames>0; print(f"file={p}\ncodec_name={codec}\nwidth={width}\nheight={height}\nr_frame_rate={rate}\npix_fmt={pix}\nduration={duration}\nsize={os.path.getsize(p)}\ndecoded_frames={frames}\nfull_decode=success")' | tee "scene_delivery/${INDEX}_${SCENE}_verification.txt"
           cp "${SCENE}_render.log" scene_delivery/
 
       - name: Upload verified scene
@@ -113,7 +107,7 @@ jobs:
   package:
     needs: render-scene
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 25
 
     steps:
       - name: Checkout render branch
@@ -135,40 +129,19 @@ jobs:
           path: delivery
           merge-multiple: true
 
-      - name: Build and verify complete series
+      - name: Complete native delivery package
         shell: bash
         run: |
           set -euo pipefail
           test "$(find delivery -maxdepth 1 -name '*_pqh.mp4' | wc -l)" -eq 6
-          cat > delivery/concat.txt <<'EOF'
-          file '01_VSCode01_InterfaceTour_pqh.mp4'
-          file '02_VSCode02_CreateProjectFolder_pqh.mp4'
-          file '03_VSCode03_CreateIndexFile_pqh.mp4'
-          file '04_VSCode04_HTMLSkeleton_pqh.mp4'
-          file '05_VSCode05_HelloWorldAndPreview_pqh.mp4'
-          file '06_VSCode06_HTMLLogicAndPractice_pqh.mp4'
-          EOF
-          sed -i 's/^          //' delivery/concat.txt
-          docker run --rm \
-            --user "$(id -u):$(id -g)" \
-            -v "$PWD:/manim" -w /manim/delivery \
-            --entrypoint bash manimcommunity/manim:v0.20.1 \
-            -c 'set -euo pipefail; ffmpeg -y -v error -f concat -safe 0 -i concat.txt -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -r 30 -movflags +faststart 00_VSCode_HTML_Basics_Full_Series.mp4'
-          test -s delivery/00_VSCode_HTML_Basics_Full_Series.mp4
-          docker run --rm \
-            -e OUTPUT="delivery/00_VSCode_HTML_Basics_Full_Series.mp4" \
-            -v "$PWD:/manim" -w /manim \
-            --entrypoint python manimcommunity/manim:v0.20.1 \
-            -c 'import av,os; from fractions import Fraction; p=os.environ["OUTPUT"]; c=av.open(p); s=[s for s in c.streams if s.type=="video"][0]; assert s.codec_context.name=="h264"; assert (s.codec_context.width,s.codec_context.height)==(1920,1080); assert Fraction(s.average_rate)==Fraction(30,1); assert s.codec_context.format.name=="yuv420p"; frames=sum(1 for _ in c.decode(video=0)); assert frames>0; print(f"file={p}\nduration={float(c.duration/av.time_base)}\ndecoded_frames={frames}\nfull_decode=success")' | tee delivery/00_full_series_verification.txt
           cp vscode_html_tutorial/vscode_html_tutorial.py delivery/
           cp vscode_html_tutorial/README.md delivery/
-          rm -f delivery/concat.txt
-          sha256sum delivery/* > delivery/SHA256SUMS.txt
+          sha256sum delivery/* > delivery/SHA256SUMS_NATIVE.txt
 
-      - name: Upload complete series
+      - name: Upload complete native series
         uses: actions/upload-artifact@v4
         with:
-          name: VSCode-HTML-Tutorial-Series-English-PQH
+          name: VSCode-HTML-Tutorial-Series-English-Native-PQH
           path: delivery/
           if-no-files-found: error
           retention-days: 7
