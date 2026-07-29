@@ -1,4 +1,4 @@
-name: Render VS Code HTML Tutorial Series Final
+name: Render VS Code HTML Tutorial Series Final Layout Check
 
 on:
   workflow_dispatch:
