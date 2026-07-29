@@ -1,7 +1,7 @@
 
 
 # ---------------------------------------------------------------------------
-# ManimCE 0.20.1 compatibility overrides
+# ManimCE 0.20.1 compatibility and readability overrides
 # ---------------------------------------------------------------------------
 def _reset_camera_compat(self, run_time: float = 0.75) -> None:
     self.play(self.camera.frame.animate.set_width(16).move_to(ORIGIN), run_time=run_time)
@@ -19,12 +19,14 @@ def _type_code_lines_compat(
     line_callback=None,
 ) -> VGroup:
     origin = origin if origin is not None else self.editor_code_origin()
+    longest_line = max((len(line) for line in lines), default=0)
+    effective_font_size = min(font_size, 15.0) if longest_line > 58 else font_size
     code_group = VGroup()
-    cursor = make_cursor(0.26)
+    cursor = make_cursor(0.24)
     self.add(cursor)
     typing_animation = globals().get("AddTextLetterByLetter")
     for idx, line in enumerate(lines):
-        row = self.code_row(start_line + idx, line, font_size)
+        row = self.code_row(start_line + idx, line, effective_font_size)
         row.align_to(origin, LEFT)
         row.set_y(origin[1] - idx * line_spacing)
         row[0].set_opacity(0)
@@ -79,7 +81,40 @@ def _html_line_compat(line: str, size: float = 22) -> Text:
     )
 
 
+_COMPACT_SKELETON = (
+    "<!DOCTYPE html>",
+    '<html lang="en">',
+    "  <head>",
+    '    <meta charset="UTF-8">',
+    '    <meta name="viewport" content="width=device-width">',
+    "    <title>Hello World</title>",
+    "  </head>",
+    "  <body>",
+    "",
+    "  </body>",
+    "</html>",
+)
+
+_COMPACT_FINAL_CODE = (
+    "<!DOCTYPE html>",
+    '<html lang="en">',
+    "  <head>",
+    '    <meta charset="UTF-8">',
+    '    <meta name="viewport" content="width=device-width">',
+    "    <title>Hello World</title>",
+    "  </head>",
+    "  <body>",
+    "    <h1>Hello, world!</h1>",
+    "    <p>My first HTML page.</p>",
+    "  </body>",
+    "</html>",
+)
+
+
 VSCodeTutorialBase.reset_camera = _reset_camera_compat
 VSCodeTutorialBase.type_code_lines = _type_code_lines_compat
 html_colors = _html_colors_compat
 html_line = _html_line_compat
+VSCode04_HTMLSkeleton.SKELETON = _COMPACT_SKELETON
+VSCode05_HelloWorldAndPreview.FINAL_CODE = _COMPACT_FINAL_CODE
+VSCode06_HTMLLogicAndPractice.FINAL_CODE = _COMPACT_FINAL_CODE
