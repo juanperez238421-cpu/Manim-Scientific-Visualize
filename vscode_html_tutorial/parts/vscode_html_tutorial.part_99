@@ -54,7 +54,7 @@ def _type_code_lines_compat(
 
 
 def _html_colors_compat(line: str) -> dict[str, str]:
-    """Syntax colors with non-overlapping Pango ranges."""
+    """Syntax colors using ranges that never overlap in Pango."""
     colors: dict[str, str] = {}
     for quoted in re.findall(r'"[^"]*"', line):
         colors[quoted] = ORANGE
@@ -65,9 +65,6 @@ def _html_colors_compat(line: str) -> dict[str, str]:
     ]:
         if tag in line:
             colors[tag] = BLUE
-    for attribute in ["lang", "charset", "name", "content", "class", "id"]:
-        if attribute in line:
-            colors[attribute] = GREEN
     return colors
 
 
