@@ -19,14 +19,16 @@ def _type_code_lines_compat(
     line_callback=None,
 ) -> VGroup:
     origin = origin if origin is not None else self.editor_code_origin()
-    longest_line = max((len(line) for line in lines), default=0)
-    effective_font_size = min(font_size, 13.5) if longest_line > 58 else font_size
     code_group = VGroup()
     cursor = make_cursor(0.24)
     self.add(cursor)
     typing_animation = globals().get("AddTextLetterByLetter")
     for idx, line in enumerate(lines):
-        row = self.code_row(start_line + idx, line, effective_font_size)
+        # Keep ordinary lines large and readable. Only exceptionally long
+        # metadata lines are reduced so they never run underneath the lesson
+        # banner or the right-side explanation panels.
+        row_font_size = min(font_size, 9.5) if len(line) > 50 else min(font_size, 17.0)
+        row = self.code_row(start_line + idx, line, row_font_size)
         row.align_to(origin, LEFT)
         row.set_y(origin[1] - idx * line_spacing)
         row[0].set_opacity(0)
