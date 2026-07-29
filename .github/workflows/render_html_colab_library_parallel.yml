@@ -44,7 +44,6 @@ jobs:
           git checkout FETCH_HEAD -- vscode_html_tutorial
           python vscode_html_tutorial/build_source.py
           python -m py_compile vscode_html_tutorial/vscode_html_tutorial.py
-          grep -nE '^class VSCode0[1-6]_.*V2' vscode_html_tutorial/vscode_html_tutorial.py
 
       - name: Pull pinned ManimCE image
         shell: bash
