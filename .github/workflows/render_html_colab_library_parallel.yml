@@ -73,7 +73,7 @@ jobs:
               manim -pqh "$SOURCE" "$SCENE" --format=mp4 --disable_caching
             ' 2>&1 | tee "${SCENE}_render.log"
 
-      - name: Verify scene
+      - name: Verify scene inside pinned container
         shell: bash
         env:
           SCENE: ${{ matrix.scene }}
@@ -81,17 +81,34 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p scene_delivery
-          video="$(find media -type f -path '*1080p*' -name "${SCENE}.mp4" -print -quit)"
+          video="$(
+            find media -type f -name "${SCENE}.mp4" ! -path '*/partial_movie_files/*' \
+              -printf '%T@ %p\n' \
+            | sort -nr \
+            | head -1 \
+            | cut -d' ' -f2-
+          )"
           test -n "$video"
           test -s "$video"
           output="scene_delivery/${INDEX}_${SCENE}_pqh.mp4"
           cp "$video" "$output"
-          ffprobe -v error \
-            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
-            -show_entries format=duration,size \
-            -of default=noprint_wrappers=1 \
-            "$output" | tee "scene_delivery/${INDEX}_${SCENE}_ffprobe.txt"
-          ffmpeg -v error -i "$output" -f null -
+
+          docker run --rm \
+            -e OUTPUT="$output" \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              ffprobe -v error \
+                -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+                -show_entries format=duration,size \
+                -of default=noprint_wrappers=1 \
+                "$OUTPUT"
+              ffmpeg -v error -i "$OUTPUT" -f null -
+            ' | tee "scene_delivery/${INDEX}_${SCENE}_ffprobe.txt"
+
           cp "${SCENE}_render.log" scene_delivery/
 
       - name: Upload verified scene
