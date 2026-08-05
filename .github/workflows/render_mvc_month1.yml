@@ -43,6 +43,7 @@ jobs:
           docker run --rm \
             --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home \
+            -e PYTHONPATH=/manim \
             -v "$PWD:/manim" \
             -w /manim \
             --entrypoint bash \
@@ -53,6 +54,7 @@ jobs:
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH="/tmp/manim-bin:$PATH"
+              export PYTHONPATH="/manim:${PYTHONPATH:-}"
 
               SCENES=(
                 "scenes/week1_vectors.py W1_VectorBridge2D3D"
