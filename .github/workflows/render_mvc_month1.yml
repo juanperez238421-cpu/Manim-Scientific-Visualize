@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   render:
@@ -21,8 +21,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect publication commit
+        id: detect
+        shell: bash
+        run: |
+          set -euo pipefail
+          message="$(git log -1 --pretty=%B)"
+          if [[ "$message" == Publish\ rendered\ MVC\ package* ]]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Prepare and validate source
+        if: steps.detect.outputs.skip != 'true'
         working-directory: render_jobs/mvc_month1/source
         shell: bash
         run: |
@@ -32,10 +47,12 @@ jobs:
           grep -Fx 'manim==0.20.1' requirements.txt
 
       - name: Pull pinned ManimCE image
+        if: steps.detect.outputs.skip != 'true'
         shell: bash
         run: docker pull manimcommunity/manim:v0.20.1
 
       - name: Run PQL tests and literal PQH renders
+        if: steps.detect.outputs.skip != 'true'
         working-directory: render_jobs/mvc_month1/source
         shell: bash
         run: |
@@ -80,6 +97,7 @@ jobs:
           cp render_mvc_month1.log delivery/logs/
 
       - name: Verify delivery
+        if: steps.detect.outputs.skip != 'true'
         working-directory: render_jobs/mvc_month1/source
         shell: bash
         run: |
@@ -95,10 +113,49 @@ jobs:
             -show_entries format=duration,size \
             -of default=noprint_wrappers=1 {} \;
 
+      - name: Build downloadable packages
+        if: steps.detect.outputs.skip != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$GITHUB_WORKSPACE/render_jobs/mvc_month1/source"
+          out="$GITHUB_WORKSPACE/deliveries/mvc_month1"
+          rm -rf "$out"
+          mkdir -p "$out"
+          (
+            cd "$root"
+            zip -qr "$out/MVC_Month1_ManimCE_PQH_complete.zip" delivery
+            zip -qr "$out/MVC_Month1_ManimCE_source.zip" mvc_manim_library.py scenes scripts README.md COURSE_MAP.md manim.cfg requirements.txt
+          )
+          cp "$root/delivery/videos/00_month1_compilation_pqh.mp4" "$out/"
+          cp "$root/delivery/SHA256SUMS.txt" "$out/"
+          sha256sum "$out"/*.zip "$out"/*.mp4 > "$out/PACKAGE_SHA256SUMS.txt"
+          test -s "$out/MVC_Month1_ManimCE_PQH_complete.zip"
+          test -s "$out/MVC_Month1_ManimCE_source.zip"
+          test -s "$out/00_month1_compilation_pqh.mp4"
+
       - name: Upload complete package
+        if: steps.detect.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: MVC-Month1-ManimCE-PQH
-          path: render_jobs/mvc_month1/source/delivery/
+          path: |
+            render_jobs/mvc_month1/source/delivery/
+            deliveries/mvc_month1/
           if-no-files-found: error
           retention-days: 7
+
+      - name: Publish package to temporary branch
+        if: steps.detect.outputs.skip != 'true' && github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deliveries/mvc_month1
+          if git diff --cached --quiet; then
+            echo "No package changes to publish."
+            exit 0
+          fi
+          git commit -m "Publish rendered MVC package [skip render]"
+          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
