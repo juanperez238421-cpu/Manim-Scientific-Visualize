@@ -48,7 +48,7 @@ class W1_VectorBridge2D3D(ThreeDScene):
         self.remove(formula)
 
         self.play(Create(axes), run_time=1.2)
-        self.play(Create(xline), Create(yline), Create(zline), Create(vector), FadeIn(endpoint), run_time=1.6)
+        self.play(Create(xline), Create(yline), Create(zline), FadeIn(vector), FadeIn(endpoint), run_time=1.6)
         self.play(FadeIn(formula, shift=UP * 0.2), run_time=0.8)
         self.move_camera(theta=25 * DEGREES, run_time=2.0)
         self.wait(1.0)
