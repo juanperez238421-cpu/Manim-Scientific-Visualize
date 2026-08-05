@@ -101,7 +101,7 @@ class W4_GradientAndTangentPlane(ThreeDScene):
         self.remove(card)
 
         self.play(Create(axes), FadeIn(surface), run_time=1.4)
-        self.play(FadeIn(point), Create(gradient), run_time=1.0)
+        self.play(FadeIn(point), FadeIn(gradient), run_time=1.0)
         self.play(FadeIn(tangent), FadeIn(card, shift=UP * 0.2), run_time=1.1)
         self.move_camera(theta=22 * DEGREES, phi=74 * DEGREES, run_time=2.0)
         self.wait(1.5)
