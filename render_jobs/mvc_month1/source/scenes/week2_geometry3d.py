@@ -41,9 +41,9 @@ class W2_CrossProductArea(ThreeDScene):
         self.remove(card)
 
         self.play(Create(axes), run_time=1.0)
-        self.play(Create(au), Create(av), run_time=1.1)
+        self.play(FadeIn(au), FadeIn(av), run_time=1.1)
         self.play(FadeIn(poly), run_time=0.8)
-        self.play(Create(aw), FadeIn(card, shift=UP * 0.18), run_time=1.2)
+        self.play(FadeIn(aw), FadeIn(card, shift=UP * 0.18), run_time=1.2)
         self.move_camera(theta=20 * DEGREES, run_time=2.0)
         self.wait(1.2)
 
@@ -92,7 +92,7 @@ class W2_LinesPlanesIntersection(ThreeDScene):
 
         self.play(Create(axes), run_time=1.0)
         self.play(FadeIn(plane), run_time=1.1)
-        self.play(Create(line), Create(normal), run_time=1.1)
+        self.play(FadeIn(line), FadeIn(normal), run_time=1.1)
         self.play(FadeIn(hit, scale=1.8), FadeIn(card, shift=UP * 0.2), run_time=1.0)
         self.move_camera(theta=15 * DEGREES, run_time=2.0)
         self.wait(1.1)
