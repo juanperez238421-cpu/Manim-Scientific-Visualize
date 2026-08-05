@@ -22,20 +22,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Extract source package
-        shell: bash
-        run: |
-          set -euo pipefail
-          rm -rf render_jobs/mvc_month1/source
-          mkdir -p render_jobs/mvc_month1/source
-          unzip -q render_jobs/mvc_month1/mvc_month1_source.zip -d render_jobs/mvc_month1/source
-          chmod +x render_jobs/mvc_month1/source/scripts/render_all.sh
-
-      - name: Validate Python source
+      - name: Prepare and validate source
         working-directory: render_jobs/mvc_month1/source
         shell: bash
         run: |
           set -euo pipefail
+          chmod +x scripts/render_all.sh
           python -m py_compile mvc_manim_library.py scenes/*.py
           grep -Fx 'manim==0.20.1' requirements.txt
 
