@@ -12,7 +12,7 @@ SCENES=(
   "scenes/week4_derivatives.py W4_GradientAndTangentPlane 08_gradient_tangent_plane"
 )
 
-rm -rf delivery
+rm -rf delivery/videos delivery/code delivery/logs
 mkdir -p delivery/videos delivery/code delivery/logs
 : > delivery/render_commands.txt
 
