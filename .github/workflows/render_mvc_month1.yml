@@ -19,25 +19,13 @@ jobs:
     timeout-minutes: 120
 
     steps:
-      - name: Checkout
+      - name: Checkout temporary render branch
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
 
-      - name: Detect publication commit
-        id: detect
-        shell: bash
-        run: |
-          set -euo pipefail
-          message="$(git log -1 --pretty=%B)"
-          if [[ "$message" == Publish\ rendered\ MVC\ package* ]]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Prepare and validate source
-        if: steps.detect.outputs.skip != 'true'
         working-directory: render_jobs/mvc_month1/source
         shell: bash
         run: |
@@ -47,12 +35,10 @@ jobs:
           grep -Fx 'manim==0.20.1' requirements.txt
 
       - name: Pull pinned ManimCE image
-        if: steps.detect.outputs.skip != 'true'
         shell: bash
         run: docker pull manimcommunity/manim:v0.20.1
 
       - name: Run PQL tests and literal PQH renders
-        if: steps.detect.outputs.skip != 'true'
         working-directory: render_jobs/mvc_month1/source
         shell: bash
         run: |
@@ -84,7 +70,7 @@ jobs:
                 "scenes/week4_derivatives.py W4_GradientAndTangentPlane"
               )
 
-              mkdir -p delivery/logs
+              mkdir -p delivery
               : > delivery/pql_commands.txt
               for item in "${SCENES[@]}"; do
                 read -r file scene <<<"$item"
@@ -96,8 +82,16 @@ jobs:
             ' 2>&1 | tee render_mvc_month1.log
           cp render_mvc_month1.log delivery/logs/
 
-      - name: Verify delivery
-        if: steps.detect.outputs.skip != 'true'
+      - name: Install verification and packaging tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg zip
+          ffprobe -version | head -1
+          zip -v | head -2
+
+      - name: Verify every rendered MP4
         working-directory: render_jobs/mvc_month1/source
         shell: bash
         run: |
@@ -108,13 +102,35 @@ jobs:
           test -s delivery/SHA256SUMS.txt
           test -s delivery/render_commands.txt
           test -s delivery/pql_commands.txt
-          find delivery/videos -maxdepth 1 -type f -name '*_pqh.mp4' -print -exec ffprobe -v error \
-            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
-            -show_entries format=duration,size \
-            -of default=noprint_wrappers=1 {} \;
+
+          : > delivery/VIDEO_MANIFEST.txt
+          while IFS= read -r -d '' video; do
+            name="$(basename "$video" .mp4)"
+            probe="delivery/logs/${name}_ffprobe.txt"
+            ffprobe -v error \
+              -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+              -show_entries format=duration,size \
+              -of default=noprint_wrappers=1 \
+              "$video" > "$probe"
+
+            codec="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$video")"
+            width="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$video")"
+            height="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$video")"
+            fps="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$video")"
+            pix="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$video")"
+
+            test "$codec" = "h264"
+            test "$width" = "1920"
+            test "$height" = "1080"
+            test "$fps" = "30/1"
+            test "$pix" = "yuv420p"
+            printf '%s | %sx%s | %s fps | %s | %s\n' "$name" "$width" "$height" "$fps" "$codec" "$pix" \
+              | tee -a delivery/VIDEO_MANIFEST.txt
+          done < <(find delivery/videos -maxdepth 1 -type f -name '*_pqh.mp4' -print0 | sort -z)
+
+          sha256sum -c delivery/SHA256SUMS.txt
 
       - name: Build downloadable packages
-        if: steps.detect.outputs.skip != 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -125,17 +141,18 @@ jobs:
           (
             cd "$root"
             zip -qr "$out/MVC_Month1_ManimCE_PQH_complete.zip" delivery
-            zip -qr "$out/MVC_Month1_ManimCE_source.zip" mvc_manim_library.py scenes scripts README.md COURSE_MAP.md manim.cfg requirements.txt
+            zip -qr "$out/MVC_Month1_ManimCE_source.zip" \
+              mvc_manim_library.py scenes scripts README.md COURSE_MAP.md manim.cfg requirements.txt
           )
           cp "$root/delivery/videos/00_month1_compilation_pqh.mp4" "$out/"
           cp "$root/delivery/SHA256SUMS.txt" "$out/"
+          cp "$root/delivery/VIDEO_MANIFEST.txt" "$out/"
           sha256sum "$out"/*.zip "$out"/*.mp4 > "$out/PACKAGE_SHA256SUMS.txt"
           test -s "$out/MVC_Month1_ManimCE_PQH_complete.zip"
           test -s "$out/MVC_Month1_ManimCE_source.zip"
           test -s "$out/00_month1_compilation_pqh.mp4"
 
       - name: Upload complete package
-        if: steps.detect.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: MVC-Month1-ManimCE-PQH
@@ -145,8 +162,8 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-      - name: Publish package to temporary branch
-        if: steps.detect.outputs.skip != 'true' && github.event_name == 'pull_request'
+      - name: Publish verified package to temporary branch
+        if: github.event_name == 'pull_request'
         shell: bash
         run: |
           set -euo pipefail
