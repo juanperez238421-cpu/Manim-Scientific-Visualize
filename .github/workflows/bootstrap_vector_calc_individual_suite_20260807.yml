@@ -52,16 +52,6 @@ jobs:
       - name: Checkout render branch
         uses: actions/checkout@v4
 
-      - name: Restore source bundle
-        shell: bash
-        run: |
-          set -euo pipefail
-          JOB=render_jobs/vector_calc_individual_suite_20260807
-          base64 -d "$JOB/sources.b64" > /tmp/vector_calc_suite_sources.zip
-          unzip -q -o /tmp/vector_calc_suite_sources.zip -d "$JOB"
-          test -s "$JOB/src/common.py"
-          test -s "$JOB/src/${{ matrix.file }}"
-
       - name: Resolve phase
         id: phase
         shell: bash
@@ -83,8 +73,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m py_compile render_jobs/vector_calc_individual_suite_20260807/src/common.py
-          python -m py_compile "render_jobs/vector_calc_individual_suite_20260807/src/${{ matrix.file }}"
+          python -m py_compile render_jobs/vector_calc_masterclass_v3_20260807/main.py
+          python -m py_compile "render_jobs/vector_calc_individual_suite_20260807/${{ matrix.file }}"
 
       - name: Install FFmpeg QA tools
         shell: bash
@@ -122,22 +112,17 @@ jobs:
               chmod +x /tmp/manim-bin/xdg-open
               export PATH="/tmp/manim-bin:$PATH"
               manim --version
-              manim '"$QUALITY"' '"$JOB"'/src/'"$FILE"' '"$SCENE"' --format=mp4 --disable_caching
+              manim '"$QUALITY"' '"$JOB"'/'"$FILE"' '"$SCENE"' --format=mp4 --disable_caching
             ' 2>&1 | tee "delivery/$SLUG/render_${PHASE}.log"
 
           VIDEO="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$VIDEO"
           test -s "$VIDEO"
           cp "$VIDEO" "delivery/$SLUG/${SLUG}_${PHASE}.mp4"
-          cp "$JOB/src/$FILE" "delivery/$SLUG/$FILE"
-          cp "$JOB/src/common.py" "delivery/$SLUG/common.py"
+          cp "$JOB/$FILE" "delivery/$SLUG/$FILE"
+          cp render_jobs/vector_calc_masterclass_v3_20260807/main.py "delivery/$SLUG/V3_BASE_LIBRARY.py"
 
-          ffprobe -v error \
-            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
-            -show_entries format=duration,size \
-            -of default=noprint_wrappers=1 \
-            "delivery/$SLUG/${SLUG}_${PHASE}.mp4" | tee "delivery/$SLUG/ffprobe.txt"
-
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of default=noprint_wrappers=1 "delivery/$SLUG/${SLUG}_${PHASE}.mp4" | tee "delivery/$SLUG/ffprobe.txt"
           ffmpeg -v error -i "delivery/$SLUG/${SLUG}_${PHASE}.mp4" -f null - 2> "delivery/$SLUG/full_decode.log"
           DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "delivery/$SLUG/${SLUG}_${PHASE}.mp4")"
           FPS_SAMPLE="$(python - <<PY
@@ -145,18 +130,15 @@ D=float("$DURATION")
 print(max(0.001, 12.0/max(D,0.001)))
 PY
 )"
-          ffmpeg -y -v error -i "delivery/$SLUG/${SLUG}_${PHASE}.mp4" \
-            -vf "fps=$FPS_SAMPLE,scale=480:-1,tile=4x3:padding=8:margin=8" \
-            -frames:v 1 "qa/$SLUG/contact_sheet.jpg" || true
-
+          ffmpeg -y -v error -i "delivery/$SLUG/${SLUG}_${PHASE}.mp4" -vf "fps=$FPS_SAMPLE,scale=480:-1,tile=4x3:padding=8:margin=8" -frames:v 1 "qa/$SLUG/contact_sheet.jpg" || true
           sha256sum "delivery/$SLUG/${SLUG}_${PHASE}.mp4" > "delivery/$SLUG/SHA256SUMS.txt"
           cat > "delivery/$SLUG/RENDER_INFO.txt" <<EOF
 Scene: $SCENE
 Source: $FILE
-Shared library: common.py
+Base library: render_jobs/vector_calc_masterclass_v3_20260807/main.py
 ManimCE: 0.20.1
 Phase: $PHASE
-Command: manim $QUALITY $JOB/src/$FILE $SCENE --format=mp4 --disable_caching
+Command: manim $QUALITY $JOB/$FILE $SCENE --format=mp4 --disable_caching
 LESSON_TIME_SCALE: $SCALE
 EOF
 
