@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import importlib.util
+import math
 from pathlib import Path
+import numpy as np
 from manim import *
 
 BASE = Path(__file__).resolve().parents[1] / "vector_calc_masterclass_v3_20260807" / "main.py"
