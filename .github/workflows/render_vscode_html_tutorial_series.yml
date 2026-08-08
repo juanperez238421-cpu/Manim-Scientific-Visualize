@@ -1,0 +1,245 @@
+name: Render VS Code HTML Tutorial Series
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "vscode_html_tutorial/**"
+      - ".github/workflows/render_vscode_html_tutorial_series.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  render-scene:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - index: "01"
+            scene: VSCode01_InterfaceTour
+          - index: "02"
+            scene: VSCode02_CreateProjectFolder
+          - index: "03"
+            scene: VSCode03_CreateIndexFile
+          - index: "04"
+            scene: VSCode04_HTMLSkeleton
+          - index: "05"
+            scene: VSCode05_HelloWorldAndPreview
+          - index: "06"
+            scene: VSCode06_HTMLLogicAndPractice
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Assemble and validate source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python vscode_html_tutorial/build_source.py
+          python -m py_compile vscode_html_tutorial/vscode_html_tutorial.py
+          grep -nE '^class VSCode0[1-6]_' vscode_html_tutorial/vscode_html_tutorial.py
+
+      - name: Pull pinned ManimCE image
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull manimcommunity/manim:v0.20.1
+
+      - name: Native PQL test and literal PQH render
+        shell: bash
+        env:
+          SCENE: ${{ matrix.scene }}
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e SCENE="$SCENE" \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/vscode-bin /tmp/manim-home
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/vscode-bin/xdg-open
+              chmod +x /tmp/vscode-bin/xdg-open
+              export PATH="/tmp/vscode-bin:$PATH"
+              SOURCE="vscode_html_tutorial/vscode_html_tutorial.py"
+              manim -pql "$SOURCE" "$SCENE" --format=mp4 --disable_caching
+              manim -pqh "$SOURCE" "$SCENE" --format=mp4 --disable_caching
+            ' 2>&1 | tee "${SCENE}_render.log"
+
+      - name: Locate and normalize final MP4
+        shell: bash
+        env:
+          SCENE: ${{ matrix.scene }}
+          INDEX: ${{ matrix.index }}
+        run: |
+          set -euo pipefail
+          mkdir -p scene_delivery
+          input="$(find media -type f -name "${SCENE}.mp4" ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$input"
+          test -s "$input"
+          output="scene_delivery/${INDEX}_${SCENE}_pqh.mp4"
+
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e INPUT="$input" \
+            -e OUTPUT="$output" \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              ffmpeg -y -v error -i "$INPUT" \
+                -c:v libx264 -preset medium -crf 18 \
+                -pix_fmt yuv420p -r 30 -movflags +faststart \
+                "$OUTPUT"
+            '
+          test -s "$output"
+
+      - name: Verify codec, dimensions, frame rate and full decode
+        shell: bash
+        env:
+          SCENE: ${{ matrix.scene }}
+          INDEX: ${{ matrix.index }}
+        run: |
+          set -euo pipefail
+          output="scene_delivery/${INDEX}_${SCENE}_pqh.mp4"
+          docker run --rm \
+            -e OUTPUT="$output" \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint python \
+            manimcommunity/manim:v0.20.1 \
+            -c 'import av, os
+from fractions import Fraction
+p=os.environ["OUTPUT"]
+c=av.open(p)
+ss=[s for s in c.streams if s.type=="video"]
+assert len(ss)==1, len(ss)
+s=ss[0]
+codec=s.codec_context.name
+width=s.codec_context.width
+height=s.codec_context.height
+rate=s.average_rate
+pix=s.codec_context.format.name if s.codec_context.format else "unknown"
+duration=float(c.duration/av.time_base) if c.duration is not None else 0.0
+assert codec=="h264", codec
+assert (width,height)==(1920,1080), (width,height)
+assert Fraction(rate)==Fraction(30,1), rate
+assert pix=="yuv420p", pix
+frames=sum(1 for _ in c.decode(video=0))
+assert frames>0, frames
+print(f"file={p}\ncodec_name={codec}\nwidth={width}\nheight={height}\nr_frame_rate={rate}\npix_fmt={pix}\nduration={duration}\nsize={os.path.getsize(p)}\ndecoded_frames={frames}\nfull_decode=success")' \
+            | tee "scene_delivery/${INDEX}_${SCENE}_verification.txt"
+          cp "${SCENE}_render.log" scene_delivery/
+
+      - name: Upload verified scene
+        uses: actions/upload-artifact@v4
+        with:
+          name: vscode-html-${{ matrix.index }}-${{ matrix.scene }}
+          path: scene_delivery/
+          if-no-files-found: error
+          retention-days: 7
+
+  package-series:
+    needs: render-scene
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Assemble exact source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python vscode_html_tutorial/build_source.py
+          python -m py_compile vscode_html_tutorial/vscode_html_tutorial.py
+
+      - name: Download verified scene artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: vscode-html-*
+          path: delivery
+          merge-multiple: true
+
+      - name: Concatenate the complete series
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(find delivery -maxdepth 1 -name '*_pqh.mp4' | wc -l)" -eq 6
+          cat > delivery/concat.txt <<'EOF'
+          file '01_VSCode01_InterfaceTour_pqh.mp4'
+          file '02_VSCode02_CreateProjectFolder_pqh.mp4'
+          file '03_VSCode03_CreateIndexFile_pqh.mp4'
+          file '04_VSCode04_HTMLSkeleton_pqh.mp4'
+          file '05_VSCode05_HelloWorldAndPreview_pqh.mp4'
+          file '06_VSCode06_HTMLLogicAndPractice_pqh.mp4'
+          EOF
+          sed -i 's/^          //' delivery/concat.txt
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -v "$PWD:/manim" \
+            -w /manim/delivery \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              ffmpeg -y -v error -f concat -safe 0 -i concat.txt \
+                -c:v libx264 -preset medium -crf 18 \
+                -pix_fmt yuv420p -r 30 -movflags +faststart \
+                00_VSCode_HTML_Basics_Full_Series.mp4
+            '
+          test -s delivery/00_VSCode_HTML_Basics_Full_Series.mp4
+
+      - name: Verify complete series
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            -e OUTPUT="delivery/00_VSCode_HTML_Basics_Full_Series.mp4" \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint python \
+            manimcommunity/manim:v0.20.1 \
+            -c 'import av, os
+from fractions import Fraction
+p=os.environ["OUTPUT"]
+c=av.open(p)
+s=[s for s in c.streams if s.type=="video"][0]
+assert s.codec_context.name=="h264"
+assert (s.codec_context.width,s.codec_context.height)==(1920,1080)
+assert Fraction(s.average_rate)==Fraction(30,1)
+assert s.codec_context.format.name=="yuv420p"
+frames=sum(1 for _ in c.decode(video=0))
+assert frames>0
+print(f"file={p}\nduration={float(c.duration/av.time_base)}\ndecoded_frames={frames}\nfull_decode=success")' \
+            | tee delivery/00_full_series_verification.txt
+
+      - name: Stage source and integrity files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp vscode_html_tutorial/vscode_html_tutorial.py delivery/
+          cp vscode_html_tutorial/build_source.py delivery/
+          rm -f delivery/concat.txt
+          sha256sum delivery/* > delivery/SHA256SUMS.txt
+
+      - name: Upload complete English tutorial series
+        uses: actions/upload-artifact@v4
+        with:
+          name: VSCode-HTML-Tutorial-Series-English-PQH
+          path: delivery/
+          if-no-files-found: error
+          retention-days: 7
