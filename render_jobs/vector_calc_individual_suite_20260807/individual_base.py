@@ -17,11 +17,15 @@ class IndividualLessonBase(V3):
     """Autonomous microclass wrapper around the validated V3 visual library."""
 
     def intro(self, code: str, title: str, subtitle: str, method: str):
-        a = self.text(code, 26, BOLD)
-        b = self.text(title, 48, BOLD)
+        a = self.fit(self.text(code, 26, BOLD), 13.4, 0.48)
+        b = self.fit(self.text(title, 48, BOLD), 13.25, 0.92)
         r = Line(LEFT*5.4, RIGHT*5.4, color=BLACK, stroke_width=2)
-        c = self.text(subtitle, 27)
-        d = self.text(method, 22, MEDIUM)
+        if "$" in subtitle:
+            c = Tex(subtitle, font_size=28, color=BLACK)
+            c = self.fit(c, 13.0, 0.70)
+        else:
+            c = self.fit(self.text(subtitle, 27), 13.0, 0.70)
+        d = self.fit(self.text(method, 22, MEDIUM), 13.0, 0.54)
         g = VGroup(a,b,r,c,d).arrange(DOWN, buff=0.25)
         self.register_fixed(g)
         self.paced_play(FadeIn(a), pause=0.7)
@@ -32,7 +36,7 @@ class IndividualLessonBase(V3):
         self.clear()
 
     def outro(self, family: str, checklist):
-        title = self.text(f"MÉTODO FINAL · {family.upper()}", 38, BOLD).to_edge(UP, buff=0.55)
+        title = self.fit(self.text(f"MÉTODO FINAL · {family.upper()}", 38, BOLD), 13.3, 0.72).to_edge(UP, buff=0.55)
         cards = VGroup()
         for i, line in enumerate(checklist, 1):
             box = RoundedRectangle(width=11.4, height=0.72, corner_radius=0.08,
