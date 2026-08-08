@@ -1,0 +1,81 @@
+name: Bootstrap Vector Calculus Masterclass V3 Native Render
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'render/vector-calc-surfaces-masterclass-v3-20260807'
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+
+    steps:
+      - name: Checkout render branch
+        uses: actions/checkout@v4
+
+      - name: Resolve phase
+        id: phase
+        shell: bash
+        run: |
+          set -euo pipefail
+          PHASE="$(tr -d '[:space:]' < render_jobs/vector_calc_masterclass_v3_20260807/phase.txt)"
+          echo "phase=$PHASE" >> "$GITHUB_OUTPUT"
+          if [ "$PHASE" = "pql" ]; then
+            echo "artifact_name=VectorCalc_Masterclass_V3_pql" >> "$GITHUB_OUTPUT"
+          elif [ "$PHASE" = "pqh" ]; then
+            echo "artifact_name=VectorCalc_Masterclass_V3_pqh" >> "$GITHUB_OUTPUT"
+          else
+            echo "Unsupported phase $PHASE" >&2
+            exit 2
+          fi
+
+      - name: Validate source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile render_jobs/vector_calc_masterclass_v3_20260807/main.py
+          grep -nE '([A-Za-z]:\\\\|/Users/|/home/[^/]+/Desktop)' render_jobs/vector_calc_masterclass_v3_20260807/main.py && exit 4 || true
+
+      - name: Install FFmpeg QA tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
+      - name: Run native ManimCE protocol
+        id: render
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          bash -x render_jobs/vector_calc_masterclass_v3_20260807/run_render.sh 2>&1 | tee bootstrap_render.log
+
+      - name: Upload render and QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.phase.outputs.artifact_name }}
+          path: |
+            delivery/
+            render_jobs/vector_calc_masterclass_v3_20260807/main.py
+            render_jobs/vector_calc_masterclass_v3_20260807/run_render.sh
+            bootstrap_render.log
+            pql_render.log
+            pqh_render.log
+            ffprobe.txt
+            full_decode.log
+            qa_contact_sheet.jpg
+            manim_version.txt
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Preserve failure
+        if: steps.render.outcome != 'success'
+        shell: bash
+        run: exit 1
