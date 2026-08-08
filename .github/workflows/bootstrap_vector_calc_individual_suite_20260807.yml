@@ -52,6 +52,16 @@ jobs:
       - name: Checkout render branch
         uses: actions/checkout@v4
 
+      - name: Restore source bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/vector_calc_individual_suite_20260807
+          base64 -d "$JOB/sources.b64" > /tmp/vector_calc_suite_sources.zip
+          unzip -q -o /tmp/vector_calc_suite_sources.zip -d "$JOB"
+          test -s "$JOB/src/common.py"
+          test -s "$JOB/src/${{ matrix.file }}"
+
       - name: Resolve phase
         id: phase
         shell: bash
