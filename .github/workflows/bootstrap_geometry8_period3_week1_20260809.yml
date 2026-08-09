@@ -1,0 +1,196 @@
+name: Bootstrap Geometry 8 Period 3 Week 1 Render
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'render/geometry8-period3-week1-20260809'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout render branch
+        uses: actions/checkout@v4
+
+      - name: Install FFmpeg verification tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
+      - name: Recover Week 1 source package
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_period3_week1_20260809
+          mkdir -p "$JOB/project"
+          curl -fL --retry 3 \
+            "https://raw.githubusercontent.com/juanperez238421-cpu/ijr-geometria-8-2026-2/render-payload-week1-20260809/manim_temp/week1_payload.tar.gz.b64" \
+            -o /tmp/week1_payload.tar.gz.b64
+          base64 -d /tmp/week1_payload.tar.gz.b64 > /tmp/week1_payload.tar.gz
+          tar -xzf /tmp/week1_payload.tar.gz -C "$JOB/project"
+          find "$JOB/project" -maxdepth 3 -type f -print
+
+      - name: Validate Python sources and JP style
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_period3_week1_20260809/project
+          python -m py_compile "$JOB/geometry8_period3_week1_class1_theory.py"
+          python -m py_compile "$JOB/geometry8_period3_week1_class2_practice.py"
+          python "$JOB/tools/check_manim_style.py" "$JOB/geometry8_period3_week1_class1_theory.py"
+          python "$JOB/tools/check_manim_style.py" "$JOB/geometry8_period3_week1_class2_practice.py"
+
+      - name: Pull official ManimCE 0.20.1 image
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull manimcommunity/manim:v0.20.1
+
+      - name: Render protocol sequence -pql then literal -pqh
+        id: render
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          JOB=render_jobs/geometry8_period3_week1_20260809/project
+          IMAGE=manimcommunity/manim:v0.20.1
+          rm -rf delivery_geometry8_week1 qa_geometry8_week1 media
+          mkdir -p delivery_geometry8_week1 qa_geometry8_week1
+
+          ENTRIES=(
+            'geometry8_period3_week1_class1_theory.py|Geometry8Week1Theory|class1_theory'
+            'geometry8_period3_week1_class2_practice.py|Geometry8Week1Practice|class2_practice'
+          )
+
+          for ENTRY in "${ENTRIES[@]}"; do
+            IFS='|' read -r FILE SCENE SLUG <<< "$ENTRY"
+            mkdir -p "delivery_geometry8_week1/$SLUG" "qa_geometry8_week1/$SLUG"
+
+            echo "===== PREVIEW $SLUG / -pql ====="
+            set +e
+            docker run --rm \
+              --user "$(id -u):$(id -g)" \
+              -e HOME=/tmp/manim-home \
+              -e LESSON_TIME_SCALE=0.12 \
+              -e FILE="$FILE" \
+              -e SCENE="$SCENE" \
+              -e JOB="$JOB" \
+              -v "$PWD:/manim" \
+              -w /manim \
+              --entrypoint bash \
+              "$IMAGE" \
+              -c '
+                set -euo pipefail
+                mkdir -p /tmp/manim-bin
+                printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+                chmod +x /tmp/manim-bin/xdg-open
+                export PATH="/tmp/manim-bin:$PATH"
+                manim --version
+                manim -pql "$JOB/$FILE" "$SCENE" --format=mp4 --disable_caching
+              ' 2>&1 | tee "delivery_geometry8_week1/$SLUG/render_pql.log"
+            STATUS=${PIPESTATUS[0]}
+            set -e
+            if [ "$STATUS" -ne 0 ]; then
+              echo "Preview render failed for $SLUG with status $STATUS" >&2
+              exit "$STATUS"
+            fi
+
+            PREVIEW_VIDEO="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+            test -n "$PREVIEW_VIDEO"
+            test -s "$PREVIEW_VIDEO"
+            cp "$PREVIEW_VIDEO" "delivery_geometry8_week1/$SLUG/${SLUG}_pql.mp4"
+
+            echo "===== FINAL $SLUG / -pqh ====="
+            set +e
+            docker run --rm \
+              --user "$(id -u):$(id -g)" \
+              -e HOME=/tmp/manim-home \
+              -e LESSON_TIME_SCALE=1.0 \
+              -e FILE="$FILE" \
+              -e SCENE="$SCENE" \
+              -e JOB="$JOB" \
+              -v "$PWD:/manim" \
+              -w /manim \
+              --entrypoint bash \
+              "$IMAGE" \
+              -c '
+                set -euo pipefail
+                mkdir -p /tmp/manim-bin
+                printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+                chmod +x /tmp/manim-bin/xdg-open
+                export PATH="/tmp/manim-bin:$PATH"
+                manim -pqh "$JOB/$FILE" "$SCENE" --format=mp4 --disable_caching
+              ' 2>&1 | tee "delivery_geometry8_week1/$SLUG/render_pqh.log"
+            STATUS=${PIPESTATUS[0]}
+            set -e
+            if [ "$STATUS" -ne 0 ]; then
+              echo "Final render failed for $SLUG with status $STATUS" >&2
+              exit "$STATUS"
+            fi
+
+            FINAL_VIDEO="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+            test -n "$FINAL_VIDEO"
+            test -s "$FINAL_VIDEO"
+            cp "$FINAL_VIDEO" "delivery_geometry8_week1/$SLUG/${SLUG}_pqh.mp4"
+            cp "$JOB/$FILE" "delivery_geometry8_week1/$SLUG/$FILE"
+            cp "$JOB/library/jp_classroom_style.py" "delivery_geometry8_week1/$SLUG/jp_classroom_style.py"
+
+            ffprobe -v error \
+              -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+              -show_entries format=duration,size \
+              -of default=noprint_wrappers=1 \
+              "delivery_geometry8_week1/$SLUG/${SLUG}_pqh.mp4" \
+              > "delivery_geometry8_week1/$SLUG/ffprobe.txt"
+
+            WIDTH="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "delivery_geometry8_week1/$SLUG/${SLUG}_pqh.mp4")"
+            HEIGHT="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "delivery_geometry8_week1/$SLUG/${SLUG}_pqh.mp4")"
+            FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "delivery_geometry8_week1/$SLUG/${SLUG}_pqh.mp4")"
+            test "$WIDTH" = "1920"
+            test "$HEIGHT" = "1080"
+            test "$FPS" = "30/1"
+
+            ffmpeg -nostdin -v error \
+              -i "delivery_geometry8_week1/$SLUG/${SLUG}_pqh.mp4" \
+              -f null - 2> "delivery_geometry8_week1/$SLUG/full_decode.log"
+
+            DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "delivery_geometry8_week1/$SLUG/${SLUG}_pqh.mp4")"
+            FPS_SAMPLE="$(python -c "d=float('$DURATION'); print(max(0.001,12.0/max(d,0.001)))")"
+            ffmpeg -nostdin -y -v error \
+              -i "delivery_geometry8_week1/$SLUG/${SLUG}_pqh.mp4" \
+              -vf "fps=$FPS_SAMPLE,scale=480:-1,tile=4x3:padding=8:margin=8" \
+              -frames:v 1 "qa_geometry8_week1/$SLUG/contact_sheet.jpg" || true
+
+            sha256sum "delivery_geometry8_week1/$SLUG/${SLUG}_pqh.mp4" \
+              > "delivery_geometry8_week1/$SLUG/SHA256SUMS.txt"
+
+            printf 'Scene: %s\nSource: %s\nManimCE image: %s\nPreview command: manim -pql %s/%s %s --format=mp4 --disable_caching\nFinal command: manim -pqh %s/%s %s --format=mp4 --disable_caching\nFinal LESSON_TIME_SCALE: 1.0\n' \
+              "$SCENE" "$FILE" "$IMAGE" "$JOB" "$FILE" "$SCENE" "$JOB" "$FILE" "$SCENE" \
+              > "delivery_geometry8_week1/$SLUG/RENDER_INFO.txt"
+          done
+
+          cp "$JOB/README_RENDER.md" delivery_geometry8_week1/
+          sha256sum delivery_geometry8_week1/*/*_pqh.mp4 > delivery_geometry8_week1/ALL_FINAL_VIDEOS_SHA256.txt
+
+      - name: Upload render package and QA diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8_Period3_Week1_ManimCE_PQH
+          path: |
+            delivery_geometry8_week1/
+            qa_geometry8_week1/
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Preserve failure status after artifact upload
+        if: steps.render.outcome != 'success'
+        shell: bash
+        run: exit 1
