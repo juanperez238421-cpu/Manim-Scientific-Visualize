@@ -31,10 +31,10 @@ jobs:
           set -euo pipefail
           JOB=render_jobs/geometry8_week2_v2_20260809
           mkdir -p "$JOB/project"
-          cat "$JOB/payload.part00" "$JOB/payload.part01" > /tmp/week2_v2_payload.b64
-          test "$(wc -c < /tmp/week2_v2_payload.b64)" -eq 28152
-          base64 -d /tmp/week2_v2_payload.b64 > /tmp/week2_v2_payload.tar.gz
-          tar -xzf /tmp/week2_v2_payload.tar.gz -C "$JOB/project"
+          cat "$JOB/payload_xz.part00" "$JOB/payload_xz.part01" > /tmp/week2_v2_payload.b64
+          test "$(wc -c < /tmp/week2_v2_payload.b64)" -eq 24720
+          base64 -d /tmp/week2_v2_payload.b64 > /tmp/week2_v2_payload.tar.xz
+          tar -xJf /tmp/week2_v2_payload.tar.xz -C "$JOB/project"
           find "$JOB/project" -maxdepth 2 -type f -print
 
       - name: Validate Python sources and JP style
