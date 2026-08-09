@@ -72,7 +72,7 @@ jobs:
               docker run --rm \
                 --user "$(id -u):$(id -g)" \
                 -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE="$SCALE" \
-                -e FILE="$FILE" -e SCENE="$SCENE" -e JOB="$JOB" \
+                -e FILE="$FILE" -e SCENE="$SCENE" -e JOB="$JOB" -e QUALITY="$QUALITY" \
                 -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" \
                 -c '
                   set -euo pipefail
