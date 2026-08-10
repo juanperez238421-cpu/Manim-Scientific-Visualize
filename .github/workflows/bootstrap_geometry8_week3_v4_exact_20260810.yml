@@ -1,0 +1,102 @@
+name: Bootstrap Geometry 8 Week 3 V4 Exact Render
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'render/geometry8-week3-v4b-final-20260810'
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install FFmpeg and recover exact V4 sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          JOB=render_jobs/geometry8_week3_v4_exact_20260810
+          cat "$JOB"/exact_00.b64 "$JOB"/exact_01.b64 > /tmp/v4.b64
+          base64 -d /tmp/v4.b64 > /tmp/v4.tar.xz
+          rm -rf work_v4 && mkdir work_v4
+          tar -xJf /tmp/v4.tar.xz -C work_v4
+          cd work_v4
+          python -m py_compile Geometry8_Week3_Class1_CircleTheory_Senior_V4_FINAL.py Geometry8_Week3_Class2_ShadedAreas_Senior_V4_FINAL.py jp_classroom_style.py
+          python check_manim_style.py Geometry8_Week3_Class1_CircleTheory_Senior_V4_FINAL.py
+          python check_manim_style.py Geometry8_Week3_Class2_ShadedAreas_Senior_V4_FINAL.py
+
+      - name: Pull ManimCE 0.20.1
+        run: docker pull manimcommunity/manim:v0.20.1
+
+      - name: Render PQL and literal PQH, validate and generate QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd work_v4
+          IMAGE=manimcommunity/manim:v0.20.1
+          mkdir -p delivery/circle delivery/shaded qa/circle qa/shaded
+
+          render_one() {
+            FILE="$1"; SCENE="$2"; SLUG="$3"; OUTDIR="$4"; QADIR="$5"
+            rm -rf media
+            docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.12 -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH="/tmp/manim-bin:$PATH"
+              manim -pql "'"$FILE"'" "'"$SCENE"'" --format=mp4 --disable_caching
+            ' 2>&1 | tee "$OUTDIR/render_pql.log"
+            PQL="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+            test -n "$PQL" && test -s "$PQL"
+            cp "$PQL" "$OUTDIR/${SLUG}_pql.mp4"
+
+            rm -rf media
+            docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH="/tmp/manim-bin:$PATH"
+              manim -pqh "'"$FILE"'" "'"$SCENE"'" --format=mp4 --disable_caching
+            ' 2>&1 | tee "$OUTDIR/render_pqh.log"
+            FINAL="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+            test -n "$FINAL" && test -s "$FINAL"
+            OUT="$OUTDIR/${SLUG}_pqh.mp4"
+            cp "$FINAL" "$OUT"
+            cp "$FILE" "$OUTDIR/"
+            ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of default=noprint_wrappers=1 "$OUT" > "$OUTDIR/ffprobe.txt"
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$OUT")" = 1920
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$OUT")" = 1080
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$OUT")" = 30/1
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$OUT")" = h264
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$OUT")" = yuv420p
+            ffmpeg -nostdin -v error -i "$OUT" -f null - 2> "$OUTDIR/full_decode.log"
+            DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT")"
+            RATE="$(python -c "d=float('$DUR'); print(max(0.001,48.0/max(d,0.001)))")"
+            ffmpeg -nostdin -y -v error -i "$OUT" -vf "fps=$RATE,scale=480:-1,tile=6x8:padding=8:margin=8" -frames:v 1 "$QADIR/contact_sheet.jpg"
+            for P in 12 24 36 48 60 72 84 94; do
+              T="$(python -c "d=float('$DUR'); print(d*$P/100.0)")"
+              ffmpeg -nostdin -y -v error -ss "$T" -i "$OUT" -frames:v 1 "$QADIR/frame_${P}pct.png"
+            done
+            sha256sum "$OUT" > "$OUTDIR/SHA256SUMS.txt"
+          }
+
+          render_one Geometry8_Week3_Class1_CircleTheory_Senior_V4_FINAL.py Geometry8Week3CircleTheorySeniorV4Final Geometry8_Week3_Class1_CircleTheory_Senior_V4_FINAL delivery/circle qa/circle
+          render_one Geometry8_Week3_Class2_ShadedAreas_Senior_V4_FINAL.py Geometry8Week3ShadedAreasSeniorV4Final Geometry8_Week3_Class2_ShadedAreas_Senior_V4_FINAL delivery/shaded qa/shaded
+          cp jp_classroom_style.py check_manim_style.py delivery/
+
+      - name: Upload final delivery
+        uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8_Week3_Senior_V4_FINAL_TwoVideos_Exact
+          path: |
+            work_v4/delivery/
+            work_v4/qa/
+          retention-days: 7
