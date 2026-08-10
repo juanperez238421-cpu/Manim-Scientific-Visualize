@@ -32,7 +32,7 @@ jobs:
           JOB=render_jobs/geometry8_week2_v3_20260809
           mkdir -p "$JOB/project"
           cat "$JOB/payload.part00" "$JOB/payload.part01" > /tmp/week2_v3_payload.b64
-          test "$(wc -c < /tmp/week2_v3_payload.b64)" -eq 22968
+          test "$(wc -c < /tmp/week2_v3_payload.b64)" -eq 22984
           base64 -d /tmp/week2_v3_payload.b64 > /tmp/week2_v3_payload.tar.xz
           tar -xJf /tmp/week2_v3_payload.tar.xz -C "$JOB/project"
           find "$JOB/project" -maxdepth 1 -type f -print
