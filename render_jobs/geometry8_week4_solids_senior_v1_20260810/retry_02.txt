@@ -1,0 +1,1 @@
+Final visual-QA rerender: explicit triangular altitude, separated scaling table, clean composite contact annotation.
