@@ -20,18 +20,59 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg
 
-      - name: Recover exact sources and validate
+      - name: Recover accepted V2 sources and build V4 safely
         shell: bash
         run: |
           set -euo pipefail
-          BRANCH=render/geometry8-week3-v4b-final-20260810
-          JOB=render_jobs/geometry8_week3_v4b_final_20260810
-          git fetch --depth=1 origin "$BRANCH"
-          git show "FETCH_HEAD:$JOB/payload_00.b64" > /tmp/payload.b64
+          OLD_BRANCH=render/geometry8-week3-split-senior-v1-20260810
+          JOB=render_jobs/geometry8_week3_split_senior_v2_final_20260810
+          git fetch --depth=1 origin "$OLD_BRANCH"
+          : > /tmp/payload.b64
+          for F in payload_00.b64 payload_01.b64 payload_02.b64 payload_03.b64; do
+            git show "FETCH_HEAD:$JOB/$F" >> /tmp/payload.b64
+          done
           base64 -d /tmp/payload.b64 > /tmp/payload.tar.xz
           rm -rf /tmp/week3_v4 && mkdir -p /tmp/week3_v4
           tar -xJf /tmp/payload.tar.xz -C /tmp/week3_v4
           cd /tmp/week3_v4
+
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          # ---------------- Circle Theory V4 ----------------
+          p = Path('Geometry8_Week3_Class1_CircleTheory_Senior_V2_FINAL.py')
+          s = p.read_text()
+          s = s.replace('class Geometry8Week3CircleTheorySeniorV2Final(JPMathClassroomScene):', 'class Geometry8Week3CircleTheorySeniorV4Final(JPMathClassroomScene):')
+          start = s.index('    def big_header(')
+          end = s.index('    def formula_box(', start)
+          helpers = '''    def big_header(self, number: int, title: str, subtitle: str) -> None:\n        self.set_header(number, title, subtitle)\n\n    def _wrap_lines(self, lines: list[str], max_chars: int = 28) -> list[str]:\n        import textwrap\n        wrapped: list[str] = []\n        for line in lines:\n            wrapped.extend(textwrap.wrap(line, width=max_chars, break_long_words=False, break_on_hyphens=False) or [line])\n        return wrapped\n\n    def card(self, title: str, body: list[str], *, width: float = 6.0, title_size: int = 34, body_size: int = 30) -> VGroup:\n        lines = self._wrap_lines(body, max_chars=28 if width >= 5.7 else 24)\n        return self.note_panel(title, lines, width=width, title_size=title_size, body_size=body_size, max_text_height=3.10)\n\n'''
+          s = s[:start] + helpers + s[end:]
+          pat = re.compile(r'    # 05\n    def area_meaning\(self\) -> None:.*?\n    # 06', re.S)
+          rep = '''    # 05\n    def area_meaning(self) -> None:\n        self.big_header(5, "CIRCUMFERENCE vs AREA", "Boundary length and covered surface are different measurements, just like perimeter and area.")\n        circle = Circle(radius=2.28, stroke_color=BLACK_LINE, stroke_width=4.2, fill_color=LIGHT_GRAY, fill_opacity=0.58)\n        boundary = circle.copy().set_fill(opacity=0).set_stroke(BLACK_LINE, width=7.5)\n        figure = VGroup(circle, boundary).move_to(LEFT * 3.65 + DOWN * 0.35)\n        c_card = self.note_panel("CIRCUMFERENCE", ["Boundary length around the circle.", "Linear units: cm, m, units."], width=5.55, title_size=34, body_size=29, max_text_height=2.15)\n        a_card = self.note_panel("AREA", ["Surface covered inside the circle.", "Square units: cm², m², units²."], width=5.55, title_size=34, body_size=29, max_text_height=2.15)\n        right = VGroup(c_card, a_card).arrange(DOWN, buff=0.38).move_to(RIGHT * 3.55 + DOWN * 0.35)\n        layout = VGroup(figure, right)\n        self.assert_content_safe(layout, "circumference vs area layout")\n        self.play(FadeIn(circle), run_time=RUN_NORMAL)\n        self.play(Create(boundary), FadeIn(c_card), run_time=RUN_NORMAL)\n        self.wait(PAUSE_READ)\n        self.play(Indicate(circle, scale_factor=1.025), FadeIn(a_card), run_time=RUN_NORMAL)\n        self.wait(PAUSE_SUMMARY)\n        self.clear_stage()\n\n    # 06'''
+          s = pat.sub(rep, s)
+          pat = re.compile(r'    # 07\n    def area_vs_circumference\(self\) -> None:.*?\n    # 08', re.S)
+          rep = '''    # 07\n    def area_vs_circumference(self) -> None:\n        self.big_header(7, "CHOOSE THE RIGHT CIRCLE FORMULA", "Ask what the question measures before substituting numbers.")\n        c1 = self.note_panel("AROUND THE CIRCLE", ["Use circumference.", "C = 2πr = πd", "Answer in linear units."], width=5.65, title_size=33, body_size=29, max_text_height=2.55)\n        c2 = self.note_panel("INSIDE THE CIRCLE", ["Use area.", "A = πr²", "Answer in square units."], width=5.65, title_size=33, body_size=29, max_text_height=2.55)\n        cards = VGroup(c1, c2).arrange(RIGHT, buff=0.82).move_to(DOWN * 0.35)\n        self.assert_content_safe(cards, "circle formula choice cards")\n        self.play(FadeIn(c1, shift=RIGHT * 0.08), run_time=RUN_NORMAL)\n        self.wait(PAUSE_READ)\n        self.play(FadeIn(c2, shift=LEFT * 0.08), run_time=RUN_NORMAL)\n        self.wait(PAUSE_SUMMARY)\n        self.clear_stage()\n\n    # 08'''
+          s = pat.sub(rep, s)
+          Path('Geometry8_Week3_Class1_CircleTheory_Senior_V4_FINAL.py').write_text(s)
+
+          # ---------------- Shaded Areas V4 ----------------
+          p = Path('Geometry8_Week3_Class2_ShadedAreas_Senior_V2_FINAL.py')
+          s = p.read_text()
+          s = s.replace('class Geometry8Week3ShadedAreasSeniorV2Final(JPMathClassroomScene):', 'class Geometry8Week3ShadedAreasSeniorV4Final(JPMathClassroomScene):')
+          start = s.index('    def big_header(')
+          end = s.index('    def formula_box(', start)
+          helpers = '''    def big_header(self, number: int, title: str, subtitle: str) -> None:\n        self.set_header(number, title, subtitle)\n\n    def _wrap_lines(self, lines: list[str], max_chars: int = 28) -> list[str]:\n        import textwrap\n        wrapped: list[str] = []\n        for line in lines:\n            wrapped.extend(textwrap.wrap(line, width=max_chars, break_long_words=False, break_on_hyphens=False) or [line])\n        return wrapped\n\n    def card(self, title: str, body: list[str], *, width: float = 6.0, title_size: int = 34, body_size: int = 30) -> VGroup:\n        lines = self._wrap_lines(body, max_chars=28 if width >= 5.7 else 24)\n        return self.note_panel(title, lines, width=width, title_size=title_size, body_size=body_size, max_text_height=3.10)\n\n'''
+          s = s[:start] + helpers + s[end:]
+          pat = re.compile(r'    # 07\n    def operation_choice\(self\) -> None:.*?\n    # 08', re.S)
+          rep = '''    # 07\n    def operation_choice(self) -> None:\n        self.big_header(7, "ADD OR SUBTRACT?", "Choose the path that uses the fewest necessary regions.")\n        left = self.note_panel("SUBTRACT", ["Whole figure with a hole.", "whole − missing"], width=5.15, title_size=34, body_size=29, max_text_height=2.10)\n        right = self.note_panel("ADD", ["Separate shaded pieces.", "piece 1 + piece 2 + ..."], width=5.15, title_size=34, body_size=29, max_text_height=2.10)\n        cards = VGroup(left, right).arrange(RIGHT, buff=1.05).move_to(UP * 0.10)\n        q = self.text("ASK: Which regions actually count?", 39, BOLD)\n        self.fit(q, 11.8, 0.58)\n        q.next_to(cards, DOWN, buff=0.70)\n        layout = VGroup(cards, q)\n        self.assert_content_safe(layout, "add or subtract layout")\n        self.play(FadeIn(left, shift=RIGHT * 0.08), run_time=RUN_NORMAL)\n        self.wait(PAUSE_READ)\n        self.play(FadeIn(right, shift=LEFT * 0.08), run_time=RUN_NORMAL)\n        self.wait(PAUSE_READ)\n        self.play(FadeIn(q), run_time=RUN_NORMAL)\n        self.wait(PAUSE_SUMMARY)\n        self.clear_stage()\n\n    # 08'''
+          s = pat.sub(rep, s)
+          pat = re.compile(r'    # 09\n    def common_errors\(self\) -> None:.*?\n    # 10', re.S)
+          rep = '''    # 09\n    def common_errors(self) -> None:\n        self.big_header(9, "COMMON ERRORS", "One correction at a time — every error corresponds to a step in the recipe.")\n        items = [\n            ("1 — WRONG REGIONS", ["Do not calculate regions that never enter the answer."]),\n            ("2 — WRONG ORDER", ["For a hole: whole − missing, never missing − whole."]),\n            ("3 — DIAMETER USED AS r", ["Convert first: r = d / 2."]),\n            ("4 — WRONG UNITS", ["Area uses cm², m², units²."]),\n        ]\n        current = None\n        for title, lines in items:\n            card = self.note_panel(title, lines, width=9.2, title_size=36, body_size=31, max_text_height=2.15)\n            card.move_to(DOWN * 0.15)\n            self.assert_content_safe(card, f"common error: {title}")\n            if current is None:\n                self.play(FadeIn(card, shift=UP * 0.08), run_time=RUN_NORMAL)\n            else:\n                self.play(ReplacementTransform(current, card), run_time=RUN_NORMAL)\n            current = card\n            self.wait(PAUSE_READ)\n        self.wait(PAUSE_SUMMARY)\n        self.clear_stage()\n\n    # 10'''
+          s = pat.sub(rep, s)
+          Path('Geometry8_Week3_Class2_ShadedAreas_Senior_V4_FINAL.py').write_text(s)
+          PY
+
           python -m py_compile Geometry8_Week3_Class1_CircleTheory_Senior_V4_FINAL.py Geometry8_Week3_Class2_ShadedAreas_Senior_V4_FINAL.py jp_classroom_style.py
           python check_manim_style.py Geometry8_Week3_Class1_CircleTheory_Senior_V4_FINAL.py
           python check_manim_style.py Geometry8_Week3_Class2_ShadedAreas_Senior_V4_FINAL.py
