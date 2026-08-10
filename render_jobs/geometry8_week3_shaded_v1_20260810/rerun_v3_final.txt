@@ -1,0 +1,1 @@
+trigger V3 final after equation-panel full-resolution QA correction
