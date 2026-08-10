@@ -50,6 +50,9 @@ jobs:
           p.write_text(s)
           PY
 
+          git show "FETCH_HEAD:$JOB/final_visual_patch.py" > /tmp/final_visual_patch.py
+          python /tmp/final_visual_patch.py Geometry8_Period3_Week4_3DSolids_Senior_V1_FINAL.py
+
           python -m py_compile Geometry8_Period3_Week4_3DSolids_Senior_V1_FINAL.py jp_classroom_style.py check_manim_style.py
           python check_manim_style.py Geometry8_Period3_Week4_3DSolids_Senior_V1_FINAL.py
           ! grep -nE '([A-Za-z]:\\\\|/Users/|/home/[^/]+/Desktop)' Geometry8_Period3_Week4_3DSolids_Senior_V1_FINAL.py jp_classroom_style.py
@@ -124,7 +127,7 @@ jobs:
             -vf "fps=$RATE,scale=480:-1,tile=6x8:padding=8:margin=8" \
             -frames:v 1 qa_week4/contact_sheet.jpg
 
-          for P in 8 15 22 30 38 46 54 62 70 78 86 94; do
+          for P in 8 15 22 30 38 46 54 58 62 68 70 76 84 86 94; do
             T="$(python -c "d=float('$DUR'); print(d*$P/100.0)")"
             ffmpeg -nostdin -y -v error -ss "$T" -i "$OUT" -frames:v 1 "qa_week4/frame_${P}pct.png"
           done
