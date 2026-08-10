@@ -25,32 +25,22 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg
 
-      - name: Rebuild V6 base and apply V7 new-topics patch
+      - name: Recover style environment and exact V7 source
         shell: bash
         run: |
           set -euo pipefail
           BASE=render_jobs/geometry8_week2_v4_20260809
-          V6=render_jobs/geometry8_week2_v6_20260809
           V7=render_jobs/geometry8_week2_v7_20260809
           rm -rf "$BASE/project"
           mkdir -p "$BASE/project"
-          cat "$BASE/payload.part00" "$BASE/payload.part01" > /tmp/week2_v5_payload.b64
-          base64 -d /tmp/week2_v5_payload.b64 > /tmp/week2_v5_payload.tar.xz
-          tar -xJf /tmp/week2_v5_payload.tar.xz -C "$BASE/project"
-          patch -d "$BASE/project" -p0 < "$BASE/v4_final.patch"
-          python "$BASE/v5_patch.py" "$BASE/project/Geometry8_Week2_Class1_Senior_V4_Final.py"
-          mv "$BASE/project/Geometry8_Week2_Class1_Senior_V4_Final.py" "$BASE/project/Geometry8_Week2_Class1_Senior_V5_Final.py"
-          patch -d "$BASE/project" -p0 < "$BASE/v5_labels.patch"
-          mv "$BASE/project/Geometry8_Week2_Class1_Senior_V5_Final.py" "$BASE/project/Geometry8_Week2_Class1_Senior_V5_FINAL.py"
-          cat "$V6/v6_patch.part00" "$V6/v6_patch.part01" > /tmp/v6_patch.b64
-          base64 -d /tmp/v6_patch.b64 > /tmp/v6_patch.xz
-          xz -dc /tmp/v6_patch.xz > /tmp/v6_update.patch
-          patch -d "$BASE/project" -p0 < /tmp/v6_update.patch
-          mv "$BASE/project/Geometry8_Week2_Class1_Senior_V5_FINAL.py" "$BASE/project/Geometry8_Week2_Class1_Senior_V6_FINAL.py"
-          base64 -d "$V7/v7_update.patch.xz.b64" > /tmp/v7_patch.xz
-          xz -dc /tmp/v7_patch.xz > /tmp/v7_update.patch
-          patch -d "$BASE/project" -p0 < /tmp/v7_update.patch
+          cat "$BASE/payload.part00" "$BASE/payload.part01" > /tmp/week2_base_payload.b64
+          base64 -d /tmp/week2_base_payload.b64 > /tmp/week2_base_payload.tar.xz
+          tar -xJf /tmp/week2_base_payload.tar.xz -C "$BASE/project"
+          base64 -d "$V7/v7_source.py.xz.b64" > /tmp/v7_source.py.xz
+          xz -dc /tmp/v7_source.py.xz > "$BASE/project/Geometry8_Week2_Class1_Senior_V7_NEW_TOPICS_FINAL.py"
           test -s "$BASE/project/Geometry8_Week2_Class1_Senior_V7_NEW_TOPICS_FINAL.py"
+          test -s "$BASE/project/jp_classroom_style.py"
+          test -s "$BASE/project/check_manim_style.py"
           find "$BASE/project" -maxdepth 1 -type f -print
 
       - name: Validate Python sources and JP style
