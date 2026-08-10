@@ -1,0 +1,52 @@
+--- Geometry8_Week2_Class1_Senior_V6_FINAL.py
++++ Geometry8_Week2_Class1_Senior_V6_FINAL.py
+@@ -456,7 +456,7 @@
+             stroke_color=BLACK_LINE, stroke_width=4.0,
+             fill_color=VERY_LIGHT_GRAY, fill_opacity=0.74,
+         ).shift(DOWN * 0.15)
+-        merge_label = self.text("ONE PARALLELOGRAM = TWO TRAPEZOIDS", 38, BOLD).next_to(para, UP, buff=0.20)
++        merge_label = self.text("2 TRAPEZOIDS = 1 PARALLELOGRAM", 38, BOLD).next_to(para, UP, buff=0.20)
+         self.play(FadeOut(first), FadeOut(copy), FadeIn(para), FadeIn(merge_label), run_time=RUN_NORMAL)
+         self.wait(PAUSE_READ)
+ 
+@@ -572,7 +572,7 @@
+         self.wait(PAUSE_EXPLAIN)
+ 
+         self.play(FadeOut(caption), FadeOut(nums), FadeOut(tris[1]), FadeOut(tris[2]), FadeOut(tris[3]),
+-                  tris[0].animate.scale(1.22).move_to(LEFT * 3.95 + DOWN * 0.15), run_time=RUN_NORMAL)
++                  tris[0].animate.scale(1.22).move_to(LEFT * 2.95 + DOWN * 0.15), run_time=RUN_NORMAL)
+         focus = self.text("ONE TRIANGLE", 39, BOLD).next_to(tris[0], UP, buff=0.20)
+         halfD = self.math(r"D/2=8\,\mathrm{cm}", 52).next_to(tris[0], LEFT, buff=0.18)
+         halfd = self.math(r"d/2=6\,\mathrm{cm}", 52).next_to(tris[0], DOWN, buff=0.18)
+@@ -633,7 +633,7 @@
+         split = DashedLine(tl, tr, color=MID_GRAY, stroke_width=3.0)
+         altitude = DashedLine(apex, (tl + tr) / 2, color=MID_GRAY, stroke_width=3.0)
+         base_lab = self.math(r"16\,\mathrm{cm}", 46).next_to(Line(bl, br), DOWN, buff=0.15)
+-        rect_h_lab = self.math(r"6\,\mathrm{cm}", 45).next_to(Line(bl, tl), LEFT, buff=0.14)
++        rect_h_lab = self.math(r"6\,\mathrm{cm}", 45).move_to(Line(bl, tl).get_center() + RIGHT * 0.72)
+         roof_h_lab = self.math(r"6\,\mathrm{cm}", 45).next_to(altitude, RIGHT, buff=0.14)
+         self.play(FadeIn(house), FadeIn(base_lab), FadeIn(rect_h_lab), run_time=RUN_NORMAL)
+         self.play(Create(split), Create(altitude), FadeIn(roof_h_lab), run_time=RUN_NORMAL)
+@@ -648,13 +648,20 @@
+                   FadeOut(base_lab), FadeOut(rect_h_lab), FadeOut(roof_h_lab), run_time=RUN_QUICK)
+         self.play(rect.animate.move_to(LEFT * 3.65 + DOWN * 1.35),
+                   roof.animate.move_to(LEFT * 3.65 + UP * 1.35), run_time=RUN_SLOW)
++        rect_left_side = Line(rect.get_vertices()[0], rect.get_vertices()[3])
+         rect_dims = VGroup(
+             self.math(r"16\,\mathrm{cm}", 45).next_to(rect, DOWN, buff=0.15),
+-            self.math(r"6\,\mathrm{cm}", 45).next_to(rect, LEFT, buff=0.15),
++            self.math(r"6\,\mathrm{cm}", 45).move_to(rect_left_side.get_center() + RIGHT * 0.72),
++        )
++        roof_alt2 = DashedLine(
++            roof.get_top(),
++            np.array([roof.get_center()[0], roof.get_bottom()[1], 0]),
++            color=MID_GRAY, stroke_width=3.0,
+         )
+         roof_dims = VGroup(
+             self.math(r"b=16\,\mathrm{cm}", 45).next_to(roof, DOWN, buff=0.15),
+-            self.math(r"h=6\,\mathrm{cm}", 45).next_to(roof, RIGHT, buff=0.15),
++            self.math(r"h=6\,\mathrm{cm}", 45).next_to(roof_alt2, RIGHT, buff=0.14),
++            roof_alt2,
+         )
+         self.play(FadeIn(rect_dims), FadeIn(roof_dims), run_time=RUN_NORMAL)
+         self.wait(PAUSE_READ)
