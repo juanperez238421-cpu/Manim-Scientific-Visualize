@@ -1,18 +1,23 @@
 --- Geometry8_Week2_Class1_Senior_V5_Final.py
 +++ Geometry8_Week2_Class1_Senior_V5_Final.py
-@@ -536,9 +536,13 @@
+@@ -536,9 +536,18 @@
              Polygon(center, bottom, left, stroke_color=BLACK_LINE, stroke_width=2.5, fill_color=PAPER_GRAY, fill_opacity=0.98),
              Polygon(center, left, top, stroke_color=BLACK_LINE, stroke_width=2.5, fill_color=LIGHT_GRAY, fill_opacity=0.90),
          )
 -        self.play(FadeIn(r["fill"]), Create(r["edges"]), Create(r["diag"]), FadeIn(r["labels"]), FadeIn(r["ra"]), run_time=RUN_NORMAL)
-+        diag_labels = VGroup(
-+            self.math(r"D=16\,\mathrm{cm}", 42).move_to(RIGHT * 1.65 + UP * 1.32),
-+            self.math(r"d=12\,\mathrm{cm}", 42).move_to(LEFT * 1.55 + DOWN * 0.72),
++        d_big = self.math(r"D=16\,\mathrm{cm}", 44).move_to(RIGHT * 4.10 + UP * 1.30)
++        d_small = self.math(r"d=12\,\mathrm{cm}", 44).move_to(LEFT * 4.10 + DOWN * 0.72)
++        diag_labels = VGroup(d_big, d_small)
++        diag_guides = VGroup(
++            Arrow(d_big.get_left(), np.array([0.10, 1.65, 0]), buff=0.10, color=MID_GRAY, stroke_width=2.5, tip_length=0.16),
++            Arrow(d_small.get_right(), np.array([-1.35, -0.15, 0]), buff=0.10, color=MID_GRAY, stroke_width=2.5, tip_length=0.16),
 +        )
-+        self.play(FadeIn(r["fill"]), Create(r["edges"]), Create(r["diag"]), FadeIn(diag_labels), FadeIn(r["ra"]), run_time=RUN_NORMAL)
++        self.play(FadeIn(r["fill"]), Create(r["edges"]), Create(r["diag"]),
++                  FadeIn(diag_labels), GrowArrow(diag_guides[0]), GrowArrow(diag_guides[1]),
++                  FadeIn(r["ra"]), run_time=RUN_NORMAL)
          self.wait(PAUSE_READ)
 -        self.play(FadeOut(r["fill"]), FadeOut(r["labels"]), FadeIn(tris), run_time=RUN_NORMAL)
-+        self.play(FadeOut(r["fill"]), FadeOut(diag_labels), FadeIn(tris), run_time=RUN_NORMAL)
++        self.play(FadeOut(r["fill"]), FadeOut(diag_labels), FadeOut(diag_guides), FadeIn(tris), run_time=RUN_NORMAL)
          # Remove the original construction before exploding the pieces. Keeping
          # ghost diagonals here created a false visual merge in the previous cut.
          self.play(FadeOut(r["edges"]), FadeOut(r["diag"]), FadeOut(r["ra"]),
