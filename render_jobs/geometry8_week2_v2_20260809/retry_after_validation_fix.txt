@@ -1,0 +1,1 @@
+Trigger protocol render after narrowing absolute-path validation to lesson/style sources.
