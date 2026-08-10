@@ -1,0 +1,114 @@
+--- Geometry8_Week2_Class1_Senior_V4_Final.py
++++ Geometry8_Week2_Class1_Senior_V4_Final.py
+@@ -214,7 +214,7 @@
+             labels = VGroup(
+                 self.math(r"D=16\,\mathrm{cm}", 37).next_to(vert, LEFT, buff=0.16),
+                 self.math(r"d=12\,\mathrm{cm}", 37).next_to(horiz, DOWN, buff=0.16),
+-                self.math(r"s=10\,\mathrm{cm}", 36).next_to(edges[0], UR, buff=0.10),
++                self.math(r"s=10\,\mathrm{cm}", 38).next_to(edges[3], LEFT, buff=0.13).shift(UP*0.12),
+             )
+         else:
+             labels = VGroup(
+@@ -293,18 +293,20 @@
+         anchor = RIGHT * 3.45 + DOWN * 0.20
+         self.play(FadeIn(t["fill"]), run_time=RUN_QUICK)
+ 
+-        s1 = self.big_step("1", "PARALLEL BASES", ["B is the longer base.", "b is the shorter base."], width=6.15).move_to(anchor + UP * 1.25)
++        card_anchor = anchor + DOWN * 0.25
++        s1 = self.big_step("1", "PARALLEL BASES", ["B is the longer base.", "b is the shorter base."], width=6.15).move_to(card_anchor)
+         self.play(Create(t["bottom"]), Create(t["top"]), FadeIn(t["marks"]),
+                   FadeIn(t["labels"][0]), FadeIn(t["labels"][1]), FadeIn(s1), run_time=RUN_SLOW)
+         self.wait(PAUSE_EXPLAIN)
+ 
+-        s2 = self.big_step("2", "OUTER LEGS", ["c and d close the outside border.", "They are used for perimeter."], width=6.15).move_to(anchor + DOWN * 0.55)
++        s2 = self.big_step("2", "OUTER LEGS", ["c and d close the outside border.", "They are used for perimeter."], width=6.15).move_to(card_anchor)
+         self.play(Create(t["left"]), Create(t["right"]), FadeIn(t["labels"][3]), FadeIn(t["labels"][4]),
+-                  FadeIn(s2), run_time=RUN_NORMAL)
++                  ReplacementTransform(s1, s2), run_time=RUN_NORMAL)
+         self.wait(PAUSE_EXPLAIN)
+ 
+-        s3 = self.big_step("3", "HEIGHT h", ["Height is perpendicular to the bases.", "A slanted leg is NOT the height."], width=6.15).move_to(anchor + DOWN * 2.25)
+-        self.play(Create(t["height"]), FadeIn(t["ra"]), FadeIn(t["labels"][2]), FadeIn(s3), run_time=RUN_NORMAL)
++        s3 = self.big_step("3", "HEIGHT h", ["Height is perpendicular to the bases.", "A slanted leg is NOT the height."], width=6.15).move_to(card_anchor)
++        self.play(Create(t["height"]), FadeIn(t["ra"]), FadeIn(t["labels"][2]),
++                  ReplacementTransform(s2, s3), run_time=RUN_NORMAL)
+         self.wait(PAUSE_SUMMARY)
+         self.clear_stage()
+ 
+@@ -432,28 +434,35 @@
+         self.wait(PAUSE_READ)
+         self.play(FadeOut(action), FadeOut(lab1), FadeOut(lab2), run_time=RUN_QUICK)
+ 
+-        # Move both objects to a clean joined configuration in the center.
++        # Move both objects toward the join, then replace the overlapping seams by
++        # one clean parallelogram outline. This makes the recomposition readable.
+         first_target = LEFT * 1.55 + DOWN * 0.45
+         copy_target = RIGHT * 1.55 + DOWN * 0.45
+         self.play(first.animate.move_to(first_target), copy.animate.move_to(copy_target), run_time=RUN_SLOW)
+-        joined = VGroup(first, copy)
+-        outline_box = SurroundingRectangle(joined, buff=0.12, stroke_color=LIGHT_GRAY, stroke_width=1.2)
+-        self.play(Create(outline_box), run_time=RUN_QUICK)
+         self.wait(PAUSE_READ)
+ 
+-        # Measurements appear only after the join is stable.
+-        base_line = Line(joined.get_left() + DOWN * 1.25, joined.get_right() + DOWN * 1.25,
++        para = Polygon(
++            [-3.55, -0.82, 0], [3.05, -0.82, 0], [4.05, 0.82, 0], [-2.55, 0.82, 0],
++            stroke_color=BLACK_LINE, stroke_width=3.8,
++            fill_color=VERY_LIGHT_GRAY, fill_opacity=0.72,
++        ).shift(DOWN*0.20)
++        merge_label = self.text("TWO TRAPEZOIDS → ONE PARALLELOGRAM", 31, BOLD).next_to(para, UP, buff=0.18)
++        self.play(FadeOut(first), FadeOut(copy), FadeIn(para), FadeIn(merge_label), run_time=RUN_NORMAL)
++        self.wait(PAUSE_READ)
++
++        # Measurements appear only after the merged outline is clean.
++        base_line = Line(para.get_left() + DOWN * 1.18, para.get_right() + DOWN * 1.18,
+                          color=BLACK_LINE, stroke_width=2.8)
+         base_label = self.math(r"B+b", 44).next_to(base_line, DOWN, buff=0.10)
+-        h_line = Line(joined.get_left() + LEFT * 0.30 + DOWN * 0.95,
+-                      joined.get_left() + LEFT * 0.30 + UP * 0.55,
++        h_line = Line(para.get_left() + LEFT * 0.30 + DOWN * 0.78,
++                      para.get_left() + LEFT * 0.30 + UP * 0.78,
+                       color=MID_GRAY, stroke_width=2.8)
+         h_label = self.math(r"h", 44).next_to(h_line, LEFT, buff=0.10)
+         self.play(Create(base_line), FadeIn(base_label), Create(h_line), FadeIn(h_label), run_time=RUN_NORMAL)
+         self.wait(PAUSE_EXPLAIN)
+ 
+         # Shift the finished geometry left only after all merging is complete.
+-        geometry = VGroup(joined, outline_box, base_line, base_label, h_line, h_label)
++        geometry = VGroup(para, merge_label, base_line, base_label, h_line, h_label)
+         self.play(geometry.animate.scale(0.88).move_to(LEFT * 3.55 + DOWN * 0.35), run_time=RUN_SLOW)
+         derivation = VGroup(
+             self.math(r"2A=(B+b)h", 56),
+@@ -530,12 +539,13 @@
+         self.play(FadeIn(r["fill"]), Create(r["edges"]), Create(r["diag"]), FadeIn(r["labels"]), FadeIn(r["ra"]), run_time=RUN_NORMAL)
+         self.wait(PAUSE_READ)
+         self.play(FadeOut(r["fill"]), FadeOut(r["labels"]), FadeIn(tris), run_time=RUN_NORMAL)
+-        # Large exploded positions prevent pieces from visually merging.
+-        targets = [LEFT * 3.7 + UP * 1.00, RIGHT * 3.7 + UP * 1.00,
+-                   RIGHT * 3.7 + DOWN * 1.55, LEFT * 3.7 + DOWN * 1.55]
+-        self.play(*[tri.animate.move_to(pos) for tri, pos in zip(tris, targets)],
+-                  r["edges"].animate.set_stroke(opacity=0.12),
+-                  r["diag"].animate.set_stroke(opacity=0.12), run_time=RUN_SLOW)
++        # Remove the original construction before exploding the pieces. Keeping
++        # ghost diagonals here created a false visual merge in the previous cut.
++        self.play(FadeOut(r["edges"]), FadeOut(r["diag"]), FadeOut(r["ra"]),
++                  FadeOut(r["center"]), run_time=RUN_QUICK)
++        targets = [LEFT * 3.9 + UP * 1.10, RIGHT * 3.9 + UP * 1.10,
++                   RIGHT * 3.9 + DOWN * 1.65, LEFT * 3.9 + DOWN * 1.65]
++        self.play(*[tri.animate.move_to(pos) for tri, pos in zip(tris, targets)], run_time=RUN_SLOW)
+         names = VGroup(
+             self.text("TRIANGLE 1", 29, BOLD).next_to(tris[0], UP, buff=0.12),
+             self.text("TRIANGLE 2", 29, BOLD).next_to(tris[1], UP, buff=0.12),
+@@ -642,4 +652,10 @@
+         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to(ORIGIN + DOWN * 0.25)
+         self.play(LaggedStart(*[FadeIn(line, shift=RIGHT * 0.10) for line in summary], lag_ratio=0.18), run_time=RUN_SLOW)
+         self.wait(PAUSE_FINAL)
+-        self.standard_closing("Shape → measurement → figure highlight → formula → calculation → units.")
++        self.play(FadeOut(summary), run_time=RUN_NORMAL)
++        closing = VGroup(
++            self.text("SHAPE → BORDER / INTERIOR → MEASURE", 37, BOLD),
++            self.text("FIGURE HIGHLIGHT → FORMULA → CALCULATE → UNITS", 35, BOLD),
++        ).arrange(DOWN, buff=0.28).move_to(ORIGIN)
++        self.play(FadeIn(closing, shift=UP*0.08), run_time=RUN_NORMAL)
++        self.wait(PAUSE_FINAL)
