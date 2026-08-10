@@ -25,7 +25,7 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg
 
-      - name: Recover V4 source package
+      - name: Recover V4 source package and apply senior patch
         shell: bash
         run: |
           set -euo pipefail
@@ -36,6 +36,7 @@ jobs:
           base64 -d /tmp/week2_v4_payload.b64 > /tmp/week2_v4_payload.tar.xz
           test -s /tmp/week2_v4_payload.tar.xz
           tar -xJf /tmp/week2_v4_payload.tar.xz -C "$JOB/project"
+          patch -d "$JOB/project" -p0 < "$JOB/v4_final.patch"
           find "$JOB/project" -maxdepth 1 -type f -print
 
       - name: Validate Python sources and JP style
