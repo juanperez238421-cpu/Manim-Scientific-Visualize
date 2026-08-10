@@ -37,6 +37,7 @@ jobs:
           patch -d "$JOB/project" -p0 < "$JOB/v4_final.patch"
           python "$JOB/v5_patch.py" "$JOB/project/Geometry8_Week2_Class1_Senior_V4_Final.py"
           mv "$JOB/project/Geometry8_Week2_Class1_Senior_V4_Final.py" "$JOB/project/Geometry8_Week2_Class1_Senior_V5_Final.py"
+          patch -d "$JOB/project" -p0 < "$JOB/v5_labels.patch"
           find "$JOB/project" -maxdepth 1 -type f -print
 
       - name: Validate Python sources and JP style
