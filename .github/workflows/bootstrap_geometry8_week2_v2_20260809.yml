@@ -37,6 +37,22 @@ jobs:
           tar -xJf /tmp/week2_v2_payload.tar.xz -C "$JOB/project"
           find "$JOB/project" -maxdepth 2 -type f -print
 
+      - name: Apply final senior visual-QA patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_week2_v2_20260809/project
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('render_jobs/geometry8_week2_v2_20260809/project/geometry8_period3_week2_class2_exercises_v2.py')
+          s=p.read_text()
+          old='''        label_D = self.math(fr"D={int(D)}\\,\\mathrm{{cm}}",23)\n        label_D.move_to(RIGHT*0.62 + UP*(DD*0.23))\n        label_d = self.math(fr"d={int(d)}\\,\\mathrm{{cm}}",23)\n        label_d.move_to(DOWN*0.33)\n'''
+          new='''        label_D = self.math(fr"D={int(D)}\\,\\mathrm{{cm}}",23)\n        # Keep the vertical diagonal label completely outside the rhombus so\n        # neither a dashed diagonal nor a slanted edge crosses the text.\n        label_D.move_to(LEFT*(dd/2 + 0.90))\n        label_d = self.math(fr"d={int(d)}\\,\\mathrm{{cm}}",23)\n        # Place the horizontal-diagonal label in the open lower-right quadrant.\n        label_d.move_to(RIGHT*0.62 + DOWN*0.35)\n'''
+          if old not in s:
+              raise SystemExit('Expected pre-QA rhombus label block not found')
+          p.write_text(s.replace(old,new))
+          PY
+
       - name: Validate Python sources and JP style
         shell: bash
         run: |
