@@ -34,6 +34,22 @@ jobs:
           rm -rf /tmp/week4 && mkdir -p /tmp/week4
           tar -xJf /tmp/week4_payload.tar.xz -C /tmp/week4
           cd /tmp/week4
+
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('Geometry8_Period3_Week4_3DSolids_Senior_V1_FINAL.py')
+          s = p.read_text()
+          old = '    def triangular_prism(self, *, center: np.ndarray = ORIGIN, scale: float = 1.0) -> VGroup:'
+          new = '    def triangular_prism_model(self, *, center: np.ndarray = ORIGIN, scale: float = 1.0) -> VGroup:'
+          assert s.count(old) == 1
+          s = s.replace(old, new, 1)
+          old2 = '        prism = self.triangular_prism(center=LEFT * 3.65 + DOWN * 0.55, scale=1.0)'
+          new2 = '        prism = self.triangular_prism_model(center=LEFT * 3.65 + DOWN * 0.55, scale=1.0)'
+          assert s.count(old2) == 1
+          s = s.replace(old2, new2, 1)
+          p.write_text(s)
+          PY
+
           python -m py_compile Geometry8_Period3_Week4_3DSolids_Senior_V1_FINAL.py jp_classroom_style.py check_manim_style.py
           python check_manim_style.py Geometry8_Period3_Week4_3DSolids_Senior_V1_FINAL.py
           ! grep -nE '([A-Za-z]:\\\\|/Users/|/home/[^/]+/Desktop)' Geometry8_Period3_Week4_3DSolids_Senior_V1_FINAL.py jp_classroom_style.py
