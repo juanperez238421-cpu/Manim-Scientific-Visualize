@@ -1,0 +1,84 @@
+name: Bootstrap Geometry 8 Week 3 Shaded Areas V2 Final Render
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'render/geometry8-week3-shaded-v1-20260810'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Recover V1, apply V2 QA patch, validate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_week3_shaded_v1_20260810
+          rm -rf /tmp/week3_project && mkdir -p /tmp/week3_project
+          base64 -d "$JOB/payload.tar.xz.b64" > /tmp/week3_payload.tar.xz
+          tar -xJf /tmp/week3_payload.tar.xz -C /tmp/week3_project
+          python "$JOB/week3_v2_patch.py" /tmp/week3_project/Geometry8_Week3_Class1_ShadedAreas_SimpleCases_Senior_V1.py
+          mv /tmp/week3_project/Geometry8_Week3_Class1_ShadedAreas_SimpleCases_Senior_V1.py /tmp/week3_project/Geometry8_Week3_Class1_ShadedAreas_SimpleCases_Senior_V2_FINAL.py
+          python -m py_compile /tmp/week3_project/Geometry8_Week3_Class1_ShadedAreas_SimpleCases_Senior_V2_FINAL.py /tmp/week3_project/jp_classroom_style.py
+          python /tmp/week3_project/check_manim_style.py /tmp/week3_project/Geometry8_Week3_Class1_ShadedAreas_SimpleCases_Senior_V2_FINAL.py
+          cp /tmp/week3_project/Geometry8_Week3_Class1_ShadedAreas_SimpleCases_Senior_V2_FINAL.py .
+          cp /tmp/week3_project/jp_classroom_style.py .
+          cp /tmp/week3_project/check_manim_style.py .
+      - name: Pull ManimCE 0.20.1
+        run: docker pull manimcommunity/manim:v0.20.1
+      - name: Render PQL and literal PQH, then verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          FILE=Geometry8_Week3_Class1_ShadedAreas_SimpleCases_Senior_V2_FINAL.py
+          SCENE=Geometry8Week3ShadedAreasSeniorV2
+          SLUG=Geometry8_Week3_Class1_ShadedAreas_SimpleCases_Senior_V2_FINAL
+          IMAGE=manimcommunity/manim:v0.20.1
+          rm -rf delivery_geometry8_week3_shaded_v2_final qa_geometry8_week3_shaded_v2_final media
+          mkdir -p delivery_geometry8_week3_shaded_v2_final qa_geometry8_week3_shaded_v2_final
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.12 -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c '
+            set -euo pipefail
+            mkdir -p /tmp/manim-bin; printf "#!/usr/bin/env bash\nexit 0\n" >/tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH="/tmp/manim-bin:$PATH"
+            manim -pql "'$FILE'" "'$SCENE'" --format=mp4 --disable_caching
+          ' 2>&1 | tee delivery_geometry8_week3_shaded_v2_final/render_pql.log
+          PREVIEW="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -s "$PREVIEW"; cp "$PREVIEW" "delivery_geometry8_week3_shaded_v2_final/${SLUG}_pql.mp4"
+          rm -rf media
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c '
+            set -euo pipefail
+            mkdir -p /tmp/manim-bin; printf "#!/usr/bin/env bash\nexit 0\n" >/tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH="/tmp/manim-bin:$PATH"
+            manim -pqh "'$FILE'" "'$SCENE'" --format=mp4 --disable_caching
+          ' 2>&1 | tee delivery_geometry8_week3_shaded_v2_final/render_pqh.log
+          FINAL="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -s "$FINAL"
+          OUT="delivery_geometry8_week3_shaded_v2_final/${SLUG}_pqh.mp4"
+          cp "$FINAL" "$OUT"
+          cp "$FILE" jp_classroom_style.py check_manim_style.py delivery_geometry8_week3_shaded_v2_final/
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of default=noprint_wrappers=1 "$OUT" > delivery_geometry8_week3_shaded_v2_final/ffprobe.txt
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$OUT")" = 1920
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$OUT")" = 1080
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$OUT")" = 30/1
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$OUT")" = h264
+          ffmpeg -nostdin -v error -i "$OUT" -f null - 2> delivery_geometry8_week3_shaded_v2_final/full_decode.log
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT")"
+          SAMPLE="$(python -c "d=float('$DUR'); print(max(0.001,48.0/max(d,0.001)))")"
+          ffmpeg -nostdin -y -v error -i "$OUT" -vf "fps=$SAMPLE,scale=480:-1,tile=8x6:padding=8:margin=8" -frames:v 1 qa_geometry8_week3_shaded_v2_final/contact_sheet.jpg
+          sha256sum "$OUT" > delivery_geometry8_week3_shaded_v2_final/SHA256SUMS.txt
+          printf 'Scene: %s\nSource: %s\nManimCE: 0.20.1\nFinal: manim -pqh %s %s --format=mp4 --disable_caching\n' "$SCENE" "$FILE" "$FILE" "$SCENE" > delivery_geometry8_week3_shaded_v2_final/RENDER_INFO.txt
+      - name: Upload final V2 package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8_Period3_Week3_ShadedAreas_SimpleCases_V2_FINAL_PQH
+          path: |
+            delivery_geometry8_week3_shaded_v2_final/
+            qa_geometry8_week3_shaded_v2_final/
+          retention-days: 7
