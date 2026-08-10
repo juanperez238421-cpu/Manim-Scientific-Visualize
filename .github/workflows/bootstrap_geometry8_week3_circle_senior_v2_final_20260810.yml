@@ -1,0 +1,95 @@
+name: Bootstrap Geometry 8 Week 3 Circle Senior V2 Final Render
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'render/geometry8-week3-split-senior-v1-20260810'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install FFmpeg
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Recover source and validate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_week3_split_senior_v2_final_20260810
+          rm -rf /tmp/week3_circle_v2 && mkdir -p /tmp/week3_circle_v2
+          cat "$JOB"/payload_00.b64 "$JOB"/payload_01.b64 "$JOB"/payload_02.b64 "$JOB"/payload_03.b64 > /tmp/week3_v2.b64
+          base64 -d /tmp/week3_v2.b64 > /tmp/week3_v2.tar.xz
+          tar -xJf /tmp/week3_v2.tar.xz -C /tmp/week3_circle_v2
+          python -m py_compile /tmp/week3_circle_v2/Geometry8_Week3_Class1_CircleTheory_Senior_V2_FINAL.py /tmp/week3_circle_v2/jp_classroom_style.py
+          python /tmp/week3_circle_v2/check_manim_style.py /tmp/week3_circle_v2/Geometry8_Week3_Class1_CircleTheory_Senior_V2_FINAL.py
+          cp /tmp/week3_circle_v2/Geometry8_Week3_Class1_CircleTheory_Senior_V2_FINAL.py .
+          cp /tmp/week3_circle_v2/jp_classroom_style.py .
+          cp /tmp/week3_circle_v2/check_manim_style.py .
+      - name: Pull ManimCE 0.20.1
+        run: docker pull manimcommunity/manim:v0.20.1
+      - name: Render PQL and literal PQH, verify and QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          FILE=Geometry8_Week3_Class1_CircleTheory_Senior_V2_FINAL.py
+          SCENE=Geometry8Week3CircleTheorySeniorV2Final
+          SLUG=Geometry8_Week3_Class1_CircleTheory_Senior_V2_FINAL
+          IMAGE=manimcommunity/manim:v0.20.1
+          OUTDIR=delivery_geometry8_week3_circle_senior_v2_final
+          QADIR=qa_geometry8_week3_circle_senior_v2_final
+          rm -rf "$OUTDIR" "$QADIR" media
+          mkdir -p "$OUTDIR" "$QADIR"
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.12 -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c '
+            set -euo pipefail
+            mkdir -p /tmp/manim-bin
+            printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+            chmod +x /tmp/manim-bin/xdg-open
+            export PATH="/tmp/manim-bin:$PATH"
+            manim -pql "'$FILE'" "'$SCENE'" --format=mp4 --disable_caching
+          ' 2>&1 | tee "$OUTDIR/render_pql.log"
+          PREVIEW="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -s "$PREVIEW"
+          cp "$PREVIEW" "$OUTDIR/${SLUG}_pql.mp4"
+          rm -rf media
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c '
+            set -euo pipefail
+            mkdir -p /tmp/manim-bin
+            printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+            chmod +x /tmp/manim-bin/xdg-open
+            export PATH="/tmp/manim-bin:$PATH"
+            manim -pqh "'$FILE'" "'$SCENE'" --format=mp4 --disable_caching
+          ' 2>&1 | tee "$OUTDIR/render_pqh.log"
+          FINAL="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -s "$FINAL"
+          OUT="$OUTDIR/${SLUG}_pqh.mp4"
+          cp "$FINAL" "$OUT"
+          cp "$FILE" jp_classroom_style.py check_manim_style.py "$OUTDIR/"
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of default=noprint_wrappers=1 "$OUT" > "$OUTDIR/ffprobe.txt"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$OUT")" = 1920
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$OUT")" = 1080
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$OUT")" = 30/1
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$OUT")" = h264
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$OUT")" = yuv420p
+          ffmpeg -nostdin -v error -i "$OUT" -f null - 2> "$OUTDIR/full_decode.log"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT")"
+          SAMPLE="$(python -c "d=float('$DUR'); print(max(0.001,48.0/max(d,0.001)))")"
+          ffmpeg -nostdin -y -v error -i "$OUT" -vf "fps=$SAMPLE,scale=480:-1,tile=6x8:padding=8:margin=8" -frames:v 1 "$QADIR/contact_sheet.jpg"
+          for P in 10 25 40 52 58 64 72 85 95; do T="$(python -c "d=float('$DUR'); print(d*$P/100.0)")"; ffmpeg -nostdin -y -v error -ss "$T" -i "$OUT" -frames:v 1 "$QADIR/frame_${P}pct.png"; done
+          sha256sum "$OUT" > "$OUTDIR/SHA256SUMS.txt"
+      - name: Upload final package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8_Week3_CircleTheory_Senior_V2_FINAL_PQH
+          path: |
+            delivery_geometry8_week3_circle_senior_v2_final/
+            qa_geometry8_week3_circle_senior_v2_final/
+          retention-days: 7
