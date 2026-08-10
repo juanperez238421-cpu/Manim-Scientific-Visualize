@@ -26,10 +26,10 @@ jobs:
           JOB=render_jobs/geometry8_week3_workshop_senior_v1_20260810
           git fetch --depth=1 origin "$BRANCH"
           : > /tmp/workshop_payload.b64
-          for F in payload_00.b64 payload_01.b64 payload_02.b64 payload_03.b64 payload_04.b64; do
+          for F in payload_00_0.b64 payload_00_1_0.b64 payload_00_1_1.b64 payload_00_1_2_0.b64 payload_00_1_2_1.b64 payload_00_1_2_2.b64 payload_00_2.b64 payload_00_3.b64 payload_00_4.b64 payload_01.b64 payload_02.b64 payload_03.b64 payload_04.b64; do
             git show "FETCH_HEAD:$JOB/$F" >> /tmp/workshop_payload.b64
           done
-          test "$(wc -c < /tmp/workshop_payload.b64)" -ge 18056
+          test "$(wc -c < /tmp/workshop_payload.b64)" -eq 18056
           base64 -d /tmp/workshop_payload.b64 > /tmp/workshop_payload.tar.xz
           xz -t /tmp/workshop_payload.tar.xz
           rm -rf /tmp/week3_workshop && mkdir -p /tmp/week3_workshop
