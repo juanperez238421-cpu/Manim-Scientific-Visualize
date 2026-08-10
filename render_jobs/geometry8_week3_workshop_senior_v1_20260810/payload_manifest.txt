@@ -1,0 +1,4 @@
+Geometry8 Week 3 Workshop Senior V1 FINAL
+payload chunks: 5
+base64 length: 18056
+layout fix: square-based figures lowered to respect JP persistent header safe zone
