@@ -4,15 +4,20 @@ import sys
 p = Path(sys.argv[1])
 s = p.read_text()
 
-# Resolve the helper/scene method name collision.
+# Resolve the helper/scene method name collision if the earlier workflow patch
+# has not already done so.
 old = '    def triangular_prism(self, *, center: np.ndarray = ORIGIN, scale: float = 1.0) -> VGroup:'
 new = '    def triangular_prism_model(self, *, center: np.ndarray = ORIGIN, scale: float = 1.0) -> VGroup:'
-assert s.count(old) == 1
-s = s.replace(old, new, 1)
-old = '        prism = self.triangular_prism(center=LEFT * 3.65 + DOWN * 0.55, scale=1.0)'
-new = '        prism = self.triangular_prism_model(center=LEFT * 3.65 + DOWN * 0.55, scale=1.0)'
-assert s.count(old) == 1
-s = s.replace(old, new, 1)
+if old in s:
+    assert s.count(old) == 1
+    s = s.replace(old, new, 1)
+else:
+    assert new in s
+old_call = '        prism = self.triangular_prism(center=LEFT * 3.65 + DOWN * 0.55, scale=1.0)'
+new_call = '        prism = self.triangular_prism_model(center=LEFT * 3.65 + DOWN * 0.55, scale=1.0)'
+if old_call in s:
+    assert s.count(old_call) == 1
+    s = s.replace(old_call, new_call, 1)
 
 # Make the triangular-base altitude explicit and perpendicular.
 old = '''        prism = self.triangular_prism_model(center=LEFT * 3.65 + DOWN * 0.55, scale=1.0)\n        labels = VGroup(\n            self.math(r"6", 28).move_to(LEFT * 3.65 + DOWN * 1.92),\n            self.math(r"4", 28).move_to(LEFT * 3.65 + DOWN * 0.45),\n            self.math(r"5", 26).move_to(LEFT * 5.0 + DOWN * 0.30),\n            self.math(r"10", 28).move_to(LEFT * 1.25 + UP * 0.72),\n        )\n        fig = VGroup(prism, labels)\n'''
