@@ -1,0 +1,1 @@
+Verified payload recovery uses exact subchunks; trigger final workshop render.
