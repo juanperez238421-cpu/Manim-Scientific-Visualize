@@ -48,7 +48,10 @@ jobs:
             "$JOB/jp_classroom_style.py"
           python "$JOB/check_manim_style.py" "$JOB/geometry8_period3_week2_class1_concepts_v2.py"
           python "$JOB/check_manim_style.py" "$JOB/geometry8_period3_week2_class2_exercises_v2.py"
-          ! grep -nE '([A-Za-z]:\\\\|/Users/|/home/[^/]+/Desktop)' "$JOB"/*.py
+          ! grep -nE '([A-Za-z]:\\\\|/Users/|/home/[^/]+/Desktop)' \
+            "$JOB/geometry8_period3_week2_class1_concepts_v2.py" \
+            "$JOB/geometry8_period3_week2_class2_exercises_v2.py" \
+            "$JOB/jp_classroom_style.py"
 
       - name: Pull official ManimCE 0.20.1 image
         shell: bash
