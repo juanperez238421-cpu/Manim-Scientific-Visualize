@@ -8,7 +8,7 @@
         semigroup=VGroup(semi,diam).scale(0.58).move_to(RIGHT*4.05+DOWN*0.15)
         sphere=sphere_surface(1.15).scale(0.78).move_to(RIGHT*5.9+DOWN*0.05)
         arr3=arrow_between(RIGHT*4.75+DOWN*0.15,RIGHT*5.15+DOWN*0.15)
-        l3=VGroup(self.text("SEMICIRCLE",20,BOLD),self.text("→ SPHERE",22,BOLD)).arrange(DOWN,buff=0.06).move_to(RIGHT*4.9+DOWN*2.70)
+        l3=VGroup(self.text("SEMICIRCLE",20,BOLD),self.text("→ SPHERE",22,BOLD)).arrange(DOWN,buff=0.06).move_to(RIGHT*4.9+DOWN*3.45)
         self.fixed(l3); self.play(FadeIn(semigroup),Create(arr3),FadeIn(sphere),FadeIn(l3),run_time=1.2); self.wait(2.4)
         rule=self.text("CAD lesson: profile geometry is the design language of Revolve.",27,BOLD).to_edge(DOWN,buff=0.30)
         self.fixed(rule);self.play(FadeIn(rule),run_time=0.7);self.wait(3.2)
@@ -156,8 +156,8 @@
 
     def closing(self):
         self.set_camera_orientation(phi=0,theta=-90*DEGREES,zoom=1)
-        title=self.text("PROFILE  →  AXIS  →  ANGLE  →  OPERATION  →  SOLID",38,BOLD)
-        sub=self.text("Inventor becomes easier when you design the 2D generator before thinking about the 3D result.",26)
+        title=self.text("PROFILE  →  AXIS  →  ANGLE  →  OPERATION  →  SOLID",38,BOLD); self.fit(title, 14.25, 0.82)
+        sub=self.text("Inventor becomes easier when you design the 2D generator before thinking about the 3D result.",26); self.fit(sub, 13.80, 0.62)
         checklist=VGroup(
             self.pill("closed region",19),self.pill("valid axis",19),self.pill("correct extent",19),self.pill("join / cut",19),
         ).arrange(RIGHT,buff=0.20)
