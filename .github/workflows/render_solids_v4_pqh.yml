@@ -12,7 +12,7 @@ jobs:
   render:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
 
     steps:
       - name: Checkout temporary render branch
@@ -21,37 +21,73 @@ jobs:
           ref: render-solids-v4-bigger-figures-20260811
           fetch-depth: 0
 
-      - name: Restore exact source payload
+      - name: Restore exact uploaded source and style
         shell: bash
         run: |
           set -euo pipefail
-          rm -rf render_workspace render_output
-          mkdir -p render_workspace render_output
-          cat render_payload/code_*.b64 | tr -d '\n' | base64 -d | gzip -dc > render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py
-          cat render_payload/style_*.b64 | tr -d '\n' | base64 -d | gzip -dc > render_workspace/jp_classroom_style.py
-          sha256sum render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py render_workspace/jp_classroom_style.py | tee render_output/source_sha256.txt
-          test "$(sha256sum render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py | cut -d' ' -f1)" = "c359547721378bfcb9d4ddb1a485b0e8e039a6379053f6df63b4279a846dc6d4"
-          test "$(sha256sum render_workspace/jp_classroom_style.py | cut -d' ' -f1)" = "3f3f06e94d5cad870ad335502cc1a93e56ce675abb1231ded5f9c71fd3e60e3d"
+          rm -rf render_workspace render_output render_delivery
+          mkdir -p render_workspace render_output render_delivery \
+                   render_workspace/media_pql render_workspace/media_pqh
+
+          cat render_payload/code_*.b64 | tr -d '\n' | base64 -d | gzip -dc \
+            > render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py
+          cat render_payload/style_*.b64 | tr -d '\n' | base64 -d | gzip -dc \
+            > render_workspace/jp_classroom_style.py
+
+          # These are the SHA-256 values of the files re-uploaded by the user.
+          test "$(sha256sum render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py | cut -d' ' -f1)" \
+            = "c359547721378bfcb9d4ddb1a485b0e8e039a6379053f6df63b4279a846dc6d4"
+          test "$(sha256sum render_workspace/jp_classroom_style.py | cut -d' ' -f1)" \
+            = "3f3f06e94d5cad870ad335502cc1a93e56ce675abb1231ded5f9c71fd3e60e3d"
+
+          sha256sum \
+            render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py \
+            render_workspace/jp_classroom_style.py \
+            | tee render_output/source_sha256.txt
+
+          # Create writable mounted media roots BEFORE entering Docker.
+          chmod 777 render_workspace/media_pql render_workspace/media_pqh
 
       - name: Python syntax validation
         shell: bash
         run: |
           set -euo pipefail
-          python -m py_compile render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py
+          python -m py_compile \
+            render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py \
+            render_workspace/jp_classroom_style.py
           echo "py_compile: PASS" | tee render_output/py_compile.txt
-          cat > render_output/prior_pql_validation.txt <<'EOF'
-          Mandatory -pql passed for this exact source SHA256 in runs:
-          31560840760
-          31561694976
-          31562648177
-          31563287982
-          No source bytes changed after those validations; only render-output preservation changed.
-          EOF
 
       - name: Pull fixed ManimCE image
         run: docker pull manimcommunity/manim:v0.20.1
 
-      - name: Final high-quality render (-pqh) into mounted output
+      - name: Mandatory low-quality validation (-pql)
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd render_workspace
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=0.10 \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/colab-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open
+              chmod +x /tmp/colab-bin/xdg-open
+              export PATH="/tmp/colab-bin:$PATH"
+              manim -pql \
+                SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py \
+                SolidsOfRevolutionInventorSeniorV3 \
+                --format=mp4 --disable_caching --fps 30 \
+                --media_dir /manim/media_pql
+            '
+          echo "literal -pql: PASS" | tee ../render_output/pql_validation.txt
+
+      - name: Final literal high-quality render (-pqh)
         shell: bash
         run: |
           set -euo pipefail
@@ -66,46 +102,134 @@ jobs:
             manimcommunity/manim:v0.20.1 \
             -c '
               set -euo pipefail
-              mkdir -p /tmp/colab-bin /manim/media
+              mkdir -p /tmp/colab-bin
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open
               chmod +x /tmp/colab-bin/xdg-open
               export PATH="/tmp/colab-bin:$PATH"
-              manim -pqh SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching --fps 30 --media_dir /manim/media
+              manim -pqh \
+                SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py \
+                SolidsOfRevolutionInventorSeniorV3 \
+                --format=mp4 --disable_caching --fps 30 \
+                --media_dir /manim/media_pqh
             '
 
-      - name: Inventory and preserve generated MP4
+      - name: Preserve, normalize and verify final MP4
         shell: bash
         run: |
           set -euo pipefail
-          find render_workspace/media -type f -printf '%s\t%p\n' | sort -nr > render_output/all_generated_files.txt
-          find render_workspace/media -type f -iname '*.mp4' -printf '%s\t%p\n' | sort -nr > render_output/all_generated_mp4s.txt
-          echo '--- ALL MP4 CANDIDATES ---'
-          cat render_output/all_generated_mp4s.txt
-          COUNT="$(wc -l < render_output/all_generated_mp4s.txt)"
-          test "$COUNT" -ge 1
-          FINAL_MP4="$(head -n 1 render_output/all_generated_mp4s.txt | cut -f2-)"
-          echo "selected=$FINAL_MP4" | tee render_output/selected_render.txt
-          test -n "$FINAL_MP4"
-          test -s "$FINAL_MP4"
-          cp "$FINAL_MP4" render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh_RAW.mp4
+
+          find render_workspace/media_pqh -type f -printf '%s\t%p\n' | sort -nr \
+            > render_output/all_pqh_files.txt
+          find render_workspace/media_pqh -type f -iname '*.mp4' -printf '%s\t%p\n' | sort -nr \
+            > render_output/all_pqh_mp4s.txt
+          cat render_output/all_pqh_mp4s.txt
+          test "$(wc -l < render_output/all_pqh_mp4s.txt)" -ge 1
+
+          RAW="$(head -n 1 render_output/all_pqh_mp4s.txt | cut -f2-)"
+          test -n "$RAW"
+          test -s "$RAW"
+          cp "$RAW" render_output/raw_pqh.mp4
+
+          RAW_CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 render_output/raw_pqh.mp4)"
+          RAW_PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 render_output/raw_pqh.mp4)"
+          RAW_W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 render_output/raw_pqh.mp4)"
+          RAW_H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 render_output/raw_pqh.mp4)"
+          RAW_FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 render_output/raw_pqh.mp4)"
+
+          FINAL="render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh.mp4"
+          if [ "$RAW_CODEC" = "h264" ] && [ "$RAW_PIX" = "yuv420p" ] && \
+             [ "$RAW_W" = "1920" ] && [ "$RAW_H" = "1080" ] && [ "$RAW_FPS" = "30/1" ]; then
+            cp render_output/raw_pqh.mp4 "$FINAL"
+            echo "Raw Manim MP4 already satisfies delivery codec/profile; copied losslessly." \
+              | tee render_output/normalization.txt
+          else
+            ffmpeg -y -v warning -i render_output/raw_pqh.mp4 \
+              -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -r 30 \
+              -movflags +faststart -an "$FINAL"
+            echo "Normalized to H.264 / yuv420p / 30 fps." | tee render_output/normalization.txt
+          fi
+
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate \
+            -show_entries format=duration,size \
+            -of default=noprint_wrappers=1 "$FINAL" \
+            | tee render_output/ffprobe_final.txt
+
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$FINAL")" = "h264"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$FINAL")" = "1920"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$FINAL")" = "1080"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$FINAL")" = "yuv420p"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$FINAL")" = "30/1"
+
+          # Full decode check: any corrupt frame makes this step fail.
+          ffmpeg -v error -i "$FINAL" -f null -
+          echo "full decode: PASS" | tee render_output/full_decode.txt
+
+          sha256sum "$FINAL" | tee render_output/final_video_sha256.txt
+
           cp render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py render_output/
           cp render_workspace/jp_classroom_style.py render_output/
-          sha256sum render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh_RAW.mp4 | tee render_output/raw_video_sha256.txt
-          ffprobe -v error -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate -show_entries format=duration,size -of default=noprint_wrappers=1 render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh_RAW.mp4 | tee render_output/ffprobe_raw.txt
+          cat > render_output/render_command.txt <<'EOF'
+          manim -pqh SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching --fps 30 --media_dir /manim/media_pqh
+          EOF
 
-      - name: Commit preserved render to isolated branch
+      - name: Generate representative QA frames and contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          FINAL="render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh.mp4"
+          mkdir -p render_output/qa_frames
+          DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$FINAL")"
+          for i in $(seq 1 12); do
+            TS="$(awk -v d="$DURATION" -v i="$i" 'BEGIN{printf "%.3f", d*i/13.0}')"
+            ffmpeg -y -v error -ss "$TS" -i "$FINAL" -frames:v 1 \
+              "render_output/qa_frames/frame_$(printf '%02d' "$i").png"
+          done
+          ffmpeg -y -v error -framerate 1 -start_number 1 \
+            -i render_output/qa_frames/frame_%02d.png \
+            -vf "scale=480:270,tile=4x3" -frames:v 1 render_output/contact_sheet.png
+          test -s render_output/contact_sheet.png
+
+      - name: Prepare branch-safe delivery files
+        shell: bash
+        run: |
+          set -euo pipefail
+          FINAL="render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh.mp4"
+          SIZE="$(stat -c%s "$FINAL")"
+
+          cp render_output/contact_sheet.png render_delivery/
+          cp render_output/ffprobe_final.txt render_delivery/
+          cp render_output/final_video_sha256.txt render_delivery/
+          cp render_output/render_command.txt render_delivery/
+          cp render_output/pql_validation.txt render_delivery/
+          cp render_output/py_compile.txt render_delivery/
+          cp render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py render_delivery/
+          cp render_output/jp_classroom_style.py render_delivery/
+
+          if [ "$SIZE" -lt 90000000 ]; then
+            cp "$FINAL" render_delivery/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh.mp4
+            echo "mode=single" > render_delivery/DELIVERY_MODE.txt
+          else
+            split -b 45M -d -a 3 "$FINAL" \
+              render_delivery/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh.mp4.part.
+            echo "mode=split" > render_delivery/DELIVERY_MODE.txt
+          fi
+          find render_delivery -maxdepth 1 -type f -printf '%f\t%s bytes\n' | sort \
+            | tee render_delivery/MANIFEST.txt
+
+      - name: Commit validated delivery to isolated branch
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add render_output
-          git commit -m "Preserve Solids V4 raw pqh render [skip ci]"
+          git add -f render_delivery
+          git commit -m "Preserve validated Solids V4 pqh delivery [skip ci]"
           git push origin HEAD:render-solids-v4-bigger-figures-20260811
 
-      - name: Upload raw pqh render artifact
+      - name: Upload validated render artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SolidsOfRevolution_V4_BiggerFigures_RAW_pqh
+          name: SolidsOfRevolution_V4_BiggerFigures_VALIDATED_pqh
           path: render_output/
           if-no-files-found: error
