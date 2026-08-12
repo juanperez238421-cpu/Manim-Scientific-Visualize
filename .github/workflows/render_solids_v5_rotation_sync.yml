@@ -21,43 +21,37 @@ jobs:
           ref: render-solids-v5-rotation-sync-20260812
           fetch-depth: 1
 
-      - name: Restore exact V5 source and exact JP style
+      - name: Restore V4 baseline, exact JP style, and apply audited V5 patch
         shell: bash
         run: |
           set -euo pipefail
           rm -rf render_v5_workspace render_v5_pql_delivery
           mkdir -p render_v5_workspace/extracted render_v5_pql_delivery
 
-          test "$(wc -c < render_v5/chunks/source_00.b64)" -eq 4000
-          test "$(wc -c < render_v5/chunks/source_01.b64)" -eq 4000
-          test "$(wc -c < render_v5/chunks/source_02a.b64)" -eq 2000
-          test "$(wc -c < render_v5/chunks/source_02b.b64)" -eq 2000
-          test "$(wc -c < render_v5/chunks/source_03a.b64)" -eq 2000
-          test "$(wc -c < render_v5/chunks/source_03b.b64)" -eq 2000
-          test "$(wc -c < render_v5/chunks/source_04.b64)" -eq 32
-
-          cat \
-            render_v5/chunks/source_00.b64 \
-            render_v5/chunks/source_01.b64 \
-            render_v5/chunks/source_02a.b64 \
-            render_v5/chunks/source_02b.b64 \
-            render_v5/chunks/source_03a.b64 \
-            render_v5/chunks/source_03b.b64 \
-            render_v5/chunks/source_04.b64 \
-            | tr -d '\n' | base64 -d | gzip -dc \
-            > render_v5_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL.py
+          test "$(sha256sum render_v5/v4_to_v5_rotation_sync.patch | cut -d' ' -f1)" \
+            = "09fbc472d669f86c5c0ac1692263ffcbc1efbd095f6696c4d09a8f3228316005"
 
           git fetch --depth=1 origin render-solids-v4-bigger-figures-20260811
+          git show FETCH_HEAD:render_delivery/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py \
+            > render_v5_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL.py
           git show FETCH_HEAD:render_delivery/jp_classroom_style.py \
             > render_v5_workspace/jp_classroom_style_EXACT_RENDER_USED.py
 
           test "$(sha256sum render_v5_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL.py | cut -d' ' -f1)" \
-            = "d8e15d3c44aea974ab3210f80d900d28b7d985a1ff6333a24b0737e919691c24"
+            = "c359547721378bfcb9d4ddb1a485b0e8e039a6379053f6df63b4279a846dc6d4"
           test "$(sha256sum render_v5_workspace/jp_classroom_style_EXACT_RENDER_USED.py | cut -d' ' -f1)" \
             = "3f3f06e94d5cad870ad335502cc1a93e56ce675abb1231ded5f9c71fd3e60e3d"
 
+          patch render_v5_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL.py \
+            render_v5/v4_to_v5_rotation_sync.patch
+
+          test "$(sha256sum render_v5_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL.py | cut -d' ' -f1)" \
+            = "d8e15d3c44aea974ab3210f80d900d28b7d985a1ff6333a24b0737e919691c24"
+
           cp render_v5_workspace/*.py render_v5_pql_delivery/
-          sha256sum render_v5_workspace/*.py | tee render_v5_pql_delivery/source_sha256.txt
+          cp render_v5/v4_to_v5_rotation_sync.patch render_v5_pql_delivery/
+          sha256sum render_v5_workspace/*.py render_v5/v4_to_v5_rotation_sync.patch \
+            | tee render_v5_pql_delivery/source_sha256.txt
 
       - name: Python syntax validation
         shell: bash
