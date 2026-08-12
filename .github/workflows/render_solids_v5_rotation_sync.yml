@@ -28,10 +28,19 @@ jobs:
           rm -rf render_v5_workspace render_v5_pql_delivery
           mkdir -p render_v5_workspace/extracted render_v5_pql_delivery
 
+          test "$(wc -c < render_v5/chunks/source_00.b64)" -eq 4000
+          test "$(wc -c < render_v5/chunks/source_01.b64)" -eq 4000
+          test "$(wc -c < render_v5/chunks/source_02a.b64)" -eq 2000
+          test "$(wc -c < render_v5/chunks/source_02b.b64)" -eq 2000
+          test "$(wc -c < render_v5/chunks/source_03a.b64)" -eq 2000
+          test "$(wc -c < render_v5/chunks/source_03b.b64)" -eq 2000
+          test "$(wc -c < render_v5/chunks/source_04.b64)" -eq 32
+
           cat \
             render_v5/chunks/source_00.b64 \
             render_v5/chunks/source_01.b64 \
-            render_v5/chunks/source_02.b64 \
+            render_v5/chunks/source_02a.b64 \
+            render_v5/chunks/source_02b.b64 \
             render_v5/chunks/source_03a.b64 \
             render_v5/chunks/source_03b.b64 \
             render_v5/chunks/source_04.b64 \
