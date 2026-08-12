@@ -85,7 +85,7 @@ jobs:
               manim -pqh first3_full.py FirstThreeProblems --disable_caching --format=mp4 --fps 30
             '
 
-      - name: Collect and verify final MP4
+      - name: Collect, normalize and verify final MP4
         shell: bash
         run: |
           set -euo pipefail
@@ -95,14 +95,21 @@ jobs:
             height=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$candidate" || true)
             fps=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$candidate" || true)
             echo "Candidate: $candidate -> ${width}x${height} @ ${fps}"
-            if [[ "$width" == "1920" && "$height" == "1080" && "$fps" == "30/1" ]]; then
+            if [[ "$width" == "1920" && "$height" == "1080" ]]; then
               FINAL="$candidate"
               break
             fi
           done < <(find render_jobs/calc_mv_first3/media -type f -name 'FirstThreeProblems.mp4' | sort)
           test -n "$FINAL"
-          echo "Selected final: $FINAL"
-          cp "$FINAL" delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4
+          echo "Selected PQH source: $FINAL"
+
+          # Normalize the literal -pqh render to the protocol's preferred delivery
+          # characteristics: H.264, yuv420p, 1920x1080, 30 fps, fast-start MP4.
+          ffmpeg -y -i "$FINAL" \
+            -an -c:v libx264 -preset medium -crf 18 \
+            -pix_fmt yuv420p -r 30 -movflags +faststart \
+            delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4
+
           cp render_jobs/calc_mv_first3/first3_full.py delivery/Multivariable_Calculus_Workshop_Problems_1_2_3.py
           cp render_jobs/calc_mv_first3/jp_classroom_style.py delivery/jp_classroom_style.py
           ffprobe -v error \
