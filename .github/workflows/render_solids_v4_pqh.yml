@@ -1,0 +1,126 @@
+name: Render Solids V4 Bigger Figures
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout temporary render branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Restore exact source payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p render_workspace render_output
+          cat render_payload/code_*.b64 | tr -d '\n' | base64 -d | gzip -dc > render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py
+          cat render_payload/style_*.b64 | tr -d '\n' | base64 -d | gzip -dc > render_workspace/jp_classroom_style.py
+          sha256sum render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py render_workspace/jp_classroom_style.py | tee render_output/source_sha256.txt
+          test "$(sha256sum render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py | cut -d' ' -f1)" = "c359547721378bfcb9d4ddb1a485b0e8e039a6379053f6df63b4279a846dc6d4"
+          test "$(sha256sum render_workspace/jp_classroom_style.py | cut -d' ' -f1)" = "3f3f06e94d5cad870ad335502cc1a93e56ce675abb1231ded5f9c71fd3e60e3d"
+
+      - name: Python syntax validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py
+          echo "py_compile: PASS" | tee render_output/py_compile.txt
+
+      - name: Pull fixed ManimCE image
+        run: docker pull manimcommunity/manim:v0.20.1
+
+      - name: Mandatory low-quality validation (-pql)
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd render_workspace
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=0.08 \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/colab-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open
+              chmod +x /tmp/colab-bin/xdg-open
+              export PATH="/tmp/colab-bin:$PATH"
+              manim -pql SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching
+            ' 2>&1 | tee ../render_output/render_pql.log
+
+      - name: Final high-quality render (-pqh)
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd render_workspace
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/colab-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open
+              chmod +x /tmp/colab-bin/xdg-open
+              export PATH="/tmp/colab-bin:$PATH"
+              manim -pqh SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching
+            ' 2>&1 | tee ../render_output/render_pqh.log
+
+      - name: Verify final video and build QA contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          SCENE='SolidsOfRevolutionInventorSeniorV3'
+          FINAL_MP4="$(find render_workspace/media/videos -type f -name "${SCENE}.mp4" -path '*1080p*' | sort | tail -n 1)"
+          test -n "$FINAL_MP4"
+          test -s "$FINAL_MP4"
+          cp "$FINAL_MP4" render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh.mp4
+          cp render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py render_output/
+          cp render_workspace/jp_classroom_style.py render_output/
+          ffprobe -v error -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate -show_entries format=duration,size -of default=noprint_wrappers=1 render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh.mp4 | tee render_output/ffprobe.txt
+          grep -q '^codec_name=h264$' render_output/ffprobe.txt
+          grep -q '^width=1920$' render_output/ffprobe.txt
+          grep -q '^height=1080$' render_output/ffprobe.txt
+          grep -q '^pix_fmt=yuv420p$' render_output/ffprobe.txt
+          grep -q '^r_frame_rate=30/1$' render_output/ffprobe.txt
+          ffmpeg -v error -i render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh.mp4 -f null -
+          echo "full_decode: PASS" | tee render_output/decode_check.txt
+          sha256sum render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh.mp4 | tee render_output/video_sha256.txt
+          ffmpeg -y -v error -i render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh.mp4 -vf "fps=1/12,scale=384:-1,tile=5x4:padding=4:margin=4" -frames:v 1 render_output/Solids_V4_QA_contact_sheet.jpg
+
+      - name: Commit verified render to temporary branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add render_output
+          git commit -m "Render verified Solids V4 pqh [skip ci]" || exit 0
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+
+      - name: Upload verified render artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SolidsOfRevolution_V4_BiggerFigures_pqh
+          path: render_output/
+          if-no-files-found: error
