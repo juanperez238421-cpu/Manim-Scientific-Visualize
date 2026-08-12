@@ -14,8 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
-      LESSON_SOURCE_BLOB: da0dd810d05c2f544109f2b5ebc17ced8fe6b95b
-      STYLE_SOURCE_BLOB: 420ff71e7513c1ed7be5585a8482ac9ad18d8403
+      LESSON_GZIP_BLOB: d06b9ecd0a50a68538c40d452ef0213484eb9587
+      STYLE_GZIP_BLOB: 420ff71e7513c1ed7be5585a8482ac9ad18d8403
       GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout branch
@@ -28,18 +28,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p render_jobs/calc_mv_first3 delivery
-          get_blob() {
+          mkdir -p render_jobs/calc_mv_first3 delivery /tmp/calc_sources
+          get_gzip_blob() {
             local sha="$1"
             local out="$2"
+            local gz="/tmp/calc_sources/${sha}.gz"
             curl -fsSL \
               -H "Authorization: Bearer $GH_TOKEN" \
               -H "Accept: application/vnd.github+json" \
               "https://api.github.com/repos/${GITHUB_REPOSITORY}/git/blobs/${sha}" \
-            | jq -r '.content' | tr -d '\n' | base64 -d > "$out"
+            | jq -r '.content' | tr -d '\n' | base64 -d > "$gz"
+            gzip -t "$gz"
+            gzip -dc "$gz" > "$out"
           }
-          get_blob "$LESSON_SOURCE_BLOB" render_jobs/calc_mv_first3/first3_full.py
-          get_blob "$STYLE_SOURCE_BLOB" render_jobs/calc_mv_first3/jp_classroom_style.py
+          get_gzip_blob "$LESSON_GZIP_BLOB" render_jobs/calc_mv_first3/first3_full.py
+          get_gzip_blob "$STYLE_GZIP_BLOB" render_jobs/calc_mv_first3/jp_classroom_style.py
           python -m py_compile render_jobs/calc_mv_first3/first3_full.py render_jobs/calc_mv_first3/jp_classroom_style.py
           sha256sum render_jobs/calc_mv_first3/first3_full.py render_jobs/calc_mv_first3/jp_classroom_style.py | tee delivery/source_sha256.txt
 
