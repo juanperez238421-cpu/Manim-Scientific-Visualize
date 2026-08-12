@@ -1,0 +1,10 @@
+MANIFEST.txt	0 bytes
+SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py	43021 bytes
+SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh.mp4.part.000	13691794 bytes
+jp_classroom_style.py	31302 bytes
+pqh_validation.txt	39 bytes
+pql_validation.txt	19 bytes
+py_compile.txt	17 bytes
+raw_video_sha256.txt	108 bytes
+render_command.txt	190 bytes
+source_sha256.txt	265 bytes
