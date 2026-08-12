@@ -1,0 +1,111 @@
+name: Render Calculus Problems 1-3 Senior V2
+
+on:
+  push:
+    branches:
+      - calc-mv-workshop-p1-first3-20260811
+    paths:
+      - ".github/workflows/render_calc_first3_senior_v2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: calc-mv-workshop-p1-first3-20260811
+          fetch-depth: 0
+
+      - name: Recover Senior V2 source and validate
+        shell: bash
+        env:
+          SOURCE_GZIP_B64: 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
+        run: |
+          set -euo pipefail
+          mkdir -p render_jobs/calc_mv_first3_senior_v2 delivery
+          printf '%s' "$SOURCE_GZIP_B64" | base64 -d | gzip -dc > render_jobs/calc_mv_first3_senior_v2/first3_senior_v2.py
+          cp delivery/jp_classroom_style.py render_jobs/calc_mv_first3_senior_v2/jp_classroom_style.py
+          python -m py_compile render_jobs/calc_mv_first3_senior_v2/first3_senior_v2.py render_jobs/calc_mv_first3_senior_v2/jp_classroom_style.py
+          test "$(sha256sum render_jobs/calc_mv_first3_senior_v2/first3_senior_v2.py | awk '{print $1}')" = "254451ec2747ff01cafb21dea0575d3287b49ca0ed01296e918d8556bab4e31e"
+          cp render_jobs/calc_mv_first3_senior_v2/first3_senior_v2.py delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_SENIOR_V2.py
+          sha256sum render_jobs/calc_mv_first3_senior_v2/first3_senior_v2.py render_jobs/calc_mv_first3_senior_v2/jp_classroom_style.py | tee delivery/SENIOR_V2_source_sha256.txt
+
+      - name: Pull ManimCE 0.20.1 image
+        run: docker pull manimcommunity/manim:v0.20.1
+
+      - name: QA literal -pql render
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf render_jobs/calc_mv_first3_senior_v2/media_pql
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w /manim/render_jobs/calc_mv_first3_senior_v2 \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/bin/xdg-open
+              chmod +x /tmp/bin/xdg-open
+              export PATH="/tmp/bin:$PATH"
+              manim -pql first3_senior_v2.py FirstThreeProblems \
+                --disable_caching --format=mp4 --fps 15 -r 854,480 \
+                --media_dir media_pql
+              QA=$(find media_pql -type f -name "FirstThreeProblems.mp4" -printf "%T@ %p\n" | sort -nr | head -n1 | cut -d" " -f2-)
+              test -n "$QA"
+              test -s "$QA"
+            '
+
+      - name: Final literal -pqh render 1920x1080 30fps
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf render_jobs/calc_mv_first3_senior_v2/media_pqh
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=0.88 \
+            -v "$PWD:/manim" -w /manim/render_jobs/calc_mv_first3_senior_v2 \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/bin /manim/delivery
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/bin/xdg-open
+              chmod +x /tmp/bin/xdg-open
+              export PATH="/tmp/bin:$PATH"
+              manim -pqh first3_senior_v2.py FirstThreeProblems \
+                --disable_caching --format=mp4 --fps 30 -r 1920,1080 \
+                --media_dir media_pqh
+              FINAL=$(find media_pqh -type f -name "FirstThreeProblems.mp4" -printf "%T@ %p\n" | sort -nr | head -n1 | cut -d" " -f2-)
+              test -n "$FINAL"
+              test -s "$FINAL"
+              cp "$FINAL" /manim/delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_SENIOR_V2_pqh.mp4
+              ffprobe -v error \
+                -show_entries stream=codec_name,pix_fmt,width,height,r_frame_rate \
+                -show_entries format=duration,size \
+                -of default=noprint_wrappers=1 \
+                /manim/delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_SENIOR_V2_pqh.mp4 \
+                | tee /manim/delivery/SENIOR_V2_ffprobe.txt
+            '
+          sha256sum delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_SENIOR_V2_pqh.mp4 | tee delivery/SENIOR_V2_video_sha256.txt
+
+      - name: Upload Senior V2 PQH artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: multivariable-calculus-problems-1-3-senior-v2-pqh
+          path: |
+            delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_SENIOR_V2_pqh.mp4
+            delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_SENIOR_V2.py
+            delivery/jp_classroom_style.py
+            delivery/SENIOR_V2_source_sha256.txt
+            delivery/SENIOR_V2_video_sha256.txt
+            delivery/SENIOR_V2_ffprobe.txt
+          if-no-files-found: error
+          retention-days: 7
