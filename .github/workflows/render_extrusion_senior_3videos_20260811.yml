@@ -26,8 +26,8 @@ jobs:
           rm -rf /tmp/extrusion3 && mkdir -p /tmp/extrusion3
           base64 -d "$JOB/source.py.gz.b64" | gzip -dc > /tmp/extrusion3/Extrusion_Inventor_SENIOR_3Videos.py
           base64 -d "$JOB/jp_classroom_style.py.gz.b64" | gzip -dc > /tmp/extrusion3/jp_classroom_style.py
-          test "$(wc -l < /tmp/extrusion3/Extrusion_Inventor_SENIOR_3Videos.py)" -eq 639
-          echo 'dd455f9c334534033b75fc0cbfa6f1054cc1ade45a4f2a019faf4a013fb37e28  /tmp/extrusion3/Extrusion_Inventor_SENIOR_3Videos.py' | sha256sum -c -
+          test "$(wc -l < /tmp/extrusion3/Extrusion_Inventor_SENIOR_3Videos.py)" -eq 656
+          echo '579497f53982ec5fad968357ab87059215055b4f16c031a7431815ce1dc82292  /tmp/extrusion3/Extrusion_Inventor_SENIOR_3Videos.py' | sha256sum -c -
           echo '3f3f06e94d5cad870ad335502cc1a93e56ce675abb1231ded5f9c71fd3e60e3d  /tmp/extrusion3/jp_classroom_style.py' | sha256sum -c -
           python -m py_compile /tmp/extrusion3/Extrusion_Inventor_SENIOR_3Videos.py /tmp/extrusion3/jp_classroom_style.py
           ! grep -nE '([A-Za-z]:\\|/Users/|/home/[^/]+/Desktop)' /tmp/extrusion3/Extrusion_Inventor_SENIOR_3Videos.py
@@ -120,7 +120,7 @@ jobs:
           Validation sequence: py_compile → PQL preview → literal PQH final → ffprobe → full decode → QA frames → SHA-256.
           Target: ManimCE 0.20.1, 1920×1080, 30 fps, H.264/yuv420p.
           EOF
-          printf 'ManimCE 0.20.1\nSource SHA-256: dd455f9c334534033b75fc0cbfa6f1054cc1ade45a4f2a019faf4a013fb37e28\nFinal command pattern: manim -pqh %s <SCENE> --format=mp4 --disable_caching\n' "$FILE" > delivery_extrusion3/RENDER_INFO.txt
+          printf 'ManimCE 0.20.1\nSource SHA-256: 579497f53982ec5fad968357ab87059215055b4f16c031a7431815ce1dc82292\nFinal command pattern: manim -pqh %s <SCENE> --format=mp4 --disable_caching\n' "$FILE" > delivery_extrusion3/RENDER_INFO.txt
           sha256sum delivery_extrusion3/*_pqh.mp4 delivery_extrusion3/$FILE delivery_extrusion3/jp_classroom_style.py > delivery_extrusion3/SHA256SUMS.txt
           zip -9 -r Inventor_Extrusion_SENIOR_3Videos_PQH.zip delivery_extrusion3 qa_extrusion3 >/dev/null
 
