@@ -1,0 +1,245 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Solids of Revolution for Autodesk Inventor Professional.
+
+A calculus-free, college-level ManimCE lesson built on the JP Classroom style.
+Target: Manim Community Edition 0.20.x, horizontal Full HD, white background.
+
+Pedagogical arc
+---------------
+1. Closed sketch area + rotation axis.
+2. Revolution angle: 90°, 180°, 360°.
+3. Familiar profile -> familiar solid: rectangle/cylinder, triangle/cone,
+   semicircle/sphere.
+4. Inventor workflow: sketch, axis, Revolve, angle, operation.
+5. Engineering examples: stepped shaft and revolved cut/groove concept.
+6. Elementary formula connection without integral calculus.
+7. Final reverse-engineering challenge: recover the 2D profile from a 3D part.
+"""
+
+from __future__ import annotations
+
+import math
+import os
+from typing import Sequence
+
+import numpy as np
+from manim import *
+
+from jp_classroom_style import (
+    JPThreeDClassroomScene,
+    BLACK_TEXT,
+    BLACK_LINE,
+    DARK_GRAY,
+    MID_GRAY,
+    LIGHT_GRAY,
+    VERY_LIGHT_GRAY,
+    PAPER_GRAY,
+    WHITE_FILL,
+)
+
+
+# -----------------------------------------------------------------------------
+# Render configuration
+# -----------------------------------------------------------------------------
+config.pixel_width = 1920
+config.pixel_height = 1080
+config.frame_width = 16
+config.frame_height = 9
+config.frame_rate = 30
+config.background_color = WHITE
+
+TIME_SCALE = float(os.getenv("LESSON_TIME_SCALE", "1.0"))
+
+
+# -----------------------------------------------------------------------------
+# Geometry helpers
+# -----------------------------------------------------------------------------
+def _profile_interp(points: Sequence[tuple[float, float]], t: float) -> tuple[float, float]:
+    """Interpolate a radius/height polyline by normalized arc length.
+
+    points are (radius, y) pairs. Duplicated y values are allowed, which is
+    useful for vertical shoulders in stepped profiles.
+    """
+    pts = np.array(points, dtype=float)
+    seg = np.diff(pts, axis=0)
+    lengths = np.sqrt(np.sum(seg * seg, axis=1))
+    total = float(np.sum(lengths))
+    if total <= 1e-12:
+        return float(pts[0, 0]), float(pts[0, 1])
+
+    s = np.clip(t, 0.0, 1.0) * total
+    cumulative = 0.0
+    for i, length in enumerate(lengths):
+        if s <= cumulative + length or i == len(lengths) - 1:
+            local = 0.0 if length <= 1e-12 else (s - cumulative) / length
+            p = pts[i] + local * seg[i]
+            return float(p[0]), float(p[1])
+        cumulative += length
+    return float(pts[-1, 0]), float(pts[-1, 1])
+
+
+def revolution_surface(
+    profile: Sequence[tuple[float, float]],
+    angle: float = TAU,
+    opacity: float = 0.52,
+    resolution: tuple[int, int] = (24, 12),
+) -> Surface:
+    """Outer surface obtained by revolving a radius/height profile around Y."""
+
+    def surf(u: float, v: float) -> np.ndarray:
+        r, y = _profile_interp(profile, v)
+        return np.array([r * math.cos(u), y, r * math.sin(u)])
+
+    surface = Surface(
+        surf,
+        u_range=[0.0, angle],
+        v_range=[0.0, 1.0],
+        resolution=resolution,
+        fill_color=GRAY_C,
+        fill_opacity=opacity,
+        stroke_color=GRAY_B,
+        stroke_width=0.7,
+    )
+    return surface
+
+
+def revolution_cap(
+    y: float,
+    radius: float,
+    angle: float = TAU,
+    opacity: float = 0.34,
+    resolution: tuple[int, int] = (20, 5),
+) -> Surface:
+    """Circular or sector cap at constant y."""
+
+    def cap(u: float, v: float) -> np.ndarray:
+        rr = radius * v
+        return np.array([rr * math.cos(u), y, rr * math.sin(u)])
+
+    return Surface(
+        cap,
+        u_range=[0.0, angle],
+        v_range=[0.0, 1.0],
+        resolution=resolution,
+        fill_color=GRAY_D,
+        fill_opacity=opacity,
+        stroke_color=GRAY_B,
+        stroke_width=0.55,
+    )
+
+
+def closed_profile_polygon(
+    profile: Sequence[tuple[float, float]],
+    fill_opacity: float = 0.52,
+) -> Polygon:
+    """Closed sketch region between the Y-axis and the outer profile."""
+    pts = [np.array([0.0, profile[0][1], 0.0])]
+    pts.extend(np.array([r, y, 0.0]) for r, y in profile)
+    pts.append(np.array([0.0, profile[-1][1], 0.0]))
+    return Polygon(
+        *pts,
+        stroke_color=BLACK_LINE,
+        stroke_width=2.4,
+        fill_color=LIGHT_GRAY,
+        fill_opacity=fill_opacity,
+    )
+
+
+def axis_line(y0: float = -2.6, y1: float = 2.6) -> DashedLine:
+    return DashedLine(
+        np.array([0.0, y0, 0.0]),
+        np.array([0.0, y1, 0.0]),
+        color=BLACK_LINE,
+        stroke_width=2.5,
+        dash_length=0.12,
+    )
+
+
+def sphere_surface(radius: float = 1.45) -> Surface:
+    def surf(u: float, v: float) -> np.ndarray:
+        return np.array([
+            radius * math.sin(v) * math.cos(u),
+            radius * math.cos(v),
+            radius * math.sin(v) * math.sin(u),
+        ])
+
+    return Surface(
+        surf,
+        u_range=[0.0, TAU],
+        v_range=[0.0, PI],
+        resolution=(26, 15),
+        fill_color=GRAY_C,
+        fill_opacity=0.50,
+        stroke_color=GRAY_B,
+        stroke_width=0.65,
+    )
+
+
+def torus_surface(major: float = 1.45, minor: float = 0.32) -> Surface:
+    """Simple torus used only as a visual metaphor for a revolved groove."""
+    def surf(u: float, v: float) -> np.ndarray:
+        rr = major + minor * math.cos(v)
+        return np.array([
+            rr * math.cos(u),
+            minor * math.sin(v),
+            rr * math.sin(u),
+        ])
+
+    return Surface(
+        surf,
+        u_range=[0.0, TAU],
+        v_range=[0.0, TAU],
+        resolution=(26, 10),
+        fill_color=GRAY_D,
+        fill_opacity=0.46,
+        stroke_color=GRAY_B,
+        stroke_width=0.55,
+    )
+
+
+# -----------------------------------------------------------------------------
+# Main lesson
+# -----------------------------------------------------------------------------
+class SolidsOfRevolutionInventor(JPThreeDClassroomScene):
+    """Friendly college-level introduction to solids of revolution for CAD."""
+
+    def play(self, *animations, **kwargs):
+        if kwargs.get("run_time") is not None:
+            kwargs["run_time"] *= TIME_SCALE
+        return super().play(*animations, **kwargs)
+
+    def wait(self, duration=DEFAULT_WAIT_TIME, *args, **kwargs):
+        return super().wait(duration * TIME_SCALE, *args, **kwargs)
+
+    # ----- fixed-frame UI -----------------------------------------------------
+    def fixed(self, *mobs: Mobject) -> None:
+        self.add_fixed_in_frame_mobjects(*mobs)
+
+    def title_block(self, title: str, subtitle: str) -> VGroup:
+        t = self.text(title, 48, BOLD)
+        s = self.text(subtitle, 25)
+        rule = Line(LEFT * 5.7, RIGHT * 5.7, color=BLACK_LINE, stroke_width=2.0)
+        g = VGroup(t, rule, s).arrange(DOWN, buff=0.26)
+        if g.width > 14.2:
+            g.scale_to_fit_width(14.2)
+        return g
+
+    def section_header(self, number: int, title: str, subtitle: str) -> VGroup:
+        badge = RoundedRectangle(
+            width=0.72,
+            height=0.52,
+            corner_radius=0.09,
+            stroke_color=BLACK_LINE,
+            stroke_width=1.8,
+            fill_color=WHITE,
+            fill_opacity=1.0,
+        )
+        badge_text = self.text(f"{number:02d}", 22, BOLD).move_to(badge)
+        h = self.text(title, 31, BOLD)
+        row = VGroup(VGroup(badge, badge_text), h).arrange(RIGHT, buff=0.22)
+        row.to_edge(UP, buff=0.18).to_edge(LEFT, buff=0.48)
+        rule = Line(LEFT * 7.45, RIGHT * 7.45, color=LIGHT_GRAY, stroke_width=1.8)
+        rule.next_to(row, DOWN, buff=0.06)
+        sub = self.text(subtitle, 20)
+        if sub.width > 14.0:
