@@ -1,0 +1,151 @@
+--- V4.py
++++ V5.py
+@@ -1,11 +1,11 @@
+ #!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+-"""Senior V4 — Solids of Revolution for Autodesk Inventor Professional.
++"""Senior V5 — Solids of Revolution for Autodesk Inventor Professional.
+ 
+ Calculus-free college-level ManimCE lesson. The central model is always:
+ PROFILE -> AXIS -> ANGLE -> OPERATION -> SOLID.
+ 
+-V4 keeps the dedicated geometric sweep engine and enlarges the visual geometry: the *actual 2D generating area*
++V5 preserves the enlarged V4 geometry and synchronizes the revolution kinematics: the *actual 2D generating area*
+ rotates in 3D, selected points leave circular trajectories, and those traces
+ resolve into the final revolved surface. This preserves the causal connection
+ between sketch and solid instead of cutting from one object to the other.
+@@ -21,7 +21,7 @@
+ import numpy as np
+ from manim import *
+ 
+-from jp_classroom_style import (
++from jp_classroom_style_EXACT_RENDER_USED import (
+     JPThreeDClassroomScene,
+     BLACK_TEXT, BLACK_LINE, DARK_GRAY, MID_GRAY, LIGHT_GRAY,
+     VERY_LIGHT_GRAY, PAPER_GRAY, WHITE_FILL,
+@@ -39,6 +39,31 @@
+ # increasing the effective size of every 2D generator and 3D revolved body.
+ GEOMETRY_SCALE = 1.22
+ 
++# Revolution convention: Manim positive rotation about +Y (UP) follows the
++# right-hand rule. Therefore a point that starts at (r, y, 0) moves as
++# (r cos(theta), y, -r sin(theta)). Every generated sweep object uses this
++# same mapping so the visible 2D generator and the emerging 3D volume always
++# travel in the same physical direction.
++REVOLUTION_AXIS = UP
++
++def revolve_point(radius: float, y: float, theta: float) -> np.ndarray:
++    return np.array([
++        GEOMETRY_SCALE * radius * math.cos(theta),
++        GEOMETRY_SCALE * y,
++        -GEOMETRY_SCALE * radius * math.sin(theta),
++    ])
++
++def validate_revolution_kinematics() -> None:
++    """Numerically lock the sweep parameterization to Rotate(..., axis=UP)."""
++    for theta in (0.0, PI / 2, PI, 3 * PI / 2, TAU):
++        c, sn = math.cos(theta), math.sin(theta)
++        # Standard right-hand rotation matrix around +Y.
++        ry = np.array([[c, 0.0, sn], [0.0, 1.0, 0.0], [-sn, 0.0, c]])
++        p0 = np.array([GEOMETRY_SCALE, 0.0, 0.0])
++        expected = ry @ p0
++        actual = revolve_point(1.0, 0.0, theta)
++        assert np.allclose(actual, expected, atol=1e-12), (theta, actual, expected)
++
+ 
+ # -----------------------------------------------------------------------------
+ # Geometry helpers
+@@ -64,7 +89,7 @@
+ def revolution_surface(profile, angle=TAU, opacity=0.50, resolution=(28, 16), color=GRAY_C):
+     def f(u, v):
+         r, y = profile_interp(profile, v)
+-        return np.array([GEOMETRY_SCALE * r * math.cos(u), GEOMETRY_SCALE * y, GEOMETRY_SCALE * r * math.sin(u)])
++        return revolve_point(r, y, u)
+     return Surface(
+         f, u_range=[0, angle], v_range=[0, 1], resolution=resolution,
+         fill_color=color, fill_opacity=opacity,
+@@ -74,8 +99,7 @@
+ 
+ def revolution_cap(y, radius, angle=TAU, opacity=0.28):
+     def f(u, v):
+-        rr = GEOMETRY_SCALE * radius * v
+-        return np.array([rr * math.cos(u), GEOMETRY_SCALE * y, rr * math.sin(u)])
++        return revolve_point(radius * v, y, u)
+     return Surface(
+         f, u_range=[0, angle], v_range=[0, 1], resolution=(24, 5),
+         fill_color=GRAY_D, fill_opacity=opacity,
+@@ -88,7 +112,7 @@
+         return np.array([
+             GEOMETRY_SCALE * radius * math.sin(v) * math.cos(u),
+             GEOMETRY_SCALE * radius * math.cos(v),
+-            GEOMETRY_SCALE * radius * math.sin(v) * math.sin(u),
++            -GEOMETRY_SCALE * radius * math.sin(v) * math.sin(u),
+         ])
+     return Surface(
+         f, u_range=[0, TAU], v_range=[0, PI], resolution=(30, 16),
+@@ -147,7 +171,7 @@
+             t_range=[0.0, 1.0], color=color, stroke_opacity=0.0,
+         )
+     return ParametricFunction(
+-        lambda a: np.array([GEOMETRY_SCALE * radius * math.cos(a), GEOMETRY_SCALE * y, GEOMETRY_SCALE * radius * math.sin(a)]),
++        lambda a: revolve_point(radius, y, a),
+         t_range=[start_angle, end_angle],
+         color=color, stroke_width=1.65, stroke_opacity=opacity,
+     )
+@@ -157,7 +181,7 @@
+     """Flat annulus used to close hollow revolved bodies or rectangular cut volumes."""
+     def f(u, v):
+         rr = GEOMETRY_SCALE * (inner_radius + (outer_radius - inner_radius) * v)
+-        return np.array([rr * math.cos(u), GEOMETRY_SCALE * y, rr * math.sin(u)])
++        return np.array([rr * math.cos(u), GEOMETRY_SCALE * y, -rr * math.sin(u)])
+     return Surface(
+         f, u_range=[0, angle], v_range=[0, 1], resolution=(28, 5),
+         fill_color=color, fill_opacity=opacity,
+@@ -252,8 +276,8 @@
+         # Rotate both the filled area and its outer generator. Every orbit is
+         # drawn over the same time interval, so the geometry is temporally linked.
+         scene.play(
+-            Rotate(region, angle, axis=UP, about_point=ORIGIN),
+-            Rotate(generating_curve, angle, axis=UP, about_point=ORIGIN),
++            Rotate(region, angle, axis=REVOLUTION_AXIS, about_point=ORIGIN),
++            Rotate(generating_curve, angle, axis=REVOLUTION_AXIS, about_point=ORIGIN),
+             AnimationGroup(*[Create(t) for t in traces], lag_ratio=0.0),
+             run_time=duration,
+             rate_func=linear,
+@@ -293,8 +317,8 @@
+             else:
+                 scene.play(ReplacementTransform(labels[i - 1], lab), run_time=0.45)
+             scene.play(
+-                Rotate(region, delta, axis=UP, about_point=ORIGIN),
+-                Rotate(generating_curve, delta, axis=UP, about_point=ORIGIN),
++                Rotate(region, delta, axis=REVOLUTION_AXIS, about_point=ORIGIN),
++                Rotate(generating_curve, delta, axis=REVOLUTION_AXIS, about_point=ORIGIN),
+                 AnimationGroup(*[Create(t) for t in segment_traces], lag_ratio=0.0),
+                 run_time=runtime,
+                 rate_func=linear,
+@@ -329,7 +353,7 @@
+             annular_cap(cut_profile_outer[-1][1], cut_profile_inner[-1][0], cut_profile_outer[-1][0], opacity=0.18),
+         )
+         scene.play(
+-            Rotate(cut_region, TAU, axis=UP, about_point=ORIGIN),
++            Rotate(cut_region, TAU, axis=REVOLUTION_AXIS, about_point=ORIGIN),
+             AnimationGroup(*[Create(t) for t in traces], lag_ratio=0.0),
+             run_time=duration,
+             rate_func=linear,
+@@ -348,6 +372,7 @@
+     def validate_lesson_data(self):
+         assert abs(TAU - 2 * PI) < 1e-12
+         assert 0 < PI / 2 < PI < TAU
++        validate_revolution_kinematics()
+ 
+     def play(self, *animations, **kwargs):
+         if kwargs.get("run_time") is not None:
+@@ -656,7 +681,7 @@
+         # Draw trajectories from both the outer and inner profile simultaneously.
+         traces = VGroup(self.sweep.traces(outer, count=5), self.sweep.traces(inner, count=5, opacity=0.34))
+         self.play(
+-            Rotate(ring, TAU, axis=UP, about_point=ORIGIN),
++            Rotate(ring, TAU, axis=REVOLUTION_AXIS, about_point=ORIGIN),
+             AnimationGroup(*[Create(t) for group in traces for t in group], lag_ratio=0.0),
+             run_time=4.0, rate_func=linear,
+         )
