@@ -1,0 +1,126 @@
+name: Render Solids V5 Rotation Sync
+
+on:
+  push:
+    branches:
+      - render-solids-v5-rotation-sync-20260812
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout isolated render branch
+        uses: actions/checkout@v4
+        with:
+          ref: render-solids-v5-rotation-sync-20260812
+
+      - name: Restore exact V5 source and exact JP style
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p render_v5_workspace/extracted render_v5_delivery/qa_frames
+          cat render_v5/source.py.gz.b64 | tr -d '\n' | base64 -d | gzip -dc > render_v5_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL.py
+          cat render_v5/style.py.gz.b64 | tr -d '\n' | base64 -d | gzip -dc > render_v5_workspace/jp_classroom_style_EXACT_RENDER_USED.py
+          test "$(sha256sum render_v5_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL.py | cut -d' ' -f1)" = "d8e15d3c44aea974ab3210f80d900d28b7d985a1ff6333a24b0737e919691c24"
+          test "$(sha256sum render_v5_workspace/jp_classroom_style_EXACT_RENDER_USED.py | cut -d' ' -f1)" = "3f3f06e94d5cad870ad335502cc1a93e56ce675abb1231ded5f9c71fd3e60e3d"
+          cp render_v5_workspace/*.py render_v5_delivery/
+          sha256sum render_v5_workspace/*.py | tee render_v5_delivery/source_sha256.txt
+
+      - name: Python syntax validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile render_v5_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL.py render_v5_workspace/jp_classroom_style_EXACT_RENDER_USED.py
+          echo "py_compile: PASS" | tee render_v5_delivery/py_compile.txt
+
+      - name: Pull fixed ManimCE 0.20.1 image
+        run: docker pull manimcommunity/manim:v0.20.1
+
+      - name: Mandatory low-quality validation (-pql)
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd render_v5_workspace
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=0.12 \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/colab-bin /tmp/manim_pql
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open
+              chmod +x /tmp/colab-bin/xdg-open
+              export PATH="/tmp/colab-bin:$PATH"
+              manim -pql SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching --fps 30 --media_dir /tmp/manim_pql
+              RAW="$(find /tmp/manim_pql -type f -iname "*.mp4" -printf "%s\t%p\n" | sort -nr | head -n 1 | cut -f2-)"
+              test -n "$RAW" && test -s "$RAW"
+              cp "$RAW" /manim/extracted/v5_pql.mp4
+            '
+          test -s extracted/v5_pql.mp4
+          echo "literal -pql: PASS" | tee ../render_v5_delivery/pql_validation.txt
+          cp extracted/v5_pql.mp4 ../render_v5_delivery/
+
+      - name: Final literal high-quality render (-pqh)
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd render_v5_workspace
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/colab-bin /tmp/manim_pqh
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open
+              chmod +x /tmp/colab-bin/xdg-open
+              export PATH="/tmp/colab-bin:$PATH"
+              manim -pqh SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching --fps 30 --media_dir /tmp/manim_pqh
+              RAW="$(find /tmp/manim_pqh -type f -iname "*.mp4" -printf "%s\t%p\n" | sort -nr | head -n 1 | cut -f2-)"
+              test -n "$RAW" && test -s "$RAW"
+              cp "$RAW" /manim/extracted/SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL_pqh.mp4
+            '
+          test -s extracted/SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL_pqh.mp4
+          echo "literal -pqh: PASS" | tee ../render_v5_delivery/pqh_validation.txt
+          cp extracted/SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL_pqh.mp4 ../render_v5_delivery/
+
+      - name: Mandatory technical QA and control frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO="render_v5_delivery/SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL_pqh.mp4"
+          test -s "$VIDEO"
+          ffprobe -v error -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate,avg_frame_rate -show_entries format=duration,size -of default=noprint_wrappers=1 "$VIDEO" | tee render_v5_delivery/ffprobe_final.txt
+          ffmpeg -v error -i "$VIDEO" -f null -
+          echo "full decode: PASS" | tee render_v5_delivery/full_decode.txt
+          sha256sum "$VIDEO" | tee render_v5_delivery/video_sha256.txt
+          for t in 24 25 26 42 43 44 45 46 47 48 49 50 84 132 160 211; do
+            ffmpeg -loglevel error -y -ss "$t" -i "$VIDEO" -frames:v 1 -vf scale=960:-2 "render_v5_delivery/qa_frames/frame_${t}s.jpg"
+          done
+          cat > render_v5_delivery/render_info.txt <<'EOF'
+          Scene: SolidsOfRevolutionInventorSeniorV3
+          Source: SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL.py
+          Style: jp_classroom_style_EXACT_RENDER_USED.py
+          ManimCE: 0.20.1
+          Preview: manim -pql ... --format=mp4 --disable_caching --fps 30
+          Final: manim -pqh SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching --fps 30
+          Rotation convention: positive theta about +Y; (r,y,0) -> (r cos(theta), y, -r sin(theta)).
+          EOF
+
+      - name: Upload complete V5 delivery
+        uses: actions/upload-artifact@v4
+        with:
+          name: SolidsOfRevolution_V5_ROTATION_SYNC_FINAL_pqh
+          path: render_v5_delivery/
+          if-no-files-found: error
+          retention-days: 14
