@@ -1,0 +1,244 @@
+            revolution_cap(-1.35, 1.35, TAU, 0.30),
+        )
+        cone_label = VGroup(
+            self.text("TRIANGLE", 22, BOLD),
+            self.text("→ CONE", 25, BOLD),
+        ).arrange(DOWN, buff=0.08).move_to(DOWN * 3.0)
+        self.fixed(cone_label)
+        self.play(FadeIn(cone), FadeIn(cone_label), run_time=1.2)
+        self.wait(2.0)
+
+        # Sphere
+        sphere = sphere_surface(1.35).shift(RIGHT * 4.4)
+        sphere_label = VGroup(
+            self.text("SEMICIRCLE", 22, BOLD),
+            self.text("→ SPHERE", 25, BOLD),
+        ).arrange(DOWN, buff=0.08).move_to(RIGHT * 4.4 + DOWN * 3.0)
+        self.fixed(sphere_label)
+        self.play(FadeIn(sphere), FadeIn(sphere_label), run_time=1.2)
+        self.wait(4.0)
+
+        rule = self.text("If the profile changes, the entire 3D silhouette changes.", 28, BOLD)
+        rule.to_edge(DOWN, buff=0.34)
+        self.fixed(rule)
+        self.play(FadeIn(rule), run_time=0.8)
+        self.wait(3.2)
+        self.clear_scene()
+
+    def inventor_workflow(self) -> None:
+        self.set_camera_orientation(phi=0 * DEGREES, theta=-90 * DEGREES, zoom=1.0)
+        header = self.section_header(
+            4,
+            "INVENTOR MENTAL MODEL: SKETCH FIRST, THEN REVOLVE",
+            "The command is simple when the sketch logic is correct: a closed region, a valid axis, and a chosen angle.",
+        )
+        self.fixed(header)
+        self.play(FadeIn(header), run_time=0.75)
+
+        cards = VGroup(
+            self.step_card("1", "SKETCH", "Draw the side profile as a closed region."),
+            self.step_card("2", "AXIS", "Use a centerline or suitable sketch line."),
+            self.step_card("3", "REVOLVE", "Choose the profile and rotation axis."),
+            self.step_card("4", "ANGLE", "Set 360° or a partial revolution."),
+            self.step_card("5", "OPERATION", "Create new solid, join, or remove material."),
+            self.step_card("6", "CHECK", "Inspect section shape and symmetry."),
+        )
+        cards.arrange_in_grid(rows=3, cols=2, buff=(0.42, 0.28))
+        cards.move_to(DOWN * 0.40)
+        self.fixed(cards)
+        self.play(
+            LaggedStart(*[FadeIn(card, shift=UP * 0.10) for card in cards], lag_ratio=0.10),
+            run_time=2.4,
+        )
+        self.wait(3.0)
+
+        warning = self.note(
+            "CAD HABIT",
+            [
+                "Do not start by thinking about volume formulas.",
+                "Start by asking: What side profile would create this part?",
+            ],
+            width=7.7,
+        ).to_edge(DOWN, buff=0.28)
+        self.fixed(warning)
+        self.play(FadeIn(warning), run_time=0.8)
+        self.wait(4.5)
+        self.clear_scene()
+
+    def engineering_examples(self) -> None:
+        self.set_camera_orientation(phi=64 * DEGREES, theta=-50 * DEGREES, zoom=0.88)
+        header = self.section_header(
+            5,
+            "WHY ENGINEERS USE REVOLVE: AXISYMMETRIC PARTS ARE EVERYWHERE",
+            "A single 2D side profile can define shafts, pulleys, bushings, knobs, nozzles, grooves, and many turned parts.",
+        )
+        self.fixed(header)
+        self.play(FadeIn(header), run_time=0.75)
+
+        stepped = [
+            (0.70, -2.15),
+            (0.70, -1.55),
+            (1.15, -1.55),
+            (1.15, -0.65),
+            (0.88, -0.65),
+            (0.88, 0.15),
+            (1.38, 0.15),
+            (1.38, 1.10),
+            (0.72, 1.10),
+            (0.72, 2.10),
+        ]
+        shaft = revolution_surface(stepped, TAU, 0.53, resolution=(28, 20)).shift(LEFT * 3.2)
+        self.play(FadeIn(shaft), run_time=1.3)
+        shaft_label = self.text("STEPPED SHAFT: one profile, many diameters", 24, BOLD)
+        shaft_label.move_to(LEFT * 3.2 + DOWN * 3.05)
+        self.fixed(shaft_label)
+        self.play(FadeIn(shaft_label), run_time=0.7)
+        self.wait(3.0)
+
+        # Groove concept: toroidal removal path next to a plain cylinder.
+        base_profile = [(1.45, -1.55), (1.45, 1.55)]
+        base = VGroup(
+            revolution_surface(base_profile, TAU, 0.36),
+            revolution_cap(-1.55, 1.45, TAU, 0.24),
+            revolution_cap(1.55, 1.45, TAU, 0.24),
+        ).shift(RIGHT * 3.6)
+        groove = torus_surface(major=1.46, minor=0.28).shift(RIGHT * 3.6)
+        groove_label = self.text("REVOLVED CUT: a small profile removes a ring-shaped groove", 22, BOLD)
+        groove_label.move_to(RIGHT * 3.6 + DOWN * 3.05)
+        self.fixed(groove_label)
+        self.play(FadeIn(base), run_time=1.0)
+        self.play(FadeIn(groove), FadeIn(groove_label), run_time=1.0)
+        self.wait(3.4)
+
+        concept = self.note(
+            "DESIGN QUESTION",
+            [
+                "Is the part mostly symmetric around one axis?",
+                "If yes, Revolve may be simpler than Extrude.",
+            ],
+            width=5.6,
+        ).to_corner(UR, buff=0.42).shift(DOWN * 0.95)
+        self.fixed(concept)
+        self.play(FadeIn(concept), run_time=0.8)
+        self.wait(4.0)
+        self.clear_scene()
+
+    def simple_formula_connection(self) -> None:
+        self.set_camera_orientation(phi=0 * DEGREES, theta=-90 * DEGREES, zoom=1.0)
+        header = self.section_header(
+            6,
+            "A SIMPLE FORMULA CONNECTION — WITHOUT CALCULUS",
+            "Formulas are useful for checking a model, but they are not required to understand the Revolve operation.",
+        )
+        self.fixed(header)
+        self.play(FadeIn(header), run_time=0.75)
+
+        # 2D base area at left
+        circle = Circle(radius=1.25, color=BLACK_LINE, stroke_width=2.5, fill_color=LIGHT_GRAY, fill_opacity=0.52)
+        radius = Line(circle.get_center(), circle.get_right(), color=BLACK_LINE, stroke_width=2.4)
+        rlab = MathTex("r", color=BLACK_TEXT, font_size=38).next_to(radius, UP, buff=0.08)
+        base_group = VGroup(circle, radius, rlab).move_to(LEFT * 4.2 + DOWN * 0.35)
+        base_title = self.text("BASE AREA", 26, BOLD).next_to(base_group, UP, buff=0.35)
+        area_eq = MathTex(r"A=\pi r^2", color=BLACK_TEXT, font_size=48).next_to(base_group, DOWN, buff=0.35)
+        self.fixed(base_group, base_title, area_eq)
+
+        # Text and formula at right
+        idea = self.note(
+            "CYLINDER CHECK",
+            [
+                "Think of a constant circular cross-section.",
+                "Volume = base area × length.",
+            ],
+            width=6.0,
+        ).move_to(RIGHT * 3.4 + UP * 0.65)
+        vol = MathTex(r"V=A\,L=\pi r^2L", color=BLACK_TEXT, font_size=50)
+        vol.move_to(RIGHT * 3.4 + DOWN * 1.20)
+        self.fixed(idea, vol)
+
+        self.play(FadeIn(base_group), FadeIn(base_title), run_time=1.0)
+        self.play(Write(area_eq), run_time=1.0)
+        self.wait(2.4)
+        self.play(FadeIn(idea), run_time=0.9)
+        self.wait(2.0)
+        self.play(Write(vol), run_time=1.1)
+        self.wait(3.2)
+
+        no_calc = self.text(
+            "For this class: geometry + CAD logic first. Calculus can come later.",
+            27,
+            BOLD,
+        ).to_edge(DOWN, buff=0.32)
+        self.fixed(no_calc)
+        self.play(FadeIn(no_calc), run_time=0.8)
+        self.wait(4.0)
+        self.clear_scene()
+
+    def reverse_engineering_challenge(self) -> None:
+        self.set_camera_orientation(phi=64 * DEGREES, theta=-50 * DEGREES, zoom=0.90)
+        header = self.section_header(
+            7,
+            "FINAL CHALLENGE: CAN YOU SEE THE 2D SKETCH INSIDE THE 3D PART?",
+            "Professional CAD work becomes easier when you can mentally reverse a revolved solid back into its side profile.",
+        )
+        self.fixed(header)
+        self.play(FadeIn(header), run_time=0.75)
+
+        profile = [
+            (0.62, -2.00),
+            (0.62, -1.40),
+            (1.20, -1.40),
+            (1.20, -0.40),
+            (0.86, -0.40),
+            (0.86, 0.45),
+            (1.42, 0.45),
+            (1.42, 1.25),
+            (0.78, 1.25),
+            (0.78, 2.00),
+        ]
+        solid = revolution_surface(profile, TAU, 0.54, resolution=(28, 20)).shift(RIGHT * 2.5)
+        self.play(FadeIn(solid), run_time=1.2)
+
+        q = self.note(
+            "ASK YOURSELF",
+            [
+                "1. Where is the axis?",
+                "2. Which radii create each diameter?",
+                "3. Where must the profile step inward or outward?",
+            ],
+            width=5.8,
+        ).to_corner(DL, buff=0.50).shift(UP * 0.85)
+        self.fixed(q)
+        self.play(FadeIn(q), run_time=0.8)
+        self.wait(4.5)
+
+        # Reveal the original 2D profile next to the 3D result.
+        self.move_camera(phi=45 * DEGREES, theta=-35 * DEGREES, zoom=0.92, run_time=1.3)
+        sketch = closed_profile_polygon(profile, 0.48).shift(LEFT * 3.7)
+        sketch_axis = axis_line(-2.25, 2.25).shift(LEFT * 3.7)
+        reveal = self.text("REVEAL: this closed side area generated the entire part", 25, BOLD)
+        reveal.to_edge(DOWN, buff=0.34)
+        self.fixed(reveal)
+        self.play(Create(sketch_axis), FadeIn(sketch), FadeIn(reveal), run_time=1.4)
+        self.wait(5.0)
+        self.clear_scene()
+
+    def closing(self) -> None:
+        self.set_camera_orientation(phi=0 * DEGREES, theta=-90 * DEGREES, zoom=1.0)
+        statement = self.text("PROFILE  →  AXIS  →  ANGLE  →  SOLID", 40, BOLD)
+        sub = self.text(
+            "In Inventor, the quality of the 3D revolve begins with the logic of the 2D sketch.",
+            26,
+        )
+        group = VGroup(statement, sub).arrange(DOWN, buff=0.32)
+        self.fixed(group)
+        self.play(FadeIn(statement), run_time=1.0)
+        self.wait(1.7)
+        self.play(FadeIn(sub), run_time=0.9)
+        self.wait(5.0)
+        self.play(FadeOut(group), run_time=0.9)
+
+
+# Preview (protocol validation):
+#   manim -pql solids_revolution_inventor.py SolidsOfRevolutionInventor --format=mp4 --disable_caching
+# Final (requested):
+#   manim -pqh solids_revolution_inventor.py SolidsOfRevolutionInventor --format=mp4 --disable_caching
