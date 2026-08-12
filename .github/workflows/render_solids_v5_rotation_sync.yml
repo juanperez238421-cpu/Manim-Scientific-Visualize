@@ -93,8 +93,8 @@ jobs:
               cp "$RAW" /manim/extracted/v5_pql.mp4
             '
           test -s extracted/v5_pql.mp4
-          echo "literal -pql: PASS" | tee ../render_v5_pql_delivery/pql_validation.txt
-          cp extracted/v5_pql.mp4 ../render_v5_pql_delivery/
+          echo "literal -pql: PASS" | tee "$GITHUB_WORKSPACE/render_v5_pql_delivery/pql_validation.txt"
+          cp extracted/v5_pql.mp4 "$GITHUB_WORKSPACE/render_v5_pql_delivery/v5_pql.mp4"
 
       - name: Technical probe of preview
         shell: bash
