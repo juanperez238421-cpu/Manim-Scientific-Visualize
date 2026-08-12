@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Recover render source
+      - name: Recover render source and apply visual QA patch
         shell: bash
         run: |
           set -euo pipefail
@@ -31,7 +31,10 @@ jobs:
           git show "FETCH_HEAD:$JOB/payload_02.pyfrag" > /tmp/revolve/payload_02.pyfrag
           cat /tmp/revolve/payload_00.pyfrag /tmp/revolve/payload_01.pyfrag /tmp/revolve/payload_02.pyfrag > /tmp/revolve/solids_revolution_inventor.py
           git show "FETCH_HEAD:$JOB/jp_classroom_style.py" > /tmp/revolve/jp_classroom_style.py
+          git show "FETCH_HEAD:$JOB/final_visual_patch.py" > /tmp/revolve/final_visual_patch.py
           test "$(wc -l < /tmp/revolve/solids_revolution_inventor.py)" -eq 734
+          python /tmp/revolve/final_visual_patch.py /tmp/revolve/solids_revolution_inventor.py
+          test "$(wc -l < /tmp/revolve/solids_revolution_inventor.py)" -eq 735
           python -m py_compile /tmp/revolve/solids_revolution_inventor.py /tmp/revolve/jp_classroom_style.py
           ! grep -nE '([A-Za-z]:\\\\|/Users/|/home/[^/]+/Desktop)' /tmp/revolve/*.py
           sha256sum /tmp/revolve/solids_revolution_inventor.py > /tmp/source_sha.txt
