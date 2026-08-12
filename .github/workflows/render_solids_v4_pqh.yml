@@ -26,8 +26,7 @@ jobs:
         run: |
           set -euo pipefail
           rm -rf render_workspace render_output render_delivery
-          mkdir -p render_workspace render_output render_delivery \
-                   render_workspace/media_pql render_workspace/media_pqh
+          mkdir -p render_workspace/raw_delivery render_output render_delivery
 
           cat render_payload/code_*.b64 | tr -d '\n' | base64 -d | gzip -dc \
             > render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py
@@ -42,7 +41,7 @@ jobs:
           sha256sum render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py \
                     render_workspace/jp_classroom_style.py \
             | tee render_output/source_sha256.txt
-          chmod 777 render_workspace/media_pql render_workspace/media_pqh
+          chmod 777 render_workspace/raw_delivery
 
       - name: Python syntax validation
         shell: bash
@@ -69,7 +68,7 @@ jobs:
             --entrypoint bash manimcommunity/manim:v0.20.1 \
             -c '
               set -euo pipefail
-              mkdir -p /tmp/colab-bin
+              mkdir -p /tmp/colab-bin /tmp/manim_pql
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open
               chmod +x /tmp/colab-bin/xdg-open
               export PATH="/tmp/colab-bin:$PATH"
@@ -77,11 +76,11 @@ jobs:
                 SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py \
                 SolidsOfRevolutionInventorSeniorV3 \
                 --format=mp4 --disable_caching --fps 30 \
-                --media_dir /manim/media_pql
+                --media_dir /tmp/manim_pql
             '
           echo "literal -pql: PASS" | tee ../render_output/pql_validation.txt
 
-      - name: Final literal high-quality render (-pqh)
+      - name: Final literal high-quality render and in-container extraction (-pqh)
         shell: bash
         run: |
           set -euo pipefail
@@ -94,49 +93,60 @@ jobs:
             --entrypoint bash manimcommunity/manim:v0.20.1 \
             -c '
               set -euo pipefail
-              mkdir -p /tmp/colab-bin
+              mkdir -p /tmp/colab-bin /tmp/manim_pqh
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open
               chmod +x /tmp/colab-bin/xdg-open
               export PATH="/tmp/colab-bin:$PATH"
+
               manim -pqh \
                 SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py \
                 SolidsOfRevolutionInventorSeniorV3 \
                 --format=mp4 --disable_caching --fps 30 \
-                --media_dir /manim/media_pqh
+                --media_dir /tmp/manim_pqh
+
+              echo "--- MP4 files generated inside container ---"
+              find /tmp/manim_pqh -type f -iname "*.mp4" -printf "%s\t%p\n" | sort -nr
+              RAW="$(find /tmp/manim_pqh -type f -iname "*.mp4" -printf "%s\t%p\n" | sort -nr | head -n 1 | cut -f2-)"
+              test -n "$RAW"
+              test -s "$RAW"
+              cp "$RAW" /manim/raw_delivery/raw_pqh.mp4
+              test -s /manim/raw_delivery/raw_pqh.mp4
+              sync
             '
 
-      - name: Preserve exact raw pqh MP4 in branch-safe chunks
+          test -s raw_delivery/raw_pqh.mp4
+          echo "literal -pqh: PASS + raw MP4 extracted" | tee ../render_output/pqh_validation.txt
+
+      - name: Verify and split exact raw pqh MP4
         shell: bash
         run: |
           set -euo pipefail
-          find render_workspace/media_pqh -type f -iname '*.mp4' -printf '%s\t%p\n' | sort -nr \
-            | tee render_output/all_pqh_mp4s.txt
-          test "$(wc -l < render_output/all_pqh_mp4s.txt)" -ge 1
-          RAW="$(head -n 1 render_output/all_pqh_mp4s.txt | cut -f2-)"
-          test -n "$RAW"
+          RAW="render_workspace/raw_delivery/raw_pqh.mp4"
           test -s "$RAW"
 
-          cp "$RAW" render_output/raw_pqh.mp4
-          sha256sum render_output/raw_pqh.mp4 | tee render_output/raw_video_sha256.txt
+          sha256sum "$RAW" | tee render_output/raw_video_sha256.txt
           ffprobe -v error \
             -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate,avg_frame_rate \
             -show_entries format=duration,size \
-            -of default=noprint_wrappers=1 render_output/raw_pqh.mp4 \
+            -of default=noprint_wrappers=1 "$RAW" \
             | tee render_output/ffprobe_raw.txt
+          ffmpeg -v error -i "$RAW" -f null -
+          echo "full decode: PASS" | tee render_output/full_decode.txt
 
           cp render_output/raw_video_sha256.txt render_delivery/
           cp render_output/ffprobe_raw.txt render_delivery/
+          cp render_output/full_decode.txt render_delivery/
           cp render_output/pql_validation.txt render_delivery/
+          cp render_output/pqh_validation.txt render_delivery/
           cp render_output/py_compile.txt render_delivery/
           cp render_output/source_sha256.txt render_delivery/
           cp render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py render_delivery/
           cp render_workspace/jp_classroom_style.py render_delivery/
           printf '%s\n' \
-            'manim -pqh SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching --fps 30 --media_dir /manim/media_pqh' \
+            'manim -pqh SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching --fps 30 --media_dir /tmp/manim_pqh' \
             > render_delivery/render_command.txt
 
-          # Always split so every committed blob remains well below GitHub's 100 MB limit.
-          split -b 40M -d -a 3 render_output/raw_pqh.mp4 \
+          split -b 40M -d -a 3 "$RAW" \
             render_delivery/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh.mp4.part.
           find render_delivery -maxdepth 1 -type f -printf '%f\t%s bytes\n' | sort \
             | tee render_delivery/MANIFEST.txt
@@ -155,5 +165,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: SolidsOfRevolution_V4_BiggerFigures_RAW_pqh
-          path: render_output/
+          path: render_workspace/raw_delivery/raw_pqh.mp4
           if-no-files-found: error
