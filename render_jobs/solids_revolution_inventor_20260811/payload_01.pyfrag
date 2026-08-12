@@ -1,0 +1,245 @@
+            sub.scale_to_fit_width(14.0)
+        sub.next_to(rule, DOWN, buff=0.08).align_to(row, LEFT)
+        return VGroup(row, rule, sub)
+
+    def note(self, title: str, lines: Sequence[str], width=5.4) -> VGroup:
+        h = self.text(title, 25, BOLD)
+        body = VGroup(*[self.text(line, 22) for line in lines]).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.15
+        )
+        content = VGroup(h, body).arrange(DOWN, aligned_edge=LEFT, buff=0.20)
+        if content.width > width - 0.55:
+            content.scale_to_fit_width(width - 0.55)
+        box = RoundedRectangle(
+            width=width,
+            height=max(1.4, content.height + 0.58),
+            corner_radius=0.11,
+            stroke_color=BLACK_LINE,
+            stroke_width=1.6,
+            fill_color=WHITE,
+            fill_opacity=0.96,
+        )
+        content.move_to(box).align_to(box, LEFT).shift(RIGHT * 0.28)
+        return VGroup(box, content)
+
+    def step_card(self, number: str, title: str, body: str, width=4.35) -> VGroup:
+        badge = Circle(radius=0.23, stroke_color=BLACK_LINE, fill_color=PAPER_GRAY, fill_opacity=1)
+        n = self.text(number, 18, BOLD).move_to(badge)
+        t = self.text(title, 23, BOLD)
+        b = self.text(body, 18)
+        text_group = VGroup(t, b).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        row = VGroup(VGroup(badge, n), text_group).arrange(RIGHT, buff=0.18)
+        if row.width > width - 0.30:
+            row.scale_to_fit_width(width - 0.30)
+        box = RoundedRectangle(
+            width=width,
+            height=1.05,
+            corner_radius=0.10,
+            stroke_color=BLACK_LINE,
+            stroke_width=1.4,
+            fill_color=WHITE,
+            fill_opacity=0.98,
+        )
+        row.move_to(box)
+        return VGroup(box, row)
+
+    def clear_scene(self, keep: Sequence[Mobject] = ()) -> None:
+        keep_ids = {id(x) for mob in keep for x in mob.get_family()}
+        removable = [m for m in self.mobjects if id(m) not in keep_ids]
+        if removable:
+            self.play(*[FadeOut(m) for m in removable], run_time=0.75)
+        for m in removable:
+            self.remove(m)
+
+    # ----- lesson flow --------------------------------------------------------
+    def construct(self) -> None:
+        self.opening()
+        self.core_idea()
+        self.revolution_angle()
+        self.profile_families()
+        self.inventor_workflow()
+        self.engineering_examples()
+        self.simple_formula_connection()
+        self.reverse_engineering_challenge()
+        self.closing()
+
+    def opening(self) -> None:
+        self.set_camera_orientation(phi=0 * DEGREES, theta=-90 * DEGREES, zoom=1.0)
+        block = self.title_block(
+            "SOLIDS OF REVOLUTION",
+            "Inventor Professional · build 3D parts from a 2D area and a rotation axis",
+        )
+        promise = self.text(
+            "No integral calculus required — think like a CAD designer: SKETCH → AXIS → REVOLVE",
+            25,
+            MEDIUM,
+        )
+        group = VGroup(block, promise).arrange(DOWN, buff=0.48)
+        self.fixed(group)
+        self.play(FadeIn(block[0], shift=UP * 0.15), run_time=1.0)
+        self.play(Create(block[1]), FadeIn(block[2]), run_time=1.0)
+        self.wait(2.2)
+        self.play(FadeIn(promise, shift=UP * 0.12), run_time=1.0)
+        self.wait(4.5)
+        self.play(FadeOut(group), run_time=0.9)
+        self.remove(group)
+
+    def core_idea(self) -> None:
+        header = self.section_header(
+            1,
+            "THE CORE IDEA: A 2D AREA TURNS AROUND AN AXIS",
+            "A closed sketch area sweeps through space. The sweep creates a three-dimensional form.",
+        )
+        self.fixed(header)
+        self.play(FadeIn(header), run_time=0.8)
+
+        profile = [(1.65, -1.35), (1.65, 1.35)]
+        region = closed_profile_polygon(profile).shift(LEFT * 2.3)
+        axis = axis_line(-1.95, 1.95).shift(LEFT * 2.3)
+        outer = Line(
+            np.array([-0.65, -1.35, 0]),
+            np.array([-0.65, 1.35, 0]),
+            color=BLACK_LINE,
+            stroke_width=3,
+        )
+        # Labels are fixed-frame so they remain easy to read when the camera tilts.
+        labels = VGroup(
+            self.text("closed sketch area", 24, BOLD).move_to(LEFT * 4.5 + DOWN * 2.75),
+            self.text("rotation axis", 23, BOLD).move_to(LEFT * 1.7 + DOWN * 2.75),
+        )
+        self.fixed(labels)
+
+        self.play(Create(axis), FadeIn(region), run_time=1.4)
+        self.play(Create(outer), FadeIn(labels), run_time=1.0)
+        self.wait(2.2)
+
+        relation = self.text("AREA  +  AXIS  +  TURN  =  3D SOLID", 33, BOLD)
+        relation.to_edge(DOWN, buff=0.35)
+        self.fixed(relation)
+        self.play(FadeIn(relation, shift=UP * 0.12), run_time=0.9)
+        self.wait(2.0)
+
+        # Move to 3D and show the profile turning into a cylindrical form.
+        self.play(FadeOut(labels), FadeOut(relation), run_time=0.65)
+        self.move_camera(phi=67 * DEGREES, theta=-52 * DEGREES, zoom=0.92, run_time=1.5)
+        world_region = closed_profile_polygon(profile, 0.30).shift(LEFT * 2.3)
+        world_axis = axis_line(-1.95, 1.95).shift(LEFT * 2.3)
+        self.play(Transform(region, world_region), Transform(axis, world_axis), run_time=0.7)
+
+        # Re-center geometry before revolution.
+        self.play(region.animate.shift(RIGHT * 2.3), axis.animate.shift(RIGHT * 2.3), FadeOut(outer), run_time=1.0)
+        profile_for_turn = closed_profile_polygon(profile, 0.25)
+        self.add(profile_for_turn)
+        solid = VGroup(
+            revolution_surface(profile, TAU, 0.48),
+            revolution_cap(-1.35, 1.65, TAU, 0.34),
+            revolution_cap(1.35, 1.65, TAU, 0.34),
+        )
+        self.play(
+            Rotate(profile_for_turn, angle=TAU, axis=UP, about_point=ORIGIN),
+            FadeIn(solid),
+            run_time=4.0,
+            rate_func=smooth,
+        )
+        self.wait(2.8)
+
+        key = self.note(
+            "ONE SENTENCE TO REMEMBER",
+            [
+                "The 2D area defines the material.",
+                "The axis defines what it rotates around.",
+                "The angle defines how far it turns.",
+            ],
+            width=5.4,
+        ).to_corner(DR, buff=0.42)
+        self.fixed(key)
+        self.play(FadeIn(key), run_time=0.9)
+        self.wait(4.0)
+        self.clear_scene()
+
+    def revolution_angle(self) -> None:
+        self.set_camera_orientation(phi=64 * DEGREES, theta=-52 * DEGREES, zoom=0.93)
+        header = self.section_header(
+            2,
+            "THE REVOLUTION ANGLE CONTROLS HOW MUCH OF THE SOLID EXISTS",
+            "In CAD, 360° makes a complete turn; smaller angles make partial revolved features.",
+        )
+        self.fixed(header)
+        self.play(FadeIn(header), run_time=0.75)
+
+        axis = axis_line(-1.9, 1.9)
+        profile = [(1.55, -1.25), (1.55, 1.25)]
+        self.play(Create(axis), run_time=0.7)
+
+        angle_label = self.text("90°", 34, BOLD).to_corner(DL, buff=0.55)
+        explanation = self.text("quarter turn", 23).next_to(angle_label, UP, buff=0.12)
+        self.fixed(angle_label, explanation)
+        quarter = revolution_surface(profile, PI / 2, 0.52)
+        self.play(FadeIn(quarter), FadeIn(angle_label), FadeIn(explanation), run_time=1.1)
+        self.wait(2.2)
+
+        half = revolution_surface(profile, PI, 0.52)
+        new_label = self.text("180°", 34, BOLD).move_to(angle_label)
+        new_explanation = self.text("half turn", 23).move_to(explanation)
+        self.fixed(new_label, new_explanation)
+        self.play(
+            Transform(quarter, half),
+            ReplacementTransform(angle_label, new_label),
+            ReplacementTransform(explanation, new_explanation),
+            run_time=1.7,
+        )
+        angle_label, explanation = new_label, new_explanation
+        self.wait(2.2)
+
+        full = revolution_surface(profile, TAU, 0.52)
+        cap1 = revolution_cap(-1.25, 1.55, TAU, 0.32)
+        cap2 = revolution_cap(1.25, 1.55, TAU, 0.32)
+        new_label = self.text("360°", 34, BOLD).move_to(angle_label)
+        new_explanation = self.text("complete turn", 23).move_to(explanation)
+        self.fixed(new_label, new_explanation)
+        self.play(
+            Transform(quarter, full),
+            FadeIn(cap1),
+            FadeIn(cap2),
+            ReplacementTransform(angle_label, new_label),
+            ReplacementTransform(explanation, new_explanation),
+            run_time=1.9,
+        )
+        self.wait(3.0)
+
+        message = self.text("The angle changes the sweep — not the original sketch area.", 26, BOLD)
+        message.to_edge(DOWN, buff=0.35)
+        self.fixed(message)
+        self.play(FadeIn(message), run_time=0.8)
+        self.wait(3.5)
+        self.clear_scene()
+
+    def profile_families(self) -> None:
+        self.set_camera_orientation(phi=63 * DEGREES, theta=-50 * DEGREES, zoom=0.86)
+        header = self.section_header(
+            3,
+            "READ THE PROFILE BEFORE YOU READ THE 3D SOLID",
+            "Three familiar 2D areas create three familiar 3D solids when revolved around the vertical axis.",
+        )
+        self.fixed(header)
+        self.play(FadeIn(header), run_time=0.75)
+
+        # Cylinder
+        cylinder_profile = [(1.15, -1.35), (1.15, 1.35)]
+        cyl = VGroup(
+            revolution_surface(cylinder_profile, TAU, 0.48),
+            revolution_cap(-1.35, 1.15, TAU, 0.30),
+            revolution_cap(1.35, 1.15, TAU, 0.30),
+        ).shift(LEFT * 4.4)
+        cyl_label = VGroup(
+            self.text("RECTANGLE", 22, BOLD),
+            self.text("→ CYLINDER", 25, BOLD),
+        ).arrange(DOWN, buff=0.08).move_to(LEFT * 4.4 + DOWN * 3.0)
+        self.fixed(cyl_label)
+        self.play(FadeIn(cyl), FadeIn(cyl_label), run_time=1.2)
+        self.wait(2.0)
+
+        # Cone
+        cone_profile = [(1.35, -1.35), (0.0, 1.35)]
+        cone = VGroup(
+            revolution_surface(cone_profile, TAU, 0.48),
