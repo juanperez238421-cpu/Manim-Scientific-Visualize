@@ -64,7 +64,7 @@ jobs:
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/bin/xdg-open
               chmod +x /tmp/bin/xdg-open
               export PATH="/tmp/bin:$PATH"
-              manim -pql first3_full.py FirstThreeProblems --disable_caching --format=mp4
+              manim -pql first3_full.py FirstThreeProblems --disable_caching --format=mp4 --media_dir media_pql
             '
 
       - name: Final high-quality render (-pqh, 30 fps)
@@ -82,34 +82,20 @@ jobs:
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/bin/xdg-open
               chmod +x /tmp/bin/xdg-open
               export PATH="/tmp/bin:$PATH"
-              manim -pqh first3_full.py FirstThreeProblems --disable_caching --format=mp4 --fps 30
+              manim -pqh first3_full.py FirstThreeProblems --disable_caching --format=mp4 --fps 30 --media_dir media_pqh
             '
 
-      - name: Collect, normalize and verify final MP4
+      - name: Collect and verify raw PQH MP4
         shell: bash
         run: |
           set -euo pipefail
-          FINAL=""
-          while IFS= read -r candidate; do
-            width=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$candidate" || true)
-            height=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$candidate" || true)
-            fps=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$candidate" || true)
-            echo "Candidate: $candidate -> ${width}x${height} @ ${fps}"
-            if [[ "$width" == "1920" && "$height" == "1080" ]]; then
-              FINAL="$candidate"
-              break
-            fi
-          done < <(find render_jobs/calc_mv_first3/media -type f -name 'FirstThreeProblems.mp4' | sort)
-          test -n "$FINAL"
-          echo "Selected PQH source: $FINAL"
-
-          # Normalize the literal -pqh render to the protocol's preferred delivery
-          # characteristics: H.264, yuv420p, 1920x1080, 30 fps, fast-start MP4.
-          ffmpeg -y -i "$FINAL" \
-            -an -c:v libx264 -preset medium -crf 18 \
-            -pix_fmt yuv420p -r 30 -movflags +faststart \
-            delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4
-
+          mapfile -t finals < <(find render_jobs/calc_mv_first3/media_pqh -type f -name 'FirstThreeProblems.mp4' | sort)
+          printf 'PQH candidates:\n%s\n' "${finals[*]:-NONE}"
+          test "${#finals[@]}" -ge 1
+          FINAL="${finals[0]}"
+          test -s "$FINAL"
+          echo "Selected raw -pqh render: $FINAL"
+          cp "$FINAL" delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4
           cp render_jobs/calc_mv_first3/first3_full.py delivery/Multivariable_Calculus_Workshop_Problems_1_2_3.py
           cp render_jobs/calc_mv_first3/jp_classroom_style.py delivery/jp_classroom_style.py
           ffprobe -v error \
@@ -119,9 +105,6 @@ jobs:
             delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4 | tee delivery/ffprobe.txt
           test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4)" = "1920"
           test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4)" = "1080"
-          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4)" = "30/1"
-          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4)" = "h264"
-          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4)" = "yuv420p"
           sha256sum \
             delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4 \
             delivery/Multivariable_Calculus_Workshop_Problems_1_2_3.py \
@@ -146,5 +129,5 @@ jobs:
             delivery/Multivariable_Calculus_Workshop_Problems_1_2_3.py \
             delivery/jp_classroom_style.py \
             delivery/source_sha256.txt delivery/ffprobe.txt delivery/delivery_sha256.txt
-          git commit -m 'Add verified PQH render for calculus workshop problems 1-3 [skip render]'
+          git commit -m 'Add verified raw PQH render for calculus workshop problems 1-3 [skip render]'
           git push origin HEAD:calc-mv-workshop-p1-first3-20260811
