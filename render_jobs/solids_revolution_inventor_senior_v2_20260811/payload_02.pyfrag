@@ -1,0 +1,174 @@
+            self.fixed(labels)
+            self.play(Create(a),FadeIn(sketch),Create(arr),FadeIn(solid),FadeIn(labels),run_time=1.3)
+            self.wait(1.8)
+
+        # Semicircle -> sphere at right, drawn in 2D as a half-disk adjacent to axis.
+        semi = ParametricFunction(lambda t: np.array([1.15*math.sin(t),1.15*math.cos(t),0]), t_range=[0,PI], color=BLACK_LINE, stroke_width=2.5)
+        diam = Line(semi.get_start(), semi.get_end(), color=BLACK_LINE, stroke_width=2.5)
+        semigroup=VGroup(semi,diam).scale(0.58).move_to(RIGHT*4.05+DOWN*0.15)
+        sphere=sphere_surface(1.15).scale(0.78).move_to(RIGHT*5.9+DOWN*0.05)
+        arr3=arrow_between(RIGHT*4.75+DOWN*0.15,RIGHT*5.15+DOWN*0.15)
+        l3=VGroup(self.text("SEMICIRCLE",20,BOLD),self.text("→ SPHERE",22,BOLD)).arrange(DOWN,buff=0.06).move_to(RIGHT*4.9+DOWN*2.70)
+        self.fixed(l3); self.play(FadeIn(semigroup),Create(arr3),FadeIn(sphere),FadeIn(l3),run_time=1.2); self.wait(2.4)
+        rule=self.text("CAD lesson: profile geometry is the design language of Revolve.",27,BOLD).to_edge(DOWN,buff=0.30)
+        self.fixed(rule);self.play(FadeIn(rule),run_time=0.7);self.wait(3.2)
+        self.clear_scene()
+
+        # Second short screen: offset profile -> hollow part.
+        self.set_camera_orientation(phi=62*DEGREES, theta=-48*DEGREES, zoom=0.92)
+        h2=self.section_header(4,"A PROFILE DOES NOT HAVE TO TOUCH THE AXIS",
+                               "If the closed area stays away from the axis, Revolve can create a hollow axisymmetric body such as a bushing.")
+        self.fixed(h2);self.play(FadeIn(h2),run_time=0.7)
+        outer=[(1.55,-1.25),(1.55,1.25)]
+        ring=closed_ring_profile(outer,0.82,0.50).shift(LEFT*3.3)
+        ax=axis_line(-1.8,1.8).shift(LEFT*3.3)
+        gap=DoubleArrow(LEFT*3.3,LEFT*2.48,buff=0,color=BLACK_LINE,stroke_width=2)
+        gaplab=self.text("gap from axis",21,BOLD).next_to(gap,DOWN,buff=0.12);self.fixed(gaplab)
+        self.play(Create(ax),FadeIn(ring),Create(gap),FadeIn(gaplab),run_time=1.2);self.wait(2.2)
+        self.move_camera(phi=67*DEGREES,theta=-48*DEGREES,zoom=0.90,run_time=1.2)
+        # Tube surface: outer and inner cylinders.
+        outer_s=revolution_surface(outer,TAU,0.44)
+        inner=[(0.82,-1.25),(0.82,1.25)]
+        inner_s=revolution_surface(inner,TAU,0.20,color=GRAY_D)
+        tube=VGroup(outer_s,inner_s)
+        self.play(FadeOut(gap),FadeOut(gaplab),ring.animate.shift(RIGHT*3.3),ax.animate.shift(RIGHT*3.3),run_time=0.8)
+        self.play(FadeOut(ring),FadeIn(tube),run_time=1.4);self.wait(2.8)
+        msg=self.note("ENGINEERING EXAMPLE",["Bushings, sleeves and rings often begin this way.","The axis creates symmetry; the profile position creates the bore."],width=6.2).to_corner(DR,buff=0.45)
+        self.fixed(msg);self.play(FadeIn(msg),run_time=0.8);self.wait(3.3)
+        self.clear_scene()
+
+    def inventor_workflow(self):
+        self.set_camera_orientation(phi=0,theta=-90*DEGREES,zoom=1)
+        h=self.section_header(5,"INVENTOR WORKFLOW: DEFINE THE INPUTS OF REVOLVE",
+                              "The command becomes predictable when you can identify the profile, axis, extent and operation before clicking OK.")
+        self.fixed(h);self.play(FadeIn(h),run_time=0.7)
+        panel=self.cad_panel().move_to(RIGHT*3.55+DOWN*0.35)
+        self.fixed(panel)
+        profile=[(1.25,-1.45),(1.25,-0.25),(0.85,-0.25),(0.85,1.35)]
+        sketch=closed_profile_polygon(profile,0.53).scale(1.05).move_to(LEFT*3.45+DOWN*0.30)
+        ax=axis_line(-2.0,2.0).scale(1.05).move_to(LEFT*3.45+DOWN*0.30)
+        p_lab=self.pill("PROFILE",20).move_to(LEFT*5.1+DOWN*2.9)
+        a_lab=self.pill("AXIS",20).move_to(LEFT*2.0+DOWN*2.9)
+        self.fixed(p_lab,a_lab)
+        self.play(Create(ax),FadeIn(sketch),FadeIn(p_lab),FadeIn(a_lab),run_time=1.2)
+        self.play(FadeIn(panel),run_time=1.0);self.wait(2.0)
+        # Highlight parameter rows in sequence with surrounding rectangles.
+        rows=panel[1][1]
+        for i,label in enumerate(["Select region","Choose centerline","Full / 360°","New Solid"]):
+            idx=[0,1,3,4][i]
+            box=SurroundingRectangle(rows[idx],color=BLACK_LINE,buff=0.07,stroke_width=2.2)
+            tag=self.text(label,20,BOLD).to_edge(DOWN,buff=0.30)
+            self.fixed(box,tag)
+            self.play(Create(box),FadeIn(tag),run_time=0.55);self.wait(1.25)
+            self.play(FadeOut(box),FadeOut(tag),run_time=0.40)
+        self.wait(1.2)
+        summary=self.text("If the inputs are clear before the command, the Revolve operation is almost mechanical.",25,BOLD).to_edge(DOWN,buff=0.28)
+        self.fixed(summary);self.play(FadeIn(summary),run_time=0.8);self.wait(3.2)
+        self.clear_scene()
+
+    def stepped_shaft_example(self):
+        self.set_camera_orientation(phi=0,theta=-90*DEGREES,zoom=1)
+        h=self.section_header(6,"ENGINEERING EXAMPLE: ONE SIDE PROFILE CAN DEFINE A STEPPED SHAFT",
+                              "Each horizontal radius in the sketch becomes a cylindrical diameter after a 360° revolution.")
+        self.fixed(h);self.play(FadeIn(h),run_time=0.7)
+        prof=[(0.68,-2.0),(0.68,-1.35),(1.12,-1.35),(1.12,-0.40),(0.86,-0.40),(0.86,0.45),(1.36,0.45),(1.36,1.20),(0.76,1.20),(0.76,2.0)]
+        sketch=closed_profile_polygon(prof,0.53).shift(LEFT*3.6)
+        ax=axis_line(-2.3,2.3).shift(LEFT*3.6)
+        labels=VGroup(
+            self.text("small radius",18).move_to(LEFT*1.7+UP*1.60),
+            self.text("large radius",18,BOLD).move_to(LEFT*1.55+UP*0.80),
+            self.text("shoulder",18).move_to(LEFT*1.8+DOWN*0.15),
+        );self.fixed(labels)
+        self.play(Create(ax),FadeIn(sketch),FadeIn(labels),run_time=1.2);self.wait(3.0)
+        process=VGroup(self.pill("PROFILE",20),self.pill("360° REVOLVE",20),self.pill("SHAFT",20)).arrange(RIGHT,buff=0.55).to_edge(DOWN,buff=0.32)
+        parrows=VGroup(arrow_between(process[0].get_right(),process[1].get_left()),arrow_between(process[1].get_right(),process[2].get_left()))
+        self.fixed(process,parrows);self.play(FadeIn(process),Create(parrows),run_time=0.9);self.wait(1.5)
+        self.play(FadeOut(labels),run_time=0.4)
+        self.move_camera(phi=65*DEGREES,theta=-48*DEGREES,zoom=0.88,run_time=1.3)
+        shaft=revolution_surface(prof,TAU,0.53,resolution=(32,24))
+        self.play(sketch.animate.shift(RIGHT*3.6),ax.animate.shift(RIGHT*3.6),run_time=0.8)
+        self.play(FadeOut(sketch),FadeIn(shaft),run_time=1.5);self.wait(3.2)
+        insight=self.note("WHY THIS MATTERS",["A complicated 3D shaft may require only one 2D sketch.","Edit a radius in the sketch → the matching diameter updates."],width=6.3).to_corner(DR,buff=0.45)
+        self.fixed(insight);self.play(FadeIn(insight),run_time=0.8);self.wait(3.4)
+        self.clear_scene()
+
+    def revolved_cut_example(self):
+        self.set_camera_orientation(phi=65*DEGREES,theta=-48*DEGREES,zoom=0.90)
+        h=self.section_header(7,"REVOLVED CUT: THE SAME LOGIC CAN REMOVE MATERIAL",
+                              "A small closed cut profile swept around the axis creates a circumferential groove — no torus metaphor is needed.")
+        self.fixed(h);self.play(FadeIn(h),run_time=0.7)
+        plain=[(1.42,-1.70),(1.42,1.70)]
+        grooved=[(1.42,-1.70),(1.42,-0.35),(1.08,-0.35),(1.08,0.35),(1.42,0.35),(1.42,1.70)]
+        before=VGroup(revolution_surface(plain,TAU,0.44),revolution_cap(-1.70,1.42),revolution_cap(1.70,1.42)).shift(LEFT*3.5)
+        after=VGroup(revolution_surface(grooved,TAU,0.52),revolution_cap(-1.70,1.42),revolution_cap(1.70,1.42)).shift(RIGHT*3.5)
+        blab=VGroup(self.text("BEFORE",22,BOLD),self.text("plain shaft",18)).arrange(DOWN,buff=0.04).move_to(LEFT*3.5+DOWN*3.0)
+        alab=VGroup(self.text("AFTER REVOLVED CUT",22,BOLD),self.text("ring groove",18)).arrange(DOWN,buff=0.04).move_to(RIGHT*3.5+DOWN*3.0)
+        self.fixed(blab,alab)
+        self.play(FadeIn(before),FadeIn(blab),run_time=1.0);self.wait(2.0)
+        arr=arrow_between(LEFT*0.9,RIGHT*0.9);self.play(Create(arr),FadeIn(after),FadeIn(alab),run_time=1.3);self.wait(3.0)
+        self.play(FadeOut(before),FadeOut(blab),FadeOut(arr),run_time=0.6)
+        # Reveal exact 2D profile behind the groove.
+        self.move_camera(phi=0,theta=-90*DEGREES,zoom=1,run_time=1.2)
+        notch=Polygon(np.array([1.08,-0.35,0]),np.array([1.42,-0.35,0]),np.array([1.42,0.35,0]),np.array([1.08,0.35,0]),stroke_color=BLACK_LINE,stroke_width=2.4,fill_color=LIGHT_GRAY,fill_opacity=0.60).shift(LEFT*3.7)
+        nax=axis_line(-1.8,1.8).shift(LEFT*3.7)
+        nlab=self.note("CUT PROFILE",["This small rectangle is swept 360°.","Its sweep removes a ring of material."],width=5.4).move_to(LEFT*3.4+DOWN*2.15)
+        self.fixed(nlab)
+        self.play(Create(nax),FadeIn(notch),FadeIn(nlab),run_time=1.1);self.wait(3.6)
+        self.clear_scene()
+
+    def no_calculus_check(self):
+        self.set_camera_orientation(phi=0,theta=-90*DEGREES,zoom=1)
+        h=self.section_header(8,"A SIMPLE GEOMETRY CHECK — WITHOUT INTEGRAL CALCULUS",
+                              "Use familiar formulas only as a model check. The Revolve concept itself is geometric and visual.")
+        self.fixed(h);self.play(FadeIn(h),run_time=0.7)
+        circle=Circle(radius=1.18,color=BLACK_LINE,stroke_width=2.5,fill_color=LIGHT_GRAY,fill_opacity=0.50).move_to(LEFT*4.25+DOWN*0.20)
+        rad=Line(circle.get_center(),circle.get_right(),color=BLACK_LINE,stroke_width=2.3)
+        rlab=MathTex("r",color=BLACK_TEXT,font_size=36).next_to(rad,UP,buff=0.05)
+        title=self.text("CIRCULAR BASE AREA",24,BOLD).next_to(circle,UP,buff=0.35)
+        area=MathTex(r"A=\pi r^2",color=BLACK_TEXT,font_size=48).next_to(circle,DOWN,buff=0.32)
+        self.fixed(circle,rad,rlab,title,area)
+        self.play(FadeIn(circle),Create(rad),FadeIn(rlab),FadeIn(title),run_time=1.0);self.play(Write(area),run_time=0.9);self.wait(2.4)
+        bridge=VGroup(self.pill("same base",20),self.pill("length L",20),self.pill("cylinder volume",20)).arrange(DOWN,buff=0.22).move_to(ORIGIN+DOWN*0.20)
+        self.fixed(bridge);self.play(LaggedStart(*[FadeIn(x) for x in bridge],lag_ratio=0.15),run_time=1.2);self.wait(1.8)
+        formula=MathTex(r"V=A\,L=\pi r^2L",color=BLACK_TEXT,font_size=52).move_to(RIGHT*4.25+DOWN*0.25)
+        ftitle=self.text("CYLINDER CHECK",24,BOLD).next_to(formula,UP,buff=0.35)
+        self.fixed(formula,ftitle);self.play(FadeIn(ftitle),Write(formula),run_time=1.2);self.wait(2.8)
+        footer=self.text("For tomorrow's class: understand profile + axis + operation first; calculus can be added later.",25,BOLD).to_edge(DOWN,buff=0.30)
+        self.fixed(footer);self.play(FadeIn(footer),run_time=0.8);self.wait(3.3)
+        self.clear_scene()
+
+    def final_design_challenge(self):
+        self.set_camera_orientation(phi=64*DEGREES,theta=-48*DEGREES,zoom=0.90)
+        h=self.section_header(9,"FINAL DESIGN CHALLENGE: REVERSE THE 3D PART BACK INTO A 2D PROFILE",
+                              "This is the most useful professional habit: mentally recover the sketch that could generate the part.")
+        self.fixed(h);self.play(FadeIn(h),run_time=0.7)
+        prof=[(0.64,-2.0),(0.64,-1.35),(1.12,-1.35),(1.12,-0.40),(0.86,-0.40),(0.86,0.45),(1.35,0.45),(1.35,1.20),(0.78,1.20),(0.78,2.0)]
+        solid=revolution_surface(prof,TAU,0.54,resolution=(32,24)).shift(RIGHT*2.75)
+        self.play(FadeIn(solid),run_time=1.2)
+        q=self.note("ASK IN THIS ORDER",["1. Where is the symmetry axis?","2. Where do diameters change?","3. What side profile contains those radii?","4. Is this a Join or a Cut?"],width=5.9).to_corner(DL,buff=0.50).shift(UP*0.65)
+        self.fixed(q);self.play(FadeIn(q),run_time=0.8);self.wait(4.0)
+        self.move_camera(phi=43*DEGREES,theta=-32*DEGREES,zoom=0.92,run_time=1.2)
+        sketch=closed_profile_polygon(prof,0.52).shift(LEFT*3.7)
+        ax=axis_line(-2.3,2.3).shift(LEFT*3.7)
+        reveal=self.text("REVEAL: this single closed side profile can generate the whole shaft.",25,BOLD).to_edge(DOWN,buff=0.30)
+        self.fixed(reveal);self.play(Create(ax),FadeIn(sketch),FadeIn(reveal),run_time=1.3);self.wait(4.5)
+        self.clear_scene()
+
+    def closing(self):
+        self.set_camera_orientation(phi=0,theta=-90*DEGREES,zoom=1)
+        title=self.text("PROFILE  →  AXIS  →  ANGLE  →  OPERATION  →  SOLID",38,BOLD)
+        sub=self.text("Inventor becomes easier when you design the 2D generator before thinking about the 3D result.",26)
+        checklist=VGroup(
+            self.pill("closed region",19),self.pill("valid axis",19),self.pill("correct extent",19),self.pill("join / cut",19),
+        ).arrange(RIGHT,buff=0.20)
+        group=VGroup(title,sub,checklist).arrange(DOWN,buff=0.34)
+        self.fixed(group)
+        self.play(FadeIn(title),run_time=0.9);self.wait(1.4)
+        self.play(FadeIn(sub),run_time=0.8);self.wait(1.7)
+        self.play(LaggedStart(*[FadeIn(x) for x in checklist],lag_ratio=0.13),run_time=1.2);self.wait(4.2)
+        self.play(FadeOut(group),run_time=0.8)
+
+# Preview:
+# manim -pql SolidsOfRevolution_InventorProfessional_SENIOR_V2.py SolidsOfRevolutionInventorSeniorV2 --format=mp4 --disable_caching
+# Final:
+# manim -pqh SolidsOfRevolution_InventorProfessional_SENIOR_V2.py SolidsOfRevolutionInventorSeniorV2 --format=mp4 --disable_caching
