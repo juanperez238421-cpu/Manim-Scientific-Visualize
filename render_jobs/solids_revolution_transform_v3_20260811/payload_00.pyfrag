@@ -1,0 +1,210 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Senior V3 — Solids of Revolution for Autodesk Inventor Professional.
+
+Calculus-free college-level ManimCE lesson. The central model is always:
+PROFILE -> AXIS -> ANGLE -> OPERATION -> SOLID.
+
+V3 adds a dedicated geometric sweep engine: the *actual 2D generating area*
+rotates in 3D, selected points leave circular trajectories, and those traces
+resolve into the final revolved surface. This preserves the causal connection
+between sketch and solid instead of cutting from one object to the other.
+
+Designed for Manim Community Edition 0.20.x and the JP classroom visual system.
+"""
+from __future__ import annotations
+
+import math
+import os
+from typing import Sequence
+
+import numpy as np
+from manim import *
+
+from jp_classroom_style import (
+    JPThreeDClassroomScene,
+    BLACK_TEXT, BLACK_LINE, DARK_GRAY, MID_GRAY, LIGHT_GRAY,
+    VERY_LIGHT_GRAY, PAPER_GRAY, WHITE_FILL,
+)
+
+config.pixel_width = 1920
+config.pixel_height = 1080
+config.frame_width = 16
+config.frame_height = 9
+config.frame_rate = 30
+config.background_color = WHITE
+TIME_SCALE = float(os.getenv("LESSON_TIME_SCALE", "1.0"))
+
+# -----------------------------------------------------------------------------
+# Geometry helpers
+# -----------------------------------------------------------------------------
+def profile_interp(points: Sequence[tuple[float, float]], t: float) -> tuple[float, float]:
+    pts = np.array(points, dtype=float)
+    seg = np.diff(pts, axis=0)
+    lengths = np.sqrt(np.sum(seg * seg, axis=1))
+    total = float(np.sum(lengths))
+    if total <= 1e-12:
+        return float(pts[0, 0]), float(pts[0, 1])
+    s = np.clip(t, 0.0, 1.0) * total
+    acc = 0.0
+    for i, length in enumerate(lengths):
+        if s <= acc + length or i == len(lengths) - 1:
+            q = 0.0 if length <= 1e-12 else (s - acc) / length
+            p = pts[i] + q * seg[i]
+            return float(p[0]), float(p[1])
+        acc += length
+    return float(pts[-1, 0]), float(pts[-1, 1])
+
+
+def revolution_surface(profile, angle=TAU, opacity=0.50, resolution=(28, 16), color=GRAY_C):
+    def f(u, v):
+        r, y = profile_interp(profile, v)
+        return np.array([r * math.cos(u), y, r * math.sin(u)])
+    return Surface(
+        f, u_range=[0, angle], v_range=[0, 1], resolution=resolution,
+        fill_color=color, fill_opacity=opacity,
+        stroke_color=GRAY_B, stroke_width=0.65,
+    )
+
+
+def revolution_cap(y, radius, angle=TAU, opacity=0.28):
+    def f(u, v):
+        rr = radius * v
+        return np.array([rr * math.cos(u), y, rr * math.sin(u)])
+    return Surface(
+        f, u_range=[0, angle], v_range=[0, 1], resolution=(24, 5),
+        fill_color=GRAY_D, fill_opacity=opacity,
+        stroke_color=GRAY_B, stroke_width=0.50,
+    )
+
+
+def sphere_surface(radius=1.25):
+    def f(u, v):
+        return np.array([
+            radius * math.sin(v) * math.cos(u),
+            radius * math.cos(v),
+            radius * math.sin(v) * math.sin(u),
+        ])
+    return Surface(
+        f, u_range=[0, TAU], v_range=[0, PI], resolution=(30, 16),
+        fill_color=GRAY_C, fill_opacity=0.50,
+        stroke_color=GRAY_B, stroke_width=0.60,
+    )
+
+
+def closed_profile_polygon(profile, opacity=0.50, axis_radius=0.0):
+    pts = [np.array([axis_radius, profile[0][1], 0.0])]
+    pts.extend(np.array([r, y, 0.0]) for r, y in profile)
+    pts.append(np.array([axis_radius, profile[-1][1], 0.0]))
+    return Polygon(
+        *pts, stroke_color=BLACK_LINE, stroke_width=2.5,
+        fill_color=LIGHT_GRAY, fill_opacity=opacity,
+    )
+
+
+def closed_ring_profile(outer_profile, inner_radius, opacity=0.45):
+    outer = [np.array([r, y, 0]) for r, y in outer_profile]
+    inner = [np.array([inner_radius, y, 0]) for _, y in reversed(outer_profile)]
+    return Polygon(
+        *(outer + inner), stroke_color=BLACK_LINE, stroke_width=2.4,
+        fill_color=LIGHT_GRAY, fill_opacity=opacity,
+    )
+
+
+def axis_line(y0=-2.5, y1=2.5):
+    return DashedLine(
+        np.array([0, y0, 0]), np.array([0, y1, 0]),
+        color=BLACK_LINE, stroke_width=2.7, dash_length=0.12,
+    )
+
+
+def arrow_between(a, b):
+    return Arrow(a, b, buff=0.10, color=BLACK_LINE, stroke_width=2.4, max_tip_length_to_length_ratio=0.16)
+
+
+# -----------------------------------------------------------------------------
+# SPECIALIZED GEOMETRIC SWEEP ENGINE
+# -----------------------------------------------------------------------------
+def profile_curve(profile, color=BLACK_LINE, stroke_width=3.0, opacity=1.0):
+    """Outer generating curve r(y) drawn in the sketch plane z=0."""
+    curve = VMobject(color=color, stroke_width=stroke_width)
+    curve.set_points_as_corners([np.array([r, y, 0.0]) for r, y in profile])
+    curve.set_stroke(opacity=opacity)
+    return curve
+
+
+def orbit_curve(radius, y, start_angle=0.0, end_angle=TAU, color=MID_GRAY, opacity=0.42):
+    """Exact circular trajectory of one profile point around the Y axis."""
+    if radius <= 1e-6:
+        # A point on the axis has no orbit. Return a tiny invisible placeholder.
+        return ParametricFunction(
+            lambda t: np.array([0.0, y, 0.0]),
+            t_range=[0.0, 1.0], color=color, stroke_opacity=0.0,
+        )
+    return ParametricFunction(
+        lambda a: np.array([radius * math.cos(a), y, radius * math.sin(a)]),
+        t_range=[start_angle, end_angle],
+        color=color, stroke_width=1.65, stroke_opacity=opacity,
+    )
+
+
+def annular_cap(y, inner_radius, outer_radius, angle=TAU, opacity=0.26, color=GRAY_D):
+    """Flat annulus used to close hollow revolved bodies or rectangular cut volumes."""
+    def f(u, v):
+        rr = inner_radius + (outer_radius - inner_radius) * v
+        return np.array([rr * math.cos(u), y, rr * math.sin(u)])
+    return Surface(
+        f, u_range=[0, angle], v_range=[0, 1], resolution=(28, 5),
+        fill_color=color, fill_opacity=opacity,
+        stroke_color=GRAY_B, stroke_width=0.45,
+    )
+
+
+class RevolveSweepEngine:
+    """Reusable animation system for a true profile -> sweep -> solid transition.
+
+    The engine deliberately shows the geometric mechanism rather than using a
+    simple cross-fade. A translucent 2D region is rotated about the selected
+    axis while sample points on its generating boundary draw their exact
+    circular trajectories. Only after the sweep is visually established does
+    the wire/sweep evidence resolve into a continuous surface.
+    """
+
+    def __init__(self, scene):
+        self.scene = scene
+
+    @staticmethod
+    def sample_points(profile, count=7):
+        # Include the vertices (important for shoulders) plus evenly spaced
+        # path samples. Deduplicate to keep the wireframe readable.
+        raw = list(profile)
+        raw.extend(profile_interp(profile, t) for t in np.linspace(0.08, 0.92, max(0, count)))
+        out = []
+        for r, y in raw:
+            key = (round(float(r), 3), round(float(y), 3))
+            if key not in {(round(a, 3), round(b, 3)) for a, b in out}:
+                out.append((float(r), float(y)))
+        # Limit clutter while prioritizing true profile corners.
+        if len(out) > 12:
+            vertices = list(profile)
+            extras = [p for p in out if p not in vertices]
+            step = max(1, len(extras) // max(1, 12 - len(vertices)))
+            out = vertices + extras[::step][:max(0, 12 - len(vertices))]
+        return out
+
+    def traces(self, profile, start_angle=0.0, end_angle=TAU, count=7, opacity=0.40):
+        return VGroup(*[
+            orbit_curve(r, y, start_angle, end_angle, opacity=opacity)
+            for r, y in self.sample_points(profile, count=count)
+            if r > 1e-5
+        ])
+
+    def final_solid(self, profile, angle=TAU, opacity=0.53, caps=True, resolution=(32, 18), color=GRAY_C):
+        pieces = [revolution_surface(profile, angle, opacity, resolution=resolution, color=color)]
+        if caps:
+            r0, y0 = profile[0]
+            r1, y1 = profile[-1]
+            if r0 > 1e-5:
+                pieces.append(revolution_cap(y0, r0, angle, 0.24))
+            if r1 > 1e-5:
+                pieces.append(revolution_cap(y1, r1, angle, 0.24))
