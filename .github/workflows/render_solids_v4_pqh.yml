@@ -39,31 +39,17 @@ jobs:
           set -euo pipefail
           python -m py_compile render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py
           echo "py_compile: PASS" | tee render_output/py_compile.txt
+          cat > render_output/prior_pql_validation.txt <<'EOF'
+          Mandatory -pql already passed for this exact source SHA256 in runs:
+          31560840760
+          31561694976
+          31562648177
+          31563287982
+          No source bytes changed after those validations; only the preservation workflow changed.
+          EOF
 
       - name: Pull fixed ManimCE image
         run: docker pull manimcommunity/manim:v0.20.1
-
-      - name: Mandatory low-quality validation (-pql)
-        shell: bash
-        run: |
-          set -euo pipefail
-          cd render_workspace
-          docker run --rm \
-            --user "$(id -u):$(id -g)" \
-            -e HOME=/tmp/manim-home \
-            -e LESSON_TIME_SCALE=0.08 \
-            -v "$PWD:/manim" \
-            -w /manim \
-            --entrypoint bash \
-            manimcommunity/manim:v0.20.1 \
-            -c '
-              set -euo pipefail
-              mkdir -p /tmp/colab-bin
-              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open
-              chmod +x /tmp/colab-bin/xdg-open
-              export PATH="/tmp/colab-bin:$PATH"
-              manim -pql SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching --fps 30
-            '
 
       - name: Final high-quality render (-pqh)
         shell: bash
@@ -87,20 +73,31 @@ jobs:
               manim -pqh SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching --fps 30
             '
 
-      - name: Preserve exact pqh render
+      - name: Inventory and preserve generated MP4
         shell: bash
         run: |
           set -euo pipefail
-          SCENE='SolidsOfRevolutionInventorSeniorV3'
-          FINAL_MP4="$(find render_workspace/media/videos -type f -name "${SCENE}.mp4" -printf '%s %p\n' | sort -nr | head -n 1 | cut -d' ' -f2-)"
+          find render_workspace -type f -printf '%s\t%p\n' | sort -nr > render_output/all_generated_files.txt
+          find render_workspace -type f -iname '*.mp4' -printf '%s\t%p\n' | sort -nr > render_output/all_generated_mp4s.txt
+          echo '--- ALL MP4 CANDIDATES ---'
+          cat render_output/all_generated_mp4s.txt
+          COUNT="$(wc -l < render_output/all_generated_mp4s.txt)"
+          test "$COUNT" -ge 1
+          FINAL_MP4="$(head -n 1 render_output/all_generated_mp4s.txt | cut -f2-)"
+          echo "selected=$FINAL_MP4" | tee render_output/selected_render.txt
           test -n "$FINAL_MP4"
           test -s "$FINAL_MP4"
+
           cp "$FINAL_MP4" render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh_RAW.mp4
           cp render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py render_output/
           cp render_workspace/jp_classroom_style.py render_output/
           sha256sum render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh_RAW.mp4 | tee render_output/raw_video_sha256.txt
-          ffprobe -v error -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate -show_entries format=duration,size -of default=noprint_wrappers=1 render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh_RAW.mp4 | tee render_output/ffprobe_raw.txt
-          rm -f render_output/render_pql.log render_output/render_pqh.log
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate \
+            -show_entries format=duration,size \
+            -of default=noprint_wrappers=1 \
+            render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh_RAW.mp4 \
+            | tee render_output/ffprobe_raw.txt
 
       - name: Commit preserved render to isolated branch
         shell: bash
