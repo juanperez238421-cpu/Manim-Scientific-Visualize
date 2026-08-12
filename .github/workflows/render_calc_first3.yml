@@ -67,7 +67,7 @@ jobs:
               manim -pql first3_full.py FirstThreeProblems --disable_caching --format=mp4
             '
 
-      - name: Final high-quality render (-pqh)
+      - name: Final high-quality render (-pqh, 30 fps)
         shell: bash
         run: |
           set -euo pipefail
@@ -82,15 +82,26 @@ jobs:
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/bin/xdg-open
               chmod +x /tmp/bin/xdg-open
               export PATH="/tmp/bin:$PATH"
-              manim -pqh first3_full.py FirstThreeProblems --disable_caching --format=mp4
+              manim -pqh first3_full.py FirstThreeProblems --disable_caching --format=mp4 --fps 30
             '
 
       - name: Collect and verify final MP4
         shell: bash
         run: |
           set -euo pipefail
-          FINAL=$(find render_jobs/calc_mv_first3/media -type f -name 'FirstThreeProblems.mp4' | sort | tail -n 1)
+          FINAL=""
+          while IFS= read -r candidate; do
+            width=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$candidate" || true)
+            height=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$candidate" || true)
+            fps=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$candidate" || true)
+            echo "Candidate: $candidate -> ${width}x${height} @ ${fps}"
+            if [[ "$width" == "1920" && "$height" == "1080" && "$fps" == "30/1" ]]; then
+              FINAL="$candidate"
+              break
+            fi
+          done < <(find render_jobs/calc_mv_first3/media -type f -name 'FirstThreeProblems.mp4' | sort)
           test -n "$FINAL"
+          echo "Selected final: $FINAL"
           cp "$FINAL" delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4
           cp render_jobs/calc_mv_first3/first3_full.py delivery/Multivariable_Calculus_Workshop_Problems_1_2_3.py
           cp render_jobs/calc_mv_first3/jp_classroom_style.py delivery/jp_classroom_style.py
@@ -101,6 +112,9 @@ jobs:
             delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4 | tee delivery/ffprobe.txt
           test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4)" = "1920"
           test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4)" = "1080"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4)" = "30/1"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4)" = "h264"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4)" = "yuv420p"
           sha256sum \
             delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4 \
             delivery/Multivariable_Calculus_Workshop_Problems_1_2_3.py \
