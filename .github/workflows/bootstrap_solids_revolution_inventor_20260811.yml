@@ -1,0 +1,121 @@
+name: Solids Revolution Inventor PQH Render
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'render/solids-revolution-inventor-20260811'
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Recover render source
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          BRANCH=render/solids-revolution-inventor-20260811
+          JOB=render_jobs/solids_revolution_inventor_20260811
+          git fetch --depth=1 origin "$BRANCH"
+          rm -rf /tmp/revolve && mkdir -p /tmp/revolve
+          git show "FETCH_HEAD:$JOB/payload_00.pyfrag" > /tmp/revolve/payload_00.pyfrag
+          git show "FETCH_HEAD:$JOB/payload_01.pyfrag" > /tmp/revolve/payload_01.pyfrag
+          git show "FETCH_HEAD:$JOB/payload_02.pyfrag" > /tmp/revolve/payload_02.pyfrag
+          cat /tmp/revolve/payload_00.pyfrag /tmp/revolve/payload_01.pyfrag /tmp/revolve/payload_02.pyfrag > /tmp/revolve/solids_revolution_inventor.py
+          git show "FETCH_HEAD:$JOB/jp_classroom_style.py" > /tmp/revolve/jp_classroom_style.py
+          test "$(wc -l < /tmp/revolve/solids_revolution_inventor.py)" -eq 734
+          python -m py_compile /tmp/revolve/solids_revolution_inventor.py /tmp/revolve/jp_classroom_style.py
+          ! grep -nE '([A-Za-z]:\\\\|/Users/|/home/[^/]+/Desktop)' /tmp/revolve/*.py
+          sha256sum /tmp/revolve/solids_revolution_inventor.py > /tmp/source_sha.txt
+
+      - name: Pull ManimCE 0.20.1
+        run: docker pull manimcommunity/manim:v0.20.1
+
+      - name: Render preview PQL and final literal PQH
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp /tmp/revolve/solids_revolution_inventor.py .
+          cp /tmp/revolve/jp_classroom_style.py .
+          IMAGE=manimcommunity/manim:v0.20.1
+          FILE=solids_revolution_inventor.py
+          SCENE=SolidsOfRevolutionInventor
+          SLUG=SolidsOfRevolution_InventorProfessional_FINAL
+          rm -rf media delivery_revolve qa_revolve
+          mkdir -p delivery_revolve qa_revolve
+
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.12 \
+            -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH="/tmp/manim-bin:$PATH"
+              manim -pql solids_revolution_inventor.py SolidsOfRevolutionInventor --format=mp4 --disable_caching
+            ' 2>&1 | tee delivery_revolve/render_pql.log
+
+          PQL="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+          cp "$PQL" "delivery_revolve/${SLUG}_pql.mp4"
+
+          rm -rf media
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH="/tmp/manim-bin:$PATH"
+              manim -pqh solids_revolution_inventor.py SolidsOfRevolutionInventor --format=mp4 --disable_caching
+            ' 2>&1 | tee delivery_revolve/render_pqh.log
+
+          FINAL="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          OUT="delivery_revolve/${SLUG}_pqh.mp4"
+          cp "$FINAL" "$OUT"
+          cp "$FILE" jp_classroom_style.py delivery_revolve/
+          cp /tmp/source_sha.txt delivery_revolve/SOURCE_SHA256.txt
+
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+            -show_entries format=duration,size \
+            -of default=noprint_wrappers=1 "$OUT" > delivery_revolve/ffprobe.txt
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$OUT")" = 1920
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$OUT")" = 1080
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$OUT")" = 30/1
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$OUT")" = h264
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$OUT")" = yuv420p
+          ffmpeg -nostdin -v error -i "$OUT" -f null - 2> delivery_revolve/full_decode.log
+
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT")"
+          RATE="$(python -c "d=float('$DUR'); print(max(0.001,42.0/max(d,0.001)))")"
+          ffmpeg -nostdin -y -v error -i "$OUT" \
+            -vf "fps=$RATE,scale=480:-1,tile=6x7:padding=8:margin=8" \
+            -frames:v 1 qa_revolve/contact_sheet.jpg
+          for P in 5 12 20 28 36 44 52 60 68 76 84 92; do
+            T="$(python -c "d=float('$DUR'); print(d*$P/100.0)")"
+            ffmpeg -nostdin -y -v error -ss "$T" -i "$OUT" -frames:v 1 "qa_revolve/frame_${P}pct.png"
+          done
+
+          sha256sum "$OUT" > delivery_revolve/SHA256SUMS.txt
+          printf 'ManimCE 0.20.1\nPreview: manim -pql %s %s --format=mp4 --disable_caching\nFinal: manim -pqh %s %s --format=mp4 --disable_caching\n' "$FILE" "$SCENE" "$FILE" "$SCENE" > delivery_revolve/RENDER_INFO.txt
+
+      - name: Upload final delivery and QA
+        uses: actions/upload-artifact@v4
+        with:
+          name: SolidsOfRevolution_InventorProfessional_FINAL_PQH
+          path: |
+            delivery_revolve/
+            qa_revolve/
+          if-no-files-found: error
+          retention-days: 7
