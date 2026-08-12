@@ -31,6 +31,10 @@ jobs:
             echo 'Absolute path detected' >&2
             exit 1
           fi
+          command -v ffmpeg
+          command -v ffprobe
+          ffmpeg -version | head -n 1
+          ffprobe -version | head -n 1
           rm -rf preview hq delivery
           mkdir -p preview hq delivery/logs delivery/frames delivery/scenes
           chmod -R a+rwX .
@@ -91,51 +95,60 @@ jobs:
             test -s "delivery/scenes/${scene}.mp4"
           done
 
-      - name: Verify canonical PQH scene outputs
+      - name: Verify canonical PQH scene outputs on runner
         shell: bash
         run: |
           set -euo pipefail
           SCENES=(LoftTheoryJP LoftSimpleJP3D LoftExercise1JP3D LoftExercise2JP3D LoftSummaryJP)
           : > delivery/concat.txt
           for scene in "${SCENES[@]}"; do
-            VIDEO="/manim/delivery/scenes/${scene}.mp4"
-            docker run --rm \
-              -v "$PWD:/manim" -w /manim \
-              --entrypoint bash \
-              manimcommunity/manim:v0.20.1 \
-              -c "set -euo pipefail; ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of json '$VIDEO'" \
-              > "delivery/${scene}_ffprobe.json"
-            WIDTH="$(docker run --rm -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 '$VIDEO'")"
-            HEIGHT="$(docker run --rm -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 '$VIDEO'")"
+            VIDEO="$PWD/delivery/scenes/${scene}.mp4"
+            test -s "$VIDEO"
+            ffprobe -v error \
+              -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+              -show_entries format=duration,size \
+              -of json "$VIDEO" > "delivery/${scene}_ffprobe.json"
+            WIDTH="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$VIDEO" | tr -d '[:space:]')"
+            HEIGHT="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$VIDEO" | tr -d '[:space:]')"
+            echo "${scene}: ${WIDTH}x${HEIGHT}"
             test "$WIDTH" = 1920
             test "$HEIGHT" = 1080
-            echo "file '$VIDEO'" >> delivery/concat.txt
+            ffmpeg -v error -i "$VIDEO" -f null -
+            printf "file '%s'\n" "$VIDEO" >> delivery/concat.txt
           done
 
       - name: Assemble only genuine PQH outputs
         shell: bash
         run: |
           set -euo pipefail
-          chmod -R a+rwX delivery
-          docker run --rm \
-            -e HOME=/tmp/manim-home \
-            -v "$PWD:/manim" -w /manim \
-            --entrypoint bash \
-            manimcommunity/manim:v0.20.1 \
-            -c 'set -euo pipefail; ffmpeg -y -f concat -safe 0 -i /manim/delivery/concat.txt -c:v libx264 -preset medium -crf 17 -pix_fmt yuv420p -r 30 -an /manim/delivery/Inventor_Solevacion_Loft_JP_REAL_PQH.mp4'
+          ffmpeg -y -f concat -safe 0 -i delivery/concat.txt \
+            -c:v libx264 -preset medium -crf 17 -pix_fmt yuv420p -r 30 -an \
+            delivery/Inventor_Solevacion_Loft_JP_REAL_PQH.mp4
 
       - name: Final protocol verification
         shell: bash
         run: |
           set -euo pipefail
-          chmod -R a+rwX delivery
-          docker run --rm \
-            -v "$PWD:/manim" -w /manim \
-            --entrypoint bash \
-            manimcommunity/manim:v0.20.1 \
-            -c 'set -euo pipefail; VIDEO=/manim/delivery/Inventor_Solevacion_Loft_JP_REAL_PQH.mp4; test -s "$VIDEO"; ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of json "$VIDEO" > /manim/delivery/ffprobe.json; ffmpeg -v error -i "$VIDEO" -f null -; WIDTH=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$VIDEO"); HEIGHT=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$VIDEO"); FPS=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$VIDEO"); CODEC=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$VIDEO"); PIX=$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$VIDEO"); test "$WIDTH" = 1920; test "$HEIGHT" = 1080; test "$FPS" = 30/1; test "$CODEC" = h264; test "$PIX" = yuv420p; ffmpeg -y -i "$VIDEO" -vf "fps=1/20,scale=640:-1,tile=3x3" -frames:v 1 /manim/delivery/frames/control_sheet.jpg'
-          sha256sum delivery/Inventor_Solevacion_Loft_JP_REAL_PQH.mp4 > delivery/sha256.txt
+          VIDEO=delivery/Inventor_Solevacion_Loft_JP_REAL_PQH.mp4
+          test -s "$VIDEO"
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+            -show_entries format=duration,size \
+            -of json "$VIDEO" > delivery/ffprobe.json
+          ffmpeg -v error -i "$VIDEO" -f null -
+          WIDTH="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$VIDEO" | tr -d '[:space:]')"
+          HEIGHT="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$VIDEO" | tr -d '[:space:]')"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$VIDEO" | tr -d '[:space:]')"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$VIDEO" | tr -d '[:space:]')"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$VIDEO" | tr -d '[:space:]')"
+          test "$WIDTH" = 1920
+          test "$HEIGHT" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          sha256sum "$VIDEO" > delivery/sha256.txt
           cp Inventor_Solevacion_Loft_JP_REAL_PQH.py jp_classroom_style.py delivery/
+          ffmpeg -y -i "$VIDEO" -vf 'fps=1/20,scale=640:-1,tile=3x3' -frames:v 1 delivery/frames/control_sheet.jpg
           {
             echo 'Render completed correctly.'
             echo
@@ -157,3 +170,12 @@ jobs:
           path: delivery/
           if-no-files-found: error
           retention-days: 7
+
+      - name: Upload debug delivery on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Inventor_Solevacion_Loft_JP_REAL_PQH_debug
+          path: delivery/
+          if-no-files-found: warn
+          retention-days: 2
