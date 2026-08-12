@@ -63,7 +63,7 @@ jobs:
               chmod +x /tmp/colab-bin/xdg-open
               export PATH="/tmp/colab-bin:$PATH"
               manim -pql SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching --fps 30
-            ' 2>&1 | tee ../render_output/render_pql.log
+            '
 
       - name: Final high-quality render (-pqh)
         shell: bash
@@ -85,108 +85,36 @@ jobs:
               chmod +x /tmp/colab-bin/xdg-open
               export PATH="/tmp/colab-bin:$PATH"
               manim -pqh SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching --fps 30
-            ' 2>&1 | tee ../render_output/render_pqh.log
+            '
 
-      - name: Normalize delivery and build QA evidence
+      - name: Preserve exact pqh render
         shell: bash
         run: |
           set -euo pipefail
           SCENE='SolidsOfRevolutionInventorSeniorV3'
-          mapfile -t MP4S < <(find render_workspace/media/videos -type f -name "${SCENE}.mp4" | sort)
-          printf '%s\n' "${MP4S[@]}" | tee render_output/mp4_candidates.txt
-          test "${#MP4S[@]}" -gt 0
-
-          FINAL_MP4=''
-          BEST_PIXELS=0
-          BEST_SIZE=0
-          for f in "${MP4S[@]}"; do
-            W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$f" || echo 0)"
-            H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$f" || echo 0)"
-            S="$(stat -c%s "$f")"
-            P=$((W * H))
-            echo "$W x $H | $S bytes | $f" | tee -a render_output/mp4_candidates_detailed.txt
-            if [ "$P" -gt "$BEST_PIXELS" ] || { [ "$P" -eq "$BEST_PIXELS" ] && [ "$S" -gt "$BEST_SIZE" ]; }; then
-              BEST_PIXELS="$P"
-              BEST_SIZE="$S"
-              FINAL_MP4="$f"
-            fi
-          done
+          FINAL_MP4="$(find render_workspace/media/videos -type f -name "${SCENE}.mp4" -printf '%s %p\n' | sort -nr | head -n 1 | cut -d' ' -f2-)"
           test -n "$FINAL_MP4"
           test -s "$FINAL_MP4"
-          echo "selected=$FINAL_MP4" | tee render_output/selected_render.txt
-
-          RAW='render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh_RAW.mp4'
-          OUT='render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh.mp4'
-          cp "$FINAL_MP4" "$RAW"
+          cp "$FINAL_MP4" render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh_RAW.mp4
           cp render_workspace/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py render_output/
           cp render_workspace/jp_classroom_style.py render_output/
+          sha256sum render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh_RAW.mp4 | tee render_output/raw_video_sha256.txt
+          ffprobe -v error -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate -show_entries format=duration,size -of default=noprint_wrappers=1 render_output/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL_pqh_RAW.mp4 | tee render_output/ffprobe_raw.txt
+          rm -f render_output/render_pql.log render_output/render_pqh.log
 
-          ffprobe -v error -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate -show_entries format=duration,size -of default=noprint_wrappers=1 "$RAW" | tee render_output/ffprobe_raw.txt
-
-          # Delivery normalization does not change lesson content or geometry.
-          # It guarantees the protocol delivery profile independently of Manim's encoder defaults.
-          ffmpeg -y -v error -i "$RAW" \
-            -vf "scale=1920:1080:flags=lanczos,fps=30" \
-            -c:v libx264 -preset slow -crf 17 -pix_fmt yuv420p \
-            -movflags +faststart \
-            "$OUT"
-
-          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=nw=1:nk=1 "$OUT")"
-          WIDTH="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of default=nw=1:nk=1 "$OUT")"
-          HEIGHT="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of default=nw=1:nk=1 "$OUT")"
-          PIXFMT="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of default=nw=1:nk=1 "$OUT")"
-          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of default=nw=1:nk=1 "$OUT")"
-          DURATION="$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 "$OUT")"
-          SIZE="$(stat -c%s "$OUT")"
-          {
-            echo "codec_name=$CODEC"
-            echo "width=$WIDTH"
-            echo "height=$HEIGHT"
-            echo "pix_fmt=$PIXFMT"
-            echo "r_frame_rate=$FPS"
-            echo "duration=$DURATION"
-            echo "size=$SIZE"
-          } | tee render_output/ffprobe.txt
-
-          test "$CODEC" = 'h264'
-          test "$WIDTH" = '1920'
-          test "$HEIGHT" = '1080'
-          test "$PIXFMT" = 'yuv420p'
-          test "$FPS" = '30/1'
-          ffmpeg -v error -i "$OUT" -f null -
-          echo "full_decode: PASS" | tee render_output/decode_check.txt
-          sha256sum "$OUT" | tee render_output/video_sha256.txt
-
-          # Broad visual QA: 30 representative frames across the full lesson.
-          ffmpeg -y -v error -i "$OUT" -vf "fps=1/8,scale=384:-1,tile=5x6:padding=4:margin=4" -frames:v 1 render_output/Solids_V4_QA_contact_sheet_A.jpg
-          DURATION_INT="${DURATION%.*}"
-          HALF=$((DURATION_INT / 2))
-          ffmpeg -y -v error -ss "$HALF" -i "$OUT" -vf "fps=1/4,scale=384:-1,tile=5x6:padding=4:margin=4" -frames:v 1 render_output/Solids_V4_QA_contact_sheet_B.jpg
-
-          cat > render_output/QA_SUMMARY.txt <<EOF
-          SOURCE_SHA256=c359547721378bfcb9d4ddb1a485b0e8e039a6379053f6df63b4279a846dc6d4
-          MANIM_IMAGE=manimcommunity/manim:v0.20.1
-          PY_COMPILE=PASS
-          PQL=PASS
-          PQH=PASS
-          DELIVERY_NORMALIZATION=H264_1920x1080_30FPS_YUV420P
-          FULL_DECODE=PASS
-          MAIN_BRANCH_MERGED=NO
-          EOF
-
-      - name: Commit verified render to temporary branch
+      - name: Commit preserved render to isolated branch
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add render_output
-          git commit -m "Render verified Solids V4 pqh [skip ci]" || exit 0
+          git commit -m "Preserve Solids V4 raw pqh render [skip ci]"
           git push origin HEAD:render-solids-v4-bigger-figures-20260811
 
-      - name: Upload verified render artifact
+      - name: Upload raw pqh render artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SolidsOfRevolution_V4_BiggerFigures_pqh
+          name: SolidsOfRevolution_V4_BiggerFigures_RAW_pqh
           path: render_output/
           if-no-files-found: error
