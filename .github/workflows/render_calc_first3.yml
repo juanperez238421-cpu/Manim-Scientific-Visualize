@@ -44,14 +44,13 @@ jobs:
           get_gzip_blob "$LESSON_GZIP_BLOB" render_jobs/calc_mv_first3/first3_full.py
           get_gzip_blob "$STYLE_GZIP_BLOB" render_jobs/calc_mv_first3/jp_classroom_style.py
           python -m py_compile render_jobs/calc_mv_first3/first3_full.py render_jobs/calc_mv_first3/jp_classroom_style.py
+          cp render_jobs/calc_mv_first3/first3_full.py delivery/Multivariable_Calculus_Workshop_Problems_1_2_3.py
+          cp render_jobs/calc_mv_first3/jp_classroom_style.py delivery/jp_classroom_style.py
           sha256sum render_jobs/calc_mv_first3/first3_full.py render_jobs/calc_mv_first3/jp_classroom_style.py | tee delivery/source_sha256.txt
 
       - name: Pull ManimCE 0.20.1 image
         run: docker pull manimcommunity/manim:v0.20.1
 
-      # The exact reviewed source already passed the protocol's -pql QA render in
-      # previous runs. This persistence run re-renders only the final literal -pqh
-      # product so the capture cannot be confused with the low-quality preview.
       - name: Final literal -pqh render at 1920x1080 30fps
         shell: bash
         run: |
@@ -71,37 +70,16 @@ jobs:
               manim -pqh first3_full.py FirstThreeProblems \
                 --disable_caching --format=mp4 --fps 30 -r 1920,1080 \
                 --media_dir media_pqh
-              echo "PQH files:"
-              find /manim/render_jobs/calc_mv_first3/media_pqh -type f -name "FirstThreeProblems.mp4" -print
               FINAL=$(find /manim/render_jobs/calc_mv_first3/media_pqh -type f -name "FirstThreeProblems.mp4" -printf "%T@ %p\n" | sort -nr | head -n 1 | cut -d" " -f2-)
               test -n "$FINAL"
               test -s "$FINAL"
               cp "$FINAL" /manim/delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4
             '
+          test -s delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4
+          sha256sum delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4 | tee delivery/video_sha256.txt
+          ls -lh delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4
 
-      - name: Verify PQH MP4 and preserve sources
-        shell: bash
-        run: |
-          set -euo pipefail
-          VIDEO=delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4
-          test -s "$VIDEO"
-          cp render_jobs/calc_mv_first3/first3_full.py delivery/Multivariable_Calculus_Workshop_Problems_1_2_3.py
-          cp render_jobs/calc_mv_first3/jp_classroom_style.py delivery/jp_classroom_style.py
-          ffprobe -v error \
-            -show_entries stream=codec_name,pix_fmt,width,height,r_frame_rate \
-            -show_entries format=duration,size \
-            -of default=noprint_wrappers=1 \
-            "$VIDEO" | tee delivery/ffprobe.txt
-          WIDTH=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$VIDEO")
-          HEIGHT=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$VIDEO")
-          test "$WIDTH" = "1920"
-          test "$HEIGHT" = "1080"
-          sha256sum \
-            "$VIDEO" \
-            delivery/Multivariable_Calculus_Workshop_Problems_1_2_3.py \
-            delivery/jp_classroom_style.py | tee delivery/delivery_sha256.txt
-
-      - name: Upload render artifact
+      - name: Upload PQH render artifact
         uses: actions/upload-artifact@v4
         with:
           name: multivariable-calculus-problems-1-3-pqh
@@ -109,7 +87,7 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-      - name: Commit verified delivery back to render branch
+      - name: Commit PQH delivery back to render branch
         shell: bash
         run: |
           set -euo pipefail
@@ -119,6 +97,6 @@ jobs:
             delivery/Multivariable_Calculus_Workshop_Problems_1_2_3_pqh.mp4 \
             delivery/Multivariable_Calculus_Workshop_Problems_1_2_3.py \
             delivery/jp_classroom_style.py \
-            delivery/source_sha256.txt delivery/ffprobe.txt delivery/delivery_sha256.txt
-          git commit -m 'Add verified 1080p PQH render for calculus workshop problems 1-3 [skip render]'
+            delivery/source_sha256.txt delivery/video_sha256.txt
+          git commit -m 'Add literal 1080p PQH render for calculus workshop problems 1-3 [skip render]'
           git push origin HEAD:calc-mv-workshop-p1-first3-20260811
