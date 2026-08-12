@@ -15,7 +15,7 @@
         )
         val.move_to(field).align_to(field, LEFT).shift(RIGHT * 0.17)
         row = VGroup(lab, VGroup(field, val)).arrange(RIGHT, buff=0.24)
-        row.set_width(width, stretch=False)
+        row.scale_to_fit_width(width)
         return row
 
     def cad_panel(self):
