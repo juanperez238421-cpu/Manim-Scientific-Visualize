@@ -94,25 +94,26 @@ jobs:
             '
           test -s extracted/v5_pql.mp4
           echo "literal -pql: PASS" | tee "$GITHUB_WORKSPACE/render_v5_pql_delivery/pql_validation.txt"
-          cp extracted/v5_pql.mp4 "$GITHUB_WORKSPACE/render_v5_pql_delivery/v5_pql.mp4"
 
-      - name: Technical probe of preview
-        shell: bash
-        run: |
-          set -euo pipefail
-          ffprobe -v error \
-            -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate \
-            -show_entries format=duration,size \
-            -of default=noprint_wrappers=1 \
-            render_v5_pql_delivery/v5_pql.mp4 \
-            | tee render_v5_pql_delivery/ffprobe_pql.txt
-          ffmpeg -v error -i render_v5_pql_delivery/v5_pql.mp4 -f null -
-          echo "full decode: PASS" | tee render_v5_pql_delivery/full_decode_pql.txt
-
-      - name: Upload mandatory pql preview for visual review
+      - name: Upload exact pql preview immediately
         uses: actions/upload-artifact@v4
         with:
           name: SolidsOfRevolution_V5_ROTATION_SYNC_PQL_REVIEW
-          path: render_v5_pql_delivery/
+          path: render_v5_workspace/extracted/v5_pql.mp4
           if-no-files-found: error
           retention-days: 7
+
+      - name: Technical probe of preview
+        shell: bash
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          VIDEO="render_v5_workspace/extracted/v5_pql.mp4"
+          test -s "$VIDEO"
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate \
+            -show_entries format=duration,size \
+            -of default=noprint_wrappers=1 "$VIDEO" \
+            | tee render_v5_pql_delivery/ffprobe_pql.txt
+          ffmpeg -v error -i "$VIDEO" -f null -
+          echo "full decode: PASS" | tee render_v5_pql_delivery/full_decode_pql.txt
