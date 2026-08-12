@@ -1,9 +1,9 @@
 name: Render Solids V4 Bigger Figures
 
 on:
-  pull_request:
-    branches: [main]
-    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - render-solids-v4-bigger-figures-20260811
 
 permissions:
   contents: write
@@ -18,7 +18,7 @@ jobs:
       - name: Checkout temporary render branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: render-solids-v4-bigger-figures-20260811
           fetch-depth: 0
 
       - name: Restore exact source payload
@@ -116,7 +116,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add render_output
           git commit -m "Render verified Solids V4 pqh [skip ci]" || exit 0
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          git push origin HEAD:render-solids-v4-bigger-figures-20260811
 
       - name: Upload verified render artifact
         uses: actions/upload-artifact@v4
