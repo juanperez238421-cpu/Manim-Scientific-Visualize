@@ -25,7 +25,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat render_jobs/valentina_senior_v2/scene_*.b64 | base64 -d | gzip -dc > valentina_workshop_senior_v2.py
+          base64 -d render_jobs/valentina_senior_v2/scene_full.b64 | gzip -dc > valentina_workshop_senior_v2.py
           echo '30d0f58147048e439e1b05fda5d2f56e685ae96fde03cc94bbf410c50595731f  valentina_workshop_senior_v2.py' | sha256sum -c -
           python -m py_compile valentina_workshop_senior_v2.py
 
