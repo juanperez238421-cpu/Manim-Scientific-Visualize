@@ -1,0 +1,116 @@
+name: Render Calculus Workshop Auditable V5
+
+on:
+  push:
+    branches:
+      - chatgpt/calc-workshop-auditable-v5-20260813
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble and validate exact sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg curl
+          mkdir -p work delivery qa logs
+          cat renders/calc_workshop_auditable_v5/main_part_*.frag > work/main.py
+          curl -fsSL 'https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/15ab18494a763e2fc7494aed6cf48743e248bd72/renders/calc_workshop_v4/jp_classroom_style_exact.py' -o work/jp_classroom_style.py
+          python -m py_compile work/main.py work/jp_classroom_style.py
+          ! grep -nE '([A-Za-z]:\\\\|/Users/|/home/[^/]+/Desktop)' work/main.py work/jp_classroom_style.py
+          sha256sum work/main.py work/jp_classroom_style.py | tee logs/SOURCE_SHA256SUMS.txt
+          grep -n '^class Video0' work/main.py | tee logs/SCENES.txt
+
+      - name: Pull fixed ManimCE 0.20.1
+        run: docker pull manimcommunity/manim:v0.20.1
+
+      - name: PQL previews
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp work/main.py .
+          cp work/jp_classroom_style.py .
+          IMAGE=manimcommunity/manim:v0.20.1
+          for SCENE in Video01_Dominios_Auditable Video02_Limites_Auditable Video03_Tangentes_Auditable; do
+            rm -rf media
+            docker run --rm --user "$(id -u):$(id -g)" \
+              -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.12 \
+              -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c '
+                set -euo pipefail
+                mkdir -p /tmp/manim-bin
+                printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+                chmod +x /tmp/manim-bin/xdg-open
+                export PATH="/tmp/manim-bin:$PATH"
+                manim -pql main.py '"$SCENE"' --format=mp4 --disable_caching
+              ' 2>&1 | tee "logs/pql_${SCENE}.log"
+            PQL="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+            test -n "$PQL" && test -s "$PQL"
+            ffmpeg -nostdin -y -v error -ss 2 -i "$PQL" -frames:v 1 "qa/${SCENE}_pql_start.png"
+            ffmpeg -nostdin -y -v error -sseof -2 -i "$PQL" -frames:v 1 "qa/${SCENE}_pql_end.png"
+          done
+
+      - name: Literal PQH final renders and verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          IMAGE=manimcommunity/manim:v0.20.1
+          declare -A OUT=(
+            [Video01_Dominios_Auditable]='01_dominio_funciones_vectoriales_AUDITABLE_V5_pqh.mp4'
+            [Video02_Limites_Auditable]='02_limites_funciones_vectoriales_AUDITABLE_V5_pqh.mp4'
+            [Video03_Tangentes_Auditable]='03_recta_tangente_curva_vectorial_AUDITABLE_V5_pqh.mp4'
+          )
+          for SCENE in Video01_Dominios_Auditable Video02_Limites_Auditable Video03_Tangentes_Auditable; do
+            rm -rf media
+            docker run --rm --user "$(id -u):$(id -g)" \
+              -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+              -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c '
+                set -euo pipefail
+                mkdir -p /tmp/manim-bin
+                printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+                chmod +x /tmp/manim-bin/xdg-open
+                export PATH="/tmp/manim-bin:$PATH"
+                manim -pqh main.py '"$SCENE"' --format=mp4 --disable_caching
+              ' 2>&1 | tee "logs/pqh_${SCENE}.log"
+            FINAL="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+            test -n "$FINAL" && test -s "$FINAL"
+            DEST="delivery/${OUT[$SCENE]}"
+            cp "$FINAL" "$DEST"
+            ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of default=noprint_wrappers=1 "$DEST" | tee "logs/ffprobe_${SCENE}.txt"
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$DEST")" = 1920
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$DEST")" = 1080
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$DEST")" = 30/1
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$DEST")" = h264
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$DEST")" = yuv420p
+            ffmpeg -nostdin -v error -i "$DEST" -f null - 2> "logs/decode_${SCENE}.log"
+            DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$DEST")"
+            RATE="$(python -c "d=float('$DUR'); print(max(0.001,36.0/max(d,0.001)))")"
+            ffmpeg -nostdin -y -v error -i "$DEST" -vf "fps=$RATE,scale=480:-1,tile=6x6:padding=8:margin=8" -frames:v 1 "qa/${SCENE}_contact_sheet.jpg"
+            for P in 10 25 40 55 70 85 95; do
+              T="$(python -c "d=float('$DUR'); print(d*$P/100.0)")"
+              ffmpeg -nostdin -y -v error -ss "$T" -i "$DEST" -frames:v 1 "qa/${SCENE}_${P}pct.png"
+            done
+          done
+          cp work/main.py work/jp_classroom_style.py delivery/
+          cp -r logs delivery/
+          cp -r qa delivery/
+          sha256sum delivery/*.mp4 delivery/main.py delivery/jp_classroom_style.py > delivery/SHA256SUMS.txt
+          printf '%s\n' \
+            'ManimCE 0.20.1' \
+            'Preview: manim -pql main.py <Scene> --format=mp4 --disable_caching' \
+            'Final: manim -pqh main.py <Scene> --format=mp4 --disable_caching' > delivery/RENDER_INFO.txt
+
+      - name: Upload auditable final packae
+        uses: actions/upload-artifact@v4
+        with:
+          name: calc-workshop-auditable-v5
+          path: delivery/
+          if-no-files-found: error
+          retention-days: 7
