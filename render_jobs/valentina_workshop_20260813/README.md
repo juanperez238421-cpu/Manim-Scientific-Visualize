@@ -4,10 +4,12 @@ Paquete ManimCE con **18 videos independientes**, uno por cada pregunta numerada
 
 - Runtime objetivo: Manim Community Edition 0.20.1
 - Formato final: 1920x1080, 30 fps, H.264/yuv420p
-- Validación: `-pql` por escena antes del render final
-- Render final: literal `-pqh` por escena
+- Validación: literal `-pql --fps 30` por escena antes del render final
+- Render final: literal `-pqh --fps 30` por escena
 - Estilo: `jp_classroom_style.py` (white classroom / black hierarchy)
 
 Escenas: `Q01` ... `Q18`.
 
 Observación pedagógica importante: en la pregunta 12, el inciso a) impreso indica `ln(x-y^2)`, cuyo dominio es `x>y^2`, pero la Figura I representa visualmente una parábola vertical compatible con `y>x^2`. El video documenta esta inconsistencia en lugar de ocultarla.
+
+Render contract V2: el indicador de calidad `-pqh` se conserva literalmente y el frame rate se fija explícitamente en 30 fps para coincidir con el estándar JP Classroom.
