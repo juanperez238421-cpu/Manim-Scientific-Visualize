@@ -16,14 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate source
+      - name: Recover and validate source
         shell: bash
         run: |
           set -euo pipefail
           JOB=render_jobs/valentina_workshop_20260813
-          python -m py_compile "$JOB/valentina_workshop.py" "$JOB/jp_classroom_style.py"
-          ! grep -nE '([A-Za-z]:\\\\|/Users/|/home/[^/]+/Desktop)' "$JOB"/*.py
-          sha256sum "$JOB/valentina_workshop.py" "$JOB/jp_classroom_style.py" > /tmp/source_sha256.txt
+          mkdir -p /tmp/valentina
+          cat "$JOB"/v_*.b64 | base64 -d | gzip -dc > /tmp/valentina/valentina_workshop.py
+          cat "$JOB"/s_*.b64 | base64 -d | gzip -dc > /tmp/valentina/jp_classroom_style.py
+          python -m py_compile /tmp/valentina/valentina_workshop.py /tmp/valentina/jp_classroom_style.py
+          ! grep -nE '([A-Za-z]:\\\\|/Users/|/home/[^/]+/Desktop)' /tmp/valentina/*.py
+          sha256sum /tmp/valentina/valentina_workshop.py /tmp/valentina/jp_classroom_style.py > /tmp/source_sha256.txt
 
       - name: Pull ManimCE 0.20.1
         run: docker pull manimcommunity/manim:v0.20.1
@@ -32,9 +35,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          JOB=render_jobs/valentina_workshop_20260813
-          cp "$JOB/valentina_workshop.py" .
-          cp "$JOB/jp_classroom_style.py" .
+          cp /tmp/valentina/valentina_workshop.py .
+          cp /tmp/valentina/jp_classroom_style.py .
           IMAGE=manimcommunity/manim:v0.20.1
           rm -rf media pql_logs
           mkdir -p pql_logs
