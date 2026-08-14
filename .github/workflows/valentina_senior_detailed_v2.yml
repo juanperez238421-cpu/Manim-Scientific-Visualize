@@ -1,0 +1,131 @@
+name: Valentina Senior Detailed V2 PQH
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'agent/valentina-senior-detailed-v2-20260813'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 18
+      matrix:
+        scene: [Q01, Q02, Q03, Q04, Q05, Q06, Q07, Q08, Q09, Q10, Q11, Q12, Q13, Q14, Q15, Q16, Q17, Q18]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Recover Senior V2 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat render_jobs/valentina_senior_v2/scene_*.b64 | base64 -d | gzip -dc > valentina_workshop_senior_v2.py
+          echo '30d0f58147048e439e1b05fda5d2f56e685ae96fde03cc94bbf410c50595731f  valentina_workshop_senior_v2.py' | sha256sum -c -
+          python -m py_compile valentina_workshop_senior_v2.py
+
+      - name: Pull ManimCE 0.20.1
+        run: docker pull manimcommunity/manim:v0.20.1
+
+      - name: PQL validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf media
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -ql valentina_workshop_senior_v2.py ${{ matrix.scene }} --format=mp4 --disable_caching
+            "
+          TEST="$(find media -type f -name '${{ matrix.scene }}.mp4' | head -1)"
+          test -n "$TEST" && test -s "$TEST"
+
+      - name: Render literal PQH 1920x1080
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf media delivery
+          mkdir -p delivery
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pqh valentina_workshop_senior_v2.py ${{ matrix.scene }} --format=mp4 --disable_caching
+            "
+          FINAL="$(find media -type f -name '${{ matrix.scene }}.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" "delivery/Valentina_Senior_V2_${{ matrix.scene }}_pqh.mp4"
+
+      - name: Verify video stream and decode
+        shell: bash
+        run: |
+          set -euo pipefail
+          F="delivery/Valentina_Senior_V2_${{ matrix.scene }}_pqh.mp4"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")" = 1920
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")" = 1080
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")" = 30/1
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")" = h264
+          ffmpeg -nostdin -v error -i "$F" -f null -
+          ffprobe -v error -show_entries format=duration,size -of default=noprint_wrappers=1 "$F" > "delivery/technical_${{ matrix.scene }}.txt"
+
+      - name: Upload verified question
+        uses: actions/upload-artifact@v4
+        with:
+          name: valentina-v2-${{ matrix.scene }}
+          path: delivery/
+          retention-days: 7
+          if-no-files-found: error
+
+  assemble:
+    if: github.event.pull_request.head.ref == 'agent/valentina-senior-detailed-v2-20260813'
+    needs: render
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all verified scenes
+        uses: actions/download-artifact@v4
+        with:
+          pattern: valentina-v2-*
+          path: all
+          merge-multiple: true
+
+      - name: Assemble one complete MP4 and verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p final
+          find all -type f -name 'Valentina_Senior_V2_Q*_pqh.mp4' | sort > /tmp/files.txt
+          test "$(wc -l < /tmp/files.txt)" = 18
+          awk '{gsub("\047","\047\\\047\047"); print "file \047"$0"\047"}' /tmp/files.txt > /tmp/concat.txt
+          ffmpeg -nostdin -y -v error -f concat -safe 0 -i /tmp/concat.txt -c copy final/Valentina_Taller_Calculo_Varias_Variables_SENIOR_DETAILED_V2_pqh.mp4
+          F=final/Valentina_Taller_Calculo_Varias_Variables_SENIOR_DETAILED_V2_pqh.mp4
+          ffmpeg -nostdin -v error -i "$F" -f null -
+          ffprobe -v error -show_entries format=duration,size -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -of json "$F" > final/TECHNICAL.json
+          sha256sum "$F" > final/SHA256SUM.txt
+          cp /tmp/files.txt final/SCENE_ORDER.txt
+
+      - name: Upload final complete video
+        uses: actions/upload-artifact@v4
+        with:
+          name: Valentina_SENIOR_DETAILED_V2_FINAL_PQH
+          path: final/
+          retention-days: 7
+          if-no-files-found: error
