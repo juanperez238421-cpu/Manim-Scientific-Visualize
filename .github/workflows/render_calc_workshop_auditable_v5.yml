@@ -1,94 +1,60 @@
-name: Render Calculus Workshop Auditable V5 V3FIX
-
+name: Render Calculus V3 Fix
 on:
   push:
-    branches:
-      - chatgpt/calc-workshop-auditable-v5-20260813
-
+    branches: [chatgpt/calc-workshop-auditable-v5-20260813]
 permissions:
   contents: read
-
 jobs:
-  render-v3fix:
+  render:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
-
-      - name: Assemble and validate exact sources
-        shell: bash
+      - name: Prepare
         run: |
           set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg curl
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg curl
           mkdir -p work delivery qa logs
           cat renders/calc_workshop_auditable_v5/main_part_*.frag > work/main.py
           curl -fsSL 'https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/15ab18494a763e2fc7494aed6cf48743e248bd72/renders/calc_workshop_v4/jp_classroom_style_exact.py' -o work/jp_classroom_style.py
           python -m py_compile work/main.py work/jp_classroom_style.py
-          sha256sum work/main.py work/jp_classroom_style.py | tee logs/SOURCE_SHA256SUMS.txt
           grep -n 'SENIOR QA PATCH V5.1' work/main.py
-
-      - name: Pull fixed ManimCE 0.20.1
+          cp work/main.py work/jp_classroom_style.py .
+      - name: Pull ManimCE
         run: docker pull manimcommunity/manim:v0.20.1
-
-      - name: PQL preview V3FIX
-        shell: bash
-        run: |
-          set -euo pipefail
-          cp work/main.py .
-          cp work/jp_classroom_style.py .
-          IMAGE=manimcommunity/manim:v0.20.1
-          SCENE=Video03_Tangentes_Auditable
-          docker run --rm --user "$(id -u):$(id -g)" \
-            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.12 \
-            -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c '
-              set -euo pipefail
-              mkdir -p /tmp/manim-bin
-              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
-              chmod +x /tmp/manim-bin/xdg-open
-              export PATH="/tmp/manim-bin:$PATH"
-              manim -pql main.py Video03_Tangentes_Auditable --format=mp4 --disable_caching
-            ' 2>&1 | tee logs/pql_${SCENE}_V51.log
-          PQL="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
-          test -n "$PQL" && test -s "$PQL"
-          ffmpeg -nostdin -y -v error -ss 8 -i "$PQL" -frames:v 1 qa/V3FIX_pql_start.png
-          ffmpeg -nostdin -y -v error -sseof -8 -i "$PQL" -frames:v 1 qa/V3FIX_pql_end.png
-
-      - name: Literal PQH V3FIX and verification
-        shell: bash
+      - name: Preview and final PQH
         run: |
           set -euo pipefail
           IMAGE=manimcommunity/manim:v0.20.1
           SCENE=Video03_Tangentes_Auditable
-          rm -rf media
-          docker run --rm --user "$(id -u):$(id -g)" \
-            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
-            -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c '
-              set -euo pipefail
-              mkdir -p /tmp/manim-bin
-              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
-              chmod +x /tmp/manim-bin/xdg-open
-              export PATH="/tmp/manim-bin:$PATH"
-              manim -pqh main.py Video03_Tangentes_Auditable --format=mp4 --disable_caching
-            ' 2>&1 | tee logs/pqh_${SCENE}_V51.log
-          FINAL="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
-          test -n "$FINAL" && test -s "$FINAL"
-          DEST=delivery/03_recta_tangente_curva_vectorial_AUDITABLE_V51_pqh.mp4
-         Ü‰’SSˆ‰TÕ‚ˆ™œ›Ø™H]ˆ\œ›Üˆ\ÚÝ×Ù[šY\ÈÝ™X[OXÛÙX×Û˜[YKÚYZYÚ—Ùœ˜[YWÜ˜]K^Ù›]\ÚÝ×Ù[šY\È›Ü›X]Y\˜][Û‹Ú^™H[ÙˆY˜][[›Üš[ÝÜ˜\\œÏLH‰TÕˆYHÙÜËÙ™œ›Ø™WÕŒÑ’Vˆ\Ý‰
-™œ›Ø™H]ˆ\œ›Üˆ\Ù[XÝÜÝ™X[\ÈŽŒ\ÚÝ×Ù[šY\ÈÝ™X[O]ÚY[ÙˆÜÝ\L‰TÕŠHˆHNLŒˆ\Ý‰
-™œ›Ø™H]ˆ\œ›Üˆ\Ù[XÝÜÝ™X[\ÈŽŒ\ÚÝ×Ù[šY\ÈÝ™X[OZZYÚ[ÙˆÜÝ\L‰TÕŠHˆHLˆ\Ý‰
-™œ›Ø™H]ˆ\œ›Üˆ\Ù[XÝÜÝ™X[\ÈŽŒ\ÚÝ×Ù[šY\ÈÝ™X[O\—Ùœ˜[YWÜ˜]H[ÙˆÜÝ\L‰TÕŠHˆHÌÌBˆ\Ý‰
-™œ›Ø™H]ˆ\œ›Üˆ\Ù[XÝÜÝ™X[\ÈŽŒ\ÚÝ×Ù[šY\ÈÝ™X[OXÛÙX×Û˜[YH[ÙˆÜÝ\L‰TÕŠHˆHˆ\Ý‰
-™œ›Ø™H]ˆ\œ›Üˆ\Ù[XÝÜÝ™X[\ÈŽŒ\ÚÝ×Ù[šY\ÈÝ™X[O\^Ù›][ÙˆÜÝ\L‰TÕŠHˆH]]Œˆ™›\YÈ[›ÜÝ[ˆ]ˆ\œ›ÜˆZH‰TÕˆYˆ[HˆÙÜËÙXÛÙWÕŒÑ’V›ÙÂˆTH‰
-™œ›Ø™H]ˆ\œ›Üˆ\ÚÝ×Ù[šY\È›Ü›X]Y\˜][Ûˆ[ÙˆÜÝ\L‰TÕŠH‚ˆUOH‰
-]ÛˆXÈ™Y›Ø]
-	ÉT‰ÊNÈš[
-X^
-ŒK‹ŒÛX^
-ŒJJJHŠH‚ˆ™›\YÈ[›ÜÝ[ˆ^H]ˆ\œ›ÜˆZH‰TÕˆ]™ˆ™œÏIUKØØ[OM‹LK[OMžÎœY[™ÏN›X\™Ú[NˆYœ˜[Y\ÎˆHXKÕŒÑ’VØÛÛXÝÜÚY]šœÂˆ›Üˆ[ˆŒÍHLHÌLÈÂˆH‰
-]ÛˆXÈ™Y›Ø]
-	ÉT‰ÊNÈš[
-
-‰ÌLŒ
-HŠH‚ˆ™›\YÈ[›ÜÝ[ˆ^H]ˆ\œ›Üˆ\ÜÈ‰ˆZH‰TÕˆYœ˜[Y\ÎˆHœXKÕŒÑ’VÉÔ\Ýœ™È‚ˆÛ™BˆÜÛÜšËÛXZ[‹œHÛÜšËÚœØÛ\ÜÜ›ÛÛWÜÝ[KœH[]™\žKÂˆÜ\ˆÙÜÈXH[]™\žKÂˆÚLMœÝ[H‰TÕˆ[]™\žKÛXZ[‹œH[]™\žKÚœØÛ\ÜÜ›ÛÛWÜÝ[KœHˆ[]™\žKÔÒLM”ÕST×ÕLKˆš[ˆ	É\×‰Èˆ	ÓX[š[PÑHŒŒŒIÈˆ	Ñš[˜[ˆX[š[H\ZXZ[‹œHšY[Ì×Õ[™Ù[\×Ð]Y]X›HKY›Ü›X][\KY\ØX›WØØXÚ[™ÉÈˆ	ÔPH]ÚKŒNˆ[˜ÚÜ™Y[™Ù[Ù[ÛY]žH
-ÈÛX[ˆš[˜[[[™H™]™X[	Èˆ[]™\žKÔ‘S‘T—ÒS‘“×ÕLK‚ˆH˜[YNˆ\ØYŒÑ’V\Y˜XÝˆ\Ù\ÎˆXÝ[ÛœËÝ\ØYX\Y˜XÝˆÚ]‚ˆ˜[YNˆØ[Ë]ÛÜšÜÚÜX]Y]X›K]K]ŒÙš^ˆ]ˆ[]™\žKÂˆY‹[›ËYš[\ËY›Ý[™ˆ\œ›Ü‚ˆ™][[Û‹Y^\ÎˆÂ
+          for QUALITY in pql pqh; do
+            rm -rf media
+            SCALE=1.0; [ "$QUALITY" = pql ] && SCALE=0.12
+            docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=$SCALE -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c "mkdir -p /tmp/bin; printf '#!/bin/sh\\nexit 0\\n' >/tmp/bin/xdg-open; chmod +x /tmp/bin/xdg-open; export PATH=/tmp/bin:\$PATH; manim -$QUALITY main.py $SCENE --format=mp4 --disable_caching" 2>&1 | tee "logs/${QUALITY}.log"
+            FILE="$(find media -type f -name "${SCENE}.mp4" | head -1)"
+            test -s "$FILE"
+            if [ "$QUALITY" = pql ]; then
+              cp "$FILE" delivery/V3FIX_preview_pql.mp4
+            else
+              cp "$FILE" delivery/03_recta_tangente_curva_vectorial_AUDITABLE_V51_pqh.mp4
+            fi
+          done
+      - name: Verify and QA
+        run: |
+          set -euo pipefail
+          F=delivery/03_recta_tangente_curva_vectorial_AUDITABLE_V51_pqh.mp4
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of default=noprint_wrappers=1 "$F" | tee logs/ffprobe.txt
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")" = 1920
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")" = 1080
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")" = 30/1
+          ffmpeg -nostdin -v error -i "$F" -f null -
+          D="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          for P in 35 55 70 85; do T="$(python -c "d=float('$D'); print(d*$P/100)")"; ffmpeg -nostdin -y -v error -ss "$T" -i "$F" -frames:v 1 "qa/${P}.png"; done
+          cp work/main.py work/jp_classroom_style.py delivery/
+          cp -r qa logs delivery/
+          sha256sum delivery/*.mp4 delivery/main.py delivery/jp_classroom_style.py > delivery/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: calc-workshop-v3fix-v51
+          path: delivery/
+          retention-days: 7
