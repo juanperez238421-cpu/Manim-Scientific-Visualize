@@ -1,0 +1,131 @@
+name: Valentina Calculus III Workshop PQH Render
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'agent/valentina-calculo-iii-workshop-pqh-20260813'
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate source
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/valentina_workshop_20260813
+          python -m py_compile "$JOB/valentina_workshop.py" "$JOB/jp_classroom_style.py"
+          ! grep -nE '([A-Za-z]:\\\\|/Users/|/home/[^/]+/Desktop)' "$JOB"/*.py
+          sha256sum "$JOB/valentina_workshop.py" "$JOB/jp_classroom_style.py" > /tmp/source_sha256.txt
+
+      - name: Pull ManimCE 0.20.1
+        run: docker pull manimcommunity/manim:v0.20.1
+
+      - name: PQL validation for all 18 questions
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/valentina_workshop_20260813
+          cp "$JOB/valentina_workshop.py" .
+          cp "$JOB/jp_classroom_style.py" .
+          IMAGE=manimcommunity/manim:v0.20.1
+          rm -rf media pql_logs
+          mkdir -p pql_logs
+          for N in $(seq -w 1 18); do
+            SCENE="Q${N}"
+            echo "===== PQL $SCENE ====="
+            rm -rf media
+            docker run --rm --user "$(id -u):$(id -g)" \
+              -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.10 \
+              -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c "
+                set -euo pipefail
+                mkdir -p /tmp/manim-bin
+                printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+                chmod +x /tmp/manim-bin/xdg-open
+                export PATH=/tmp/manim-bin:\$PATH
+                manim -pql valentina_workshop.py $SCENE --format=mp4 --disable_caching
+              " 2>&1 | tee "pql_logs/${SCENE}.log"
+            TEST_VIDEO="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+            test -n "$TEST_VIDEO" && test -s "$TEST_VIDEO"
+          done
+
+      - name: Final literal PQH renders and verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          IMAGE=manimcommunity/manim:v0.20.1
+          rm -rf media delivery qa
+          mkdir -p delivery qa
+          cp /tmp/source_sha256.txt delivery/SOURCE_SHA256.txt
+          printf 'ManimCE 0.20.1\nFormat: 1920x1080 @ 30 fps\nPreview: literal -pql\nFinal: literal -pqh\n' > delivery/RENDER_INFO.txt
+
+          for N in $(seq -w 1 18); do
+            SCENE="Q${N}"
+            OUT="delivery/Valentina_Taller1_Pregunta_${N}_pqh.mp4"
+            echo "===== PQH $SCENE ====="
+            rm -rf media
+            docker run --rm --user "$(id -u):$(id -g)" \
+              -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+              -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c "
+                set -euo pipefail
+                mkdir -p /tmp/manim-bin
+                printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+                chmod +x /tmp/manim-bin/xdg-open
+                export PATH=/tmp/manim-bin:\$PATH
+                manim -pqh valentina_workshop.py $SCENE --format=mp4 --disable_caching
+              " 2>&1 | tee "delivery/render_${SCENE}_pqh.log"
+            FINAL="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+            test -n "$FINAL" && test -s "$FINAL"
+            cp "$FINAL" "$OUT"
+
+            W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$OUT")"
+            H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$OUT")"
+            FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$OUT")"
+            CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$OUT")"
+            PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$OUT")"
+            test "$W" = 1920
+            test "$H" = 1080
+            test "$FPS" = 30/1
+            test "$CODEC" = h264
+            test "$PIX" = yuv420p
+            ffmpeg -nostdin -v error -i "$OUT" -f null - 2> "delivery/decode_${SCENE}.log"
+
+            DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT")"
+            MID="$(python -c "print(float('$DUR')/2)")"
+            ffmpeg -nostdin -y -v error -ss "$MID" -i "$OUT" -frames:v 1 "qa/${SCENE}_mid.png"
+          done
+
+          sha256sum delivery/*.mp4 > delivery/SHA256SUMS.txt
+          cp valentina_workshop.py jp_classroom_style.py delivery/
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess, json
+          rows=[]
+          for p in sorted(Path('delivery').glob('*.mp4')):
+              raw=subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration,size','-of','json',str(p)],text=True)
+              d=json.loads(raw)['format']
+              rows.append(f"{p.name}\t{float(d['duration']):.2f}s\t{int(d['size'])} bytes")
+          Path('delivery/VIDEO_MANIFEST.tsv').write_text('file\tduration\tsize\n'+'\n'.join(rows)+'\n')
+          PY
+          zip -9 -r delivery/Valentina_CalculoIII_Taller1_18Videos_PQH_Package.zip \
+            delivery/Valentina_Taller1_Pregunta_*_pqh.mp4 \
+            delivery/valentina_workshop.py delivery/jp_classroom_style.py \
+            delivery/SHA256SUMS.txt delivery/SOURCE_SHA256.txt delivery/VIDEO_MANIFEST.tsv delivery/RENDER_INFO.txt
+
+      - name: Upload complete package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Valentina_CalculoIII_Taller1_18Videos_PQH
+          path: |
+            delivery/
+            qa/
+            pql_logs/
+          if-no-files-found: error
+          retention-days: 7
