@@ -20,7 +20,7 @@ jobs:
           set -euo pipefail
           JOB=render_jobs/position_time_graph_20260816
           mkdir -p "$JOB/build" qa out
-          base64 -d "$JOB/source_v2.py.gz.b64" | gzip -dc > "$JOB/build/position_time_graph_senior.py"
+          base64 -d "$JOB/source.py.gz.b64" | gzip -dc > "$JOB/build/position_time_graph_senior.py"
           base64 -d "$JOB/style.py.gz.b64" | gzip -dc > "$JOB/build/jp_classroom_style.py"
           python -m py_compile "$JOB/build/position_time_graph_senior.py" "$JOB/build/jp_classroom_style.py"
           STYLE_SHA="$(sha256sum "$JOB/build/jp_classroom_style.py" | awk '{print $1}')"
