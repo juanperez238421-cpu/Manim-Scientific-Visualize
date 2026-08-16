@@ -3,10 +3,10 @@ set -euo pipefail
 JOB=render_jobs/openai_asset_demo_20260815
 SCENE=OpenAIAssetInclinedPlaneLesson
 mkdir -p assets/images delivery qa_frames
-cp "$JOB/main_v2.py" main.py
+cat "$JOB"/main_pt_0[0-4] > main.py
 cat "$JOB"/style_pt_0[0-8] > jp_classroom_style.py
 cat "$JOB"/ap_0[0-8] | base64 -d > assets/images/openai_inclined_plane_block_760_q55.webp
-echo '6407358fd40d379167d816f2fb8b0d360cbb1f937eecc81bcfc8ac992542c759  main.py' | sha256sum -c -
+echo '0575594653365878ad454e471752691589960a4a5d7e30e27393994b19c6c032  main.py' | sha256sum -c -
 echo '3f3f06e94d5cad870ad335502cc1a93e56ce675abb1231ded5f9c71fd3e60e3d  jp_classroom_style.py' | sha256sum -c -
 echo 'ee660f75cc495e6c11d8e426c6d971aedfab774a258ca99901f13333f676f43d  assets/images/openai_inclined_plane_block_760_q55.webp' | sha256sum -c -
 python -m py_compile main.py jp_classroom_style.py
