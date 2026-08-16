@@ -18,37 +18,38 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Reconstruct exact render project and validate Python
+      - name: Reconstruct and verify exact project
         shell: bash
         run: |
           set -euo pipefail
           JOB=render_jobs/openai_asset_demo_20260815
-          cat "$JOB"/payload_0[0-7].b64 | base64 -d > /tmp/job_payload.tar.gz
-          mkdir -p /tmp/job_payload
-          tar -xzf /tmp/job_payload.tar.gz -C /tmp/job_payload
-          cp /tmp/job_payload/jp_classroom_style.py ./jp_classroom_style.py
           mkdir -p assets/images delivery qa_frames
-          cp /tmp/job_payload/assets/images/openai_inclined_plane_block_760_q55.webp assets/images/
-          cp "$JOB/main_v2.py" ./main.py
+
+          cp "$JOB/main_v2.py" main.py
+          base64 -d "$JOB/style_exact.py.gz.b64" | gzip -dc > jp_classroom_style.py
+          cat "$JOB"/ap_0[0-8] | base64 -d > assets/images/openai_inclined_plane_block_760_q55.webp
+
+          echo '6407358fd40d379167d816f2fb8b0d360cbb1f937eecc81bcfc8ac992542c759  main.py' | sha256sum -c -
+          echo '3f3f06e94d5cad870ad335502cc1a93e56ce675abb1231ded5f9c71fd3e60e3d  jp_classroom_style.py' | sha256sum -c -
+          echo 'ee660f75cc495e6c11d8e426c6d971aedfab774a258ca99901f13333f676f43d  assets/images/openai_inclined_plane_block_760_q55.webp' | sha256sum -c -
+
           python -m py_compile main.py jp_classroom_style.py
-          test -s assets/images/openai_inclined_plane_block_760_q55.webp
           sha256sum main.py jp_classroom_style.py assets/images/openai_inclined_plane_block_760_q55.webp | tee SOURCE_SHA256.txt
 
-      - name: Install verification tools
+      - name: Verification tools
         shell: bash
         run: |
           set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg
+          if ! command -v ffprobe >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
           ffprobe -version | head -1
 
-      - name: Pull pinned ManimCE image
-        shell: bash
-        run: |
-          set -euo pipefail
-          docker pull manimcommunity/manim:v0.20.1
+      - name: Pull pinned ManimCE 0.20.1
+        run: docker pull manimcommunity/manim:v0.20.1
 
-      - name: Preview validation with literal -pql
+      - name: Preview validation literal -pql
         shell: bash
         run: |
           set -euo pipefail
@@ -65,11 +66,12 @@ jobs:
               export PATH="/tmp/manim-bin:$PATH"
               manim -pql main.py OpenAIAssetInclinedPlaneLesson --format=mp4 --disable_caching
             ' 2>&1 | tee preview_pql.log
+
           PREVIEW="$(find media -type f -name 'OpenAIAssetInclinedPlaneLesson.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PREVIEW" && test -s "$PREVIEW"
           ffmpeg -nostdin -v error -i "$PREVIEW" -f null -
 
-      - name: Final literal PQH render
+      - name: Final render literal -pqh
         shell: bash
         run: |
           set -euo pipefail
@@ -87,7 +89,7 @@ jobs:
               manim -pqh main.py OpenAIAssetInclinedPlaneLesson --format=mp4 --disable_caching
             ' 2>&1 | tee render_pqh.log
 
-      - name: Verify video and build auditable delivery
+      - name: Verify MP4 and stage audited delivery
         shell: bash
         run: |
           set -euo pipefail
@@ -120,10 +122,10 @@ jobs:
           cat > delivery/RENDER_INFO.txt <<EOF
           Scene: OpenAIAssetInclinedPlaneLesson
           Source: main.py
-          Style: exact uploaded jp_classroom_style_EXACT_RENDER_USED(1).py staged as jp_classroom_style.py
+          Style: exact uploaded jp_classroom_style_EXACT_RENDER_USED(1).py
           ManimCE: 0.20.1
-          Preview command: manim -pql main.py OpenAIAssetInclinedPlaneLesson --format=mp4 --disable_caching
-          Final command: manim -pqh main.py OpenAIAssetInclinedPlaneLesson --format=mp4 --disable_caching
+          Preview: manim -pql main.py OpenAIAssetInclinedPlaneLesson --format=mp4 --disable_caching
+          Final: manim -pqh main.py OpenAIAssetInclinedPlaneLesson --format=mp4 --disable_caching
           Resolution: ${W}x${H}
           FPS: ${FPS}
           Codec: ${CODEC}
@@ -135,14 +137,13 @@ jobs:
           python - <<'PY'
           import subprocess
           from pathlib import Path
-          f=Path('delivery/OpenAIAssetInclinedPlaneLesson_pqh.mp4')
-          dur=float(subprocess.check_output([
+          f = Path('delivery/OpenAIAssetInclinedPlaneLesson_pqh.mp4')
+          dur = float(subprocess.check_output([
               'ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(f)
           ], text=True).strip())
-          for i, frac in enumerate((0.05,0.25,0.50,0.75,0.95), 1):
-              t=max(0.0, dur*frac)
+          for i, frac in enumerate((0.05, 0.25, 0.50, 0.75, 0.95), 1):
               subprocess.run([
-                  'ffmpeg','-y','-v','error','-ss',f'{t:.3f}','-i',str(f),
+                  'ffmpeg','-y','-v','error','-ss',f'{dur*frac:.3f}','-i',str(f),
                   '-frames:v','1',f'qa_frames/qa_{i:02d}.png'
               ], check=True)
           PY
