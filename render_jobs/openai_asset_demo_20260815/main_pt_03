@@ -1,0 +1,88 @@
+ SECTION 3 — derive the mathematical model from the image
+        # ------------------------------------------------------------------
+        self.clear_stage(keep_header=True)
+        self.set_header(
+            3,
+            "THE IMAGE BECOMES A MATHEMATICAL MODEL",
+            "The asset provides visual context; equations are generated, sequenced and transformed natively in ManimCE.",
+        )
+
+        asset3 = self._asset(5.85)
+        left_group, left_box, left_figure, left_title, left_caption = self._image_panel(
+            asset3,
+            width=6.35,
+            height=4.85,
+            title="Visual context",
+            caption="Same OpenAI-generated asset",
+        )
+
+        eq_stack = self.equation_stack(
+            [
+                r"W=mg",
+                r"W_{\parallel}=W\sin\theta",
+                r"W_{\perp}=W\cos\theta",
+                r"N=W_{\perp}=mg\cos\theta",
+            ],
+            sizes=[42, 38, 38, 38],
+            buff=0.34,
+            max_width=6.10,
+            max_height=3.55,
+        )
+        eq_box = RoundedRectangle(
+            width=6.25,
+            height=4.85,
+            corner_radius=0.12,
+            stroke_color=BLACK_LINE,
+            stroke_width=1.8,
+            fill_color=PAPER_GRAY,
+            fill_opacity=1.0,
+        )
+        eq_title = self.text("Force decomposition", 26, BOLD)
+        eq_title.next_to(eq_box.get_top(), DOWN, buff=0.20)
+        eq_stack.move_to(eq_box).shift(DOWN * 0.18)
+        right_panel = VGroup(eq_box, eq_title, eq_stack)
+
+        # Manual split composition uses ``Group`` on the raster side while
+        # preserving the same safe-zone geometry as JP Classroom split_layout.
+        self.fit(left_group, 6.35, 5.05)
+        self.fit(right_panel, 6.35, 5.05)
+        left_group.move_to(LEFT * 3.40 + DOWN * 0.52)
+        right_panel.move_to(RIGHT * 3.40 + DOWN * 0.52)
+        split_group = Group(left_group, right_panel)
+        self.fit_content_zone(split_group, max_width=14.4, max_height=5.05)
+        self.assert_content_safe(split_group, "image plus equation split layout")
+
+        self.play(FadeIn(left_box), FadeIn(left_figure), run_time=RUN_NORMAL)
+        if left_title is not None:
+            self.play(FadeIn(left_title), run_time=RUN_QUICK)
+        if left_caption is not None:
+            self.play(FadeIn(left_caption), run_time=RUN_QUICK)
+        self.play(FadeIn(eq_box), FadeIn(eq_title), run_time=RUN_NORMAL)
+        self.wait(PAUSE_READ)
+        for equation in eq_stack:
+            self.play(Write(equation), run_time=RUN_NORMAL)
+            self.wait(PAUSE_READ)
+        self.wait(PAUSE_EXPLAIN)
+
+        # ------------------------------------------------------------------
+        # SECTION 4 — numerical example to show asset reuse as lesson content
+        # ------------------------------------------------------------------
+        self.clear_stage(keep_header=True)
+        self.set_header(
+            4,
+            "QUICK NUMERICAL CHECK",
+            "For m = 10 kg and θ = 30°, the same visual asset supports a complete worked example without regenerating the image.",
+        )
+
+        givens = self.key_value_panel(
+            "GIVEN",
+            [
+                ("Mass", r"m=10\,\mathrm{kg}"),
+                ("Angle", r"\theta=30^{\circ}"),
+                ("Gravity", r"g=9.81\,\mathrm{m/s^2}"),
+            ],
+            width=5.20,
+            label_size=22,
+            value_size=28,
+        )
+        givens.move_to(LEFT * 4.25 + 
