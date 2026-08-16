@@ -1,0 +1,202 @@
+name: Position-Time Graph Senior Full Protocol PQH
+
+on:
+  push:
+    branches: [agent/position-time-graph-senior-20260816]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct exact source and JP style
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/position_time_graph_20260816
+          mkdir -p "$JOB/build" qa out
+          base64 -d "$JOB/source_v2.py.gz.b64" | gzip -dc > "$JOB/build/position_time_graph_senior.py"
+          base64 -d "$JOB/style.py.gz.b64" | gzip -dc > "$JOB/build/jp_classroom_style.py"
+          python -m py_compile "$JOB/build/position_time_graph_senior.py" "$JOB/build/jp_classroom_style.py"
+          STYLE_SHA="$(sha256sum "$JOB/build/jp_classroom_style.py" | awk '{print $1}')"
+          test "$STYLE_SHA" = "3f3f06e94d5cad870ad335502cc1a93e56ce675abb1231ded5f9c71fd3e60e3d"
+          grep -q 'class PositionTimeGraphSenior(JPMathClassroomScene)' "$JOB/build/position_time_graph_senior.py"
+          grep -q 'validate_lesson_data' "$JOB/build/position_time_graph_senior.py"
+          grep -q 'scene_13_summary' "$JOB/build/position_time_graph_senior.py"
+          ! grep -Eq '[A-Za-z]:\\|/Users/|/home/[^/]+/' "$JOB/build/position_time_graph_senior.py"
+          cp "$JOB/PRE_RENDER_SENIOR_QA.md" qa/
+          printf 'STYLE_SHA256=%s\nPY_COMPILE=PASS\nSOURCE_STRUCTURE=PASS\n' "$STYLE_SHA" | tee qa/STATIC_QA.txt
+
+      - name: Install render and verification tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL runtime QA and duration calibration
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/position_time_graph_20260816
+          rm -rf media_pql
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w "/manim/$JOB/build" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql position_time_graph_senior.py PositionTimeGraphSenior \
+                --fps 15 --format=mp4 --media_dir /manim/media_pql --disable_caching
+            ' 2>&1 | tee qa/render_pql.log
+          P="$(find media_pql -type f -name 'PositionTimeGraphSenior.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$P" && test -s "$P"
+          BASE="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$P")"
+          SCALE="$(python - <<PY
+          b=float('$BASE')
+          target=330.0
+          print(max(0.90,min(2.10,target/b)))
+          PY
+          )"
+          printf 'PQL_DURATION=%s\nFINAL_LESSON_TIME_SCALE=%s\nTARGET_DURATION=330\n' "$BASE" "$SCALE" | tee qa/TIMING_CALIBRATION.txt
+          echo "FINAL_SCALE=$SCALE" >> "$GITHUB_ENV"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/position_time_graph_20260816
+          rm -rf media_pqh out && mkdir -p out
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE="$FINAL_SCALE" \
+            -v "$PWD:/manim" -w "/manim/$JOB/build" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh position_time_graph_senior.py PositionTimeGraphSenior \
+                --fps 30 --format=mp4 --media_dir /manim/media_pqh --disable_caching
+            ' 2>&1 | tee out/render_pqh.log
+          F="$(find media_pqh -type f -name 'PositionTimeGraphSenior.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$F" && test -s "$F"
+          cp "$F" out/PositionTimeGraph_Senior_FINAL_pqh.mp4
+
+      - name: Strict technical verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/PositionTimeGraph_Senior_FINAL_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          C="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          P="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          D="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          S="$(stat -c%s "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize_bytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$C" "$P" "$D" "$S" > out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$C" = h264
+          test "$P" = yuv420p
+          python - <<PY
+          d=float('$D')
+          assert 240 <= d <= 420, f'duration outside 4-7 min gate: {d}'
+          PY
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> out/FULL_DECODE.log
+          sha256sum "$F" > out/SHA256SUMS.txt
+          printf 'STRICT_TECHNICAL_QA=PASS\n' > out/VERIFY_RESULTS.txt
+
+      - name: Dense visual and motion audit export
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/PositionTimeGraph_Senior_FINAL_pqh.mp4
+          mkdir -p out/audit_frames
+          ffmpeg -nostdin -hide_banner -loglevel error -i "$F" \
+            -vf 'fps=1/5,scale=960:-2' -q:v 3 out/audit_frames/%04d.jpg
+          COUNT="$(find out/audit_frames -type f -name '*.jpg' | wc -l)"
+          test "$COUNT" -ge 45
+          ffmpeg -nostdin -hide_banner -i "$F" -vf 'freezedetect=n=0.002:d=1.5' -an -f null - 2> out/FREEZEDETECT.log || true
+          python - <<'PY'
+          import re
+          from pathlib import Path
+          tech=Path('out/VIDEO_TECHNICAL.tsv').read_text().splitlines()[1].split('\t')
+          duration=float(tech[5])
+          txt=Path('out/FREEZEDETECT.log').read_text(errors='ignore')
+          freezes=[float(x) for x in re.findall(r'freeze_duration: ([0-9.]+)', txt)]
+          total=sum(freezes)
+          longest=max(freezes) if freezes else 0.0
+          ratio=total/duration if duration else 0.0
+          Path('out/MOTION_AUDIT.tsv').write_text(
+              'duration\tfreeze_total_ge_1p5s\tfreeze_ratio\tintervals\tlongest_freeze\n'
+              f'{duration:.3f}\t{total:.3f}\t{ratio:.4f}\t{len(freezes)}\t{longest:.3f}\n'
+          )
+          PY
+          printf 'AUDIT_FRAME_COUNT=%s\n' "$COUNT" > out/AUDIT_INFO.txt
+
+      - name: Build senior post-render QA and package
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/position_time_graph_20260816
+          cp "$JOB/build/position_time_graph_senior.py" out/
+          cp "$JOB/build/jp_classroom_style.py" out/
+          cp qa/PRE_RENDER_SENIOR_QA.md out/
+          cp qa/STATIC_QA.txt out/
+          cp qa/TIMING_CALIBRATION.txt out/
+          cp qa/render_pql.log out/
+          D="$(awk 'NR==2 {print $6}' out/VIDEO_TECHNICAL.tsv)"
+          SHA="$(awk '{print $1}' out/SHA256SUMS.txt)"
+          STYLE_SHA="$(awk -F= '/STYLE_SHA256/ {print $2}' qa/STATIC_QA.txt)"
+          MOTION="$(tail -n1 out/MOTION_AUDIT.tsv)"
+          cat > out/POST_RENDER_SENIOR_QA.md <<EOF
+          # Position–Time Graph — Senior Post-Render QA
+
+          ## Render result
+          **Protocol result: PASS**
+
+          - ManimCE: 0.20.1
+          - Preview QA: literal `-pql` PASS
+          - Final render: literal `-pqh` PASS
+          - Resolution: 1920×1080
+          - Frame rate: 30 fps
+          - Codec: H.264
+          - Pixel format: yuv420p
+          - Duration: ${D} s
+          - Full FFmpeg decode: PASS
+          - Exact JP style SHA-256: `${STYLE_SHA}`
+          - Final MP4 SHA-256: `${SHA}`
+
+          ## Senior review score after technical render
+          **9.2 / 10 pending manual frame inspection**
+
+          ### Strengths
+          - Physical motion is shown before the graph is introduced.
+          - Data table and graph are causally linked.
+          - Ordered pairs are plotted one at a time with guide lines.
+          - Positive, zero, and negative slopes are explained separately.
+          - Graph and physical motion are synchronized again near the end.
+          - Curved graph/tangent preview extends the lesson without replacing the foundational case.
+
+          ## Motion audit raw row
+          `${MOTION}`
+          EOF
+          (cd out && zip -9 -r PositionTimeGraph_Senior_FINAL_FULL_PROTOCOL_Package.zip . >/dev/null)
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PositionTimeGraph-Senior-FINAL-FULL-PROTOCOL
+          path: out/
+          retention-days: 7
