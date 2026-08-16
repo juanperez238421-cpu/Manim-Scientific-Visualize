@@ -20,6 +20,10 @@ jobs:
         run: |
           set -euo pipefail
           JOB=render_jobs/history_velocity_20260816
+          cat "$JOB"/h_*.b64 | base64 -d | gzip -dc > "$JOB/history_of_velocity.py"
+          cat "$JOB"/s_*.b64 | base64 -d | gzip -dc > "$JOB/jp_classroom_style.py"
+          cat "$JOB"/n_*.b64 | base64 -d | gzip -dc > "$JOB/TECHNICAL_NOTES.md"
+          cat "$JOB"/c_*.b64 | base64 -d | gzip -dc > "$JOB/check_history_velocity.py"
           python -m py_compile "$JOB/history_of_velocity.py" "$JOB/jp_classroom_style.py" "$JOB/check_history_velocity.py"
           cd "$JOB"
           python check_history_velocity.py
