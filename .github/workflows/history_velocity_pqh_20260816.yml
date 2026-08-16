@@ -1,4 +1,4 @@
-name: History of Velocity V3 PQH 20260816
+name: History of Velocity V3 FINAL PQH 20260816
 
 on:
   pull_request:
@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Reconstruct and validate exact V3 sources
+      - name: Reconstruct, patch and validate exact V3 final sources
         shell: bash
         run: |
           set -euo pipefail
@@ -24,7 +24,8 @@ jobs:
           cat "$JOB"/s_*.b64 | base64 -d | gzip -dc > "$JOB/jp_classroom_style.py"
           cat "$JOB"/n_*.b64 | base64 -d | gzip -dc > "$JOB/TECHNICAL_NOTES.md"
           cat "$JOB"/c_*.b64 | base64 -d | gzip -dc > "$JOB/check_history_velocity.py"
-          python -m py_compile "$JOB/history_of_velocity.py" "$JOB/jp_classroom_style.py" "$JOB/check_history_velocity.py"
+          python "$JOB/apply_v3_final_layout_patch.py" "$JOB/history_of_velocity.py"
+          python -m py_compile "$JOB/history_of_velocity.py" "$JOB/jp_classroom_style.py" "$JOB/check_history_velocity.py" "$JOB/apply_v3_final_layout_patch.py"
           (cd "$JOB" && python check_history_velocity.py)
 
       - name: Install verification tools and ManimCE image
@@ -36,7 +37,7 @@ jobs:
           ffprobe -version | head -1
           docker pull manimcommunity/manim:v0.20.1 >/dev/null
 
-      - name: Accelerated literal PQL V3 runtime QA
+      - name: Accelerated literal PQL V3 final runtime QA
         shell: bash
         run: |
           set -euo pipefail
@@ -54,16 +55,16 @@ jobs:
             " 2>&1 | tee qa_out/render_pql.log
           PREVIEW="$(find media_pql -type f -name 'HistoryOfVelocity.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PREVIEW" && test -s "$PREVIEW"
-          cp "$PREVIEW" qa_out/HistoryOfVelocity_V3_QA_pql.mp4
+          cp "$PREVIEW" qa_out/HistoryOfVelocity_V3_FINAL_QA_pql.mp4
 
-      - name: Literal PQH final render V3
+      - name: Literal PQH final render V3 at pedagogical timing
         shell: bash
         run: |
           set -euo pipefail
           JOB=render_jobs/history_velocity_20260816
           rm -rf media out && mkdir -p out
           docker run --rm --user "$(id -u):$(id -g)" \
-            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.10 \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.40 \
             -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "
               set -euo pipefail
               mkdir -p /tmp/manim-bin
@@ -76,7 +77,7 @@ jobs:
           test -n "$FINAL" && test -s "$FINAL"
           cp "$FINAL" out/HistoryOfVelocity_Senior_FINAL_V3_pqh.mp4
 
-      - name: Verify V3 MP4 and export dense audit frames
+      - name: Strictly verify V3 final MP4 and export dense audit frames
         shell: bash
         run: |
           set -euo pipefail
@@ -93,7 +94,11 @@ jobs:
           test "$FPS" = 30/1
           test "$CODEC" = h264
           test "$PIX" = yuv420p
-          echo "V3_DIAGNOSTIC_DURATION=$DUR"
+          python - <<'PY'
+          dur=float(open('out/VIDEO_TECHNICAL.tsv').read().splitlines()[1].split('\t')[-1])
+          assert 480 <= dur <= 720, f'V3 final duration outside 8-12 minute target: {dur}'
+          print('duration_target_pass', dur)
+          PY
           ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
           mkdir -p out/audit_frames
           for P in 0.02 0.06 0.10 0.16 0.22 0.28 0.34 0.40 0.46 0.52 0.58 0.64 0.70 0.76 0.82 0.88 0.94 0.985; do
@@ -103,25 +108,25 @@ jobs:
           done
           sha256sum "$F" > out/SHA256SUMS.txt
 
-      - name: Package V3 diagnostic delivery
+      - name: Package V3 final verified delivery
         shell: bash
         run: |
           set -euo pipefail
           JOB=render_jobs/history_velocity_20260816
           cp "$JOB/history_of_velocity.py" "$JOB/jp_classroom_style.py" "$JOB/TECHNICAL_NOTES.md" out/
           cp qa_out/render_pql.log out/
-          printf 'ManimCE: 0.20.1\nPreview: literal -pql, time scale 0.08\nFinal diagnostic: literal -pqh, time scale 1.10, 30 fps\nResolution: 1920x1080\nCodec target: H.264 / yuv420p\nValidation: py_compile + runtime PQL + ffprobe + full FFmpeg decode + SHA-256\n' > out/RENDER_INFO.txt
+          printf 'ManimCE: 0.20.1\nPreview: literal -pql, time scale 0.08\nFinal: literal -pqh, time scale 1.40, 30 fps\nResolution: 1920x1080\nCodec: H.264 / yuv420p\nValidation: py_compile + runtime PQL + strict 8-12 min gate + ffprobe + full FFmpeg decode + SHA-256\nV3 corrections: atomic headers; Newton-Leibniz equation separation; graph interpretation label separation; observer/velocity-label separation; interactive Galileo/Kepler/Newton/x-v-a/vector/relativity scenes.\n' > out/RENDER_INFO.txt
           cd out
-          zip -9 -r HistoryOfVelocity_Senior_FINAL_V3_DIAGNOSTIC_Package.zip \
+          zip -9 -r HistoryOfVelocity_Senior_FINAL_V3_PQH_Package.zip \
             HistoryOfVelocity_Senior_FINAL_V3_pqh.mp4 history_of_velocity.py jp_classroom_style.py TECHNICAL_NOTES.md \
             VIDEO_TECHNICAL.tsv SHA256SUMS.txt RENDER_INFO.txt render_pqh.log render_pql.log full_decode.log audit_frames/
 
       - uses: actions/upload-artifact@v4
         with:
-          name: HistoryOfVelocity-Senior-V3-DIAGNOSTIC
+          name: HistoryOfVelocity-Senior-FINAL-V3-PQH
           path: |
             out/HistoryOfVelocity_Senior_FINAL_V3_pqh.mp4
-            out/HistoryOfVelocity_Senior_FINAL_V3_DIAGNOSTIC_Package.zip
+            out/HistoryOfVelocity_Senior_FINAL_V3_PQH_Package.zip
             out/history_of_velocity.py
             out/jp_classroom_style.py
             out/TECHNICAL_NOTES.md
