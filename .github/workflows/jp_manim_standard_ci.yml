@@ -1,0 +1,43 @@
+name: JP Manim Standard CI
+
+on:
+  pull_request:
+    paths:
+      - "JP_Manim_Standard/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jp-manim-standard-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: JP_Manim_Standard
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore Manim caches
+        uses: actions/cache@v4
+        with:
+          path: |
+            JP_Manim_Standard/media/Tex
+            JP_Manim_Standard/media/text
+            JP_Manim_Standard/media/videos/**/partial_movie_files
+          key: manim-v0201-${{ runner.os }}-${{ hashFiles('JP_Manim_Standard/src/**', 'JP_Manim_Standard/examples/**', 'JP_Manim_Standard/templates/**') }}
+          restore-keys: |
+            manim-v0201-${{ runner.os }}-
+      - name: Syntax and static QA
+        run: |
+          python -m py_compile src/jp_manim_standard/*.py tools/*.py examples/smoke_test.py templates/class_template.py
+          python tools/check_style.py examples/smoke_test.py
+      - name: Low-quality Docker smoke render
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e PYTHONPATH=/manim/src \
+            -v "$PWD:/manim" -w /manim manimcommunity/manim:v0.20.1 \
+            manim -ql examples/smoke_test.py StandardSmokeTest --seed 42
