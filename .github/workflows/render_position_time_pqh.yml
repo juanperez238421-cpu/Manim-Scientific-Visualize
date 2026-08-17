@@ -93,7 +93,12 @@ jobs:
         run: |
           set -euo pipefail
           VIDEO="${{ steps.render.outputs.video }}"
-          ffprobe -v error \
+          docker run --rm \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint ffprobe \
+            manimcommunity/manim:v0.20.1 \
+            -v error \
             -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
             -show_entries format=duration,size \
             -of default=noprint_wrappers=1 \
@@ -101,6 +106,7 @@ jobs:
           grep -q '^codec_name=h264$' ffprobe.txt
           grep -q '^width=1920$' ffprobe.txt
           grep -q '^height=1080$' ffprobe.txt
+          grep -q '^r_frame_rate=30/1$' ffprobe.txt
           grep -q '^pix_fmt=yuv420p$' ffprobe.txt
 
       - name: Stage delivery
