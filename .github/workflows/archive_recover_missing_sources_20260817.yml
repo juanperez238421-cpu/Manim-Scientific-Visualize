@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - archive/clean-pqh-source-recovery-20260817
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -26,14 +29,12 @@ jobs:
           rm -rf recovered_sources tmp_recovery
           mkdir -p recovered_sources tmp_recovery
 
-          # Solids of Revolution V4: exact source and exact style preserved on its render branch.
           git fetch --depth=1 origin render-solids-v4-bigger-figures-20260811:refs/remotes/origin/render-solids-v4-bigger-figures-20260811
           git show origin/render-solids-v4-bigger-figures-20260811:render_delivery/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py > recovered_sources/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py
           git show origin/render-solids-v4-bigger-figures-20260811:render_delivery/jp_classroom_style.py > recovered_sources/jp_classroom_style_V4_EXACT.py
           test "$(sha256sum recovered_sources/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py | cut -d' ' -f1)" = "c359547721378bfcb9d4ddb1a485b0e8e039a6379053f6df63b4279a846dc6d4"
           test "$(sha256sum recovered_sources/jp_classroom_style_V4_EXACT.py | cut -d' ' -f1)" = "3f3f06e94d5cad870ad335502cc1a93e56ce675abb1231ded5f9c71fd3e60e3d"
 
-          # Solids V5: reconstruct exactly from V4 + the archived rotation-sync patch.
           git fetch --depth=1 origin render-solids-v5-rotation-sync-20260812:refs/remotes/origin/render-solids-v5-rotation-sync-20260812
           cp recovered_sources/SolidsOfRevolution_InventorProfessional_TRANSFORM_V4_BIGGER_FIGURES_FINAL.py recovered_sources/SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL.py
           git show origin/render-solids-v5-rotation-sync-20260812:render_v5/v4_to_v5_rotation_sync.patch > tmp_recovery/v4_to_v5_rotation_sync.patch
@@ -42,13 +43,11 @@ jobs:
           test "$(sha256sum recovered_sources/SolidsOfRevolution_InventorProfessional_TRANSFORM_V5_ROTATION_SYNC_FINAL.py | cut -d' ' -f1)" = "d8e15d3c44aea974ab3210f80d900d28b7d985a1ff6333a24b0737e919691c24"
           cp recovered_sources/jp_classroom_style_V4_EXACT.py recovered_sources/jp_classroom_style_V5_EXACT.py
 
-          # Valentina Senior Detailed V2: decode the exact compressed source used by the 18-scene render matrix.
           git fetch --depth=1 origin agent/valentina-senior-detailed-v2-20260813:refs/remotes/origin/valentina-senior-v2
           git show origin/valentina-senior-v2:render_jobs/valentina_senior_v2/scene_full.b64 > tmp_recovery/valentina_scene_full.b64
           base64 -d tmp_recovery/valentina_scene_full.b64 | gzip -dc > recovered_sources/valentina_workshop_senior_v2.py
           test "$(sha256sum recovered_sources/valentina_workshop_senior_v2.py | cut -d' ' -f1)" = "30d0f58147048e439e1b05fda5d2f56e685ae96fde03cc94bbf410c50595731f"
 
-          # Git/GitHub Masterclass V4: reconstruct the exact executable source from its archived source parts.
           git fetch --depth=1 origin agent/html-github-css-masterclasses-v5:refs/remotes/origin/html-github-css-masterclasses-v5
           git archive origin/html-github-css-masterclasses-v5 vscode_html_tutorial | tar -x -C tmp_recovery
           python - <<'PY'
