@@ -1,0 +1,41 @@
+name: Recover GitHub Masterclass Exact Dependency
+
+on:
+  push:
+    branches:
+      - archive/clean-pqh-source-recovery-20260817
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recover-dependency:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Rebuild exact VSCodeShell dependency
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf dep_workspace recovered_dependency
+          mkdir -p dep_workspace recovered_dependency
+          git fetch --depth=1 origin agent/html-github-css-masterclasses-v5:refs/remotes/origin/html-github-css-masterclasses-v5
+          git archive origin/html-github-css-masterclasses-v5 vscode_html_tutorial | tar -x -C dep_workspace
+          python dep_workspace/vscode_html_tutorial/build_source.py
+          cp dep_workspace/vscode_html_tutorial/vscode_html_tutorial.py recovered_dependency/vscode_html_tutorial.py
+          python -m py_compile recovered_dependency/vscode_html_tutorial.py
+          sha256sum recovered_dependency/vscode_html_tutorial.py > recovered_dependency/SOURCE_SHA256.txt
+      - name: Upload exact dependency
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-masterclass-exact-dependency-20260817
+          path: recovered_dependency/
+          if-no-files-found: error
+          retention-days: 14
