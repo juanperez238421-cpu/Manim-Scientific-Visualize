@@ -23,7 +23,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p build_v5
-          base64 -d render_jobs/position_time_graph_v5_20260817/source_v5.py.gz.b64 | gzip -dc > build_v5/position_time_graph_senior_v5.py
+          cat render_jobs/position_time_graph_v5_20260817/source_parts/v5c_*.b64 | base64 -d | gzip -dc > build_v5/position_time_graph_senior_v5.py
           base64 -d render_jobs/position_time_graph_20260816/style.py.gz.b64 | gzip -dc > build_v5/jp_classroom_style.py
           test -s build_v5/position_time_graph_senior_v5.py
           test -s build_v5/jp_classroom_style.py
@@ -34,8 +34,11 @@ jobs:
             echo 'V5 source unexpectedly contains morphing header transition' >&2
             exit 1
           fi
+          SOURCE_SHA=$(sha256sum build_v5/position_time_graph_senior_v5.py | awk '{print $1}')
+          test "$SOURCE_SHA" = '8929d88553562099eb62dd57e7a592c80416e7c8babec51cf78895370f5f8bcf'
           STYLE_SHA=$(sha256sum build_v5/jp_classroom_style.py | awk '{print $1}')
           test "$STYLE_SHA" = '3f3f06e94d5cad870ad335502cc1a93e56ce675abb1231ded5f9c71fd3e60e3d'
+          echo "V5 source SHA-256: $SOURCE_SHA"
           echo "Exact JP style SHA-256: $STYLE_SHA"
 
       - name: Pull ManimCE 0.20.1
