@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 """Senior final QA V5 after full-resolution inspection of the V4 render.
 
-V5 corrects two rendered-pixel issues:
+V5 corrects rendered-pixel issues found during senior QA:
 1) guarantee explicit numeric tick labels on every position-time graph;
 2) display a literal ordered pair (t, x) with parentheses/comma before copying
-   its two components into the data-table row.
+   its two components into the data-table row;
+3) keep all registration labels fully inside their cards with projection-safe spacing.
 
 All other senior V4 improvements and the JP classroom contract are preserved.
 """
@@ -66,7 +67,7 @@ class PositionTimeGraphLessonV5(PositionTimeGraphLessonV4):
             self.math(str(n), 31).next_to(track.n2p(n), DOWN, buff=0.14)
             for n in range(8)
         ])
-        track_label = self.text("POSITION TRACK   x (m)", 34, BOLD).next_to(track, UP, buff=0.36)
+        track_label = self.text("POSITION TRACK   x (m)", 34, BOLD).next_to(track, UP, buff=0.52)
         origin_tag = self.text("origin", 23, MEDIUM).next_to(track.n2p(0), DOWN, buff=0.55)
 
         mover = Dot(track.n2p(0), radius=0.17, color=BLACK_LINE)
@@ -90,7 +91,7 @@ class PositionTimeGraphLessonV5(PositionTimeGraphLessonV4):
             stroke_color=MID_GRAY, stroke_width=1.8,
             fill_color=WHITE, fill_opacity=1,
         ).move_to([left_center, -2.33, 0])
-        pair_label = self.text("2  FORM DATA PAIR", 27, BOLD).move_to(pair_box).shift(LEFT * 1.66)
+        pair_label = self.text("2  FORM DATA PAIR", 27, BOLD).move_to(pair_box).shift(LEFT * 1.43)
         pair_source, pair_t, pair_x = self._ordered_pair(0, 0)
         pair_source.move_to(pair_box).shift(RIGHT * 1.73)
 
