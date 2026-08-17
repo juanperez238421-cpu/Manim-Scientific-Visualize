@@ -1,4 +1,4 @@
-name: Render Position Time Graph QA V2 PQH
+name: Render Position Time Graph QA V3 PQH
 
 on:
   pull_request:
@@ -25,8 +25,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m py_compile position_time_graph/main.py position_time_graph/qa_v2.py
-          test -s position_time_graph/qa_v2.py
+          python -m py_compile position_time_graph/main.py position_time_graph/qa_v2.py position_time_graph/qa_v3.py
+          test -s position_time_graph/qa_v3.py
 
       - name: Pull official ManimCE image
         shell: bash
@@ -52,11 +52,11 @@ jobs:
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH="/tmp/manim-bin:$PATH"
-              manim -pql qa_v2.py PositionTimeGraphLessonV2 \
+              manim -pql qa_v3.py PositionTimeGraphLessonV3 \
                 --format=mp4 \
-                --media_dir=/manim/render_media_low_v2 \
+                --media_dir=/manim/render_media_low_v3 \
                 --disable_caching
-            ' 2>&1 | tee preview_render_v2.log
+            ' 2>&1 | tee preview_render_v3.log
 
       - name: Final render with literal -pqh
         id: render
@@ -77,13 +77,13 @@ jobs:
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH="/tmp/manim-bin:$PATH"
-              manim -pqh qa_v2.py PositionTimeGraphLessonV2 \
+              manim -pqh qa_v3.py PositionTimeGraphLessonV3 \
                 --format=mp4 \
-                --media_dir=/manim/render_media_high_v2 \
+                --media_dir=/manim/render_media_high_v3 \
                 --disable_caching
-            ' 2>&1 | tee final_render_v2.log
+            ' 2>&1 | tee final_render_v3.log
 
-          VIDEO="$(find render_media_high_v2 -type f -name 'PositionTimeGraphLessonV2.mp4' -print -quit)"
+          VIDEO="$(find render_media_high_v3 -type f -name 'PositionTimeGraphLessonV3.mp4' -print -quit)"
           test -n "$VIDEO"
           test -s "$VIDEO"
           echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
@@ -92,27 +92,29 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p delivery_v2
-          cp "${{ steps.render.outputs.video }}" delivery_v2/PositionTimeGraphLesson_QA_V2_pqh.mp4
-          cp position_time_graph/main.py delivery_v2/PositionTimeGraphLesson_BASE.py
-          cp position_time_graph/qa_v2.py delivery_v2/PositionTimeGraphLesson_QA_V2.py
-          cp preview_render_v2.log delivery_v2/
-          cp final_render_v2.log delivery_v2/
-          cat > delivery_v2/QA_RENDER_INFO.txt <<'EOF'
-          Scene: PositionTimeGraphLessonV2
-          Revision: Senior QA V2 — enlarged typography and rebuilt motion/time/position registration
+          mkdir -p delivery_v3
+          cp "${{ steps.render.outputs.video }}" delivery_v3/PositionTimeGraphLesson_FINAL_QA_V3_pqh.mp4
+          cp position_time_graph/main.py delivery_v3/PositionTimeGraphLesson_BASE.py
+          cp position_time_graph/qa_v2.py delivery_v3/PositionTimeGraphLesson_QA_V2.py
+          cp position_time_graph/qa_v3.py delivery_v3/PositionTimeGraphLesson_FINAL_QA_V3.py
+          cp preview_render_v3.log delivery_v3/
+          cp final_render_v3.log delivery_v3/
+          cat > delivery_v3/QA_RENDER_INFO.txt <<'EOF'
+          Scene: PositionTimeGraphLessonV3
+          Revision: Final frame-audited QA V3
           ManimCE: 0.20.1 official Docker image
-          Preview: manim -pql qa_v2.py PositionTimeGraphLessonV2 --format=mp4 --disable_caching
-          Final: manim -pqh qa_v2.py PositionTimeGraphLessonV2 --format=mp4 --disable_caching
+          Preview: manim -pql qa_v3.py PositionTimeGraphLessonV3 --format=mp4 --disable_caching
+          Final: manim -pqh qa_v3.py PositionTimeGraphLessonV3 --format=mp4 --disable_caching
+          Fixes after actual 1080p inspection: visible OBSERVE/READ badge, guaranteed numeric track labels, safer table header geometry, larger table rows, synchronized header/subtitle transitions.
           Visual contract: JP classroom 1920x1080, 30 fps, white background, monochrome hierarchy
-          Final MP4 metadata and decode are audited after artifact download in the delivery environment.
+          Final MP4 metadata, decode integrity and sampled-frame QA are audited after artifact download.
           EOF
-          sha256sum delivery_v2/* > delivery_v2/SHA256SUMS.txt
+          sha256sum delivery_v3/* > delivery_v3/SHA256SUMS.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: PositionTimeGraphLesson_QA_V2_pqh
-          path: delivery_v2/
+          name: PositionTimeGraphLesson_FINAL_QA_V3_pqh
+          path: delivery_v3/
           if-no-files-found: error
           retention-days: 7
