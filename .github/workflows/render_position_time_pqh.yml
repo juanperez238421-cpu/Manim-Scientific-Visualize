@@ -34,6 +34,14 @@ jobs:
           set -euo pipefail
           docker pull manimcommunity/manim:v0.20.1
 
+      - name: Install FFmpeg verification tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          ffprobe -version | head -n 1
+
       - name: Preview validation with literal -pql
         shell: bash
         run: |
@@ -93,12 +101,7 @@ jobs:
         run: |
           set -euo pipefail
           VIDEO="${{ steps.render.outputs.video }}"
-          docker run --rm \
-            -v "$PWD:/manim" \
-            -w /manim \
-            --entrypoint ffprobe \
-            manimcommunity/manim:v0.20.1 \
-            -v error \
+          ffprobe -v error \
             -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
             -show_entries format=duration,size \
             -of default=noprint_wrappers=1 \
