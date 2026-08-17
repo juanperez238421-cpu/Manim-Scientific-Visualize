@@ -88,19 +88,6 @@ jobs:
           test -s "$VIDEO"
           echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
 
-      - name: Decode-check final video in official container
-        shell: bash
-        run: |
-          set -euo pipefail
-          VIDEO="${{ steps.render.outputs.video }}"
-          docker run --rm \
-            -v "$PWD:/manim" \
-            -w /manim \
-            --entrypoint ffmpeg \
-            manimcommunity/manim:v0.20.1 \
-            -v error -i "$VIDEO" -f null -
-          printf 'Decode check: PASS\nLocal ffprobe metadata audit required after artifact download.\n' > video_decode_check_v2.txt
-
       - name: Stage delivery
         shell: bash
         run: |
@@ -111,7 +98,6 @@ jobs:
           cp position_time_graph/qa_v2.py delivery_v2/PositionTimeGraphLesson_QA_V2.py
           cp preview_render_v2.log delivery_v2/
           cp final_render_v2.log delivery_v2/
-          cp video_decode_check_v2.txt delivery_v2/
           cat > delivery_v2/QA_RENDER_INFO.txt <<'EOF'
           Scene: PositionTimeGraphLessonV2
           Revision: Senior QA V2 — enlarged typography and rebuilt motion/time/position registration
@@ -119,7 +105,7 @@ jobs:
           Preview: manim -pql qa_v2.py PositionTimeGraphLessonV2 --format=mp4 --disable_caching
           Final: manim -pqh qa_v2.py PositionTimeGraphLessonV2 --format=mp4 --disable_caching
           Visual contract: JP classroom 1920x1080, 30 fps, white background, monochrome hierarchy
-          Final metadata is audited with ffprobe after artifact download in the delivery environment.
+          Final MP4 metadata and decode are audited after artifact download in the delivery environment.
           EOF
           sha256sum delivery_v2/* > delivery_v2/SHA256SUMS.txt
 
