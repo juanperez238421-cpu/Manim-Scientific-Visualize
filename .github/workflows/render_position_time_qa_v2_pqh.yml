@@ -1,4 +1,4 @@
-name: Render Position Time Graph QA V4 PQH
+name: Render Position Time Graph FINAL Senior QA V5 PQH
 
 on:
   pull_request:
@@ -25,8 +25,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m py_compile position_time_graph/main.py position_time_graph/qa_v2.py position_time_graph/qa_v3.py position_time_graph/qa_v4.py
-          test -s position_time_graph/qa_v4.py
+          python -m py_compile position_time_graph/main.py position_time_graph/qa_v2.py position_time_graph/qa_v3.py position_time_graph/qa_v4.py position_time_graph/qa_v5.py
+          test -s position_time_graph/qa_v5.py
 
       - name: Pull official ManimCE image
         shell: bash
@@ -52,11 +52,11 @@ jobs:
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH="/tmp/manim-bin:$PATH"
-              manim -pql qa_v4.py PositionTimeGraphLessonV4 \
+              manim -pql qa_v5.py PositionTimeGraphLessonV5 \
                 --format=mp4 \
-                --media_dir=/manim/render_media_low_v4 \
+                --media_dir=/manim/render_media_low_v5 \
                 --disable_caching
-            ' 2>&1 | tee preview_render_v4.log
+            ' 2>&1 | tee preview_render_v5.log
 
       - name: Final render with literal -pqh
         id: render
@@ -77,13 +77,13 @@ jobs:
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH="/tmp/manim-bin:$PATH"
-              manim -pqh qa_v4.py PositionTimeGraphLessonV4 \
+              manim -pqh qa_v5.py PositionTimeGraphLessonV5 \
                 --format=mp4 \
-                --media_dir=/manim/render_media_high_v4 \
+                --media_dir=/manim/render_media_high_v5 \
                 --disable_caching
-            ' 2>&1 | tee final_render_v4.log
+            ' 2>&1 | tee final_render_v5.log
 
-          VIDEO="$(find render_media_high_v4 -type f -name 'PositionTimeGraphLessonV4.mp4' -print -quit)"
+          VIDEO="$(find render_media_high_v5 -type f -name 'PositionTimeGraphLessonV5.mp4' -print -quit)"
           test -n "$VIDEO"
           test -s "$VIDEO"
           echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
@@ -92,30 +92,32 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p delivery_v4
-          cp "${{ steps.render.outputs.video }}" delivery_v4/PositionTimeGraphLesson_SENIOR_QA_V4_pqh.mp4
-          cp position_time_graph/main.py delivery_v4/PositionTimeGraphLesson_BASE.py
-          cp position_time_graph/qa_v2.py delivery_v4/PositionTimeGraphLesson_QA_V2.py
-          cp position_time_graph/qa_v3.py delivery_v4/PositionTimeGraphLesson_QA_V3.py
-          cp position_time_graph/qa_v4.py delivery_v4/PositionTimeGraphLesson_SENIOR_QA_V4.py
-          cp preview_render_v4.log delivery_v4/
-          cp final_render_v4.log delivery_v4/
-          cat > delivery_v4/QA_RENDER_INFO.txt <<'EOF'
-          Scene: PositionTimeGraphLessonV4
-          Revision: Senior projection QA V4 after inspection of user-supplied V3 render
+          mkdir -p delivery_v5
+          cp "${{ steps.render.outputs.video }}" delivery_v5/PositionTimeGraphLesson_FINAL_SENIOR_QA_V5_pqh.mp4
+          cp position_time_graph/main.py delivery_v5/PositionTimeGraphLesson_BASE.py
+          cp position_time_graph/qa_v2.py delivery_v5/PositionTimeGraphLesson_QA_V2.py
+          cp position_time_graph/qa_v3.py delivery_v5/PositionTimeGraphLesson_QA_V3.py
+          cp position_time_graph/qa_v4.py delivery_v5/PositionTimeGraphLesson_SENIOR_QA_V4.py
+          cp position_time_graph/qa_v5.py delivery_v5/PositionTimeGraphLesson_FINAL_SENIOR_QA_V5.py
+          cp preview_render_v5.log delivery_v5/
+          cp final_render_v5.log delivery_v5/
+          cat > delivery_v5/QA_RENDER_INFO.txt <<'EOF'
+          Scene: PositionTimeGraphLessonV5
+          Revision: Final Senior QA V5 after full-resolution V4 inspection
           ManimCE: 0.20.1 official Docker image
-          Preview: manim -pql qa_v4.py PositionTimeGraphLessonV4 --format=mp4 --disable_caching
-          Final: manim -pqh qa_v4.py PositionTimeGraphLessonV4 --format=mp4 --disable_caching
-          Main QA improvements: larger canvas utilization; explicit OBSERVE/READ -> FORM (t,x) -> RECORD causality; pair-to-row transformations; larger plotting graph; larger interpretation/slope geometry; delta x and delta t annotations; larger 2x3 final method cards; reduced closing dead time.
+          Preview: manim -pql qa_v5.py PositionTimeGraphLessonV5 --format=mp4 --disable_caching
+          Final: manim -pqh qa_v5.py PositionTimeGraphLessonV5 --format=mp4 --disable_caching
+          V4 improvements preserved: larger canvas utilization; OBSERVE/READ -> FORM DATA PAIR -> RECORD causality; pair-to-row transformations; larger plotting graph; stronger interpretation/slope geometry; delta x/delta t annotations; larger 2x3 summary; reduced closing dead time.
+          V5 rendered-pixel fixes: guaranteed explicit numeric axis labels on all graphs; literal ordered-pair punctuation (t, x) with numeric components copied into the matching table row.
           Visual contract: JP classroom 1920x1080, 30 fps, white background, monochrome hierarchy.
-          Final MP4 metadata, decode integrity and rendered-frame QA are audited after artifact download.
+          Final MP4 metadata, decode integrity and sampled-frame QA are audited after artifact download.
           EOF
-          sha256sum delivery_v4/* > delivery_v4/SHA256SUMS.txt
+          sha256sum delivery_v5/* > delivery_v5/SHA256SUMS.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: PositionTimeGraphLesson_SENIOR_QA_V4_pqh
-          path: delivery_v4/
+          name: PositionTimeGraphLesson_FINAL_SENIOR_QA_V5_pqh
+          path: delivery_v5/
           if-no-files-found: error
           retention-days: 7
