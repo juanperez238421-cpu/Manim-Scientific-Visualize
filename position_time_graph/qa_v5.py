@@ -91,7 +91,7 @@ class PositionTimeGraphLessonV5(PositionTimeGraphLessonV4):
             stroke_color=MID_GRAY, stroke_width=1.8,
             fill_color=WHITE, fill_opacity=1,
         ).move_to([left_center, -2.33, 0])
-        pair_label = self.text("2  FORM DATA PAIR", 27, BOLD).move_to(pair_box).shift(LEFT * 1.43)
+        pair_label = self.text("2  FORM DATA PAIR", 27, BOLD).move_to(pair_box).align_to(pair_box, LEFT).shift(RIGHT * 0.28)
         pair_source, pair_t, pair_x = self._ordered_pair(0, 0)
         pair_source.move_to(pair_box).shift(RIGHT * 1.73)
 
