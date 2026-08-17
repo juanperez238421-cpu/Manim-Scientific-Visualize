@@ -6,7 +6,8 @@ V5 corrects rendered-pixel issues found during senior QA:
 1) guarantee explicit numeric tick labels on every position-time graph;
 2) display a literal ordered pair (t, x) with parentheses/comma before copying
    its two components into the data-table row;
-3) keep all registration labels fully inside their cards with projection-safe spacing.
+3) keep all registration labels fully inside their cards with projection-safe spacing;
+4) keep graph axis titles inside the safe graph envelope so side panels never cover them.
 
 All other senior V4 improvements and the JP classroom contract are preserved.
 """
@@ -27,10 +28,11 @@ class PositionTimeGraphLessonV5(PositionTimeGraphLessonV4):
             },
             tips=False,
         )
-        axis_names = axes.get_axis_labels(
-            self.math(r"t\;(\mathrm{s})", 36),
-            self.math(r"x\;(\mathrm{m})", 36),
-        )
+        x_name = self.math(r"t\;(\mathrm{s})", 36)
+        x_name.next_to(axes.x_axis.get_end(), DOWN, buff=0.13).shift(LEFT * 0.45)
+        y_name = self.math(r"x\;(\mathrm{m})", 36)
+        y_name.next_to(axes.y_axis.get_end(), RIGHT, buff=0.12).shift(DOWN * 0.10)
+        axis_names = VGroup(x_name, y_name)
         x_numbers = VGroup(*[
             self.math(str(n), 28).next_to(axes.c2p(n, 0), DOWN, buff=0.11)
             for n in range(0, 8)
