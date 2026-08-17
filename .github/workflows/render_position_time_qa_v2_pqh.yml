@@ -1,0 +1,142 @@
+name: Render Position Time Graph QA V2 PQH
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'position_time_graph/**'
+      - '.github/workflows/render_position_time_qa_v2_pqh.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Python source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile position_time_graph/main.py position_time_graph/qa_v2.py
+          test -s position_time_graph/qa_v2.py
+
+      - name: Pull official ManimCE image
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull manimcommunity/manim:v0.20.1
+
+      - name: Install FFmpeg verification tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          ffprobe -version | head -n 1
+
+      - name: Preview validation with literal -pql
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=0.08 \
+            -v "$PWD:/manim" \
+            -w /manim/position_time_graph \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH="/tmp/manim-bin:$PATH"
+              manim -pql qa_v2.py PositionTimeGraphLessonV2 \
+                --format=mp4 \
+                --media_dir=/manim/render_media_low_v2 \
+                --disable_caching
+            ' 2>&1 | tee preview_render_v2.log
+
+      - name: Final render with literal -pqh
+        id: render
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" \
+            -w /manim/position_time_graph \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH="/tmp/manim-bin:$PATH"
+              manim -pqh qa_v2.py PositionTimeGraphLessonV2 \
+                --format=mp4 \
+                --media_dir=/manim/render_media_high_v2 \
+                --disable_caching
+            ' 2>&1 | tee final_render_v2.log
+
+          VIDEO="$(find render_media_high_v2 -type f -name 'PositionTimeGraphLessonV2.mp4' -print -quit)"
+          test -n "$VIDEO"
+          test -s "$VIDEO"
+          echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
+
+      - name: Verify final video
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO="${{ steps.render.outputs.video }}"
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+            -show_entries format=duration,size \
+            -of default=noprint_wrappers=1 \
+            "$VIDEO" | tee ffprobe_v2.txt
+          grep -q '^codec_name=h264$' ffprobe_v2.txt
+          grep -q '^width=1920$' ffprobe_v2.txt
+          grep -q '^height=1080$' ffprobe_v2.txt
+          grep -q '^r_frame_rate=30/1$' ffprobe_v2.txt
+          grep -q '^pix_fmt=yuv420p$' ffprobe_v2.txt
+
+      - name: Stage delivery
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p delivery_v2
+          cp "${{ steps.render.outputs.video }}" delivery_v2/PositionTimeGraphLesson_QA_V2_pqh.mp4
+          cp position_time_graph/main.py delivery_v2/PositionTimeGraphLesson_BASE.py
+          cp position_time_graph/qa_v2.py delivery_v2/PositionTimeGraphLesson_QA_V2.py
+          cp preview_render_v2.log delivery_v2/
+          cp final_render_v2.log delivery_v2/
+          cp ffprobe_v2.txt delivery_v2/
+          cat > delivery_v2/QA_RENDER_INFO.txt <<'EOF'
+          Scene: PositionTimeGraphLessonV2
+          Revision: Senior QA V2 — enlarged typography and rebuilt motion/time/position registration
+          ManimCE: 0.20.1 official Docker image
+          Preview: manim -pql qa_v2.py PositionTimeGraphLessonV2 --format=mp4 --disable_caching
+          Final: manim -pqh qa_v2.py PositionTimeGraphLessonV2 --format=mp4 --disable_caching
+          Visual contract: JP classroom 1920x1080, 30 fps, white background, monochrome hierarchy
+          EOF
+          sha256sum delivery_v2/* > delivery_v2/SHA256SUMS.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PositionTimeGraphLesson_QA_V2_pqh
+          path: delivery_v2/
+          if-no-files-found: error
+          retention-days: 7
