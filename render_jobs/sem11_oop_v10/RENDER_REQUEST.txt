@@ -1,0 +1,3 @@
+Seminar11 OOP Immersive V10 render request
+2026-08-18
+Protocol: ManimCE 0.20.1 -> literal -pql -> literal -pqh -> ffprobe/full-decode/audit-frames/SHA256
