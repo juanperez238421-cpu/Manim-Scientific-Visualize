@@ -1,0 +1,125 @@
+name: House Extrusion PR Commitback 20260818
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'render-house-extrusion-20260818'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: render-house-extrusion-20260818
+
+      - name: Render verify and commit back
+        shell: bash
+        run: |
+          set -uo pipefail
+          JOB=render_jobs/house_extrusion
+          SRC="$JOB/House_Extrusion_3D_ManimCE.py"
+          OUT="$JOB/delivery_committed_pr"
+          rm -rf "$OUT" media_pql media
+          mkdir -p "$OUT/audit_frames"
+
+          commit_status() {
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add "$OUT" "$SRC"
+            git commit -m "$1" || true
+            git push origin HEAD:render-house-extrusion-20260818 || true
+          }
+
+          fail_job() {
+            CODE="$1"
+            printf 'FAILED\ncode=%s\n' "$CODE" > "$OUT/STATUS.txt"
+            cp "$SRC" "$OUT/House_Extrusion_3D_ManimCE.py" 2>/dev/null || true
+            commit_status "House extrusion render failure: $CODE"
+            exit 1
+          }
+
+          sed -i 's/door_cutter.shift(IN \* 0.75)/door_cutter.shift(DOWN * 0.75)/' "$SRC"
+          sed -i 's/door_cutter.animate.shift(OUT \* 0.75)/door_cutter.animate.shift(UP * 0.75)/' "$SRC"
+          sed -i 's/win_cutter.shift(IN \* 0.75)/win_cutter.shift(DOWN * 0.75)/' "$SRC"
+          sed -i 's/win_cutter.animate.shift(OUT \* 0.75)/win_cutter.animate.shift(UP * 0.75)/' "$SRC"
+
+          python -m py_compile "$SRC" > "$OUT/py_compile.log" 2>&1 || fail_job PY_COMPILE
+          grep -n 'cutter.shift\|cutter.animate' "$SRC" > "$OUT/AXIS_QA.txt"
+          docker pull manimcommunity/manim:v0.20.1 > "$OUT/docker_pull.log" 2>&1 || fail_job DOCKER_PULL
+
+          set +e
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pql $SRC HouseExtrusion3D --format=mp4 --media_dir media_pql --disable_caching
+            " 2>&1 | tee "$OUT/render_pql.log"
+          PQL=${PIPESTATUS[0]}
+          set -e
+          [ "$PQL" -eq 0 ] || fail_job PQL_RENDER
+
+          PREVIEW="$(find media_pql -type f -name 'HouseExtrusion3D.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          [ -n "$PREVIEW" ] && [ -s "$PREVIEW" ] || fail_job PQL_OUTPUT
+
+          set +e
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pqh $SRC HouseExtrusion3D --fps 30 --format=mp4 --media_dir media --disable_caching
+            " 2>&1 | tee "$OUT/render_pqh.log"
+          PQH=${PIPESTATUS[0]}
+          set -e
+          [ "$PQH" -eq 0 ] || fail_job PQH_RENDER
+
+          FINAL="$(find media -type f -name 'HouseExtrusion3D.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          [ -n "$FINAL" ] && [ -s "$FINAL" ] || fail_job PQH_OUTPUT
+          cp "$FINAL" "$OUT/House_Extrusion_3D_PQH.mp4"
+          cp "$SRC" "$OUT/House_Extrusion_3D_ManimCE.py"
+
+          F="$OUT/House_Extrusion_3D_PQH.mp4"
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          SIZE="$(ffprobe -v error -show_entries format=size -of csv=p=0 "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+            "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > "$OUT/VIDEO_TECHNICAL.tsv"
+          [ "$W" = 1920 ] || fail_job WIDTH
+          [ "$H" = 1080 ] || fail_job HEIGHT
+          [ "$FPS" = 30/1 ] || fail_job FPS
+          [ "$CODEC" = h264 ] || fail_job CODEC
+          [ "$PIX" = yuv420p ] || fail_job PIX_FMT
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/full_decode.log" || fail_job DECODE
+
+          for P in 0.04 0.16 0.30 0.44 0.58 0.72 0.86 0.97; do
+            T="$(python -c "print(float('$DUR')*float('$P'))")"
+            TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "$OUT/audit_frames/frame_${TAG}.png" || fail_job QA_FRAME
+          done
+
+          sha256sum "$F" "$OUT/House_Extrusion_3D_ManimCE.py" > "$OUT/SHA256SUMS.txt"
+          cat > "$OUT/RENDER_INFO.txt" <<'EOF'
+Scene: HouseExtrusion3D
+ManimCE: 0.20.1
+Preview: literal -pql
+Final: literal -pqh, 1920x1080, 30 fps, H.264/yuv420p
+QA: py_compile + axis check + PQL + PQH + ffprobe + full decode + 8 audit frames + SHA-256
+EOF
+          printf 'SUCCESS\n' > "$OUT/STATUS.txt"
+          commit_status 'Render HouseExtrusion3D verified PQH MP4'
