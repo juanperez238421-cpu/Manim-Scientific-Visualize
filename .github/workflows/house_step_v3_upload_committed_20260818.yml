@@ -1,0 +1,32 @@
+name: House Step V3 Upload Committed MP4 20260818
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  upload:
+    if: github.event.pull_request.head.ref == 'house-step-v3-render-20260818' && github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact V3 branch
+        uses: actions/checkout@v4
+        with:
+          ref: house-step-v3-render-20260818
+      - name: Validate committed MP4 exists
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=render_jobs/house_step_v3/delivery_final/House_Extrusion_3D_STEP_BY_STEP_V3_FULL_PQH.mp4
+          test -s "$F"
+          ls -lh "$F"
+      - name: Upload full MP4
+        uses: actions/upload-artifact@v4
+        with:
+          name: House-Extrusion-3D-StepByStep-V3-FULL-PQH
+          path: render_jobs/house_step_v3/delivery_final/House_Extrusion_3D_STEP_BY_STEP_V3_FULL_PQH.mp4
+          if-no-files-found: error
+          retention-days: 7
