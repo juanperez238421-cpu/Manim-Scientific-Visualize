@@ -55,7 +55,7 @@ jobs:
           test -n "$FINAL" && test -s "$FINAL"
           cp "$FINAL" out/Geometry8_Circle_Fundamentals_FINAL_FIXED_pqh.mp4
 
-      - name: Verify final MP4 and export audit frames
+      - name: Verify final MP4
         shell: bash
         run: |
           set -euo pipefail
@@ -68,13 +68,6 @@ jobs:
           test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")" = h264
           test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")" = yuv420p
           ffmpeg -nostdin -v error -i "$F" -f null -
-          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
-          mkdir -p out/audit_frames
-          for P in 0.05 0.20 0.35 0.50 0.62 0.68 0.72 0.80 0.95; do
-            T="$(python -c "print(float('$DUR')*float('$P'))")"
-            TAG="$(python -c "print(int(float('$P')*1000))")"
-            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_${TAG}.png"
-          done
           sha256sum "$F" > out/SHA256SUMS.txt
           cp render_jobs/geometry8_circle_20260818/Geometry8_Circle_Fundamentals_FINAL.py out/
           cp render_jobs/geometry8_circle_20260818/jp_classroom_style.py out/
