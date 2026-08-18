@@ -17,3 +17,5 @@ V5 keeps the approved V4 composition, cameras, color semantics and operation ord
 ## QA gate
 
 Acceptance requires PQL first, dense semantic frame extraction, manual review of the wall-croquis closure sequence and exterior-wall transparency, then literal PQH plus ffprobe/full-decode/SHA-256 validation.
+
+The PQL workflow uses robust final-video discovery because Manim names the preview artifact `HouseExtrusion3D_PQL_PASS.mp4` rather than the scene class name alone.
