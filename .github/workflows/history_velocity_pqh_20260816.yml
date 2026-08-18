@@ -1,4 +1,4 @@
-name: House Extrusion 3D Verified PQH V2 20260818
+name: House Extrusion 3D Verified PQH FINAL V3 20260818
 
 on:
   pull_request:
@@ -9,13 +9,13 @@ permissions:
 
 jobs:
   render:
-    if: github.event.pull_request.head.ref == 'runner-house-extrusion-20260818-v4'
+    if: github.event.pull_request.head.ref == 'runner-house-extrusion-20260818-v5'
     runs-on: ubuntu-latest
     timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch source and apply senior visual QA patches
+      - name: Fetch source and apply final senior QA patches
         shell: bash
         run: |
           set -euo pipefail
@@ -30,9 +30,9 @@ jobs:
           sed -i 's/phi=58 \* DEGREES, theta=-52 \* DEGREES, zoom=0.75/phi=58 * DEGREES, theta=-52 * DEGREES, zoom=0.70/' "$SRC"
           sed -i 's/phi=68 \* DEGREES, theta=-28 \* DEGREES, zoom=0.92/phi=65 * DEGREES, theta=-55 * DEGREES, zoom=0.78/' "$SRC"
           sed -i 's/phi=63 \* DEGREES, theta=-48 \* DEGREES, zoom=0.82/phi=63 * DEGREES, theta=-50 * DEGREES, zoom=0.72/' "$SRC"
-          python -c 'from pathlib import Path; p=Path("job/House_Extrusion_3D_ManimCE.py"); s=p.read_text(); old="self.play(Transform(old_text, new_text), run_time=0.55)"; new="self.play(old_text.animate.set_opacity(0), run_time=0.15)\n        old_text.become(new_text)\n        old_text.set_opacity(0)\n        self.play(old_text.animate.set_opacity(1), run_time=0.25)"; assert old in s; p.write_text(s.replace(old,new))'
+          python render_jobs/house_extrusion_hud_patch_v3.py
           python -m py_compile "$SRC"
-          grep -n 'phase_box\|old_text.become\|move_camera(phi=58\|move_camera(phi=65\|move_camera(phi=63\|cutter.shift\|cutter.animate' "$SRC" | tee out/VISUAL_QA_PATCH.txt
+          grep -n 'phase_state\|add_fixed_in_frame_mobjects(new_text)\|remove_fixed_in_frame_mobjects\|move_camera(phi=58\|move_camera(phi=65\|move_camera(phi=63\|cutter.shift\|cutter.animate' "$SRC" | tee out/FINAL_QA_PATCH.txt
 
       - name: Install verification tools and ManimCE 0.20.1 image
         shell: bash
@@ -43,7 +43,7 @@ jobs:
           ffprobe -version | head -1
           docker pull manimcommunity/manim:v0.20.1 >/dev/null
 
-      - name: Literal PQL runtime QA V2
+      - name: Literal PQL runtime QA FINAL V3
         shell: bash
         run: |
           set -euo pipefail
@@ -61,9 +61,9 @@ jobs:
             " 2>&1 | tee qa_out/render_pql.log
           PREVIEW="$(find media_pql -type f -name 'HouseExtrusion3D.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PREVIEW" && test -s "$PREVIEW"
-          cp "$PREVIEW" qa_out/HouseExtrusion3D_V2_QA_pql.mp4
+          cp "$PREVIEW" qa_out/HouseExtrusion3D_FINAL_V3_QA_pql.mp4
 
-      - name: Literal PQH final render V2
+      - name: Literal PQH final render FINAL V3
         shell: bash
         run: |
           set -euo pipefail
@@ -81,15 +81,15 @@ jobs:
             " 2>&1 | tee out/render_pqh.log
           FINAL="$(find media -type f -name 'HouseExtrusion3D.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$FINAL" && test -s "$FINAL"
-          cp "$FINAL" out/House_Extrusion_3D_PQH_V2.mp4
-          cp job/House_Extrusion_3D_ManimCE.py out/House_Extrusion_3D_ManimCE_V2.py
+          cp "$FINAL" out/House_Extrusion_3D_PQH_FINAL_V3.mp4
+          cp job/House_Extrusion_3D_ManimCE.py out/House_Extrusion_3D_ManimCE_FINAL_V3.py
           cp qa_out/render_pql.log out/
 
-      - name: Strict technical verification and visual audit frames V2
+      - name: Strict technical verification and visual audit FINAL V3
         shell: bash
         run: |
           set -euo pipefail
-          F=out/House_Extrusion_3D_PQH_V2.mp4
+          F=out/House_Extrusion_3D_PQH_FINAL_V3.mp4
           W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
           H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
           FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
@@ -110,38 +110,38 @@ jobs:
             TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
             ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_${TAG}.png"
           done
-          sha256sum "$F" out/House_Extrusion_3D_ManimCE_V2.py > out/SHA256SUMS.txt
+          sha256sum "$F" out/House_Extrusion_3D_ManimCE_FINAL_V3.py > out/SHA256SUMS.txt
           printf '%s\n' \
-            'Scene: HouseExtrusion3D V2' \
+            'Scene: HouseExtrusion3D FINAL V3' \
             'ManimCE: 0.20.1' \
             'Preview: literal -pql' \
             'Final: literal -pqh' \
             'Output target: 1920x1080, 30 fps, H.264, yuv420p' \
-            'Visual QA V2: stable phase text via opacity+become; wider phase box; safer camera framing; clearer negative-extrusion facade view.' \
+            'Visual QA: phase text objects are removed and re-added fixed-in-frame; no glyph morphing; wider HUD; safe camera margins; facade-aligned negative extrusion.' \
             'Sequence: terrain -> 2D plan -> positive slab -> positive columns -> positive walls -> negative door cut -> negative window cut -> positive roof -> camera orbit.' \
             'QA: py_compile + PQL runtime + PQH + ffprobe + full FFmpeg decode + 13 audit frames + SHA-256' \
             > out/RENDER_INFO.txt
 
-      - name: Package verified delivery V2
+      - name: Package verified delivery FINAL V3
         shell: bash
         run: |
           set -euo pipefail
           cd out
-          zip -9 -r House_Extrusion_3D_PQH_V2_Package.zip \
-            House_Extrusion_3D_PQH_V2.mp4 House_Extrusion_3D_ManimCE_V2.py VIDEO_TECHNICAL.tsv \
-            SHA256SUMS.txt RENDER_INFO.txt VISUAL_QA_PATCH.txt render_pql.log render_pqh.log full_decode.log audit_frames/
+          zip -9 -r House_Extrusion_3D_PQH_FINAL_V3_Package.zip \
+            House_Extrusion_3D_PQH_FINAL_V3.mp4 House_Extrusion_3D_ManimCE_FINAL_V3.py VIDEO_TECHNICAL.tsv \
+            SHA256SUMS.txt RENDER_INFO.txt FINAL_QA_PATCH.txt render_pql.log render_pqh.log full_decode.log audit_frames/
 
       - uses: actions/upload-artifact@v4
         with:
-          name: House-Extrusion-3D-PQH-20260818-FINAL-V2
+          name: House-Extrusion-3D-PQH-20260818-FINAL-V3
           path: |
-            out/House_Extrusion_3D_PQH_V2.mp4
-            out/House_Extrusion_3D_PQH_V2_Package.zip
-            out/House_Extrusion_3D_ManimCE_V2.py
+            out/House_Extrusion_3D_PQH_FINAL_V3.mp4
+            out/House_Extrusion_3D_PQH_FINAL_V3_Package.zip
+            out/House_Extrusion_3D_ManimCE_FINAL_V3.py
             out/VIDEO_TECHNICAL.tsv
             out/SHA256SUMS.txt
             out/RENDER_INFO.txt
-            out/VISUAL_QA_PATCH.txt
+            out/FINAL_QA_PATCH.txt
             out/audit_frames/
           if-no-files-found: error
           retention-days: 7
