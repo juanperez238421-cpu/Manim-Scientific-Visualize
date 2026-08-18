@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   render:
-    if: github.event.pull_request.head.ref == 'runner-house-extrusion-20260818-v2'
+    if: github.event.pull_request.head.ref == 'runner-house-extrusion-20260818-v3'
     runs-on: ubuntu-latest
     timeout-minutes: 180
     steps:
@@ -105,15 +105,15 @@ jobs:
             ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_${TAG}.png"
           done
           sha256sum "$F" out/House_Extrusion_3D_ManimCE.py > out/SHA256SUMS.txt
-          cat > out/RENDER_INFO.txt <<'EOF'
-Scene: HouseExtrusion3D
-ManimCE: 0.20.1
-Preview: literal -pql
-Final: literal -pqh
-Output target: 1920x1080, 30 fps, H.264, yuv420p
-Sequence: terrain -> 2D plan -> positive slab -> positive columns -> positive walls -> negative door cut -> negative window cut -> positive roof -> camera orbit.
-QA: py_compile + PQL runtime + PQH + ffprobe + full FFmpeg decode + 11 audit frames + SHA-256
-EOF
+          printf '%s\n' \
+            'Scene: HouseExtrusion3D' \
+            'ManimCE: 0.20.1' \
+            'Preview: literal -pql' \
+            'Final: literal -pqh' \
+            'Output target: 1920x1080, 30 fps, H.264, yuv420p' \
+            'Sequence: terrain -> 2D plan -> positive slab -> positive columns -> positive walls -> negative door cut -> negative window cut -> positive roof -> camera orbit.' \
+            'QA: py_compile + PQL runtime + PQH + ffprobe + full FFmpeg decode + 11 audit frames + SHA-256' \
+            > out/RENDER_INFO.txt
 
       - name: Package verified delivery
         shell: bash
