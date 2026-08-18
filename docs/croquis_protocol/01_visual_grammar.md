@@ -35,6 +35,18 @@ Future face families may be added only when a real case requires them.
 5. Built solids: neutral architectural grays.
 6. Fixed HUD: stable screen-space layer; never competes with geometry.
 
+## Closed-profile invariant
+
+Any croquis that directly produces an additive or subtractive solid must be visibly closed before depth is introduced. A wall sketch is therefore not represented by a centerline: its displayed footprint must encode the same width, center and orientation as the 3D wall that follows. Internal walls are drawn one closed profile at a time so closure can be visually verified before extrusion.
+
+## Transparency invariant for architectural interiors
+
+Once exterior walls have been extruded, their fill should remain translucent whenever opaque facades would hide the internal-wall logic. Interior partitions remain substantially more opaque so room topology stays readable. Transparency is a pedagogical viewing aid, not a change in geometry.
+
+## Typography invariant
+
+Technical labels, phase text, notes and summaries use LaTeX (`Tex`/`MathTex`) and are introduced with `self.play(Write(...))`. Boxes, rules and geometric supports may use their own geometric animations, but visible technical text should not simply appear by `FadeIn`.
+
 ## Non-negotiable rule
 
 No important 2D technical geometry begins while the camera is still rotating into its croquis state.
