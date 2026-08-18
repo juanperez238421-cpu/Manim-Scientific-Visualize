@@ -1,0 +1,4 @@
+HouseExtrusion3D render trigger
+Date: 2026-08-18
+Mode: literal -pql QA then literal -pqh final
+Commit-back output: render_jobs/house_extrusion/delivery_committed/
