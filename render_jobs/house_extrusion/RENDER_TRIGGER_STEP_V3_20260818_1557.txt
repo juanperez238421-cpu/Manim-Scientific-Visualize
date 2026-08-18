@@ -1,0 +1,2 @@
+Trigger exact Senior Step-by-Step V3 render after QA review.
+Sequence: terrain -> slab sketch -> slab extrusion -> wall/column sketches on slab -> positive structure -> negative cuts -> roof -> orbit.
