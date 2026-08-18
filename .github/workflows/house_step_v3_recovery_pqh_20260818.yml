@@ -1,0 +1,84 @@
+name: House Step V3 Recovery PQH 20260818
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'house-step-v3-render-20260818'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: house-step-v3-render-20260818
+
+      - name: Compile exact V3 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile render_jobs/house_step_v3/House_Extrusion_3D_ManimCE.py
+
+      - name: Pull exact ManimCE image
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQH render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/house_step_v3/House_Extrusion_3D_ManimCE.py
+          rm -rf media out && mkdir -p out
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pqh $SRC HouseExtrusion3D --fps 30 --format=mp4 --media_dir media --disable_caching
+            " 2>&1 | tee out/render_pqh.log
+          F="$(find media -type f -name 'HouseExtrusion3D.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$F" && test -s "$F"
+          cp "$F" out/House_Extrusion_3D_STEP_BY_STEP_V3_FULL_PQH.mp4
+          cp "$SRC" out/House_Extrusion_3D_STEP_BY_STEP_V3.py
+
+      - name: Verify inside Manim container
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/House_Extrusion_3D_STEP_BY_STEP_V3_FULL_PQH.mp4
+          probe(){ docker run --rm -v "$PWD:/manim" -w /manim --entrypoint ffprobe manimcommunity/manim:v0.20.1 "$@"; }
+          W="$(probe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(probe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(probe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(probe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(probe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(probe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          printf 'width=%s\nheight=%s\nfps=%s\ncodec=%s\npix_fmt=%s\nduration=%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" > out/VIDEO_TECHNICAL.txt
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          docker run --rm -v "$PWD:/manim" -w /manim --entrypoint ffmpeg manimcommunity/manim:v0.20.1 -nostdin -v error -i "$F" -f null -
+          sha256sum "$F" out/House_Extrusion_3D_STEP_BY_STEP_V3.py > out/SHA256SUMS.txt
+          printf 'SUCCESS\n' > out/STATUS.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: House-Step-V3-Recovery-FULL-PQH
+          path: |
+            out/House_Extrusion_3D_STEP_BY_STEP_V3_FULL_PQH.mp4
+            out/House_Extrusion_3D_STEP_BY_STEP_V3.py
+            out/VIDEO_TECHNICAL.txt
+            out/SHA256SUMS.txt
+            out/STATUS.txt
+          if-no-files-found: error
+          retention-days: 7
