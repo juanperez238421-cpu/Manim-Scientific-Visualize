@@ -1,0 +1,115 @@
+name: Archive Geometry8 Early Thales Parallel PQH
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'archive/geometry8-early-thales-rerender-20260817'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        include:
+          - scene: ThalesPyramidMasterclassArchive
+            date: 2026-07-11
+            stem: ThalesPyramidMasterclass_ARCHIVE_RERENDER
+          - scene: ThalesTheoremArchive
+            date: 2026-07-11
+            stem: ThalesTheorem_ARCHIVE_RERENDER
+          - scene: ThalesTheoremFullArchive
+            date: 2026-07-11
+            stem: ThalesTheoremFull_ARCHIVE_RERENDER
+          - scene: ThalesTheoremGeometry8Archive
+            date: 2026-07-11
+            stem: ThalesTheoremGeometry8_ARCHIVE_RERENDER
+          - scene: Geometry8SecondTermVisualRoadmapArchive
+            date: 2026-07-13
+            stem: Geometry8SecondTermVisualRoadmap_ARCHIVE_RERENDER
+          - scene: Geometry8CongruenceThalesArchive
+            date: 2026-07-15
+            stem: Geometry8CongruenceThales_ARCHIVE_RERENDER
+          - scene: TriangleRatiosSimilarityThalesArchive
+            date: 2026-07-21
+            stem: TriangleRatiosSimilarityThales_ARCHIVE_RERENDER
+          - scene: UnitCircleThalesBridgeArchive
+            date: 2026-07-22
+            stem: UnitCircleThalesBridge_ARCHIVE_RERENDER
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reconstruct source and compile
+        shell: bash
+        run: |
+          set -euo pipefail
+          tr -cd 'A-Za-z0-9+/=' < archive_rerender/thales_early_archive_reconstructed.py.gz.b64 | base64 -d | gzip -dc > thales_early_archive_reconstructed.py
+          tr -cd 'A-Za-z0-9+/=' < archive_rerender/jp_classroom_style.py.gz.b64 | base64 -d | gzip -dc > jp_classroom_style.py
+          python -m py_compile thales_early_archive_reconstructed.py jp_classroom_style.py
+      - name: Install QA tools and pull ManimCE 0.20.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg >/dev/null
+          docker pull manimcommunity/manim:v0.20.1
+      - name: PQL gate
+        shell: bash
+        env:
+          SCENE: ${{ matrix.scene }}
+        run: |
+          set -euo pipefail
+          rm -rf media
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.20 -e SCENE="$SCENE" -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c 'set -euo pipefail; mkdir -p /tmp/bin; printf "#!/usr/bin/env bash\nexit 0\n" >/tmp/bin/xdg-open; chmod +x /tmp/bin/xdg-open; export PATH="/tmp/bin:$PATH"; manim -pql thales_early_archive_reconstructed.py "$SCENE" --format=mp4 --disable_caching --fps 30'
+          test -n "$(find media -type f -name "${SCENE}.mp4" | head -1)"
+      - name: Literal PQH and QA
+        shell: bash
+        env:
+          SCENE: ${{ matrix.scene }}
+          DATE: ${{ matrix.date }}
+          STEM: ${{ matrix.stem }}
+        run: |
+          set -euo pipefail
+          rm -rf media delivery
+          mkdir -p delivery
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 -e SCENE="$SCENE" -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c 'set -euo pipefail; mkdir -p /tmp/bin; printf "#!/usr/bin/env bash\nexit 0\n" >/tmp/bin/xdg-open; chmod +x /tmp/bin/xdg-open; export PATH="/tmp/bin:$PATH"; manim -pqh thales_early_archive_reconstructed.py "$SCENE" --format=mp4 --disable_caching --fps 30'
+          SRC="$(find media -type f -name "${SCENE}.mp4" ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$SRC" && test -s "$SRC"
+          OUT="delivery/${DATE}__${STEM}_pqh.mp4"
+          cp "$SRC" "$OUT"
+          cp thales_early_archive_reconstructed.py jp_classroom_style.py delivery/
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$OUT")" = h264
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$OUT")" = 1920
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$OUT")" = 1080
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$OUT")" = 30/1
+          ffmpeg -nostdin -v error -i "$OUT" -f null -
+      - uses: actions/upload-artifact@v4
+        with:
+          name: early-thales-${{ matrix.date }}-${{ matrix.scene }}
+          path: delivery/
+          retention-days: 14
+          if-no-files-found: error
+
+  package:
+    needs: render
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: early-thales-*
+          path: all
+      - name: Verify eight videos
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(find all -type f -name '*.mp4' | wc -l)" -eq 8
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8_Early_Thales_Proportional_Triangles_Archive_Rerenders_PARALLEL
+          path: all/
+          retention-days: 14
+          if-no-files-found: error
