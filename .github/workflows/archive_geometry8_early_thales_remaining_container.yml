@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   render:
-    if: github.event.pull_request.head.ref == 'archive/geometry8-early-thales-rerender-20260817'
+    if: github.event.pull_request.head.ref == 'archive/geometry8-thales-remaining-container-only-20260817'
     runs-on: ubuntu-latest
     container:
       image: manimcommunity/manim:v0.20.1
