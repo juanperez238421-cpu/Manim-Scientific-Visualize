@@ -1,0 +1,3 @@
+HouseExtrusion3D FINAL V3
+Date: 2026-08-18
+HUD: fixed-in-frame text replacement without glyph transforms
