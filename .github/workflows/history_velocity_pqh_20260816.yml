@@ -1,4 +1,4 @@
-name: House Extrusion 3D Verified PQH FINAL V3 20260818
+name: History of Velocity V3 FINAL PQH 20260816
 
 on:
   pull_request:
@@ -9,32 +9,26 @@ permissions:
 
 jobs:
   render:
-    if: github.event.pull_request.head.ref == 'runner-house-extrusion-20260818-v5'
+    if: github.event.pull_request.head.ref == 'agent/history-of-velocity-pqh-20260816'
     runs-on: ubuntu-latest
     timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch source and apply final senior QA patches
+      - name: Reconstruct, patch and validate exact V3 final sources
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p job out qa_out
-          SRC=job/House_Extrusion_3D_ManimCE.py
-          curl -fsSL 'https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/render-house-extrusion-20260818/render_jobs/house_extrusion/House_Extrusion_3D_ManimCE.py' -o "$SRC"
-          sed -i 's/door_cutter.shift(IN \* 0.75)/door_cutter.shift(DOWN * 0.75)/' "$SRC"
-          sed -i 's/door_cutter.animate.shift(OUT \* 0.75)/door_cutter.animate.shift(UP * 0.75)/' "$SRC"
-          sed -i 's/win_cutter.shift(IN \* 0.75)/win_cutter.shift(DOWN * 0.75)/' "$SRC"
-          sed -i 's/win_cutter.animate.shift(OUT \* 0.75)/win_cutter.animate.shift(UP * 0.75)/' "$SRC"
-          sed -i 's/width=4.55,/width=5.50,/' "$SRC"
-          sed -i 's/phi=58 \* DEGREES, theta=-52 \* DEGREES, zoom=0.75/phi=58 * DEGREES, theta=-52 * DEGREES, zoom=0.70/' "$SRC"
-          sed -i 's/phi=68 \* DEGREES, theta=-28 \* DEGREES, zoom=0.92/phi=65 * DEGREES, theta=-55 * DEGREES, zoom=0.78/' "$SRC"
-          sed -i 's/phi=63 \* DEGREES, theta=-48 \* DEGREES, zoom=0.82/phi=63 * DEGREES, theta=-50 * DEGREES, zoom=0.72/' "$SRC"
-          python render_jobs/house_extrusion_hud_patch_v3.py
-          python -m py_compile "$SRC"
-          grep -n 'phase_state\|add_fixed_in_frame_mobjects(new_text)\|remove_fixed_in_frame_mobjects\|move_camera(phi=58\|move_camera(phi=65\|move_camera(phi=63\|cutter.shift\|cutter.animate' "$SRC" | tee out/FINAL_QA_PATCH.txt
+          JOB=render_jobs/history_velocity_20260816
+          cat "$JOB"/h_*.b64 | base64 -d | gzip -dc > "$JOB/history_of_velocity.py"
+          cat "$JOB"/s_*.b64 | base64 -d | gzip -dc > "$JOB/jp_classroom_style.py"
+          cat "$JOB"/n_*.b64 | base64 -d | gzip -dc > "$JOB/TECHNICAL_NOTES.md"
+          cat "$JOB"/c_*.b64 | base64 -d | gzip -dc > "$JOB/check_history_velocity.py"
+          python "$JOB/apply_v3_final_layout_patch.py" "$JOB/history_of_velocity.py"
+          python -m py_compile "$JOB/history_of_velocity.py" "$JOB/jp_classroom_style.py" "$JOB/check_history_velocity.py" "$JOB/apply_v3_final_layout_patch.py"
+          (cd "$JOB" && python check_history_velocity.py)
 
-      - name: Install verification tools and ManimCE 0.20.1 image
+      - name: Install verification tools and ManimCE image
         shell: bash
         run: |
           set -euo pipefail
@@ -43,105 +37,102 @@ jobs:
           ffprobe -version | head -1
           docker pull manimcommunity/manim:v0.20.1 >/dev/null
 
-      - name: Literal PQL runtime QA FINAL V3
+      - name: Accelerated literal PQL V3 final runtime QA
         shell: bash
         run: |
           set -euo pipefail
-          rm -rf media_pql
+          JOB=render_jobs/history_velocity_20260816
+          rm -rf media_pql qa_out && mkdir -p qa_out
           docker run --rm --user "$(id -u):$(id -g)" \
-            -e HOME=/tmp/manim-home -v "$PWD:/manim" -w /manim \
-            --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.08 \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "
               set -euo pipefail
               mkdir -p /tmp/manim-bin
               printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:\$PATH
-              manim -pql job/House_Extrusion_3D_ManimCE.py HouseExtrusion3D \
-                --format=mp4 --media_dir media_pql --disable_caching
+              manim -pql $JOB/history_of_velocity.py HistoryOfVelocity --fps 15 --format=mp4 --media_dir media_pql --disable_caching
             " 2>&1 | tee qa_out/render_pql.log
-          PREVIEW="$(find media_pql -type f -name 'HouseExtrusion3D.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          PREVIEW="$(find media_pql -type f -name 'HistoryOfVelocity.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PREVIEW" && test -s "$PREVIEW"
-          cp "$PREVIEW" qa_out/HouseExtrusion3D_FINAL_V3_QA_pql.mp4
+          cp "$PREVIEW" qa_out/HistoryOfVelocity_V3_FINAL_QA_pql.mp4
 
-      - name: Literal PQH final render FINAL V3
+      - name: Literal PQH final render V3 at pedagogical timing
         shell: bash
         run: |
           set -euo pipefail
-          rm -rf media
+          JOB=render_jobs/history_velocity_20260816
+          rm -rf media out && mkdir -p out
           docker run --rm --user "$(id -u):$(id -g)" \
-            -e HOME=/tmp/manim-home -v "$PWD:/manim" -w /manim \
-            --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.40 \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "
               set -euo pipefail
               mkdir -p /tmp/manim-bin
               printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:\$PATH
-              manim -pqh job/House_Extrusion_3D_ManimCE.py HouseExtrusion3D \
-                --fps 30 --format=mp4 --media_dir media --disable_caching
+              manim -pqh $JOB/history_of_velocity.py HistoryOfVelocity --fps 30 --format=mp4 --media_dir media --disable_caching
             " 2>&1 | tee out/render_pqh.log
-          FINAL="$(find media -type f -name 'HouseExtrusion3D.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          FINAL="$(find media -type f -name 'HistoryOfVelocity.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$FINAL" && test -s "$FINAL"
-          cp "$FINAL" out/House_Extrusion_3D_PQH_FINAL_V3.mp4
-          cp job/House_Extrusion_3D_ManimCE.py out/House_Extrusion_3D_ManimCE_FINAL_V3.py
-          cp qa_out/render_pql.log out/
+          cp "$FINAL" out/HistoryOfVelocity_Senior_FINAL_V3_pqh.mp4
 
-      - name: Strict technical verification and visual audit FINAL V3
+      - name: Strictly verify V3 final MP4 and export dense audit frames
         shell: bash
         run: |
           set -euo pipefail
-          F=out/House_Extrusion_3D_PQH_FINAL_V3.mp4
+          F=out/HistoryOfVelocity_Senior_FINAL_V3_pqh.mp4
           W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
           H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
           FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
           CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
           PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
           DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
-          SIZE="$(ffprobe -v error -show_entries format=size -of csv=p=0 "$F")"
-          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > out/VIDEO_TECHNICAL.tsv
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\n%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" > out/VIDEO_TECHNICAL.tsv
           test "$W" = 1920
           test "$H" = 1080
           test "$FPS" = 30/1
           test "$CODEC" = h264
           test "$PIX" = yuv420p
+          python - <<'PY'
+          dur=float(open('out/VIDEO_TECHNICAL.tsv').read().splitlines()[1].split('\t')[-1])
+          assert 480 <= dur <= 720, f'V3 final duration outside 8-12 minute target: {dur}'
+          print('duration_target_pass', dur)
+          PY
           ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
           mkdir -p out/audit_frames
-          for P in 0.03 0.10 0.18 0.28 0.38 0.48 0.53 0.58 0.63 0.68 0.78 0.88 0.96; do
+          for P in 0.02 0.06 0.10 0.16 0.22 0.28 0.34 0.40 0.46 0.52 0.58 0.64 0.70 0.76 0.82 0.88 0.94 0.985; do
             T="$(python -c "print(float('$DUR')*float('$P'))")"
             TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
             ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_${TAG}.png"
           done
-          sha256sum "$F" out/House_Extrusion_3D_ManimCE_FINAL_V3.py > out/SHA256SUMS.txt
-          printf '%s\n' \
-            'Scene: HouseExtrusion3D FINAL V3' \
-            'ManimCE: 0.20.1' \
-            'Preview: literal -pql' \
-            'Final: literal -pqh' \
-            'Output target: 1920x1080, 30 fps, H.264, yuv420p' \
-            'Visual QA: phase text objects are removed and re-added fixed-in-frame; no glyph morphing; wider HUD; safe camera margins; facade-aligned negative extrusion.' \
-            'Sequence: terrain -> 2D plan -> positive slab -> positive columns -> positive walls -> negative door cut -> negative window cut -> positive roof -> camera orbit.' \
-            'QA: py_compile + PQL runtime + PQH + ffprobe + full FFmpeg decode + 13 audit frames + SHA-256' \
-            > out/RENDER_INFO.txt
+          sha256sum "$F" > out/SHA256SUMS.txt
 
-      - name: Package verified delivery FINAL V3
+      - name: Package V3 final verified delivery
         shell: bash
         run: |
           set -euo pipefail
+          JOB=render_jobs/history_velocity_20260816
+          cp "$JOB/history_of_velocity.py" "$JOB/jp_classroom_style.py" "$JOB/TECHNICAL_NOTES.md" out/
+          cp qa_out/render_pql.log out/
+          printf 'ManimCE: 0.20.1\nPreview: literal -pql, time scale 0.08\nFinal: literal -pqh, time scale 1.40, 30 fps\nResolution: 1920x1080\nCodec: H.264 / yuv420p\nValidation: py_compile + runtime PQL + strict 8-12 min gate + ffprobe + full FFmpeg decode + SHA-256\nV3 corrections: atomic headers; Newton-Leibniz equation separation; graph interpretation label separation; observer/velocity-label separation; interactive Galileo/Kepler/Newton/x-v-a/vector/relativity scenes.\n' > out/RENDER_INFO.txt
           cd out
-          zip -9 -r House_Extrusion_3D_PQH_FINAL_V3_Package.zip \
-            House_Extrusion_3D_PQH_FINAL_V3.mp4 House_Extrusion_3D_ManimCE_FINAL_V3.py VIDEO_TECHNICAL.tsv \
-            SHA256SUMS.txt RENDER_INFO.txt FINAL_QA_PATCH.txt render_pql.log render_pqh.log full_decode.log audit_frames/
+          zip -9 -r HistoryOfVelocity_Senior_FINAL_V3_PQH_Package.zip \
+            HistoryOfVelocity_Senior_FINAL_V3_pqh.mp4 history_of_velocity.py jp_classroom_style.py TECHNICAL_NOTES.md \
+            VIDEO_TECHNICAL.tsv SHA256SUMS.txt RENDER_INFO.txt render_pqh.log render_pql.log full_decode.log audit_frames/
 
       - uses: actions/upload-artifact@v4
         with:
-          name: House-Extrusion-3D-PQH-20260818-FINAL-V3
+          name: HistoryOfVelocity-Senior-FINAL-V3-PQH
           path: |
-            out/House_Extrusion_3D_PQH_FINAL_V3.mp4
-            out/House_Extrusion_3D_PQH_FINAL_V3_Package.zip
-            out/House_Extrusion_3D_ManimCE_FINAL_V3.py
+            out/HistoryOfVelocity_Senior_FINAL_V3_pqh.mp4
+            out/HistoryOfVelocity_Senior_FINAL_V3_PQH_Package.zip
+            out/history_of_velocity.py
+            out/jp_classroom_style.py
+            out/TECHNICAL_NOTES.md
             out/VIDEO_TECHNICAL.tsv
             out/SHA256SUMS.txt
             out/RENDER_INFO.txt
-            out/FINAL_QA_PATCH.txt
             out/audit_frames/
           if-no-files-found: error
           retention-days: 7
