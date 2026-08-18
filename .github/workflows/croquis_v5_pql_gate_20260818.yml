@@ -43,11 +43,18 @@ jobs:
               manim -pql render_jobs/house_step_v3/House_Extrusion_3D_STEP_BY_STEP_V5_CLOSED_CROQUIS_LATEX.py HouseExtrusion3D --format=mp4 --disable_caching
             '
 
+      - name: Ensure FFmpeg verification tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
       - name: PQL technical and visual QA package
         run: |
           set -euo pipefail
-          MP4=$(find media -type f -name 'HouseExtrusion3D.mp4' | head -n 1)
+          MP4=$(find media -type f -name '*.mp4' | grep 'HouseExtrusion3D' | grep -v 'partial_movie_files' | head -n 1)
+          test -n "$MP4"
           test -s "$MP4"
+          echo "PQL=$MP4"
           mkdir -p delivery/v5_pql/frames
           cp "$MP4" delivery/v5_pql/House_Extrusion_3D_STEP_BY_STEP_V5_PQL.mp4
           cp render_jobs/house_step_v3/House_Extrusion_3D_STEP_BY_STEP_V5_CLOSED_CROQUIS_LATEX.py delivery/v5_pql/
