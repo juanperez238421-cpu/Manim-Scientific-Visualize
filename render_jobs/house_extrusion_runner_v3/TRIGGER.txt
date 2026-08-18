@@ -1,0 +1,3 @@
+HouseExtrusion3D
+Date: 2026-08-18
+Runner revision: v3 YAML-corrected
