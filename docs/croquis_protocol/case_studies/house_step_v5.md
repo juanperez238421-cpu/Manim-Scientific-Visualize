@@ -19,3 +19,7 @@ V5 keeps the approved V4 composition, cameras, color semantics and operation ord
 Acceptance requires PQL first, dense semantic frame extraction, manual review of the wall-croquis closure sequence and exterior-wall transparency, then literal PQH plus ffprobe/full-decode/SHA-256 validation.
 
 The PQL workflow uses robust final-video discovery because Manim names the preview artifact `HouseExtrusion3D_PQL_PASS.mp4` rather than the scene class name alone.
+
+## PQL result
+
+PASS. The dense 40-frame audit confirms stable PLAN_2D before wall drawing, individually closed internal-wall footprints, readable column profiles, transparent exterior-wall context, opaque-enough internal partitions, and no new HUD clipping. This gate authorizes the V5 literal PQH render.
