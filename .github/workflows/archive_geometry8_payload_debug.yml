@@ -1,0 +1,20 @@
+name: Archive Geometry8 Payload Debug
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  upload:
+    if: github.event.pull_request.head.ref == 'archive/geometry8-early-thales-rerender-20260817'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          wc -c archive_rerender/*.b64
+          sha256sum archive_rerender/*.b64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: early-thales-payload-debug
+          path: archive_rerender/*.b64
+          retention-days: 2
