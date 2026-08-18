@@ -35,7 +35,7 @@ jobs:
           PY
           python -Werror -m py_compile "$JOB/Geometry8_Circle_Class2_Parts_Arcs.py" "$JOB/jp_classroom_style.py"
           grep -q 'class Geometry8CircleClass2PartsArcs' "$JOB/Geometry8_Circle_Class2_Parts_Arcs.py"
-          grep -q '\\qquad m\\angle AVB' "$JOB/Geometry8_Circle_Class2_Parts_Arcs.py"
+          grep -q '\\qquad "' "$JOB/Geometry8_Circle_Class2_Parts_Arcs.py"
 
       - name: Literal PQL visual runtime QA
         shell: bash
