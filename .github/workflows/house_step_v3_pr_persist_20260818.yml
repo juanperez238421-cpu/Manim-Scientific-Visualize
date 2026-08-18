@@ -5,92 +5,93 @@ on:
     branches: [main]
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  render:
-    if: github.event.pull_request.head.ref == 'house-step-v3-render-20260818' && github.actor != 'github-actions[bot]'
+  sem11_oop_v10:
+    if: github.event.pull_request.head.ref == 'render-sem11-oop-v10-20260818'
     runs-on: ubuntu-latest
     timeout-minutes: 120
 
     steps:
-      - name: Checkout exact render branch
-        uses: actions/checkout@v4
-        with:
-          ref: house-step-v3-render-20260818
+      - uses: actions/checkout@v4
 
-      - name: Persist STARTED
+      - name: Reconstruct exact V10 sources and static QA
         shell: bash
         run: |
           set -euo pipefail
-          OUT=render_jobs/house_step_v3/delivery
-          mkdir -p "$OUT"
-          printf 'STARTED\n' > "$OUT/STATUS.txt"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$OUT/STATUS.txt"
-          git commit -m 'House Step V3 PR render started' || true
-          git push origin HEAD:house-step-v3-render-20260818
+          JOB=render_jobs/sem11_oop_v10
+          CHUNKS="$JOB/chunks"
+          BASE='https://raw.githubusercontent.com/juanperez238421-cpu/IJR---Seminario/render-sem11-oop-v10-20260818/render_jobs/sem11_oop_v10'
+          mkdir -p "$CHUNKS" out
+          for I in 00 01 02 03 04; do
+            curl -fsSL "$BASE/chunks/scene_$I" -o "$CHUNKS/scene_$I"
+            curl -fsSL "$BASE/chunks/style_$I" -o "$CHUNKS/style_$I"
+          done
+          curl -fsSL "$BASE/check_manim_style.py" -o "$JOB/check_manim_style.py"
+          cat "$CHUNKS"/scene_* > "$JOB/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10.py"
+          cat "$CHUNKS"/style_* > "$JOB/jp_classroom_style.py"
+          python -m py_compile "$JOB/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10.py" "$JOB/jp_classroom_style.py" "$JOB/check_manim_style.py"
+          python "$JOB/check_manim_style.py" "$JOB/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10.py" | tee out/STYLE_QA.txt
+          sha256sum "$JOB/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10.py" "$JOB/jp_classroom_style.py" > out/SOURCE_SHA256.txt
 
-      - name: Render and persist verified delivery
+      - name: Prepare ManimCE 0.20.1 and verification tools
         shell: bash
         run: |
-          set -uo pipefail
-          JOB=render_jobs/house_step_v3
-          SRC="$JOB/House_Extrusion_3D_ManimCE.py"
-          OUT="$JOB/delivery"
-          rm -rf media_pql media "$OUT/audit_frames"
-          mkdir -p "$OUT/audit_frames"
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
 
-          persist_fail() {
-            CODE="$1"
-            printf 'FAILED\ncode=%s\n' "$CODE" > "$OUT/STATUS.txt"
-            git add "$OUT" || true
-            git commit -m "House Step V3 PR render failed $CODE" || true
-            git push origin HEAD:house-step-v3-render-20260818 || true
-            exit 1
-          }
-
-          python -m py_compile "$SRC" > "$OUT/py_compile.log" 2>&1 || persist_fail PY_COMPILE
-          docker pull manimcommunity/manim:v0.20.1 > "$OUT/docker_pull.log" 2>&1 || persist_fail DOCKER_PULL
-
-          set +e
-          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+      - name: Accelerated literal PQL layout gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/sem11_oop_v10
+          rm -rf media_pql
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.18 \
             -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "
               set -euo pipefail
               mkdir -p /tmp/manim-bin
               printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:\$PATH
-              manim -pql $SRC HouseExtrusion3D --format=mp4 --media_dir media_pql --disable_caching
-            " 2>&1 | tee "$OUT/render_pql.log"
-          PQL=${PIPESTATUS[0]}
-          set -e
-          [ "$PQL" -eq 0 ] || persist_fail PQL_RENDER
+              manim -pql $JOB/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10.py Seminar11OOPImmersiveV10 \
+                --fps 15 --format=mp4 --media_dir media_pql --disable_caching
+            " 2>&1 | tee out/render_pql.log
+          P="$(find media_pql -type f -name 'Seminar11OOPImmersiveV10.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$P" && test -s "$P"
+          cp "$P" out/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10_QA_pql.mp4
 
-          PREVIEW="$(find media_pql -type f -name 'HouseExtrusion3D.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
-          [ -n "$PREVIEW" ] && [ -s "$PREVIEW" ] || persist_fail PQL_OUTPUT
-
-          set +e
-          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/sem11_oop_v10
+          rm -rf media
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
             -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "
               set -euo pipefail
               mkdir -p /tmp/manim-bin
               printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:\$PATH
-              manim -pqh $SRC HouseExtrusion3D --fps 30 --format=mp4 --media_dir media --disable_caching
-            " 2>&1 | tee "$OUT/render_pqh.log"
-          PQH=${PIPESTATUS[0]}
-          set -e
-          [ "$PQH" -eq 0 ] || persist_fail PQH_RENDER
+              manim -pqh $JOB/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10.py Seminar11OOPImmersiveV10 \
+                --fps 30 --format=mp4 --media_dir media --disable_caching
+            " 2>&1 | tee out/render_pqh.log
+          F="$(find media -type f -name 'Seminar11OOPImmersiveV10.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$F" && test -s "$F"
+          cp "$F" out/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10_pqh.mp4
+          cp "$JOB/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10.py" out/
+          cp "$JOB/jp_classroom_style.py" out/
 
-          FINAL="$(find media -type f -name 'HouseExtrusion3D.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
-          [ -n "$FINAL" ] && [ -s "$FINAL" ] || persist_fail PQH_OUTPUT
-          cp "$FINAL" "$OUT/House_Extrusion_3D_STEP_BY_STEP_V3_PQH.mp4"
-          cp "$SRC" "$OUT/House_Extrusion_3D_ManimCE.py"
-
-          F="$OUT/House_Extrusion_3D_STEP_BY_STEP_V3_PQH.mp4"
+      - name: Strict technical QA and audit frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10_pqh.mp4
           W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
           H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
           FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
@@ -98,24 +99,44 @@ jobs:
           PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
           DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
           SIZE="$(ffprobe -v error -show_entries format=size -of csv=p=0 "$F")"
-          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > "$OUT/VIDEO_TECHNICAL.tsv"
-          [ "$W" = 1920 ] || persist_fail WIDTH
-          [ "$H" = 1080 ] || persist_fail HEIGHT
-          [ "$FPS" = 30/1 ] || persist_fail FPS
-          [ "$CODEC" = h264 ] || persist_fail CODEC
-          [ "$PIX" = yuv420p ] || persist_fail PIX_FMT
-          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/full_decode.log" || persist_fail FULL_DECODE
-
-          for P in 0.05 0.15 0.25 0.35 0.45 0.55 0.65 0.75 0.85 0.95; do
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
+          mkdir -p out/audit_frames
+          for P in 0.03 0.10 0.18 0.26 0.34 0.42 0.50 0.58 0.66 0.74 0.82 0.90 0.97; do
             T="$(python -c "print(float('$DUR')*float('$P'))")"
             TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
-            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "$OUT/audit_frames/frame_${TAG}.png" || persist_fail QA_FRAME
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_${TAG}.png"
           done
+          ffmpeg -nostdin -loglevel error -i "$F" -vf "fps=1/10,scale=640:-1,tile=4x3:padding=6:margin=8" -frames:v 1 out/QA_CONTACT_SHEET.jpg
+          sha256sum "$F" out/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10.py out/jp_classroom_style.py > out/SHA256SUMS.txt
+          printf 'Scene: Seminar11OOPImmersiveV10\nVersion: Senior QA V10 clean-fade final\nManimCE: 0.20.1\nPreview: literal -pql with LESSON_TIME_SCALE=0.18\nFinal: literal -pqh, 1920x1080, 30 fps, H.264/yuv420p\nQA: py_compile + JP style checker + runtime safe-frame assertions + PQL + PQH + ffprobe + full decode + 13 audit frames + contact sheet + SHA-256\n' > out/RENDER_INFO.txt
+          cd out
+          zip -9 -r Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10_PQH_Package.zip \
+            Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10_pqh.mp4 \
+            Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10_QA_pql.mp4 \
+            Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10.py jp_classroom_style.py \
+            VIDEO_TECHNICAL.tsv SHA256SUMS.txt SOURCE_SHA256.txt RENDER_INFO.txt STYLE_QA.txt \
+            render_pql.log render_pqh.log full_decode.log QA_CONTACT_SHEET.jpg audit_frames/
 
-          sha256sum "$F" "$SRC" > "$OUT/SHA256SUMS.txt"
-          printf 'Scene: HouseExtrusion3D\nVersion: Senior Step-by-Step V3\nManimCE: 0.20.1\nPreview: literal -pql\nFinal: literal -pqh, 1920x1080, 30 fps, H.264/yuv420p\nQA: py_compile + PQL + PQH + ffprobe + full decode + audit frames + SHA-256\n' > "$OUT/RENDER_INFO.txt"
-          printf 'SUCCESS\n' > "$OUT/STATUS.txt"
-
-          git add "$OUT"
-          git commit -m 'House Step V3 PR verified PQH delivery'
-          git push origin HEAD:house-step-v3-render-20260818
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Seminar11-OOP-V10-PQH-CLEANFADE-20260818
+          path: |
+            out/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10_pqh.mp4
+            out/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10_QA_pql.mp4
+            out/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10_PQH_Package.zip
+            out/Seminar11_OOP_Immersive_EN_SENIOR_QA_FINAL_V10.py
+            out/jp_classroom_style.py
+            out/VIDEO_TECHNICAL.tsv
+            out/SHA256SUMS.txt
+            out/RENDER_INFO.txt
+            out/STYLE_QA.txt
+            out/QA_CONTACT_SHEET.jpg
+            out/audit_frames/
+          if-no-files-found: error
+          retention-days: 7
