@@ -23,7 +23,7 @@ jobs:
           docker run --rm \
             -v "$PWD/render_jobs/itm_activity_cover_only:/manim" \
             manimcommunity/manim:v0.20.1 \
-            manim -pqh itm_activity_cover.py ITMActivityCover --media_dir media
+            manim -qh itm_activity_cover.py ITMActivityCover --media_dir media
 
       - name: Normalize final cover file
         run: |
