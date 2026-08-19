@@ -59,10 +59,26 @@ class Geometry8CirclePedagogicalSequenceSeniorQA(Geometry8CircleWorkshopFinal):
         ).move_to(center)
 
     def _term_card(self, title: str, body, width: float = 5.4) -> VGroup:
-        lines = [body] if isinstance(body, str) else list(body)
+        """Use each source module's proven typography contract.
+
+        Fundamentals passes a single string and its geometry/labels were audited
+        with the original 27/24 typography. Class 2 passes a list of lines and
+        benefits from the larger 30/27 projector typography. Keeping these two
+        cases separate prevents a Class-2 readability upgrade from perturbing
+        the already-validated Fundamentals layouts.
+        """
+        if isinstance(body, str):
+            return self.note_panel(
+                title,
+                [body],
+                width=width,
+                title_size=27,
+                body_size=24,
+                max_text_height=1.60,
+            )
         return self.note_panel(
             title,
-            lines,
+            list(body),
             width=width,
             title_size=30,
             body_size=27,
@@ -164,7 +180,7 @@ class Geometry8CirclePedagogicalSequenceSeniorQA(Geometry8CircleWorkshopFinal):
         Geometry8CircleClass2PartsArcs.compare_lines(self)
         Geometry8CircleClass2PartsArcs.central_angle(self)
         Geometry8CircleClass2PartsArcs.inscribed_angle(self)
-        Geometry8CircleClass2PartsArcs.summary(self)
+        self.class2_summary_qa()
 
         # C. PDF bridge placed after Class 2.
         self.standard_closing("Circle fundamentals recovered — ready for guided practice.")
@@ -184,6 +200,61 @@ class Geometry8CirclePedagogicalSequenceSeniorQA(Geometry8CircleWorkshopFinal):
         self.exercise_formula_choice_qa()
         Geometry8CircleWorkshopFinal.preview_shaded_area(self)
         self.exit_ticket_qa()
+
+    def class2_summary_qa(self) -> None:
+        """Render the exact Class-2 checklist with a TeX-safe takeaway.
+
+        The historical source concatenates two raw strings directly after
+        ``\\qquad``. Python removes the source-line boundary, so TeX sees the
+        invalid control sequence ``\\qquadm``. This local reconstruction keeps
+        the same mathematical content while making the separator explicit.
+        """
+        self.set_header(
+            9,
+            "CLASS 2 CHECKLIST",
+            "Recognize the object first. Then use the relationship that belongs to it.",
+        )
+        data = [
+            ("1  CHORD", "2 endpoints on the circle"),
+            ("2  ARC", "curved part of the boundary"),
+            ("3  TANGENT", "1 contact point"),
+            ("4  SECANT", "2 intersection points"),
+            ("5  CENTRAL ANGLE", "angle measure = arc measure"),
+            ("6  INSCRIBED ANGLE", "angle measure = arc / 2"),
+        ]
+        cards = VGroup(
+            *[
+                self.note_panel(
+                    title,
+                    [line],
+                    width=4.25,
+                    title_size=27,
+                    body_size=25,
+                    max_text_height=1.10,
+                )
+                for title, line in data
+            ]
+        )
+        cards.arrange_in_grid(rows=2, cols=3, buff=(0.28, 0.34))
+        cards.move_to(UP * 0.10)
+        takeaway = self.formula_panel(
+            r"m\angle AOB=m\widehat{AB}\qquad\;m\angle AVB=\frac{1}{2}m\widehat{AB}",
+            width=9.7,
+            height=1.05,
+            font_size=34,
+        )
+        takeaway.next_to(cards, DOWN, buff=0.30)
+        group = VGroup(cards, takeaway).move_to(DOWN * 0.38)
+        self.assert_content_safe(group, "class2 summary group")
+        self.play(
+            LaggedStart(*[FadeIn(card, shift=UP * 0.10) for card in cards], lag_ratio=0.10),
+            run_time=RUN_SLOW * 1.8,
+        )
+        self.play(FadeIn(takeaway), run_time=RUN_NORMAL)
+        self.wait(PAUSE_SUMMARY)
+        self.standard_closing(
+            "Identify the element. Count the intersections. Read the arc. Then calculate."
+        )
 
     def fundamentals_summary_without_closing(self) -> None:
         """Same Fundamentals page 10, with closing deferred until after Class 2."""
