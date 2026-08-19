@@ -98,9 +98,9 @@
             self.uml_object("explorer", "Robot", ['name = "Explorer"', 'energy = 90', 'position = 0'], width=3.15, height=2.45),
             self.uml_object("courier", "Robot", ['name = "Courier"', 'energy = 75', 'position = 5'], width=3.15, height=2.45),
             self.uml_object("scout", "Robot", ['name = "Scout"', 'energy = 85', 'position = 2'], width=3.15, height=2.45),
-        ).arrange(RIGHT, buff=0.34).move_to(RIGHT*2.30 + DOWN*0.45)
+        ).arrange(RIGHT, buff=0.34).move_to(RIGHT*2.65 + DOWN*0.45)
 
-        label = self.text("INSTANTIATION", 18, BOLD).move_to(RIGHT*2.30 + UP*2.15)
+        label = self.text("INSTANTIATION", 18, BOLD).move_to(RIGHT*2.65 + UP*2.15)
         arrows = VGroup(*[
             Arrow(robot_class.get_right()+RIGHT*0.06, obj.get_left()+LEFT*0.08, buff=0.12, color=LIGHT_GRAY, stroke_width=1.7)
             for obj in objects
