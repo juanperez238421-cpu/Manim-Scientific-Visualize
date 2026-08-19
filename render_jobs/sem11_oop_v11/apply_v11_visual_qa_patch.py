@@ -37,12 +37,34 @@ repls.append((
 '''        relations = VGroup(\n            self.uml_composition(whole, inventory, owner_shift=LEFT*0.62),\n            self.uml_composition(whole, robot, owner_shift=ORIGIN),\n            self.uml_composition(whole, sensor, owner_shift=RIGHT*0.62),\n        )\n'''))
 
 old_project = '''        scenario = self.text("Smart garden: read soil moisture and activate a pump when water is needed.", 24, BOLD).move_to(UP*2.25)\n        controller = self.uml_class("Controller", ["- threshold : float"], ["+ evaluate()"], width=3.75, height=2.55, body_size=16).move_to(UP*0.60)\n        sensor = self.uml_class("MoistureSensor", ["- value : float"], ["+ read()"], width=3.75, height=2.55, body_size=16).move_to(LEFT*4.45 + DOWN*2.05)\n        pump = self.uml_class("Pump", ["- isOn : bool"], ["+ start()", "+ stop()"], width=3.75, height=2.55, body_size=16).move_to(DOWN*2.05)\n        garden = self.uml_class("Garden", ["- name : str"], ["+ irrigate()"], width=3.75, height=2.55, body_size=16).move_to(RIGHT*4.45 + DOWN*2.05)\n        classes = VGroup(controller, sensor, pump, garden)\n\n        sensor_link = Arrow(sensor.get_top()+UP*0.02, controller.get_left()+DOWN*0.18, buff=0.12, color=BLACK_LINE, stroke_width=1.8)\n        sensor_label = self.text("moisture", 16, MEDIUM).move_to((sensor_link.get_start()+sensor_link.get_end())/2 + LEFT*0.18)\n        pump_link = Arrow(controller.get_bottom()+DOWN*0.02, pump.get_top()+UP*0.02, buff=0.12, color=BLACK_LINE, stroke_width=1.8)\n        pump_label = self.text("command", 16, MEDIUM).next_to(pump_link, RIGHT, buff=0.10)\n        garden_link = Arrow(controller.get_right()+DOWN*0.18, garden.get_top()+UP*0.02, buff=0.12, color=BLACK_LINE, stroke_width=1.8)\n        garden_label = self.text("decision", 16, MEDIUM).move_to((garden_link.get_start()+garden_link.get_end())/2 + RIGHT*0.18)\n        links = VGroup(VGroup(sensor_link, sensor_label), VGroup(pump_link, pump_label), VGroup(garden_link, garden_label))\n'''
-new_project = '''        scenario = self.text("Smart garden: read soil moisture and activate a pump when water is needed.", 24, BOLD).move_to(UP*2.35)\n        controller = self.uml_class("Controller", ["- threshold : float"], ["+ evaluate()"], width=3.75, height=2.55, body_size=16).move_to(UP*0.85)\n        sensor = self.uml_class("MoistureSensor", ["- value : float"], ["+ read()"], width=3.75, height=2.55, body_size=16).move_to(LEFT*4.45 + DOWN*2.05)\n        pump = self.uml_class("Pump", ["- isOn : bool"], ["+ start()", "+ stop()"], width=3.75, height=2.55, body_size=16).move_to(DOWN*2.05)\n        garden = self.uml_class("Garden", ["- name : str"], ["+ irrigate()"], width=3.75, height=2.55, body_size=16).move_to(RIGHT*4.45 + DOWN*2.05)\n        classes = VGroup(controller, sensor, pump, garden)\n\n        # Classical UML-style associations: simple solid lines and labels in whitespace.\n        sensor_link = Line(sensor.get_top()+UP*0.02, controller.get_left()+DOWN*0.30, color=BLACK_LINE, stroke_width=1.8)\n        sensor_label = self.text("reads", 16, MEDIUM).move_to(sensor_link.get_center() + UP*0.32 + LEFT*0.05)\n        pump_link = Line(controller.get_bottom()+DOWN*0.02, pump.get_top()+UP*0.02, color=BLACK_LINE, stroke_width=1.8)\n        pump_label = self.text("controls", 16, MEDIUM).move_to(pump_link.get_center() + RIGHT*0.86 + UP*0.08)\n        garden_link = Line(pump.get_right()+UP*0.62, garden.get_left()+UP*0.62, color=BLACK_LINE, stroke_width=1.8)\n        garden_label = self.text("waters", 16, MEDIUM).move_to(garden_link.get_center() + UP*0.28)\n        links = VGroup(VGroup(sensor_link, sensor_label), VGroup(pump_link, pump_label), VGroup(garden_link, garden_label))\n'''
+new_project = '''        scenario = self.text("Smart garden: read soil moisture and activate a pump when water is needed.", 24, BOLD).move_to(UP*2.35)\n        controller = self.uml_class("Controller", ["- threshold : float"], ["+ evaluate()"], width=3.75, height=2.55, body_size=16).move_to(UP*0.85)\n        sensor = self.uml_class("MoistureSensor", ["- value : float"], ["+ read()"], width=3.75, height=2.55, body_size=16).move_to(LEFT*4.65 + DOWN*2.05)\n        pump = self.uml_class("Pump", ["- isOn : bool"], ["+ start()", "+ stop()"], width=3.75, height=2.55, body_size=16).move_to(DOWN*2.05)\n        garden = self.uml_class("Garden", ["- name : str"], ["+ irrigate()"], width=3.75, height=2.55, body_size=16).move_to(RIGHT*4.65 + DOWN*2.05)\n        classes = VGroup(controller, sensor, pump, garden)\n\n        # Classical UML-style associations: simple solid lines and labels in whitespace.\n        sensor_link = Line(sensor.get_top()+UP*0.02, controller.get_left()+DOWN*0.30, color=BLACK_LINE, stroke_width=1.8)\n        sensor_label = self.text("reads", 16, MEDIUM).move_to(sensor_link.get_center() + UP*0.32 + LEFT*0.05)\n        pump_link = Line(controller.get_bottom()+DOWN*0.02, pump.get_top()+UP*0.02, color=BLACK_LINE, stroke_width=1.8)\n        pump_label = self.text("controls", 16, MEDIUM).move_to(pump_link.get_center() + RIGHT*0.86 + UP*0.08)\n        garden_link = Line(pump.get_right()+UP*0.62, garden.get_left()+UP*0.62, color=BLACK_LINE, stroke_width=1.8)\n        garden_label = self.text("waters", 16, MEDIUM).move_to(garden_link.get_center() + UP*0.28)\n        links = VGroup(VGroup(sensor_link, sensor_label), VGroup(pump_link, pump_label), VGroup(garden_link, garden_label))\n'''
 repls.append((old_project, new_project))
 
 repls.append((
 '''        for link in links:\n            self.play(GrowArrow(link[0]), FadeIn(link[1]), run_time=RUN_NORMAL)\n''',
 '''        for link in links:\n            self.play(Create(link[0]), FadeIn(link[1]), run_time=RUN_NORMAL)\n'''))
+
+# Senior QA Rev2: place UML instance underline below glyphs, never through text.
+repls.append((
+    "        underline = Line(header.get_left()+DOWN*0.07, header.get_right()+DOWN*0.07, color=BLACK_LINE, stroke_width=1.2)\n",
+    "        underline_y = header.get_bottom()[1] - 0.07\n"
+    "        underline = Line(\n"
+    "            [header.get_left()[0], underline_y, 0],\n"
+    "            [header.get_right()[0], underline_y, 0],\n"
+    "            color=BLACK_LINE, stroke_width=1.2,\n"
+    "        )\n",
+))
+
+# Senior QA Rev2: labels are independent layout blocks; they may not touch UML class boxes.
+repls.append((
+    "        self.assert_no_overlap([controller, sensor, pump, garden], \"scene_07 class boxes\")\n",
+    "        self.assert_no_overlap([controller, sensor, pump, garden], \"scene_07 class boxes\")\n"
+    "        self.assert_no_overlap(\n"
+    "            [controller, sensor, pump, garden, sensor_label, pump_label, garden_label],\n"
+    "            \"scene_07 boxes and association labels\",\n"
+    "            padding=0.0,\n"
+    "        )\n",
+))
 
 for old, new in repls:
     count = s.count(old)
@@ -51,4 +73,4 @@ for old, new in repls:
     s = s.replace(old, new)
 
 path.write_text(s, encoding='utf-8')
-print('V11 visual QA patch v2 applied')
+print('V11 visual QA patch v3 / Senior QA Rev2 applied')
