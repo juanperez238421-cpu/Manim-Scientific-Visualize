@@ -19,6 +19,7 @@ jobs:
       - name: Render only the independent cover
         run: |
           mkdir -p render_jobs/itm_activity_cover_only/media
+          chmod -R a+rwx render_jobs/itm_activity_cover_only
           docker run --rm \
             -v "$PWD/render_jobs/itm_activity_cover_only:/manim" \
             manimcommunity/manim:v0.20.1 \
