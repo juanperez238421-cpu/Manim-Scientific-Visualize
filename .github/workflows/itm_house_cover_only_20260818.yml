@@ -1,0 +1,80 @@
+name: ITM House Cover Only 20260818
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  cover:
+    if: github.event.pull_request.head.ref == 'itm-house-cover-only-20260818'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout cover branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Download official ITM logo only
+        run: |
+          set -euo pipefail
+          mkdir -p assets
+          curl -fL --retry 5 --retry-delay 2 --connect-timeout 20 \
+            -A 'Mozilla/5.0' \
+            'https://www.itm.edu.co/wp-content/uploads/formatos/logo-ITM.png' \
+            -o assets/logo_ITM.png
+          test -s assets/logo_ITM.png
+          file assets/logo_ITM.png
+
+      - name: Compile cover source
+        run: |
+          set -euo pipefail
+          python -m py_compile render_jobs/itm_house_cover/ITM_House_Activity_Cover.py
+
+      - name: Render standalone cover PQH only
+        run: |
+          set -euo pipefail
+          mkdir -p media
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/preview-bin /tmp/manim-home
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/preview-bin/xdg-open
+              chmod +x /tmp/preview-bin/xdg-open
+              export PATH="/tmp/preview-bin:$PATH"
+              manim -pqh render_jobs/itm_house_cover/ITM_House_Activity_Cover.py ITMHouseActivityCover --format=mp4 --disable_caching
+            '
+
+      - name: Verify and package cover
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          MP4=$(find media -type f -name '*.mp4' -printf '%s %p\n' | sort -nr | head -n 1 | cut -d' ' -f2-)
+          test -s "$MP4"
+          mkdir -p delivery/itm_cover/frames
+          cp "$MP4" delivery/itm_cover/ITM_House_Activity_Cover_PQH.mp4
+          cp render_jobs/itm_house_cover/ITM_House_Activity_Cover.py delivery/itm_cover/
+          cp assets/logo_ITM.png delivery/itm_cover/logo_ITM.png
+          ffprobe -v error -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate -show_entries format=duration,size -of default=noprint_wrappers=1 "$MP4" > delivery/itm_cover/FFPROBE.txt
+          ffmpeg -v error -i "$MP4" -f null -
+          for T in 1 3 5 8 10; do
+            ffmpeg -y -loglevel error -ss "$T" -i "$MP4" -frames:v 1 "delivery/itm_cover/frames/frame_${T}s.jpg" || true
+          done
+          sha256sum delivery/itm_cover/ITM_House_Activity_Cover_PQH.mp4 delivery/itm_cover/ITM_House_Activity_Cover.py > delivery/itm_cover/SHA256SUMS.txt
+
+      - name: Upload standalone cover artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ITM-House-Activity-Cover-PQH
+          path: delivery/itm_cover
+          retention-days: 7
