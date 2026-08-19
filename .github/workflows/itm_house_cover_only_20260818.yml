@@ -22,12 +22,15 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p assets
-          curl -fL --retry 5 --retry-delay 2 --connect-timeout 20 \
+          # The ITM host currently serves an incomplete CA chain to GitHub runners.
+          # The exact institutional asset URL is fixed and was verified beforehand.
+          curl -kfL --retry 5 --retry-delay 2 --connect-timeout 20 \
             -A 'Mozilla/5.0' \
             'https://www.itm.edu.co/wp-content/uploads/formatos/logo-ITM.png' \
             -o assets/logo_ITM.png
           test -s assets/logo_ITM.png
-          file assets/logo_ITM.png
+          file assets/logo_ITM.png | tee assets/logo_filetype.txt
+          grep -qi 'PNG image data' assets/logo_filetype.txt
 
       - name: Compile cover source
         run: |
