@@ -10,7 +10,7 @@ class ITMHouseActivityCover(Scene):
     """Standalone cover only. The house animation is not rendered here."""
 
     def construct(self):
-        # Official ITM logo is downloaded by the render workflow.
+        # Official ITM logo is downloaded by the isolated cover-render workflow.
         logo = ImageMobject("assets/logo_ITM.png")
         logo.set_width(4.9)
         logo.move_to(UP * 1.75)
