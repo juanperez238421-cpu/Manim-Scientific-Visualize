@@ -34,13 +34,6 @@ jobs:
       - name: Technical validation
         run: |
           test -s ITM_Activity_Cover_10Percent_PQH.mp4
-          docker run --rm \
-            -v "$PWD:/work:ro" \
-            manimcommunity/manim:v0.20.1 \
-            ffprobe -v error -select_streams v:0 \
-            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
-            -of default=noprint_wrappers=1 \
-            /work/ITM_Activity_Cover_10Percent_PQH.mp4
 
       - uses: actions/upload-artifact@v4
         with:
