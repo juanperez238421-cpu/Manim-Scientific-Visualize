@@ -59,6 +59,7 @@ jobs:
           docker run --rm \
             --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home \
+            -e ITM_CAD_PREVIEW=1 \
             -v "$PWD:/manim" \
             -w "/manim/$PROJECT_DIR" \
             --entrypoint bash \
@@ -87,7 +88,7 @@ jobs:
           mkdir -p "$OUT/qa_frames"
           DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$MP4")
           for index in $(seq 0 15); do
-            TIME=$(awk -v d="$DURATION" -v i="$index" 'BEGIN { printf "%.3f", d*i/15 }')
+            TIME=$(awk -v d="$DURATION" -v i="$index" 'BEGIN { printf "%.3f", d*i/16 }')
             ffmpeg -y -loglevel error -ss "$TIME" -i "$MP4" -frames:v 1 -vf scale=640:-1 "$OUT/qa_frames/frame_${index}.jpg"
           done
 
@@ -155,7 +156,7 @@ jobs:
           mkdir -p "$OUT/qa_frames"
           DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$MP4")
           for index in $(seq 0 31); do
-            TIME=$(awk -v d="$DURATION" -v i="$index" 'BEGIN { printf "%.3f", d*i/31 }')
+            TIME=$(awk -v d="$DURATION" -v i="$index" 'BEGIN { printf "%.3f", d*i/32 }')
             ffmpeg -y -loglevel error -ss "$TIME" -i "$MP4" -frames:v 1 -vf scale=960:-1 "$OUT/qa_frames/frame_${index}.jpg"
           done
           sha256sum "$OUT/${{ matrix.scene }}_FULL_PQH.mp4" "$OUT/house_extrusion_itm.py" > "$OUT/SHA256SUMS.txt"
@@ -168,4 +169,3 @@ jobs:
           name: ITM-CAD-V6-${{ matrix.scene }}-FULL-PQH
           path: delivery/pqh/${{ matrix.scene }}
           retention-days: 14
-

@@ -49,8 +49,8 @@ python validate_scene.py
 ## Render de prueba
 
 ```bash
-manim -pql house_extrusion_itm.py HouseExtrusionITM_SEDTCAD22 --format=mp4 --disable_caching
-manim -pql house_extrusion_itm.py HouseExtrusionITM_DTR43 --format=mp4 --disable_caching
+ITM_CAD_PREVIEW=1 manim -pql house_extrusion_itm.py HouseExtrusionITM_SEDTCAD22 --format=mp4 --disable_caching
+ITM_CAD_PREVIEW=1 manim -pql house_extrusion_itm.py HouseExtrusionITM_DTR43 --format=mp4 --disable_caching
 ```
 
 ## Render final
@@ -66,6 +66,7 @@ En ejecución sin escritorio se conserva el indicador literal `-pqh` mediante un
 
 - Manim Community Edition `0.20.1`.
 - Full HD `1920×1080`, `30 fps`.
+- Gate PQL ligero `854×480`, `15 fps` mediante `ITM_CAD_PREVIEW=1`.
 - MP4 H.264, `yuv420p`.
 - Código compilable y activo institucional disponible.
 - Todo texto visible creado con `Tex` y animado mediante `Write`.
@@ -79,4 +80,3 @@ En ejecución sin escritorio se conserva el indicador literal `-pqh` mediante un
 - La identidad visual fue contrastada con la página oficial de formatos institucionales del ITM: <https://www.itm.edu.co/formatos-institucionales/>.
 - Los códigos `DTR43` y `SEDTCAD22` corresponden a “Dibujo Técnico y CAD” en documentación pública del ITM: <https://www.itm.edu.co/wp-content/uploads/facultad-ingenierias/2024/Acta-nro.-24.-Reunio%CC%81n-Extraordinaria-del-11-de-junio-de-2025_compressed.pdf>.
 - El raster del logotipo se conserva localmente para hacer el render reproducible. Fuente pública de recuperación: <https://keystoneacademic-res.cloudinary.com/image/upload/c_pad,w_3840,h_1280/dpr_auto/f_auto/q_auto/v1/element/15/150420_Metro.png>.
-

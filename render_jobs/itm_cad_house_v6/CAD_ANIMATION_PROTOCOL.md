@@ -163,11 +163,10 @@ No encadenar croquis y extrusión sin una pausa de lectura. Las operaciones exte
 ```bash
 python -m py_compile house_extrusion_itm.py validate_scene.py
 python validate_scene.py
-manim -pql house_extrusion_itm.py HouseExtrusionITM_SEDTCAD22 --disable_caching
-manim -pql house_extrusion_itm.py HouseExtrusionITM_DTR43 --disable_caching
+ITM_CAD_PREVIEW=1 manim -pql house_extrusion_itm.py HouseExtrusionITM_SEDTCAD22 --disable_caching
+ITM_CAD_PREVIEW=1 manim -pql house_extrusion_itm.py HouseExtrusionITM_DTR43 --disable_caching
 manim -pqh house_extrusion_itm.py HouseExtrusionITM_SEDTCAD22 --format=mp4 --disable_caching
 manim -pqh house_extrusion_itm.py HouseExtrusionITM_DTR43 --format=mp4 --disable_caching
 ```
 
 Aceptar cada MP4 final solo si `ffprobe` confirma H.264, 1920×1080, 30 fps y `yuv420p`; FFmpeg decodifica el archivo completo; los fotogramas de auditoría no muestran solapes o recortes; y existe una suma SHA-256.
-

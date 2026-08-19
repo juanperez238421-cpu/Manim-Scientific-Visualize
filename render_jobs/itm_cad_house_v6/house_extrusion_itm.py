@@ -24,13 +24,15 @@ V6 refinements:
 
 from manim import *
 import numpy as np
+import os
 from pathlib import Path
 
-config.pixel_width = 1920
-config.pixel_height = 1080
+IS_PREVIEW_RENDER = os.getenv("ITM_CAD_PREVIEW", "0") == "1"
+config.pixel_width = 854 if IS_PREVIEW_RENDER else 1920
+config.pixel_height = 480 if IS_PREVIEW_RENDER else 1080
 config.frame_width = 16
 config.frame_height = 9
-config.frame_rate = 30
+config.frame_rate = 15 if IS_PREVIEW_RENDER else 30
 config.background_color = WHITE
 
 BLACK_TEXT = BLACK
@@ -123,7 +125,7 @@ class HouseExtrusion3D(ThreeDScene):
         logo = ImageMobject(str(self.LOGO_PATH)).scale_to_fit_width(4.85)
         logo.to_edge(UP, buff=0.48)
 
-        institution = self.text(self.INSTITUTION_NAME, 22, BOLD, DARK)
+        institution = self.text("FACULTAD DE INGENIERÍAS", 22, BOLD, DARK)
         course = self.text(self.COURSE_TITLE, 48, BOLD, DARK)
         group = self.text(f"GRUPO {self.GROUP_CODE}", 30, BOLD, SKETCH)
         topic = self.text(
