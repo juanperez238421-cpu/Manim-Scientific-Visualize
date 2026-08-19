@@ -2,7 +2,7 @@ name: Geometry 8 Circle Pedagogical Senior QA PQH 20260819
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, agent/geometry8-circle-final-total-20260818]
   workflow_dispatch:
 
 permissions:
