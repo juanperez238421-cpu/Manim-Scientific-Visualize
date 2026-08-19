@@ -35,12 +35,16 @@ jobs:
           p=Path('render_jobs/sem11_oop_v11/Seminar11_OOP_UML_SENIOR_V11.py')
           s=p.read_text()
           required=[
-              'class Seminar11OOPUMLV11', 'def uml_class(', 'target_shift=ORIGIN',
-              'owner_shift=ORIGIN', 'def assert_no_overlap(', 'UML OBJECT INSTANCES',
-              'self.uml_generalization(robot, parent, LEFT*0.58)',
-              'self.uml_realization(robot, interface, LEFT*0.72)',
+              'class Seminar11OOPUMLV11',
+              'def uml_class(',
+              'target_shift=ORIGIN, start_shift=ORIGIN',
+              'owner_shift=ORIGIN',
+              'def assert_no_overlap(',
+              'UML OBJECT INSTANCES',
+              'self.uml_generalization(robot, parent, LEFT*1.35, RIGHT*1.55)',
+              'self.uml_realization(robot, interface, LEFT*1.20, RIGHT*1.55)',
               'self.uml_composition(whole, inventory, owner_shift=LEFT*0.62)',
-              'garden_link = Line(pump.get_right()'
+              'garden_label = self.text("waters"'
           ]
           missing=[x for x in required if x not in s]
           assert not missing, f'missing V11 final visual-QA architecture: {missing}'
@@ -128,7 +132,7 @@ jobs:
           done
           ffmpeg -nostdin -loglevel error -i "$F" -vf "fps=1/8,scale=560:-1,tile=4x4:padding=6:margin=8" -frames:v 1 out/QA_CONTACT_SHEET.jpg
           sha256sum "$F" out/Seminar11_OOP_UML_SENIOR_V11.py out/jp_classroom_style.py out/apply_v11_visual_qa_patch.py > out/SHA256SUMS.txt
-          printf 'Scene: Seminar11OOPUMLV11\nVersion: Senior QA V11 UML FINAL\nManimCE: 0.20.1\nPreview: literal -pql with runtime safe-frame and no-overlap assertions\nFinal: literal -pqh, 1920x1080, 30 fps, H.264/yuv420p\nArchitecture: classic UML class/object boxes; separated generalization/realization anchors; separated composition diamonds; clean class associations\nQA: py_compile + PQL + PQH + ffprobe + full decode + 18 audit frames + contact sheet + SHA-256 + rendered-pixel review\n' > out/RENDER_INFO.txt
+          printf 'Scene: Seminar11OOPUMLV11\nVersion: Senior QA V11 UML FINAL\nManimCE: 0.20.1\nPreview: literal -pql with runtime safe-frame and no-overlap assertions\nFinal: literal -pqh, 1920x1080, 30 fps, H.264/yuv420p\nArchitecture: classic UML class/object boxes; interior child anchors for steeper generalization/realization; separated composition diamonds; clean class associations and labels\nQA: py_compile + PQL + PQH + ffprobe + full decode + 18 audit frames + contact sheet + SHA-256 + rendered-pixel review\n' > out/RENDER_INFO.txt
           cd out
           zip -9 -r Seminar11_OOP_UML_SENIOR_V11_FINAL_PQH_Package.zip \
             Seminar11_OOP_UML_SENIOR_V11_FINAL_pqh.mp4 Seminar11_OOP_UML_SENIOR_V11.py jp_classroom_style.py apply_v11_visual_qa_patch.py \
@@ -136,7 +140,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Seminar11-OOP-V11-UML-FINAL-PQH-20260819
+          name: Seminar11-OOP-V11-UML-FINAL2-PQH-20260819
           path: |
             out/Seminar11_OOP_UML_SENIOR_V11_FINAL_pqh.mp4
             out/Seminar11_OOP_UML_SENIOR_V11_FINAL_PQH_Package.zip
