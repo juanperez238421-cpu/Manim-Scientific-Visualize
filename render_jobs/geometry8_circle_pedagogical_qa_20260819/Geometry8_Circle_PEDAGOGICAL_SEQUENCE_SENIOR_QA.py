@@ -332,7 +332,7 @@ class Geometry8CirclePedagogicalSequenceSeniorQA(Geometry8CircleWorkshopFinal):
             cards.add(VGroup(box, content))
             answers.add(answer)
 
-        cards.arrange(RIGHT, buff=0.32).move_to(DOWN * 0.35)
+        cards.arrange(RIGHT, buff=0.32).move_to(UP * 0.02)
         for answer, card in zip(answers, cards):
             answer.move_to(card[0].get_bottom() + UP * 0.40)
 
@@ -344,7 +344,7 @@ class Geometry8CirclePedagogicalSequenceSeniorQA(Geometry8CircleWorkshopFinal):
             body_size=28,
             max_text_height=1.05,
         )
-        think.to_edge(DOWN, buff=0.42)
+        think.move_to(DOWN * 3.25)
         group = VGroup(cards, answers, think)
         self.assert_content_safe(group, "formula choice QA")
 
