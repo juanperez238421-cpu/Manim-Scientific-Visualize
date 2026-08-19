@@ -1,0 +1,48 @@
+name: Render ITM activity cover only
+
+on:
+  push:
+    branches:
+      - agent/itm-activity-cover-only
+    paths:
+      - "render_jobs/itm_activity_cover_only/**"
+      - ".github/workflows/itm_activity_cover_only.yml"
+  workflow_dispatch:
+
+jobs:
+  render-cover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Render only the independent cover
+        run: |
+          mkdir -p render_jobs/itm_activity_cover_only/media
+          docker run --rm \
+            -v "$PWD/render_jobs/itm_activity_cover_only:/manim" \
+            manimcommunity/manim:v0.20.1 \
+            manim -pqh itm_activity_cover.py ITMActivityCover --media_dir media
+
+      - name: Normalize final cover file
+        run: |
+          COVER="$(find render_jobs/itm_activity_cover_only/media -type f -name 'ITMActivityCover.mp4' -print -quit)"
+          test -n "$COVER"
+          cp "$COVER" ITM_Activity_Cover_10Percent_PQH.mp4
+
+      - name: Technical validation
+        run: |
+          ffprobe -v error \
+            -select_streams v:0 \
+            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+            -of default=noprint_wrappers=1 ITM_Activity_Cover_10Percent_PQH.mp4
+          ffmpeg -v error -i ITM_Activity_Cover_10Percent_PQH.mp4 -f null -
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 ITM_Activity_Cover_10Percent_PQH.mp4)" = "1920"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 ITM_Activity_Cover_10Percent_PQH.mp4)" = "1080"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: itm-activity-cover-only-pqh
+          path: ITM_Activity_Cover_10Percent_PQH.mp4
+          if-no-files-found: error
+          retention-days: 7
