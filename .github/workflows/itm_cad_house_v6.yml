@@ -1,0 +1,171 @@
+name: ITM CAD House V6 · Dual Group PQH
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - house-step-v3-render-20260818
+    paths:
+      - "render_jobs/itm_cad_house_v6/**"
+      - ".github/workflows/itm_cad_house_v6.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "render_jobs/itm_cad_house_v6/**"
+      - ".github/workflows/itm_cad_house_v6.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: itm-cad-house-v6-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PROJECT_DIR: render_jobs/itm_cad_house_v6
+  MANIM_IMAGE: manimcommunity/manim:v0.20.1
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v4
+
+      - name: Static protocol validation
+        run: |
+          set -euo pipefail
+          python -m py_compile "$PROJECT_DIR/house_extrusion_itm.py" "$PROJECT_DIR/validate_scene.py"
+          python "$PROJECT_DIR/validate_scene.py"
+
+  pql-gate:
+    needs: validate
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        scene:
+          - HouseExtrusionITM_SEDTCAD22
+          - HouseExtrusionITM_DTR43
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v4
+
+      - name: Literal PQL visual gate
+        run: |
+          set -euo pipefail
+          mkdir -p media "delivery/pql/${{ matrix.scene }}"
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" \
+            -w "/manim/$PROJECT_DIR" \
+            --entrypoint bash \
+            "$MANIM_IMAGE" \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/preview-bin /tmp/manim-home
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/preview-bin/xdg-open
+              chmod +x /tmp/preview-bin/xdg-open
+              export PATH="/tmp/preview-bin:$PATH"
+              manim -pql house_extrusion_itm.py "${{ matrix.scene }}" --format=mp4 --disable_caching
+            '
+
+      - name: Decode and sample PQL
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          OUT="delivery/pql/${{ matrix.scene }}"
+          MP4=$(find "$PROJECT_DIR/media" -type f -name "${{ matrix.scene }}.mp4" | grep -v partial_movie_files | head -n 1)
+          test -n "$MP4"
+          test -s "$MP4"
+          cp "$MP4" "$OUT/${{ matrix.scene }}_PQL.mp4"
+          ffprobe -v error -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate -show_entries format=duration,size -of default=noprint_wrappers=1 "$MP4" > "$OUT/FFPROBE.txt"
+          ffmpeg -v error -i "$MP4" -f null -
+          mkdir -p "$OUT/qa_frames"
+          DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$MP4")
+          for index in $(seq 0 15); do
+            TIME=$(awk -v d="$DURATION" -v i="$index" 'BEGIN { printf "%.3f", d*i/15 }')
+            ffmpeg -y -loglevel error -ss "$TIME" -i "$MP4" -frames:v 1 -vf scale=640:-1 "$OUT/qa_frames/frame_${index}.jpg"
+          done
+
+      - name: Upload PQL audit package
+        uses: actions/upload-artifact@v4
+        with:
+          name: ITM-CAD-V6-${{ matrix.scene }}-PQL
+          path: delivery/pql/${{ matrix.scene }}
+          retention-days: 7
+
+  pqh-final:
+    needs: pql-gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        scene:
+          - HouseExtrusionITM_SEDTCAD22
+          - HouseExtrusionITM_DTR43
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v4
+
+      - name: Literal PQH final render
+        run: |
+          set -euo pipefail
+          mkdir -p media "delivery/pqh/${{ matrix.scene }}"
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" \
+            -w "/manim/$PROJECT_DIR" \
+            --entrypoint bash \
+            "$MANIM_IMAGE" \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/preview-bin /tmp/manim-home
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/preview-bin/xdg-open
+              chmod +x /tmp/preview-bin/xdg-open
+              export PATH="/tmp/preview-bin:$PATH"
+              manim -pqh house_extrusion_itm.py "${{ matrix.scene }}" --format=mp4 --disable_caching
+            '
+
+      - name: Strict PQH technical QA
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          OUT="delivery/pqh/${{ matrix.scene }}"
+          MP4=$(find "$PROJECT_DIR/media" -type f -name "${{ matrix.scene }}.mp4" | grep -v partial_movie_files | head -n 1)
+          test -n "$MP4"
+          test -s "$MP4"
+          cp "$MP4" "$OUT/${{ matrix.scene }}_FULL_PQH.mp4"
+          cp "$PROJECT_DIR/house_extrusion_itm.py" "$OUT/"
+          cp "$PROJECT_DIR/CAD_ANIMATION_PROTOCOL.md" "$OUT/"
+          cp "$PROJECT_DIR/README.md" "$OUT/"
+          ffprobe -v error -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate -show_entries format=duration,size -of default=noprint_wrappers=1 "$MP4" > "$OUT/FFPROBE.txt"
+          grep -q '^codec_name=h264$' "$OUT/FFPROBE.txt"
+          grep -q '^width=1920$' "$OUT/FFPROBE.txt"
+          grep -q '^height=1080$' "$OUT/FFPROBE.txt"
+          grep -q '^pix_fmt=yuv420p$' "$OUT/FFPROBE.txt"
+          grep -q '^r_frame_rate=30/1$' "$OUT/FFPROBE.txt"
+          ffmpeg -v error -i "$MP4" -f null -
+          mkdir -p "$OUT/qa_frames"
+          DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$MP4")
+          for index in $(seq 0 31); do
+            TIME=$(awk -v d="$DURATION" -v i="$index" 'BEGIN { printf "%.3f", d*i/31 }')
+            ffmpeg -y -loglevel error -ss "$TIME" -i "$MP4" -frames:v 1 -vf scale=960:-1 "$OUT/qa_frames/frame_${index}.jpg"
+          done
+          sha256sum "$OUT/${{ matrix.scene }}_FULL_PQH.mp4" "$OUT/house_extrusion_itm.py" > "$OUT/SHA256SUMS.txt"
+          printf 'Scene: %s\nManimCE: 0.20.1\nCommand: manim -pqh house_extrusion_itm.py %s --format=mp4 --disable_caching\n' \
+            "${{ matrix.scene }}" "${{ matrix.scene }}" > "$OUT/RENDER_INFO.txt"
+
+      - name: Upload verified PQH package
+        uses: actions/upload-artifact@v4
+        with:
+          name: ITM-CAD-V6-${{ matrix.scene }}-FULL-PQH
+          path: delivery/pqh/${{ matrix.scene }}
+          retention-days: 14
+
