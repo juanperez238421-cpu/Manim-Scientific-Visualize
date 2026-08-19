@@ -41,8 +41,8 @@
             "Turn the problem into responsibilities, then express those responsibilities as a class diagram.",
         )
 
-        scenario = self.text("Smart garden: read soil moisture and activate a pump when water is needed.", 24, BOLD).move_to(UP*2.05)
-        controller = self.uml_class("Controller", ["- threshold : float"], ["+ evaluate()"], width=3.75, height=2.55, body_size=16).move_to(UP*0.35)
+        scenario = self.text("Smart garden: read soil moisture and activate a pump when water is needed.", 24, BOLD).move_to(UP*2.25)
+        controller = self.uml_class("Controller", ["- threshold : float"], ["+ evaluate()"], width=3.75, height=2.55, body_size=16).move_to(UP*0.60)
         sensor = self.uml_class("MoistureSensor", ["- value : float"], ["+ read()"], width=3.75, height=2.55, body_size=16).move_to(LEFT*4.45 + DOWN*2.05)
         pump = self.uml_class("Pump", ["- isOn : bool"], ["+ start()", "+ stop()"], width=3.75, height=2.55, body_size=16).move_to(DOWN*2.05)
         garden = self.uml_class("Garden", ["- name : str"], ["+ irrigate()"], width=3.75, height=2.55, body_size=16).move_to(RIGHT*4.45 + DOWN*2.05)
