@@ -2,3 +2,4 @@ Render request: Statistics 11 Google Colab arrays
 Date: 2026-08-20
 Expected scene: Statistics11ColabArrays
 Expected final: delivery/Statistics11_Colab_Arrays_SENIOR_PQH.mp4
+Trigger: registered PR renderer active
