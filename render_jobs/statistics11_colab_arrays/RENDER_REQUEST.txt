@@ -2,4 +2,5 @@ Render request: Statistics 11 Google Colab arrays
 Date: 2026-08-20
 Expected scene: Statistics11ColabArrays
 Expected final: delivery/Statistics11_Colab_Arrays_SENIOR_PQH.mp4
-Trigger: retry after H.264/yuv420p/30fps normalization QA fix
+Trigger: explicit user-requested real PQH delivery rerun at 2026-08-20 10:30 America/Bogota
+Protocol: literal -pql preview -> literal -pqh final -> ffprobe -> full decode -> SHA-256 -> persisted delivery + artifact
