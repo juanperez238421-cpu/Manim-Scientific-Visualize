@@ -32,7 +32,7 @@ jobs:
           from pathlib import Path
           p=Path('render_jobs/statistics_colab_data_types/Statistics_Colab_Data_Types.py')
           s=p.read_text(encoding='utf-8')
-          required=['class StatisticsColabDataTypes','df.dtypes','type(score)','PYTHON TYPE ≠ STATISTICAL VARIABLE TYPE','self.validate_lesson_data','self.process_map']
+          required=['class StatisticsColabDataTypes','df.dtypes','type(score)','PYTHON TYPE ≠ STATISTICAL VARIABLE TYPE','def validate_lesson_data','self.process_map']
           missing=[x for x in required if x not in s]
           assert not missing, missing
           assert 'D:\\' not in s and 'C:\\' not in s
