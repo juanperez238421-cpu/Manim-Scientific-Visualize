@@ -47,7 +47,7 @@ jobs:
           test -n "$P" && test -s "$P"
           cp "$P" out/Statistics11_Colab_Arrays_QA_pql.mp4
 
-      - name: Literal PQH final render
+      - name: Literal PQH final render and delivery normalization
         shell: bash
         run: |
           set -euo pipefail
@@ -62,9 +62,9 @@ jobs:
             export PATH=/tmp/manim-bin:\$PATH
             manim -pqh $SRC Statistics11ColabArrays --fps 30 --format=mp4 --media_dir media --disable_caching
           " 2>&1 | tee out/render_pqh.log
-          F="$(find media -type f -name 'Statistics11ColabArrays.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
-          test -n "$F" && test -s "$F"
-          cp "$F" out/Statistics11_Colab_Arrays_SENIOR_PQH.mp4
+          RAW="$(find media -type f -name 'Statistics11ColabArrays.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$RAW" && test -s "$RAW"
+          ffmpeg -y -nostdin -loglevel error -i "$RAW" -vf "scale=1920:1080:flags=lanczos,fps=30" -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -movflags +faststart -an out/Statistics11_Colab_Arrays_SENIOR_PQH.mp4
           cp "$SRC" out/Statistics11_Colab_Arrays_Senior.py
 
       - name: Strict technical QA and audit frames
@@ -94,7 +94,7 @@ jobs:
           done
           ffmpeg -nostdin -loglevel error -i "$F" -vf "fps=1/8,scale=640:-1,tile=4x3:padding=6:margin=8" -frames:v 1 out/QA_CONTACT_SHEET.jpg || true
           sha256sum "$F" out/Statistics11_Colab_Arrays_Senior.py > out/SHA256SUMS.txt
-          printf 'Scene: Statistics11ColabArrays\nTopic: Statistics 11 — Google Colab arrays\nManimCE: 0.20.1\nPreview: literal -pql\nFinal: literal -pqh, 1920x1080, 30 fps, H.264/yuv420p\nContent: meaning, NumPy definition, index, slicing, 2D arrays, descriptive statistics, population/sample SD, Boolean filtering, workflow summary\nQA: py_compile + PQL + PQH + ffprobe + full decode + audit frames + contact sheet + SHA-256\n' > out/RENDER_INFO.txt
+          printf 'Scene: Statistics11ColabArrays\nTopic: Statistics 11 — Google Colab arrays\nManimCE: 0.20.1\nPreview: literal -pql\nFinal source render: literal -pqh\nDelivery normalization: 1920x1080, 30 fps, H.264/yuv420p\nContent: meaning, NumPy definition, index, slicing, 2D arrays, descriptive statistics, population/sample SD, Boolean filtering, workflow summary\nQA: py_compile + PQL + PQH + ffprobe + full decode + audit frames + contact sheet + SHA-256\n' > out/RENDER_INFO.txt
 
       - name: Upload verified Statistics 11 delivery
         uses: actions/upload-artifact@v4
