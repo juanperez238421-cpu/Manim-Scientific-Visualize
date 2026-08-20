@@ -1,0 +1,54 @@
+v0.20.1: Pulling from manimcommunity/manim
+206356c42440: Pulling fs layer
+f20ee1ada948: Pulling fs layer
+dc0c4d99783e: Pulling fs layer
+31ba6e9b229c: Pulling fs layer
+6ec290d8b3a0: Pulling fs layer
+6707cac9998f: Pulling fs layer
+1b5b25998a28: Pulling fs layer
+679858b2ac3b: Pulling fs layer
+6d7d65fbcbeb: Pulling fs layer
+81d9bcad5888: Pulling fs layer
+f574d9c6a93c: Pulling fs layer
+31ba6e9b229c: Waiting
+6ec290d8b3a0: Waiting
+6707cac9998f: Waiting
+1b5b25998a28: Waiting
+679858b2ac3b: Waiting
+6d7d65fbcbeb: Waiting
+81d9bcad5888: Waiting
+f574d9c6a93c: Waiting
+f20ee1ada948: Download complete
+dc0c4d99783e: Verifying Checksum
+dc0c4d99783e: Download complete
+206356c42440: Verifying Checksum
+206356c42440: Download complete
+31ba6e9b229c: Verifying Checksum
+31ba6e9b229c: Download complete
+6707cac9998f: Verifying Checksum
+6707cac9998f: Download complete
+6ec290d8b3a0: Verifying Checksum
+6ec290d8b3a0: Download complete
+6d7d65fbcbeb: Verifying Checksum
+6d7d65fbcbeb: Download complete
+1b5b25998a28: Verifying Checksum
+1b5b25998a28: Download complete
+81d9bcad5888: Download complete
+f574d9c6a93c: Verifying Checksum
+f574d9c6a93c: Download complete
+679858b2ac3b: Verifying Checksum
+679858b2ac3b: Download complete
+206356c42440: Pull complete
+f20ee1ada948: Pull complete
+dc0c4d99783e: Pull complete
+31ba6e9b229c: Pull complete
+6ec290d8b3a0: Pull complete
+6707cac9998f: Pull complete
+1b5b25998a28: Pull complete
+679858b2ac3b: Pull complete
+6d7d65fbcbeb: Pull complete
+81d9bcad5888: Pull complete
+f574d9c6a93c: Pull complete
+Digest: sha256:f18f53f2e4eaf2ea41713437d34363fb3f5cc6008b03fd798676ac0359396c3b
+Status: Downloaded newer image for manimcommunity/manim:v0.20.1
+docker.io/manimcommunity/manim:v0.20.1
