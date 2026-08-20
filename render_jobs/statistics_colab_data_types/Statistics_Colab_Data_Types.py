@@ -393,3 +393,5 @@ class StatisticsColabDataTypes(JPMathClassroomScene):
         self.standard_closing(
             "Correct data types make correct statistical calculations possible."
         )
+
+# Render retrigger: 2026-08-20T09:37-05:00
