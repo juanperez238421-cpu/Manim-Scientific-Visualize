@@ -1,0 +1,2 @@
+Trigger real Statistics11 Colab Arrays PQH render after YAML workflow correction.
+Protocol: py_compile -> literal -pql -> literal -pqh -> ffprobe -> full decode -> SHA-256 -> persisted MP4.
