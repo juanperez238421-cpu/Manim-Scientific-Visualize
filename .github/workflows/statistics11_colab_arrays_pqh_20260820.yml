@@ -19,17 +19,32 @@ jobs:
         with:
           ref: statistics11-colab-arrays-render-20260820
 
+      - name: Persist STARTED state
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=render_jobs/statistics11_colab_arrays/delivery
+          mkdir -p "$OUT"
+          printf 'STARTED\n' > "$OUT/STATUS.txt"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$OUT/STATUS.txt"
+          git commit -m 'Statistics11 PQH render STARTED' || true
+          git push origin HEAD:statistics11-colab-arrays-render-20260820
+
       - name: Render literal PQL and PQH with protocol QA
+        id: render
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
           JOB=render_jobs/statistics11_colab_arrays
           SRC="$JOB/Statistics11_Colab_Arrays_Senior.py"
           OUT="$JOB/delivery"
-          rm -rf media_pql media "$OUT"
-          mkdir -p "$OUT"
-          python -m py_compile "$SRC"
-          docker pull manimcommunity/manim:v0.20.1
+          rm -rf media_pql media
+          rm -f "$OUT/render_pql.log" "$OUT/render_pqh.log" "$OUT/full_decode.log" "$OUT/VIDEO_TECHNICAL.tsv" "$OUT/SHA256SUMS.txt" "$OUT/RENDER_INFO.txt" "$OUT/Statistics11_Colab_Arrays_SENIOR_PQH.mp4"
+          python -m py_compile "$SRC" 2>&1 | tee "$OUT/py_compile.log"
+          docker pull manimcommunity/manim:v0.20.1 2>&1 | tee "$OUT/docker_pull.log"
 
           docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "
             set -euo pipefail
@@ -80,18 +95,34 @@ jobs:
             'Final: literal -pqh, 1920x1080, 30 fps, H.264/yuv420p' \
             'QA: py_compile + PQL + PQH + ffprobe + full decode + SHA-256' \
             > "$OUT/RENDER_INFO.txt"
-          printf 'SUCCESS\n' > "$OUT/STATUS.txt"
 
+      - name: Persist final state and logs
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=render_jobs/statistics11_colab_arrays/delivery
+          if [ "${{ steps.render.outcome }}" = "success" ]; then
+            printf 'SUCCESS\n' > "$OUT/STATUS.txt"
+          else
+            printf 'FAILURE\n' > "$OUT/STATUS.txt"
+          fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add "$OUT"
-          git commit -m 'Render Statistics 11 Colab arrays verified PQH delivery'
+          git commit -m "Statistics11 PQH render ${{ steps.render.outcome }}" || true
           git push origin HEAD:statistics11-colab-arrays-render-20260820
 
-      - name: Upload delivery artifact
+      - name: Upload successful delivery artifact
+        if: steps.render.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: Statistics11-Colab-Arrays-PQH-20260820
           path: render_jobs/statistics11_colab_arrays/delivery/
           if-no-files-found: error
           retention-days: 30
+
+      - name: Fail workflow if render failed
+        if: steps.render.outcome != 'success'
+        shell: bash
+        run: exit 1
