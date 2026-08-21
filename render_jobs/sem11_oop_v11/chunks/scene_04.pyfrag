@@ -1,0 +1,109 @@
+        whole = self.uml_class(
+            "SmartWarehouse",
+            ["- activeOrder : Order"],
+            ["+ fulfill()"],
+            width=4.25, height=2.65, title_size=25, body_size=17,
+        ).move_to(UP*1.05)
+        inventory = self.uml_class("Inventory", ["- stock : int"], ["+ reserve()"], width=3.55, height=2.50, body_size=16).move_to(LEFT*4.55 + DOWN*2.05)
+        robot = self.uml_class("Robot", ["- position : str"], ["+ move()"], width=3.55, height=2.50, body_size=16).move_to(DOWN*2.05)
+        sensor = self.uml_class("Sensor", ["- dock : str"], ["+ read()"], width=3.55, height=2.50, body_size=16).move_to(RIGHT*4.55 + DOWN*2.05)
+        parts = VGroup(inventory, robot, sensor)
+        relations = VGroup(
+            self.uml_composition(whole, inventory),
+            self.uml_composition(whole, robot),
+            self.uml_composition(whole, sensor),
+        )
+        legend = VGroup(
+            Square(side_length=0.20, stroke_color=BLACK_LINE, fill_color=BLACK_LINE, fill_opacity=1).rotate(PI/4),
+            self.text("composition = owns / is made of", 18, MEDIUM),
+        ).arrange(RIGHT, buff=0.18).to_edge(DOWN, buff=0.26)
+
+        layout = VGroup(whole, parts, relations)
+        self.assert_content_safe(layout, "scene_06 composition")
+        self.assert_no_overlap([whole, inventory, robot, sensor], "scene_06 class boxes")
+        self.assert_within_frame(legend, "scene_06 legend", margin=0.18)
+
+        self.play(FadeIn(whole, shift=DOWN*0.08), run_time=RUN_NORMAL)
+        self.wait(PAUSE_READ)
+        self.play(LaggedStart(*[FadeIn(p, shift=UP*0.08) for p in parts], lag_ratio=0.14), run_time=RUN_SLOW)
+        for rel in relations:
+            self.play(FadeIn(rel[0]), Create(rel[1]), run_time=RUN_NORMAL)
+        self.wait(PAUSE_EXPLAIN)
+        self.play(FadeIn(legend, shift=UP*0.08), run_time=RUN_NORMAL)
+        self.wait(PAUSE_WORK)
+        self.clear_stage()
+
+    # ------------------------------------------------------------------
+    def scene_project_thinking(self) -> None:
+        self.set_header(
+            7,
+            "THINK IN CLASSES BEFORE YOU WRITE CODE",
+            "Turn the problem into responsibilities, then express those responsibilities as a class diagram.",
+        )
+
+        scenario = self.text("Smart garden: read soil moisture and activate a pump when water is needed.", 24, BOLD).move_to(UP*2.25)
+        controller = self.uml_class("Controller", ["- threshold : float"], ["+ evaluate()"], width=3.75, height=2.55, body_size=16).move_to(UP*0.60)
+        sensor = self.uml_class("MoistureSensor", ["- value : float"], ["+ read()"], width=3.75, height=2.55, body_size=16).move_to(LEFT*4.45 + DOWN*2.05)
+        pump = self.uml_class("Pump", ["- isOn : bool"], ["+ start()", "+ stop()"], width=3.75, height=2.55, body_size=16).move_to(DOWN*2.05)
+        garden = self.uml_class("Garden", ["- name : str"], ["+ irrigate()"], width=3.75, height=2.55, body_size=16).move_to(RIGHT*4.45 + DOWN*2.05)
+        classes = VGroup(controller, sensor, pump, garden)
+
+        sensor_link = Arrow(sensor.get_top()+UP*0.02, controller.get_left()+DOWN*0.18, buff=0.12, color=BLACK_LINE, stroke_width=1.8)
+        sensor_label = self.text("moisture", 16, MEDIUM).move_to((sensor_link.get_start()+sensor_link.get_end())/2 + LEFT*0.18)
+        pump_link = Arrow(controller.get_bottom()+DOWN*0.02, pump.get_top()+UP*0.02, buff=0.12, color=BLACK_LINE, stroke_width=1.8)
+        pump_label = self.text("command", 16, MEDIUM).next_to(pump_link, RIGHT, buff=0.10)
+        garden_link = Arrow(controller.get_right()+DOWN*0.18, garden.get_top()+UP*0.02, buff=0.12, color=BLACK_LINE, stroke_width=1.8)
+        garden_label = self.text("decision", 16, MEDIUM).move_to((garden_link.get_start()+garden_link.get_end())/2 + RIGHT*0.18)
+        links = VGroup(VGroup(sensor_link, sensor_label), VGroup(pump_link, pump_label), VGroup(garden_link, garden_label))
+        route = self.text("PROBLEM -> CLASSES -> ATTRIBUTES -> METHODS -> RELATIONSHIPS -> CODE", 21, BOLD).to_edge(DOWN, buff=0.22)
+
+        layout = VGroup(scenario, classes, links)
+        self.assert_content_safe(layout, "scene_07 project UML")
+        self.assert_no_overlap([controller, sensor, pump, garden], "scene_07 class boxes")
+        self.assert_within_frame(route, "scene_07 route", margin=0.18)
+
+        self.play(FadeIn(scenario, shift=UP*0.08), run_time=RUN_NORMAL)
+        self.wait(PAUSE_EXPLAIN)
+        self.play(FadeIn(controller, shift=DOWN*0.08), run_time=RUN_NORMAL)
+        self.play(LaggedStart(*[FadeIn(c, shift=UP*0.08) for c in [sensor, pump, garden]], lag_ratio=0.16), run_time=RUN_SLOW)
+        for link in links:
+            self.play(GrowArrow(link[0]), FadeIn(link[1]), run_time=RUN_NORMAL)
+        self.wait(PAUSE_EXPLAIN)
+        self.play(FadeIn(route, shift=UP*0.08), run_time=RUN_NORMAL)
+        self.wait(PAUSE_FINAL)
+        self.clear_stage()
+
+    # ------------------------------------------------------------------
+    def set_header(self, number: int, title: str, subtitle: str) -> None:
+        """Use clean fades between sections instead of glyph morphing.
+
+        V9/V10 QA showed that ReplacementTransform can briefly distort long
+        subtitles during a section change.  Fade the persistent header lane
+        out, rebuild it using the consolidated JP layout, then fade it in.
+        """
+        had_old = self.header_group is not None or self.subtitle_group is not None
+        if had_old:
+            old_items = [
+                item for item in (self.header_group, self.subtitle_group)
+                if item is not None
+            ]
+            if old_items:
+                self.play(*[FadeOut(item) for item in old_items], run_time=RUN_QUICK * 0.45)
+                self.remove(*old_items)
+            self.header_group = None
+            self.subtitle_group = None
+
+        super().set_header(number, title, subtitle)
+
+        if had_old:
+            self.header_group.set_opacity(0)
+            self.subtitle_group.set_opacity(0)
+            self.play(
+                self.header_group.animate.set_opacity(1),
+                self.subtitle_group.animate.set_opacity(1),
+                run_time=RUN_QUICK * 0.55,
+            )
+
+
+if __name__ == "__main__":
+    Seminar11OOPUMLV11().render()
