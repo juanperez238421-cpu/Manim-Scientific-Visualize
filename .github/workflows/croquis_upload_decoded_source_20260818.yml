@@ -1,0 +1,26 @@
+name: Croquis Upload Decoded Source 20260818
+
+on:
+  pull_request:
+    branches: [house-step-v3-render-20260818]
+
+jobs:
+  upload:
+    if: github.event.pull_request.head.ref == 'croquis-protocol-v1-20260818' && github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: croquis-protocol-v1-20260818
+      - name: Verify decoded source
+        run: |
+          set -euo pipefail
+          test -s render_jobs/house_step_v3/House_Extrusion_3D_STEP_BY_STEP_V3_DECODED.py
+          python -m py_compile render_jobs/house_step_v3/House_Extrusion_3D_STEP_BY_STEP_V3_DECODED.py
+      - name: Upload decoded source
+        uses: actions/upload-artifact@v4
+        with:
+          name: House-Step-V3-Decoded-Source
+          path: render_jobs/house_step_v3/House_Extrusion_3D_STEP_BY_STEP_V3_DECODED.py
+          if-no-files-found: error
+          retention-days: 7
