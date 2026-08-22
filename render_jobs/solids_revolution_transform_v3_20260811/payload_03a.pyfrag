@@ -1,0 +1,105 @@
+            "When the closed area stays away from the axis, its inner boundary also sweeps a surface and creates the bore.",
+        )
+        self.fixed(h); self.play(FadeIn(h), run_time=0.65)
+        outer = [(1.55, -1.25), (1.55, 1.25)]
+        inner = [(0.82, -1.25), (0.82, 1.25)]
+        shift = LEFT * 3.2
+        ring = closed_ring_profile(outer, 0.82, 0.52).shift(shift)
+        ax = axis_line(-1.7, 1.7).shift(shift)
+        gap = DoubleArrow(LEFT*3.2, LEFT*2.38, buff=0, color=BLACK_LINE, stroke_width=2.0)
+        gaplab = self.text("inner radius", 21, BOLD).next_to(gap, DOWN, buff=0.10)
+        self.fixed(gaplab)
+        self.play(Create(ax), FadeIn(ring), Create(gap), FadeIn(gaplab), run_time=1.05); self.wait(2.3)
+        self.play(FadeOut(gap), FadeOut(gaplab), run_time=0.4)
+        self.move_camera(
+            phi=66*DEGREES, theta=-48*DEGREES, zoom=0.91,
+            added_anims=[ring.animate.shift(-shift), ax.animate.shift(-shift)],
+            run_time=1.45,
+        )
+        hollow = self.sweep.hollow_solid(outer, inner)
+        # Draw trajectories from both the outer and inner profile simultaneously.
+        traces = VGroup(self.sweep.traces(outer, count=5), self.sweep.traces(inner, count=5, opacity=0.34))
+        self.play(
+            Rotate(ring, TAU, axis=UP, about_point=ORIGIN),
+            AnimationGroup(*[Create(t) for group in traces for t in group], lag_ratio=0.0),
+            run_time=4.0, rate_func=linear,
+        )
+        self.play(FadeIn(hollow), ring.animate.set_opacity(0.07), traces.animate.set_opacity(0.10), run_time=1.0)
+        self.play(FadeOut(ring), FadeOut(traces), run_time=0.5)
+        note = self.note(
+            "ENGINEERING READING",
+            ["Outer radius → outside diameter", "Inner radius → bore", "One annular sketch can define both."],
+            width=5.9,
+        ).to_corner(DR, buff=0.45)
+        self.fixed(note); self.play(FadeIn(note), run_time=0.7); self.wait(3.2)
+        self.clear_scene()
+
+    def inventor_workflow(self):
+        self.set_camera_orientation(phi=0,theta=-90*DEGREES,zoom=1)
+        h=self.section_header(7,"INVENTOR WORKFLOW: THE COMMAND ONLY EXECUTES THE GEOMETRY",
+                              "Profile, axis, extent and operation are geometric decisions first; the dialog simply records those decisions.")
+        self.fixed(h);self.play(FadeIn(h),run_time=0.7)
+        panel=self.cad_panel().move_to(RIGHT*3.55+DOWN*0.35)
+        self.fixed(panel)
+        profile=[(1.25,-1.45),(1.25,-0.25),(0.85,-0.25),(0.85,1.35)]
+        sketch=closed_profile_polygon(profile,0.53).scale(1.05).move_to(LEFT*3.45+DOWN*0.30)
+        ax=axis_line(-2.0,2.0).scale(1.05).move_to(LEFT*3.45+DOWN*0.30)
+        p_lab=self.pill("PROFILE",20).move_to(LEFT*5.1+DOWN*2.9)
+        a_lab=self.pill("AXIS",20).move_to(LEFT*2.0+DOWN*2.9)
+        self.fixed(p_lab,a_lab)
+        self.play(Create(ax),FadeIn(sketch),FadeIn(p_lab),FadeIn(a_lab),run_time=1.2)
+        self.play(FadeIn(panel),run_time=1.0);self.wait(1.8)
+        rows=panel[1][1]
+        for i,label in enumerate(["Select closed region","Choose centerline","Choose 360° / Full","Choose Join / Cut"]):
+            idx=[0,1,3,4][i]
+            box=SurroundingRectangle(rows[idx],color=BLACK_LINE,buff=0.07,stroke_width=2.2)
+            tag=self.text(label,20,BOLD).to_edge(DOWN,buff=0.30)
+            self.fixed(box,tag)
+            self.play(Create(box),FadeIn(tag),run_time=0.50);self.wait(1.10)
+            self.play(FadeOut(box),FadeOut(tag),run_time=0.35)
+        summary=self.text("The animation you just saw is what Inventor computes after these inputs are selected.",25,BOLD).to_edge(DOWN,buff=0.28)
+        self.fit(summary,13.8,0.58);self.fixed(summary);self.play(FadeIn(summary),run_time=0.75);self.wait(3.0)
+        self.clear_scene()
+
+    def stepped_shaft_example(self):
+        self.set_camera_orientation(phi=0,theta=-90*DEGREES,zoom=1)
+        h=self.section_header(8,"STEPPED SHAFT: WATCH EVERY SHOULDER SWEEP INTO A DIAMETER CHANGE",
+                              "This is the key professional case: one side profile can generate a complex lathe-like part with multiple diameters.")
+        self.fixed(h);self.play(FadeIn(h),run_time=0.7)
+        prof=[(0.68,-2.0),(0.68,-1.35),(1.12,-1.35),(1.12,-0.40),(0.86,-0.40),(0.86,0.45),(1.36,0.45),(1.36,1.20),(0.76,1.20),(0.76,2.0)]
+        shift=LEFT*3.55
+        sketch=closed_profile_polygon(prof,0.55).shift(shift)
+        ax=axis_line(-2.3,2.3).shift(shift)
+        labels=VGroup(
+            self.text("radius 1",18).move_to(LEFT*1.75+UP*1.62),
+            self.text("shoulder",18,BOLD).move_to(LEFT*1.55+UP*0.78),
+            self.text("radius 2",18).move_to(LEFT*1.65+DOWN*0.15),
+        );self.fixed(labels)
+        insight=self.note("READ THE SKETCH",["Vertical segments set axial lengths.","Horizontal steps change radius.","After Revolve, each radius becomes a diameter."],width=5.6).move_to(RIGHT*3.75+DOWN*0.25)
+        self.fixed(insight)
+        self.play(Create(ax),FadeIn(sketch),FadeIn(labels),FadeIn(insight),run_time=1.1);self.wait(3.1)
+        self.play(FadeOut(labels),FadeOut(insight),run_time=0.45)
+        self.move_camera(
+            phi=65*DEGREES,theta=-48*DEGREES,zoom=0.88,
+            added_anims=[sketch.animate.shift(-shift),ax.animate.shift(-shift)],
+            run_time=1.55,
+        )
+        shaft=self.sweep.animate_full_revolve(
+            sketch,prof,duration=4.7,trace_count=9,keep_axis=ax,
+            final_solid=self.sweep.final_solid(prof,opacity=0.55,caps=True,resolution=(36,24)),
+        )
+        note=self.note("WHAT THE SWEEP PROVES",["Each shoulder leaves a circular edge.","Each constant radius leaves a cylindrical band.","The 3D part is a direct record of the 2D profile."],width=6.1).to_corner(DR,buff=0.45)
+        self.fixed(note);self.play(FadeIn(note),run_time=0.75);self.wait(3.5)
+        self.clear_scene()
+
+    def revolved_cut_example(self):
+        self.set_camera_orientation(phi=0,theta=-90*DEGREES,zoom=1)
+        h=self.section_header(9,"REVOLVED CUT: WATCH THE CUT PROFILE SWEEP THE MATERIAL AWAY",
+                              "The subtractive profile uses the same rotation mechanism; only the operation changes from adding material to removing it.")
+        self.fixed(h);self.play(FadeIn(h),run_time=0.7)
+        plain=[(1.42,-1.70),(1.42,1.70)]
+        grooved=[(1.42,-1.70),(1.42,-0.35),(1.08,-0.35),(1.08,0.35),(1.42,0.35),(1.42,1.70)]
+        # Start with the plain shaft as the existing Inventor body.
+        shaft_before=VGroup(revolution_surface(plain,TAU,0.43),revolution_cap(-1.70,1.42),revolution_cap(1.70,1.42))
+        shaft_after=VGroup(revolution_surface(grooved,TAU,0.53),revolution_cap(-1.70,1.42),revolution_cap(1.70,1.42))
+        # Exact rectangular cut region: inner/outer radii and two axial limits.
