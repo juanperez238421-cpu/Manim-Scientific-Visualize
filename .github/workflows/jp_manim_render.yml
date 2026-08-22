@@ -1,0 +1,96 @@
+name: JP Manim Audited Render
+
+on:
+  workflow_dispatch:
+    inputs:
+      scene_file:
+        description: "Path relative to JP_Manim_Standard"
+        required: true
+        default: "examples/smoke_test.py"
+      scene_name:
+        description: "Manim Scene class"
+        required: true
+        default: "StandardSmokeTest"
+      mode:
+        description: "preview or final"
+        required: true
+        type: choice
+        options: [preview, final]
+        default: final
+      flush_cache:
+        description: "Flush Manim partial cache before render"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jp-manim-render-${{ github.ref }}-${{ inputs.scene_name }}
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        working-directory: JP_Manim_Standard
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore Manim caches
+        uses: actions/cache@v4
+        with:
+          path: |
+            JP_Manim_Standard/media/Tex
+            JP_Manim_Standard/media/text
+            JP_Manim_Standard/media/videos/**/partial_movie_files
+          key: manim-v0201-${{ runner.os }}-${{ inputs.scene_name }}-${{ hashFiles(format('JP_Manim_Standard/{0}', inputs.scene_file), 'JP_Manim_Standard/src/**') }}
+          restore-keys: |
+            manim-v0201-${{ runner.os }}-${{ inputs.scene_name }}-
+            manim-v0201-${{ runner.os }}-
+      - name: Pull pinned Manim image
+        run: docker pull manimcommunity/manim:v0.20.1
+      - name: Validate source
+        run: |
+          python -m py_compile "${{ inputs.scene_file }}" tools/check_style.py
+          python tools/check_style.py "${{ inputs.scene_file }}"
+      - name: Render in pinned Docker environment
+        env:
+          MODE: ${{ inputs.mode }}
+          FLUSH_CACHE: ${{ inputs.flush_cache }}
+        run: |
+          set -euo pipefail
+          QUALITY="-ql"; EXTRA=""
+          if [ "$MODE" = "final" ]; then QUALITY="-qh"; EXTRA="--fps 30 -r 1920,1080 --format=mp4"; fi
+          FLUSH=""; if [ "$FLUSH_CACHE" = "true" ]; then FLUSH="--flush_cache"; fi
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e PYTHONPATH=/manim/src \
+            -v "$PWD:/manim" -w /manim manimcommunity/manim:v0.20.1 \
+            bash -lc "manim $QUALITY '${{ inputs.scene_file }}' '${{ inputs.scene_name }}' --seed 42 $EXTRA $FLUSH 2>&1 | tee render.log"
+      - name: Locate rendered MP4
+        id: locate
+        env:
+          SCENE: ${{ inputs.scene_name }}
+        run: |
+          set -euo pipefail
+          VIDEO="$(find media -type f -name "${SCENE}.mp4" ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$VIDEO"; test -s "$VIDEO"
+          echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
+      - name: Verify and stage audited delivery
+        env:
+          MODE: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -v "$PWD:/manim" -w /manim \
+            manimcommunity/manim:v0.20.1 python tools/verify_video.py "${{ steps.locate.outputs.video }}" \
+            --scene "${{ inputs.scene_name }}" --mode "$MODE" --source "${{ inputs.scene_file }}" \
+            --output-dir "delivery/${{ inputs.scene_name }}" --git-sha "${{ github.sha }}"
+          cp render.log "delivery/${{ inputs.scene_name }}/render.log"
+      - name: Upload audited package
+        uses: actions/upload-artifact@v4
+        with:
+          name: jp-manim-${{ inputs.scene_name }}-${{ inputs.mode }}
+          path: JP_Manim_Standard/delivery/${{ inputs.scene_name }}/
+          if-no-files-found: error
+          retention-days: 14
