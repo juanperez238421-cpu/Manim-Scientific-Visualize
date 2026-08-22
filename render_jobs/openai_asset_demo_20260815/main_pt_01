@@ -1,0 +1,90 @@
+h: float,
+        label_tex: str,
+        label_shift: np.ndarray,
+        *,
+        dashed: bool = False,
+        stroke_width: float = 5.0,
+    ) -> VGroup:
+        unit = direction / np.linalg.norm(direction)
+        end = start + unit * length
+        arrow = Arrow(
+            start=start,
+            end=end,
+            buff=0,
+            color=BLACK_LINE,
+            stroke_width=stroke_width,
+            max_tip_length_to_length_ratio=0.14,
+        )
+        if dashed:
+            arrow.set_stroke(opacity=0.55)
+        label = self.math(label_tex, 31)
+        label.next_to(end, label_shift, buff=0.10)
+        return VGroup(arrow, label)
+
+    def construct(self) -> None:
+        self.standard_opening(
+            "PHYSICS • GENERATED ASSET PIPELINE",
+            "FROM OPENAI IMAGE TO MANIMCE",
+            "A reusable image becomes an editable animated scientific explanation",
+            "Raster for the object. Native Manim for the reasoning.",
+        )
+
+        # ------------------------------------------------------------------
+        # SECTION 1 — show the generated asset as a reusable visual object
+        # ------------------------------------------------------------------
+        self.set_header(
+            1,
+            "THE GENERATED ASSET",
+            "The OpenAI-generated PNG contains only the physical object; labels and mathematics stay native to ManimCE.",
+        )
+
+        asset = self._asset(7.20)
+        panel_group, panel_box, panel_figure, panel_title, panel_caption = self._image_panel(
+            asset,
+            width=7.45,
+            height=5.05,
+            title="Reusable technical asset",
+            caption="Transparent source • no baked text • no baked equations",
+        )
+        panel_group.move_to(LEFT * 3.55 + DOWN * 0.48)
+
+        principles = self.note_panel(
+            "ASSET CONTRACT",
+            [
+                "1. Generate the visual object once",
+                "2. Keep explanations outside the image",
+                "3. Animate every concept independently",
+                "4. Reuse the same asset in many lessons",
+            ],
+            width=5.75,
+            title_size=26,
+            body_size=22,
+            max_text_height=3.35,
+        )
+        principles.move_to(RIGHT * 3.70 + DOWN * 0.46)
+
+        self.assert_content_safe(panel_group, "generated asset panel")
+        self.assert_content_safe(principles, "asset contract panel")
+
+        self.play(FadeIn(panel_box), run_time=RUN_QUICK)
+        self.play(FadeIn(panel_figure, shift=UP * 0.12), run_time=RUN_SLOW)
+        if panel_title is not None:
+            self.play(FadeIn(panel_title), run_time=RUN_NORMAL)
+        if panel_caption is not None:
+            self.play(FadeIn(panel_caption), run_time=RUN_NORMAL)
+        self.wait(PAUSE_READ)
+        self.play(FadeIn(principles, shift=LEFT * 0.12), run_time=RUN_NORMAL)
+        self.wait(PAUSE_EXPLAIN)
+
+        # ------------------------------------------------------------------
+        # SECTION 2 — place native Manim force vectors over the raster asset
+        # ------------------------------------------------------------------
+        self.clear_stage(keep_header=True)
+        self.set_header(
+            2,
+            "NATIVE MANIM ANNOTATIONS",
+            "Vectors remain mathematical objects: they can grow, transform, fade, relabel and participate in later derivations.",
+        )
+
+        asset2 = self._asset(7.65)
+        asset2.move_to(LEFT * 3.25 + DOWN * 

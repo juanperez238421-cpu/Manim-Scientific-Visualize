@@ -1,0 +1,110 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""OpenAI generated image asset -> JP Classroom ManimCE demonstration.
+
+The PNG is a real OpenAI-generated asset from the current project workflow.
+All instructional overlays remain native Manim objects so they can be animated,
+edited, restyled, and reused independently of the raster asset.
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+import numpy as np
+from manim import *
+
+from jp_classroom_style import (
+    JPMathClassroomScene,
+    BLACK_LINE,
+    DARK_GRAY,
+    MID_GRAY,
+    LIGHT_GRAY,
+    PAPER_GRAY,
+    RUN_QUICK,
+    RUN_NORMAL,
+    RUN_SLOW,
+    PAUSE_SHORT,
+    PAUSE_READ,
+    PAUSE_EXPLAIN,
+    PAUSE_SUMMARY,
+    PAUSE_FINAL,
+)
+
+ASSET_PATH = Path("assets/images/openai_inclined_plane_block_760_q55.webp")
+
+
+class OpenAIAssetInclinedPlaneLesson(JPMathClassroomScene):
+    """Professional 2D ManimCE lesson integrating an OpenAI-generated asset."""
+
+    def validate_lesson_data(self) -> None:
+        if not ASSET_PATH.exists():
+            raise FileNotFoundError(ASSET_PATH)
+        # Conceptual reference values used only for the displayed numerical check.
+        theta_deg = 30.0
+        mass = 10.0
+        g = 9.81
+        expected_parallel = mass * g * np.sin(np.deg2rad(theta_deg))
+        expected_perp = mass * g * np.cos(np.deg2rad(theta_deg))
+        assert abs(expected_parallel - 49.05) < 1e-10
+        assert abs(expected_perp - 84.95709226070895) < 1e-10
+
+    def _asset(self, width: float = 6.55) -> ImageMobject:
+        image = ImageMobject(str(ASSET_PATH))
+        image.scale_to_fit_width(width)
+        return image
+
+    def _image_panel(
+        self,
+        image: ImageMobject,
+        *,
+        width: float,
+        height: float,
+        title: str | None = None,
+        caption: str | None = None,
+    ):
+        """Raster-safe companion to the style library's figure panel.
+
+        ``ImageMobject`` is a general ``Mobject`` rather than a ``VMobject`` in
+        ManimCE.  ``Group`` therefore provides the portable container while all
+        typography, sizing, palette and layout rules still come from the exact
+        JP Classroom style library.
+        """
+        box = RoundedRectangle(
+            width=width,
+            height=height,
+            corner_radius=0.12,
+            stroke_color=BLACK_LINE,
+            stroke_width=1.8,
+            fill_color=WHITE,
+            fill_opacity=1.0,
+        )
+        title_mob = self.text(title, 25, BOLD) if title else None
+        caption_mob = self.text(caption, 19) if caption else None
+
+        available_h = height - 0.76
+        if title_mob is not None:
+            available_h -= 0.55
+        if caption_mob is not None:
+            available_h -= 0.48
+        self.fit(image, width - 0.76, max(0.8, available_h))
+        image.move_to(box)
+
+        components = [box, image]
+        if title_mob is not None:
+            self.fit(title_mob, width - 0.55, 0.42)
+            title_mob.next_to(box.get_top(), DOWN, buff=0.18)
+            image.shift(DOWN * 0.18)
+            components.append(title_mob)
+        if caption_mob is not None:
+            self.fit(caption_mob, width - 0.55, 0.40)
+            caption_mob.next_to(box.get_bottom(), UP, buff=0.18)
+            image.shift(UP * 0.12)
+            components.append(caption_mob)
+
+        return Group(*components), box, image, title_mob, caption_mob
+
+    def _force_arrow(
+        self,
+        start: np.ndarray,
+        direction: np.ndarray,
+        lengt
