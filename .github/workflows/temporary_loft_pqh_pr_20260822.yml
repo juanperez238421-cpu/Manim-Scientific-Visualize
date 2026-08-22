@@ -1,0 +1,106 @@
+name: Temporary Solevacion Loft Exact PQH 20260822
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'render/loft-jp-real-pqh-20260812'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Decode exact source and style
+        shell: bash
+        run: |
+          set -euo pipefail
+          base64 -d render_payload/loft_render_payload.b64 | tar -xzf -
+          python -m py_compile Inventor_Solevacion_Loft_JP_REAL_PQH.py jp_classroom_style.py
+          ls -lh Inventor_Solevacion_Loft_JP_REAL_PQH.py jp_classroom_style.py
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg
+          rm -rf preview hq delivery
+          mkdir -p preview hq delivery/scenes delivery/logs
+          chmod -R a+rwX .
+
+      - name: Pull ManimCE 0.20.1
+        run: docker pull manimcommunity/manim:v0.20.1
+
+      - name: PQL validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          SCENES=(LoftTheoryJP LoftSimpleJP3D LoftExercise1JP3D LoftExercise2JP3D LoftSummaryJP)
+          for scene in "${SCENES[@]}"; do
+            mkdir -p "preview/${scene}"
+            chmod -R a+rwX "preview/${scene}"
+            docker run --rm \
+              -e HOME=/tmp/manim-home \
+              -e LESSON_TIME_SCALE=0.20 \
+              -e SCENE="${scene}" \
+              -e MEDIA_DIR="/manim/preview/${scene}" \
+              -v "$PWD:/manim" -w /manim \
+              --entrypoint bash manimcommunity/manim:v0.20.1 \
+              -c 'set -euo pipefail; mkdir -p /tmp/bin; printf "#!/bin/sh\nexit 0\n" > /tmp/bin/xdg-open; chmod +x /tmp/bin/xdg-open; export PATH="/tmp/bin:$PATH"; manim -pql Inventor_Solevacion_Loft_JP_REAL_PQH.py "$SCENE" --media_dir "$MEDIA_DIR" --format=mp4 --disable_caching' \
+              2>&1 | tee "delivery/logs/pql_${scene}.log"
+          done
+
+      - name: PQH final scenes
+        shell: bash
+        run: |
+          set -euo pipefail
+          SCENES=(LoftTheoryJP LoftSimpleJP3D LoftExercise1JP3D LoftExercise2JP3D LoftSummaryJP)
+          : > delivery/concat.txt
+          for scene in "${SCENES[@]}"; do
+            mkdir -p "hq/${scene}"
+            chmod -R a+rwX "hq/${scene}"
+            docker run --rm \
+              -e HOME=/tmp/manim-home \
+              -e LESSON_TIME_SCALE=1.0 \
+              -e SCENE="${scene}" \
+              -e MEDIA_DIR="/manim/hq/${scene}" \
+              -v "$PWD:/manim" -w /manim \
+              --entrypoint bash manimcommunity/manim:v0.20.1 \
+              -c 'set -euo pipefail; mkdir -p /tmp/bin; printf "#!/bin/sh\nexit 0\n" > /tmp/bin/xdg-open; chmod +x /tmp/bin/xdg-open; export PATH="/tmp/bin:$PATH"; manim -pqh Inventor_Solevacion_Loft_JP_REAL_PQH.py "$SCENE" --media_dir "$MEDIA_DIR" --format=mp4 --disable_caching' \
+              2>&1 | tee "delivery/logs/pqh_${scene}.log"
+            mapfile -t candidates < <(find "hq/${scene}" -type f -name '*.mp4' ! -path '*/partial_movie_files/*' | sort)
+            test "${#candidates[@]}" -eq 1
+            cp "${candidates[0]}" "delivery/scenes/${scene}.mp4"
+            ffmpeg -v error -i "delivery/scenes/${scene}.mp4" -f null -
+            printf "file '%s'\n" "$PWD/delivery/scenes/${scene}.mp4" >> delivery/concat.txt
+          done
+
+      - name: Assemble and verify final MP4
+        shell: bash
+        run: |
+          set -euo pipefail
+          ffmpeg -y -f concat -safe 0 -i delivery/concat.txt \
+            -c:v libx264 -preset medium -crf 17 -pix_fmt yuv420p -r 30 -an \
+            delivery/Inventor_Solevacion_Loft_JP_REAL_PQH.mp4
+          VIDEO=delivery/Inventor_Solevacion_Loft_JP_REAL_PQH.mp4
+          test -s "$VIDEO"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$VIDEO" | tr -d '[:space:]')" = 1920
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$VIDEO" | tr -d '[:space:]')" = 1080
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$VIDEO" | tr -d '[:space:]')" = 30/1
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$VIDEO" | tr -d '[:space:]')" = h264
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$VIDEO" | tr -d '[:space:]')" = yuv420p
+          ffmpeg -v error -i "$VIDEO" -f null -
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of json "$VIDEO" > delivery/ffprobe.json
+          sha256sum "$VIDEO" > delivery/sha256.txt
+          cp Inventor_Solevacion_Loft_JP_REAL_PQH.py jp_classroom_style.py delivery/
+
+      - name: Upload verified delivery
+        uses: actions/upload-artifact@v4
+        with:
+          name: Inventor_Solevacion_Loft_JP_REAL_PQH_delivery_20260822
+          path: delivery/
+          if-no-files-found: error
+          retention-days: 7
