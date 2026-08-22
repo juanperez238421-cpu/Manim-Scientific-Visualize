@@ -1,0 +1,210 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Autodesk Inventor Professional — Barrido (Sweep), senior classroom lesson.
+
+ManimCE 0.20.x.  Full-HD 16:9.  White background, black/neutral hierarchy.
+Pedagogical sequence:
+    PROFILE -> PATH -> SWEEP -> 3D SOLID
+
+The lesson intentionally begins with a simple visual example, then reproduces
+an Inventor-style workflow and develops two worked exercises from 2D sketch
+entities to 3D swept solids.
+"""
+from __future__ import annotations
+
+import math
+import os
+from typing import Callable
+
+import numpy as np
+from manim import *
+from jp_classroom_style import (
+    JPThreeDClassroomScene,
+    BLACK_TEXT, BLACK_LINE, DARK_GRAY, MID_GRAY, LIGHT_GRAY,
+    VERY_LIGHT_GRAY, PAPER_GRAY, WHITE_FILL,
+)
+
+config.pixel_width = 1920
+config.pixel_height = 1080
+config.frame_width = 16
+config.frame_height = 9
+config.frame_rate = 30
+config.background_color = WHITE
+
+TIME_SCALE = float(os.getenv("LESSON_TIME_SCALE", "1.0"))
+
+# Deliberately large classroom typography.
+TITLE = 48
+H1 = 36
+H2 = 30
+BODY = 26
+SMALL = 22
+
+RUN = 1.00
+RUN_SLOW = 1.45
+PAUSE = 1.35
+READ = 2.15
+EXPLAIN = 3.0
+
+
+def unit(v: np.ndarray) -> np.ndarray:
+    n = float(np.linalg.norm(v))
+    return v / n if n > 1e-10 else np.array([1.0, 0.0, 0.0])
+
+
+def tangent_numeric(path: Callable[[float], np.ndarray], t: float) -> np.ndarray:
+    eps = 1e-4
+    a = path(max(0.0, t - eps))
+    b = path(min(1.0, t + eps))
+    return unit(b - a)
+
+
+def circle_profile(u: float, radius: float) -> tuple[float, float]:
+    return radius * math.cos(u), radius * math.sin(u)
+
+
+def rectangle_profile(u: float, width: float, height: float) -> tuple[float, float]:
+    """Perimeter parameter u in [0,4]. Returns local normal/binormal offsets."""
+    u = max(0.0, min(4.0, float(u)))
+    hw, hh = width / 2.0, height / 2.0
+    if u <= 1.0:
+        return -hw + 2 * hw * u, -hh
+    if u <= 2.0:
+        q = u - 1.0
+        return hw, -hh + 2 * hh * q
+    if u <= 3.0:
+        q = u - 2.0
+        return hw - 2 * hw * q, hh
+    q = u - 3.0
+    return -hw, hh - 2 * hh * q
+
+
+def local_frame(path: Callable[[float], np.ndarray], t: float) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Stable frame for planar XY paths: tangent, in-plane normal, Z binormal."""
+    T = tangent_numeric(path, t)
+    B = np.array([0.0, 0.0, 1.0])
+    N = unit(np.cross(B, T))
+    return T, N, B
+
+
+def sweep_surface(
+    path: Callable[[float], np.ndarray],
+    profile: Callable[[float], tuple[float, float]],
+    u_max: float,
+    end_t: float = 1.0,
+    *,
+    opacity: float = 0.58,
+    resolution: tuple[int, int] = (20, 34),
+) -> Surface:
+    end_t = max(0.015, min(1.0, float(end_t)))
+
+    def f(u: float, v: float) -> np.ndarray:
+        t = end_t * v
+        P = path(t)
+        _, N, B = local_frame(path, t)
+        a, b = profile(u)
+        return P + a * N + b * B
+
+    return Surface(
+        f,
+        u_range=[0.0, u_max],
+        v_range=[0.0, 1.0],
+        resolution=resolution,
+        fill_color=GRAY_C,
+        fill_opacity=opacity,
+        stroke_color=GRAY_B,
+        stroke_width=0.55,
+    )
+
+
+def section_curve(
+    path: Callable[[float], np.ndarray],
+    profile: Callable[[float], tuple[float, float]],
+    u_max: float,
+    t: float,
+    *,
+    color=BLACK,
+    width=4.0,
+) -> ParametricFunction:
+    def f(u: float) -> np.ndarray:
+        P = path(t)
+        _, N, B = local_frame(path, t)
+        a, b = profile(u)
+        return P + a * N + b * B
+
+    return ParametricFunction(f, t_range=[0, u_max], color=color, stroke_width=width)
+
+
+def path_curve(path: Callable[[float], np.ndarray], *, color=BLACK, width=5.0) -> ParametricFunction:
+    return ParametricFunction(path, t_range=[0, 1], color=color, stroke_width=width)
+
+
+# -----------------------------------------------------------------------------
+# Path definitions used in the worked examples.
+# -----------------------------------------------------------------------------
+def simple_curve(t: float) -> np.ndarray:
+    # Gentle planar curve, centered for the concept scene.
+    x = -3.5 + 7.0 * t
+    y = -0.15 + 1.15 * math.sin(math.pi * (t - 0.5))
+    return np.array([x, y, 0.0])
+
+
+def elbow_path(t: float) -> np.ndarray:
+    """Line -> quarter arc -> line, normalized into three construction stages."""
+    if t < 0.34:
+        q = t / 0.34
+        return np.array([-3.6 + 2.6 * q, -1.8, 0.0])
+    if t < 0.68:
+        q = (t - 0.34) / 0.34
+        # quarter arc from (-1,-1.8), tangent +x, to (0.8,0), tangent +y
+        ang = -math.pi / 2 + q * math.pi / 2
+        center = np.array([-1.0, 0.0, 0.0])
+        return center + np.array([1.8 * math.cos(ang), 1.8 * math.sin(ang), 0.0])
+    q = (t - 0.68) / 0.32
+    return np.array([0.8, 0.0 + 3.2 * q, 0.0])
+
+
+def handle_path(t: float) -> np.ndarray:
+    """Smooth cubic Bezier trajectory for the advanced rectangular sweep."""
+    p0 = np.array([-3.9, -1.7, 0.0])
+    p1 = np.array([-2.0, 2.7, 0.0])
+    p2 = np.array([1.8, -2.6, 0.0])
+    p3 = np.array([3.9, 1.7, 0.0])
+    s = 1.0 - t
+    return s**3*p0 + 3*s*s*t*p1 + 3*s*t*t*p2 + t**3*p3
+
+
+class BarridoInventorProfessionalSenior(JPThreeDClassroomScene):
+    """Complete senior sweep lesson: concept + workflow + two worked examples."""
+
+    # ------------------------------------------------------------------
+    # Timing wrappers preserve the project protocol preview/final scaling.
+    # ------------------------------------------------------------------
+    def play(self, *animations, **kwargs):
+        if kwargs.get("run_time") is not None:
+            kwargs["run_time"] *= TIME_SCALE
+        return super().play(*animations, **kwargs)
+
+    def wait(self, duration=DEFAULT_WAIT_TIME, *args, **kwargs):
+        return super().wait(duration * TIME_SCALE, *args, **kwargs)
+
+    # ------------------------------------------------------------------
+    # Fixed-frame classroom UI helpers.
+    # ------------------------------------------------------------------
+    def ftext(self, text: str, size: int = BODY, weight=NORMAL, color=BLACK_TEXT) -> Text:
+        return Text(text, font_size=size, color=color, weight=weight, line_spacing=0.95)
+
+    def fit(self, mob: Mobject, w: float, h: float) -> Mobject:
+        if mob.width > w:
+            mob.scale_to_fit_width(w)
+        if mob.height > h:
+            mob.scale_to_fit_height(h)
+        return mob
+
+    def fixed(self, *mobs: Mobject) -> None:
+        self.add_fixed_in_frame_mobjects(*mobs)
+
+    def header(self, n: int, title: str, subtitle: str) -> VGroup:
+        num_box = RoundedRectangle(
+            width=0.72, height=0.52, corner_radius=0.1,
+            stroke_color=BLACK_LINE, stroke_width=2, fill_color=WHITE, fill_opacity=1,
