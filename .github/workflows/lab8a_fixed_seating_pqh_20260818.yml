@@ -1,0 +1,129 @@
+name: Lab 8A Fixed Seating PQH 20260818
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'agent/lab8a-fixed-seating-pqh-20260818'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct exact lesson and classroom style
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/lab8a_seating_20260818
+          mkdir -p "$JOB/library" out qa_out
+          cat "$JOB"/lab8a_*.b64 | base64 -d | gzip -dc > "$JOB/lab8a_seating.py"
+          cat "$JOB"/style_*.b64 | base64 -d | gzip -dc > "$JOB/library/jp_classroom_style.py"
+          touch "$JOB/library/__init__.py"
+          python -m py_compile "$JOB/lab8a_seating.py" "$JOB/library/jp_classroom_style.py"
+
+      - name: Install verification tools and ManimCE image
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          ffprobe -version | head -1
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL accelerated runtime QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/lab8a_seating_20260818
+          rm -rf media_pql qa_out && mkdir -p qa_out
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.06 \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pql $JOB/lab8a_seating.py Lab8AFixedSeating --fps 15 --format=mp4 --media_dir media_pql --disable_caching
+            " 2>&1 | tee qa_out/render_pql.log
+          PREVIEW="$(find media_pql -type f -name 'Lab8AFixedSeating.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PREVIEW" && test -s "$PREVIEW"
+          cp "$PREVIEW" qa_out/Lab8A_FixedSeating_QA_pql.mp4
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/lab8a_seating_20260818
+          rm -rf media out && mkdir -p out
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pqh $JOB/lab8a_seating.py Lab8AFixedSeating --fps 30 --format=mp4 --media_dir media --disable_caching
+            " 2>&1 | tee out/render_pqh.log
+          FINAL="$(find media -type f -name 'Lab8AFixedSeating.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" out/Lab8A_Fixed_Seating_FINAL_pqh.mp4
+
+      - name: Verify final MP4
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Lab8A_Fixed_Seating_FINAL_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\n%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" > out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          python - <<'PY'
+          dur=float(open('out/VIDEO_TECHNICAL.tsv').read().splitlines()[1].split('\t')[-1])
+          assert 45 <= dur <= 180, f'duration outside expected classroom range: {dur}'
+          print('duration_pass', dur)
+          PY
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
+          sha256sum "$F" > out/SHA256SUMS.txt
+
+      - name: Package verified delivery
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/lab8a_seating_20260818
+          cp "$JOB/lab8a_seating.py" out/
+          cp "$JOB/library/jp_classroom_style.py" out/
+          cp qa_out/render_pql.log out/
+          printf 'ManimCE: 0.20.1\nPreview: literal -pql, accelerated QA\nFinal: literal -pqh, 30 fps\nResolution: 1920x1080\nCodec: H.264 / yuv420p\nGroup: 8A\nStudents: 21\nAssignment: PC01-PC07, seats A-B-C\nAvailable: PC08 and PC09 (6 seats)\n' > out/RENDER_INFO.txt
+          cd out
+          zip -9 Lab8A_Fixed_Seating_FINAL_PQH_Package.zip \
+            Lab8A_Fixed_Seating_FINAL_pqh.mp4 lab8a_seating.py jp_classroom_style.py \
+            VIDEO_TECHNICAL.tsv SHA256SUMS.txt RENDER_INFO.txt render_pqh.log render_pql.log full_decode.log
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Lab8A-Fixed-Seating-FINAL-PQH
+          path: |
+            out/Lab8A_Fixed_Seating_FINAL_pqh.mp4
+            out/Lab8A_Fixed_Seating_FINAL_PQH_Package.zip
+            out/lab8a_seating.py
+            out/jp_classroom_style.py
+            out/VIDEO_TECHNICAL.tsv
+            out/SHA256SUMS.txt
+            out/RENDER_INFO.txt
+          if-no-files-found: error
+          retention-days: 7
