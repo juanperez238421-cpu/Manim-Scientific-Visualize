@@ -1,4 +1,4 @@
-name: Geometry 8 Circle Measurement to Area PQH 20260823
+name: Geometry 8 Circle Measurement to Area V2 PQH 20260823
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  render-circle-measurement-area:
+  render-circle-measurement-area-v2:
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.ref == 'agent/geometry8-circle-measurement-area-20260823'
     runs-on: ubuntu-latest
     timeout-minutes: 180
@@ -39,11 +39,13 @@ jobs:
             "$JOB/Geometry8_Circle_Workshop_FINAL.py" \
             "$JOB/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA.py" \
             "$JOB/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA_V2.py" \
-            "$JOB/Geometry8_Circle_Measurement_To_Area_20260823.py"
+            "$JOB/Geometry8_Circle_Measurement_To_Area_20260823.py" \
+            "$JOB/Geometry8_Circle_Measurement_To_Area_20260823_V2.py"
 
-          grep -q 'class Geometry8CircleMeasurementArea20260823' "$JOB/Geometry8_Circle_Measurement_To_Area_20260823.py"
-          grep -q 'C / d' "$JOB/Geometry8_Circle_Measurement_To_Area_20260823.py"
-          grep -q 'A=\\pi r\^2' "$JOB/Geometry8_Circle_Measurement_To_Area_20260823.py"
+          grep -Fq 'class Geometry8CircleMeasurementArea20260823V2' "$JOB/Geometry8_Circle_Measurement_To_Area_20260823_V2.py"
+          grep -Fq 'C / d' "$JOB/Geometry8_Circle_Measurement_To_Area_20260823.py"
+          grep -Fq 'A=\pi r^2' "$JOB/Geometry8_Circle_Measurement_To_Area_20260823.py"
+          grep -Fq ').shift(center)' "$JOB/Geometry8_Circle_Measurement_To_Area_20260823_V2.py"
 
       - name: Literal PQL full runtime gate
         shell: bash
@@ -57,14 +59,14 @@ jobs:
           export LESSON_TIME_SCALE=0.08
 
           manim -pql \
-            render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Measurement_To_Area_20260823.py \
-            Geometry8CircleMeasurementArea20260823 \
+            render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Measurement_To_Area_20260823_V2.py \
+            Geometry8CircleMeasurementArea20260823V2 \
             --fps 15 --format=mp4 --media_dir qa_media --disable_caching \
-            2>&1 | tee qa_out/MEASUREMENT_TO_AREA_pql.log
+            2>&1 | tee qa_out/MEASUREMENT_TO_AREA_V2_pql.log
 
-          PQL="$(find qa_media -type f -name 'Geometry8CircleMeasurementArea20260823.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          PQL="$(find qa_media -type f -name 'Geometry8CircleMeasurementArea20260823V2.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PQL" && test -s "$PQL"
-          cp "$PQL" qa_out/Geometry8_Circle_Measurement_To_Area_20260823_pql.mp4
+          cp "$PQL" qa_out/Geometry8_Circle_Measurement_To_Area_20260823_V2_pql.mp4
 
       - name: Literal PQH final render
         shell: bash
@@ -78,20 +80,20 @@ jobs:
           export LESSON_TIME_SCALE=1.0
 
           manim -pqh \
-            render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Measurement_To_Area_20260823.py \
-            Geometry8CircleMeasurementArea20260823 \
+            render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Measurement_To_Area_20260823_V2.py \
+            Geometry8CircleMeasurementArea20260823V2 \
             --fps 30 --format=mp4 --media_dir media --disable_caching \
-            2>&1 | tee out/MEASUREMENT_TO_AREA_pqh.log
+            2>&1 | tee out/MEASUREMENT_TO_AREA_V2_pqh.log
 
-          FINAL="$(find media -type f -name 'Geometry8CircleMeasurementArea20260823.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          FINAL="$(find media -type f -name 'Geometry8CircleMeasurementArea20260823V2.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$FINAL" && test -s "$FINAL"
-          cp "$FINAL" out/Geometry8_Circle_Measurement_To_Area_20260823_FINAL_pqh.mp4
+          cp "$FINAL" out/Geometry8_Circle_Measurement_To_Area_20260823_V2_FINAL_pqh.mp4
 
       - name: Technical verification and visual QA evidence
         shell: bash
         run: |
           set -euo pipefail
-          F=out/Geometry8_Circle_Measurement_To_Area_20260823_FINAL_pqh.mp4
+          F=out/Geometry8_Circle_Measurement_To_Area_20260823_V2_FINAL_pqh.mp4
 
           ffprobe -v error \
             -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
@@ -107,12 +109,6 @@ jobs:
 
           mkdir -p out/frame_samples
           DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
-          python - "$DURATION" <<'PY'
-          import sys
-          d=float(sys.argv[1])
-          for i in range(1,49):
-              print(f"{d*i/49:.3f}")
-          PY
           python - "$DURATION" <<'PY' > /tmp/times.txt
           import sys
           d=float(sys.argv[1])
@@ -128,13 +124,14 @@ jobs:
 
           sha256sum "$F" > out/SHA256SUMS.txt
           cp render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Measurement_To_Area_20260823.py out/
+          cp render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Measurement_To_Area_20260823_V2.py out/
           cp render_jobs/geometry8_circle_pedagogical_qa_20260819/jp_classroom_style.py out/
-          cp qa_out/MEASUREMENT_TO_AREA_pql.log out/
+          cp qa_out/MEASUREMENT_TO_AREA_V2_pql.log out/
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: Geometry8-Circle-Measurement-To-Area-20260823-FINAL-PQH
+          name: Geometry8-Circle-Measurement-To-Area-20260823-V2-FINAL-PQH
           path: |
             out/
             qa_out/
