@@ -52,9 +52,15 @@ jobs:
             "$JOB/Geometry8_Circle_V3_Exercises.py" \
             "$JOB/Geometry8_Circle_Measurement_To_Area_20260823_V3.py"
 
+          python - <<'PY'
+          import av
+          print('PyAV verification backend:', av.__version__)
+          PY
+
           grep -Fq 'class Geometry8CircleMeasurementArea20260823V3' "$JOB/Geometry8_Circle_Measurement_To_Area_20260823_V3.py"
           grep -Fq 'MoveAlongPath' "$JOB/Geometry8_Circle_V3_Measurement.py"
           grep -Fq 'AnnularSector' "$JOB/Geometry8_Circle_V3_Area.py"
+          grep -Fq 'spacing = PI * r / n' "$JOB/Geometry8_Circle_V3_Area.py"
           grep -Fq 'exercise_inverse_and_context_v3' "$JOB/Geometry8_Circle_V3_Exercises.py"
 
       - name: PQL full-timeline runtime and safe-frame gate
@@ -77,7 +83,18 @@ jobs:
           PQL="$(find qa_media -type f -name 'Geometry8CircleMeasurementArea20260823V3.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PQL" && test -s "$PQL"
           cp "$PQL" qa_out/Geometry8_Circle_Measurement_To_Area_20260823_V3_pql.mp4
-          ffmpeg -nostdin -v error -i "$PQL" -f null -
+
+          python - "$PQL" <<'PY'
+          import av, sys
+          path=sys.argv[1]
+          frames=0
+          with av.open(path) as c:
+              stream=c.streams.video[0]
+              for _ in c.decode(stream):
+                  frames += 1
+          assert frames > 0, 'PQL decoder returned zero frames'
+          print(f'PQL decoded successfully: {frames} frames')
+          PY
 
       - name: PQH final render after PQL acceptance
         shell: bash
@@ -100,48 +117,51 @@ jobs:
           test -n "$FINAL" && test -s "$FINAL"
           cp "$FINAL" out/Geometry8_Circle_Measurement_To_Area_20260823_V3_FINAL_pqh.mp4
 
-      - name: Mandatory technical verification
+      - name: Mandatory technical verification with PyAV
         shell: bash
         run: |
           set -euo pipefail
           F=out/Geometry8_Circle_Measurement_To_Area_20260823_V3_FINAL_pqh.mp4
 
-          ffprobe -v error \
-            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
-            -show_entries format=duration,size \
-            -of default=noprint_wrappers=1 "$F" | tee out/VIDEO_TECHNICAL.txt
+          python - "$F" <<'PY' | tee out/VIDEO_TECHNICAL.txt
+          import av, sys, os
+          path=sys.argv[1]
+          with av.open(path) as c:
+              s=c.streams.video[0]
+              codec=s.codec_context.name
+              width=s.codec_context.width
+              height=s.codec_context.height
+              fmt=s.codec_context.format.name if s.codec_context.format else ''
+              fps=float(s.average_rate) if s.average_rate else 0.0
+              duration=(float(c.duration) / float(av.time_base)) if c.duration else 0.0
+              frames=0
+              for _ in c.decode(s):
+                  frames += 1
+          size=os.path.getsize(path)
+          print(f'codec_name={codec}')
+          print(f'width={width}')
+          print(f'height={height}')
+          print(f'pix_fmt={fmt}')
+          print(f'fps={fps:.6f}')
+          print(f'duration={duration:.6f}')
+          print(f'frames_decoded={frames}')
+          print(f'size={size}')
+          assert width == 1920, width
+          assert height == 1080, height
+          assert abs(fps - 30.0) < 0.001, fps
+          assert codec == 'h264', codec
+          assert fmt == 'yuv420p', fmt
+          assert frames > 0, frames
+          assert duration > 1.0, duration
+          PY
 
-          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")" = 1920
-          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")" = 1080
-          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")" = 30/1
-          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")" = h264
-          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")" = yuv420p
-          ffmpeg -nostdin -v error -i "$F" -f null -
           sha256sum "$F" > out/SHA256SUMS.txt
 
-      - name: Build visual QA evidence and source bundle
+      - name: Build QA evidence and source bundle
         if: always()
         shell: bash
         run: |
           set +e
-          F=out/Geometry8_Circle_Measurement_To_Area_20260823_V3_FINAL_pqh.mp4
-          mkdir -p out/frame_samples
-          if test -s "$F"; then
-            DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
-            python - "$DURATION" <<'PY' > /tmp/times.txt
-          import sys
-          d=float(sys.argv[1])
-          for i in range(1,25):
-              print(f"{d*i/25:.3f}")
-          PY
-            i=1
-            while read -r t; do
-              ffmpeg -nostdin -v error -ss "$t" -i "$F" -frames:v 1 -q:v 2 \
-                "out/frame_samples/frame_$(printf '%02d' "$i").jpg" || true
-              i=$((i+1))
-            done < /tmp/times.txt
-          fi
-
           JOB=render_jobs/geometry8_circle_pedagogical_qa_20260819
           cp "$JOB/Geometry8_Circle_Measurement_To_Area_20260823.py" out/ 2>/dev/null || true
           cp "$JOB/Geometry8_Circle_Measurement_To_Area_20260823_V2.py" out/ 2>/dev/null || true
@@ -152,6 +172,7 @@ jobs:
           cp "$JOB/Geometry8_Circle_V3_Exercises.py" out/ 2>/dev/null || true
           cp "$JOB/jp_classroom_style.py" out/ 2>/dev/null || true
           cp qa_out/MEASUREMENT_TO_AREA_V3_pql.log out/ 2>/dev/null || true
+          cp qa_out/Geometry8_Circle_Measurement_To_Area_20260823_V3_pql.mp4 out/ 2>/dev/null || true
 
       - uses: actions/upload-artifact@v4
         if: always()
