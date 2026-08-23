@@ -90,7 +90,7 @@ jobs:
           test -n "$FINAL" && test -s "$FINAL"
           cp "$FINAL" out/Achilles_and_Tortoise_Zeno_SENIOR_V7_FINAL_pqh.mp4
 
-      - name: Strictly verify V7 MP4
+      - name: Strictly verify V7 MP4 with diagnostics
         shell: bash
         run: |
           set -euo pipefail
@@ -101,19 +101,35 @@ jobs:
           CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
           PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
           DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          printf 'QA metadata: width=%s height=%s fps=%s codec=%s pix_fmt=%s duration=%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR"
           printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\n%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" > out/VIDEO_TECHNICAL.tsv
-          test "$W" = 1920
-          test "$H" = 1080
-          test "$FPS" = 30/1
-          test "$CODEC" = h264
-          test "$PIX" = yuv420p
+          test "$W" = 1920 || { echo "FAIL width=$W"; exit 21; }
+          test "$H" = 1080 || { echo "FAIL height=$H"; exit 22; }
+          test "$FPS" = 30/1 || { echo "FAIL fps=$FPS"; exit 23; }
+          test "$CODEC" = h264 || { echo "FAIL codec=$CODEC"; exit 24; }
+          test "$PIX" = yuv420p || { echo "FAIL pix_fmt=$PIX"; exit 25; }
           python - <<'PY'
           dur=float(open('out/VIDEO_TECHNICAL.tsv').read().splitlines()[1].split('\t')[-1])
           assert 110 <= dur <= 420, f'Unexpected V7 duration: {dur}'
           print('duration_gate_pass', dur)
           PY
+          set +e
           ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
+          DEC=$?
+          set -e
+          if [ "$DEC" -ne 0 ]; then
+            echo "FAIL full decode exit=$DEC"
+            cat out/full_decode.log
+            exit 26
+          fi
+          if [ -s out/full_decode.log ]; then
+            echo "FFmpeg reported decode errors:"
+            cat out/full_decode.log
+            exit 27
+          fi
           sha256sum "$F" > out/SHA256SUMS.txt
+          cat out/SHA256SUMS.txt
+          echo "STRICT_VIDEO_QA_PASS"
 
       - name: Export dense audit frames V7
         shell: bash
