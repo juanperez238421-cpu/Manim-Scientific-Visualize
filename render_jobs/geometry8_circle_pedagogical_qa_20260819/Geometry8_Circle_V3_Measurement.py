@@ -214,10 +214,10 @@ class CircleV3MeasurementMixin:
         self.play(Write(eq1), run_time=RUN_QUICK)
         self.play(GrowFromPoint(opposite, center), run_time=RUN_NORMAL)
         self.play(ReplacementTransform(VGroup(radius.copy(), opposite.copy()), diameter), run_time=RUN_SLOW)
-        self.play(Write(d_label), TransformMatchingTex(eq1, eq2), run_time=RUN_NORMAL)
-        eq1.become(eq2)
-        self.play(TransformMatchingTex(eq1, eq3), run_time=RUN_NORMAL)
-        eq1.become(eq3)
+        # Keep one persistent equation object. This avoids duplicate glyphs that
+        # can remain on-screen when TransformMatchingTex is followed by become().
+        self.play(Write(d_label), Transform(eq1, eq2), run_time=RUN_NORMAL)
+        self.play(Transform(eq1, eq3), run_time=RUN_NORMAL)
         self.play(Create(circle), MoveAlongPath(tracer, circle), run_time=RUN_SLOW * 1.45)
         self.play(FadeOut(tracer), FadeIn(circumference_label), run_time=RUN_QUICK)
         self.play(FadeIn(relation, shift=UP * 0.08), run_time=RUN_NORMAL)
@@ -266,11 +266,11 @@ class CircleV3MeasurementMixin:
         self.play(GrowFromCenter(brace), Write(c_label), run_time=RUN_NORMAL)
         self.play(Write(e1), run_time=RUN_NORMAL)
         self.wait(PAUSE_EXPLAIN)
-        self.play(TransformMatchingTex(e1, e2), run_time=RUN_SLOW)
-        e1.become(e2)
+        # One equation object morphs through the algebraic chain; no duplicate
+        # source/target MathTex objects are left in the scene.
+        self.play(Transform(e1, e2), run_time=RUN_SLOW)
         self.wait(PAUSE_READ)
-        self.play(TransformMatchingTex(e1, e3), run_time=RUN_SLOW)
-        e1.become(e3)
+        self.play(Transform(e1, e3), run_time=RUN_SLOW)
         self.play(FadeIn(note, shift=UP * 0.08), run_time=RUN_NORMAL)
         self.wait(PAUSE_SUMMARY)
         self.clear_stage()
