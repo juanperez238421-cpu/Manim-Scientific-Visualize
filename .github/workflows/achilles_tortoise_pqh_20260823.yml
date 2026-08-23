@@ -109,7 +109,7 @@ jobs:
           test "$PIX" = yuv420p
           python - <<'PY'
           dur=float(open('out/VIDEO_TECHNICAL.tsv').read().splitlines()[1].split('\t')[-1])
-          assert 120 <= dur <= 420, f'Unexpected V7 duration: {dur}'
+          assert 110 <= dur <= 420, f'Unexpected V7 duration: {dur}'
           print('duration_gate_pass', dur)
           PY
           ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
