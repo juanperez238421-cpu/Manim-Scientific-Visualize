@@ -1,0 +1,204 @@
+        self.play(FadeOut(ui), FadeOut(stepbar), run_time=RUN)
+        self.play(FadeIn(caution, shift=UP*0.12), run_time=RUN)
+        self.wait(EXPLAIN)
+        self.play(FadeOut(caution), FadeOut(h), FadeOut(foot), run_time=RUN)
+
+    # ------------------------------------------------------------------
+    def exercise_one(self):
+        self.set_camera_orientation(phi=0*DEGREES, theta=-90*DEGREES, zoom=1.0)
+        h = self.header(3, "EXERCISE 1: 90° BENT PIPE / ROD",
+                        "Build the trajectory from two straight segments and a tangent arc, then sweep a circular profile.")
+        foot = self.footer("Exercise 1 • Circular profile • Line + Arc trajectory")
+
+        # Large 2D sketch region.
+        sketch_box = RoundedRectangle(width=9.2, height=5.2, corner_radius=0.12,
+                                      stroke_color=BLACK, stroke_width=2, fill_color=WHITE, fill_opacity=1)
+        sketch_box.move_to(LEFT*2.4 + DOWN*0.6)
+        task = self.note("DESIGN DATA", [
+            "Circular profile: Ø20 mm",
+            "Horizontal segment: 60 mm",
+            "Tangent bend radius: R30 mm",
+            "Vertical segment: 70 mm",
+        ], width=4.7)
+        task.move_to(RIGHT*5.1 + DOWN*0.45)
+        self.fixed(sketch_box, task)
+
+        # Orthographic path sketch scaled for screen.
+        A = np.array([-5.8,-2.1,0]); B=np.array([-3.1,-2.1,0])
+        Cc=np.array([-3.1,-0.5,0]); D=np.array([-1.5,-0.5,0]); E=np.array([-1.5,2.0,0])
+        line1 = Line(A,B,color=BLACK,stroke_width=5)
+        arc = Arc(radius=1.6, start_angle=-PI/2, angle=PI/2, arc_center=Cc, color=BLACK, stroke_width=5)
+        line2 = Line(D,E,color=BLACK,stroke_width=5)
+        profile = Circle(radius=0.45, color=BLACK, stroke_width=4).move_to(A)
+        labels = VGroup(
+            self.ftext("60 mm", 22).next_to(line1, DOWN, buff=0.22),
+            self.ftext("R30", 22).move_to(np.array([-2.65,-1.2,0])),
+            self.ftext("70 mm", 22).next_to(line2, RIGHT, buff=0.24),
+            self.ftext("Ø20", 22, BOLD).next_to(profile, LEFT, buff=0.22),
+        )
+        self.fixed(line1, arc, line2, profile, labels)
+
+        self.play(FadeIn(sketch_box), FadeIn(task), run_time=RUN)
+        self.play(Create(line1), run_time=RUN)
+        self.play(Create(arc), run_time=RUN_SLOW)
+        self.play(Create(line2), run_time=RUN)
+        self.play(FadeIn(profile, scale=0.75), FadeIn(labels), run_time=RUN)
+        self.wait(EXPLAIN)
+
+        select = VGroup(self.pill("PROFILE ✓", 2.4, 22), self.pill("PATH ✓", 2.1, 22), self.pill("NEW SOLID", 2.65, 22))
+        select.arrange(RIGHT, buff=0.22).move_to(DOWN*3.45)
+        self.fixed(select)
+        self.play(LaggedStart(*[FadeIn(x, shift=UP*0.08) for x in select], lag_ratio=0.15), run_time=1.4)
+        self.wait(READ)
+
+        self.play(FadeOut(sketch_box), FadeOut(task), FadeOut(line1), FadeOut(arc), FadeOut(line2),
+                  FadeOut(profile), FadeOut(labels), FadeOut(select), run_time=RUN)
+
+        # 3D build.
+        self.set_camera_orientation(phi=66*DEGREES, theta=-48*DEGREES, zoom=0.88)
+        label = self.ftext("THE CIRCULAR SECTION REMAINS NORMAL TO THE PATH", 28, BOLD).move_to(DOWN*3.55)
+        self.fixed(label)
+        path3 = path_curve(elbow_path, width=5)
+        prof = lambda u: circle_profile(u, 0.42)
+        sec0 = section_curve(elbow_path, prof, TAU, 0.0, width=4)
+        self.play(FadeIn(label), Create(path3), FadeIn(sec0), run_time=RUN_SLOW)
+        current = sweep_surface(elbow_path, prof, TAU, 0.07, resolution=(18, 34))
+        self.add(current)
+        for frac in [0.20, 0.34, 0.50, 0.68, 0.83, 1.0]:
+            nxt = sweep_surface(elbow_path, prof, TAU, frac, resolution=(18, 34))
+            self.play(Transform(current, nxt), run_time=0.70, rate_func=linear)
+        sec1 = section_curve(elbow_path, prof, TAU, 1.0, width=4)
+        self.play(FadeIn(sec1), run_time=RUN)
+        self.wait(EXPLAIN)
+
+        final_card = self.note("CHECK", [
+            "The section size stays constant.",
+            "The center of the profile follows the path.",
+            "The tangent arc gives a smooth 90° bend.",
+        ], width=5.5)
+        final_card.move_to(RIGHT*4.85 + DOWN*0.8)
+        self.fixed(final_card)
+        self.play(FadeIn(final_card, shift=LEFT*0.12), run_time=RUN)
+        self.wait(EXPLAIN)
+        self.play(FadeOut(path3), FadeOut(sec0), FadeOut(sec1), FadeOut(current), FadeOut(final_card), FadeOut(label),
+                  FadeOut(h), FadeOut(foot), run_time=RUN)
+
+    # ------------------------------------------------------------------
+    def exercise_two(self):
+        self.set_camera_orientation(phi=0*DEGREES, theta=-90*DEGREES, zoom=1.0)
+        h = self.header(4, "EXERCISE 2: RECTANGULAR HANDLE ON A SPLINE",
+                        "A non-circular profile can also be swept. The harder part is controlling the path and profile orientation.")
+        foot = self.footer("Exercise 2 • Rectangular profile • Spline trajectory")
+
+        box = RoundedRectangle(width=9.4, height=5.15, corner_radius=0.12,
+                               stroke_color=BLACK, stroke_width=2, fill_color=WHITE, fill_opacity=1)
+        box.move_to(LEFT*2.25 + DOWN*0.6)
+        data = self.note("DESIGN DATA", [
+            "Profile: 20 mm × 10 mm",
+            "Trajectory: smooth spline",
+            "Profile plane: normal to path start",
+            "Operation: New Solid",
+        ], width=4.65)
+        data.move_to(RIGHT*5.15 + DOWN*0.45)
+        self.fixed(box, data)
+
+        # Screen-space spline and control polygon.
+        controls = [np.array([-6.25,-1.75,0]), np.array([-4.6,2.0,0]), np.array([-1.7,-2.15,0]), np.array([1.25,1.55,0])]
+        ctrl_lines = VGroup(*[DashedLine(controls[i], controls[i+1], dash_length=0.12, color=LIGHT_GRAY, stroke_width=2) for i in range(3)])
+        dots = VGroup(*[Dot(p, radius=0.07, color=BLACK) for p in controls])
+        spline = VMobject(color=BLACK, stroke_width=5)
+        spline.set_points_smoothly(controls)
+        rect = Rectangle(width=0.72, height=0.42, color=BLACK, stroke_width=4).move_to(controls[0])
+        labs = VGroup(
+            self.ftext("20 × 10 mm PROFILE", 21, BOLD).next_to(rect, DOWN, buff=0.22),
+            self.ftext("SPLINE PATH", 22, BOLD).next_to(spline, UP, buff=0.22),
+        )
+        self.fixed(ctrl_lines, dots, spline, rect, labs)
+
+        self.play(FadeIn(box), FadeIn(data), run_time=RUN)
+        self.play(FadeIn(ctrl_lines), FadeIn(dots), run_time=RUN)
+        self.play(Create(spline), run_time=2.0)
+        self.play(FadeIn(rect, scale=0.75), FadeIn(labs), run_time=RUN)
+        self.wait(EXPLAIN)
+
+        logic = VGroup(
+            self.pill("CLOSED PROFILE", 2.75, 21),
+            self.pill("CONTINUOUS PATH", 2.85, 21),
+            self.pill("NORMAL START PLANE", 3.2, 21),
+        ).arrange(RIGHT, buff=0.22).move_to(DOWN*3.45)
+        self.fixed(logic)
+        self.play(LaggedStart(*[FadeIn(x, shift=UP*0.08) for x in logic], lag_ratio=0.14), run_time=1.5)
+        self.wait(READ)
+        self.play(FadeOut(box), FadeOut(data), FadeOut(ctrl_lines), FadeOut(dots), FadeOut(spline), FadeOut(rect), FadeOut(labs), FadeOut(logic), run_time=RUN)
+
+        # 3D rectangular sweep.
+        self.set_camera_orientation(phi=64*DEGREES, theta=-52*DEGREES, zoom=0.84)
+        caption = self.ftext("RECTANGULAR SECTION + CURVED PATH = SWEPT HANDLE", 28, BOLD).move_to(DOWN*3.55)
+        self.fixed(caption)
+        p3 = path_curve(handle_path, width=5)
+        prof = lambda u: rectangle_profile(u, 0.82, 0.46)
+        s0 = section_curve(handle_path, prof, 4.0, 0.0, width=4)
+        self.play(FadeIn(caption), Create(p3), FadeIn(s0), run_time=RUN_SLOW)
+        current = sweep_surface(handle_path, prof, 4.0, 0.07, resolution=(20, 38), opacity=0.64)
+        self.add(current)
+        for frac in [0.20,0.36,0.52,0.68,0.84,1.0]:
+            nxt = sweep_surface(handle_path, prof, 4.0, frac, resolution=(20, 38), opacity=0.64)
+            self.play(Transform(current, nxt), run_time=0.72, rate_func=linear)
+        s1 = section_curve(handle_path, prof, 4.0, 1.0, width=4)
+        self.play(FadeIn(s1), run_time=RUN)
+        self.wait(EXPLAIN)
+
+        card = self.note("WHY THIS IS MORE ADVANCED", [
+            "The path changes direction continuously.",
+            "The rectangular section must keep a valid orientation.",
+            "A broken or self-intersecting sweep can fail in CAD.",
+        ], width=5.8)
+        card.move_to(RIGHT*4.75 + DOWN*0.9)
+        self.fixed(card)
+        self.play(FadeIn(card, shift=LEFT*0.12), run_time=RUN)
+        self.wait(EXPLAIN)
+        self.play(FadeOut(p3), FadeOut(s0), FadeOut(s1), FadeOut(current), FadeOut(card), FadeOut(caption),
+                  FadeOut(h), FadeOut(foot), run_time=RUN)
+
+    # ------------------------------------------------------------------
+    def summary(self):
+        self.set_camera_orientation(phi=0*DEGREES, theta=-90*DEGREES, zoom=1.0)
+        h = self.header(5, "FINAL METHOD: HOW TO THINK BEFORE CLICKING SWEEP",
+                        "If you can identify the section and its trajectory, you already understand the geometry of the command.")
+        foot = self.footer()
+
+        cards = VGroup(
+            self.pill("1  DRAW PATH", 2.45, 22),
+            self.pill("2  CREATE PLANE", 2.75, 22),
+            self.pill("3  DRAW PROFILE", 2.75, 22),
+            self.pill("4  SWEEP", 2.2, 22),
+            self.pill("5  VERIFY SOLID", 2.75, 22),
+        ).arrange(RIGHT, buff=0.22)
+        cards.move_to(UP*1.35)
+        self.fixed(cards)
+
+        compare = VGroup(
+            self.note("EXTRUDE", ["Profile + straight direction", "Best for prismatic features"], width=5.7),
+            self.note("REVOLVE", ["Profile + axis + angle", "Best for axisymmetric parts"], width=5.7),
+            self.note("SWEEP", ["Profile + trajectory", "Best for pipes, rails, handles, channels"], width=5.7),
+        ).arrange(RIGHT, buff=0.25)
+        self.fit(compare, 14.4, 3.3)
+        compare.move_to(DOWN*1.15)
+        self.fixed(compare)
+
+        self.play(LaggedStart(*[FadeIn(c, shift=UP*0.1) for c in cards], lag_ratio=0.12), run_time=1.8)
+        self.wait(READ)
+        self.play(LaggedStart(*[FadeIn(c, shift=UP*0.08) for c in compare], lag_ratio=0.15), run_time=2.0)
+        self.wait(EXPLAIN)
+
+        closing = self.ftext("PROFILE + PATH = SWEPT 3D SOLID", 38, BOLD)
+        closing.move_to(DOWN*3.55)
+        self.fixed(closing)
+        self.play(FadeIn(closing), run_time=RUN)
+        self.wait(4.2)
+        self.play(*[FadeOut(m) for m in list(self.mobjects)], run_time=RUN)
+
+
+# Protocol commands:
+# Preview: manim -pql Barrido_InventorProfessional_SENIOR_FINAL.py BarridoInventorProfessionalSenior --format=mp4 --disable_caching
+# Final:   manim -pqh Barrido_InventorProfessional_SENIOR_FINAL.py BarridoInventorProfessionalSenior --format=mp4 --disable_caching
