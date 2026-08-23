@@ -20,8 +20,23 @@ jobs:
         run: |
           set -euo pipefail
           JOB=render_jobs/achilles_tortoise_20260823
-          base64 -d "$JOB/a.gz.b64" | gzip -dc > "$JOB/achilles_tortoise.py"
-          base64 -d "$JOB/s.gz.b64" | gzip -dc > "$JOB/jp_classroom_style.py"
+          python - <<'PY'
+          from pathlib import Path
+          import base64, gzip
+
+          job = Path('render_jobs/achilles_tortoise_20260823')
+          for src, dst in (
+              ('a.gz.b64', 'achilles_tortoise.py'),
+              ('s.gz.b64', 'jp_classroom_style.py'),
+          ):
+              encoded = (job / src).read_text(encoding='utf-8').strip()
+              encoded += '=' * (-len(encoded) % 4)
+              payload = base64.b64decode(encoded, validate=False)
+              (job / dst).write_bytes(gzip.decompress(payload))
+          PY
+          (cd "$JOB" && printf '%s  %s\n' \
+            '600f8404c31f33275677481d2b793a6ef98a925fb118fdd2f2ccbae26d377ab9' 'achilles_tortoise.py' \
+            '6ae7884ca21aa88ad6c82bf39cee08057c6d7be2fc03de10b25ee7c842b35703' 'jp_classroom_style.py' | sha256sum -c -)
           python -m py_compile "$JOB/achilles_tortoise.py" "$JOB/jp_classroom_style.py"
           grep -q "class AchillesTortoise" "$JOB/achilles_tortoise.py"
           grep -q "config.pixel_width = 1920" "$JOB/jp_classroom_style.py"
