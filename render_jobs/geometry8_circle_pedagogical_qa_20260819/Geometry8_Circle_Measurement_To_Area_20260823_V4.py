@@ -10,9 +10,11 @@ from __future__ import annotations
 
 from Geometry8_Circle_Measurement_To_Area_20260823_V3 import Geometry8CircleMeasurementArea20260823V3
 from Geometry8_Circle_V4_Senior_QA import CircleV4SeniorQAMixin
+from Geometry8_Circle_V4_Senior_QA_Fixes import CircleV4SeniorQAFixesMixin
 
 
 class Geometry8CircleMeasurementArea20260823V4(
+    CircleV4SeniorQAFixesMixin,
     CircleV4SeniorQAMixin,
     Geometry8CircleMeasurementArea20260823V3,
 ):
