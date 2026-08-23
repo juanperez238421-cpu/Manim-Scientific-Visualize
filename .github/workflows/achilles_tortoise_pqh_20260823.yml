@@ -1,4 +1,4 @@
-name: Achilles Tortoise FINAL PQH 20260823
+name: Achilles Tortoise V5 FINAL PQH 20260823
 
 on:
   pull_request:
@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Reconstruct and validate sources
+      - name: Reconstruct and validate V5 sources
         shell: bash
         run: |
           set -euo pipefail
@@ -23,7 +23,6 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           import base64, gzip
-
           job = Path('render_jobs/achilles_tortoise_20260823')
           for src, dst in (
               ('a.gz.b64', 'achilles_tortoise.py'),
@@ -35,10 +34,12 @@ jobs:
               (job / dst).write_bytes(gzip.decompress(payload))
           PY
           (cd "$JOB" && printf '%s  %s\n' \
-            '600f8404c31f33275677481d2b793a6ef98a925fb118fdd2f2ccbae26d377ab9' 'achilles_tortoise.py' \
+            '9f204444f8e3b639fc1c82a71c84156a76df359497d0faba912dd46e87e01593' 'achilles_tortoise.py' \
             '6ae7884ca21aa88ad6c82bf39cee08057c6d7be2fc03de10b25ee7c842b35703' 'jp_classroom_style.py' | sha256sum -c -)
           python -m py_compile "$JOB/achilles_tortoise.py" "$JOB/jp_classroom_style.py"
           grep -q "class AchillesTortoise" "$JOB/achilles_tortoise.py"
+          grep -q "solve_meeting_step_by_step" "$JOB/achilles_tortoise.py"
+          grep -q "paradox_zoom" "$JOB/achilles_tortoise.py"
           grep -q "config.pixel_width = 1920" "$JOB/jp_classroom_style.py"
           grep -q "config.pixel_height = 1080" "$JOB/jp_classroom_style.py"
           grep -q "config.frame_rate = 30" "$JOB/jp_classroom_style.py"
@@ -49,9 +50,10 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg
+          ffprobe -version | head -1
           docker pull manimcommunity/manim:v0.20.1 >/dev/null
 
-      - name: Literal PQL runtime QA
+      - name: Literal PQL runtime QA V5
         shell: bash
         run: |
           set -euo pipefail
@@ -69,9 +71,9 @@ jobs:
             ' 2>&1 | tee qa_out/render_pql.log
           PREVIEW="$(find media_pql -type f -name 'AchillesTortoise.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PREVIEW" && test -s "$PREVIEW"
-          cp "$PREVIEW" qa_out/AchillesTortoise_QA_pql.mp4
+          cp "$PREVIEW" qa_out/AchillesTortoise_V5_QA_pql.mp4
 
-      - name: Literal PQH final render
+      - name: Literal PQH final render V5
         shell: bash
         run: |
           set -euo pipefail
@@ -89,13 +91,13 @@ jobs:
             ' 2>&1 | tee out/render_pqh.log
           FINAL="$(find media -type f -name 'AchillesTortoise.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$FINAL" && test -s "$FINAL"
-          cp "$FINAL" out/Achilles_and_Tortoise_Zeno_FINAL_pqh.mp4
+          cp "$FINAL" out/Achilles_and_Tortoise_Zeno_V5_FINAL_pqh.mp4
 
-      - name: Verify MP4
+      - name: Strictly verify V5 MP4
         shell: bash
         run: |
           set -euo pipefail
-          F=out/Achilles_and_Tortoise_Zeno_FINAL_pqh.mp4
+          F=out/Achilles_and_Tortoise_Zeno_V5_FINAL_pqh.mp4
           W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
           H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
           FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
@@ -108,27 +110,35 @@ jobs:
           test "$FPS" = 30/1
           test "$CODEC" = h264
           test "$PIX" = yuv420p
+          python - <<'PY'
+          dur=float(open('out/VIDEO_TECHNICAL.tsv').read().splitlines()[1].split('\t')[-1])
+          assert 120 <= dur <= 420, f'Unexpected V5 duration: {dur}'
+          print('duration_gate_pass', dur)
+          PY
           ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
           sha256sum "$F" > out/SHA256SUMS.txt
 
-      - name: Export audit frames
+      - name: Export dense V5 audit frames
         shell: bash
         run: |
           set -euo pipefail
-          F=out/Achilles_and_Tortoise_Zeno_FINAL_pqh.mp4
+          JOB=render_jobs/achilles_tortoise_20260823
+          F=out/Achilles_and_Tortoise_Zeno_V5_FINAL_pqh.mp4
           DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
           mkdir -p out/audit_frames
-          for P in 0.08 0.22 0.38 0.55 0.72 0.90; do
+          for P in 0.03 0.08 0.14 0.20 0.28 0.36 0.44 0.52 0.60 0.68 0.76 0.84 0.92 0.98; do
             T="$(python -c "print(float('$DUR')*float('$P'))")"
-            TAG="$(python -c "print(int(float('$P')*100))")"
+            TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
             ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_${TAG}.png"
           done
+          cp "$JOB/achilles_tortoise.py" out/achilles_tortoise_v5.py
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Achilles-Tortoise-Zeno-FINAL-PQH
+          name: Achilles-Tortoise-Zeno-V5-FINAL-PQH
           path: |
-            out/Achilles_and_Tortoise_Zeno_FINAL_pqh.mp4
+            out/Achilles_and_Tortoise_Zeno_V5_FINAL_pqh.mp4
+            out/achilles_tortoise_v5.py
             out/VIDEO_TECHNICAL.tsv
             out/SHA256SUMS.txt
             out/render_pqh.log
