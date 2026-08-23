@@ -1,14 +1,48 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Final lower-margin fixes for Geometry 8 Circle V4 senior QA."""
+"""Final lower-margin and camera-focus fixes for Geometry 8 Circle V4 senior QA."""
 from __future__ import annotations
 import numpy as np
 from manim import *
 from jp_classroom_style import *
-from Geometry8_Circle_V4_Senior_QA import V4_EXPLAIN, V4_THINK, V4_FINAL, V4_SUMMARY
+from Geometry8_Circle_V4_Senior_QA import V4_READ, V4_EXPLAIN, V4_THINK, V4_FINAL, V4_SUMMARY
 
 
 class CircleV4SeniorQAFixesMixin:
+    def _v4_zoom(self, mob: Mobject, *, width: float = 8.0, pause: float = V4_READ) -> None:
+        """Hide every non-target object before zooming so no cropped clutter remains on screen."""
+        target_ids = {id(m) for m in mob.get_family()}
+        persistent = [m for m in (self.header_group, self.subtitle_group) if m is not None]
+        persistent_ids = set()
+        for item in persistent:
+            persistent_ids.update(id(m) for m in item.get_family())
+
+        background = []
+        for item in list(self.mobjects):
+            family_ids = {id(m) for m in item.get_family()}
+            if family_ids & target_ids:
+                continue
+            if family_ids & persistent_ids:
+                continue
+            background.append(item)
+
+        to_hide = persistent + background
+        if to_hide:
+            self.play(*[FadeOut(m) for m in to_hide], run_time=RUN_QUICK)
+
+        self.camera.frame.save_state()
+        required_width = max(width, mob.width + 0.85, (mob.height + 0.75) * FRAME_WIDTH / FRAME_HEIGHT)
+        required_width = min(required_width, FRAME_WIDTH)
+        self.play(self.camera.frame.animate.set(width=required_width).move_to(mob),
+                  run_time=RUN_CAMERA * 1.35)
+        self.wait(pause)
+        self.play(Restore(self.camera.frame), run_time=RUN_CAMERA * 1.20)
+
+        if background:
+            self.play(*[FadeIn(m) for m in background], run_time=RUN_QUICK)
+        if persistent:
+            self.play(*[FadeIn(m) for m in persistent], run_time=RUN_QUICK)
+
     def derive_area_sectors_v4(self) -> None:
         self._v4_header(6, "CUT THE CIRCLE — THEN REARRANGE IT",
             "Twenty thin sectors alternate up and down. Their total area does not change when we rearrange them.")
@@ -91,3 +125,47 @@ class CircleV4SeniorQAFixesMixin:
         self.play(FadeIn(unit), run_time=RUN_NORMAL)
         self._v4_zoom(VGroup(p3, unit), width=9.0, pause=V4_SUMMARY)
         self.clear_stage()
+
+    def lesson_summary_v4(self) -> None:
+        self._v4_header(10, "RETURN TO YOUR THREE REAL OBJECTS",
+            "Use the same six-step method on one object you actually measured in the previous class.")
+        labels = [("1", "MEASURE d"), ("2", "MEASURE C"), ("3", "CALCULATE C / d"),
+                  ("4", "PREDICT C = pi d"), ("5", "FIND r = d / 2"), ("6", "CALCULATE A = pi r²")]
+        cards = VGroup()
+        for num, label in labels:
+            content = VGroup(self.text(num, 34, BOLD), self.text(label, 33, BOLD)).arrange(RIGHT, buff=0.28)
+            cards.add(self._v4_panel(content, width=4.45, height=1.35, fill_color=PAPER_GRAY))
+        cards.arrange_in_grid(rows=2, cols=3, buff=(0.30, 0.52))
+        cards.move_to([0, 0.25, 0])
+        self.assert_content_safe(cards, "V4 final summary cards enlarged")
+        self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.09) for c in cards], lag_ratio=0.14),
+                  run_time=RUN_SLOW * 1.65)
+        self.wait(V4_READ)
+        for card in cards:
+            self._v4_zoom(card, width=5.35, pause=V4_READ)
+        self.wait(V4_THINK)
+        self.play(FadeOut(cards), run_time=RUN_NORMAL)
+
+        challenge = self._v4_text_panel(
+            "FINAL CHALLENGE",
+            [
+                "Choose one of your three measured objects.",
+                "Compare measured C with predicted C = pi d.",
+                "Then calculate its area and report the correct square unit.",
+            ],
+            width=11.0, title_size=42, body_size=36, fill_color=PAPER_GRAY,
+        ).move_to(DOWN * 0.20)
+        self.assert_content_safe(challenge, "V4 final challenge enlarged")
+        self.play(FadeIn(challenge, shift=UP * 0.12), run_time=RUN_SLOW)
+        self._v4_zoom(challenge, width=11.8, pause=V4_FINAL)
+        self.wait(V4_FINAL)
+
+        self.play(*[FadeOut(m) for m in list(self.mobjects)], run_time=RUN_NORMAL)
+        closing = VGroup(
+            self.text("MEASURE • DISCOVER π • CHOOSE C OR A", 52, BOLD),
+            self.text("Explain the unit every time.", 40),
+        ).arrange(DOWN, buff=0.38).move_to(ORIGIN)
+        self.fit(closing, 13.5, 3.0)
+        self.play(FadeIn(closing, shift=UP * 0.14), run_time=RUN_SLOW)
+        self.wait(V4_FINAL)
+        self.play(FadeOut(closing), run_time=RUN_NORMAL)
