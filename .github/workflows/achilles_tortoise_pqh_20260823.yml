@@ -1,0 +1,124 @@
+name: Achilles Tortoise FINAL PQH 20260823
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'agent/achilles-tortoise-pqh-20260823'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct and validate sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/achilles_tortoise_20260823
+          base64 -d "$JOB/a.gz.b64" | gzip -dc > "$JOB/achilles_tortoise.py"
+          base64 -d "$JOB/s.gz.b64" | gzip -dc > "$JOB/jp_classroom_style.py"
+          python -m py_compile "$JOB/achilles_tortoise.py" "$JOB/jp_classroom_style.py"
+          grep -q "class AchillesTortoise" "$JOB/achilles_tortoise.py"
+          grep -q "config.pixel_width = 1920" "$JOB/jp_classroom_style.py"
+          grep -q "config.pixel_height = 1080" "$JOB/jp_classroom_style.py"
+          grep -q "config.frame_rate = 30" "$JOB/jp_classroom_style.py"
+
+      - name: Install verification tools and ManimCE image
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL runtime QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/achilles_tortoise_20260823
+          rm -rf media_pql qa_out && mkdir -p qa_out
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.10 \
+            -v "$PWD:/manim" -w "/manim/$JOB" --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql achilles_tortoise.py AchillesTortoise --fps 15 --format=mp4 --media_dir /manim/media_pql --disable_caching
+            ' 2>&1 | tee qa_out/render_pql.log
+          PREVIEW="$(find media_pql -type f -name 'AchillesTortoise.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PREVIEW" && test -s "$PREVIEW"
+          cp "$PREVIEW" qa_out/AchillesTortoise_QA_pql.mp4
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/achilles_tortoise_20260823
+          rm -rf media out && mkdir -p out
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w "/manim/$JOB" --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh achilles_tortoise.py AchillesTortoise --fps 30 --format=mp4 --media_dir /manim/media --disable_caching
+            ' 2>&1 | tee out/render_pqh.log
+          FINAL="$(find media -type f -name 'AchillesTortoise.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" out/Achilles_and_Tortoise_Zeno_FINAL_pqh.mp4
+
+      - name: Verify MP4
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Achilles_and_Tortoise_Zeno_FINAL_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\n%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" > out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
+          sha256sum "$F" > out/SHA256SUMS.txt
+
+      - name: Export audit frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Achilles_and_Tortoise_Zeno_FINAL_pqh.mp4
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          mkdir -p out/audit_frames
+          for P in 0.08 0.22 0.38 0.55 0.72 0.90; do
+            T="$(python -c "print(float('$DUR')*float('$P'))")"
+            TAG="$(python -c "print(int(float('$P')*100))")"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_${TAG}.png"
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Achilles-Tortoise-Zeno-FINAL-PQH
+          path: |
+            out/Achilles_and_Tortoise_Zeno_FINAL_pqh.mp4
+            out/VIDEO_TECHNICAL.tsv
+            out/SHA256SUMS.txt
+            out/render_pqh.log
+            out/full_decode.log
+            out/audit_frames/
+            qa_out/render_pql.log
+          if-no-files-found: error
+          retention-days: 7
