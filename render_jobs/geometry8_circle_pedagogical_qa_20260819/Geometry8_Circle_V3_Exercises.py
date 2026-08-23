@@ -85,16 +85,13 @@ class CircleV3ExercisesMixin:
 
         self.play(Create(circle), GrowFromPoint(radius, center), Write(r_label), run_time=RUN_NORMAL)
         self.play(Write(e1), run_time=RUN_NORMAL)
-        self.play(TransformMatchingTex(e1, e2), run_time=RUN_NORMAL)
-        e1.become(e2)
+        self.play(Transform(e1, e2), run_time=RUN_NORMAL)
         self.play(LaggedStart(*[FadeIn(s) for s in grid], lag_ratio=0.006), run_time=RUN_SLOW)
         fill = circle.copy().set_fill(LIGHT_GRAY, opacity=0.60).set_stroke(BLACK_LINE, width=3)
         self.play(Transform(circle, fill), run_time=RUN_NORMAL)
-        self.play(TransformMatchingTex(e1, e3), run_time=RUN_NORMAL)
-        e1.become(e3)
+        self.play(Transform(e1, e3), run_time=RUN_NORMAL)
         self.play(FadeIn(unit_visual), FadeIn(squares_note), run_time=RUN_NORMAL)
-        self.play(TransformMatchingTex(e1, e4), run_time=RUN_SLOW)
-        e1.become(e4)
+        self.play(Transform(e1, e4), run_time=RUN_SLOW)
         self.wait(PAUSE_WORK)
         self.clear_stage()
 
@@ -133,10 +130,8 @@ class CircleV3ExercisesMixin:
         self.play(Create(circle), Write(c_label), run_time=RUN_NORMAL)
         self.play(MoveAlongPath(tracer, circle), run_time=RUN_SLOW * 1.25)
         self.play(FadeOut(tracer), Write(e1), run_time=RUN_NORMAL)
-        self.play(TransformMatchingTex(e1, e2), run_time=RUN_NORMAL)
-        e1.become(e2)
-        self.play(TransformMatchingTex(e1, e3), GrowFromCenter(diameter), run_time=RUN_SLOW)
-        e1.become(e3)
+        self.play(Transform(e1, e2), run_time=RUN_NORMAL)
+        self.play(Transform(e1, e3), GrowFromCenter(diameter), run_time=RUN_SLOW)
         self.play(GrowFromPoint(radius, center), Write(e4), run_time=RUN_NORMAL)
         self.play(FadeIn(fence), FadeIn(fence_text), run_time=RUN_NORMAL)
         self.play(FadeIn(cover), FadeIn(cover_text), run_time=RUN_NORMAL)
@@ -173,9 +168,9 @@ class CircleV3ExercisesMixin:
                 "Compare measured C with predicted C = pi d.",
                 "Then calculate the area and report the correct square unit.",
             ],
-            width=6.0,
-            title_size=25,
-            body_size=22,
+            width=6.15,
+            title_size=26,
+            body_size=23,
             max_text_height=1.65,
         ).move_to([3.85, -2.05, 0])
         group = VGroup(cards, object_circle, d, unknown, challenge)
