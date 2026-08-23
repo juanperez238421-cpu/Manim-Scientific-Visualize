@@ -36,7 +36,7 @@ jobs:
               )
           PY
           (cd "$JOB" && printf '%s  %s\n' \
-            'fb15625ac873947d41263b35e34e41d2665546c915f395947e77ad717017f4e6' 'achilles_tortoise_senior_v8.py' \
+            'e050494132e6847b89212392acf70a29a28db911bdf9398cd3db1461cd42c2f4' 'achilles_tortoise_senior_v8.py' \
             '6ae7884ca21aa88ad6c82bf39cee08057c6d7be2fc03de10b25ee7c842b35703' 'jp_classroom_style.py' | sha256sum -c -)
           python -m py_compile "$SRC" "$JOB/jp_classroom_style.py"
           grep -q "class AchillesTortoiseSeniorV8" "$SRC"
