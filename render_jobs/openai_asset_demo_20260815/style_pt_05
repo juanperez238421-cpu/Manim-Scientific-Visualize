@@ -1,0 +1,105 @@
+t_height - 0.12)
+                entry.move_to(rectangle)
+
+                row_rectangles.append(rectangle)
+                row_entries.append(entry)
+                x_cursor += column_width
+
+            rectangles.append(row_rectangles)
+            entries.append(row_entries)
+            row_groups.append(VGroup(*row_rectangles, *row_entries))
+
+        column_groups: list[VGroup] = []
+        for column_index in range(column_count):
+            column_items: list[Mobject] = []
+            for row_index in range(row_count):
+                column_items.extend(
+                    [rectangles[row_index][column_index], entries[row_index][column_index]]
+                )
+            column_groups.append(VGroup(*column_items))
+
+        header_group = row_groups[0]
+        body_group = VGroup(*row_groups[1:])
+        full_group = VGroup(*row_groups)
+
+        return TableDiagram(
+            group=full_group,
+            rectangles=rectangles,
+            entries=entries,
+            rows=row_groups,
+            columns=column_groups,
+            header=header_group,
+            body=body_group,
+        )
+
+    def shade_cells(
+        self,
+        table: TableDiagram,
+        coordinates: Sequence[tuple[int, int]],
+        opacity: float = 1.0,
+    ) -> AnimationGroup:
+        animations = []
+        for row_index, column_index in coordinates:
+            animations.append(
+                table.rectangles[row_index][column_index].animate.set_fill(
+                    LIGHT_GRAY, opacity=opacity
+                )
+            )
+        return AnimationGroup(*animations, lag_ratio=0.08)
+
+    def animate_table_rows(
+        self,
+        table: TableDiagram,
+        *,
+        direction: np.ndarray = RIGHT,
+        pause: float = PAUSE_SHORT,
+        include_header: bool = True,
+    ) -> None:
+        start = 0 if include_header else 1
+        for index in range(start, len(table.rows)):
+            self.play(FadeIn(table.rows[index], shift=direction * 0.12), run_time=RUN_NORMAL)
+            self.wait(pause)
+
+    # ---------------------------------------------------------------------
+    # Figures and diagrams
+    # ---------------------------------------------------------------------
+    def figure_panel(
+        self,
+        figure: Mobject,
+        *,
+        width: float = 6.2,
+        height: float = 4.5,
+        title: str | None = None,
+        caption: str | None = None,
+        inner_margin: float = 0.38,
+        title_size: int = 25,
+        caption_size: int = 19,
+        fill_color=WHITE_FILL,
+    ) -> FigurePanel:
+        """Place any Manim geometry/graph/image inside a stable classroom panel."""
+        box = RoundedRectangle(
+            width=width,
+            height=height,
+            corner_radius=0.12,
+            stroke_color=BLACK_LINE,
+            stroke_width=1.8,
+            fill_color=fill_color,
+            fill_opacity=1.0,
+        )
+
+        title_mob = self.text(title, title_size, BOLD) if title else None
+        caption_mob = self.text(caption, caption_size) if caption else None
+
+        available_h = height - 2 * inner_margin
+        if title_mob is not None:
+            available_h -= 0.55
+        if caption_mob is not None:
+            available_h -= 0.48
+
+        self.fit(figure, width - 2 * inner_margin, max(0.8, available_h))
+        figure.move_to(box)
+
+        components: list[Mobject] = [box, figure]
+        if title_mob is not None:
+            self.fit(title_mob, width - 0.55, 0.42)
+            title_m
