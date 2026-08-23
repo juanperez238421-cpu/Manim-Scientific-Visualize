@@ -101,7 +101,9 @@ class CircleV3AreaMixin:
 
         target_center_x = 3.05
         target_center_y = 0.15
-        spacing = 0.43
+        # Two alternating sectors form one visual "tooth". Half the outer
+        # arc length per sector gives a compact row whose width approaches pi*r.
+        spacing = PI * r / n
         targets = VGroup()
         for i in range(n):
             x = target_center_x + (i - (n - 1) / 2) * spacing
@@ -124,11 +126,11 @@ class CircleV3AreaMixin:
             tgt.shift(pivot)
             targets.add(tgt)
 
-        base = Line([0.95, -1.45, 0], [5.20, -1.45, 0], color=BLACK_LINE, stroke_width=2.5)
+        base = Line([0.72, -1.45, 0], [5.38, -1.45, 0], color=BLACK_LINE, stroke_width=2.5)
         base_brace = Brace(base, DOWN, buff=0.10, color=BLACK_LINE)
         base_label = self.math(r"\frac{C}{2}=\pi r", 34).next_to(base_brace, DOWN, buff=0.08)
         height = DoubleArrow(
-            [5.75, -1.36, 0], [5.75, 1.66, 0],
+            [5.72, -0.61, 0], [5.72, 0.91, 0],
             color=BLACK_LINE, stroke_width=2.2, buff=0.03, tip_length=0.11,
         )
         height_label = self.math("r", 34).next_to(height, RIGHT, buff=0.10)
@@ -152,6 +154,6 @@ class CircleV3AreaMixin:
         self.play(GrowFromCenter(height), Write(height_label), run_time=RUN_NORMAL)
         self.play(Write(e1), run_time=RUN_NORMAL)
         self.wait(PAUSE_EXPLAIN)
-        self.play(TransformMatchingTex(e1, e2), run_time=RUN_SLOW)
+        self.play(Transform(e1, e2), run_time=RUN_SLOW)
         self.wait(PAUSE_SUMMARY)
         self.clear_stage()
