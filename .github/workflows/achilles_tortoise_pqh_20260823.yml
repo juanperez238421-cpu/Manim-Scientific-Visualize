@@ -26,12 +26,51 @@ jobs:
           import base64, gzip
           job = Path('render_jobs/achilles_tortoise_20260823')
           for payload_name, output_name in [
-              ('v9_1.gz.b64', 'achilles_tortoise_senior_v9.py'),
+              ('v9.gz.b64', 'achilles_tortoise_senior_v9.py'),
               ('s.gz.b64', 'jp_classroom_style.py'),
           ]:
               encoded = (job / payload_name).read_text(encoding='utf-8').strip()
               encoded += '=' * (-len(encoded) % 4)
               (job / output_name).write_bytes(gzip.decompress(base64.b64decode(encoded, validate=False)))
+
+          p = job / 'achilles_tortoise_senior_v9.py'
+          s = p.read_text(encoding='utf-8')
+
+          old = '''        self.play(\n            m["runner"].animate.move_to(m["track"].n2p(0) + UP * 0.82),\n            m["tortoise"].animate.move_to(m["track"].n2p(10) + UP * 0.36),\n            m["r_label"].animate.move_to(m["track"].n2p(0) + UP * 1.48),\n            m["t_label"].animate.move_to(m["track"].n2p(10) + UP * 1.00),\n            run_time=2.2,\n            rate_func=smooth,\n        )\n\n        intro = VGroup(\n'''
+          new = '''        self.play(\n            m["runner"].animate.move_to(m["track"].n2p(0) + UP * 0.82),\n            m["tortoise"].animate.move_to(m["track"].n2p(10) + UP * 0.36),\n            FadeOut(m["r_label"]),\n            FadeOut(m["t_label"]),\n            FadeOut(m["meet_tag"]),\n            run_time=2.2,\n            rate_func=smooth,\n        )\n\n        intro = VGroup(\n'''
+          assert old in s
+          s = s.replace(old, new)
+
+          old = '''        self.play(FadeOut(m["panel_content"], shift=DOWN * 0.06), FadeIn(intro, shift=UP * 0.06), run_time=RUN_SLOW)\n'''
+          new = '''        self.play(FadeOut(m["panel_content"], shift=DOWN * 0.04), run_time=RUN_NORMAL)\n        self.play(FadeIn(intro, shift=UP * 0.05), run_time=RUN_NORMAL)\n'''
+          assert old in s
+          s = s.replace(old, new)
+
+          old = '''        target_tag = self.text("previous tortoise position", 17, BOLD).move_to([x_target, y + 0.88, 0])\n'''
+          new = '''        target_tag = self.chip("TARGET", width=1.05, height=0.42, size=15).move_to([x_target, y + 0.53, 0])\n'''
+          assert old in s
+          s = s.replace(old, new)
+
+          old = '''        meta = self.math(r"\\text{Stage 1}\\quad [0,10]\\,\\mathrm{m}\\quad \\Delta t_1=1\\,\\mathrm{s}\\quad g_1=1\\,\\mathrm{m}", 27).move_to([0, -1.03, 0])\n'''
+          new = '''        meta = self.math(r"\\text{Stage 1}\\quad [0,10]\\,\\mathrm{m}\\quad \\Delta t_1=1\\,\\mathrm{s}\\quad g_1=1\\,\\mathrm{m}", 25).move_to([0, -1.02, 0])\n'''
+          assert old in s
+          s = s.replace(old, new)
+
+          old = '''            27,\n        ).move_to([0, -1.03, 0])\n'''
+          new = '''            25,\n        ).move_to([0, -1.02, 0])\n'''
+          assert old in s
+          s = s.replace(old, new, 1)
+
+          s = s.replace('''                m["r_label"].animate.move_to(m["track"].n2p(a1) + UP * 1.42 + LEFT * 0.22),\n                m["t_label"].animate.move_to(m["track"].n2p(t1) + UP * 1.00 + RIGHT * 0.25),\n''', '')
+
+          old = '''        self.play(FadeOut(m["time_group"]), Transform(m["lens_title"], self.text("FINAL RESULT", 22, BOLD).move_to([0, -0.62, 0])), FadeIn(final_results, shift=UP * 0.08), run_time=RUN_SLOW)\n\n        # From the last Zeno checkpoint, move only the tiny remaining amount.\n        self.play(\n            m["runner"].animate.move_to(m["track"].n2p(self.X_CATCH) + UP * 0.82),\n            m["tortoise"].animate.move_to(m["track"].n2p(self.X_CATCH) + UP * 0.36),\n            m["r_label"].animate.move_to(m["track"].n2p(self.X_CATCH) + UP * 1.42 + LEFT * 0.28),\n            m["t_label"].animate.move_to(m["track"].n2p(self.X_CATCH) + UP * 1.02 + RIGHT * 0.28),\n            run_time=2.2,\n            rate_func=smooth,\n        )\n        self.play(Indicate(m["meet_line"], scale_factor=1.01), Indicate(m["meet_tag"], scale_factor=1.06), run_time=RUN_NORMAL)\n        catch = self.text("MEETING", 22, BOLD).next_to(m["meet_line"], DOWN, buff=0.06)\n'''
+          new = '''        self.play(FadeOut(m["time_group"]), run_time=RUN_NORMAL)\n        self.play(\n            Transform(m["lens_title"], self.text("FINAL RESULT", 22, BOLD).move_to([0, -0.62, 0])),\n            FadeIn(final_results, shift=UP * 0.06),\n            run_time=RUN_NORMAL,\n        )\n\n        # From the last Zeno checkpoint, move only the tiny remaining amount.\n        self.play(\n            m["runner"].animate.move_to(m["track"].n2p(self.X_CATCH) + UP * 0.82),\n            m["tortoise"].animate.move_to(m["track"].n2p(self.X_CATCH) + UP * 0.36),\n            run_time=2.2,\n            rate_func=smooth,\n        )\n        final_meet_tag = self.math(r"x^*=\\frac{100}{9}\\,\\mathrm{m}", 23).move_to([5.15, 1.50, 0])\n        final_meet_tag_bg = SurroundingRectangle(final_meet_tag, buff=0.08, color=BLACK_LINE, stroke_width=1.5, fill_color=WHITE, fill_opacity=1)\n        self.play(FadeIn(final_meet_tag_bg), Write(final_meet_tag), Indicate(m["meet_line"], scale_factor=1.01), run_time=RUN_NORMAL)\n        catch = self.text("MEETING", 20, BOLD).move_to([5.15, 1.12, 0])\n'''
+          assert old in s
+          s = s.replace(old, new)
+
+          s = s.replace('''            m["r_label"].animate.move_to(m["track"].n2p(11.65) + UP * 1.42),\n            m["t_label"].animate.move_to(m["track"].n2p(11.165) + UP * 1.02),\n''', '')
+
+          p.write_text(s, encoding='utf-8')
           PY
           (cd "$JOB" && printf '%s  %s\n' \
             '63af49840f7b42600452c715f5b24a2a3c0b1d90163f6fb28addee96e432e7d8' 'achilles_tortoise_senior_v9.py' \
