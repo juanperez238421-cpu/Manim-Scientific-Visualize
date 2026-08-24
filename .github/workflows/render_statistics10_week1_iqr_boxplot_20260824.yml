@@ -127,7 +127,7 @@ jobs:
           grep -q '^pix_fmt=yuv420p$' ffprobe.txt
           ffmpeg -v error -i "$VIDEO" -f null - 2>&1 | tee full_decode.log
           DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$VIDEO")"
-          python -c 'import sys; d=float(sys.argv[1]); n=18; [print(max(0.2,min(d-0.2,d*(i+0.5)/n))) for i in range(n)]' "$DURATION" > audit_times.txt
+          python -c 'import sys; d=float(sys.argv[1]); n=18; [print(f"{max(0.2,min(d-0.2,d*(i+0.5)/n)):.3f}") for i in range(n)]' "$DURATION" > audit_times.txt
           i=1
           while read -r t; do
             ffmpeg -v error -ss "$t" -i "$VIDEO" -frames:v 1 "delivery/audit_frames/frame_$(printf '%02d' "$i").png"
