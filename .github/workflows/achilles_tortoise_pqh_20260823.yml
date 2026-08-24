@@ -1,4 +1,4 @@
-name: Achilles Tortoise SENIOR V9.2 CONTINUOUS EN PQH 20260823
+name: Achilles Tortoise SENIOR V9.2 FULL PROJECT PACKAGE PQH 20260824
 
 on:
   pull_request:
@@ -35,6 +35,7 @@ jobs:
             'fd152a7c92296ecf8c9218b9e2f43221e7c4a20cb7ca857486935f0ef52e553c' 'achilles_tortoise_senior_v9_2.py' \
             '6ae7884ca21aa88ad6c82bf39cee08057c6d7be2fc03de10b25ee7c842b35703' 'jp_classroom_style.py' | sha256sum -c -)
           test -s "$JOB/STORYBOARD_V9_EN_CONTINUOUS.md"
+          test -s "protocols/PROTOCOL_MANIMCE_PQH_PROJECT_PACKAGE_STANDARD.md"
           python -m py_compile "$JOB/achilles_tortoise_senior_v9_2.py" "$JOB/jp_classroom_style.py"
           grep -q 'class AchillesTortoiseSeniorV9' "$JOB/achilles_tortoise_senior_v9_2.py"
           grep -q 'time_labels = VGroup()' "$JOB/achilles_tortoise_senior_v9_2.py"
@@ -75,7 +76,7 @@ jobs:
         run: |
           set -euo pipefail
           JOB=render_jobs/achilles_tortoise_20260823
-          rm -rf media out && mkdir -p out
+          rm -rf media out package && mkdir -p out
           docker run --rm --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
             -v "$PWD:/manim" -w "/manim/$JOB" --entrypoint bash manimcommunity/manim:v0.20.1 -c '
@@ -117,10 +118,11 @@ jobs:
           cat out/VIDEO_TECHNICAL.tsv
           cat out/SHA256SUMS.txt
 
-      - name: Export audit frames
+      - name: Export audit frames and exact project sources
         shell: bash
         run: |
           set -euo pipefail
+          JOB=render_jobs/achilles_tortoise_20260823
           F=out/Achilles_and_Tortoise_Zeno_SENIOR_V9_2_CONTINUOUS_EN_FINAL_pqh.mp4
           DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
           mkdir -p out/audit_frames
@@ -129,20 +131,90 @@ jobs:
             TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
             ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_${TAG}.png"
           done
-          cp render_jobs/achilles_tortoise_20260823/achilles_tortoise_senior_v9_2.py out/
-          cp render_jobs/achilles_tortoise_20260823/STORYBOARD_V9_EN_CONTINUOUS.md out/
+          cp "$JOB/achilles_tortoise_senior_v9_2.py" out/
+          cp "$JOB/jp_classroom_style.py" out/
+          cp "$JOB/STORYBOARD_V9_EN_CONTINUOUS.md" out/
+          cp protocols/PROTOCOL_MANIMCE_PQH_PROJECT_PACKAGE_STANDARD.md out/
+          cp .github/workflows/achilles_tortoise_pqh_20260823.yml out/
+
+      - name: Build canonical full project ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=package/Achilles_Tortoise_Zeno_V9_2_FINAL_PQH_PROJECT
+          mkdir -p "$ROOT/src" "$ROOT/storyboard" "$ROOT/render" "$ROOT/qa/audit_frames" "$ROOT/protocol" "$ROOT/workflow"
+          cp out/achilles_tortoise_senior_v9_2.py "$ROOT/src/"
+          cp out/jp_classroom_style.py "$ROOT/src/"
+          cp out/STORYBOARD_V9_EN_CONTINUOUS.md "$ROOT/storyboard/STORYBOARD.md"
+          cp out/Achilles_and_Tortoise_Zeno_SENIOR_V9_2_CONTINUOUS_EN_FINAL_pqh.mp4 "$ROOT/render/"
+          cp out/VIDEO_TECHNICAL.tsv out/SHA256SUMS.txt out/full_decode.log out/render_pqh.log "$ROOT/qa/"
+          cp qa_out/render_pql.log "$ROOT/qa/"
+          cp out/audit_frames/*.png "$ROOT/qa/audit_frames/"
+          cp out/PROTOCOL_MANIMCE_PQH_PROJECT_PACKAGE_STANDARD.md "$ROOT/protocol/"
+          cp out/achilles_tortoise_pqh_20260823.yml "$ROOT/workflow/"
+          python - <<'PY'
+          from pathlib import Path
+          root = Path('package/Achilles_Tortoise_Zeno_V9_2_FINAL_PQH_PROJECT')
+          technical = Path('out/VIDEO_TECHNICAL.tsv').read_text().strip()
+          sha = Path('out/SHA256SUMS.txt').read_text().strip()
+          readme = f'''# Achilles and the Tortoise — V9.2 Continuous English
+
+Final ManimCE PQH project package.
+
+## Render target
+
+- ManimCE: 0.20.1
+- Scene class: `AchillesTortoiseSeniorV9`
+- Source: `src/achilles_tortoise_senior_v9_2.py`
+- Style: `src/jp_classroom_style.py`
+- Storyboard: `storyboard/STORYBOARD.md`
+- Final render: `render/Achilles_and_Tortoise_Zeno_SENIOR_V9_2_CONTINUOUS_EN_FINAL_pqh.mp4`
+
+## Reproduce
+
+PQL:
+
+```bash
+manim -pql achilles_tortoise_senior_v9_2.py AchillesTortoiseSeniorV9 --fps 15 --format=mp4 --disable_caching
+```
+
+PQH:
+
+```bash
+manim -pqh achilles_tortoise_senior_v9_2.py AchillesTortoiseSeniorV9 --fps 30 --format=mp4 --disable_caching
+```
+
+## Technical QA
+
+```text
+{technical}
+```
+
+## SHA-256
+
+```text
+{sha}
+```
+
+`qa/full_decode.log` must be empty. Dense audit frames are under `qa/audit_frames/`.
+
+## Design intent
+
+This version keeps the central race diagram and analysis panel persistent while progressively analyzing the remaining intervals, reducing repeated disappear/reappear transitions. All visible lesson content is in English.
+'''
+          (root / 'README.md').write_text(readme, encoding='utf-8')
+          PY
+          python - <<'PY'
+          import shutil
+          shutil.make_archive('package/Achilles_Tortoise_Zeno_V9_2_FINAL_PQH_PROJECT', 'zip', 'package', 'Achilles_Tortoise_Zeno_V9_2_FINAL_PQH_PROJECT')
+          PY
+          test -s package/Achilles_Tortoise_Zeno_V9_2_FINAL_PQH_PROJECT.zip
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Achilles-Tortoise-Zeno-SENIOR-V9-2-CONTINUOUS-EN-FINAL-PQH
+          name: Achilles-Tortoise-Zeno-V9-2-FULL-PROJECT-PACKAGE-PQH
           path: |
-            out/Achilles_and_Tortoise_Zeno_SENIOR_V9_2_CONTINUOUS_EN_FINAL_pqh.mp4
-            out/achilles_tortoise_senior_v9_2.py
-            out/STORYBOARD_V9_EN_CONTINUOUS.md
-            out/VIDEO_TECHNICAL.tsv
-            out/SHA256SUMS.txt
-            out/full_decode.log
-            out/audit_frames/
-            qa_out/render_pql.log
+            package/Achilles_Tortoise_Zeno_V9_2_FINAL_PQH_PROJECT.zip
+            package/Achilles_Tortoise_Zeno_V9_2_FINAL_PQH_PROJECT/
           if-no-files-found: error
           retention-days: 7
