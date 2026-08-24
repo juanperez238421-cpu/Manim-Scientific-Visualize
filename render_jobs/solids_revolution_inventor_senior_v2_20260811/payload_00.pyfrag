@@ -1,0 +1,180 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Senior V2 — Solids of Revolution for Autodesk Inventor Professional.
+
+Calculus-free college-level ManimCE lesson. The central model is always:
+PROFILE -> AXIS -> ANGLE -> OPERATION -> SOLID.
+
+Designed for Manim Community Edition 0.20.x and the JP classroom visual system.
+"""
+from __future__ import annotations
+
+import math
+import os
+from typing import Sequence
+
+import numpy as np
+from manim import *
+
+from jp_classroom_style import (
+    JPThreeDClassroomScene,
+    BLACK_TEXT, BLACK_LINE, DARK_GRAY, MID_GRAY, LIGHT_GRAY,
+    VERY_LIGHT_GRAY, PAPER_GRAY, WHITE_FILL,
+)
+
+config.pixel_width = 1920
+config.pixel_height = 1080
+config.frame_width = 16
+config.frame_height = 9
+config.frame_rate = 30
+config.background_color = WHITE
+TIME_SCALE = float(os.getenv("LESSON_TIME_SCALE", "1.0"))
+
+# -----------------------------------------------------------------------------
+# Geometry helpers
+# -----------------------------------------------------------------------------
+def profile_interp(points: Sequence[tuple[float, float]], t: float) -> tuple[float, float]:
+    pts = np.array(points, dtype=float)
+    seg = np.diff(pts, axis=0)
+    lengths = np.sqrt(np.sum(seg * seg, axis=1))
+    total = float(np.sum(lengths))
+    if total <= 1e-12:
+        return float(pts[0, 0]), float(pts[0, 1])
+    s = np.clip(t, 0.0, 1.0) * total
+    acc = 0.0
+    for i, length in enumerate(lengths):
+        if s <= acc + length or i == len(lengths) - 1:
+            q = 0.0 if length <= 1e-12 else (s - acc) / length
+            p = pts[i] + q * seg[i]
+            return float(p[0]), float(p[1])
+        acc += length
+    return float(pts[-1, 0]), float(pts[-1, 1])
+
+
+def revolution_surface(profile, angle=TAU, opacity=0.50, resolution=(28, 16), color=GRAY_C):
+    def f(u, v):
+        r, y = profile_interp(profile, v)
+        return np.array([r * math.cos(u), y, r * math.sin(u)])
+    return Surface(
+        f, u_range=[0, angle], v_range=[0, 1], resolution=resolution,
+        fill_color=color, fill_opacity=opacity,
+        stroke_color=GRAY_B, stroke_width=0.65,
+    )
+
+
+def revolution_cap(y, radius, angle=TAU, opacity=0.28):
+    def f(u, v):
+        rr = radius * v
+        return np.array([rr * math.cos(u), y, rr * math.sin(u)])
+    return Surface(
+        f, u_range=[0, angle], v_range=[0, 1], resolution=(24, 5),
+        fill_color=GRAY_D, fill_opacity=opacity,
+        stroke_color=GRAY_B, stroke_width=0.50,
+    )
+
+
+def sphere_surface(radius=1.25):
+    def f(u, v):
+        return np.array([
+            radius * math.sin(v) * math.cos(u),
+            radius * math.cos(v),
+            radius * math.sin(v) * math.sin(u),
+        ])
+    return Surface(
+        f, u_range=[0, TAU], v_range=[0, PI], resolution=(30, 16),
+        fill_color=GRAY_C, fill_opacity=0.50,
+        stroke_color=GRAY_B, stroke_width=0.60,
+    )
+
+
+def closed_profile_polygon(profile, opacity=0.50, axis_radius=0.0):
+    pts = [np.array([axis_radius, profile[0][1], 0.0])]
+    pts.extend(np.array([r, y, 0.0]) for r, y in profile)
+    pts.append(np.array([axis_radius, profile[-1][1], 0.0]))
+    return Polygon(
+        *pts, stroke_color=BLACK_LINE, stroke_width=2.5,
+        fill_color=LIGHT_GRAY, fill_opacity=opacity,
+    )
+
+
+def closed_ring_profile(outer_profile, inner_radius, opacity=0.45):
+    outer = [np.array([r, y, 0]) for r, y in outer_profile]
+    inner = [np.array([inner_radius, y, 0]) for _, y in reversed(outer_profile)]
+    return Polygon(
+        *(outer + inner), stroke_color=BLACK_LINE, stroke_width=2.4,
+        fill_color=LIGHT_GRAY, fill_opacity=opacity,
+    )
+
+
+def axis_line(y0=-2.5, y1=2.5):
+    return DashedLine(
+        np.array([0, y0, 0]), np.array([0, y1, 0]),
+        color=BLACK_LINE, stroke_width=2.7, dash_length=0.12,
+    )
+
+
+def arrow_between(a, b):
+    return Arrow(a, b, buff=0.10, color=BLACK_LINE, stroke_width=2.4, max_tip_length_to_length_ratio=0.16)
+
+
+class SolidsOfRevolutionInventorSeniorV2(JPThreeDClassroomScene):
+    def validate_lesson_data(self):
+        assert abs(TAU - 2 * PI) < 1e-12
+        assert 0 < PI / 2 < PI < TAU
+
+    def play(self, *animations, **kwargs):
+        if kwargs.get("run_time") is not None:
+            kwargs["run_time"] *= TIME_SCALE
+        return super().play(*animations, **kwargs)
+
+    def wait(self, duration=DEFAULT_WAIT_TIME, *args, **kwargs):
+        return super().wait(duration * TIME_SCALE, *args, **kwargs)
+
+    # ------------------------------------------------------------------
+    # UI helpers
+    # ------------------------------------------------------------------
+    def fixed(self, *mobs):
+        self.add_fixed_in_frame_mobjects(*mobs)
+
+    def fit(self, mob, max_w=14.5, max_h=7.5):
+        if mob.width > max_w:
+            mob.scale_to_fit_width(max_w)
+        if mob.height > max_h:
+            mob.scale_to_fit_height(max_h)
+        return mob
+
+    def section_header(self, n, title, subtitle):
+        badge = RoundedRectangle(
+            width=0.72, height=0.52, corner_radius=0.09,
+            stroke_color=BLACK_LINE, stroke_width=1.8,
+            fill_color=WHITE, fill_opacity=1,
+        )
+        num = self.text(f"{n:02d}", 22, BOLD).move_to(badge)
+        head = self.text(title, 31, BOLD)
+        self.fit(head, 13.1, 0.58)
+        row = VGroup(VGroup(badge, num), head).arrange(RIGHT, buff=0.22)
+        row.to_edge(UP, buff=0.16).to_edge(LEFT, buff=0.48)
+        rule = Line(LEFT * 7.45, RIGHT * 7.45, color=LIGHT_GRAY, stroke_width=1.8)
+        rule.next_to(row, DOWN, buff=0.06)
+        sub = self.text(subtitle, 20)
+        self.fit(sub, 14.2, 0.55)
+        sub.next_to(rule, DOWN, buff=0.08).align_to(row, LEFT)
+        return VGroup(row, rule, sub)
+
+    def pill(self, text, size=22, width=None):
+        t = self.text(text, size, BOLD)
+        w = max(t.width + 0.45, width or 0)
+        box = RoundedRectangle(
+            width=w, height=0.58, corner_radius=0.18,
+            stroke_color=BLACK_LINE, stroke_width=1.5,
+            fill_color=PAPER_GRAY, fill_opacity=1,
+        )
+        t.move_to(box)
+        return VGroup(box, t)
+
+    def note(self, title, lines, width=5.6, body_size=21):
+        h = self.text(title, 24, BOLD)
+        body = VGroup(*[self.text(x, body_size) for x in lines]).arrange(DOWN, aligned_edge=LEFT, buff=0.13)
+        content = VGroup(h, body).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        self.fit(content, width - 0.55, 3.1)
+        box = RoundedRectangle(
