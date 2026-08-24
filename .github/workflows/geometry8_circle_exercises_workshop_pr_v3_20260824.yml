@@ -1,0 +1,37 @@
+name: Geometry 8 Circle Exercises Workshop V3 Full Protocol 20260824
+
+on:
+  pull_request:
+    branches: [agent/geometry8-circle-measurement-area-20260823]
+    paths:
+      - 'render_jobs/geometry8_circle_exercises_20260824/**'
+      - '.github/workflows/geometry8_circle_exercises_workshop_pr_v3_20260824.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-circle-exercises-workshop-v3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run V3 through literal PQL then PQH protocol
+        shell: bash
+        run: bash render_jobs/geometry8_circle_exercises_20260824/run_protocol_v3.sh
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Geometry8-Circle-Exercises-Workshop-20260824-V3-REAL-MANIMCE-FINAL-PQH
+          path: |
+            out/
+            qa_out/
+          if-no-files-found: error
+          retention-days: 7
