@@ -1,0 +1,136 @@
+name: Extrusion Inventor Senior 3 Videos PQH
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'render/extrusion-senior-3videos-20260811-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Recover exact source and style
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg zip
+          JOB=render_jobs/extrusion_senior_3videos_20260811
+          rm -rf /tmp/extrusion3 && mkdir -p /tmp/extrusion3
+          base64 -d "$JOB/source.py.gz.b64" | gzip -dc > /tmp/extrusion3/Extrusion_Inventor_SENIOR_3Videos.py
+          base64 -d "$JOB/jp_classroom_style.py.gz.b64" | gzip -dc > /tmp/extrusion3/jp_classroom_style.py
+          test "$(wc -l < /tmp/extrusion3/Extrusion_Inventor_SENIOR_3Videos.py)" -eq 656
+          echo '579497f53982ec5fad968357ab87059215055b4f16c031a7431815ce1dc82292  /tmp/extrusion3/Extrusion_Inventor_SENIOR_3Videos.py' | sha256sum -c -
+          echo '3f3f06e94d5cad870ad335502cc1a93e56ce675abb1231ded5f9c71fd3e60e3d  /tmp/extrusion3/jp_classroom_style.py' | sha256sum -c -
+          python -m py_compile /tmp/extrusion3/Extrusion_Inventor_SENIOR_3Videos.py /tmp/extrusion3/jp_classroom_style.py
+          ! grep -nE '([A-Za-z]:\\|/Users/|/home/[^/]+/Desktop)' /tmp/extrusion3/Extrusion_Inventor_SENIOR_3Videos.py
+
+      - name: Pull ManimCE 0.20.1
+        run: docker pull manimcommunity/manim:v0.20.1
+
+      - name: Preview and final render all three scenes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp /tmp/extrusion3/Extrusion_Inventor_SENIOR_3Videos.py .
+          cp /tmp/extrusion3/jp_classroom_style.py .
+          FILE=Extrusion_Inventor_SENIOR_3Videos.py
+          IMAGE=manimcommunity/manim:v0.20.1
+          rm -rf delivery_extrusion3 qa_extrusion3 media
+          mkdir -p delivery_extrusion3 qa_extrusion3
+
+          render_one() {
+            SCENE="$1"
+            SLUG="$2"
+            echo "=== PREVIEW PQL: $SCENE ==="
+            rm -rf media
+            docker run --rm --user "$(id -u):$(id -g)" \
+              -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.08 \
+              -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c "
+                set -euo pipefail
+                mkdir -p /tmp/manim-bin
+                printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+                chmod +x /tmp/manim-bin/xdg-open
+                export PATH=/tmp/manim-bin:\$PATH
+                manim -pql '$FILE' '$SCENE' --format=mp4 --disable_caching
+              " 2>&1 | tee "delivery_extrusion3/${SLUG}_pql.log"
+            PQL="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+            test -n "$PQL" && test -s "$PQL"
+            cp "$PQL" "delivery_extrusion3/${SLUG}_pql.mp4"
+
+            echo "=== FINAL LITERAL PQH: $SCENE ==="
+            rm -rf media
+            docker run --rm --user "$(id -u):$(id -g)" \
+              -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+              -v "$PWD:/manim" -w /manim --entrypoint bash "$IMAGE" -c "
+                set -euo pipefail
+                mkdir -p /tmp/manim-bin
+                printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+                chmod +x /tmp/manim-bin/xdg-open
+                export PATH=/tmp/manim-bin:\$PATH
+                manim -pqh '$FILE' '$SCENE' --format=mp4 --disable_caching
+              " 2>&1 | tee "delivery_extrusion3/${SLUG}_pqh.log"
+
+            FINAL="$(find media -type f -name "${SCENE}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+            test -n "$FINAL" && test -s "$FINAL"
+            OUT="delivery_extrusion3/${SLUG}_pqh.mp4"
+            cp "$FINAL" "$OUT"
+
+            ffprobe -v error \
+              -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+              -show_entries format=duration,size \
+              -of default=noprint_wrappers=1 "$OUT" > "delivery_extrusion3/${SLUG}_ffprobe.txt"
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$OUT")" = 1920
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$OUT")" = 1080
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$OUT")" = 30/1
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$OUT")" = h264
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$OUT")" = yuv420p
+            ffmpeg -nostdin -v error -i "$OUT" -f null - 2> "delivery_extrusion3/${SLUG}_full_decode.log"
+
+            DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT")"
+            RATE="$(python -c "d=float('$DUR'); print(max(0.001,12.0/max(d,0.001)))")"
+            ffmpeg -nostdin -y -v error -i "$OUT" \
+              -vf "fps=$RATE,scale=420:-1,tile=4x3:padding=7:margin=7" \
+              -frames:v 1 "qa_extrusion3/${SLUG}_contact_sheet.jpg"
+            for P in 10 25 40 55 70 85; do
+              T="$(python -c "d=float('$DUR'); print(d*$P/100.0)")"
+              ffmpeg -nostdin -y -v error -ss "$T" -i "$OUT" -frames:v 1 "qa_extrusion3/${SLUG}_${P}pct.png"
+            done
+          }
+
+          render_one ExtrudeTheoryPositiveNegative Extrusion_01_Theory_Positive_Negative
+          render_one ExtrudeExerciseQuarterCircleProfile Extrusion_02_Exercise_QuarterCircle
+          render_one ExtrudeExerciseInventorFlange Extrusion_03_Exercise_Flange
+
+          cp "$FILE" jp_classroom_style.py delivery_extrusion3/
+          cat > delivery_extrusion3/README_RENDER.md <<'EOF'
+          # Inventor Extrusion — Senior 3-Video Delivery
+
+          1. Theory: positive extrusion (Join/Add) vs negative extrusion (Cut/Remove).
+          2. Exercise 1: 60×120 mm base with R60 negative and R60 positive quarter-circle features.
+          3. Exercise 2: prior chamfered Inventor flange with four mounting holes + center bore.
+
+          Validation sequence: py_compile → PQL preview → literal PQH final → ffprobe → full decode → QA frames → SHA-256.
+          Target: ManimCE 0.20.1, 1920×1080, 30 fps, H.264/yuv420p.
+          EOF
+          printf 'ManimCE 0.20.1\nSource SHA-256: 579497f53982ec5fad968357ab87059215055b4f16c031a7431815ce1dc82292\nFinal command pattern: manim -pqh %s <SCENE> --format=mp4 --disable_caching\n' "$FILE" > delivery_extrusion3/RENDER_INFO.txt
+          sha256sum delivery_extrusion3/*_pqh.mp4 delivery_extrusion3/$FILE delivery_extrusion3/jp_classroom_style.py > delivery_extrusion3/SHA256SUMS.txt
+          zip -9 -r Inventor_Extrusion_SENIOR_3Videos_PQH.zip delivery_extrusion3 qa_extrusion3 >/dev/null
+
+      - name: Upload complete 3-video delivery
+        uses: actions/upload-artifact@v4
+        with:
+          name: Inventor_Extrusion_SENIOR_3Videos_PQH
+          path: |
+            delivery_extrusion3/
+            qa_extrusion3/
+            Inventor_Extrusion_SENIOR_3Videos_PQH.zip
+          if-no-files-found: error
+          retention-days: 7
