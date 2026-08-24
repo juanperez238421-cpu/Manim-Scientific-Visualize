@@ -13,14 +13,14 @@ import numpy as np
 from manim import *
 from jp_classroom_style import *
 
-R = 2.10
+R = 2.25
 COPY_PAUSE = 9.0
 THINK_PAUSE = 5.0
 
 
 class Geometry8CircleFundamentalsNotebook(JPMathClassroomScene):
     def validate_lesson_data(self) -> None:
-        assert_close(2 * R, 4.2, label="diameter from radius")
+        assert_close(2 * R, 4.5, label="diameter from radius")
         assert 0 < 100 < 180
         assert 180 < 260 < 360
 
@@ -38,21 +38,21 @@ class Geometry8CircleFundamentalsNotebook(JPMathClassroomScene):
         return Circle(
             radius=radius,
             stroke_color=BLACK_LINE,
-            stroke_width=5.0,
+            stroke_width=5.4,
             fill_color=WHITE,
             fill_opacity=1.0,
         ).move_to(center)
 
     def point_with_label(self, point, label, direction=UR):
-        dot = Dot(point, radius=0.095, color=BLACK_LINE)
-        text = self.math(label, 38).next_to(dot, direction, buff=0.12)
+        dot = Dot(point, radius=0.105, color=BLACK_LINE)
+        text = self.math(label, 40).next_to(dot, direction, buff=0.12)
         return VGroup(dot, text)
 
     def copy_card(self, term: str, lines: list[str], formula: str | None = None):
         """Large notebook card with short wrapped lines to prevent fit-driven shrinking."""
         box = RoundedRectangle(
-            width=6.40,
-            height=4.80,
+            width=6.45,
+            height=4.95,
             corner_radius=0.16,
             stroke_color=BLACK_LINE,
             stroke_width=2.6,
@@ -60,17 +60,17 @@ class Geometry8CircleFundamentalsNotebook(JPMathClassroomScene):
             fill_opacity=1.0,
         )
 
-        title = self.text("COPY TO NOTEBOOK", 30, BOLD)
-        term_m = self.text(term, 42, BOLD)
-        body = VGroup(*[self.text(line, 30) for line in lines])
+        title = self.text("COPY TO NOTEBOOK", 31, BOLD)
+        term_m = self.text(term, 44, BOLD)
+        body = VGroup(*[self.text(line, 32) for line in lines])
         body.arrange(DOWN, aligned_edge=LEFT, buff=0.13)
 
         pieces = [title, term_m, body]
         if formula is not None:
-            pieces.append(self.math(formula, 48))
+            pieces.append(self.math(formula, 50))
 
         content = VGroup(*pieces).arrange(DOWN, aligned_edge=LEFT, buff=0.23)
-        self.fit(content, 5.82, 4.18)
+        self.fit(content, 5.90, 4.32)
         content.move_to(box)
         content.align_to(box, LEFT).shift(RIGHT * 0.30)
         return VGroup(box, content)
@@ -82,6 +82,16 @@ class Geometry8CircleFundamentalsNotebook(JPMathClassroomScene):
         self.assert_content_safe(group, "circle notebook V2 separated two-column layout")
         return group
 
+    def section_header(self, number: int, title: str, subtitle: str) -> None:
+        """Fade between section headers instead of morphing letters into each other."""
+        old = [mob for mob in (self.header_group, self.subtitle_group) if mob is not None]
+        if old:
+            self.play(*[FadeOut(mob) for mob in old], run_time=RUN_QUICK)
+            self.remove(*old)
+            self.header_group = None
+            self.subtitle_group = None
+        JPMathClassroomScene.set_header(self, number, title, subtitle)
+
     def opening(self) -> None:
         self.standard_opening(
             "GEOMETRY 8",
@@ -91,7 +101,7 @@ class Geometry8CircleFundamentalsNotebook(JPMathClassroomScene):
         )
 
     def circle_and_center(self) -> None:
-        self.set_header(
+        self.section_header(
             1,
             "THE CIRCLE AND ITS CENTER",
             "Start from the fixed point that organizes every other element.",
@@ -122,7 +132,7 @@ class Geometry8CircleFundamentalsNotebook(JPMathClassroomScene):
         self.clear_stage()
 
     def radius(self) -> None:
-        self.set_header(
+        self.section_header(
             2,
             "RADIUS",
             "A radius starts at the center and ends on the circumference.",
@@ -154,7 +164,7 @@ class Geometry8CircleFundamentalsNotebook(JPMathClassroomScene):
         self.clear_stage()
 
     def diameter(self) -> None:
-        self.set_header(
+        self.section_header(
             3,
             "DIAMETER",
             "A diameter is the longest chord because it passes through the center.",
@@ -188,7 +198,7 @@ class Geometry8CircleFundamentalsNotebook(JPMathClassroomScene):
         self.clear_stage()
 
     def chord(self) -> None:
-        self.set_header(
+        self.section_header(
             4,
             "CHORD",
             "A chord connects two points on the circumference; it does not have to pass through the center.",
@@ -224,7 +234,7 @@ class Geometry8CircleFundamentalsNotebook(JPMathClassroomScene):
         self.clear_stage()
 
     def arc(self) -> None:
-        self.set_header(
+        self.section_header(
             5,
             "ARC",
             "An arc is a curved part of the circumference between two points.",
@@ -277,13 +287,13 @@ class Geometry8CircleFundamentalsNotebook(JPMathClassroomScene):
         return row
 
     def compare_all(self) -> None:
-        self.set_header(
+        self.section_header(
             6,
             "PUT THE FIVE ELEMENTS TOGETHER",
             "Use the numbered marks to identify each element without overlapping labels.",
         )
         center = np.array([-3.85, -0.50, 0.0])
-        rr = 2.05
+        rr = 2.17
         c = Circle(radius=rr, stroke_color=BLACK_LINE, stroke_width=5.0).move_to(center)
         O = center
         Rpt = c.point_at_angle(45 * DEGREES)
@@ -294,12 +304,12 @@ class Geometry8CircleFundamentalsNotebook(JPMathClassroomScene):
         chord = Line(C1, C2, color=BLACK_LINE, stroke_width=7.0)
         arc = Arc(radius=rr, start_angle=210 * DEGREES, angle=82 * DEGREES, arc_center=center, color=BLACK_LINE, stroke_width=10.0)
 
-        tag1 = self.text("1", 30, BOLD).next_to(O, DR, buff=0.13)
-        tag2 = self.text("2", 30, BOLD).move_to(rad.get_center() + UL * 0.22)
-        tag3 = self.text("3", 30, BOLD).next_to(diam, DOWN, buff=0.12)
-        tag4 = self.text("4", 30, BOLD).next_to(chord, UP, buff=0.12)
-        tag5 = self.text("5", 30, BOLD).next_to(arc.point_from_proportion(0.50), DOWN, buff=0.15)
-        Olabel = self.math("O", 38).next_to(O, UL, buff=0.10)
+        tag1 = self.text("1", 31, BOLD).move_to(O + RIGHT * 0.42 + DOWN * 0.36)
+        tag2 = self.text("2", 31, BOLD).move_to(rad.get_center() + UL * 0.28)
+        tag3 = self.text("3", 31, BOLD).move_to(diam.get_center() + LEFT * 1.05 + DOWN * 0.30)
+        tag4 = self.text("4", 31, BOLD).next_to(chord, UP, buff=0.14)
+        tag5 = self.text("5", 31, BOLD).next_to(arc.point_from_proportion(0.50), DOWN, buff=0.17)
+        Olabel = self.math("O", 40).next_to(O, UL, buff=0.10)
         diagram = VGroup(c, diam, chord, rad, arc, Olabel, tag1, tag2, tag3, tag4, tag5)
 
         rows = VGroup(
@@ -320,7 +330,7 @@ class Geometry8CircleFundamentalsNotebook(JPMathClassroomScene):
         self.clear_stage()
 
     def notebook_check(self) -> None:
-        self.set_header(
+        self.section_header(
             7,
             "NOTEBOOK CHECK",
             "Read each clue and say the element before the answer appears.",
@@ -344,11 +354,11 @@ class Geometry8CircleFundamentalsNotebook(JPMathClassroomScene):
         self.play(FadeIn(holder), run_time=RUN_NORMAL)
         current = None
         for i, (q, a) in enumerate(questions, start=1):
-            idx = self.text(f"CHECK {i} / 5", 32, BOLD).next_to(holder.get_top(), DOWN, buff=0.30)
-            prompt = self.text(q, 42, BOLD)
+            idx = self.text(f"CHECK {i} / 5", 34, BOLD).next_to(holder.get_top(), DOWN, buff=0.30)
+            prompt = self.text(q, 44, BOLD)
             self.fit(prompt, 11.35, 1.00)
             prompt.move_to(holder).shift(UP * 0.28)
-            answer = self.text(a, 54, BOLD).next_to(prompt, DOWN, buff=0.52)
+            answer = self.text(a, 58, BOLD).next_to(prompt, DOWN, buff=0.52)
             state = VGroup(idx, prompt)
             if current is None:
                 self.play(FadeIn(state), run_time=RUN_NORMAL)
@@ -365,7 +375,7 @@ class Geometry8CircleFundamentalsNotebook(JPMathClassroomScene):
         self.subtitle_group = None
         closing = self.text(
             "Center  ->  radius  ->  diameter  ->  chord  ->  arc",
-            50,
+            52,
             BOLD,
         )
         self.fit(closing, 13.45, 1.25)
