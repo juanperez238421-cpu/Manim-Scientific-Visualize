@@ -31,19 +31,6 @@ jobs:
           grep -q 'class Geometry8CircleFundamentalsNotebook' "$JOB/Geometry8_Circle_Fundamentals_Notebook.py"
           grep -q 'COPY TO NOTEBOOK' "$JOB/Geometry8_Circle_Fundamentals_Notebook.py"
 
-      - name: Compile notebook guide PDF
-        shell: bash
-        run: |
-          set -euo pipefail
-          JOB=render_jobs/geometry8_circle_fundamentals_notebook_20260824
-          mkdir -p /tmp/texhome
-          export HOME=/tmp/texhome
-          cd "$JOB"
-          pdflatex -interaction=nonstopmode -halt-on-error Circle_Fundamentals_Notebook_Guide.tex
-          pdflatex -interaction=nonstopmode -halt-on-error Circle_Fundamentals_Notebook_Guide.tex
-          test -s Circle_Fundamentals_Notebook_Guide.pdf
-          cp Circle_Fundamentals_Notebook_Guide.pdf "$GITHUB_WORKSPACE/out/Geometry8_Circle_Fundamentals_Notebook_Guide.pdf"
-
       - name: Literal PQL full runtime gate
         shell: bash
         run: |
@@ -139,7 +126,7 @@ jobs:
           PY
 
           test -s out/Geometry8_Circle_Fundamentals_Rendered_Video_Frames.pdf
-          sha256sum "$F" out/Geometry8_Circle_Fundamentals_Notebook_Guide.pdf out/Geometry8_Circle_Fundamentals_Rendered_Video_Frames.pdf > out/SHA256SUMS.txt
+          sha256sum "$F" out/Geometry8_Circle_Fundamentals_Rendered_Video_Frames.pdf > out/SHA256SUMS.txt
           cp render_jobs/geometry8_circle_fundamentals_notebook_20260824/Geometry8_Circle_Fundamentals_Notebook.py out/
           cp render_jobs/geometry8_circle_fundamentals_notebook_20260824/Circle_Fundamentals_Notebook_Guide.tex out/
           cp render_jobs/geometry8_circle_fundamentals_notebook_20260824/jp_classroom_style.py out/
