@@ -77,6 +77,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg
           F=out/Geometry8_Circle_Fundamentals_Notebook_FINAL_pqh.mp4
 
           ffprobe -v error \
