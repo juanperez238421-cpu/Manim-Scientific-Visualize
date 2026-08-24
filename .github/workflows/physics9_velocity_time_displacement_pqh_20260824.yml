@@ -129,23 +129,10 @@ jobs:
             ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 \
               "final_out/audit_frames/frame_${INDEX}.png"
           done
-          python - <<'PY'
-          from pathlib import Path
-          from PIL import Image, ImageOps, ImageDraw
-          paths=sorted(Path('final_out/audit_frames').glob('*.png'))
-          thumbs=[]
-          for p in paths:
-              im=Image.open(p).convert('RGB')
-              im.thumbnail((480,270))
-              canvas=Image.new('RGB',(500,305),'white')
-              canvas.paste(im,((500-im.width)//2,8))
-              ImageDraw.Draw(canvas).text((12,282),p.stem,fill='black')
-              thumbs.append(canvas)
-          sheet=Image.new('RGB',(2000,2440),'white')
-          for i,im in enumerate(thumbs):
-              sheet.paste(im,((i%4)*500,(i//4)*305))
-          sheet.save('final_out/CONTACT_SHEET.jpg',quality=90)
-          PY
+          montage final_out/audit_frames/*.png \
+            -thumbnail 480x270 -tile 4x12 -geometry +10+20 \
+            -background white -quality 90 final_out/CONTACT_SHEET.jpg
+          test -s final_out/CONTACT_SHEET.jpg
 
       - name: Build reproducible project ZIP
         shell: bash
