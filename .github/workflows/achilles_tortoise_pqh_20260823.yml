@@ -1,4 +1,4 @@
-name: Achilles Tortoise SENIOR V8 FLUID PQH 20260823
+name: Achilles Tortoise SENIOR V9 CONTINUOUS EN PQH 20260823
 
 on:
   pull_request:
@@ -15,33 +15,34 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate V8 source and reconstruct classroom style
+      - name: Validate V9 source, storyboard, and classroom style
         shell: bash
         run: |
           set -euo pipefail
           JOB=render_jobs/achilles_tortoise_20260823
-          SRC="$JOB/achilles_tortoise_senior_v8.py"
+          SRC="$JOB/achilles_tortoise_senior_v9.py"
           python - <<'PY'
           from pathlib import Path
           import base64, gzip
           job = Path('render_jobs/achilles_tortoise_20260823')
           for payload_name, output_name in [
-              ('v8.gz.b64', 'achilles_tortoise_senior_v8.py'),
+              ('v9.gz.b64', 'achilles_tortoise_senior_v9.py'),
               ('s.gz.b64', 'jp_classroom_style.py'),
           ]:
               encoded = (job / payload_name).read_text(encoding='utf-8').strip()
               encoded += '=' * (-len(encoded) % 4)
-              (job / output_name).write_bytes(
-                  gzip.decompress(base64.b64decode(encoded, validate=False))
-              )
+              (job / output_name).write_bytes(gzip.decompress(base64.b64decode(encoded, validate=False)))
           PY
           (cd "$JOB" && printf '%s  %s\n' \
-            'e050494132e6847b89212392acf70a29a28db911bdf9398cd3db1461cd42c2f4' 'achilles_tortoise_senior_v8.py' \
+            'dd32d888e4b8b2300ab7392e392d8da04e8b67ecfc9da6ac4f2cd489f15661f6' 'achilles_tortoise_senior_v9.py' \
             '6ae7884ca21aa88ad6c82bf39cee08057c6d7be2fc03de10b25ee7c842b35703' 'jp_classroom_style.py' | sha256sum -c -)
+          test -s "$JOB/STORYBOARD_V9_EN_CONTINUOUS.md"
           python -m py_compile "$SRC" "$JOB/jp_classroom_style.py"
-          grep -q "class AchillesTortoiseSeniorV8" "$SRC"
-          grep -q "def recursive_zoom" "$SRC"
-          grep -q "def convergence_timeline" "$SRC"
+          grep -q "class AchillesTortoiseSeniorV9" "$SRC"
+          grep -q "def analyze_intervals" "$SRC"
+          grep -q "def convergence" "$SRC"
+          grep -q "THE REAL RACE" "$SRC"
+          grep -q "ONE GAP, MAGNIFIED AGAIN AND AGAIN" "$SRC"
           grep -q "config.pixel_width = 1920" "$JOB/jp_classroom_style.py"
           grep -q "config.pixel_height = 1080" "$JOB/jp_classroom_style.py"
           grep -q "config.frame_rate = 30" "$JOB/jp_classroom_style.py"
@@ -54,7 +55,7 @@ jobs:
           sudo apt-get install -y -qq ffmpeg
           docker pull manimcommunity/manim:v0.20.1 >/dev/null
 
-      - name: Literal PQL runtime QA V8
+      - name: Literal PQL runtime QA V9
         shell: bash
         run: |
           set -euo pipefail
@@ -68,13 +69,13 @@ jobs:
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:$PATH
-              manim -pql achilles_tortoise_senior_v8.py AchillesTortoiseSeniorV8 --fps 15 --format=mp4 --media_dir /manim/media_pql --disable_caching
+              manim -pql achilles_tortoise_senior_v9.py AchillesTortoiseSeniorV9 --fps 15 --format=mp4 --media_dir /manim/media_pql --disable_caching
             ' 2>&1 | tee qa_out/render_pql.log
-          PREVIEW="$(find media_pql -type f -name 'AchillesTortoiseSeniorV8.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          PREVIEW="$(find media_pql -type f -name 'AchillesTortoiseSeniorV9.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PREVIEW" && test -s "$PREVIEW"
-          cp "$PREVIEW" qa_out/AchillesTortoiseSeniorV8_QA_pql.mp4
+          cp "$PREVIEW" qa_out/AchillesTortoiseSeniorV9_QA_pql.mp4
 
-      - name: Literal PQH final render V8
+      - name: Literal PQH final render V9
         shell: bash
         run: |
           set -euo pipefail
@@ -88,17 +89,17 @@ jobs:
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:$PATH
-              manim -pqh achilles_tortoise_senior_v8.py AchillesTortoiseSeniorV8 --fps 30 --format=mp4 --media_dir /manim/media --disable_caching
+              manim -pqh achilles_tortoise_senior_v9.py AchillesTortoiseSeniorV9 --fps 30 --format=mp4 --media_dir /manim/media --disable_caching
             ' 2>&1 | tee out/render_pqh.log
-          FINAL="$(find media -type f -name 'AchillesTortoiseSeniorV8.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          FINAL="$(find media -type f -name 'AchillesTortoiseSeniorV9.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$FINAL" && test -s "$FINAL"
-          cp "$FINAL" out/Achilles_and_Tortoise_Zeno_SENIOR_V8_FLUID_FINAL_pqh.mp4
+          cp "$FINAL" out/Achilles_and_Tortoise_Zeno_SENIOR_V9_CONTINUOUS_EN_FINAL_pqh.mp4
 
-      - name: Strictly verify V8 MP4
+      - name: Strictly verify V9 MP4
         shell: bash
         run: |
           set -euo pipefail
-          F=out/Achilles_and_Tortoise_Zeno_SENIOR_V8_FLUID_FINAL_pqh.mp4
+          F=out/Achilles_and_Tortoise_Zeno_SENIOR_V9_CONTINUOUS_EN_FINAL_pqh.mp4
           W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
           H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
           FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
@@ -113,7 +114,7 @@ jobs:
           test "$PIX" = yuv420p
           python - <<'PY'
           dur=float(open('out/VIDEO_TECHNICAL.tsv').read().splitlines()[1].split('\t')[-1])
-          assert 70 <= dur <= 240, f'Unexpected V8 duration: {dur}'
+          assert 90 <= dur <= 240, f'Unexpected V9 duration: {dur}'
           print('duration_gate_pass', dur)
           PY
           set +e
@@ -127,26 +128,28 @@ jobs:
           cat out/SHA256SUMS.txt
           echo "STRICT_VIDEO_QA_PASS"
 
-      - name: Export dense audit frames V8
+      - name: Export dense audit frames V9
         shell: bash
         run: |
           set -euo pipefail
-          F=out/Achilles_and_Tortoise_Zeno_SENIOR_V8_FLUID_FINAL_pqh.mp4
+          F=out/Achilles_and_Tortoise_Zeno_SENIOR_V9_CONTINUOUS_EN_FINAL_pqh.mp4
           DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
           mkdir -p out/audit_frames
-          for P in 0.03 0.08 0.13 0.18 0.23 0.28 0.33 0.38 0.43 0.48 0.53 0.58 0.63 0.68 0.73 0.78 0.83 0.88 0.93 0.98; do
+          for P in 0.02 0.06 0.10 0.14 0.18 0.22 0.26 0.30 0.34 0.38 0.42 0.46 0.50 0.54 0.58 0.62 0.66 0.70 0.74 0.78 0.82 0.86 0.90 0.94 0.98; do
             T="$(python -c "print(float('$DUR')*float('$P'))")"
             TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
             ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_${TAG}.png"
           done
-          cp render_jobs/achilles_tortoise_20260823/achilles_tortoise_senior_v8.py out/
+          cp render_jobs/achilles_tortoise_20260823/achilles_tortoise_senior_v9.py out/
+          cp render_jobs/achilles_tortoise_20260823/STORYBOARD_V9_EN_CONTINUOUS.md out/
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Achilles-Tortoise-Zeno-SENIOR-V8-FLUID-FINAL-PQH
+          name: Achilles-Tortoise-Zeno-SENIOR-V9-CONTINUOUS-EN-FINAL-PQH
           path: |
-            out/Achilles_and_Tortoise_Zeno_SENIOR_V8_FLUID_FINAL_pqh.mp4
-            out/achilles_tortoise_senior_v8.py
+            out/Achilles_and_Tortoise_Zeno_SENIOR_V9_CONTINUOUS_EN_FINAL_pqh.mp4
+            out/achilles_tortoise_senior_v9.py
+            out/STORYBOARD_V9_EN_CONTINUOUS.md
             out/VIDEO_TECHNICAL.tsv
             out/SHA256SUMS.txt
             out/render_pqh.log
