@@ -1,0 +1,35 @@
+name: Geometry 8 Circle Exercises Workshop V5 Large Text FINAL 20260824
+
+on:
+  pull_request:
+    branches: [agent/geometry8-circle-measurement-area-20260823]
+    paths:
+      - 'render_jobs/geometry8_circle_exercises_20260824/run_protocol_v5_large_text.sh'
+      - 'render_jobs/geometry8_circle_exercises_20260824/Geometry8_Circle_Exercises_Workshop_20260824_V5_LargeText_QA.py'
+      - '.github/workflows/geometry8_circle_exercises_workshop_v5_large_text_final_20260824.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-v5-large-text-final:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run V5 through literal PQL then PQH protocol
+        shell: bash
+        run: bash render_jobs/geometry8_circle_exercises_20260824/run_protocol_v5_large_text.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Geometry8-Circle-Exercises-Workshop-20260824-V5-LARGE-TEXT-FINAL-PQH
+          path: |
+            out/
+            qa_out/
+          if-no-files-found: error
+          retention-days: 7
