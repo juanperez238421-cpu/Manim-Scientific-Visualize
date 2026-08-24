@@ -1,0 +1,122 @@
+
+
+# ---------------------------------------------------------------------------
+# ManimCE 0.20.1 compatibility and readability overrides
+# ---------------------------------------------------------------------------
+def _reset_camera_compat(self, run_time: float = 0.75) -> None:
+    self.play(self.camera.frame.animate.set_width(16).move_to(ORIGIN), run_time=run_time)
+
+
+def _type_code_lines_compat(
+    self,
+    lines: Sequence[str],
+    start_line: int = 1,
+    origin: np.ndarray | None = None,
+    line_spacing: float = 0.40,
+    font_size: float = 20,
+    time_per_char: float = 0.017,
+    pause_between_lines: float = 0.06,
+    line_callback=None,
+) -> VGroup:
+    origin = origin if origin is not None else self.editor_code_origin()
+    code_group = VGroup()
+    cursor = make_cursor(0.24)
+    self.add(cursor)
+    typing_animation = globals().get("AddTextLetterByLetter")
+    for idx, line in enumerate(lines):
+        # Keep ordinary lines large and readable. Only exceptionally long
+        # metadata lines are reduced so they never run underneath the lesson
+        # banner or the right-side explanation panels.
+        row_font_size = min(font_size, 9.5) if len(line) > 50 else min(font_size, 17.0)
+        row = self.code_row(start_line + idx, line, row_font_size)
+        row.align_to(origin, LEFT)
+        row.set_y(origin[1] - idx * line_spacing)
+        row[0].set_opacity(0)
+        self.add(row[0])
+        self.play(FadeIn(row[0]), run_time=0.15)
+        if not line:
+            cursor.move_to([row[0].get_right()[0] + 0.40, row.get_y(), 0])
+            self.wait(0.12)
+        else:
+            cursor.move_to(row[1].get_left() + LEFT * 0.01)
+            animation = (
+                typing_animation(row[1], time_per_char=time_per_char)
+                if typing_animation is not None
+                else Write(row[1])
+            )
+            self.play(
+                animation,
+                cursor.animate.next_to(row[1], RIGHT, buff=0.035),
+                run_time=max(0.28, len(line) * time_per_char),
+            )
+        code_group.add(row)
+        if line_callback:
+            line_callback(idx, row, code_group)
+        self.wait(pause_between_lines)
+    self.play(FadeOut(cursor), run_time=0.25)
+    return code_group
+
+
+def _html_colors_compat(line: str) -> dict[str, str]:
+    """Syntax colors using ranges that never overlap in Pango."""
+    colors: dict[str, str] = {}
+    for quoted in re.findall(r'"[^"]*"', line):
+        colors[quoted] = ORANGE
+    for tag in [
+        "<!DOCTYPE", "<html", "</html", "<head", "</head",
+        "<body", "</body", "<meta", "<title", "</title",
+        "<h1", "</h1", "<p", "</p",
+    ]:
+        if tag in line:
+            colors[tag] = BLUE
+    return colors
+
+
+def _html_line_compat(line: str, size: float = 22) -> Text:
+    return Text(
+        line,
+        font=FONT_MONO,
+        font_size=size,
+        color=TEXT,
+        t2c=_html_colors_compat(line),
+        disable_ligatures=True,
+    )
+
+
+_COMPACT_SKELETON = (
+    "<!DOCTYPE html>",
+    '<html lang="en">',
+    "  <head>",
+    '    <meta charset="UTF-8">',
+    '    <meta name="viewport" content="width=device-width">',
+    "    <title>Hello World</title>",
+    "  </head>",
+    "  <body>",
+    "",
+    "  </body>",
+    "</html>",
+)
+
+_COMPACT_FINAL_CODE = (
+    "<!DOCTYPE html>",
+    '<html lang="en">',
+    "  <head>",
+    '    <meta charset="UTF-8">',
+    '    <meta name="viewport" content="width=device-width">',
+    "    <title>Hello World</title>",
+    "  </head>",
+    "  <body>",
+    "    <h1>Hello, world!</h1>",
+    "    <p>My first HTML page.</p>",
+    "  </body>",
+    "</html>",
+)
+
+
+VSCodeTutorialBase.reset_camera = _reset_camera_compat
+VSCodeTutorialBase.type_code_lines = _type_code_lines_compat
+html_colors = _html_colors_compat
+html_line = _html_line_compat
+VSCode04_HTMLSkeleton.SKELETON = _COMPACT_SKELETON
+VSCode05_HelloWorldAndPreview.FINAL_CODE = _COMPACT_FINAL_CODE
+VSCode06_HTMLLogicAndPractice.FINAL_CODE = _COMPACT_FINAL_CODE
