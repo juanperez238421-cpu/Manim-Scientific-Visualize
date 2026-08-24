@@ -1,4 +1,4 @@
-name: Achilles Tortoise SENIOR V9.1 CONTINUOUS EN PQH 20260823
+name: Achilles Tortoise SENIOR V9.2 CONTINUOUS EN PQH 20260823
 
 on:
   pull_request:
@@ -15,75 +15,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate V9.1 source, storyboard, and classroom style
+      - name: Reconstruct and validate V9.2 source
         shell: bash
         run: |
           set -euo pipefail
           JOB=render_jobs/achilles_tortoise_20260823
-          SRC="$JOB/achilles_tortoise_senior_v9.py"
           python - <<'PY'
           from pathlib import Path
           import base64, gzip
           job = Path('render_jobs/achilles_tortoise_20260823')
-          for payload_name, output_name in [
-              ('v9.gz.b64', 'achilles_tortoise_senior_v9.py'),
-              ('s.gz.b64', 'jp_classroom_style.py'),
-          ]:
-              encoded = (job / payload_name).read_text(encoding='utf-8').strip()
-              encoded += '=' * (-len(encoded) % 4)
-              (job / output_name).write_bytes(gzip.decompress(base64.b64decode(encoded, validate=False)))
-
-          p = job / 'achilles_tortoise_senior_v9.py'
-          s = p.read_text(encoding='utf-8')
-
-          old = '''        self.play(\n            m["runner"].animate.move_to(m["track"].n2p(0) + UP * 0.82),\n            m["tortoise"].animate.move_to(m["track"].n2p(10) + UP * 0.36),\n            m["r_label"].animate.move_to(m["track"].n2p(0) + UP * 1.48),\n            m["t_label"].animate.move_to(m["track"].n2p(10) + UP * 1.00),\n            run_time=2.2,\n            rate_func=smooth,\n        )\n\n        intro = VGroup(\n'''
-          new = '''        self.play(\n            m["runner"].animate.move_to(m["track"].n2p(0) + UP * 0.82),\n            m["tortoise"].animate.move_to(m["track"].n2p(10) + UP * 0.36),\n            FadeOut(m["r_label"]),\n            FadeOut(m["t_label"]),\n            FadeOut(m["meet_tag"]),\n            run_time=2.2,\n            rate_func=smooth,\n        )\n\n        intro = VGroup(\n'''
-          assert old in s
-          s = s.replace(old, new)
-
-          old = '''        self.play(FadeOut(m["panel_content"], shift=DOWN * 0.06), FadeIn(intro, shift=UP * 0.06), run_time=RUN_SLOW)\n'''
-          new = '''        self.play(FadeOut(m["panel_content"], shift=DOWN * 0.04), run_time=RUN_NORMAL)\n        self.play(FadeIn(intro, shift=UP * 0.05), run_time=RUN_NORMAL)\n'''
-          assert old in s
-          s = s.replace(old, new)
-
-          old = '''        target_tag = self.text("previous tortoise position", 17, BOLD).move_to([x_target, y + 0.88, 0])\n'''
-          new = '''        target_tag = self.chip("TARGET", width=1.05, height=0.42, size=15).move_to([x_target, y + 0.53, 0])\n'''
-          assert old in s
-          s = s.replace(old, new)
-
-          old = '''        meta = self.math(r"\\text{Stage 1}\\quad [0,10]\\,\\mathrm{m}\\quad \\Delta t_1=1\\,\\mathrm{s}\\quad g_1=1\\,\\mathrm{m}", 27).move_to([0, -1.03, 0])\n'''
-          new = '''        meta = self.math(r"\\text{Stage 1}\\quad [0,10]\\,\\mathrm{m}\\quad \\Delta t_1=1\\,\\mathrm{s}\\quad g_1=1\\,\\mathrm{m}", 25).move_to([0, -1.02, 0])\n'''
-          assert old in s
-          s = s.replace(old, new)
-
-          old = '''            27,\n        ).move_to([0, -1.03, 0])\n'''
-          new = '''            25,\n        ).move_to([0, -1.02, 0])\n'''
-          assert old in s
-          s = s.replace(old, new, 1)
-
-          s = s.replace('''                m["r_label"].animate.move_to(m["track"].n2p(a1) + UP * 1.42 + LEFT * 0.22),\n                m["t_label"].animate.move_to(m["track"].n2p(t1) + UP * 1.00 + RIGHT * 0.25),\n''', '')
-
-          old = '''        self.play(FadeOut(m["time_group"]), Transform(m["lens_title"], self.text("FINAL RESULT", 22, BOLD).move_to([0, -0.62, 0])), FadeIn(final_results, shift=UP * 0.08), run_time=RUN_SLOW)\n\n        # From the last Zeno checkpoint, move only the tiny remaining amount.\n        self.play(\n            m["runner"].animate.move_to(m["track"].n2p(self.X_CATCH) + UP * 0.82),\n            m["tortoise"].animate.move_to(m["track"].n2p(self.X_CATCH) + UP * 0.36),\n            m["r_label"].animate.move_to(m["track"].n2p(self.X_CATCH) + UP * 1.42 + LEFT * 0.28),\n            m["t_label"].animate.move_to(m["track"].n2p(self.X_CATCH) + UP * 1.02 + RIGHT * 0.28),\n            run_time=2.2,\n            rate_func=smooth,\n        )\n        self.play(Indicate(m["meet_line"], scale_factor=1.01), Indicate(m["meet_tag"], scale_factor=1.06), run_time=RUN_NORMAL)\n        catch = self.text("MEETING", 22, BOLD).next_to(m["meet_line"], DOWN, buff=0.06)\n'''
-          new = '''        self.play(FadeOut(m["time_group"]), run_time=RUN_NORMAL)\n        self.play(\n            Transform(m["lens_title"], self.text("FINAL RESULT", 22, BOLD).move_to([0, -0.62, 0])),\n            FadeIn(final_results, shift=UP * 0.06),\n            run_time=RUN_NORMAL,\n        )\n\n        # From the last Zeno checkpoint, move only the tiny remaining amount.\n        self.play(\n            m["runner"].animate.move_to(m["track"].n2p(self.X_CATCH) + UP * 0.82),\n            m["tortoise"].animate.move_to(m["track"].n2p(self.X_CATCH) + UP * 0.36),\n            run_time=2.2,\n            rate_func=smooth,\n        )\n        final_meet_tag = self.math(r"x^*=\\frac{100}{9}\\,\\mathrm{m}", 23).move_to([5.15, 1.50, 0])\n        final_meet_tag_bg = SurroundingRectangle(final_meet_tag, buff=0.08, color=BLACK_LINE, stroke_width=1.5, fill_color=WHITE, fill_opacity=1)\n        self.play(FadeIn(final_meet_tag_bg), Write(final_meet_tag), Indicate(m["meet_line"], scale_factor=1.01), run_time=RUN_NORMAL)\n        catch = self.text("MEETING", 20, BOLD).move_to([5.15, 1.12, 0])\n'''
-          assert old in s
-          s = s.replace(old, new)
-
-          s = s.replace('''            m["r_label"].animate.move_to(m["track"].n2p(11.65) + UP * 1.42),\n            m["t_label"].animate.move_to(m["track"].n2p(11.165) + UP * 1.02),\n''', '')
-
-          p.write_text(s, encoding='utf-8')
+          encoded = ''.join((job / f'v92_part_{i:02d}.txt').read_text().strip() for i in range(5))
+          encoded += '=' * (-len(encoded) % 4)
+          (job / 'achilles_tortoise_senior_v9_2.py').write_bytes(gzip.decompress(base64.b64decode(encoded)))
+          style = (job / 's.gz.b64').read_text().strip()
+          style += '=' * (-len(style) % 4)
+          (job / 'jp_classroom_style.py').write_bytes(gzip.decompress(base64.b64decode(style, validate=False)))
           PY
           (cd "$JOB" && printf '%s  %s\n' \
-            '63af49840f7b42600452c715f5b24a2a3c0b1d90163f6fb28addee96e432e7d8' 'achilles_tortoise_senior_v9.py' \
+            'fd152a7c92296ecf8c9218b9e2f43221e7c4a20cb7ca857486935f0ef52e553c' 'achilles_tortoise_senior_v9_2.py' \
             '6ae7884ca21aa88ad6c82bf39cee08057c6d7be2fc03de10b25ee7c842b35703' 'jp_classroom_style.py' | sha256sum -c -)
           test -s "$JOB/STORYBOARD_V9_EN_CONTINUOUS.md"
-          python -m py_compile "$SRC" "$JOB/jp_classroom_style.py"
-          grep -q "class AchillesTortoiseSeniorV9" "$SRC"
-          grep -q "TARGET" "$SRC"
-          grep -q "def analyze_intervals" "$SRC"
-          grep -q "def convergence" "$SRC"
-          grep -q "config.pixel_width = 1920" "$JOB/jp_classroom_style.py"
-          grep -q "config.pixel_height = 1080" "$JOB/jp_classroom_style.py"
-          grep -q "config.frame_rate = 30" "$JOB/jp_classroom_style.py"
+          python -m py_compile "$JOB/achilles_tortoise_senior_v9_2.py" "$JOB/jp_classroom_style.py"
+          grep -q 'class AchillesTortoiseSeniorV9' "$JOB/achilles_tortoise_senior_v9_2.py"
+          grep -q 'time_labels = VGroup()' "$JOB/achilles_tortoise_senior_v9_2.py"
+          grep -q 'TARGET' "$JOB/achilles_tortoise_senior_v9_2.py"
+          grep -q 'config.pixel_width = 1920' "$JOB/jp_classroom_style.py"
+          grep -q 'config.pixel_height = 1080' "$JOB/jp_classroom_style.py"
+          grep -q 'config.frame_rate = 30' "$JOB/jp_classroom_style.py"
 
       - name: Install verification tools and ManimCE image
         shell: bash
@@ -93,7 +51,7 @@ jobs:
           sudo apt-get install -y -qq ffmpeg
           docker pull manimcommunity/manim:v0.20.1 >/dev/null
 
-      - name: Literal PQL runtime QA V9.1
+      - name: Literal PQL runtime QA V9.2
         shell: bash
         run: |
           set -euo pipefail
@@ -107,13 +65,12 @@ jobs:
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:$PATH
-              manim -pql achilles_tortoise_senior_v9.py AchillesTortoiseSeniorV9 --fps 15 --format=mp4 --media_dir /manim/media_pql --disable_caching
+              manim -pql achilles_tortoise_senior_v9_2.py AchillesTortoiseSeniorV9 --fps 15 --format=mp4 --media_dir /manim/media_pql --disable_caching
             ' 2>&1 | tee qa_out/render_pql.log
           PREVIEW="$(find media_pql -type f -name 'AchillesTortoiseSeniorV9.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PREVIEW" && test -s "$PREVIEW"
-          cp "$PREVIEW" qa_out/AchillesTortoiseSeniorV9_1_QA_pql.mp4
 
-      - name: Literal PQH final render V9.1
+      - name: Literal PQH final render V9.2
         shell: bash
         run: |
           set -euo pipefail
@@ -127,17 +84,17 @@ jobs:
               printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:$PATH
-              manim -pqh achilles_tortoise_senior_v9.py AchillesTortoiseSeniorV9 --fps 30 --format=mp4 --media_dir /manim/media --disable_caching
+              manim -pqh achilles_tortoise_senior_v9_2.py AchillesTortoiseSeniorV9 --fps 30 --format=mp4 --media_dir /manim/media --disable_caching
             ' 2>&1 | tee out/render_pqh.log
           FINAL="$(find media -type f -name 'AchillesTortoiseSeniorV9.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$FINAL" && test -s "$FINAL"
-          cp "$FINAL" out/Achilles_and_Tortoise_Zeno_SENIOR_V9_1_CONTINUOUS_EN_FINAL_pqh.mp4
+          cp "$FINAL" out/Achilles_and_Tortoise_Zeno_SENIOR_V9_2_CONTINUOUS_EN_FINAL_pqh.mp4
 
-      - name: Strictly verify V9.1 MP4
+      - name: Strict video QA
         shell: bash
         run: |
           set -euo pipefail
-          F=out/Achilles_and_Tortoise_Zeno_SENIOR_V9_1_CONTINUOUS_EN_FINAL_pqh.mp4
+          F=out/Achilles_and_Tortoise_Zeno_SENIOR_V9_2_CONTINUOUS_EN_FINAL_pqh.mp4
           W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
           H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
           FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
@@ -152,25 +109,19 @@ jobs:
           test "$PIX" = yuv420p
           python - <<'PY'
           dur=float(open('out/VIDEO_TECHNICAL.tsv').read().splitlines()[1].split('\t')[-1])
-          assert 90 <= dur <= 240, f'Unexpected V9.1 duration: {dur}'
-          print('duration_gate_pass', dur)
+          assert 90 <= dur <= 240, dur
           PY
-          set +e
           ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
-          DEC=$?
-          set -e
-          test "$DEC" -eq 0
           test ! -s out/full_decode.log
           sha256sum "$F" > out/SHA256SUMS.txt
           cat out/VIDEO_TECHNICAL.tsv
           cat out/SHA256SUMS.txt
-          echo "STRICT_VIDEO_QA_PASS"
 
-      - name: Export dense audit frames V9.1
+      - name: Export audit frames
         shell: bash
         run: |
           set -euo pipefail
-          F=out/Achilles_and_Tortoise_Zeno_SENIOR_V9_1_CONTINUOUS_EN_FINAL_pqh.mp4
+          F=out/Achilles_and_Tortoise_Zeno_SENIOR_V9_2_CONTINUOUS_EN_FINAL_pqh.mp4
           DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
           mkdir -p out/audit_frames
           for P in 0.02 0.06 0.10 0.14 0.18 0.22 0.26 0.30 0.34 0.38 0.42 0.46 0.50 0.54 0.58 0.62 0.66 0.70 0.74 0.78 0.82 0.86 0.90 0.94 0.98; do
@@ -178,19 +129,18 @@ jobs:
             TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
             ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_${TAG}.png"
           done
-          cp render_jobs/achilles_tortoise_20260823/achilles_tortoise_senior_v9.py out/
+          cp render_jobs/achilles_tortoise_20260823/achilles_tortoise_senior_v9_2.py out/
           cp render_jobs/achilles_tortoise_20260823/STORYBOARD_V9_EN_CONTINUOUS.md out/
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Achilles-Tortoise-Zeno-SENIOR-V9-1-CONTINUOUS-EN-FINAL-PQH
+          name: Achilles-Tortoise-Zeno-SENIOR-V9-2-CONTINUOUS-EN-FINAL-PQH
           path: |
-            out/Achilles_and_Tortoise_Zeno_SENIOR_V9_1_CONTINUOUS_EN_FINAL_pqh.mp4
-            out/achilles_tortoise_senior_v9.py
+            out/Achilles_and_Tortoise_Zeno_SENIOR_V9_2_CONTINUOUS_EN_FINAL_pqh.mp4
+            out/achilles_tortoise_senior_v9_2.py
             out/STORYBOARD_V9_EN_CONTINUOUS.md
             out/VIDEO_TECHNICAL.tsv
             out/SHA256SUMS.txt
-            out/render_pqh.log
             out/full_decode.log
             out/audit_frames/
             qa_out/render_pql.log
