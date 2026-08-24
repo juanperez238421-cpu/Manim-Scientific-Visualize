@@ -126,13 +126,7 @@ jobs:
           grep -q '^r_frame_rate=30/1$' ffprobe.txt
           grep -q '^pix_fmt=yuv420p$' ffprobe.txt
           ffmpeg -v error -i "$VIDEO" -f null - 2>&1 | tee full_decode.log
-          DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$VIDEO")"
-          python -c 'import sys; d=float(sys.argv[1]); n=18; [print(f"{max(0.2,min(d-0.2,d*(i+0.5)/n)):.3f}") for i in range(n)]' "$DURATION" > audit_times.txt
-          i=1
-          while read -r t; do
-            ffmpeg -v error -ss "$t" -i "$VIDEO" -frames:v 1 "delivery/audit_frames/frame_$(printf '%02d' "$i").png"
-            i=$((i+1))
-          done < audit_times.txt
+          ffmpeg -v error -i "$VIDEO" -vf "fps=18/94.562760" -frames:v 18 delivery/audit_frames/frame_%02d.png
           test "$(find delivery/audit_frames -type f -name '*.png' | wc -l)" -eq 18
 
       - name: Stage delivery package
