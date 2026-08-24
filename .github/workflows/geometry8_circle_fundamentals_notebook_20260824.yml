@@ -1,0 +1,156 @@
+name: Geometry 8 Circle Fundamentals Notebook PQH 20260824
+
+on:
+  pull_request:
+    branches: [agent/geometry8-circle-pedagogical-senior-qa-20260819]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-circle-fundamentals-notebook:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.ref == 'agent/geometry8-circle-fundamentals-notebook-20260824'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct audited JP classroom style
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_circle_fundamentals_notebook_20260824
+          mkdir -p "$JOB" out qa_media qa_out media /tmp/manim-bin /tmp/manim-home
+          cat render_jobs/geometry8_circle_20260818/s_*.b64 | base64 -d | gzip -dc > "$JOB/jp_classroom_style.py"
+          python -Werror -m py_compile "$JOB/jp_classroom_style.py" "$JOB/Geometry8_Circle_Fundamentals_Notebook.py"
+          grep -q 'class Geometry8CircleFundamentalsNotebook' "$JOB/Geometry8_Circle_Fundamentals_Notebook.py"
+          grep -q 'COPY TO NOTEBOOK' "$JOB/Geometry8_Circle_Fundamentals_Notebook.py"
+
+      - name: Compile notebook guide PDF
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_circle_fundamentals_notebook_20260824
+          mkdir -p /tmp/texhome
+          export HOME=/tmp/texhome
+          cd "$JOB"
+          pdflatex -interaction=nonstopmode -halt-on-error Circle_Fundamentals_Notebook_Guide.tex
+          pdflatex -interaction=nonstopmode -halt-on-error Circle_Fundamentals_Notebook_Guide.tex
+          test -s Circle_Fundamentals_Notebook_Guide.pdf
+          cp Circle_Fundamentals_Notebook_Guide.pdf "$GITHUB_WORKSPACE/out/Geometry8_Circle_Fundamentals_Notebook_Guide.pdf"
+
+      - name: Literal PQL full runtime gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=0.08
+          JOB=render_jobs/geometry8_circle_fundamentals_notebook_20260824
+
+          manim -pql \
+            "$JOB/Geometry8_Circle_Fundamentals_Notebook.py" \
+            Geometry8CircleFundamentalsNotebook \
+            --fps 15 --format=mp4 --media_dir qa_media --disable_caching \
+            2>&1 | tee qa_out/CIRCLE_FUNDAMENTALS_NOTEBOOK_pql.log
+
+          PQL="$(find qa_media -type f -name 'Geometry8CircleFundamentalsNotebook.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+          cp "$PQL" qa_out/Geometry8_Circle_Fundamentals_Notebook_pql.mp4
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=1.0
+          JOB=render_jobs/geometry8_circle_fundamentals_notebook_20260824
+
+          manim -pqh \
+            "$JOB/Geometry8_Circle_Fundamentals_Notebook.py" \
+            Geometry8CircleFundamentalsNotebook \
+            --fps 30 --format=mp4 --media_dir media --disable_caching \
+            2>&1 | tee out/CIRCLE_FUNDAMENTALS_NOTEBOOK_pqh.log
+
+          FINAL="$(find media -type f -name 'Geometry8CircleFundamentalsNotebook.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" out/Geometry8_Circle_Fundamentals_Notebook_FINAL_pqh.mp4
+
+      - name: Technical verification and video-frame PDF
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Geometry8_Circle_Fundamentals_Notebook_FINAL_pqh.mp4
+
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+            -show_entries format=duration,size \
+            -of default=noprint_wrappers=1 "$F" | tee out/VIDEO_TECHNICAL.txt
+
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")" = 1920
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")" = 1080
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")" = 30/1
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")" = h264
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null -
+
+          mkdir -p out/keyframes
+          DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          python - "$DURATION" <<'PY' > /tmp/times.txt
+          import sys
+          d=float(sys.argv[1])
+          for i in range(1,15):
+              print(f"{d*i/15:.3f}")
+          PY
+          i=1
+          while read -r t; do
+            ffmpeg -nostdin -v error -ss "$t" -i "$F" -frames:v 1 -q:v 2 \
+              "out/keyframes/frame_$(printf '%02d' "$i").jpg"
+            i=$((i+1))
+          done < /tmp/times.txt
+
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageDraw
+          files=sorted(Path('out/keyframes').glob('frame_*.jpg'))
+          pages=[]
+          for idx,p in enumerate(files,1):
+              im=Image.open(p).convert('RGB')
+              canvas=Image.new('RGB',(1920,1080),'white')
+              im.thumbnail((1840,930))
+              canvas.paste(im,((1920-im.width)//2,55))
+              d=ImageDraw.Draw(canvas)
+              d.text((70,1010),f'Circle Fundamentals - rendered video frame {idx}/{len(files)}',fill='black')
+              pages.append(canvas)
+          pages[0].save(
+              'out/Geometry8_Circle_Fundamentals_Rendered_Video_Frames.pdf',
+              'PDF', resolution=150.0, save_all=True, append_images=pages[1:]
+          )
+          PY
+
+          test -s out/Geometry8_Circle_Fundamentals_Rendered_Video_Frames.pdf
+          sha256sum "$F" out/Geometry8_Circle_Fundamentals_Notebook_Guide.pdf out/Geometry8_Circle_Fundamentals_Rendered_Video_Frames.pdf > out/SHA256SUMS.txt
+          cp render_jobs/geometry8_circle_fundamentals_notebook_20260824/Geometry8_Circle_Fundamentals_Notebook.py out/
+          cp render_jobs/geometry8_circle_fundamentals_notebook_20260824/Circle_Fundamentals_Notebook_Guide.tex out/
+          cp render_jobs/geometry8_circle_fundamentals_notebook_20260824/jp_classroom_style.py out/
+          cp qa_out/CIRCLE_FUNDAMENTALS_NOTEBOOK_pql.log out/
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Geometry8-Circle-Fundamentals-Notebook-20260824-PQH
+          path: |
+            out/
+            qa_out/
+          if-no-files-found: error
+          retention-days: 7
