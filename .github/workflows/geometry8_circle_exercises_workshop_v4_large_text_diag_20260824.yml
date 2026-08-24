@@ -1,0 +1,25 @@
+name: Geometry 8 Circle Exercises Workshop V4 Large Text Diagnostic 20260824
+
+on:
+  pull_request:
+    branches: [agent/geometry8-circle-measurement-area-20260823]
+    paths:
+      - 'render_jobs/geometry8_circle_exercises_20260824/diagnose_v4_large_text.sh'
+      - '.github/workflows/geometry8_circle_exercises_workshop_v4_large_text_diag_20260824.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose-v4-large-text:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+    steps:
+      - uses: actions/checkout@v4
+      - name: Concise PQL diagnostic
+        shell: bash
+        run: bash render_jobs/geometry8_circle_exercises_20260824/diagnose_v4_large_text.sh
