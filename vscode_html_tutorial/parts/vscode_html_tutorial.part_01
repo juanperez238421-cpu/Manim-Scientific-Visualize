@@ -1,0 +1,266 @@
+            stroke_color=LINE,
+            stroke_width=1,
+        ).next_to(activity, RIGHT, buff=0).align_to(activity, UP)
+        editor_height = 9 - g.top_h - g.status_h - (g.panel_h if self.terminal_open else 0)
+        editor = Rectangle(
+            width=16 - g.activity_w - g.sidebar_w,
+            height=editor_height,
+            fill_color=EDITOR_BG,
+            fill_opacity=1,
+            stroke_color=LINE,
+            stroke_width=1,
+        ).next_to(sidebar, RIGHT, buff=0).align_to(sidebar, UP)
+        panel = Rectangle(
+            width=16 - g.activity_w - g.sidebar_w,
+            height=g.panel_h if self.terminal_open else 0.001,
+            fill_color=PANEL_BG,
+            fill_opacity=1,
+            stroke_color=LINE,
+            stroke_width=1,
+        ).next_to(editor, DOWN, buff=0).align_to(editor, LEFT)
+
+        self.regions.update(
+            background=background,
+            top=top,
+            activity=activity,
+            sidebar=sidebar,
+            editor=editor,
+            panel=panel,
+            status=status,
+        )
+
+        menu = self._build_top_bar(top)
+        activity_icons = self._build_activity_icons(activity)
+        explorer = self._build_explorer(sidebar)
+        editor_content = self._build_editor(editor)
+        terminal_content = self._build_terminal(panel) if self.terminal_open else VGroup()
+        status_content = self._build_status(status)
+
+        self.group.add(
+            background,
+            top,
+            activity,
+            sidebar,
+            editor,
+            panel,
+            status,
+            menu,
+            activity_icons,
+            explorer,
+            editor_content,
+            terminal_content,
+            status_content,
+        )
+
+    def _build_top_bar(self, top: Rectangle) -> VGroup:
+        logo = ui_text("◆", 17, CYAN, BOLD).move_to(top.get_left() + RIGHT * 0.22)
+        menus = VGroup(*[ui_text(item, 12.5, TEXT_SOFT) for item in ["File", "Edit", "Selection", "View", "Go", "Run", "Terminal", "Help"]])
+        menus.arrange(RIGHT, buff=0.20).next_to(logo, RIGHT, buff=0.18)
+        search = rr(5.5, 0.29, "#242426", "#3B3B3D", radius=0.07)
+        search.move_to([1.62, top.get_y(), 0])
+        search_text = ui_text("code_bot_section", 11.5, TEXT_SOFT).move_to(search.get_left() + RIGHT * 0.55)
+        back = ui_text("‹", 22, TEXT_MUTED).next_to(search, LEFT, buff=0.20)
+        forward = ui_text("›", 22, TEXT_MUTED).next_to(back, RIGHT, buff=0.13)
+        status_chip = rr(0.52, 0.26, "#143548", "#143548", radius=0.08)
+        status_chip.move_to([5.78, top.get_y(), 0])
+        status_dot = Dot(status_chip.get_left() + RIGHT * 0.13, radius=0.035, color=CYAN)
+        status_num = ui_text("26", 10.5, TEXT, BOLD).move_to(status_chip.get_right() + LEFT * 0.16)
+        right_icons = VGroup(*[ui_text(symbol, 14, TEXT_MUTED) for symbol in ["◫", "▯", "▣", "□", "−", "×"]])
+        right_icons.arrange(RIGHT, buff=0.18).move_to([7.14, top.get_y(), 0])
+        self.regions["menu_items"] = menus
+        self.regions["search"] = search
+        return VGroup(logo, menus, search, search_text, back, forward, status_chip, status_dot, status_num, right_icons)
+
+    def _build_activity_icons(self, activity: Rectangle) -> VGroup:
+        symbols = ["▱", "⌕", "⑂", "▷", "◇", "△", "⚗", "●", "⬡", "◈", "✦", "◎"]
+        icons = VGroup(*[ui_text(symbol, 18 if i != 6 else 17, TEXT_MUTED) for i, symbol in enumerate(symbols)])
+        icons.arrange(DOWN, buff=0.22).move_to(activity.get_top() + DOWN * 2.28)
+        icons[0].set_color(TEXT)
+        active = Rectangle(width=0.025, height=0.40, fill_color=CYAN, fill_opacity=1, stroke_width=0)
+        active.move_to(activity.get_left() + RIGHT * 0.014 + UP * (activity.height / 2 - 0.38))
+        bottom_icons = VGroup(ui_text("◉", 18, TEXT_MUTED), ui_text("⚙", 17, TEXT_MUTED)).arrange(DOWN, buff=0.27)
+        bottom_icons.move_to(activity.get_bottom() + UP * 0.50)
+        self.regions["activity_icons"] = icons
+        return VGroup(active, icons, bottom_icons)
+
+    def _build_explorer(self, sidebar: Rectangle) -> VGroup:
+        header = ui_text("EXPLORER", 11.5, TEXT).move_to(sidebar.get_corner(UL) + [0.62, -0.23, 0])
+        ellipsis = ui_text("...", 15, TEXT_MUTED).move_to(sidebar.get_corner(UR) + [-0.23, -0.22, 0])
+        top_line = Line(sidebar.get_left(), sidebar.get_right(), color=LINE, stroke_width=1).shift(UP * (sidebar.height / 2 - 0.45))
+        open_header = ui_text("⌄  OPEN EDITORS", 10.8, TEXT, BOLD)
+        open_header.move_to(sidebar.get_corner(UL) + [0.72, -0.63, 0])
+
+        y = sidebar.get_top()[1] - 0.92
+        rows = VGroup()
+        if self.open_file:
+            row = self._file_row(self.open_file, selected=True)
+            row.move_to([sidebar.get_center()[0] + 0.03, y, 0])
+            rows.add(row)
+            self.file_rows[self.open_file] = row
+            y -= 0.30
+
+        project_header = ui_text(f"⌄  {self.project_name}", 11.0, TEXT, BOLD)
+        project_header.move_to([sidebar.get_left()[0] + 0.20 + project_header.width / 2, y, 0])
+        self.regions["project_header"] = project_header
+        y -= 0.33
+
+        for filename in self.files:
+            row = self._file_row(filename, selected=(filename == self.open_file))
+            row.move_to([sidebar.get_center()[0] + 0.04, y, 0])
+            rows.add(row)
+            self.file_rows[filename] = row
+            y -= 0.31
+
+        outline = ui_text("›  OUTLINE", 10.8, TEXT, BOLD)
+        timeline = ui_text("›  TIMELINE", 10.8, TEXT, BOLD)
+        outline.move_to([sidebar.get_left()[0] + 0.19 + outline.width / 2, max(y - 0.05, sidebar.get_bottom()[1] + 1.30), 0])
+        timeline.next_to(outline, DOWN, aligned_edge=LEFT, buff=0.20)
+        toolbar = VGroup(*[ui_text(symbol, 15, TEXT_SOFT) for symbol in ["▱", "▰", "↻", "◌", "..."]]).arrange(RIGHT, buff=0.18)
+        toolbar.move_to(sidebar.get_bottom() + UP * 0.35)
+        self.regions["explorer_toolbar"] = toolbar
+        return VGroup(header, ellipsis, top_line, open_header, project_header, rows, outline, timeline, toolbar)
+
+    def _file_row(self, filename: str, selected: bool = False) -> VGroup:
+        icon = ui_text("⬡" if filename.endswith(".html") else "▱", 13, HTML_ORANGE if filename.endswith(".html") else TEXT_MUTED)
+        label = ui_text(filename, 11.5, TEXT)
+        row = VGroup(icon, label).arrange(RIGHT, buff=0.12)
+        if selected:
+            bg = Rectangle(width=2.35, height=0.28, fill_color="#2A2D2E", fill_opacity=1, stroke_width=0)
+            row.move_to(bg.get_left() + RIGHT * (0.24 + row.width / 2))
+            return VGroup(bg, row)
+        return row
+
+    def _build_editor(self, editor: Rectangle) -> VGroup:
+        if self.open_file:
+            tab = Rectangle(width=1.65, height=0.38, fill_color=EDITOR_BG, fill_opacity=1, stroke_color=LINE, stroke_width=1)
+            tab.align_to(editor, UL)
+            tab.shift(RIGHT * 0.825 + DOWN * 0.19)
+            icon = ui_text("⬡", 12, HTML_ORANGE).move_to(tab.get_left() + RIGHT * 0.22)
+            label = ui_text(self.open_file, 12.5, TEXT).next_to(icon, RIGHT, buff=0.10)
+            close = ui_text("×", 15, TEXT_MUTED).move_to(tab.get_right() + LEFT * 0.20)
+            breadcrumb = ui_text(f"{self.open_file}   ›   html", 11.0, TEXT_MUTED)
+            breadcrumb.move_to(editor.get_corner(UL) + [0.70 + breadcrumb.width / 2, -0.61, 0])
+            self.regions["editor_tab"] = tab
+            self.regions["breadcrumb"] = breadcrumb
+            return VGroup(tab, icon, label, close, breadcrumb)
+
+        logo = self._vscode_logo().scale(1.60).set_opacity(0.055)
+        logo.move_to(editor.get_center() + UP * 0.42)
+        actions = VGroup(
+            self._command_hint("Open Chat", ["Ctrl", "Alt", "I"]),
+            self._command_hint("Show All Commands", ["Ctrl", "Shift", "P"]),
+            self._command_hint("Toggle Terminal", ["Ctrl", "`"]),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        actions.move_to(editor.get_center() + DOWN * 0.60)
+        self.regions["welcome_logo"] = logo
+        return VGroup(logo, actions)
+
+    def _vscode_logo(self) -> VGroup:
+        left = Polygon(
+            [-0.95, 0.10, 0], [-0.62, 0.43, 0], [-0.10, 0.05, 0], [0.38, 0.55, 0], [0.66, 0.46, 0], [0.66, -0.46, 0], [0.38, -0.55, 0], [-0.10, -0.05, 0], [-0.62, -0.43, 0], [-0.95, -0.10, 0], [-0.58, 0.00, 0],
+            fill_color="#3B3B3D", fill_opacity=1, stroke_width=0,
+        )
+        inner = Polygon([0.10, 0, 0], [0.46, 0.29, 0], [0.46, -0.29, 0], fill_color=EDITOR_BG, fill_opacity=1, stroke_width=0)
+        return VGroup(left, inner)
+
+    def _command_hint(self, label: str, keys: Sequence[str]) -> VGroup:
+        label_mob = ui_text(label, 12.0, TEXT_MUTED)
+        key_group = VGroup(*[keyboard_key(key) for key in keys])
+        pluses = VGroup(*[ui_text("+", 10, TEXT_MUTED) for _ in range(max(0, len(keys) - 1))])
+        composed = VGroup()
+        for index, key in enumerate(key_group):
+            composed.add(key)
+            if index < len(key_group) - 1:
+                composed.add(pluses[index])
+        composed.arrange(RIGHT, buff=0.07)
+        line = VGroup(label_mob, composed).arrange(RIGHT, buff=0.50)
+        return line
+
+    def _build_terminal(self, panel: Rectangle) -> VGroup:
+        tab_names = ["PROBLEMS", "OUTPUT", "DEBUG CONSOLE", "TERMINAL", "PORTS"]
+        tabs = VGroup(*[ui_text(name, 10.5, TEXT_SOFT if name == "TERMINAL" else TEXT_MUTED) for name in tab_names])
+        tabs.arrange(RIGHT, buff=0.30).move_to(panel.get_corner(UL) + [1.76, -0.23, 0])
+        underline = Line(tabs[3].get_left(), tabs[3].get_right(), color=CYAN, stroke_width=1.8).next_to(tabs[3], DOWN, buff=0.05)
+        controls = VGroup(*[ui_text(symbol, 15, TEXT_MUTED) for symbol in ["+", "⌄", "...", "□", "×"]])
+        controls.arrange(RIGHT, buff=0.16).move_to(panel.get_corner(UR) + [-0.53, -0.22, 0])
+
+        prompt = mono_text(f"PS {self.terminal_path}>", 13.0, TEXT_SOFT)
+        prompt.move_to(panel.get_corner(UL) + [0.30 + prompt.width / 2, -0.72, 0])
+        cursor = make_cursor(0.21).next_to(prompt, RIGHT, buff=0.05)
+        profiles_box = Rectangle(width=1.22, height=panel.height - 0.44, fill_color="#1B1B1D", fill_opacity=1, stroke_color=LINE, stroke_width=1)
+        profiles_box.align_to(panel, RIGHT).align_to(panel, DOWN)
+        profiles = VGroup(ui_text("▣  cmd", 11.5, TEXT_SOFT), ui_text("◉  wsl", 11.5, TEXT_SOFT), ui_text("▰  pwsh", 11.5, TEXT))
+        profiles.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to(profiles_box.get_top() + DOWN * 0.56)
+        selected = Rectangle(width=1.18, height=0.28, fill_color="#2A2D2E", fill_opacity=1, stroke_width=0).move_to(profiles[2])
+        profiles[2].set_z_index(2)
+        warning = ui_text("△", 14, YELLOW).move_to(profiles_box.get_corner(UR) + [-0.18, -0.38, 0])
+        self.regions["terminal_tabs"] = tabs
+        self.regions["terminal_prompt"] = prompt
+        self.regions["terminal_profiles"] = profiles_box
+        return VGroup(tabs, underline, controls, prompt, cursor, profiles_box, selected, profiles, warning)
+
+    def _build_status(self, status: Rectangle) -> VGroup:
+        left = ui_text("× 0   △ 0   ○ 0     ◔  Initializing virtual environments", 9.8, TEXT_MUTED)
+        left.move_to(status.get_left() + RIGHT * (0.12 + left.width / 2))
+        right = ui_text("Ln 1, Col 1    Spaces: 2    UTF-8    CRLF    HTML    ◉  ♢", 9.8, TEXT_SOFT)
+        right.move_to(status.get_right() + LEFT * (0.12 + right.width / 2))
+        self.regions["status_content"] = right
+        return VGroup(left, right)
+
+
+class VSCodeTutorialBase(MovingCameraScene):
+    lesson_number = 0
+    lesson_title = "Visual Studio Code"
+
+    def setup_shell(
+        self,
+        project_name: str = "CODE_BOT_SECTION",
+        files: Sequence[str] = (),
+        open_file: str | None = None,
+        terminal_path: str = r"D:\Academia\HTML\code_bot_section",
+    ) -> VSCodeShell:
+        self.shell = VSCodeShell(project_name, files, open_file, terminal_path)
+        self.add(self.shell.group)
+        return self.shell
+
+    def show_lesson_banner(self, subtitle: str, title: str = "Visual Studio Code Guide") -> VGroup:
+        banner = title_banner(title, subtitle)
+        banner.move_to([4.18, 3.55, 0])
+        self.play(FadeIn(banner, shift=DOWN * 0.08), run_time=0.75)
+        return banner
+
+    def add_callout(
+        self,
+        title: str,
+        body: str | None,
+        box_center: Sequence[float],
+        target: Sequence[float],
+        width: float = 2.55,
+        accent: str = CYAN,
+    ) -> VGroup:
+        box = callout_box(title, body, width, accent)
+        box.move_to(box_center)
+        start = box.get_left() if target[0] < box_center[0] else box.get_right()
+        link = pointer(start, target, accent)
+        group = VGroup(link, box)
+        self.play(Create(link), FadeIn(box, shift=UP * 0.05), run_time=0.55)
+        return group
+
+    def focus(self, target: Mobject | Sequence[float], scale: float = 0.75, run_time: float = 0.75) -> None:
+        center = target.get_center() if isinstance(target, Mobject) else target
+        self.play(self.camera.frame.animate.scale(scale).move_to(center), run_time=run_time)
+
+    def reset_camera(self, run_time: float = 0.75) -> None:
+        self.play(self.camera.frame.animate.set(width=16).move_to(ORIGIN), run_time=run_time)
+
+    def editor_code_origin(self) -> np.ndarray:
+        editor = self.shell.regions["editor"]
+        return editor.get_corner(UL) + np.array([0.92, -1.02, 0])
+
+    def code_row(self, line_no: int, line: str, font_size: float = 20) -> VGroup:
+        line_num = mono_text(str(line_no), 14.5, TEXT_MUTED)
+        content = html_line(line, font_size)
+        row = VGroup(line_num, content).arrange(RIGHT, buff=0.32, aligned_edge=UP)
+        return row
+
+    def type_code_lines(
