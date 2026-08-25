@@ -109,7 +109,7 @@ jobs:
           test -n "$PQH_VIDEO" && test -s "$PQH_VIDEO"
           printf '%s\n' "$PQH_VIDEO" > pqh_video_path.txt
 
-      - name: Protocol gate 3 - technical verification and dense visual audit
+      - name: Protocol gate 3 - technical verification and full decode
         shell: bash
         run: |
           set -euo pipefail
@@ -125,14 +125,7 @@ jobs:
           grep -q '^pix_fmt=yuv420p$' ffprobe.txt
           ffmpeg -v error -i "$VIDEO" -f null - 2>&1 | tee full_decode.log
           DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$VIDEO")"
-          python - <<'PY'
-          import os
-          d=float(os.environ['DURATION'])
-          assert 120 <= d <= 900, f'Unexpected duration: {d}'
-          print('duration_seconds', d)
-          PY
-        env:
-          DURATION: ${{ env.DURATION }}
+          python -c "d=float('$DURATION'); assert 120 <= d <= 900, f'Unexpected duration: {d}'; print('duration_seconds', d)"
 
       - name: Export 24 distributed audit frames
         shell: bash
