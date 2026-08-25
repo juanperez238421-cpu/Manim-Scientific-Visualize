@@ -20,11 +20,9 @@ jobs:
       options: --user root
     steps:
       - uses: actions/checkout@v4
-
       - name: Render four lessons, build PDFs, audit and package
         shell: bash
-        run: bash render_jobs/geometry8_shaded_areas_sequence_20260825/run_full_protocol_v3.sh
-
+        run: bash render_jobs/geometry8_shaded_areas_sequence_20260825/run_full_protocol_v4.sh
       - uses: actions/upload-artifact@v4
         if: always()
         with:
