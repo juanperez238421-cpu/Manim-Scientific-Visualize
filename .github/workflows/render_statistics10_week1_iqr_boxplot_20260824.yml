@@ -1,4 +1,4 @@
-name: Render Statistics10 Week1 IQR Boxplot PQH
+name: Render Statistics10 Week1 IQR Boxplot PQH RERENDER 20260825
 
 on:
   pull_request:
@@ -15,16 +15,18 @@ jobs:
     timeout-minutes: 120
 
     steps:
-      - name: Checkout render branch
+      - name: Checkout rerender branch
         uses: actions/checkout@v4
 
-      - name: Validate source
+      - name: Validate source and package inputs
         shell: bash
         run: |
           set -euo pipefail
           SOURCE="render_jobs/statistics10_week1_iqr_boxplot_20260824/main.py"
+          PROTOCOL="render_jobs/statistics10_week1_iqr_boxplot_20260824/RENDER_PROTOCOL.md"
           python -m py_compile "$SOURCE"
           grep -n '^class Statistics10Week1IQRBoxplot' "$SOURCE"
+          test -s "$PROTOCOL"
           mkdir -p media_pql media_pqh delivery/audit_frames
 
       - name: Pull ManimCE 0.20.1
@@ -38,11 +40,11 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg
+          sudo apt-get install -y -qq ffmpeg zip
           ffmpeg -version | head -n 1
           ffprobe -version | head -n 1
 
-      - name: Literal PQL classroom QA gate
+      - name: Protocol gate 1 - literal PQL validation render
         shell: bash
         run: |
           set -euo pipefail
@@ -75,7 +77,7 @@ jobs:
           test -n "$PQL_VIDEO"
           test -s "$PQL_VIDEO"
 
-      - name: Literal PQH final render
+      - name: Protocol gate 2 - literal PQH final rerender
         shell: bash
         run: |
           set -euo pipefail
@@ -109,7 +111,7 @@ jobs:
           test -s "$PQH_VIDEO"
           printf '%s\n' "$PQH_VIDEO" > pqh_video_path.txt
 
-      - name: Verify MP4, full decode and extract dense audit frames
+      - name: Protocol gate 3 - media verification and visual audit
         shell: bash
         run: |
           set -euo pipefail
@@ -126,39 +128,49 @@ jobs:
           grep -q '^r_frame_rate=30/1$' ffprobe.txt
           grep -q '^pix_fmt=yuv420p$' ffprobe.txt
           ffmpeg -v error -i "$VIDEO" -f null - 2>&1 | tee full_decode.log
-          ffmpeg -v error -i "$VIDEO" -vf "fps=18/94.562760" -frames:v 18 delivery/audit_frames/frame_%02d.png
+          DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$VIDEO")"
+          ffmpeg -v error -i "$VIDEO" -vf "fps=18/${DURATION}" -frames:v 18 delivery/audit_frames/frame_%02d.png
           test "$(find delivery/audit_frames -type f -name '*.png' | wc -l)" -eq 18
 
-      - name: Stage delivery package
+      - name: Stage complete protocol delivery
         shell: bash
         run: |
           set -euo pipefail
           VIDEO="$(cat pqh_video_path.txt)"
           SOURCE="render_jobs/statistics10_week1_iqr_boxplot_20260824/main.py"
-          cp "$VIDEO" delivery/Statistics10_Week1_IQR_Boxplot_FINAL_PQH.mp4
+          PROTOCOL="render_jobs/statistics10_week1_iqr_boxplot_20260824/RENDER_PROTOCOL.md"
+          cp "$VIDEO" delivery/Statistics10_Week1_IQR_Boxplot_WEEK1_RERENDER_FINAL_PQH.mp4
           cp "$SOURCE" delivery/Statistics10_Week1_IQR_Boxplot.py
+          cp "$PROTOCOL" delivery/RENDER_PROTOCOL.md
+          cp .github/workflows/render_statistics10_week1_iqr_boxplot_20260824.yml delivery/GITHUB_ACTIONS_RENDER_WORKFLOW.yml
           cp pql_render.log pqh_render.log ffprobe.txt full_decode.log delivery/
           cat > delivery/RENDER_INFO.txt <<'EOF'
           Subject: Statistics 10
-          Period: Third period, Week 1
+          Period: Third period — Week 1
           Lesson: IQR & Boxplot Consolidation
           Scene: Statistics10Week1IQRBoxplot
           ManimCE: 0.20.1
+          Render date: 2026-08-25
+          Validation: literal -pql
           Final render: literal -pqh
           Resolution: 1920x1080
           FPS: 30
-          Contents: variance-to-IQR bridge, quartiles, IQR, 1.5 IQR fences, outlier classification, line-by-line boxplot construction, interpretation, same-scale comparison, guided practice, exit ticket.
+          Pixel format: yuv420p
+          QA: ffprobe validation + full FFmpeg decode + 18 distributed audit frames
+          Package contents: MP4, source code, render protocol, GitHub Actions workflow, PQL/PQH logs, ffprobe/decode reports, audit frames, SHA-256 checksums.
           EOF
           (
             cd delivery
-            sha256sum Statistics10_Week1_IQR_Boxplot_FINAL_PQH.mp4 Statistics10_Week1_IQR_Boxplot.py pql_render.log pqh_render.log ffprobe.txt full_decode.log RENDER_INFO.txt audit_frames/*.png > SHA256SUMS.txt
+            sha256sum Statistics10_Week1_IQR_Boxplot_WEEK1_RERENDER_FINAL_PQH.mp4 Statistics10_Week1_IQR_Boxplot.py RENDER_PROTOCOL.md GITHUB_ACTIONS_RENDER_WORKFLOW.yml pql_render.log pqh_render.log ffprobe.txt full_decode.log RENDER_INFO.txt audit_frames/*.png > SHA256SUMS.txt
           )
+          zip -r Statistics10_Week1_IQR_Boxplot_WEEK1_RERENDER_FULL_PACKAGE.zip delivery >/dev/null
+          cp Statistics10_Week1_IQR_Boxplot_WEEK1_RERENDER_FULL_PACKAGE.zip delivery/
           ls -lh delivery
 
-      - name: Upload final Week 1 package
+      - name: Upload complete rerender package
         uses: actions/upload-artifact@v4
         with:
-          name: Statistics10_Week1_IQR_Boxplot_FINAL_PQH
+          name: Statistics10_Week1_IQR_Boxplot_WEEK1_RERENDER_FULL_PACKAGE
           path: delivery/
           if-no-files-found: error
           retention-days: 7
