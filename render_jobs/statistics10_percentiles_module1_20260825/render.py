@@ -1,9 +1,20 @@
+import importlib.util
 import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))
-from main import Statistics10QuartilesDecilesPercentiles, SCORES, percentile
+SCENE_PATH = HERE / "main.py"
+
+# Load the lesson source under a unique module name. This avoids colliding with
+# the inherited Week-1 file that the lesson itself imports as module `main`.
+spec = importlib.util.spec_from_file_location("statistics10_percentiles_scene", SCENE_PATH)
+scene_module = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = scene_module
+spec.loader.exec_module(scene_module)
+
+Statistics10QuartilesDecilesPercentiles = scene_module.Statistics10QuartilesDecilesPercentiles
+SCORES = scene_module.SCORES
+percentile = scene_module.percentile
 
 
 class Statistics10QuartilesDecilesPercentilesFinal(Statistics10QuartilesDecilesPercentiles):
