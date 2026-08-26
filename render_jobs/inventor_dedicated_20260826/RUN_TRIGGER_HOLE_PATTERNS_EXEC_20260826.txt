@@ -1,0 +1,1 @@
+Merge trigger for Autodesk Inventor Hole + Rectangular Pattern + Circular Pattern literal PQH render.
