@@ -1,0 +1,1 @@
+Trigger dedicated Inventor Coil/Bobina FULL TOTAL PQH render after workflow registration.
