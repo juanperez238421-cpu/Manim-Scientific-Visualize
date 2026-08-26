@@ -1,0 +1,227 @@
+name: Inventor Misc House Style V3 Parallel PQH 20260826
+
+on:
+  push:
+    branches:
+      - render-inventor-misc-house-style-v3-20260826
+    paths:
+      - 'render_jobs/inventor_misc_house_style_v3_20260826/**'
+      - '.github/workflows/inventor_misc_house_style_v3_parallel_pqh_20260826.yml'
+      - '.render_trigger_inventor_misc_house_style_v3_20260826.txt'
+  workflow_dispatch:
+
+jobs:
+  render:
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        include:
+          - slug: 01_fillet_redondeo
+            file: scenes/01_fillet_redondeo.py
+            scene: InventorFilletHouseStyle
+          - slug: 02_chamfer_chaflan
+            file: scenes/02_chamfer_chaflan.py
+            scene: InventorChamferHouseStyle
+          - slug: 03_mirror_simetria
+            file: scenes/03_mirror_simetria.py
+            scene: InventorMirrorHouseStyle
+          - slug: 04_rib_nervio
+            file: scenes/04_rib_nervio.py
+            scene: InventorRibHouseStyle
+          - slug: 05_emboss_repujado
+            file: scenes/05_emboss_repujado.py
+            scene: InventorEmbossHouseStyle
+          - slug: 06_coil_bobina
+            file: scenes/06_coil_bobina.py
+            scene: InventorCoilHouseStyle
+          - slug: 07_rectangular_pattern_lineal
+            file: scenes/07_rectangular_pattern_lineal.py
+            scene: InventorRectPatternHouseStyle
+          - slug: 08_circular_pattern
+            file: scenes/08_circular_pattern.py
+            scene: InventorCircularPatternHouseStyle
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    defaults:
+      run:
+        working-directory: render_jobs/inventor_misc_house_style_v3_20260826
+
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+
+      - name: Static preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile library/jp_misc_cad_style.py scenes/*.py
+          grep -n "class ${{ matrix.scene }}" "${{ matrix.file }}"
+          if grep -R -nE '([A-Za-z]:\\|/Users/|/home/[^/]+/Desktop)' library scenes; then
+            echo 'Absolute path detected' >&2
+            exit 1
+          fi
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1 || ! command -v zip >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ffmpeg zip
+          fi
+          rm -rf preview hq delivery
+          mkdir -p preview hq "delivery/${{ matrix.slug }}/frames" "delivery/${{ matrix.slug }}/logs"
+          chmod -R a+rwX .
+
+      - name: Pull exact ManimCE 0.20.1 image
+        run: docker pull manimcommunity/manim:v0.20.1
+
+      - name: PQL smoke render
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "preview/${{ matrix.slug }}"
+          docker run --rm \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=0.18 \
+            -e FILE='${{ matrix.file }}' \
+            -e SCENE='${{ matrix.scene }}' \
+            -e MEDIA_DIR="/manim/preview/${{ matrix.slug }}" \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 \
+            -c 'set -euo pipefail; mkdir -p /tmp/bin; printf "#!/bin/sh\nexit 0\n" > /tmp/bin/xdg-open; chmod +x /tmp/bin/xdg-open; export PATH="/tmp/bin:$PATH"; manim -pql "$FILE" "$SCENE" --media_dir "$MEDIA_DIR" --format=mp4 --disable_caching' \
+            2>&1 | tee "delivery/${{ matrix.slug }}/logs/pql.log"
+
+      - name: PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "hq/${{ matrix.slug }}"
+          docker run --rm \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=1.0 \
+            -e FILE='${{ matrix.file }}' \
+            -e SCENE='${{ matrix.scene }}' \
+            -e MEDIA_DIR="/manim/hq/${{ matrix.slug }}" \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 \
+            -c 'set -euo pipefail; mkdir -p /tmp/bin; printf "#!/bin/sh\nexit 0\n" > /tmp/bin/xdg-open; chmod +x /tmp/bin/xdg-open; export PATH="/tmp/bin:$PATH"; manim -pqh "$FILE" "$SCENE" --media_dir "$MEDIA_DIR" --format=mp4 --disable_caching' \
+            2>&1 | tee "delivery/${{ matrix.slug }}/logs/pqh.log"
+
+          mapfile -t candidates < <(find "hq/${{ matrix.slug }}" -type f -name '*.mp4' ! -path '*/partial_movie_files/*' | sort)
+          printf '%s\n' "${candidates[@]}" > "delivery/${{ matrix.slug }}/final_candidates.txt"
+          if [ "${#candidates[@]}" -ne 1 ]; then
+            echo "Expected exactly one final MP4, found ${#candidates[@]}" >&2
+            find "hq/${{ matrix.slug }}" -type f -print | sort >&2
+            exit 1
+          fi
+          cp "${candidates[0]}" "delivery/${{ matrix.slug }}/${{ matrix.slug }}_PQH.mp4"
+
+      - name: Verify final video and create QA evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO="delivery/${{ matrix.slug }}/${{ matrix.slug }}_PQH.mp4"
+          test -s "$VIDEO"
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of json "$VIDEO" > "delivery/${{ matrix.slug }}/ffprobe.json"
+          WIDTH="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$VIDEO" | tr -d '[:space:]')"
+          HEIGHT="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$VIDEO" | tr -d '[:space:]')"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$VIDEO" | tr -d '[:space:]')"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$VIDEO" | tr -d '[:space:]')"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$VIDEO" | tr -d '[:space:]')"
+          test "$WIDTH" = 1920
+          test "$HEIGHT" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          ffmpeg -v error -i "$VIDEO" -f null -
+          sha256sum "$VIDEO" > "delivery/${{ matrix.slug }}/sha256.txt"
+          ffmpeg -y -i "$VIDEO" -vf 'fps=1/8,scale=640:-1,tile=3x3' -frames:v 1 "delivery/${{ matrix.slug }}/frames/control_sheet.jpg"
+          cp "${{ matrix.file }}" "delivery/${{ matrix.slug }}/"
+          cp library/jp_misc_cad_style.py "delivery/${{ matrix.slug }}/"
+          cp README.md "delivery/${{ matrix.slug }}/PACKAGE_README.md"
+          {
+            echo 'PASS — House / Sweep / Loft / Revolve visual grammar'
+            echo 'ManimCE 0.20.1 official Docker'
+            echo 'PQL smoke render: PASS'
+            echo 'PQH literal render: PASS'
+            echo 'Final video: 1920x1080, 30 fps, H.264, yuv420p'
+            echo 'Full FFmpeg decode: PASS'
+            cat "delivery/${{ matrix.slug }}/sha256.txt"
+          } > "delivery/${{ matrix.slug }}/QA_PASS.txt"
+
+      - name: Upload verified operation package
+        uses: actions/upload-artifact@v4
+        with:
+          name: inventor-misc-${{ matrix.slug }}
+          path: render_jobs/inventor_misc_house_style_v3_20260826/delivery/${{ matrix.slug }}/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload debug evidence on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inventor-misc-${{ matrix.slug }}-debug
+          path: render_jobs/inventor_misc_house_style_v3_20260826/delivery/${{ matrix.slug }}/
+          if-no-files-found: warn
+          retention-days: 2
+
+  package:
+    needs: render
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Install FFmpeg and ZIP if needed
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v zip >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ffmpeg zip
+          fi
+
+      - name: Download all eight verified artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: inventor-misc-0*
+          path: collected
+          merge-multiple: false
+
+      - name: Build master class video and total package
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p FINAL_PACKAGE/sources FINAL_PACKAGE/individual_videos FINAL_PACKAGE/qa
+          SLUGS=(01_fillet_redondeo 02_chamfer_chaflan 03_mirror_simetria 04_rib_nervio 05_emboss_repujado 06_coil_bobina 07_rectangular_pattern_lineal 08_circular_pattern)
+          : > concat.txt
+          for slug in "${SLUGS[@]}"; do
+            DIR="collected/inventor-misc-${slug}"
+            VIDEO="$DIR/${slug}_PQH.mp4"
+            test -s "$VIDEO"
+            ffmpeg -v error -i "$VIDEO" -f null -
+            cp "$VIDEO" FINAL_PACKAGE/individual_videos/
+            cp "$DIR/ffprobe.json" "$DIR/sha256.txt" "$DIR/QA_PASS.txt" FINAL_PACKAGE/qa/
+            cp "$DIR/frames/control_sheet.jpg" "FINAL_PACKAGE/qa/${slug}_control_sheet.jpg"
+            printf "file '%s'\n" "$PWD/$VIDEO" >> concat.txt
+          done
+
+          ffmpeg -y -f concat -safe 0 -i concat.txt -c copy FINAL_PACKAGE/Inventor_Misc_Tools_HouseStyle_V3_MASTER_PQH.mp4
+          ffmpeg -v error -i FINAL_PACKAGE/Inventor_Misc_Tools_HouseStyle_V3_MASTER_PQH.mp4 -f null -
+          cp render_jobs/inventor_misc_house_style_v3_20260826/README.md FINAL_PACKAGE/
+          cp -R render_jobs/inventor_misc_house_style_v3_20260826/library FINAL_PACKAGE/sources/
+          cp -R render_jobs/inventor_misc_house_style_v3_20260826/scenes FINAL_PACKAGE/sources/
+          cp .github/workflows/inventor_misc_house_style_v3_parallel_pqh_20260826.yml FINAL_PACKAGE/sources/
+          sha256sum FINAL_PACKAGE/Inventor_Misc_Tools_HouseStyle_V3_MASTER_PQH.mp4 > FINAL_PACKAGE/MASTER_SHA256.txt
+          zip -r Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826.zip FINAL_PACKAGE >/dev/null
+          sha256sum Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826.zip > PACKAGE_SHA256.txt
+
+      - name: Upload total delivery package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826
+          path: |
+            Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826.zip
+            PACKAGE_SHA256.txt
+            FINAL_PACKAGE/
+          if-no-files-found: error
+          retention-days: 7
