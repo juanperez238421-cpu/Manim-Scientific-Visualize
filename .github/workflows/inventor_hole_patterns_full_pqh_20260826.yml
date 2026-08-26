@@ -1,0 +1,205 @@
+name: Inventor Hole + Patterns FULL PQH 20260826
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  JOB_ROOT: render_jobs/inventor_dedicated_20260826
+  MANIM_IMAGE: manimcommunity/manim:v0.20.1
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'render/inventor-hole-patterns-full-pqh-20260826'
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Static Python validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            "$JOB_ROOT/library/inventor_pro_ui.py" \
+            "$JOB_ROOT/library/sketch_to_3d_helpers.py" \
+            "$JOB_ROOT/scenes/09_hole_agujero_full.py" \
+            "$JOB_ROOT/scenes/10_rectangular_pattern_full.py" \
+            "$JOB_ROOT/scenes/11_circular_pattern_full.py"
+
+      - name: Install render and QA dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg zip >/dev/null
+          docker pull "$MANIM_IMAGE" >/dev/null
+          ffprobe -version | head -1
+
+      - name: Literal PQL smoke gate for all three scenes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$JOB_ROOT"
+          rm -rf media_pql delivery
+          mkdir -p delivery/logs
+
+          render_pql () {
+            local file="$1"
+            local scene="$2"
+            local slug="$3"
+            docker run --rm \
+              --user "$(id -u):$(id -g)" \
+              -e HOME=/tmp/manim-home \
+              -e PYTHONPATH="/manim/$JOB_ROOT" \
+              -v "$GITHUB_WORKSPACE:/manim" \
+              -w "/manim/$JOB_ROOT" \
+              --entrypoint bash "$MANIM_IMAGE" -c "
+                set -euo pipefail
+                mkdir -p /tmp/manim-bin
+                printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+                chmod +x /tmp/manim-bin/xdg-open
+                export PATH=/tmp/manim-bin:\$PATH
+                manim -pql '$file' '$scene' \
+                  --fps 15 \
+                  --format=mp4 \
+                  --media_dir 'media_pql/$slug' \
+                  --disable_caching
+              " 2>&1 | tee "delivery/logs/${slug}_pql.log"
+            test -n "$(find "media_pql/$slug" -type f -name "${scene}.mp4" -print -quit)"
+          }
+
+          render_pql scenes/09_hole_agujero_full.py InventorHoleDetailed 09_hole_agujero
+          render_pql scenes/10_rectangular_pattern_full.py InventorRectangularPatternFull 10_rectangular_pattern
+          render_pql scenes/11_circular_pattern_full.py InventorCircularPatternFull 11_circular_pattern
+
+      - name: Literal PQH final renders
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$JOB_ROOT"
+          rm -rf media
+          mkdir -p delivery/final
+
+          render_pqh () {
+            local file="$1"
+            local scene="$2"
+            local slug="$3"
+            local out_name="$4"
+            docker run --rm \
+              --user "$(id -u):$(id -g)" \
+              -e HOME=/tmp/manim-home \
+              -e PYTHONPATH="/manim/$JOB_ROOT" \
+              -v "$GITHUB_WORKSPACE:/manim" \
+              -w "/manim/$JOB_ROOT" \
+              --entrypoint bash "$MANIM_IMAGE" -c "
+                set -euo pipefail
+                mkdir -p /tmp/manim-bin
+                printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+                chmod +x /tmp/manim-bin/xdg-open
+                export PATH=/tmp/manim-bin:\$PATH
+                manim -pqh '$file' '$scene' \
+                  --fps 30 \
+                  --format=mp4 \
+                  --media_dir 'media/$slug' \
+                  --disable_caching
+              " 2>&1 | tee "delivery/logs/${slug}_pqh.log"
+            local final
+            final="$(find "media/$slug" -type f -name "${scene}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+            test -n "$final" && test -s "$final"
+            cp "$final" "delivery/final/$out_name"
+          }
+
+          render_pqh scenes/09_hole_agujero_full.py InventorHoleDetailed 09_hole_agujero Inventor_Hole_Agujero_FULL_PQH.mp4
+          render_pqh scenes/10_rectangular_pattern_full.py InventorRectangularPatternFull 10_rectangular_pattern Inventor_Rectangular_Pattern_FULL_PQH.mp4
+          render_pqh scenes/11_circular_pattern_full.py InventorCircularPatternFull 11_circular_pattern Inventor_Circular_Pattern_FULL_PQH.mp4
+
+      - name: Build combined rectangular + circular FULL TOTAL video
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$JOB_ROOT/delivery/final"
+          printf "file '%s'\nfile '%s'\n" \
+            "Inventor_Rectangular_Pattern_FULL_PQH.mp4" \
+            "Inventor_Circular_Pattern_FULL_PQH.mp4" > patterns_concat.txt
+          ffmpeg -nostdin -y -v error \
+            -f concat -safe 0 -i patterns_concat.txt \
+            -c copy \
+            Inventor_Patterns_Rectangular_Circular_FULL_TOTAL_PQH.mp4
+          test -s Inventor_Patterns_Rectangular_Circular_FULL_TOTAL_PQH.mp4
+
+      - name: Strict technical QA, full decode and audit frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$JOB_ROOT"
+          mkdir -p delivery/qa/audit_frames
+          : > delivery/qa/VIDEO_TECHNICAL.tsv
+          printf 'file\twidth\theight\tfps\tcodec\tpix_fmt\tduration\n' >> delivery/qa/VIDEO_TECHNICAL.tsv
+
+          for F in delivery/final/*.mp4; do
+            NAME="$(basename "$F")"
+            W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+            H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+            FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+            CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+            PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+            DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+            printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$NAME" "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" >> delivery/qa/VIDEO_TECHNICAL.tsv
+            test "$W" = 1920
+            test "$H" = 1080
+            test "$FPS" = 30/1
+            test "$CODEC" = h264
+            test "$PIX" = yuv420p
+            ffmpeg -nostdin -v error -i "$F" -f null - 2> "delivery/qa/${NAME%.mp4}_full_decode.log"
+            test ! -s "delivery/qa/${NAME%.mp4}_full_decode.log"
+
+            for P in 0.12 0.38 0.65 0.90; do
+              T="$(python -c "print(float('$DUR')*float('$P'))")"
+              TAG="$(python -c "print(int(float('$P')*100))")"
+              ffmpeg -nostdin -y -v error -ss "$T" -i "$F" -frames:v 1 \
+                "delivery/qa/audit_frames/${NAME%.mp4}_${TAG}.png"
+            done
+          done
+
+          sha256sum delivery/final/*.mp4 > delivery/qa/SHA256SUMS.txt
+
+      - name: Package exact source and QA evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$JOB_ROOT"
+          mkdir -p delivery/source
+          cp scenes/09_hole_agujero_full.py delivery/source/
+          cp scenes/10_rectangular_pattern_full.py delivery/source/
+          cp scenes/11_circular_pattern_full.py delivery/source/
+          cp library/inventor_pro_ui.py delivery/source/
+          cp library/sketch_to_3d_helpers.py delivery/source/
+          cat > delivery/README_DELIVERY.md <<'EOF'
+          # Inventor Hole + Patterns FULL PQH
+
+          Final deliverables:
+          - Inventor_Hole_Agujero_FULL_PQH.mp4
+          - Inventor_Rectangular_Pattern_FULL_PQH.mp4
+          - Inventor_Circular_Pattern_FULL_PQH.mp4
+          - Inventor_Patterns_Rectangular_Circular_FULL_TOTAL_PQH.mp4
+
+          Render protocol: ManimCE 0.20.1, literal PQL gate, literal PQH final, 1920x1080, 30 fps, H.264/yuv420p, full FFmpeg decode, distributed audit frames and SHA-256.
+          EOF
+          (cd delivery && zip -qr Inventor_Hole_Patterns_FULL_TOTAL_PQH_PACKAGE.zip final source qa logs README_DELIVERY.md)
+
+      - name: Upload full delivery artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Inventor-Hole-Patterns-FULL-TOTAL-PQH
+          path: render_jobs/inventor_dedicated_20260826/delivery/
+          if-no-files-found: error
+          retention-days: 14
