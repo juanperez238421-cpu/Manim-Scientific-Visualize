@@ -3,7 +3,7 @@ name: Inventor Hole + Patterns FULL PQH PUSH 20260826
 on:
   push:
     branches:
-      - render/inventor-hole-patterns-pqh-run-20260826
+      - render/inventor-hole-patterns-exec-20260826
 
 permissions:
   contents: read
