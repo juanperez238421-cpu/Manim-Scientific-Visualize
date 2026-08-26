@@ -1,0 +1,17 @@
+EMBOSS / REPUJADO SENIOR V1 — AUTOMATED QA PASS
+ManimCE: 0.20.1
+Final render: literal -pqh
+Resolution: 1920 x 1080
+Frame rate: 30/1
+Codec: h264
+Pixel format: yuv420p
+Duration: 123.959505 s
+Full FFmpeg decode: PASS
+Static Python compile: PASS
+HUD no-overlap assertion: PASS at render time
+Parameter-card right safe-area assertion: PASS at render time
+Profile-fit and shallow-depth assertions: PASS at render time
+Consolidated style source: latest Fillet / Chamfer / Hole senior family.
+Pedagogy: Sketch1 -> Extrusion1 -> Top Face -> Sketch2 closed hexagon -> Emboss parameters -> 3D +3 mm preview -> Emboss vs Engrave -> validation -> Emboss1 -> 3-to-5 mm parametric edit -> applications -> final orbit.
+Audit frames: 24
+Contact sheet: generated
