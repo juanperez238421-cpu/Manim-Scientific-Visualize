@@ -1,253 +1,196 @@
-name: Inventor Dedicated Operations 2D-to-3D FINAL PQH 20260826
+name: Inventor Misc House Style V3 FINAL PQH 20260826
 
 on:
   push:
     branches:
       - render-inventor-dedicated-20260826
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: inventor-2d-to-3d-final-20260826
+  group: inventor-misc-house-style-v3-final-20260826
   cancel-in-progress: true
-
-env:
-  JOB_ROOT: render_jobs/inventor_dedicated_20260826
-  MANIM_IMAGE: manimcommunity/manim:v0.20.1
 
 jobs:
   render:
-    name: Render ${{ matrix.slug }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 120
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 8
       matrix:
         include:
           - slug: 01_fillet_redondeo
             file: scenes/01_fillet_redondeo.py
-            scene: InventorFilletDetailed
+            scene: InventorFilletHouseStyle
           - slug: 02_chamfer_chaflan
             file: scenes/02_chamfer_chaflan.py
-            scene: InventorChamferDetailed
+            scene: InventorChamferHouseStyle
           - slug: 03_mirror_simetria
             file: scenes/03_mirror_simetria.py
-            scene: InventorMirrorDetailed
+            scene: InventorMirrorHouseStyle
           - slug: 04_rib_nervio
             file: scenes/04_rib_nervio.py
-            scene: InventorRibDetailed
+            scene: InventorRibHouseStyle
           - slug: 05_emboss_repujado
             file: scenes/05_emboss_repujado.py
-            scene: InventorEmbossDetailed
+            scene: InventorEmbossHouseStyle
           - slug: 06_coil_bobina
             file: scenes/06_coil_bobina.py
-            scene: InventorCoilDetailed
+            scene: InventorCoilHouseStyle
           - slug: 07_rectangular_pattern_lineal
             file: scenes/07_rectangular_pattern_lineal.py
-            scene: InventorRectPatternDetailed
+            scene: InventorRectPatternHouseStyle
           - slug: 08_circular_pattern
             file: scenes/08_circular_pattern.py
-            scene: InventorCircularPatternDetailed
+            scene: InventorCircularPatternHouseStyle
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    defaults:
+      run:
+        working-directory: render_jobs/inventor_misc_house_style_v3_20260826
 
     steps:
-      - name: Checkout exact render branch
+      - name: Checkout House-style source branch
         uses: actions/checkout@v4
         with:
-          ref: render-inventor-dedicated-20260826
+          ref: render-inventor-misc-house-style-v3-20260826
 
-      - name: Static Python validation
+      - name: Static preflight
         shell: bash
         run: |
           set -euo pipefail
-          python -m py_compile \
-            "$JOB_ROOT/library/inventor_pro_ui.py" \
-            "$JOB_ROOT/library/sketch_to_3d_helpers.py" \
-            "$JOB_ROOT/${{ matrix.file }}"
+          python -m py_compile library/jp_misc_cad_style.py scenes/*.py
+          grep -n "class ${{ matrix.scene }}" "${{ matrix.file }}"
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1 || ! command -v zip >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ffmpeg zip
+          fi
+          rm -rf preview hq delivery
+          mkdir -p preview hq "delivery/${{ matrix.slug }}/frames" "delivery/${{ matrix.slug }}/logs"
+          chmod -R a+rwX .
 
-      - name: Prepare ManimCE 0.20.1 and QA tools
+      - name: Pull exact ManimCE 0.20.1 image
+        run: docker pull manimcommunity/manim:v0.20.1
+
+      - name: PQL smoke render
         shell: bash
         run: |
           set -euo pipefail
-          command -v ffprobe >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null)
-          command -v zip >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq zip >/dev/null)
-          docker pull "$MANIM_IMAGE" >/dev/null
-          ffprobe -version | head -1
-
-      - name: Literal PQL smoke render
-        shell: bash
-        run: |
-          set -euo pipefail
-          cd "$JOB_ROOT"
-          rm -rf "media_pql/${{ matrix.slug }}"
-          mkdir -p "delivery/${{ matrix.slug }}"
           docker run --rm \
-            --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home \
-            -e PYTHONPATH="/manim/$JOB_ROOT" \
-            -v "$GITHUB_WORKSPACE:/manim" \
-            -w "/manim/$JOB_ROOT" \
-            --entrypoint bash "$MANIM_IMAGE" -c "
-              set -euo pipefail
-              mkdir -p /tmp/manim-bin
-              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
-              chmod +x /tmp/manim-bin/xdg-open
-              export PATH=/tmp/manim-bin:\$PATH
-              manim -pql '${{ matrix.file }}' '${{ matrix.scene }}' \
-                --fps 15 --format=mp4 \
-                --media_dir 'media_pql/${{ matrix.slug }}' \
-                --disable_caching
-            " 2>&1 | tee "delivery/${{ matrix.slug }}/render_pql.log"
-          PREVIEW="$(find "media_pql/${{ matrix.slug }}" -type f -name '${{ matrix.scene }}.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
-          test -n "$PREVIEW" && test -s "$PREVIEW"
+            -e LESSON_TIME_SCALE=0.18 \
+            -e FILE='${{ matrix.file }}' \
+            -e SCENE='${{ matrix.scene }}' \
+            -e MEDIA_DIR="/manim/preview/${{ matrix.slug }}" \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 \
+            -c 'set -euo pipefail; mkdir -p /tmp/bin; printf "#!/bin/sh\nexit 0\n" > /tmp/bin/xdg-open; chmod +x /tmp/bin/xdg-open; export PATH="/tmp/bin:$PATH"; manim -pql "$FILE" "$SCENE" --media_dir "$MEDIA_DIR" --format=mp4 --disable_caching' \
+            2>&1 | tee "delivery/${{ matrix.slug }}/logs/pql.log"
 
-      - name: Literal PQH final render
+      - name: PQH final render
         shell: bash
         run: |
           set -euo pipefail
-          cd "$JOB_ROOT"
-          rm -rf "media/${{ matrix.slug }}"
           docker run --rm \
-            --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home \
-            -e PYTHONPATH="/manim/$JOB_ROOT" \
-            -v "$GITHUB_WORKSPACE:/manim" \
-            -w "/manim/$JOB_ROOT" \
-            --entrypoint bash "$MANIM_IMAGE" -c "
-              set -euo pipefail
-              mkdir -p /tmp/manim-bin
-              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
-              chmod +x /tmp/manim-bin/xdg-open
-              export PATH=/tmp/manim-bin:\$PATH
-              manim -pqh '${{ matrix.file }}' '${{ matrix.scene }}' \
-                --fps 30 --format=mp4 \
-                --media_dir 'media/${{ matrix.slug }}' \
-                --disable_caching
-            " 2>&1 | tee "delivery/${{ matrix.slug }}/render_pqh.log"
-          FINAL="$(find "media/${{ matrix.slug }}" -type f -name '${{ matrix.scene }}.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
-          test -n "$FINAL" && test -s "$FINAL"
-          cp "$FINAL" "delivery/${{ matrix.slug }}/${{ matrix.slug }}_PQH.mp4"
-          cp "${{ matrix.file }}" "delivery/${{ matrix.slug }}/${{ matrix.slug }}.py"
-          cp library/inventor_pro_ui.py "delivery/${{ matrix.slug }}/inventor_pro_ui.py"
-          cp library/sketch_to_3d_helpers.py "delivery/${{ matrix.slug }}/sketch_to_3d_helpers.py"
+            -e LESSON_TIME_SCALE=1.0 \
+            -e FILE='${{ matrix.file }}' \
+            -e SCENE='${{ matrix.scene }}' \
+            -e MEDIA_DIR="/manim/hq/${{ matrix.slug }}" \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 \
+            -c 'set -euo pipefail; mkdir -p /tmp/bin; printf "#!/bin/sh\nexit 0\n" > /tmp/bin/xdg-open; chmod +x /tmp/bin/xdg-open; export PATH="/tmp/bin:$PATH"; manim -pqh "$FILE" "$SCENE" --media_dir "$MEDIA_DIR" --format=mp4 --disable_caching' \
+            2>&1 | tee "delivery/${{ matrix.slug }}/logs/pqh.log"
+          mapfile -t candidates < <(find "hq/${{ matrix.slug }}" -type f -name '*.mp4' ! -path '*/partial_movie_files/*' | sort)
+          printf '%s\n' "${candidates[@]}" > "delivery/${{ matrix.slug }}/final_candidates.txt"
+          test "${#candidates[@]}" -eq 1
+          cp "${candidates[0]}" "delivery/${{ matrix.slug }}/${{ matrix.slug }}_PQH.mp4"
 
-      - name: Strict technical QA and audit frames
+      - name: Verify and package operation
         shell: bash
         run: |
           set -euo pipefail
-          cd "$JOB_ROOT"
-          OUT="delivery/${{ matrix.slug }}"
-          F="$OUT/${{ matrix.slug }}_PQH.mp4"
-          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
-          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
-          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
-          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
-          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
-          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
-          SIZE="$(ffprobe -v error -show_entries format=size -of csv=p=0 "$F")"
-          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
-            "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > "$OUT/VIDEO_TECHNICAL.tsv"
-          test "$W" = 1920
-          test "$H" = 1080
-          test "$FPS" = 30/1
-          test "$CODEC" = h264
-          test "$PIX" = yuv420p
-          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/full_decode.log"
-          mkdir -p "$OUT/audit_frames"
-          for P in 0.04 0.13 0.24 0.36 0.49 0.62 0.75 0.88 0.96; do
-            T="$(python -c "print(float('$DUR')*float('$P'))")"
-            TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
-            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "$OUT/audit_frames/frame_${TAG}.png"
-          done
-          sha256sum "$F" "$OUT/${{ matrix.slug }}.py" "$OUT/inventor_pro_ui.py" "$OUT/sketch_to_3d_helpers.py" > "$OUT/SHA256SUMS.txt"
-          cat > "$OUT/RENDER_INFO.txt" <<EOF
-          Scene: ${{ matrix.scene }}
-          Source: ${{ matrix.file }}
-          ManimCE: 0.20.1
-          Preview: literal -pql at 15 fps
-          Final: literal -pqh at 30 fps
-          Output: 1920x1080, H.264, yuv420p
-          Pedagogy: 2D Sketch -> dimensions/constraints -> Finish Sketch -> 3D base -> dedicated feature -> preview -> OK -> Browser -> final orbit
-          Visual system: Autodesk Inventor Professional inspired ribbon + Model Browser + Properties + gray CAD canvas
-          QA: py_compile + PQL + PQH + ffprobe + full FFmpeg decode + 9 audit frames + SHA-256
-          EOF
-          (
-            cd "$OUT"
-            zip -9 -r "${{ matrix.slug }}_FULL_PACKAGE.zip" \
-              "${{ matrix.slug }}_PQH.mp4" "${{ matrix.slug }}.py" \
-              inventor_pro_ui.py sketch_to_3d_helpers.py \
-              VIDEO_TECHNICAL.tsv RENDER_INFO.txt SHA256SUMS.txt \
-              render_pql.log render_pqh.log full_decode.log audit_frames/ >/dev/null
-          )
+          VIDEO="delivery/${{ matrix.slug }}/${{ matrix.slug }}_PQH.mp4"
+          test -s "$VIDEO"
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of json "$VIDEO" > "delivery/${{ matrix.slug }}/ffprobe.json"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$VIDEO" | tr -d '[:space:]')" = 1920
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$VIDEO" | tr -d '[:space:]')" = 1080
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$VIDEO" | tr -d '[:space:]')" = 30/1
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$VIDEO" | tr -d '[:space:]')" = h264
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$VIDEO" | tr -d '[:space:]')" = yuv420p
+          ffmpeg -v error -i "$VIDEO" -f null -
+          sha256sum "$VIDEO" > "delivery/${{ matrix.slug }}/sha256.txt"
+          ffmpeg -y -i "$VIDEO" -vf 'fps=1/8,scale=640:-1,tile=3x3' -frames:v 1 "delivery/${{ matrix.slug }}/frames/control_sheet.jpg"
+          cp "${{ matrix.file }}" "delivery/${{ matrix.slug }}/"
+          cp library/jp_misc_cad_style.py README.md "delivery/${{ matrix.slug }}/"
+          echo 'PASS: PQL + PQH + ffprobe + full decode' > "delivery/${{ matrix.slug }}/QA_PASS.txt"
 
-      - name: Upload verified operation package
+      - name: Upload operation artifact
         uses: actions/upload-artifact@v4
         with:
-          name: inventor-${{ matrix.slug }}
-          path: |
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/${{ matrix.slug }}_PQH.mp4
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/${{ matrix.slug }}.py
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/inventor_pro_ui.py
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/sketch_to_3d_helpers.py
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/${{ matrix.slug }}_FULL_PACKAGE.zip
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/VIDEO_TECHNICAL.tsv
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/RENDER_INFO.txt
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/SHA256SUMS.txt
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/audit_frames/
+          name: inventor-misc-${{ matrix.slug }}
+          path: render_jobs/inventor_misc_house_style_v3_20260826/delivery/${{ matrix.slug }}/
           if-no-files-found: error
           retention-days: 7
 
+      - name: Upload debug on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inventor-misc-${{ matrix.slug }}-debug
+          path: render_jobs/inventor_misc_house_style_v3_20260826/delivery/${{ matrix.slug }}/
+          if-no-files-found: warn
+          retention-days: 2
+
   package:
-    name: Build complete 8-video ZIP
     needs: render
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
-      - name: Checkout exact source branch
+      - name: Checkout House-style sources
         uses: actions/checkout@v4
         with:
-          ref: render-inventor-dedicated-20260826
-
-      - name: Download all verified operation artifacts
+          ref: render-inventor-misc-house-style-v3-20260826
+      - name: Ensure FFmpeg and ZIP
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v zip >/dev/null 2>&1; then sudo apt-get update -qq && sudo apt-get install -y ffmpeg zip; fi
+      - name: Download all verified operations
         uses: actions/download-artifact@v4
         with:
-          pattern: inventor-*
-          path: master
+          pattern: inventor-misc-0*
+          path: collected
           merge-multiple: false
-
-      - name: Build final master package
+      - name: Assemble final package
         shell: bash
         run: |
           set -euo pipefail
-          command -v zip >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq zip >/dev/null)
-          mkdir -p master/_project_sources
-          cp "$JOB_ROOT/README.md" master/_project_sources/README.md
-          cp "$JOB_ROOT/library/inventor_pro_ui.py" master/_project_sources/inventor_pro_ui.py
-          cp "$JOB_ROOT/library/sketch_to_3d_helpers.py" master/_project_sources/sketch_to_3d_helpers.py
-          cp "$JOB_ROOT"/scenes/*.py master/_project_sources/
-          find master -type f -name '*_PQH.mp4' | sort > master/VIDEOS_INCLUDED.txt
-          find master/_project_sources -type f -name '*.py' | sort > master/SOURCES_INCLUDED.txt
-          test "$(wc -l < master/VIDEOS_INCLUDED.txt)" -eq 8
-          cat > master/PACKAGE_INFO.txt <<'EOF'
-          Autodesk Inventor Professional inspired dedicated operations package
-          8 independent ManimCE lessons and 8 verified PQH MP4 videos
-          Every lesson explicitly teaches: 2D croquis -> constraints/dimensions -> 3D base -> feature setup -> preview -> confirmation -> final 3D orbit
-          Operations: Fillet, Chamfer, Mirror, Rib, Emboss, Coil, Rectangular Pattern, Circular Pattern
-          ManimCE 0.20.1 | 1920x1080 | 30 fps | H.264/yuv420p
-          EOF
-          zip -9 -r Inventor_Professional_2D_to_3D_8Tools_FULL_PQH_20260826.zip master >/dev/null
-          sha256sum Inventor_Professional_2D_to_3D_8Tools_FULL_PQH_20260826.zip > Inventor_Professional_2D_to_3D_8Tools_FULL_PQH_20260826.zip.sha256
-
-      - name: Upload final complete package
+          mkdir -p FINAL_PACKAGE/sources FINAL_PACKAGE/individual_videos FINAL_PACKAGE/qa
+          SLUGS=(01_fillet_redondeo 02_chamfer_chaflan 03_mirror_simetria 04_rib_nervio 05_emboss_repujado 06_coil_bobina 07_rectangular_pattern_lineal 08_circular_pattern)
+          : > concat.txt
+          for slug in "${SLUGS[@]}"; do
+            DIR="collected/inventor-misc-${slug}"
+            VIDEO="$DIR/${slug}_PQH.mp4"
+            test -s "$VIDEO"
+            cp "$VIDEO" FINAL_PACKAGE/individual_videos/
+            cp "$DIR/ffprobe.json" "$DIR/sha256.txt" "$DIR/QA_PASS.txt" FINAL_PACKAGE/qa/
+            cp "$DIR/frames/control_sheet.jpg" "FINAL_PACKAGE/qa/${slug}_control_sheet.jpg"
+            printf "file '%s'\n" "$PWD/$VIDEO" >> concat.txt
+          done
+          ffmpeg -y -f concat -safe 0 -i concat.txt -c copy FINAL_PACKAGE/Inventor_Misc_Tools_HouseStyle_V3_MASTER_PQH.mp4
+          ffmpeg -v error -i FINAL_PACKAGE/Inventor_Misc_Tools_HouseStyle_V3_MASTER_PQH.mp4 -f null -
+          cp render_jobs/inventor_misc_house_style_v3_20260826/README.md FINAL_PACKAGE/
+          cp -R render_jobs/inventor_misc_house_style_v3_20260826/library render_jobs/inventor_misc_house_style_v3_20260826/scenes FINAL_PACKAGE/sources/
+          sha256sum FINAL_PACKAGE/Inventor_Misc_Tools_HouseStyle_V3_MASTER_PQH.mp4 > FINAL_PACKAGE/MASTER_SHA256.txt
+          zip -r Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826.zip FINAL_PACKAGE >/dev/null
+          sha256sum Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826.zip > PACKAGE_SHA256.txt
+      - name: Upload total package
         uses: actions/upload-artifact@v4
         with:
-          name: Inventor-Professional-2D-to-3D-8Tools-FULL-PQH-20260826
+          name: Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826
           path: |
-            Inventor_Professional_2D_to_3D_8Tools_FULL_PQH_20260826.zip
-            Inventor_Professional_2D_to_3D_8Tools_FULL_PQH_20260826.zip.sha256
-            master/VIDEOS_INCLUDED.txt
-            master/SOURCES_INCLUDED.txt
-            master/PACKAGE_INFO.txt
+            Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826.zip
+            PACKAGE_SHA256.txt
+            FINAL_PACKAGE/
           if-no-files-found: error
           retention-days: 7
