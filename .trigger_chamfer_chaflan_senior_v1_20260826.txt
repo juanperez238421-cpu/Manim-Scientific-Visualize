@@ -1,0 +1,2 @@
+Trigger Chamfer / Chaflan Senior V1 final QA render.
+Target: 02_chamfer_chaflan.mp4
