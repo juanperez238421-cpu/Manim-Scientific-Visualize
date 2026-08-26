@@ -1,132 +1,155 @@
-name: House Step V3 Push Render 20260818
+name: Inventor Fillet Redondeo Senior V5 QA FINAL PQH 20260826
 
 on:
   push:
     branches:
-      - house-step-v3-render-20260818
+      - render-inventor-dedicated-20260826
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: inventor-fillet-redondeo-senior-v5-20260826
+  cancel-in-progress: true
+
+env:
+  JOB_ROOT: render_jobs/fillet_redondeo_senior_v5_20260826
+  MANIM_IMAGE: manimcommunity/manim:v0.20.1
 
 jobs:
-  render:
-    if: github.actor != 'github-actions[bot]'
+  render_fillet_v5:
+    name: Render Fillet Redondeo Senior V5 QA
     runs-on: ubuntu-latest
-    timeout-minutes: 120
-
+    timeout-minutes: 150
     steps:
-      - name: Checkout render branch
+      - name: Checkout exact render branch
         uses: actions/checkout@v4
         with:
-          ref: house-step-v3-render-20260818
-
-      - name: Persist STARTED
+          ref: render-inventor-dedicated-20260826
+      - name: Static Python and lesson-contract QA
         shell: bash
         run: |
           set -euo pipefail
-          OUT=render_jobs/house_step_v3/delivery
-          mkdir -p "$OUT"
-          printf 'STARTED\n' > "$OUT/STATUS.txt"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$OUT/STATUS.txt"
-          git commit -m 'House Step V3 render started' || true
-          git push origin HEAD:house-step-v3-render-20260818
-
-      - name: Render PQL and PQH, verify, commit delivery
+          python -m py_compile "$JOB_ROOT/fillet_redondeo_senior_v5.py"
+          grep -q 'class InventorFilletRedondeoSeniorV5' "$JOB_ROOT/fillet_redondeo_senior_v5.py"
+          grep -q 'Sketch1' "$JOB_ROOT/fillet_redondeo_senior_v5.py"
+          grep -q 'Extrusion1' "$JOB_ROOT/fillet_redondeo_senior_v5.py"
+          grep -q 'Edge1' "$JOB_ROOT/fillet_redondeo_senior_v5.py"
+          grep -q 'R = 8 mm' "$JOB_ROOT/fillet_redondeo_senior_v5.py"
+          grep -q 'Fillet1' "$JOB_ROOT/fillet_redondeo_senior_v5.py"
+          grep -q 'assert_safe' "$JOB_ROOT/fillet_redondeo_senior_v5.py"
+      - name: Prepare ManimCE 0.20.1 and QA tools
         shell: bash
         run: |
-          set -uo pipefail
-          JOB=render_jobs/house_step_v3
-          SRC="$JOB/House_Extrusion_3D_ManimCE.py"
-          OUT="$JOB/delivery"
-          rm -rf media_pql media "$OUT/audit_frames"
-          mkdir -p "$OUT/audit_frames"
-
-          persist_fail() {
-            CODE="$1"
-            printf 'FAILED\ncode=%s\n' "$CODE" > "$OUT/STATUS.txt"
-            git add "$OUT" || true
-            git commit -m "House Step V3 render failed $CODE" || true
-            git push origin HEAD:house-step-v3-render-20260818 || true
-            exit 1
-          }
-
-          python -m py_compile "$SRC" > "$OUT/py_compile.log" 2>&1 || persist_fail PY_COMPILE
-          docker pull manimcommunity/manim:v0.20.1 > "$OUT/docker_pull.log" 2>&1 || persist_fail DOCKER_PULL
-
-          set +e
-          docker run --rm --user "$(id -u):$(id -g)" \
-            -e HOME=/tmp/manim-home -v "$PWD:/manim" -w /manim \
-            --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+          set -euo pipefail
+          command -v ffprobe >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null)
+          command -v zip >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq zip >/dev/null)
+          docker pull "$MANIM_IMAGE" >/dev/null
+      - name: Literal PQL smoke render
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$JOB_ROOT"
+          rm -rf media_pql media delivery
+          mkdir -p delivery/audit_frames
+          chmod -R a+rwX .
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+            -v "$GITHUB_WORKSPACE:/manim" -w "/manim/$JOB_ROOT" \
+            --entrypoint bash "$MANIM_IMAGE" -c "
               set -euo pipefail
               mkdir -p /tmp/manim-bin
               printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:\$PATH
-              manim -pql $SRC HouseExtrusion3D --format=mp4 --media_dir media_pql --disable_caching
-            " 2>&1 | tee "$OUT/render_pql.log"
-          PQL=${PIPESTATUS[0]}
-          set -e
-          [ "$PQL" -eq 0 ] || persist_fail PQL_RENDER
-
-          PREVIEW="$(find media_pql -type f -name 'HouseExtrusion3D.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
-          [ -n "$PREVIEW" ] && [ -s "$PREVIEW" ] || persist_fail PQL_OUTPUT
-
-          set +e
-          docker run --rm --user "$(id -u):$(id -g)" \
-            -e HOME=/tmp/manim-home -v "$PWD:/manim" -w /manim \
-            --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              manim -pql fillet_redondeo_senior_v5.py InventorFilletRedondeoSeniorV5 \
+                --fps 15 --format=mp4 --media_dir media_pql --disable_caching
+            " 2>&1 | tee delivery/render_pql.log
+          PQL="$(find media_pql -type f -name 'InventorFilletRedondeoSeniorV5.mp4' ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$JOB_ROOT"
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+            -v "$GITHUB_WORKSPACE:/manim" -w "/manim/$JOB_ROOT" \
+            --entrypoint bash "$MANIM_IMAGE" -c "
               set -euo pipefail
               mkdir -p /tmp/manim-bin
               printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:\$PATH
-              manim -pqh $SRC HouseExtrusion3D --fps 30 --format=mp4 --media_dir media --disable_caching
-            " 2>&1 | tee "$OUT/render_pqh.log"
-          PQH=${PIPESTATUS[0]}
-          set -e
-          [ "$PQH" -eq 0 ] || persist_fail PQH_RENDER
-
-          FINAL="$(find media -type f -name 'HouseExtrusion3D.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
-          [ -n "$FINAL" ] && [ -s "$FINAL" ] || persist_fail PQH_OUTPUT
-          cp "$FINAL" "$OUT/House_Extrusion_3D_STEP_BY_STEP_V3_PQH.mp4"
-          cp "$SRC" "$OUT/House_Extrusion_3D_ManimCE.py"
-
-          F="$OUT/House_Extrusion_3D_STEP_BY_STEP_V3_PQH.mp4"
-          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
-          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
-          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
-          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
-          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
-          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
-          SIZE="$(ffprobe -v error -show_entries format=size -of csv=p=0 "$F")"
-          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > "$OUT/VIDEO_TECHNICAL.tsv"
-          [ "$W" = 1920 ] || persist_fail WIDTH
-          [ "$H" = 1080 ] || persist_fail HEIGHT
-          [ "$FPS" = 30/1 ] || persist_fail FPS
-          [ "$CODEC" = h264 ] || persist_fail CODEC
-          [ "$PIX" = yuv420p ] || persist_fail PIX_FMT
-          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/full_decode.log" || persist_fail FULL_DECODE
-
-          for P in 0.05 0.15 0.25 0.35 0.45 0.55 0.65 0.75 0.85 0.95; do
+              manim -pqh fillet_redondeo_senior_v5.py InventorFilletRedondeoSeniorV5 \
+                --fps 30 --format=mp4 --media_dir media --disable_caching
+            " 2>&1 | tee delivery/render_pqh.log
+          FINAL="$(find media -type f -name 'InventorFilletRedondeoSeniorV5.mp4' ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" delivery/Inventor_Fillet_Redondeo_Senior_V5_FINAL_PQH.mp4
+          cp fillet_redondeo_senior_v5.py delivery/Inventor_Fillet_Redondeo_Senior_V5.py
+      - name: Senior automated technical QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$JOB_ROOT"
+          F=delivery/Inventor_Fillet_Redondeo_Senior_V5_FINAL_PQH.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F" | tr -d '[:space:]')"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F" | tr -d '[:space:]')"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F" | tr -d '[:space:]')"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F" | tr -d '[:space:]')"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F" | tr -d '[:space:]')"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F" | tr -d '[:space:]')"
+          SIZE="$(ffprobe -v error -show_entries format=size -of csv=p=0 "$F" | tr -d '[:space:]')"
+          test "$W" = 1920; test "$H" = 1080; test "$FPS" = 30/1; test "$CODEC" = h264; test "$PIX" = yuv420p
+          python - "$DUR" <<'PY'
+          import sys
+          d=float(sys.argv[1])
+          assert 105 <= d <= 220, f"Unexpected lesson duration: {d}"
+          PY
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> delivery/full_decode.log
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of json "$F" > delivery/VIDEO_TECHNICAL.json
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > delivery/VIDEO_TECHNICAL.tsv
+          for P in 0.04 0.10 0.16 0.22 0.28 0.34 0.40 0.46 0.52 0.58 0.64 0.70 0.76 0.82 0.89 0.96; do
             T="$(python -c "print(float('$DUR')*float('$P'))")"
             TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
-            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "$OUT/audit_frames/frame_${TAG}.png" || persist_fail QA_FRAME
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "delivery/audit_frames/frame_${TAG}.png"
           done
-
-          sha256sum "$F" "$SRC" > "$OUT/SHA256SUMS.txt"
-          cat > "$OUT/RENDER_INFO.txt" <<'EOF'
-Scene: HouseExtrusion3D
-Version: Senior Step-by-Step V3
-ManimCE: 0.20.1
-Preview: literal -pql
-Final: literal -pqh, 1920x1080, 30 fps, H.264/yuv420p
-Sequence: terrain -> slab sketch -> slab extrusion -> sketch walls/columns on slab -> columns -> perimeter walls -> interior walls -> negative door/window cuts -> roof -> orbit
-QA: py_compile + PQL + PQH + ffprobe + full decode + 10 audit frames + SHA-256
-EOF
-          printf 'SUCCESS\n' > "$OUT/STATUS.txt"
-
-          git add "$OUT"
-          git commit -m 'House Step V3 verified PQH delivery'
-          git push origin HEAD:house-step-v3-render-20260818
+          ffmpeg -y -loglevel error -pattern_type glob -i 'delivery/audit_frames/*.png' -vf 'scale=480:-1,tile=4x4' -frames:v 1 delivery/QA_CONTACT_SHEET.jpg
+          sha256sum "$F" delivery/Inventor_Fillet_Redondeo_Senior_V5.py > delivery/SHA256SUMS.txt
+          cat > delivery/QA_AUTOMATED_REPORT.txt <<EOF
+          FILLET / REDONDEO SENIOR V5 — AUTOMATED QA PASS
+          ManimCE: 0.20.1
+          Final render: literal -pqh
+          Resolution: $W x $H
+          Frame rate: $FPS
+          Codec: $CODEC
+          Pixel format: $PIX
+          Duration: $DUR s
+          Full FFmpeg decode: PASS
+          Static Python compile: PASS
+          Safe-area assertions embedded in scene: PASS at render time
+          Audit frames: 16
+          Contact sheet: generated
+          EOF
+          zip -9 -j delivery/Inventor_Fillet_Redondeo_Senior_V5_FULL_PACKAGE.zip \
+            delivery/Inventor_Fillet_Redondeo_Senior_V5_FINAL_PQH.mp4 \
+            delivery/Inventor_Fillet_Redondeo_Senior_V5.py \
+            delivery/VIDEO_TECHNICAL.json delivery/VIDEO_TECHNICAL.tsv \
+            delivery/QA_AUTOMATED_REPORT.txt delivery/QA_CONTACT_SHEET.jpg \
+            delivery/SHA256SUMS.txt delivery/render_pql.log delivery/render_pqh.log delivery/full_decode.log
+      - name: Upload verified V5 package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Inventor-Fillet-Redondeo-Senior-V5-QA-FINAL-PQH
+          path: |
+            ${{ env.JOB_ROOT }}/delivery/Inventor_Fillet_Redondeo_Senior_V5_FINAL_PQH.mp4
+            ${{ env.JOB_ROOT }}/delivery/Inventor_Fillet_Redondeo_Senior_V5.py
+            ${{ env.JOB_ROOT }}/delivery/Inventor_Fillet_Redondeo_Senior_V5_FULL_PACKAGE.zip
+            ${{ env.JOB_ROOT }}/delivery/VIDEO_TECHNICAL.json
+            ${{ env.JOB_ROOT }}/delivery/VIDEO_TECHNICAL.tsv
+            ${{ env.JOB_ROOT }}/delivery/QA_AUTOMATED_REPORT.txt
+            ${{ env.JOB_ROOT }}/delivery/QA_CONTACT_SHEET.jpg
+            ${{ env.JOB_ROOT }}/delivery/SHA256SUMS.txt
+            ${{ env.JOB_ROOT }}/delivery/audit_frames/
+          if-no-files-found: error
+          retention-days: 7
