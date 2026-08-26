@@ -1,2 +1,3 @@
 Trigger registered workflow after branch-specific YAML update.
 2026-08-26 HouseStyle V3
+Attempt: single-runner total package
