@@ -1,0 +1,2 @@
+Trigger Senior V6 final visual QA render after workflow registration.
+2026-08-26
