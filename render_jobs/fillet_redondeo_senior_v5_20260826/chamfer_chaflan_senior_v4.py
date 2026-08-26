@@ -5,8 +5,9 @@ from manim import *
 
 from chamfer_chaflan_senior_v3 import (
     InventorChamferChaflanSeniorV3,
-    DARK, SKETCH, VALID, REMOVE, BOLD, smooth,
+    DARK, SKETCH, VALID, BOLD, smooth,
 )
+from chamfer_chaflan_senior_v2 import REMOVE
 
 
 class InventorChamferChaflanSeniorV4(InventorChamferChaflanSeniorV3):
