@@ -1,0 +1,48 @@
+name: Persist Hole Agujero Senior V2 Delivery 20260826
+
+on:
+  push:
+    branches: [delivery-hole-agujero-20260826]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  persist:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: delivery-hole-agujero-20260826
+          fetch-depth: 0
+      - name: Download verified Hole artifact from successful PQH run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/hole-artifact deliveries/hole_agujero_senior_v2
+          mkdir -p /tmp/hole-artifact deliveries/hole_agujero_senior_v2
+          gh run download 33003020577 -n '03-hole-agujero-Senior-V2-FINAL-QA-PQH' -D /tmp/hole-artifact
+          find /tmp/hole-artifact -maxdepth 2 -type f -printf '%p\n'
+          MP4="$(find /tmp/hole-artifact -type f -name '03_hole_agujero.mp4' | head -1)"
+          test -n "$MP4" && test -s "$MP4"
+          cp "$MP4" deliveries/hole_agujero_senior_v2/Inventor_Hole_Agujero_Senior_V2_FINAL_PQH.mp4
+          for f in VIDEO_TECHNICAL.json VIDEO_TECHNICAL.tsv QA_AUTOMATED_REPORT.txt QA_CONTACT_SHEET.jpg SHA256SUMS.txt hole_agujero_senior_v2.py; do
+            SRC="$(find /tmp/hole-artifact -type f -name "$f" | head -1 || true)"
+            if [ -n "$SRC" ]; then cp "$SRC" deliveries/hole_agujero_senior_v2/; fi
+          done
+          test -s deliveries/hole_agujero_senior_v2/Inventor_Hole_Agujero_Senior_V2_FINAL_PQH.mp4
+      - name: Commit delivery files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add deliveries/hole_agujero_senior_v2
+          git commit -m 'Persist verified Hole Agujero Senior V2 PQH delivery'
+          git push origin HEAD:delivery-hole-agujero-20260826
