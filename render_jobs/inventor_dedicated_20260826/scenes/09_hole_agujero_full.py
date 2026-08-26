@@ -48,7 +48,6 @@ class InventorHoleDetailed(InventorOperationScene):
             step_start=1,
         )
 
-        # Top-face selection and placement point.
         selected_face = Rectangle(
             width=5.55,
             height=2.60,
@@ -69,15 +68,15 @@ class InventorHoleDetailed(InventorOperationScene):
             radius=0.075,
             color=SELECT,
         )
-        guide_x = DashedLine3D(
-            start=LEFT * 1.60 + UP * 0.32 + OUT * 0.30,
-            end=RIGHT * 1.25 + UP * 0.32 + OUT * 0.30,
+        guide_x = DashedLine(
+            LEFT * 1.60 + UP * 0.32 + OUT * 0.30,
+            RIGHT * 1.25 + UP * 0.32 + OUT * 0.30,
             color=UI_MID,
             dash_length=0.10,
         )
-        guide_y = DashedLine3D(
-            start=RIGHT * 1.25 + DOWN * 1.05 + OUT * 0.30,
-            end=RIGHT * 1.25 + UP * 0.32 + OUT * 0.30,
+        guide_y = DashedLine(
+            RIGHT * 1.25 + DOWN * 1.05 + OUT * 0.30,
+            RIGHT * 1.25 + UP * 0.32 + OUT * 0.30,
             color=UI_MID,
             dash_length=0.10,
         )
@@ -88,11 +87,7 @@ class InventorHoleDetailed(InventorOperationScene):
             "Ubica un punto de croquis y acótalo desde referencias funcionales. Si cambia la pieza, esas cotas mantienen la posición del Hole1.",
         )
 
-        hole_profile = Circle(
-            radius=0.35,
-            color=SKETCH,
-            stroke_width=5,
-        ).move_to(placement.get_center())
+        hole_profile = Circle(radius=0.35, color=SKETCH, stroke_width=5).move_to(placement.get_center())
         self.play(Create(hole_profile), run_time=0.45)
         self.step(
             6,
@@ -118,9 +113,10 @@ class InventorHoleDetailed(InventorOperationScene):
             "Through All atraviesa todo el espesor aunque la placa cambie después. Distance sirve cuando necesitas una profundidad ciega controlada.",
         )
 
-        # Simulated Boolean cut: dark internal cylinder flush with the plate.
+        # Simulated Boolean cut: a dark internal cylinder is rendered flush with
+        # the plate so the viewer reads the feature as removed material.
         hole_void = cylinder(0.35, 0.56, UI_DARK_2, 1.0).move_to(
-            [placement.get_center()[0], placement.get_center()[1], -0.34 * 0]
+            [placement.get_center()[0], placement.get_center()[1], 0.0]
         )
         self.play(
             FadeOut(selected_face),
