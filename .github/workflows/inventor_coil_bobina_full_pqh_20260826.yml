@@ -1,0 +1,203 @@
+name: Inventor Coil Bobina FULL TOTAL PQH 20260826
+
+on:
+  push:
+    branches:
+      - render/inventor-coil-bobina-full-pqh-20260826
+
+permissions:
+  contents: read
+
+env:
+  JOB_ROOT: render_jobs/inventor_dedicated_20260826
+  MANIM_IMAGE: manimcommunity/manim:v0.20.1
+  SCENE_FILE: scenes/06_coil_bobina.py
+  SCENE_NAME: InventorCoilDetailed
+  OUTPUT_NAME: Inventor_Coil_Bobina_FULL_TOTAL_PQH.mp4
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+
+    steps:
+      - name: Checkout exact branch commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Static Python validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            "$JOB_ROOT/library/inventor_pro_ui.py" \
+            "$JOB_ROOT/library/sketch_to_3d_helpers.py" \
+            "$JOB_ROOT/$SCENE_FILE"
+
+      - name: Install render and QA dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg zip >/dev/null
+          docker pull "$MANIM_IMAGE" >/dev/null
+          ffprobe -version | head -1
+
+      - name: Literal PQL smoke render
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$JOB_ROOT"
+          rm -rf media_pql delivery
+          mkdir -p delivery/logs delivery/qa/audit_frames delivery/final delivery/source
+
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e PYTHONPATH="/manim/$JOB_ROOT" \
+            -v "$GITHUB_WORKSPACE:/manim" \
+            -w "/manim/$JOB_ROOT" \
+            --entrypoint bash "$MANIM_IMAGE" -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pql '$SCENE_FILE' '$SCENE_NAME' \
+                --fps 15 \
+                --format=mp4 \
+                --media_dir media_pql \
+                --disable_caching
+            " 2>&1 | tee delivery/logs/coil_bobina_pql.log
+
+          PREVIEW="$(find media_pql -type f -name "${SCENE_NAME}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PREVIEW" && test -s "$PREVIEW"
+          cp "$PREVIEW" delivery/qa/Inventor_Coil_Bobina_QA_PQL.mp4
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$JOB_ROOT"
+          rm -rf media
+
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e PYTHONPATH="/manim/$JOB_ROOT" \
+            -v "$GITHUB_WORKSPACE:/manim" \
+            -w "/manim/$JOB_ROOT" \
+            --entrypoint bash "$MANIM_IMAGE" -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pqh '$SCENE_FILE' '$SCENE_NAME' \
+                --fps 30 \
+                --format=mp4 \
+                --media_dir media \
+                --disable_caching
+            " 2>&1 | tee delivery/logs/coil_bobina_pqh.log
+
+          FINAL="$(find media -type f -name "${SCENE_NAME}.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" "delivery/final/$OUTPUT_NAME"
+          cp "$SCENE_FILE" delivery/source/06_coil_bobina.py
+          cp library/inventor_pro_ui.py delivery/source/inventor_pro_ui.py
+          cp library/sketch_to_3d_helpers.py delivery/source/sketch_to_3d_helpers.py
+
+      - name: Strict technical QA, full decode and audit frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$JOB_ROOT"
+          OUT=delivery/qa
+          F="delivery/final/$OUTPUT_NAME"
+
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          SIZE="$(ffprobe -v error -show_entries format=size -of csv=p=0 "$F")"
+
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+            "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > "$OUT/TECHNICAL.tsv"
+
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+
+          python - <<'PY'
+          from pathlib import Path
+          row = Path('delivery/qa/TECHNICAL.tsv').read_text().splitlines()[1].split('\t')
+          duration = float(row[5])
+          assert 40.0 <= duration <= 110.0, f'Unexpected lesson duration: {duration}'
+          print('duration QA PASS', duration)
+          PY
+
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/full_decode.log"
+          test ! -s "$OUT/full_decode.log"
+
+          mkdir -p "$OUT/audit_frames"
+          for P in 0.06 0.18 0.30 0.42 0.54 0.66 0.78 0.90; do
+            T="$(python -c "print(float('$DUR')*float('$P'))")"
+            TAG="$(python -c "print(f'{int(float('$P')*100):02d}')")"
+            ffmpeg -nostdin -y -v error -ss "$T" -i "$F" -frames:v 1 "$OUT/audit_frames/coil_${TAG}.png"
+          done
+
+          ffmpeg -nostdin -y -v error \
+            -pattern_type glob -i "$OUT/audit_frames/coil_*.png" \
+            -vf "scale=480:-1,tile=4x2" \
+            -frames:v 1 "$OUT/control_sheet.jpg"
+
+          ffprobe -v error -show_format -show_streams -of json "$F" > "$OUT/ffprobe.json"
+          sha256sum "$F" delivery/source/06_coil_bobina.py > "$OUT/SHA256SUMS.txt"
+          printf 'QA PASS\nPQL -> PQH protocol complete\n1920x1080 @ 30 fps\nH.264 / yuv420p\nFull FFmpeg decode: PASS\n' > "$OUT/QA_PASS.txt"
+
+      - name: Build delivery package
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$JOB_ROOT"
+          cat > delivery/README_DELIVERY.md <<'EOF'
+          # Inventor Coil / Bobina — FULL TOTAL PQH
+
+          Dedicated Autodesk Inventor Professional lesson using the consolidated CAD visual grammar.
+
+          Sequence:
+          1. XZ sketch plane
+          2. Centerline / Axis
+          3. Circular profile and mean radius
+          4. Finish Sketch
+          5. Coil command and reference selection
+          6. Pitch & Revolution sizing mode
+          7. Pitch interpretation
+          8. Four revolutions / axial development
+          9. Direction and rotation sense
+          10. Helical path formation
+          11. Tubular solid preview
+          12. OK -> Coil1
+          13. Final 3D orbit
+
+          Render protocol: ManimCE 0.20.1, literal -pql gate, literal -pqh final, FFprobe validation, full FFmpeg decode, audit frames and SHA-256.
+          EOF
+
+          rm -f Inventor_Coil_Bobina_FULL_TOTAL_PQH_PACKAGE.zip
+          zip -qr Inventor_Coil_Bobina_FULL_TOTAL_PQH_PACKAGE.zip delivery
+
+      - name: Upload FULL TOTAL package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Inventor-Coil-Bobina-FULL-TOTAL-PQH
+          path: |
+            ${{ env.JOB_ROOT }}/delivery
+            ${{ env.JOB_ROOT }}/Inventor_Coil_Bobina_FULL_TOTAL_PQH_PACKAGE.zip
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
