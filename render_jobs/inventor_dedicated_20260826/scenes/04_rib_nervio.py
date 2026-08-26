@@ -1,46 +1,20 @@
 from manim import *
 from library.inventor_pro_ui import *
-from library.sketch_to_3d_helpers import animate_rect_sketch_to_extrusion, finish_feature
 
-
-class InventorRibDetailed(InventorOperationScene):
-    OPERATION = "Rib"
-    FEATURE_NODE = "Rib1"
-
+class InventorRibDetailed(JPMiscCADScene):
+    OPERATION="Rib / Nervio"
     def construct(self):
-        self.install_hud(
-            [("Profile", "Sketch2 line"), ("Thickness", "6 mm"), ("Direction", "Symmetric"), ("Extent", "To Next")],
-            ["Part1.ipt", "Origin", "Sketch1", "Extrusion1", "Sketch2", "Rib1"],
-        )
-        self.intro("Nervio: crear primero el sólido base desde un croquis 2D y después convertir una línea abierta en un refuerzo 3D paramétrico.")
-
-        base = animate_rect_sketch_to_extrusion(
-            self,
-            width=4.6,
-            depth=2.55,
-            height=0.42,
-            shift=DOWN * 0.38,
-            dimensions="75 mm x 45 mm",
-            extrusion="7 mm",
-            step_start=1,
-        )
-
-        self.step(4, "Crea la pared que recibirá el refuerzo", "El nervio debe conectar material existente. Aquí una pared vertical representa la siguiente cara que limitará Extent = To Next.")
-        wall = cuboid(0.46, 2.55, 2.35, STEEL_DARK).shift(LEFT * 2.05 + DOWN * 0.38 + OUT * 0.97)
-        self.play(FadeIn(wall), run_time=0.65)
-
-        self.step(5, "Sketch2 sobre la cara: dibuja una línea abierta", "Rib no requiere un perfil cerrado. Acota la línea y restringe sus extremos para controlar posición, inclinación y dependencia.")
-        sketch = Line3D(start=[-1.82, -0.38, 0.26], end=[0.90, -0.38, 1.88], color=SKETCH, thickness=0.045)
-        self.play(Create(sketch), run_time=0.65)
-
-        self.step(6, "3D Model -> Create -> Rib", "Selecciona Sketch2, define Thickness = 6 mm y usa Symmetric para repartir el espesor a ambos lados de la línea.")
-        pts = [(-1.82, -0.15), (-1.82, 1.68), (0.92, -0.15)]
-        preview = extruded_polygon(pts, 0.34, PREVIEW, 0.58).rotate(90 * DEGREES, axis=RIGHT).shift(DOWN * 0.38)
-        self.play(FadeIn(preview), sketch.animate.set_opacity(0.30), run_time=0.75)
-
-        self.step(7, "Extent = To Next", "La vista previa debe crecer hasta encontrar el sólido siguiente. Verifica que una base, pared y nervio queden conectados sin atravesar zonas no deseadas.")
-        result = extruded_polygon(pts, 0.34, STEEL, 1.0).rotate(90 * DEGREES, axis=RIGHT).shift(DOWN * 0.38)
-        self.play(FadeOut(preview), FadeIn(result), FadeOut(sketch), run_time=0.75)
-
-        self.step(8, "OK -> Rib1", "El Browser conserva Sketch2 como dependencia de Rib1. Editar la línea reposiciona el refuerzo y cambiar Thickness modifica su espesor.")
-        finish_feature(self, 9, "Resultado: refuerzo estructural delgado creado desde una línea abierta y conectado paramétricamente al sólido.")
+        self.opening("NERVIO  •  RIB","Create a thin structural wall from an open sketch line and terminate it against existing faces.",["OPEN SKETCH","THICKNESS","EXTENT","STRUCTURAL RIB"])
+        h=self.section_header(1,"CORE IDEA: RIB STARTS FROM AN OPEN LINE","The line defines the structural path; thickness and extent turn that line into material.")
+        line=Line(LEFT*3.8+DOWN*1.3,RIGHT*.2+UP*1.4,color=BLACK,stroke_width=5); ghost=line.copy().set_stroke(width=18,opacity=.18); lab=self.text("OPEN SKETCH LINE → THIN WALL",24,BOLD).to_edge(DOWN,buff=.35); self.fixed(lab)
+        self.play(Create(line),FadeIn(lab),run_time=1.1); self.play(FadeIn(ghost),run_time=1.1); self.wait(EXPLAIN); self.clear_scene()
+        h=self.section_header(2,"BUILD THE HOST SOLID FIRST","As in House: existing geometry comes first. The rib reinforces a base plate and a vertical wall."); self.fixed(h); self.set_camera_orientation(phi=64*DEGREES,theta=-48*DEGREES,zoom=.9)
+        base=cuboid(5.4,3.2,.45,.56).shift(DOWN*.3); wall=cuboid(.45,3.2,2.7,.56).shift(LEFT*2.48+OUT*1.35+DOWN*.3); self.play(FadeIn(base),run_time=.9); self.play(FadeIn(wall),run_time=.9); self.wait(READ)
+        self.move_camera(phi=0,theta=-90*DEGREES,zoom=1,run_time=1.1); side_base=Rectangle(width=5.4,height=.45,color=BLACK,stroke_width=3).shift(DOWN*1.1); side_wall=Rectangle(width=.45,height=2.7,color=BLACK,stroke_width=3).move_to(LEFT*2.48+UP*.25); ribline=Line(LEFT*2.22+DOWN*.88,LEFT*.15+UP*1.35,color=BLACK,stroke_width=5)
+        dims=VGroup(self.text("OPEN LINE",22,BOLD).next_to(ribline,RIGHT,buff=.25),self.text("Thickness = 6 mm",22,BOLD).to_edge(DOWN,buff=.34)); self.fixed(dims); self.play(FadeOut(base),FadeOut(wall),FadeIn(side_base),FadeIn(side_wall),Create(ribline),FadeIn(dims),run_time=1.3); self.wait(EXPLAIN)
+        self.move_camera(phi=64*DEGREES,theta=-48*DEGREES,zoom=.9,run_time=1.1); self.play(FadeOut(side_base),FadeOut(side_wall),FadeOut(ribline),run_time=.4); base=cuboid(5.4,3.2,.45,.56).shift(DOWN*.3); wall=cuboid(.45,3.2,2.7,.56).shift(LEFT*2.48+OUT*1.35+DOWN*.3); self.play(FadeIn(base),FadeIn(wall),run_time=.6)
+        seed=Line3D([-2.25,0,0],[-.15,0,1.9],color=BLACK,thickness=.035); self.play(Create(seed),run_time=.7)
+        rib=VGroup(Polygon(np.array([-2.25,-.26,-.05]),np.array([-2.25,-.26,1.95]),np.array([-.15,-.26,-.05]),fill_color=GRAY_C,fill_opacity=.56,stroke_color=GRAY_B),Polygon(np.array([-2.25,.26,-.05]),np.array([-2.25,.26,1.95]),np.array([-.15,.26,-.05]),fill_color=GRAY_C,fill_opacity=.56,stroke_color=GRAY_B),Polygon(np.array([-2.25,-.26,1.95]),np.array([-2.25,.26,1.95]),np.array([-.15,.26,-.05]),np.array([-.15,-.26,-.05]),fill_color=GRAY_C,fill_opacity=.56,stroke_color=GRAY_B))
+        self.play(FadeIn(rib),seed.animate.set_opacity(.25),run_time=1.6); card=self.parameter_card("RIB",[("Profile","Open Line"),("Thickness","6 mm"),("Direction","Symmetric"),("Extent","To Next")]); self.play(FadeIn(card),run_time=.75); self.wait(EXPLAIN); self.play(FadeOut(card),FadeOut(seed),run_time=.4)
+        note=self.note("STRUCTURAL REASONING",["Rib increases stiffness with little material.","Thickness is much smaller than height.","To Next keeps termination attached to the host."],width=6.2).to_corner(DR,buff=.45).shift(UP*.45); self.fixed(note); self.play(FadeIn(note),run_time=.8); self.wait(EXPLAIN); self.play(FadeOut(note),FadeOut(h),run_time=.4)
+        self.final_orbit("OPEN SKETCH + THICKNESS + EXTENT = RIB")
