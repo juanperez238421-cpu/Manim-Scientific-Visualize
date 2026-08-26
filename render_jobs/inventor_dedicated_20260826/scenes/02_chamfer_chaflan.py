@@ -1,43 +1,25 @@
 from manim import *
 from library.inventor_pro_ui import *
-from library.sketch_to_3d_helpers import animate_rect_sketch_to_extrusion, finish_feature
 
-
-class InventorChamferDetailed(InventorOperationScene):
-    OPERATION = "Chamfer"
-    FEATURE_NODE = "Chamfer1"
-
+class InventorChamferDetailed(JPMiscCADScene):
+    OPERATION="Chamfer / Chaflán"
     def construct(self):
-        self.install_hud(
-            [("Selection", "1 Edge"), ("Type", "Distance + Angle"), ("Distance", "6 mm"), ("Angle", "45 deg")],
-            ["Part1.ipt", "Origin", "Sketch1", "Extrusion1", "Chamfer1"],
-        )
-        self.intro("Chaflán: construir primero el sólido desde un croquis 2D y después sustituir una arista por una cara plana controlada.")
-
-        raw = animate_rect_sketch_to_extrusion(
-            self,
-            width=4.4,
-            depth=2.55,
-            height=0.78,
-            shift=DOWN * 0.30,
-            dimensions="70 mm x 45 mm",
-            extrusion="12 mm",
-            step_start=1,
-        )
-
-        self.step(4, "Selecciona la arista a biselar", "Chamfer trabaja sobre aristas del sólido terminado y genera una cara plana entre las dos caras adyacentes.")
-        edge = Line3D(start=[-2.2, 0.975, -0.39], end=[2.2, 0.975, -0.39], color=SELECT, thickness=0.05)
-        self.play(Create(edge), run_time=0.55)
-
-        self.step(5, "3D Model -> Modify -> Chamfer", "Escoge el método Distance + Angle. Inventor usa la arista seleccionada y una cara de referencia para orientar el bisel.")
-        self.step(6, "Distance = 6 mm; Angle = 45 deg", "La distancia controla el retiro desde la arista y el ángulo gobierna la inclinación de la nueva cara.")
-
-        pts = [(-2.2, -1.275), (2.2, -1.275), (2.2, 0.60), (1.57, 1.275), (-2.2, 1.275)]
-        preview = extruded_polygon(pts, 0.78, PREVIEW, 0.58).shift(DOWN * 0.30)
-        self.play(FadeOut(raw, run_time=0.25), FadeIn(preview, run_time=0.65), edge.animate.set_opacity(0.35))
-        self.step(7, "Comprueba la orientación de la vista previa", "Si la cara inclinada aparece en el lado incorrecto, cambia la referencia o usa Flip Direction antes de aceptar.")
-
-        result = extruded_polygon(pts, 0.78, STEEL, 1.0).shift(DOWN * 0.30)
-        self.play(FadeOut(preview), FadeIn(result), FadeOut(edge), run_time=0.75)
-        self.step(8, "OK -> Chamfer1", "El Browser registra Chamfer1 como feature dependiente de Extrusion1 y conserva distancia, ángulo y selección.")
-        finish_feature(self, 9, "Resultado: cara inclinada de 6 mm a 45 grados, editable sin modificar el croquis base.")
+        self.opening("CHAFLÁN  •  CHAMFER","Replace a sharp corner with a flat bevel controlled by distance and angle.",["EDGE","DISTANCE","ANGLE","BEVELED SOLID"])
+        h=self.section_header(1,"CORE IDEA: CHAMFER CREATES A FLAT TRANSITION","Unlike Fillet, the new transition is planar; a straight cutting line removes the corner in section.")
+        sharp=VGroup(Line(LEFT*5+DOWN,LEFT*3+DOWN,color=BLACK,stroke_width=5),Line(LEFT*3+DOWN,LEFT*3+UP,color=BLACK,stroke_width=5))
+        bevel=VGroup(Line(RIGHT*0+DOWN,RIGHT*1+DOWN,color=BLACK,stroke_width=5),Line(RIGHT*2,RIGHT*2+UP,color=BLACK,stroke_width=5),Line(RIGHT*1+DOWN,RIGHT*2,color=BLACK,stroke_width=5))
+        labs=VGroup(self.text("SHARP",23,BOLD).move_to(LEFT*4+DOWN*2),self.text("6 mm × 45°",23,BOLD).move_to(RIGHT*1.3+DOWN*2)); self.fixed(labs)
+        self.play(Create(sharp),FadeIn(labs[0]),run_time=1); self.play(TransformFromCopy(sharp,bevel),FadeIn(labs[1]),run_time=1.4); self.wait(EXPLAIN); self.clear_scene()
+        body=self.base_plate_from_sketch(2,width=5,depth=3,height=.72,dims="80 × 48 mm",extrude="12 mm")
+        h=self.section_header(3,"SELECT THE CORNER EDGES TO BE BEVELED","This example chamfers the four vertical corners after Extrusion1 is complete."); self.fixed(h)
+        edges=VGroup(*[Line3D([sx*2.5,sy*1.5,-.36],[sx*2.5,sy*1.5,.36],color=BLACK,thickness=.035) for sx,sy in [(1,1),(-1,1),(-1,-1),(1,-1)]])
+        card=self.parameter_card("CHAMFER",[("Selection","4 Edges"),("Type","Distance + Angle"),("Distance","6 mm"),("Angle","45 deg")]); self.play(LaggedStart(*[Create(e) for e in edges],lag_ratio=.16),FadeIn(card),run_time=1.35); self.wait(READ)
+        self.play(FadeOut(card),run_time=.3); self.move_camera(phi=5*DEGREES,theta=-90*DEGREES,zoom=1,run_time=1)
+        top=Rectangle(width=5,height=3,color=BLACK,stroke_width=4); self.play(FadeOut(body),FadeOut(edges),FadeIn(top),run_time=.7)
+        w,d,c=2.5,1.5,.40; cuts=VGroup(Line([w-c,d,0],[w,d-c,0],color=BLACK,stroke_width=4),Line([-w+c,d,0],[-w,d-c,0],color=BLACK,stroke_width=4),Line([-w+c,-d,0],[-w,-d+c,0],color=BLACK,stroke_width=4),Line([w-c,-d,0],[w,-d+c,0],color=BLACK,stroke_width=4))
+        self.play(LaggedStart(*[Create(x) for x in cuts],lag_ratio=.18),run_time=1.5)
+        pts=[[-w+c,-d,0],[w-c,-d,0],[w,-d+c,0],[w,d-c,0],[w-c,d,0],[-w+c,d,0],[-w,d-c,0],[-w,-d+c,0]]; poly=Polygon(*[np.array(p) for p in pts],color=BLACK,stroke_width=4)
+        self.play(FadeOut(top),FadeOut(cuts),FadeIn(poly),run_time=1); self.wait(READ)
+        self.move_camera(phi=64*DEGREES,theta=-48*DEGREES,zoom=.9,run_time=1.1); result=chamfered_plate(5,3,.72,.40,.60); self.play(FadeOut(poly),FadeIn(result),run_time=1.25)
+        note=self.note("WHY CHAMFER?",["Break a dangerous sharp edge.","Create assembly lead-in geometry.","Prepare edges for manufacturing."],width=5.8).to_corner(DR,buff=.45).shift(UP*.45); self.fixed(note); self.play(FadeIn(note),run_time=.8); self.wait(EXPLAIN); self.play(FadeOut(note),FadeOut(h),run_time=.4)
+        self.final_orbit("EDGE + DISTANCE / ANGLE = CHAMFERED FEATURE")
