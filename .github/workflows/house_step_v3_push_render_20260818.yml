@@ -1,4 +1,4 @@
-name: Inventor Chamfer Chaflan Senior V3 FINAL QA PQH 20260826
+name: Inventor Chamfer Chaflan Senior V4 FINAL QA PQH 20260826
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: inventor-chamfer-chaflan-senior-v3-20260826
+  group: inventor-chamfer-chaflan-senior-v4-20260826
   cancel-in-progress: true
 
 env:
@@ -18,8 +18,8 @@ env:
   MANIM_IMAGE: manimcommunity/manim:v0.20.1
 
 jobs:
-  render_chamfer_v3:
-    name: Render Chamfer Chaflan Senior V3 Final QA
+  render_chamfer_v4:
+    name: Render Chamfer Chaflan Senior V4 Final QA
     runs-on: ubuntu-latest
     timeout-minutes: 180
     steps:
@@ -28,18 +28,19 @@ jobs:
         with:
           ref: render-inventor-dedicated-20260826
 
-      - name: Static Python and final composition contract QA
+      - name: Static Python and final overlap contract QA
         shell: bash
         run: |
           set -euo pipefail
           python -m py_compile "$JOB_ROOT/fillet_redondeo_senior_v5.py" \
             "$JOB_ROOT/chamfer_chaflan_senior_v1.py" \
             "$JOB_ROOT/chamfer_chaflan_senior_v2.py" \
-            "$JOB_ROOT/chamfer_chaflan_senior_v3.py"
-          grep -q 'class InventorChamferChaflanSeniorV3' "$JOB_ROOT/chamfer_chaflan_senior_v3.py"
-          grep -q 'HUD subtitle overlaps phase box' "$JOB_ROOT/chamfer_chaflan_senior_v3.py"
-          grep -q 'EXTRA_PANEL_CLEARANCE' "$JOB_ROOT/chamfer_chaflan_senior_v3.py"
-          grep -q 'V2 score: 8.7 / 10' "$JOB_ROOT/CHAMFER_V2_SECOND_VISUAL_QA.md"
+            "$JOB_ROOT/chamfer_chaflan_senior_v3.py" \
+            "$JOB_ROOT/chamfer_chaflan_senior_v4.py"
+          grep -q 'class InventorChamferChaflanSeniorV4' "$JOB_ROOT/chamfer_chaflan_senior_v4.py"
+          grep -q 'next_to(h_dim, UP' "$JOB_ROOT/chamfer_chaflan_senior_v4.py"
+          grep -q 'next_to(da, UP' "$JOB_ROOT/chamfer_chaflan_senior_v4.py"
+          grep -q 'V3 score: 9.2 / 10' "$JOB_ROOT/CHAMFER_V3_THIRD_VISUAL_QA.md"
 
       - name: Prepare ManimCE 0.20.1 and QA tools
         shell: bash
@@ -54,8 +55,8 @@ jobs:
         run: |
           set -euo pipefail
           cd "$JOB_ROOT"
-          rm -rf media_pql_chamfer_v3 media_chamfer_v3 delivery_chamfer_v3
-          mkdir -p delivery_chamfer_v3/audit_frames
+          rm -rf media_pql_chamfer_v4 media_chamfer_v4 delivery_chamfer_v4
+          mkdir -p delivery_chamfer_v4/audit_frames
           chmod -R a+rwX .
           docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
             -v "$GITHUB_WORKSPACE:/manim" -w "/manim/$JOB_ROOT" \
@@ -65,10 +66,10 @@ jobs:
               printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:\$PATH
-              manim -pql chamfer_chaflan_senior_v3.py InventorChamferChaflanSeniorV3 \
-                --fps 15 --format=mp4 --media_dir media_pql_chamfer_v3 --disable_caching
-            " 2>&1 | tee delivery_chamfer_v3/render_pql.log
-          PQL="$(find media_pql_chamfer_v3 -type f -name 'InventorChamferChaflanSeniorV3.mp4' ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+              manim -pql chamfer_chaflan_senior_v4.py InventorChamferChaflanSeniorV4 \
+                --fps 15 --format=mp4 --media_dir media_pql_chamfer_v4 --disable_caching
+            " 2>&1 | tee delivery_chamfer_v4/render_pql.log
+          PQL="$(find media_pql_chamfer_v4 -type f -name 'InventorChamferChaflanSeniorV4.mp4' ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PQL" && test -s "$PQL"
 
       - name: Literal PQH final render
@@ -84,25 +85,27 @@ jobs:
               printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:\$PATH
-              manim -pqh chamfer_chaflan_senior_v3.py InventorChamferChaflanSeniorV3 \
-                --fps 30 --format=mp4 --media_dir media_chamfer_v3 --disable_caching
-            " 2>&1 | tee delivery_chamfer_v3/render_pqh.log
-          FINAL="$(find media_chamfer_v3 -type f -name 'InventorChamferChaflanSeniorV3.mp4' ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+              manim -pqh chamfer_chaflan_senior_v4.py InventorChamferChaflanSeniorV4 \
+                --fps 30 --format=mp4 --media_dir media_chamfer_v4 --disable_caching
+            " 2>&1 | tee delivery_chamfer_v4/render_pqh.log
+          FINAL="$(find media_chamfer_v4 -type f -name 'InventorChamferChaflanSeniorV4.mp4' ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$FINAL" && test -s "$FINAL"
-          cp "$FINAL" delivery_chamfer_v3/02_chamfer_chaflan.mp4
-          cp chamfer_chaflan_senior_v3.py delivery_chamfer_v3/02_chamfer_chaflan_V3.py
-          cp chamfer_chaflan_senior_v2.py delivery_chamfer_v3/02_chamfer_chaflan_V2_BASE.py
-          cp chamfer_chaflan_senior_v1.py delivery_chamfer_v3/02_chamfer_chaflan_V1_BASE.py
-          cp fillet_redondeo_senior_v5.py delivery_chamfer_v3/jp_cad_senior_base.py
-          cp CHAMFER_V1_SENIOR_VISUAL_QA.md delivery_chamfer_v3/CHAMFER_V1_SENIOR_VISUAL_QA.md
-          cp CHAMFER_V2_SECOND_VISUAL_QA.md delivery_chamfer_v3/CHAMFER_V2_SECOND_VISUAL_QA.md
+          cp "$FINAL" delivery_chamfer_v4/02_chamfer_chaflan.mp4
+          cp chamfer_chaflan_senior_v4.py delivery_chamfer_v4/02_chamfer_chaflan_V4.py
+          cp chamfer_chaflan_senior_v3.py delivery_chamfer_v4/02_chamfer_chaflan_V3_BASE.py
+          cp chamfer_chaflan_senior_v2.py delivery_chamfer_v4/02_chamfer_chaflan_V2_BASE.py
+          cp chamfer_chaflan_senior_v1.py delivery_chamfer_v4/02_chamfer_chaflan_V1_BASE.py
+          cp fillet_redondeo_senior_v5.py delivery_chamfer_v4/jp_cad_senior_base.py
+          cp CHAMFER_V1_SENIOR_VISUAL_QA.md delivery_chamfer_v4/CHAMFER_V1_SENIOR_VISUAL_QA.md
+          cp CHAMFER_V2_SECOND_VISUAL_QA.md delivery_chamfer_v4/CHAMFER_V2_SECOND_VISUAL_QA.md
+          cp CHAMFER_V3_THIRD_VISUAL_QA.md delivery_chamfer_v4/CHAMFER_V3_THIRD_VISUAL_QA.md
 
       - name: Senior automated technical and frame QA
         shell: bash
         run: |
           set -euo pipefail
           cd "$JOB_ROOT"
-          F=delivery_chamfer_v3/02_chamfer_chaflan.mp4
+          F=delivery_chamfer_v4/02_chamfer_chaflan.mp4
           W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F" | tr -d '[:space:]')"
           H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F" | tr -d '[:space:]')"
           FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F" | tr -d '[:space:]')"
@@ -120,20 +123,21 @@ jobs:
           d=float(sys.argv[1])
           assert 115 <= d <= 270, f"Unexpected lesson duration: {d}"
           PY
-          ffmpeg -nostdin -v error -i "$F" -f null - 2> delivery_chamfer_v3/full_decode.log
-          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of json "$F" > delivery_chamfer_v3/VIDEO_TECHNICAL.json
-          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > delivery_chamfer_v3/VIDEO_TECHNICAL.tsv
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> delivery_chamfer_v4/full_decode.log
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of json "$F" > delivery_chamfer_v4/VIDEO_TECHNICAL.json
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > delivery_chamfer_v4/VIDEO_TECHNICAL.tsv
           for P in 0.03 0.08 0.13 0.18 0.23 0.28 0.33 0.38 0.43 0.48 0.53 0.58 0.63 0.68 0.73 0.78 0.83 0.88 0.93 0.97; do
             T="$(python -c "print(float('$DUR')*float('$P'))")"
             TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
-            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "delivery_chamfer_v3/audit_frames/frame_${TAG}.png"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "delivery_chamfer_v4/audit_frames/frame_${TAG}.png"
           done
-          ffmpeg -y -loglevel error -pattern_type glob -i 'delivery_chamfer_v3/audit_frames/*.png' -vf 'scale=384:-1,tile=5x4' -frames:v 1 delivery_chamfer_v3/QA_CONTACT_SHEET.jpg
-          sha256sum "$F" delivery_chamfer_v3/02_chamfer_chaflan_V3.py delivery_chamfer_v3/02_chamfer_chaflan_V2_BASE.py > delivery_chamfer_v3/SHA256SUMS.txt
-          cat > delivery_chamfer_v3/QA_AUTOMATED_REPORT.txt <<EOF
-          CHAMFER / CHAFLAN SENIOR V3 — AUTOMATED QA PASS
+          ffmpeg -y -loglevel error -pattern_type glob -i 'delivery_chamfer_v4/audit_frames/*.png' -vf 'scale=384:-1,tile=5x4' -frames:v 1 delivery_chamfer_v4/QA_CONTACT_SHEET.jpg
+          sha256sum "$F" delivery_chamfer_v4/02_chamfer_chaflan_V4.py delivery_chamfer_v4/02_chamfer_chaflan_V3_BASE.py > delivery_chamfer_v4/SHA256SUMS.txt
+          cat > delivery_chamfer_v4/QA_AUTOMATED_REPORT.txt <<EOF
+          CHAMFER / CHAFLAN SENIOR V4 — AUTOMATED QA PASS
           V1 manual visual score: 6.4 / 10
           V2 second visual score: 8.7 / 10
+          V3 third visual score: 9.2 / 10
           ManimCE: 0.20.1
           Final render: literal -pqh
           Resolution: $W x $H
@@ -144,42 +148,46 @@ jobs:
           Full FFmpeg decode: PASS
           Static Python compile: PASS
           Safe-area assertions: PASS at render time
-          Explicit HUD no-overlap assertion: PASS at render time
-          V3 fixes: shortened HUD subtitle + hard phase-box clearance + extra model/panel clearance + centered preview restoration.
+          HUD no-overlap assertion: PASS at render time
+          V4 fix: both horizontal 6 mm labels moved above their dimension arrows to eliminate contact with the green chamfer line.
           Audit frames: 20
           Contact sheet: generated
           EOF
-          zip -9 -j delivery_chamfer_v3/02_chamfer_chaflan_FULL_PACKAGE_V3.zip \
-            delivery_chamfer_v3/02_chamfer_chaflan.mp4 \
-            delivery_chamfer_v3/02_chamfer_chaflan_V3.py \
-            delivery_chamfer_v3/02_chamfer_chaflan_V2_BASE.py \
-            delivery_chamfer_v3/02_chamfer_chaflan_V1_BASE.py \
-            delivery_chamfer_v3/jp_cad_senior_base.py \
-            delivery_chamfer_v3/CHAMFER_V1_SENIOR_VISUAL_QA.md \
-            delivery_chamfer_v3/CHAMFER_V2_SECOND_VISUAL_QA.md \
-            delivery_chamfer_v3/VIDEO_TECHNICAL.json delivery_chamfer_v3/VIDEO_TECHNICAL.tsv \
-            delivery_chamfer_v3/QA_AUTOMATED_REPORT.txt delivery_chamfer_v3/QA_CONTACT_SHEET.jpg \
-            delivery_chamfer_v3/SHA256SUMS.txt delivery_chamfer_v3/render_pql.log \
-            delivery_chamfer_v3/render_pqh.log delivery_chamfer_v3/full_decode.log
+          zip -9 -j delivery_chamfer_v4/02_chamfer_chaflan_FULL_PACKAGE_V4.zip \
+            delivery_chamfer_v4/02_chamfer_chaflan.mp4 \
+            delivery_chamfer_v4/02_chamfer_chaflan_V4.py \
+            delivery_chamfer_v4/02_chamfer_chaflan_V3_BASE.py \
+            delivery_chamfer_v4/02_chamfer_chaflan_V2_BASE.py \
+            delivery_chamfer_v4/02_chamfer_chaflan_V1_BASE.py \
+            delivery_chamfer_v4/jp_cad_senior_base.py \
+            delivery_chamfer_v4/CHAMFER_V1_SENIOR_VISUAL_QA.md \
+            delivery_chamfer_v4/CHAMFER_V2_SECOND_VISUAL_QA.md \
+            delivery_chamfer_v4/CHAMFER_V3_THIRD_VISUAL_QA.md \
+            delivery_chamfer_v4/VIDEO_TECHNICAL.json delivery_chamfer_v4/VIDEO_TECHNICAL.tsv \
+            delivery_chamfer_v4/QA_AUTOMATED_REPORT.txt delivery_chamfer_v4/QA_CONTACT_SHEET.jpg \
+            delivery_chamfer_v4/SHA256SUMS.txt delivery_chamfer_v4/render_pql.log \
+            delivery_chamfer_v4/render_pqh.log delivery_chamfer_v4/full_decode.log
 
-      - name: Upload verified Chamfer V3 package
+      - name: Upload verified Chamfer V4 package
         uses: actions/upload-artifact@v4
         with:
-          name: 02-chamfer-chaflan-Senior-V3-FINAL-QA-PQH
+          name: 02-chamfer-chaflan-Senior-V4-FINAL-QA-PQH
           path: |
-            ${{ env.JOB_ROOT }}/delivery_chamfer_v3/02_chamfer_chaflan.mp4
-            ${{ env.JOB_ROOT }}/delivery_chamfer_v3/02_chamfer_chaflan_V3.py
-            ${{ env.JOB_ROOT }}/delivery_chamfer_v3/02_chamfer_chaflan_V2_BASE.py
-            ${{ env.JOB_ROOT }}/delivery_chamfer_v3/02_chamfer_chaflan_V1_BASE.py
-            ${{ env.JOB_ROOT }}/delivery_chamfer_v3/jp_cad_senior_base.py
-            ${{ env.JOB_ROOT }}/delivery_chamfer_v3/02_chamfer_chaflan_FULL_PACKAGE_V3.zip
-            ${{ env.JOB_ROOT }}/delivery_chamfer_v3/CHAMFER_V1_SENIOR_VISUAL_QA.md
-            ${{ env.JOB_ROOT }}/delivery_chamfer_v3/CHAMFER_V2_SECOND_VISUAL_QA.md
-            ${{ env.JOB_ROOT }}/delivery_chamfer_v3/VIDEO_TECHNICAL.json
-            ${{ env.JOB_ROOT }}/delivery_chamfer_v3/VIDEO_TECHNICAL.tsv
-            ${{ env.JOB_ROOT }}/delivery_chamfer_v3/QA_AUTOMATED_REPORT.txt
-            ${{ env.JOB_ROOT }}/delivery_chamfer_v3/QA_CONTACT_SHEET.jpg
-            ${{ env.JOB_ROOT }}/delivery_chamfer_v3/SHA256SUMS.txt
-            ${{ env.JOB_ROOT }}/delivery_chamfer_v3/audit_frames/
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/02_chamfer_chaflan.mp4
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/02_chamfer_chaflan_V4.py
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/02_chamfer_chaflan_V3_BASE.py
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/02_chamfer_chaflan_V2_BASE.py
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/02_chamfer_chaflan_V1_BASE.py
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/jp_cad_senior_base.py
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/02_chamfer_chaflan_FULL_PACKAGE_V4.zip
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/CHAMFER_V1_SENIOR_VISUAL_QA.md
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/CHAMFER_V2_SECOND_VISUAL_QA.md
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/CHAMFER_V3_THIRD_VISUAL_QA.md
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/VIDEO_TECHNICAL.json
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/VIDEO_TECHNICAL.tsv
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/QA_AUTOMATED_REPORT.txt
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/QA_CONTACT_SHEET.jpg
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/SHA256SUMS.txt
+            ${{ env.JOB_ROOT }}/delivery_chamfer_v4/audit_frames/
           if-no-files-found: error
           retention-days: 7
