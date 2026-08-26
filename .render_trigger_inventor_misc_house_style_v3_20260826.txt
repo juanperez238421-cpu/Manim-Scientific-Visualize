@@ -1,0 +1,2 @@
+Trigger final parallel render after workflow registration.
+Timestamp: 2026-08-26
