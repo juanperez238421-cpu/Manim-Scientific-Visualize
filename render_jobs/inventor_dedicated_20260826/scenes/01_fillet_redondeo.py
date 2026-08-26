@@ -1,51 +1,26 @@
 from manim import *
 from library.inventor_pro_ui import *
-from library.sketch_to_3d_helpers import animate_rect_sketch_to_extrusion, finish_feature
 
-
-class InventorFilletDetailed(InventorOperationScene):
-    OPERATION = "Fillet"
-    FEATURE_NODE = "Fillet1"
-
+class InventorFilletDetailed(JPMiscCADScene):
+    OPERATION="Fillet / Redondeo"
     def construct(self):
-        self.install_hud(
-            [("Selection", "1 Edge"), ("Radius", "8 mm"), ("Continuity", "Tangent"), ("Mode", "Constant")],
-            ["Part1.ipt", "Origin", "Sketch1", "Extrusion1", "Fillet1"],
-        )
-        self.intro("Redondeo de aristas: desde un croquis 2D completamente restringido hasta una transición 3D tangente y paramétrica.")
-
-        raw = animate_rect_sketch_to_extrusion(
-            self,
-            width=4.4,
-            depth=2.55,
-            height=0.75,
-            shift=DOWN * 0.30,
-            dimensions="70 mm x 45 mm",
-            extrusion="12 mm",
-            step_start=1,
-        )
-
-        self.step(4, "Identifica la arista 3D", "Fillet modifica aristas existentes del sólido. Selecciona solo las aristas que deban compartir el mismo radio.")
-        selected = Line3D(
-            start=[2.2, -1.575, 0.375],
-            end=[2.2, 0.975, 0.375],
-            color=SELECT,
-            thickness=0.045,
-        )
-        self.play(Create(selected), run_time=0.55)
-
-        self.step(5, "3D Model -> Modify -> Fillet", "Activa Fillet y confirma que la arista aparece en Selection. El feature queda asociado a esa referencia geométrica.")
-        radius_arc = Arc(radius=0.55, start_angle=0, angle=PI / 2, color=SELECT, stroke_width=5)
-        radius_arc.rotate(90 * DEGREES, RIGHT).shift([1.73, 0.71, 0.42])
-        self.play(Create(radius_arc), run_time=0.55)
-
-        self.step(6, "Define Radius = 8 mm", "En Constant Radius, un único valor R gobierna toda la transición. Un radio excesivo puede invadir caras o detalles vecinos.")
-        preview = rounded_plate(4.4, 2.55, 0.75, 0.42, PREVIEW).shift(DOWN * 0.30).set_opacity(0.54)
-        self.play(FadeOut(raw, run_time=0.25), FadeIn(preview, run_time=0.65), selected.animate.set_opacity(0.35))
-
-        self.step(7, "Inspecciona la vista previa", "Gira la pieza y comprueba tangencia, continuidad y ausencia de autointersecciones antes de aceptar la operación.")
-        result = rounded_plate(4.4, 2.55, 0.75, 0.42, STEEL).shift(DOWN * 0.30)
-        self.play(FadeOut(preview), FadeIn(result), FadeOut(selected), FadeOut(radius_arc), run_time=0.75)
-
-        self.step(8, "Confirma con OK y revisa el Browser", "Inventor agrega Fillet1 debajo de Extrusion1. Editar Fillet1 cambia el radio sin reconstruir Sketch1 ni Extrusion1.")
-        finish_feature(self, 9, "Resultado: arista suave, tangente y completamente paramétrica mediante Fillet1.")
+        self.opening("REDONDEO  •  FILLET","Replace a sharp edge with a tangent radius after the base solid is understood.",["EDGE","RADIUS","TANGENCY","FILLETED SOLID"])
+        h=self.section_header(1,"CORE IDEA: SHARP CORNER → TANGENT ARC","Fillet is local geometry: the original faces remain while their sharp intersection is replaced by radius R.")
+        sharp=VGroup(Line(LEFT*5+DOWN,LEFT*3+DOWN,color=BLACK,stroke_width=5),Line(LEFT*3+DOWN,LEFT*3+UP,color=BLACK,stroke_width=5))
+        arc=Arc(radius=1,start_angle=PI,angle=-PI/2,arc_center=RIGHT*2+ORIGIN,color=BLACK,stroke_width=5)
+        legs=VGroup(Line(RIGHT*0+DOWN,RIGHT*1+DOWN,color=BLACK,stroke_width=5),Line(RIGHT*2,RIGHT*2+UP,color=BLACK,stroke_width=5),arc)
+        labs=VGroup(self.text("SHARP",23,BOLD).move_to(LEFT*4+DOWN*2),self.text("R = 6 mm",23,BOLD).move_to(RIGHT*1.3+DOWN*2)); self.fixed(labs)
+        self.play(Create(sharp),FadeIn(labs[0]),run_time=1); self.play(TransformFromCopy(sharp,legs),FadeIn(labs[1]),run_time=1.5); self.wait(EXPLAIN); self.clear_scene()
+        body=self.base_plate_from_sketch(2,width=5,depth=3,height=.72,dims="80 × 48 mm",extrude="12 mm")
+        h=self.section_header(3,"SELECT THE 3D EDGES THAT SHARE THE SAME RADIUS","The sketch is finished. Now work on existing edges of Extrusion1."); self.fixed(h)
+        edges=VGroup(*[Line3D([sx*2.5,sy*1.5,-.36],[sx*2.5,sy*1.5,.36],color=BLACK,thickness=.035) for sx,sy in [(1,1),(-1,1),(-1,-1),(1,-1)]])
+        card=self.parameter_card("FILLET",[("Selection","4 Edges"),("Radius","6 mm"),("Mode","Constant")]); self.play(LaggedStart(*[Create(e) for e in edges],lag_ratio=.16),FadeIn(card),run_time=1.35); self.wait(READ)
+        self.play(FadeOut(card),run_time=.3); self.move_camera(phi=5*DEGREES,theta=-90*DEGREES,zoom=1,run_time=1)
+        top=Rectangle(width=5,height=3,color=BLACK,stroke_width=4); self.play(FadeOut(body),FadeOut(edges),FadeIn(top),run_time=.7)
+        pts=[np.array(p) for p in rounded_rect_points(5,3,.42,10,0)]; rounded=VMobject(color=BLACK,stroke_width=4).set_points_as_corners(pts+[pts[0]])
+        caption=self.text("TOP VIEW — corner geometry changes before the 3D reveal",23,BOLD).to_edge(DOWN,buff=.34); self.fixed(caption)
+        self.play(FadeIn(caption),Transform(top,rounded),run_time=2.2); self.wait(READ); self.play(FadeOut(caption),run_time=.3)
+        self.move_camera(phi=64*DEGREES,theta=-48*DEGREES,zoom=.9,run_time=1.1); result=rounded_plate(5,3,.72,.42,.60)
+        self.play(FadeOut(top),FadeIn(result),run_time=1.25)
+        note=self.note("CHECK BEFORE OK",["Radius fits inside adjacent faces.","No nearby feature is consumed.","The transition stays tangent."],width=5.8).to_corner(DR,buff=.45).shift(UP*.45); self.fixed(note); self.play(FadeIn(note),run_time=.8); self.wait(EXPLAIN); self.play(FadeOut(note),FadeOut(h),run_time=.4)
+        self.final_orbit("EDGE + RADIUS + TANGENCY = FILLETED FEATURE")
