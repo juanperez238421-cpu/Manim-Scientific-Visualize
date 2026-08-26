@@ -1,8 +1,26 @@
-# Autodesk Inventor — operaciones misceláneas, videos dedicados PQH
+# Autodesk Inventor — operaciones misceláneas, videos dedicados 2D -> 3D PQH
 
 Paquete de **8 videos independientes**, uno por operación, derivado de `Inventor_Misc_Operations_3D_V2_PQH.py` y rediseñado como una simulación didáctica **inspirada en Autodesk Inventor Professional 2026**.
 
-## Cambio visual
+## Contrato pedagógico FINAL
+
+Cada video debe comenzar desde la lógica real de modelado paramétrico y no desde una pieza 3D ya terminada:
+
+1. seleccionar el plano de trabajo (`XY`, `XZ`, `YZ` o cara existente);
+2. entrar a **Start 2D Sketch**;
+3. dibujar el perfil o geometría semilla;
+4. aplicar cotas y restricciones geométricas hasta dejar clara la intención de diseño;
+5. usar **Finish Sketch**;
+6. convertir el croquis en volumen o feature 3D base;
+7. seleccionar referencias 3D para la operación dedicada;
+8. abrir la herramienta correspondiente desde `3D Model`;
+9. definir parámetros numéricos explícitos;
+10. inspeccionar la vista previa;
+11. confirmar con `OK`;
+12. comprobar el feature creado en el **Model Browser**;
+13. terminar con una órbita 3D que muestre el resultado desde diferentes ángulos.
+
+## Sistema visual
 
 La versión anterior funcionaba como una presentación 3D con paleta azul/cian/verde. Esta versión cambia la gramática visual para aproximarse al entorno de trabajo de Inventor:
 
@@ -21,38 +39,35 @@ No es una copia píxel por píxel de la interfaz propietaria. Reproduce su **arq
 
 ## Videos / códigos
 
-| # | Archivo | Escena | Operación |
-|---|---|---|---|
-| 01 | `01_fillet_redondeo.py` | `InventorFilletDetailed` | Redondeo / Fillet |
-| 02 | `02_chamfer_chaflan.py` | `InventorChamferDetailed` | Chaflán / Chamfer |
-| 03 | `03_mirror_simetria.py` | `InventorMirrorDetailed` | Simetría / Mirror |
-| 04 | `04_rib_nervio.py` | `InventorRibDetailed` | Nervio / Rib |
-| 05 | `05_emboss_repujado.py` | `InventorEmbossDetailed` | Repujado / Emboss |
-| 06 | `06_coil_bobina.py` | `InventorCoilDetailed` | Bobina / Coil |
-| 07 | `07_rectangular_pattern_lineal.py` | `InventorRectPatternDetailed` | Patrón lineal / Rectangular Pattern |
-| 08 | `08_circular_pattern.py` | `InventorCircularPatternDetailed` | Patrón circular / Circular Pattern |
-
-## Secuencia didáctica de cada video
-
-1. Identificar la geometría y la dependencia del feature.
-2. Activar la herramienta en `3D Model`.
-3. Seleccionar las referencias necesarias.
-4. Definir parámetros numéricos explícitos.
-5. Revisar la vista previa antes de crear la operación.
-6. Confirmar con `OK` y leer el nuevo feature en el Browser.
+| # | Archivo | Escena | Operación | Flujo 2D -> 3D |
+|---|---|---|---|---|
+| 01 | `01_fillet_redondeo.py` | `InventorFilletDetailed` | Redondeo / Fillet | Rectángulo acotado -> Extrusion1 -> Edge -> Fillet R=8 mm |
+| 02 | `02_chamfer_chaflan.py` | `InventorChamferDetailed` | Chaflán / Chamfer | Rectángulo acotado -> Extrusion1 -> Edge -> 6 mm + 45° |
+| 03 | `03_mirror_simetria.py` | `InventorMirrorDetailed` | Simetría / Mirror | Media pieza -> Extrusion1/features -> YZ Plane -> Mirror |
+| 04 | `04_rib_nervio.py` | `InventorRibDetailed` | Nervio / Rib | Base -> Extrusion1 -> línea abierta Sketch2 -> Rib 6 mm |
+| 05 | `05_emboss_repujado.py` | `InventorEmbossDetailed` | Repujado / Emboss | Placa -> Extrusion1 -> Sketch2 cerrado -> Emboss 3 mm |
+| 06 | `06_coil_bobina.py` | `InventorCoilDetailed` | Bobina / Coil | Perfil circular + Centerline -> Coil -> Pitch 12 mm / 4 rev |
+| 07 | `07_rectangular_pattern_lineal.py` | `InventorRectPatternDetailed` | Patrón lineal | Placa -> semilla Sketch2/Extrusion2 -> 4 x 35 mm |
+| 08 | `08_circular_pattern.py` | `InventorCircularPatternDetailed` | Patrón circular | Disco Ø80 -> semilla radial -> Z Axis -> 8 x 360° |
 
 ## QA y render
 
 Cada escena pasa por:
 
-- `python -m py_compile`;
+- `python -m py_compile` de escena y librerías compartidas;
 - render de humo literal `-pql`;
 - render final literal `-pqh`;
 - 1920×1080, 30 fps;
 - H.264 / yuv420p;
 - `ffprobe` de resolución, fps, codec y duración;
 - decodificación completa con FFmpeg;
-- seis frames de auditoría distribuidos en el video;
+- nueve frames de auditoría distribuidos en el video;
 - SHA-256 del MP4 y fuentes.
 
-El workflow usa una **matriz de 8 jobs en paralelo** y luego crea un ZIP maestro con todos los videos, códigos, paquetes individuales y evidencias de QA.
+El renderer FINAL usa una **matriz de 8 operaciones con hasta 4 renders simultáneos** para reducir presión de runners manteniendo ejecución paralela. Después crea un ZIP maestro con los ocho videos PQH, los ocho códigos, las dos librerías compartidas, paquetes individuales y evidencia de QA.
+
+## Salida final esperada
+
+`Inventor_Professional_2D_to_3D_8Tools_FULL_PQH_20260826.zip`
+
+Render generation: 2026-08-26 FINAL 2D-to-3D trigger.
