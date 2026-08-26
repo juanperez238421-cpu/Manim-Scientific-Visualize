@@ -1,4 +1,4 @@
-name: House Step V3 Push Render 20260818
+name: Inventor Misc House Style V3 TOTAL PQH 20260826
 
 on:
   push:
@@ -6,127 +6,101 @@ on:
       - house-step-v3-render-20260818
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: inventor-misc-house-style-v3-total-20260826
+  cancel-in-progress: true
 
 jobs:
-  render:
+  render-total-package:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 120
-
     steps:
-      - name: Checkout render branch
+      - name: Checkout House-style source branch
         uses: actions/checkout@v4
         with:
-          ref: house-step-v3-render-20260818
+          ref: render-inventor-misc-house-style-v3-20260826
 
-      - name: Persist STARTED
+      - name: Preflight
         shell: bash
         run: |
           set -euo pipefail
-          OUT=render_jobs/house_step_v3/delivery
-          mkdir -p "$OUT"
-          printf 'STARTED\n' > "$OUT/STATUS.txt"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$OUT/STATUS.txt"
-          git commit -m 'House Step V3 render started' || true
-          git push origin HEAD:house-step-v3-render-20260818
+          cd render_jobs/inventor_misc_house_style_v3_20260826
+          python -m py_compile library/jp_misc_cad_style.py scenes/*.py
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1 || ! command -v zip >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ffmpeg zip
+          fi
+          rm -rf preview hq FINAL_PACKAGE
+          mkdir -p preview hq FINAL_PACKAGE/individual_videos FINAL_PACKAGE/sources FINAL_PACKAGE/qa/logs FINAL_PACKAGE/qa/frames
+          chmod -R a+rwX .
 
-      - name: Render PQL and PQH, verify, commit delivery
+      - name: Pull ManimCE 0.20.1
+        run: docker pull manimcommunity/manim:v0.20.1
+
+      - name: Render PQL and PQH for all eight lessons
         shell: bash
         run: |
-          set -uo pipefail
-          JOB=render_jobs/house_step_v3
-          SRC="$JOB/House_Extrusion_3D_ManimCE.py"
-          OUT="$JOB/delivery"
-          rm -rf media_pql media "$OUT/audit_frames"
-          mkdir -p "$OUT/audit_frames"
-
-          persist_fail() {
-            CODE="$1"
-            printf 'FAILED\ncode=%s\n' "$CODE" > "$OUT/STATUS.txt"
-            git add "$OUT" || true
-            git commit -m "House Step V3 render failed $CODE" || true
-            git push origin HEAD:house-step-v3-render-20260818 || true
-            exit 1
-          }
-
-          python -m py_compile "$SRC" > "$OUT/py_compile.log" 2>&1 || persist_fail PY_COMPILE
-          docker pull manimcommunity/manim:v0.20.1 > "$OUT/docker_pull.log" 2>&1 || persist_fail DOCKER_PULL
-
-          set +e
-          docker run --rm --user "$(id -u):$(id -g)" \
-            -e HOME=/tmp/manim-home -v "$PWD:/manim" -w /manim \
-            --entrypoint bash manimcommunity/manim:v0.20.1 -c "
-              set -euo pipefail
-              mkdir -p /tmp/manim-bin
-              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
-              chmod +x /tmp/manim-bin/xdg-open
-              export PATH=/tmp/manim-bin:\$PATH
-              manim -pql $SRC HouseExtrusion3D --format=mp4 --media_dir media_pql --disable_caching
-            " 2>&1 | tee "$OUT/render_pql.log"
-          PQL=${PIPESTATUS[0]}
-          set -e
-          [ "$PQL" -eq 0 ] || persist_fail PQL_RENDER
-
-          PREVIEW="$(find media_pql -type f -name 'HouseExtrusion3D.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
-          [ -n "$PREVIEW" ] && [ -s "$PREVIEW" ] || persist_fail PQL_OUTPUT
-
-          set +e
-          docker run --rm --user "$(id -u):$(id -g)" \
-            -e HOME=/tmp/manim-home -v "$PWD:/manim" -w /manim \
-            --entrypoint bash manimcommunity/manim:v0.20.1 -c "
-              set -euo pipefail
-              mkdir -p /tmp/manim-bin
-              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
-              chmod +x /tmp/manim-bin/xdg-open
-              export PATH=/tmp/manim-bin:\$PATH
-              manim -pqh $SRC HouseExtrusion3D --fps 30 --format=mp4 --media_dir media --disable_caching
-            " 2>&1 | tee "$OUT/render_pqh.log"
-          PQH=${PIPESTATUS[0]}
-          set -e
-          [ "$PQH" -eq 0 ] || persist_fail PQH_RENDER
-
-          FINAL="$(find media -type f -name 'HouseExtrusion3D.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
-          [ -n "$FINAL" ] && [ -s "$FINAL" ] || persist_fail PQH_OUTPUT
-          cp "$FINAL" "$OUT/House_Extrusion_3D_STEP_BY_STEP_V3_PQH.mp4"
-          cp "$SRC" "$OUT/House_Extrusion_3D_ManimCE.py"
-
-          F="$OUT/House_Extrusion_3D_STEP_BY_STEP_V3_PQH.mp4"
-          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
-          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
-          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
-          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
-          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
-          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
-          SIZE="$(ffprobe -v error -show_entries format=size -of csv=p=0 "$F")"
-          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > "$OUT/VIDEO_TECHNICAL.tsv"
-          [ "$W" = 1920 ] || persist_fail WIDTH
-          [ "$H" = 1080 ] || persist_fail HEIGHT
-          [ "$FPS" = 30/1 ] || persist_fail FPS
-          [ "$CODEC" = h264 ] || persist_fail CODEC
-          [ "$PIX" = yuv420p ] || persist_fail PIX_FMT
-          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/full_decode.log" || persist_fail FULL_DECODE
-
-          for P in 0.05 0.15 0.25 0.35 0.45 0.55 0.65 0.75 0.85 0.95; do
-            T="$(python -c "print(float('$DUR')*float('$P'))")"
-            TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
-            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "$OUT/audit_frames/frame_${TAG}.png" || persist_fail QA_FRAME
+          set -euo pipefail
+          cd render_jobs/inventor_misc_house_style_v3_20260826
+          SLUGS=(01_fillet_redondeo 02_chamfer_chaflan 03_mirror_simetria 04_rib_nervio 05_emboss_repujado 06_coil_bobina 07_rectangular_pattern_lineal 08_circular_pattern)
+          FILES=(scenes/01_fillet_redondeo.py scenes/02_chamfer_chaflan.py scenes/03_mirror_simetria.py scenes/04_rib_nervio.py scenes/05_emboss_repujado.py scenes/06_coil_bobina.py scenes/07_rectangular_pattern_lineal.py scenes/08_circular_pattern.py)
+          SCENES=(InventorFilletHouseStyle InventorChamferHouseStyle InventorMirrorHouseStyle InventorRibHouseStyle InventorEmbossHouseStyle InventorCoilHouseStyle InventorRectPatternHouseStyle InventorCircularPatternHouseStyle)
+          : > FINAL_PACKAGE/qa/concat.txt
+          for i in "${!SLUGS[@]}"; do
+            slug="${SLUGS[$i]}"; file="${FILES[$i]}"; scene="${SCENES[$i]}"
+            mkdir -p "preview/${slug}" "hq/${slug}"
+            docker run --rm -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.18 -e FILE="$file" -e SCENE="$scene" -e MEDIA_DIR="/manim/preview/${slug}" -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c 'set -euo pipefail; mkdir -p /tmp/bin; printf "#!/bin/sh\nexit 0\n" > /tmp/bin/xdg-open; chmod +x /tmp/bin/xdg-open; export PATH="/tmp/bin:$PATH"; manim -pql "$FILE" "$SCENE" --media_dir "$MEDIA_DIR" --format=mp4 --disable_caching' 2>&1 | tee "FINAL_PACKAGE/qa/logs/${slug}_pql.log"
+            docker run --rm -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 -e FILE="$file" -e SCENE="$scene" -e MEDIA_DIR="/manim/hq/${slug}" -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c 'set -euo pipefail; mkdir -p /tmp/bin; printf "#!/bin/sh\nexit 0\n" > /tmp/bin/xdg-open; chmod +x /tmp/bin/xdg-open; export PATH="/tmp/bin:$PATH"; manim -pqh "$FILE" "$SCENE" --media_dir "$MEDIA_DIR" --format=mp4 --disable_caching' 2>&1 | tee "FINAL_PACKAGE/qa/logs/${slug}_pqh.log"
+            mapfile -t candidates < <(find "hq/${slug}" -type f -name '*.mp4' ! -path '*/partial_movie_files/*' | sort)
+            printf '%s\n' "${candidates[@]}" > "FINAL_PACKAGE/qa/${slug}_final_candidates.txt"
+            test "${#candidates[@]}" -eq 1
+            video="FINAL_PACKAGE/individual_videos/${slug}_PQH.mp4"
+            cp "${candidates[0]}" "$video"
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$video" | tr -d '[:space:]')" = 1920
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$video" | tr -d '[:space:]')" = 1080
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$video" | tr -d '[:space:]')" = 30/1
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$video" | tr -d '[:space:]')" = h264
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$video" | tr -d '[:space:]')" = yuv420p
+            ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of json "$video" > "FINAL_PACKAGE/qa/${slug}_ffprobe.json"
+            ffmpeg -v error -i "$video" -f null -
+            sha256sum "$video" > "FINAL_PACKAGE/qa/${slug}_sha256.txt"
+            ffmpeg -y -i "$video" -vf 'fps=1/8,scale=640:-1,tile=3x3' -frames:v 1 "FINAL_PACKAGE/qa/frames/${slug}_control_sheet.jpg"
+            printf "file '%s'\n" "$PWD/$video" >> FINAL_PACKAGE/qa/concat.txt
           done
 
-          sha256sum "$F" "$SRC" > "$OUT/SHA256SUMS.txt"
-          cat > "$OUT/RENDER_INFO.txt" <<'EOF'
-Scene: HouseExtrusion3D
-Version: Senior Step-by-Step V3
-ManimCE: 0.20.1
-Preview: literal -pql
-Final: literal -pqh, 1920x1080, 30 fps, H.264/yuv420p
-Sequence: terrain -> slab sketch -> slab extrusion -> sketch walls/columns on slab -> columns -> perimeter walls -> interior walls -> negative door/window cuts -> roof -> orbit
-QA: py_compile + PQL + PQH + ffprobe + full decode + 10 audit frames + SHA-256
-EOF
-          printf 'SUCCESS\n' > "$OUT/STATUS.txt"
+      - name: Assemble master video and total ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd render_jobs/inventor_misc_house_style_v3_20260826
+          ffmpeg -y -f concat -safe 0 -i FINAL_PACKAGE/qa/concat.txt -c copy FINAL_PACKAGE/Inventor_Misc_Tools_HouseStyle_V3_MASTER_PQH.mp4
+          ffmpeg -v error -i FINAL_PACKAGE/Inventor_Misc_Tools_HouseStyle_V3_MASTER_PQH.mp4 -f null -
+          cp README.md FINAL_PACKAGE/
+          cp -R library scenes FINAL_PACKAGE/sources/
+          printf 'PASS — 8 independent literal PQH renders\nStyle: House + Sweep + Loft + Revolve\n1920x1080 30fps H.264 yuv420p\n' > FINAL_PACKAGE/QA_TOTAL_PASS.txt
+          sha256sum FINAL_PACKAGE/Inventor_Misc_Tools_HouseStyle_V3_MASTER_PQH.mp4 > FINAL_PACKAGE/MASTER_SHA256.txt
+          zip -r Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826.zip FINAL_PACKAGE >/dev/null
+          sha256sum Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826.zip > PACKAGE_SHA256.txt
 
-          git add "$OUT"
-          git commit -m 'House Step V3 verified PQH delivery'
-          git push origin HEAD:house-step-v3-render-20260818
+      - name: Upload total package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826
+          path: |
+            render_jobs/inventor_misc_house_style_v3_20260826/Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826.zip
+            render_jobs/inventor_misc_house_style_v3_20260826/PACKAGE_SHA256.txt
+            render_jobs/inventor_misc_house_style_v3_20260826/FINAL_PACKAGE/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload debug evidence on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Inventor_Misc_Tools_HouseStyle_V3_DEBUG_20260826
+          path: render_jobs/inventor_misc_house_style_v3_20260826/FINAL_PACKAGE/
+          if-no-files-found: warn
+          retention-days: 2
