@@ -1,4 +1,4 @@
-name: Inventor Hole Agujero Senior V3 FINAL QA PQH 20260826
+name: Inventor Emboss Repujado Senior V1 FINAL QA PQH 20260826
 
 on:
   push:
@@ -7,10 +7,10 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: inventor-hole-agujero-senior-v3-20260826
+  group: inventor-emboss-repujado-senior-v1-20260826
   cancel-in-progress: true
 
 env:
@@ -18,10 +18,12 @@ env:
   MANIM_IMAGE: manimcommunity/manim:v0.20.1
 
 jobs:
-  render_hole_v3:
-    name: Render Hole Agujero Senior V3 Final QA
+  render_emboss_v1:
+    if: github.actor != 'github-actions[bot]'
+    name: Render Emboss Repujado Senior V1 Final QA
     runs-on: ubuntu-latest
     timeout-minutes: 180
+
     steps:
       - name: Checkout exact render branch
         uses: actions/checkout@v4
@@ -32,15 +34,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m py_compile "$JOB_ROOT/fillet_redondeo_senior_v5.py" \
+          python -m py_compile \
+            "$JOB_ROOT/fillet_redondeo_senior_v5.py" \
             "$JOB_ROOT/hole_agujero_senior_v1.py" \
             "$JOB_ROOT/hole_agujero_senior_v2.py" \
-            "$JOB_ROOT/hole_agujero_senior_v3.py"
-          grep -q 'class InventorHoleAgujeroSeniorV3' "$JOB_ROOT/hole_agujero_senior_v3.py"
-          grep -q 'next_to(circle, DOWN' "$JOB_ROOT/hole_agujero_senior_v3.py"
-          grep -q 'Point1' "$JOB_ROOT/hole_agujero_senior_v1.py"
-          grep -q 'Ø 12 mm' "$JOB_ROOT/hole_agujero_senior_v3.py"
-          grep -q 'Through All' "$JOB_ROOT/hole_agujero_senior_v2.py"
+            "$JOB_ROOT/hole_agujero_senior_v3.py" \
+            "$JOB_ROOT/emboss_repujado_senior_v1.py"
+          grep -q 'class InventorEmbossRepujadoSeniorV1' "$JOB_ROOT/emboss_repujado_senior_v1.py"
+          grep -q 'Sketch2 Region' "$JOB_ROOT/emboss_repujado_senior_v1.py"
+          grep -q 'Emboss from Face' "$JOB_ROOT/emboss_repujado_senior_v1.py"
+          grep -q 'Depth.*3 mm' "$JOB_ROOT/emboss_repujado_senior_v1.py"
+          grep -q 'Emboss1' "$JOB_ROOT/emboss_repujado_senior_v1.py"
+          grep -q 'ENGRAVE' "$JOB_ROOT/emboss_repujado_senior_v1.py"
+          grep -q 'parametric_edit' "$JOB_ROOT/emboss_repujado_senior_v1.py"
 
       - name: Prepare ManimCE 0.20.1 and QA tools
         shell: bash
@@ -55,8 +61,8 @@ jobs:
         run: |
           set -euo pipefail
           cd "$JOB_ROOT"
-          rm -rf media_pql_hole_v3 media_hole_v3 delivery_hole_v3
-          mkdir -p delivery_hole_v3/audit_frames
+          rm -rf media_pql_emboss_v1 media_emboss_v1 delivery_emboss_v1
+          mkdir -p delivery_emboss_v1/audit_frames
           chmod -R a+rwX .
           docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
             -v "$GITHUB_WORKSPACE:/manim" -w "/manim/$JOB_ROOT" \
@@ -66,10 +72,10 @@ jobs:
               printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:\$PATH
-              manim -pql hole_agujero_senior_v3.py InventorHoleAgujeroSeniorV3 \
-                --fps 15 --format=mp4 --media_dir media_pql_hole_v3 --disable_caching
-            " 2>&1 | tee delivery_hole_v3/render_pql.log
-          PQL="$(find media_pql_hole_v3 -type f -name 'InventorHoleAgujeroSeniorV3.mp4' ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+              manim -pql emboss_repujado_senior_v1.py InventorEmbossRepujadoSeniorV1 \
+                --fps 15 --format=mp4 --media_dir media_pql_emboss_v1 --disable_caching
+            " 2>&1 | tee delivery_emboss_v1/render_pql.log
+          PQL="$(find media_pql_emboss_v1 -type f -name 'InventorEmbossRepujadoSeniorV1.mp4' ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PQL" && test -s "$PQL"
 
       - name: Literal PQH final render
@@ -85,23 +91,22 @@ jobs:
               printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:\$PATH
-              manim -pqh hole_agujero_senior_v3.py InventorHoleAgujeroSeniorV3 \
-                --fps 30 --format=mp4 --media_dir media_hole_v3 --disable_caching
-            " 2>&1 | tee delivery_hole_v3/render_pqh.log
-          FINAL="$(find media_hole_v3 -type f -name 'InventorHoleAgujeroSeniorV3.mp4' ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+              manim -pqh emboss_repujado_senior_v1.py InventorEmbossRepujadoSeniorV1 \
+                --fps 30 --format=mp4 --media_dir media_emboss_v1 --disable_caching
+            " 2>&1 | tee delivery_emboss_v1/render_pqh.log
+          FINAL="$(find media_emboss_v1 -type f -name 'InventorEmbossRepujadoSeniorV1.mp4' ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$FINAL" && test -s "$FINAL"
-          cp "$FINAL" delivery_hole_v3/03_hole_agujero.mp4
-          cp hole_agujero_senior_v3.py delivery_hole_v3/03_hole_agujero_V3.py
-          cp hole_agujero_senior_v2.py delivery_hole_v3/03_hole_agujero_V2_BASE.py
-          cp hole_agujero_senior_v1.py delivery_hole_v3/03_hole_agujero_V1_BASE.py
-          cp fillet_redondeo_senior_v5.py delivery_hole_v3/jp_cad_senior_base.py
+          cp "$FINAL" delivery_emboss_v1/05_emboss_repujado.mp4
+          cp emboss_repujado_senior_v1.py delivery_emboss_v1/05_emboss_repujado_V1.py
+          cp hole_agujero_senior_v3.py delivery_emboss_v1/hole_agujero_V3_reference.py
+          cp fillet_redondeo_senior_v5.py delivery_emboss_v1/jp_cad_senior_base.py
 
       - name: Senior automated technical and frame QA
         shell: bash
         run: |
           set -euo pipefail
           cd "$JOB_ROOT"
-          F=delivery_hole_v3/03_hole_agujero.mp4
+          F=delivery_emboss_v1/05_emboss_repujado.mp4
           W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F" | tr -d '[:space:]')"
           H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F" | tr -d '[:space:]')"
           FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F" | tr -d '[:space:]')"
@@ -109,6 +114,7 @@ jobs:
           PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F" | tr -d '[:space:]')"
           DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F" | tr -d '[:space:]')"
           SIZE="$(ffprobe -v error -show_entries format=size -of csv=p=0 "$F" | tr -d '[:space:]')"
+
           test "$W" = 1920
           test "$H" = 1080
           test "$FPS" = 30/1
@@ -117,20 +123,36 @@ jobs:
           python - "$DUR" <<'PY'
           import sys
           d=float(sys.argv[1])
-          assert 125 <= d <= 330, f"Unexpected lesson duration: {d}"
+          assert 95 <= d <= 360, f"Unexpected lesson duration: {d}"
           PY
-          ffmpeg -nostdin -v error -i "$F" -f null - 2> delivery_hole_v3/full_decode.log
-          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of json "$F" > delivery_hole_v3/VIDEO_TECHNICAL.json
-          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > delivery_hole_v3/VIDEO_TECHNICAL.tsv
+
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> delivery_emboss_v1/full_decode.log
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+            -show_entries format=duration,size -of json "$F" \
+            > delivery_emboss_v1/VIDEO_TECHNICAL.json
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+            "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" \
+            > delivery_emboss_v1/VIDEO_TECHNICAL.tsv
+
           for P in 0.02 0.06 0.10 0.14 0.18 0.22 0.26 0.30 0.34 0.38 0.42 0.46 0.50 0.54 0.58 0.62 0.66 0.70 0.74 0.78 0.82 0.86 0.91 0.96; do
             T="$(python -c "print(float('$DUR')*float('$P'))")"
             TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
-            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "delivery_hole_v3/audit_frames/frame_${TAG}.png"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 \
+              "delivery_emboss_v1/audit_frames/frame_${TAG}.png"
           done
-          ffmpeg -y -loglevel error -pattern_type glob -i 'delivery_hole_v3/audit_frames/*.png' -vf 'scale=384:-1,tile=6x4' -frames:v 1 delivery_hole_v3/QA_CONTACT_SHEET.jpg
-          sha256sum "$F" delivery_hole_v3/03_hole_agujero_V3.py delivery_hole_v3/03_hole_agujero_V2_BASE.py > delivery_hole_v3/SHA256SUMS.txt
-          cat > delivery_hole_v3/QA_AUTOMATED_REPORT.txt <<EOF
-          HOLE / AGUJERO SENIOR V3 — AUTOMATED QA PASS
+          ffmpeg -y -loglevel error -pattern_type glob \
+            -i 'delivery_emboss_v1/audit_frames/*.png' \
+            -vf 'scale=384:-1,tile=6x4' -frames:v 1 \
+            delivery_emboss_v1/QA_CONTACT_SHEET.jpg
+
+          sha256sum "$F" \
+            delivery_emboss_v1/05_emboss_repujado_V1.py \
+            delivery_emboss_v1/hole_agujero_V3_reference.py \
+            > delivery_emboss_v1/SHA256SUMS.txt
+
+          cat > delivery_emboss_v1/QA_AUTOMATED_REPORT.txt <<EOF
+          EMBOSS / REPUJADO SENIOR V1 — AUTOMATED QA PASS
           ManimCE: 0.20.1
           Final render: literal -pqh
           Resolution: $W x $H
@@ -140,42 +162,54 @@ jobs:
           Duration: $DUR s
           Full FFmpeg decode: PASS
           Static Python compile: PASS
-          Safe-area assertions: PASS at render time
           HUD no-overlap assertion: PASS at render time
-          Sketch2 / Hole parameter panel separation assertion: PASS at render time
-          V2 fix: Hole parameter panel shifted left and narrowed after V1 safe-area failure.
-          V3 visual fix: Ø12 mm preview label moved below circular feature with explicit clearance after manual 24-frame audit.
-          Pedagogy: Sketch1 -> Extrusion1 -> Top Face -> Sketch2 Point1 -> Hole parameters -> top preview -> section A-A -> cylindrical removal -> validation -> hole types -> parametric edit -> final orbit.
+          Parameter-card right safe-area assertion: PASS at render time
+          Profile-fit and shallow-depth assertions: PASS at render time
+          Consolidated style source: latest Fillet / Chamfer / Hole senior family.
+          Pedagogy: Sketch1 -> Extrusion1 -> Top Face -> Sketch2 closed hexagon -> Emboss parameters -> 3D +3 mm preview -> Emboss vs Engrave -> validation -> Emboss1 -> 3-to-5 mm parametric edit -> applications -> final orbit.
           Audit frames: 24
           Contact sheet: generated
           EOF
-          zip -9 -j delivery_hole_v3/03_hole_agujero_FULL_PACKAGE_V3.zip \
-            delivery_hole_v3/03_hole_agujero.mp4 \
-            delivery_hole_v3/03_hole_agujero_V3.py \
-            delivery_hole_v3/03_hole_agujero_V2_BASE.py \
-            delivery_hole_v3/03_hole_agujero_V1_BASE.py \
-            delivery_hole_v3/jp_cad_senior_base.py \
-            delivery_hole_v3/VIDEO_TECHNICAL.json delivery_hole_v3/VIDEO_TECHNICAL.tsv \
-            delivery_hole_v3/QA_AUTOMATED_REPORT.txt delivery_hole_v3/QA_CONTACT_SHEET.jpg \
-            delivery_hole_v3/SHA256SUMS.txt delivery_hole_v3/render_pql.log \
-            delivery_hole_v3/render_pqh.log delivery_hole_v3/full_decode.log
 
-      - name: Upload verified Hole V3 package
+          zip -9 -j delivery_emboss_v1/05_emboss_repujado_FULL_PACKAGE_V1.zip \
+            delivery_emboss_v1/05_emboss_repujado.mp4 \
+            delivery_emboss_v1/05_emboss_repujado_V1.py \
+            delivery_emboss_v1/hole_agujero_V3_reference.py \
+            delivery_emboss_v1/jp_cad_senior_base.py \
+            delivery_emboss_v1/VIDEO_TECHNICAL.json \
+            delivery_emboss_v1/VIDEO_TECHNICAL.tsv \
+            delivery_emboss_v1/QA_AUTOMATED_REPORT.txt \
+            delivery_emboss_v1/QA_CONTACT_SHEET.jpg \
+            delivery_emboss_v1/SHA256SUMS.txt \
+            delivery_emboss_v1/render_pql.log \
+            delivery_emboss_v1/render_pqh.log \
+            delivery_emboss_v1/full_decode.log
+
+      - name: Persist verified PQH delivery on render branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$JOB_ROOT/delivery_emboss_v1"
+          git commit -m 'Persist Emboss Repujado V1 PQH delivery' || true
+          git push origin HEAD:render-inventor-dedicated-20260826
+
+      - name: Upload verified Emboss V1 package
         uses: actions/upload-artifact@v4
         with:
-          name: 03-hole-agujero-Senior-V3-FINAL-QA-PQH
+          name: 05-emboss-repujado-Senior-V1-FINAL-QA-PQH
           path: |
-            ${{ env.JOB_ROOT }}/delivery_hole_v3/03_hole_agujero.mp4
-            ${{ env.JOB_ROOT }}/delivery_hole_v3/03_hole_agujero_V3.py
-            ${{ env.JOB_ROOT }}/delivery_hole_v3/03_hole_agujero_V2_BASE.py
-            ${{ env.JOB_ROOT }}/delivery_hole_v3/03_hole_agujero_V1_BASE.py
-            ${{ env.JOB_ROOT }}/delivery_hole_v3/jp_cad_senior_base.py
-            ${{ env.JOB_ROOT }}/delivery_hole_v3/03_hole_agujero_FULL_PACKAGE_V3.zip
-            ${{ env.JOB_ROOT }}/delivery_hole_v3/VIDEO_TECHNICAL.json
-            ${{ env.JOB_ROOT }}/delivery_hole_v3/VIDEO_TECHNICAL.tsv
-            ${{ env.JOB_ROOT }}/delivery_hole_v3/QA_AUTOMATED_REPORT.txt
-            ${{ env.JOB_ROOT }}/delivery_hole_v3/QA_CONTACT_SHEET.jpg
-            ${{ env.JOB_ROOT }}/delivery_hole_v3/SHA256SUMS.txt
-            ${{ env.JOB_ROOT }}/delivery_hole_v3/audit_frames/
+            ${{ env.JOB_ROOT }}/delivery_emboss_v1/05_emboss_repujado.mp4
+            ${{ env.JOB_ROOT }}/delivery_emboss_v1/05_emboss_repujado_V1.py
+            ${{ env.JOB_ROOT }}/delivery_emboss_v1/hole_agujero_V3_reference.py
+            ${{ env.JOB_ROOT }}/delivery_emboss_v1/jp_cad_senior_base.py
+            ${{ env.JOB_ROOT }}/delivery_emboss_v1/05_emboss_repujado_FULL_PACKAGE_V1.zip
+            ${{ env.JOB_ROOT }}/delivery_emboss_v1/VIDEO_TECHNICAL.json
+            ${{ env.JOB_ROOT }}/delivery_emboss_v1/VIDEO_TECHNICAL.tsv
+            ${{ env.JOB_ROOT }}/delivery_emboss_v1/QA_AUTOMATED_REPORT.txt
+            ${{ env.JOB_ROOT }}/delivery_emboss_v1/QA_CONTACT_SHEET.jpg
+            ${{ env.JOB_ROOT }}/delivery_emboss_v1/SHA256SUMS.txt
+            ${{ env.JOB_ROOT }}/delivery_emboss_v1/audit_frames/
           if-no-files-found: error
           retention-days: 7
