@@ -1,0 +1,11 @@
+MIRROR / SIMETRÍA SENIOR V4 FINAL — AUTOMATED QA PASS
+Literal final command: manim -pqh
+ManimCE: 0.20.1
+Resolution: 1920 x 1080
+FPS: 30/1
+Codec: h264 / yuv420p
+Duration: 105.194141 s
+Full FFmpeg decode: PASS
+Dense audit frames: 25
+V4 visual corrections: Boss1 selection halo aligned exactly with source feature; parametric edit camera exposes both symmetric bosses; validation wording normalized to Spanish.
+Inherited approved V3 flow: concept -> Sketch1 -> Extrusion1 -> Sketch2 -> Boss1 -> Mirror Features -> YZ plane -> preview -> 28/28 verification -> reference validation -> OK Mirror1 -> Ø16/Ø22 synchronized edit -> final orbit.
