@@ -1,73 +1,59 @@
-name: Inventor Dedicated Operations Parallel PQH 20260826
+name: Inventor Patterns Senior V1 PARALLEL PQH 20260826
 
 on:
-  pull_request:
-    branches: [main]
+  push:
+    branches:
+      - render/inventor-patterns-senior-v1-20260826
 
 permissions:
   contents: read
 
 env:
-  JOB_ROOT: render_jobs/inventor_dedicated_20260826
+  JOB_ROOT: render_jobs/fillet_redondeo_senior_v5_20260826
   MANIM_IMAGE: manimcommunity/manim:v0.20.1
 
 jobs:
-  render:
-    if: github.event.pull_request.head.ref == 'render-inventor-dedicated-20260826'
-    name: Render ${{ matrix.slug }}
+  render_pattern:
+    name: Render ${{ matrix.slug }} Senior V1
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 180
     strategy:
       fail-fast: false
-      max-parallel: 8
+      max-parallel: 2
       matrix:
         include:
-          - slug: 01_fillet_redondeo
-            file: scenes/01_fillet_redondeo.py
-            scene: InventorFilletDetailed
-          - slug: 02_chamfer_chaflan
-            file: scenes/02_chamfer_chaflan.py
-            scene: InventorChamferDetailed
-          - slug: 03_mirror_simetria
-            file: scenes/03_mirror_simetria.py
-            scene: InventorMirrorDetailed
-          - slug: 04_rib_nervio
-            file: scenes/04_rib_nervio.py
-            scene: InventorRibDetailed
-          - slug: 05_emboss_repujado
-            file: scenes/05_emboss_repujado.py
-            scene: InventorEmbossDetailed
-          - slug: 06_coil_bobina
-            file: scenes/06_coil_bobina.py
-            scene: InventorCoilDetailed
-          - slug: 07_rectangular_pattern_lineal
-            file: scenes/07_rectangular_pattern_lineal.py
-            scene: InventorRectPatternDetailed
-          - slug: 08_circular_pattern
-            file: scenes/08_circular_pattern.py
-            scene: InventorCircularPatternDetailed
+          - slug: rectangular_pattern
+            file: rectangular_pattern_senior_v1.py
+            scene: InventorRectangularPatternSeniorV1
+            output: 10_rectangular_pattern_SENIOR_V1_PQH.mp4
+          - slug: circular_pattern
+            file: circular_pattern_senior_v1.py
+            scene: InventorCircularPatternSeniorV1
+            output: 11_circular_pattern_SENIOR_V1_PQH.mp4
 
     steps:
-      - name: Checkout exact PR head
+      - name: Checkout exact senior pattern branch
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Static Python validation
+      - name: Static Python + lesson-contract QA
         shell: bash
         run: |
           set -euo pipefail
           python -m py_compile \
-            "$JOB_ROOT/library/inventor_pro_ui.py" \
+            "$JOB_ROOT/fillet_redondeo_senior_v5.py" \
+            "$JOB_ROOT/pattern_senior_base.py" \
             "$JOB_ROOT/${{ matrix.file }}"
+          grep -q 'SKETCH' "$JOB_ROOT/${{ matrix.file }}"
+          grep -q 'HOLE1' "$JOB_ROOT/${{ matrix.file }}"
+          grep -q 'EDICIÓN PARAMÉTRICA' "$JOB_ROOT/${{ matrix.file }}"
+          grep -q 'RESUMEN' "$JOB_ROOT/pattern_senior_base.py"
 
-      - name: Install verification tools and ManimCE 0.20.1
+      - name: Prepare ManimCE 0.20.1 and QA tools
         shell: bash
         run: |
           set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg zip >/dev/null
-          ffprobe -version | head -1
+          command -v ffprobe >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null)
+          command -v zip >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq zip >/dev/null)
           docker pull "$MANIM_IMAGE" >/dev/null
 
       - name: Literal PQL smoke render
@@ -75,14 +61,11 @@ jobs:
         run: |
           set -euo pipefail
           cd "$JOB_ROOT"
-          rm -rf "media_pql/${{ matrix.slug }}"
-          mkdir -p "delivery/${{ matrix.slug }}"
-          docker run --rm \
-            --user "$(id -u):$(id -g)" \
-            -e HOME=/tmp/manim-home \
-            -e PYTHONPATH="/manim/$JOB_ROOT" \
-            -v "$GITHUB_WORKSPACE:/manim" \
-            -w "/manim/$JOB_ROOT" \
+          rm -rf "media_pql_${{ matrix.slug }}" "media_${{ matrix.slug }}" "delivery_${{ matrix.slug }}"
+          mkdir -p "delivery_${{ matrix.slug }}/audit_frames"
+          chmod -R a+rwX .
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+            -v "$GITHUB_WORKSPACE:/manim" -w "/manim/$JOB_ROOT" \
             --entrypoint bash "$MANIM_IMAGE" -c "
               set -euo pipefail
               mkdir -p /tmp/manim-bin
@@ -90,26 +73,20 @@ jobs:
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:\$PATH
               manim -pql '${{ matrix.file }}' '${{ matrix.scene }}' \
-                --fps 15 \
-                --format=mp4 \
-                --media_dir 'media_pql/${{ matrix.slug }}' \
+                --fps 15 --format=mp4 \
+                --media_dir 'media_pql_${{ matrix.slug }}' \
                 --disable_caching
-            " 2>&1 | tee "delivery/${{ matrix.slug }}/render_pql.log"
-          PREVIEW="$(find "media_pql/${{ matrix.slug }}" -type f -name '${{ matrix.scene }}.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
-          test -n "$PREVIEW" && test -s "$PREVIEW"
+            " 2>&1 | tee "delivery_${{ matrix.slug }}/render_pql.log"
+          PQL="$(find "media_pql_${{ matrix.slug }}" -type f -name '${{ matrix.scene }}.mp4' ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
 
       - name: Literal PQH final render
         shell: bash
         run: |
           set -euo pipefail
           cd "$JOB_ROOT"
-          rm -rf "media/${{ matrix.slug }}"
-          docker run --rm \
-            --user "$(id -u):$(id -g)" \
-            -e HOME=/tmp/manim-home \
-            -e PYTHONPATH="/manim/$JOB_ROOT" \
-            -v "$GITHUB_WORKSPACE:/manim" \
-            -w "/manim/$JOB_ROOT" \
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+            -v "$GITHUB_WORKSPACE:/manim" -w "/manim/$JOB_ROOT" \
             --entrypoint bash "$MANIM_IMAGE" -c "
               set -euo pipefail
               mkdir -p /tmp/manim-bin
@@ -117,126 +94,129 @@ jobs:
               chmod +x /tmp/manim-bin/xdg-open
               export PATH=/tmp/manim-bin:\$PATH
               manim -pqh '${{ matrix.file }}' '${{ matrix.scene }}' \
-                --fps 30 \
-                --format=mp4 \
-                --media_dir 'media/${{ matrix.slug }}' \
+                --fps 30 --format=mp4 \
+                --media_dir 'media_${{ matrix.slug }}' \
                 --disable_caching
-            " 2>&1 | tee "delivery/${{ matrix.slug }}/render_pqh.log"
-          FINAL="$(find "media/${{ matrix.slug }}" -type f -name '${{ matrix.scene }}.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+            " 2>&1 | tee "delivery_${{ matrix.slug }}/render_pqh.log"
+          FINAL="$(find "media_${{ matrix.slug }}" -type f -name '${{ matrix.scene }}.mp4' ! -path '*/partial_movie_files/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$FINAL" && test -s "$FINAL"
-          cp "$FINAL" "delivery/${{ matrix.slug }}/${{ matrix.slug }}_PQH.mp4"
-          cp "${{ matrix.file }}" "delivery/${{ matrix.slug }}/${{ matrix.slug }}.py"
-          cp library/inventor_pro_ui.py "delivery/${{ matrix.slug }}/inventor_pro_ui.py"
+          cp "$FINAL" "delivery_${{ matrix.slug }}/${{ matrix.output }}"
+          cp '${{ matrix.file }}' "delivery_${{ matrix.slug }}/"
+          cp pattern_senior_base.py "delivery_${{ matrix.slug }}/"
 
-      - name: Strict technical QA and audit frames
+      - name: Senior automated technical and frame QA
         shell: bash
         run: |
           set -euo pipefail
           cd "$JOB_ROOT"
-          OUT="delivery/${{ matrix.slug }}"
-          F="$OUT/${{ matrix.slug }}_PQH.mp4"
-          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
-          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
-          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
-          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
-          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
-          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
-          SIZE="$(ffprobe -v error -show_entries format=size -of csv=p=0 "$F")"
-          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
-            "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > "$OUT/VIDEO_TECHNICAL.tsv"
+          D="delivery_${{ matrix.slug }}"
+          F="$D/${{ matrix.output }}"
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F" | tr -d '[:space:]')"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F" | tr -d '[:space:]')"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F" | tr -d '[:space:]')"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F" | tr -d '[:space:]')"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F" | tr -d '[:space:]')"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F" | tr -d '[:space:]')"
+          SIZE="$(ffprobe -v error -show_entries format=size -of csv=p=0 "$F" | tr -d '[:space:]')"
           test "$W" = 1920
           test "$H" = 1080
           test "$FPS" = 30/1
           test "$CODEC" = h264
           test "$PIX" = yuv420p
-          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/full_decode.log"
-          mkdir -p "$OUT/audit_frames"
-          for P in 0.05 0.20 0.38 0.56 0.74 0.92; do
+          python - "$DUR" <<'PY'
+          import sys
+          d=float(sys.argv[1])
+          assert 85 <= d <= 360, f"Unexpected lesson duration: {d}"
+          PY
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$D/full_decode.log"
+          test ! -s "$D/full_decode.log"
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt -show_entries format=duration,size -of json "$F" > "$D/VIDEO_TECHNICAL.json"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > "$D/VIDEO_TECHNICAL.tsv"
+          for P in 0.04 0.10 0.16 0.22 0.28 0.34 0.40 0.46 0.52 0.58 0.64 0.70 0.76 0.82 0.88 0.94; do
             T="$(python -c "print(float('$DUR')*float('$P'))")"
             TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
-            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "$OUT/audit_frames/frame_${TAG}.png"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "$D/audit_frames/frame_${TAG}.png"
           done
-          sha256sum "$F" "$OUT/${{ matrix.slug }}.py" "$OUT/inventor_pro_ui.py" > "$OUT/SHA256SUMS.txt"
-          cat > "$OUT/RENDER_INFO.txt" <<EOF
-          Scene: ${{ matrix.scene }}
-          Source: ${{ matrix.file }}
+          ffmpeg -y -loglevel error -pattern_type glob -i "$D/audit_frames/*.png" -vf 'scale=480:-1,tile=4x4' -frames:v 1 "$D/QA_CONTACT_SHEET.jpg"
+          sha256sum "$F" '${{ matrix.file }}' pattern_senior_base.py > "$D/SHA256SUMS.txt"
+          cat > "$D/QA_AUTOMATED_REPORT.txt" <<EOF
+          ${{ matrix.slug }} SENIOR V1 — AUTOMATED QA PASS
           ManimCE: 0.20.1
-          Preview: literal -pql at 15 fps
-          Final: literal -pqh at 30 fps
-          Output: 1920x1080, H.264, yuv420p
-          Visual system: Inventor Professional inspired ribbon + Model Browser + property panel + restrained gray CAD canvas
-          QA: py_compile + PQL + PQH + ffprobe + full FFmpeg decode + 6 audit frames + SHA-256
+          Final render: literal -pqh
+          Resolution: $W x $H
+          Frame rate: $FPS
+          Codec: $CODEC
+          Pixel format: $PIX
+          Duration: $DUR s
+          Full FFmpeg decode: PASS
+          Static Python compile: PASS
+          Safe-area assertions: PASS at render time
+          Visual contract: white background, black typography, blue sketch, green valid preview, red validation warnings.
+          Pedagogy: concept -> Sketch1 -> Extrusion1 -> Hole1 seed -> parameters -> preview -> validation -> parametric edit -> final summary/orbit.
+          Audit frames: 16
           EOF
-          (
-            cd "$OUT"
-            zip -9 -r "${{ matrix.slug }}_FULL_PACKAGE.zip" \
-              "${{ matrix.slug }}_PQH.mp4" \
-              "${{ matrix.slug }}.py" inventor_pro_ui.py \
-              VIDEO_TECHNICAL.tsv RENDER_INFO.txt SHA256SUMS.txt \
-              render_pql.log render_pqh.log full_decode.log audit_frames/ >/dev/null
-          )
 
-      - name: Upload verified operation package
+      - name: Upload verified senior pattern artifact
         uses: actions/upload-artifact@v4
         with:
-          name: inventor-${{ matrix.slug }}
-          path: |
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/${{ matrix.slug }}_PQH.mp4
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/${{ matrix.slug }}.py
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/inventor_pro_ui.py
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/${{ matrix.slug }}_FULL_PACKAGE.zip
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/VIDEO_TECHNICAL.tsv
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/RENDER_INFO.txt
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/SHA256SUMS.txt
-            ${{ env.JOB_ROOT }}/delivery/${{ matrix.slug }}/audit_frames/
+          name: senior-${{ matrix.slug }}-V1-PQH
+          path: ${{ env.JOB_ROOT }}/delivery_${{ matrix.slug }}/
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 14
 
-  package:
-    if: github.event.pull_request.head.ref == 'render-inventor-dedicated-20260826'
-    name: Build complete 8-video package
-    needs: render
+  combine_patterns:
+    name: Combine Circular + Rectangular FULL TOTAL
+    needs: render_pattern
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Checkout exact PR head
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - name: Download all verified operation artifacts
+      - name: Download verified pattern videos and QA
         uses: actions/download-artifact@v4
         with:
-          pattern: inventor-*
-          path: master
-          merge-multiple: false
+          pattern: senior-*-V1-PQH
+          path: full_total
+          merge-multiple: true
 
-      - name: Add sources and create master ZIP
+      - name: Build FULL TOTAL video and package
         shell: bash
         run: |
           set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq zip >/dev/null
-          mkdir -p master/_project_sources
-          cp "$JOB_ROOT/README.md" master/_project_sources/README.md
-          cp "$JOB_ROOT/library/inventor_pro_ui.py" master/_project_sources/inventor_pro_ui.py
-          cp "$JOB_ROOT"/scenes/*.py master/_project_sources/
-          find master -type f -name '*_PQH.mp4' | sort > master/VIDEOS_INCLUDED.txt
-          find master/_project_sources -type f -name '*.py' | sort > master/SOURCES_INCLUDED.txt
-          test "$(wc -l < master/VIDEOS_INCLUDED.txt)" -eq 8
-          printf 'Autodesk Inventor dedicated operations package\n8 independent ManimCE scenes + 8 verified PQH MP4 videos\nRender strategy: 8 parallel matrix jobs\nBranch: render-inventor-dedicated-20260826\n' > master/PACKAGE_INFO.txt
-          zip -9 -r Inventor_Professional_Misc_Operations_8Videos_PQH_20260826.zip master >/dev/null
-          sha256sum Inventor_Professional_Misc_Operations_8Videos_PQH_20260826.zip > Inventor_Professional_Misc_Operations_8Videos_PQH_20260826.zip.sha256
+          cd full_total
+          test -s 10_rectangular_pattern_SENIOR_V1_PQH.mp4
+          test -s 11_circular_pattern_SENIOR_V1_PQH.mp4
+          printf "file '%s'\nfile '%s'\n" \
+            "10_rectangular_pattern_SENIOR_V1_PQH.mp4" \
+            "11_circular_pattern_SENIOR_V1_PQH.mp4" > concat.txt
+          ffmpeg -nostdin -y -v error -f concat -safe 0 -i concat.txt -c copy \
+            Inventor_Rectangular_Circular_Pattern_FULL_TOTAL_SENIOR_V1_PQH.mp4
+          F=Inventor_Rectangular_Circular_Pattern_FULL_TOTAL_SENIOR_V1_PQH.mp4
+          test -s "$F"
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> FULL_TOTAL_DECODE.log
+          test ! -s FULL_TOTAL_DECODE.log
+          sha256sum *.mp4 > SHA256SUMS_FULL_TOTAL.txt
+          cat > README_FULL_TOTAL.md <<'EOF'
+          # Autodesk Inventor — Rectangular + Circular Pattern FULL TOTAL Senior V1
 
-      - name: Upload final complete package
+          Consolidated visual contract: 1920x1080, 30 fps, white background, black typography, blue sketch geometry, green valid previews, red validation warnings, large safe-layout typography and complete 2D -> 3D -> feature -> validation -> parametric-edit flow.
+
+          Render protocol: ManimCE 0.20.1 literal -pql smoke gate followed by literal -pqh final renders. Every source video and the combined FULL TOTAL video receive full FFmpeg decode and SHA-256 evidence.
+          EOF
+          zip -9 -r Inventor_Patterns_FULL_TOTAL_SENIOR_V1_PQH_PACKAGE.zip . >/dev/null
+
+      - name: Upload FULL TOTAL senior patterns package
         uses: actions/upload-artifact@v4
         with:
-          name: Inventor-Professional-Misc-Operations-8Videos-PQH-20260826-FINAL
-          path: |
-            Inventor_Professional_Misc_Operations_8Videos_PQH_20260826.zip
-            Inventor_Professional_Misc_Operations_8Videos_PQH_20260826.zip.sha256
-            master/VIDEOS_INCLUDED.txt
-            master/SOURCES_INCLUDED.txt
-            master/PACKAGE_INFO.txt
+          name: Inventor-Patterns-FULL-TOTAL-SENIOR-V1-PQH
+          path: full_total/
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 14
