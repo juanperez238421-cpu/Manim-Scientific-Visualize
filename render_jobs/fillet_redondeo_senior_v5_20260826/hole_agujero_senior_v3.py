@@ -3,10 +3,8 @@ from __future__ import annotations
 import numpy as np
 from manim import *
 
-from hole_agujero_senior_v2 import (
-    InventorHoleAgujeroSeniorV2,
-    SKETCH, VALID, REMOVE, BOLD, smooth,
-)
+from hole_agujero_senior_v2 import InventorHoleAgujeroSeniorV2
+from fillet_redondeo_senior_v5 import SKETCH, VALID, REMOVE, BOLD, smooth
 
 
 class InventorHoleAgujeroSeniorV3(InventorHoleAgujeroSeniorV2):
