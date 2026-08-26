@@ -1,0 +1,17 @@
+HOLE / AGUJERO SENIOR V2 — AUTOMATED QA PASS
+ManimCE: 0.20.1
+Final render: literal -pqh
+Resolution: 1920 x 1080
+Frame rate: 30/1
+Codec: h264
+Pixel format: yuv420p
+Duration: 145.285677 s
+Full FFmpeg decode: PASS
+Static Python compile: PASS
+Safe-area assertions: PASS at render time
+HUD no-overlap assertion: PASS at render time
+Sketch2 / Hole parameter panel separation assertion: PASS at render time
+V2 fix: Hole parameter panel shifted left and narrowed after V1 safe-area failure.
+Pedagogy: Sketch1 -> Extrusion1 -> Top Face -> Sketch2 Point1 -> Hole parameters -> top preview -> section A-A -> cylindrical removal -> validation -> hole types -> parametric edit -> final orbit.
+Audit frames: 24
+Contact sheet: generated
