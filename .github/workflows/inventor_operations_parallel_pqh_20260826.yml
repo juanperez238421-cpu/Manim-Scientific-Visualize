@@ -1,0 +1,17 @@
+name: Inventor Dedicated Operations Parallel PQH 20260826
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# This workflow is kept as the canonical manual definition. The registered
+# push renderer used for the final branch render is house_step_v3_push_render_20260818.yml.
+# Keeping this file manual-only prevents duplicate 8-way matrices on every source commit.
+
+jobs:
+  documentation_only:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Use registered push renderer for final Inventor delivery.'

@@ -1,9 +1,13 @@
-name: Inventor Misc House Style V3 Registered Parallel PQH 20260826
+name: Inventor Misc House Style V3 Parallel PQH 20260826
 
 on:
   push:
     branches:
       - render-inventor-misc-house-style-v3-20260826
+    paths:
+      - 'render_jobs/inventor_misc_house_style_v3_20260826/**'
+      - '.github/workflows/inventor_misc_house_style_v3_parallel_pqh_20260826.yml'
+      - '.render_trigger_inventor_misc_house_style_v3_20260826.txt'
   workflow_dispatch:
 
 jobs:
@@ -53,6 +57,10 @@ jobs:
           set -euo pipefail
           python -m py_compile library/jp_misc_cad_style.py scenes/*.py
           grep -n "class ${{ matrix.scene }}" "${{ matrix.file }}"
+          if grep -R -nE '([A-Za-z]:\\|/Users/|/home/[^/]+/Desktop)' library scenes; then
+            echo 'Absolute path detected' >&2
+            exit 1
+          fi
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1 || ! command -v zip >/dev/null 2>&1; then
             sudo apt-get update -qq
             sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ffmpeg zip
@@ -100,6 +108,7 @@ jobs:
           printf '%s\n' "${candidates[@]}" > "delivery/${{ matrix.slug }}/final_candidates.txt"
           if [ "${#candidates[@]}" -ne 1 ]; then
             echo "Expected exactly one final MP4, found ${#candidates[@]}" >&2
+            find "hq/${{ matrix.slug }}" -type f -print | sort >&2
             exit 1
           fi
           cp "${candidates[0]}" "delivery/${{ matrix.slug }}/${{ matrix.slug }}_PQH.mp4"
@@ -127,7 +136,15 @@ jobs:
           cp "${{ matrix.file }}" "delivery/${{ matrix.slug }}/"
           cp library/jp_misc_cad_style.py "delivery/${{ matrix.slug }}/"
           cp README.md "delivery/${{ matrix.slug }}/PACKAGE_README.md"
-          echo PASS > "delivery/${{ matrix.slug }}/QA_PASS.txt"
+          {
+            echo 'PASS — House / Sweep / Loft / Revolve visual grammar'
+            echo 'ManimCE 0.20.1 official Docker'
+            echo 'PQL smoke render: PASS'
+            echo 'PQH literal render: PASS'
+            echo 'Final video: 1920x1080, 30 fps, H.264, yuv420p'
+            echo 'Full FFmpeg decode: PASS'
+            cat "delivery/${{ matrix.slug }}/sha256.txt"
+          } > "delivery/${{ matrix.slug }}/QA_PASS.txt"
 
       - name: Upload verified operation package
         uses: actions/upload-artifact@v4
@@ -153,16 +170,24 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
-      - name: Ensure FFmpeg and ZIP
+
+      - name: Install FFmpeg and ZIP if needed
+        shell: bash
         run: |
-          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v zip >/dev/null 2>&1; then sudo apt-get update -qq && sudo apt-get install -y ffmpeg zip; fi
-      - name: Download all operation artifacts
+          set -euo pipefail
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v zip >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ffmpeg zip
+          fi
+
+      - name: Download all eight verified artifacts
         uses: actions/download-artifact@v4
         with:
           pattern: inventor-misc-0*
           path: collected
           merge-multiple: false
-      - name: Build master and ZIP
+
+      - name: Build master class video and total package
         shell: bash
         run: |
           set -euo pipefail
@@ -173,20 +198,24 @@ jobs:
             DIR="collected/inventor-misc-${slug}"
             VIDEO="$DIR/${slug}_PQH.mp4"
             test -s "$VIDEO"
+            ffmpeg -v error -i "$VIDEO" -f null -
             cp "$VIDEO" FINAL_PACKAGE/individual_videos/
             cp "$DIR/ffprobe.json" "$DIR/sha256.txt" "$DIR/QA_PASS.txt" FINAL_PACKAGE/qa/
             cp "$DIR/frames/control_sheet.jpg" "FINAL_PACKAGE/qa/${slug}_control_sheet.jpg"
             printf "file '%s'\n" "$PWD/$VIDEO" >> concat.txt
           done
+
           ffmpeg -y -f concat -safe 0 -i concat.txt -c copy FINAL_PACKAGE/Inventor_Misc_Tools_HouseStyle_V3_MASTER_PQH.mp4
           ffmpeg -v error -i FINAL_PACKAGE/Inventor_Misc_Tools_HouseStyle_V3_MASTER_PQH.mp4 -f null -
           cp render_jobs/inventor_misc_house_style_v3_20260826/README.md FINAL_PACKAGE/
           cp -R render_jobs/inventor_misc_house_style_v3_20260826/library FINAL_PACKAGE/sources/
           cp -R render_jobs/inventor_misc_house_style_v3_20260826/scenes FINAL_PACKAGE/sources/
+          cp .github/workflows/inventor_misc_house_style_v3_parallel_pqh_20260826.yml FINAL_PACKAGE/sources/
           sha256sum FINAL_PACKAGE/Inventor_Misc_Tools_HouseStyle_V3_MASTER_PQH.mp4 > FINAL_PACKAGE/MASTER_SHA256.txt
           zip -r Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826.zip FINAL_PACKAGE >/dev/null
           sha256sum Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826.zip > PACKAGE_SHA256.txt
-      - name: Upload total delivery
+
+      - name: Upload total delivery package
         uses: actions/upload-artifact@v4
         with:
           name: Inventor_Misc_Tools_HouseStyle_V3_TOTAL_PACKAGE_20260826
