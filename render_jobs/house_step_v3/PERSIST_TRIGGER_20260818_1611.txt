@@ -1,0 +1,1 @@
+Trigger exact V3 PQH render and immediate MP4 persistence.

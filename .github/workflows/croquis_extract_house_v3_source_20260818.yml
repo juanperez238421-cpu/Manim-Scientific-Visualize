@@ -1,0 +1,55 @@
+name: Croquis Extract House V3 Source 20260818
+
+on:
+  pull_request:
+    branches: [house-step-v3-render-20260818]
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    if: github.event.pull_request.head.ref == 'croquis-protocol-v1-20260818' && github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout protocol branch
+        uses: actions/checkout@v4
+        with:
+          ref: croquis-protocol-v1-20260818
+
+      - name: Decode executable House V3 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import ast, base64, gzip
+
+          src = Path('render_jobs/house_step_v3/House_Extrusion_3D_ManimCE.py')
+          text = src.read_text(encoding='utf-8')
+          tree = ast.parse(text)
+          payload = None
+          for node in tree.body:
+              if isinstance(node, ast.Assign):
+                  for target in node.targets:
+                      if isinstance(target, ast.Name) and target.id == '_payload':
+                          payload = ast.literal_eval(node.value)
+                          break
+          if payload is None:
+              raise RuntimeError('Could not locate _payload in wrapped source')
+          decoded = gzip.decompress(base64.b64decode(payload)).decode('utf-8')
+          out = Path('render_jobs/house_step_v3/House_Extrusion_3D_STEP_BY_STEP_V3_DECODED.py')
+          out.write_text(decoded, encoding='utf-8')
+          print(f'Decoded {len(decoded.splitlines())} lines -> {out}')
+          PY
+          python -m py_compile render_jobs/house_step_v3/House_Extrusion_3D_STEP_BY_STEP_V3_DECODED.py
+
+      - name: Persist decoded source for protocol analysis
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add render_jobs/house_step_v3/House_Extrusion_3D_STEP_BY_STEP_V3_DECODED.py
+          git commit -m 'Decode House Step V3 source for croquis protocol analysis' || true
+          git push origin HEAD:croquis-protocol-v1-20260818
