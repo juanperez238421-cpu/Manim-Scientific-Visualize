@@ -1,45 +1,19 @@
 from manim import *
 from library.inventor_pro_ui import *
-from library.sketch_to_3d_helpers import animate_rect_sketch_to_extrusion, finish_feature
 
-
-class InventorEmbossDetailed(InventorOperationScene):
-    OPERATION = "Emboss"
-    FEATURE_NODE = "Emboss1"
-
+class InventorEmbossDetailed(JPMiscCADScene):
+    OPERATION="Emboss / Repujado"
     def construct(self):
-        self.install_hud(
-            [("Profile", "Sketch2"), ("Type", "Emboss from Face"), ("Depth", "3 mm"), ("Direction", "Positive")],
-            ["Part1.ipt", "Origin", "Sketch1", "Extrusion1", "Sketch2", "Emboss1"],
-        )
-        self.intro("Repujado: partir de un croquis 2D base, crear una placa 3D y después elevar o grabar otro perfil sobre una cara.")
-
-        plate = animate_rect_sketch_to_extrusion(
-            self,
-            width=4.8,
-            depth=2.80,
-            height=0.34,
-            shift=DOWN * 0.34,
-            dimensions="80 mm x 50 mm",
-            extrusion="6 mm",
-            step_start=1,
-        )
-
-        self.step(4, "Selecciona la cara superior y crea Sketch2", "El segundo croquis debe quedar asociado a la cara donde se aplicará el relieve; evita planos desconectados del sólido.")
-        profile = Circle(radius=0.76, color=SKETCH, stroke_width=5).shift(DOWN * 0.34 + OUT * 0.19)
-        inner = Circle(radius=0.34, color=SKETCH, stroke_width=4).shift(DOWN * 0.34 + OUT * 0.20)
-        self.play(Create(profile), Create(inner), run_time=0.75)
-
-        self.step(5, "Construye y restringe un perfil cerrado", "Círculos, texto convertido a geometría o contornos cerrados definen exactamente el área que Inventor elevará o grabará.")
-        self.step(6, "3D Model -> Create -> Emboss", "Selecciona Sketch2, usa Emboss from Face, define Depth = 3 mm y conserva Positive para generar relieve hacia afuera.")
-
-        preview = cylinder(0.76, 0.58, PREVIEW, 0.55).shift(DOWN * 0.34 + OUT * 0.45)
-        preview_inner = cylinder(0.34, 0.63, CANVAS, 0.95).shift(DOWN * 0.34 + OUT * 0.48)
-        self.play(FadeIn(preview), FadeIn(preview_inner), profile.animate.set_opacity(0.28), inner.animate.set_opacity(0.28), run_time=0.75)
-        self.step(7, "Vista previa: Emboss vs Engrave", "Emboss agrega material y Engrave lo introduce en la cara. Verifica dirección, profundidad y que el contorno permanezca dentro de la superficie.")
-
-        result = cylinder(0.76, 0.58, STEEL_DARK, 1.0).shift(DOWN * 0.34 + OUT * 0.45)
-        hole = cylinder(0.34, 0.65, CANVAS, 1.0).shift(DOWN * 0.34 + OUT * 0.48)
-        self.play(FadeOut(preview), FadeOut(preview_inner), FadeIn(result), FadeIn(hole), FadeOut(profile), FadeOut(inner), run_time=0.75)
-        self.step(8, "OK -> Emboss1", "El Browser registra Sketch2 y Emboss1. La profundidad y el sentido pueden editarse sin rehacer Extrusion1.")
-        finish_feature(self, 9, "Resultado: relieve de 3 mm creado desde un segundo croquis y completamente editable como Emboss1.")
+        self.opening("REPUJADO  •  EMBOSS","Project a closed sketch on a face and raise or sink it by a controlled depth.",["FACE","CLOSED SKETCH","DEPTH","EMBOSSED FEATURE"])
+        h=self.section_header(1,"CORE IDEA: THE PROFILE LIVES ON A FACE","Emboss uses a closed region. Positive depth raises it; negative direction creates an engraved/debossed detail.")
+        face=Rectangle(width=5.8,height=3.2,color=BLACK,stroke_width=3); hexagon=RegularPolygon(6,radius=.85,color=BLACK,stroke_width=4); arrow=Arrow(DOWN*.15,UP*1.45,buff=.05,color=BLACK,stroke_width=3)
+        labs=VGroup(self.text("CLOSED PROFILE",22,BOLD).next_to(hexagon,DOWN,buff=.3),self.text("+3 mm",22,BOLD).next_to(arrow,RIGHT,buff=.2)); self.fixed(labs); self.play(Create(face),Create(hexagon),FadeIn(labs[0]),run_time=1.1); self.play(Create(arrow),FadeIn(labs[1]),run_time=.8); self.wait(EXPLAIN); self.clear_scene()
+        body=self.base_plate_from_sketch(2,width=5.6,depth=3.2,height=.55,dims="90 × 52 mm",extrude="9 mm")
+        h=self.section_header(3,"DRAW THE EMBOSS PROFILE ON THE TOP FACE","Use the finished face as Sketch2 plane. Close and constrain the profile before creating the feature."); self.fixed(h)
+        self.move_camera(phi=5*DEGREES,theta=-90*DEGREES,zoom=1,run_time=1); plate=Rectangle(width=5.6,height=3.2,color=BLACK,stroke_width=3); logo=RegularPolygon(6,radius=.82,color=BLACK,stroke_width=4); center=Dot(ORIGIN,color=BLACK,radius=.06); dim=self.text("Hexagon: 24 mm across flats   |   centered",21,BOLD).to_edge(DOWN,buff=.34); self.fixed(dim)
+        self.play(FadeOut(body),FadeIn(plate),Create(logo),FadeIn(center),FadeIn(dim),run_time=1.2); self.wait(EXPLAIN)
+        self.move_camera(phi=64*DEGREES,theta=-48*DEGREES,zoom=.9,run_time=1.1); self.play(FadeOut(plate),FadeOut(logo),run_time=.35); base=cuboid(5.6,3.2,.55,.56); self.play(FadeIn(base),run_time=.6)
+        pts=[[.82*math.cos(a),.82*math.sin(a),.275] for a in np.linspace(0,TAU,6,endpoint=False)]; emblem=extruded_polygon(pts,.24,.20); self.play(FadeIn(emblem),run_time=1.5)
+        card=self.parameter_card("EMBOSS",[("Profile","Sketch2 region"),("Depth","3 mm"),("Direction","Positive"),("Operation","Emboss")]); self.play(FadeIn(card),run_time=.8); self.wait(EXPLAIN); final=extruded_polygon(pts,.24,.62); self.play(Transform(emblem,final),FadeOut(card),run_time=.8)
+        note=self.note("WHEN TO USE IT",["Logos and identification marks.","Raised grip or decorative geometry.","Shallow face detail without a tall extrusion."],width=6).to_corner(DR,buff=.45).shift(UP*.45); self.fixed(note); self.play(FadeIn(note),run_time=.8); self.wait(EXPLAIN); self.play(FadeOut(note),FadeOut(h),run_time=.4)
+        self.final_orbit("FACE + CLOSED PROFILE + DEPTH = EMBOSS")
