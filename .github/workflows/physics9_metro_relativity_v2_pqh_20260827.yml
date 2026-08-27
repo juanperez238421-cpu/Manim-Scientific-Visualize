@@ -1,0 +1,175 @@
+name: Physics 9 Metro Relativity V2 Simplified FINAL PQH 20260827
+
+on:
+  push:
+    branches:
+      - render/physics9-metro-relativity-v2-simplified-20260827
+    paths:
+      - 'render_jobs/physics9_metro_relativity_20260827/metro_relativity_v2_simplified.py'
+      - 'render_jobs/physics9_metro_relativity_20260827/metro_relativity_lesson.py'
+      - 'render_jobs/physics9_metro_relativity_20260827/QA_REVIEW_V1_TO_V2.md'
+      - '.github/workflows/physics9_metro_relativity_v2_pqh_20260827.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: render/physics9-metro-relativity-v2-simplified-20260827
+
+      - name: Validate V2 source and QA contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_metro_relativity_20260827
+          python -m py_compile "$JOB/metro_relativity_lesson.py" "$JOB/metro_relativity_v2_simplified.py"
+          grep -q 'class Physics9MetroRelativityV2' "$JOB/metro_relativity_v2_simplified.py"
+          grep -q '300\\,000.*km/s' "$JOB/metro_relativity_v2_simplified.py"
+          grep -q 'No 3D human geometry' "$JOB/QA_REVIEW_V1_TO_V2.md"
+          mkdir -p qa_preview
+          sha256sum "$JOB/metro_relativity_lesson.py" "$JOB/metro_relativity_v2_simplified.py" "$JOB/QA_REVIEW_V1_TO_V2.md" > qa_preview/SOURCE_SHA256SUMS.txt
+
+      - name: Prepare pinned ManimCE environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg zip imagemagick
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL runtime gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_metro_relativity_20260827
+          rm -rf media_pql
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.08 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql metro_relativity_v2_simplified.py Physics9MetroRelativityV2 \
+                --format=mp4 --media_dir=/manim/media_pql --disable_caching
+            ' 2>&1 | tee qa_preview/render_pql.log
+          PQL="$(find media_pql -type f -name 'Physics9MetroRelativityV2.mp4' -print -quit)"
+          test -n "$PQL" && test -s "$PQL"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_metro_relativity_20260827
+          rm -rf media_pqh final_out package
+          mkdir -p final_out
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh metro_relativity_v2_simplified.py Physics9MetroRelativityV2 \
+                --format=mp4 --media_dir=/manim/media_pqh --disable_caching
+            ' 2>&1 | tee final_out/render_pqh.log
+          FINAL="$(find media_pqh -type f -name 'Physics9MetroRelativityV2.mp4' -print -quit)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" final_out/Physics9_Metro_Relativity_V2_SIMPLIFIED_FINAL_pqh.mp4
+
+      - name: Strict technical QA and full decode
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Physics9_Metro_Relativity_V2_SIMPLIFIED_FINAL_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\n%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" > final_out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          python - <<'PY'
+          from pathlib import Path
+          d=float(Path('final_out/VIDEO_TECHNICAL.tsv').read_text().splitlines()[1].split('\t')[-1])
+          assert 80 <= d <= 240, d
+          PY
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> final_out/full_decode.log
+          test ! -s final_out/full_decode.log
+          sha256sum "$F" > final_out/SHA256SUMS.txt
+
+      - name: Distributed visual QA frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Physics9_Metro_Relativity_V2_SIMPLIFIED_FINAL_pqh.mp4
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          mkdir -p final_out/audit_frames
+          for INDEX in $(seq -w 0 23); do
+            T="$(python -c "print(float('$DUR')*(int('$INDEX')+0.5)/24.0)")"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "final_out/audit_frames/frame_${INDEX}.png"
+          done
+          montage final_out/audit_frames/*.png -thumbnail 480x270 -tile 4x6 -geometry +10+20 -background white -quality 90 final_out/CONTACT_SHEET.jpg
+          test -s final_out/CONTACT_SHEET.jpg
+
+      - name: Build reproducible project ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_metro_relativity_20260827
+          ROOT=package/Physics9_Metro_Relativity_V2_SIMPLIFIED_FINAL_PQH_PROJECT
+          mkdir -p "$ROOT/src" "$ROOT/qa/audit_frames" "$ROOT/workflow"
+          cp "$JOB/metro_relativity_lesson.py" "$ROOT/src/"
+          cp "$JOB/metro_relativity_v2_simplified.py" "$ROOT/src/"
+          cp "$JOB/QA_REVIEW_V1_TO_V2.md" "$ROOT/qa/"
+          cp final_out/Physics9_Metro_Relativity_V2_SIMPLIFIED_FINAL_pqh.mp4 "$ROOT/"
+          cp final_out/VIDEO_TECHNICAL.tsv final_out/SHA256SUMS.txt final_out/full_decode.log final_out/render_pqh.log final_out/CONTACT_SHEET.jpg "$ROOT/qa/"
+          cp qa_preview/render_pql.log qa_preview/SOURCE_SHA256SUMS.txt "$ROOT/qa/"
+          cp final_out/audit_frames/*.png "$ROOT/qa/audit_frames/"
+          cp .github/workflows/physics9_metro_relativity_v2_pqh_20260827.yml "$ROOT/workflow/"
+          (cd package && zip -qr Physics9_Metro_Relativity_V2_SIMPLIFIED_FINAL_PQH_PROJECT.zip Physics9_Metro_Relativity_V2_SIMPLIFIED_FINAL_PQH_PROJECT)
+          test -s package/Physics9_Metro_Relativity_V2_SIMPLIFIED_FINAL_PQH_PROJECT.zip
+
+      - name: Publish V2 final MP4 and QA manifest to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST=deliveries/physics9_metro_relativity_v2_20260827
+          mkdir -p "$DEST"
+          cp final_out/Physics9_Metro_Relativity_V2_SIMPLIFIED_FINAL_pqh.mp4 "$DEST/"
+          cp final_out/VIDEO_TECHNICAL.tsv final_out/SHA256SUMS.txt final_out/CONTACT_SHEET.jpg "$DEST/"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DEST"
+          if ! git diff --cached --quiet; then
+            git commit -m "render: publish Physics 9 metro relativity V2 final PQH"
+            git push origin HEAD:render/physics9-metro-relativity-v2-simplified-20260827
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-Metro-Relativity-V2-Simplified-FINAL-PQH
+          path: |
+            package/Physics9_Metro_Relativity_V2_SIMPLIFIED_FINAL_PQH_PROJECT.zip
+            final_out/Physics9_Metro_Relativity_V2_SIMPLIFIED_FINAL_pqh.mp4
+            final_out/VIDEO_TECHNICAL.tsv
+            final_out/SHA256SUMS.txt
+            final_out/CONTACT_SHEET.jpg
+            final_out/audit_frames/
+          if-no-files-found: error
+          retention-days: 14
