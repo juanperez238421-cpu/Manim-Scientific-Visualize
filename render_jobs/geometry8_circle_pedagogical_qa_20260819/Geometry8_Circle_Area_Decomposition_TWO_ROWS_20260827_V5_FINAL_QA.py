@@ -42,13 +42,13 @@ class Geometry8CircleAreaTwoRows20260827V5FinalQA(Geometry8CircleAreaTwoRows2026
         fila1 = self.text("FILA 1", 28, BOLD).move_to([-4.45, 1.25, 0])
         fila2 = self.text("FILA 2", 28, BOLD).move_to([-4.45, -1.02, 0])
 
-        # Lower and slightly smaller than V4 so the lower P/2 label remains
-        # completely visible. The panel is still well inside the safe frame.
+        # Final QA: give the lower P/2 label a clearly visible gap above the
+        # summary panel. y=-3.70 keeps the full box inside the 16:9 safe frame.
         formula = self.formula_panel(
             r"P=2\pi r\qquad\Rightarrow\qquad\frac{P}{2}=\pi r",
             6.6,
             40,
-        ).move_to([0.0, -3.48, 0])
+        ).move_to([0.0, -3.70, 0])
 
         self.assert_safe(
             VGroup(rows, arcs_top, arcs_bottom, measures, fila1, fila2, formula, h),
