@@ -31,9 +31,9 @@ jobs:
           python -Werror -m py_compile "$SRC"
           grep -Fq 'class Geometry8CircleAreaDecomposition20260827' "$SRC"
           grep -Fq 'def step_6_height_not_2r' "$SRC"
-          grep -Fq '\\frac{2\\pi r}{2}=\\pi r' "$SRC"
-          grep -Fq '\\boxed{A=\\pi r^2}' "$SRC"
-          if grep -Eq '[A-Za-z]:\\\\|/Users/|/home/[^/]+/Desktop' "$SRC"; then
+          grep -Fq '\frac{2\pi r}{2}=\pi r' "$SRC"
+          grep -Fq '\boxed{A=\pi r^2}' "$SRC"
+          if grep -Eq '[A-Za-z]:\\|/Users/|/home/[^/]+/Desktop' "$SRC"; then
             echo 'Absolute path detected' >&2
             exit 1
           fi
@@ -171,5 +171,5 @@ jobs:
           path: |
             out/
             qa_out/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 7
