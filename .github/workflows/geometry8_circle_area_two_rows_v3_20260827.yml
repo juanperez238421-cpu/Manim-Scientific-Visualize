@@ -130,7 +130,10 @@ jobs:
           print(f'size={os.path.getsize(p)}')
           assert codec == 'h264'
           assert width == 1920 and height == 1080
-          assert abs(fps - 30.0) < 0.001
+          # Container/PyAV can report 30 fps as ~30.001 because of MP4 time-base rounding.
+          # This tolerance still rejects genuinely wrong frame rates while accepting the
+          # requested Manim --fps 30 output.
+          assert abs(fps - 30.0) < 0.01
           assert fmt == 'yuv420p'
           assert duration > 20
           assert frames > 0
@@ -169,6 +172,7 @@ jobs:
               card.paste(im,((500-im.width)//2,8))
               ImageDraw.Draw(card).text((10,280),os.path.basename(fp),fill='black')
               cards.append(card)
+          assert len(cards) >= 24, f'Expected dense visual audit, got {len(cards)} frames'
           cols=3
           rows=math.ceil(len(cards)/cols)
           sheet=Image.new('RGB',(cols*500,rows*300),'white')
