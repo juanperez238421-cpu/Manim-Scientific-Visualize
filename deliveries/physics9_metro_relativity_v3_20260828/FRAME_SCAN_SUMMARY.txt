@@ -1,0 +1,4 @@
+frames_scanned=4055
+blank_frames=67
+very_sparse_frames=76
+border_heavy_frames=16
