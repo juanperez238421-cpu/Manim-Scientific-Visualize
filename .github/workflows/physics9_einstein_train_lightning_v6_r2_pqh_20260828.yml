@@ -1,0 +1,215 @@
+name: Physics 9 Einstein Train Lightning V6 R2 FINAL PQH 20260828
+
+on:
+  push:
+    branches:
+      - render/physics9-einstein-train-lightning-v6-20260828
+    paths:
+      - 'render_jobs/physics9_einstein_train_lightning_v6_20260828/physics9_einstein_train_lightning_v6.py'
+      - 'render_jobs/physics9_einstein_train_lightning_v6_20260828/physics9_einstein_train_lightning_v6_r2.py'
+      - 'render_jobs/physics9_einstein_train_lightning_v6_20260828/SENIOR_QA_V6.md'
+      - '.github/workflows/physics9_einstein_train_lightning_v6_r2_pqh_20260828.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: render/physics9-einstein-train-lightning-v6-20260828
+
+      - name: Validate V6 R2 source and exact physics
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_einstein_train_lightning_v6_20260828
+          BASE="$JOB/physics9_einstein_train_lightning_v6.py"
+          SRC="$JOB/physics9_einstein_train_lightning_v6_r2.py"
+          python -m py_compile "$BASE" "$SRC"
+          grep -q 'class Physics9EinsteinTrainLightningV6R2' "$SRC"
+          grep -q 'SIMULTANEOUS ARRIVAL AT x = 0' "$SRC"
+          grep -q 'FRONT FLASH ARRIVES FIRST' "$SRC"
+          grep -q 'REAR FLASH ARRIVES LATER' "$SRC"
+          grep -q 'X=X_0+vt' "$SRC"
+          grep -q '0.500' "$SRC"
+
+          python - <<'PY'
+          import math
+          c=300.0; beta=0.60; v=beta*c; a=150.0
+          assert abs(a/c-0.5)<1e-12
+          assert abs(a/(c+v)-0.3125)<1e-12
+          assert abs(a/(c-v)-1.25)<1e-12
+          gamma=1/math.sqrt(1-beta**2)
+          assert abs(gamma-1.25)<1e-12
+          assert abs(gamma*(-beta*a/c)+0.375)<1e-12
+          assert abs(gamma*(+beta*a/c)-0.375)<1e-12
+          PY
+
+          mkdir -p qa_preview
+          sha256sum "$BASE" "$SRC" "$JOB/SENIOR_QA_V6.md" > qa_preview/SOURCE_SHA256SUMS.txt
+
+      - name: Prepare pinned ManimCE environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg zip imagemagick
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL runtime gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_einstein_train_lightning_v6_20260828
+          rm -rf media_pql_r2
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=0.05 \
+            -v "$PWD:/manim" \
+            -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql physics9_einstein_train_lightning_v6_r2.py Physics9EinsteinTrainLightningV6R2 \
+                --format=mp4 --media_dir=/manim/media_pql_r2 --disable_caching
+            ' 2>&1 | tee qa_preview/render_pql_r2.log
+          PQL="$(find media_pql_r2 -type f -name 'Physics9EinsteinTrainLightningV6R2.mp4' -print -quit)"
+          test -n "$PQL"; test -s "$PQL"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_einstein_train_lightning_v6_20260828
+          rm -rf media_pqh_r2 final_out_r2 package_r2
+          mkdir -p final_out_r2
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" \
+            -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh physics9_einstein_train_lightning_v6_r2.py Physics9EinsteinTrainLightningV6R2 \
+                --format=mp4 --media_dir=/manim/media_pqh_r2 --disable_caching
+            ' 2>&1 | tee final_out_r2/render_pqh.log
+          FINAL="$(find media_pqh_r2 -type f -name 'Physics9EinsteinTrainLightningV6R2.mp4' -print -quit)"
+          test -n "$FINAL"; test -s "$FINAL"
+          cp "$FINAL" final_out_r2/Physics9_Einstein_Train_Lightning_V6_R2_FINAL_pqh.mp4
+
+      - name: Technical QA and full decode
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out_r2/Physics9_Einstein_Train_Lightning_V6_R2_FINAL_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          FRAMES="$(ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tframes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$FRAMES" > final_out_r2/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920; test "$H" = 1080; test "$FPS" = 30/1; test "$CODEC" = h264; test "$PIX" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> final_out_r2/full_decode.log
+          test ! -s final_out_r2/full_decode.log
+          sha256sum "$F" > final_out_r2/SHA256SUMS.txt
+
+      - name: Every-frame automated blank and border scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out_r2/Physics9_Einstein_Train_Lightning_V6_R2_FINAL_pqh.mp4
+          ffmpeg -nostdin -v error -i "$F" -vf scale=320:180 -pix_fmt gray -f rawvideo final_out_r2/all_frames_gray.raw
+          python - <<'PY'
+          from pathlib import Path
+          import csv
+          W,H=320,180; B=W*H
+          raw=Path('final_out_r2/all_frames_gray.raw').read_bytes(); assert len(raw)%B==0
+          n=len(raw)//B
+          border_idx=[y*W+x for y in range(H) for x in range(W) if x<6 or x>=W-6 or y<6 or y>=H-6]
+          blank=sparse=border_heavy=0; rows=[]
+          for i in range(n):
+              fr=raw[i*B:(i+1)*B]; dark_n=sum(p<245 for p in fr); frac=dark_n/B
+              if dark_n==0: blank+=1
+              if frac<0.0035: sparse+=1
+              border=sum(fr[j]<235 for j in border_idx); border_frac=border/max(dark_n,1)
+              if border_frac>0.22 and dark_n>220: border_heavy+=1
+              rows.append((i,frac,border_frac))
+          with open('final_out_r2/FRAME_BY_FRAME_SCAN.csv','w',newline='') as f:
+              w=csv.writer(f); w.writerow(['frame','dark_fraction','border_dark_fraction']); w.writerows(rows)
+          Path('final_out_r2/FRAME_SCAN_SUMMARY.txt').write_text(f'frames_scanned={n}\nblank_frames={blank}\nvery_sparse_frames={sparse}\nborder_heavy_frames={border_heavy}\n')
+          assert blank<n*0.08; assert sparse<n*0.12; assert border_heavy<n*0.02
+          PY
+          rm final_out_r2/all_frames_gray.raw
+
+      - name: Dense distributed visual QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out_r2/Physics9_Einstein_Train_Lightning_V6_R2_FINAL_pqh.mp4
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          mkdir -p final_out_r2/audit_frames
+          for INDEX in $(seq -w 0 71); do
+            T="$(python -c "print(float('$DUR')*(int('$INDEX')+0.5)/72.0)")"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "final_out_r2/audit_frames/frame_${INDEX}.png"
+          done
+          montage final_out_r2/audit_frames/*.png -thumbnail 480x270 -tile 6x12 -geometry +8+16 -background white -quality 90 final_out_r2/CONTACT_SHEET.jpg
+          test -s final_out_r2/CONTACT_SHEET.jpg
+
+      - name: Build reproducible package and publish
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_einstein_train_lightning_v6_20260828
+          ROOT=package_r2/Physics9_Einstein_Train_Lightning_V6_R2_FINAL_PQH_PROJECT
+          mkdir -p "$ROOT/src" "$ROOT/qa/audit_frames" "$ROOT/workflow"
+          cp "$JOB/physics9_einstein_train_lightning_v6.py" "$ROOT/src/"
+          cp "$JOB/physics9_einstein_train_lightning_v6_r2.py" "$ROOT/src/"
+          cp "$JOB/SENIOR_QA_V6.md" "$ROOT/qa/"
+          cp final_out_r2/Physics9_Einstein_Train_Lightning_V6_R2_FINAL_pqh.mp4 "$ROOT/"
+          cp final_out_r2/VIDEO_TECHNICAL.tsv final_out_r2/SHA256SUMS.txt final_out_r2/full_decode.log final_out_r2/render_pqh.log final_out_r2/FRAME_SCAN_SUMMARY.txt final_out_r2/FRAME_BY_FRAME_SCAN.csv final_out_r2/CONTACT_SHEET.jpg "$ROOT/qa/"
+          cp final_out_r2/audit_frames/*.png "$ROOT/qa/audit_frames/"
+          cp qa_preview/render_pql_r2.log qa_preview/SOURCE_SHA256SUMS.txt "$ROOT/qa/"
+          cp .github/workflows/physics9_einstein_train_lightning_v6_r2_pqh_20260828.yml "$ROOT/workflow/"
+          (cd package_r2 && zip -qr Physics9_Einstein_Train_Lightning_V6_R2_FINAL_PQH_PROJECT.zip Physics9_Einstein_Train_Lightning_V6_R2_FINAL_PQH_PROJECT)
+
+          DEST=deliveries/physics9_einstein_train_lightning_v6_r2_20260828
+          mkdir -p "$DEST"
+          cp final_out_r2/Physics9_Einstein_Train_Lightning_V6_R2_FINAL_pqh.mp4 "$DEST/"
+          cp final_out_r2/VIDEO_TECHNICAL.tsv final_out_r2/SHA256SUMS.txt final_out_r2/FRAME_SCAN_SUMMARY.txt final_out_r2/CONTACT_SHEET.jpg "$DEST/"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DEST"
+          if ! git diff --cached --quiet; then
+            git commit -m "render: publish Einstein train-lightning V6 R2"
+            git push origin HEAD:render/physics9-einstein-train-lightning-v6-20260828
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-Einstein-Train-Lightning-V6-R2-FINAL-PQH
+          path: |
+            package_r2/Physics9_Einstein_Train_Lightning_V6_R2_FINAL_PQH_PROJECT.zip
+            final_out_r2/Physics9_Einstein_Train_Lightning_V6_R2_FINAL_pqh.mp4
+            final_out_r2/VIDEO_TECHNICAL.tsv
+            final_out_r2/SHA256SUMS.txt
+            final_out_r2/FRAME_SCAN_SUMMARY.txt
+            final_out_r2/FRAME_BY_FRAME_SCAN.csv
+            final_out_r2/CONTACT_SHEET.jpg
+            final_out_r2/audit_frames/
+          if-no-files-found: error
+          retention-days: 14
