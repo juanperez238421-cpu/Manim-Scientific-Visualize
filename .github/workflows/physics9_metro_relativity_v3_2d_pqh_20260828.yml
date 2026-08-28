@@ -1,0 +1,241 @@
+name: Physics 9 Metro Relativity V3 2D English FINAL PQH 20260828
+
+on:
+  push:
+    branches:
+      - render/physics9-metro-relativity-v3-2d-only-20260828
+    paths:
+      - 'render_jobs/physics9_metro_relativity_v3_2d_english_20260828/**'
+      - '.github/workflows/physics9_metro_relativity_v3_2d_pqh_20260828.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: render/physics9-metro-relativity-v3-2d-only-20260828
+
+      - name: Validate V3 source and 2D-only contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_metro_relativity_v3_2d_english_20260828
+          SRC="$JOB/metro_relativity_v3_2d_english.py"
+          QA="$JOB/QA_FRAME_BY_FRAME_V2_TO_V3.md"
+          python -m py_compile "$SRC"
+          grep -q 'class Physics9MetroRelativityV3' "$SRC"
+          grep -q 'X=X_0+vt' "$SRC"
+          grep -q '0.60c' "$SRC"
+          grep -q '8.0.*ns' "$SRC"
+          grep -q '10.0.*ns' "$SRC"
+          if grep -Eq 'ThreeDScene|ThreeDAxes|Prism\(|Sphere\(|Cylinder\(|set_camera_orientation|ambient_camera_rotation' "$SRC"; then
+            echo 'FAIL: 3D API detected in a 2D-only lesson.'
+            exit 1
+          fi
+          if grep -Eqi 'DESDE|ESTACIÓN|PERSONA|VELOCIDAD|LÁMPARA|RESUMEN|PREGUNTA DE SALIDA|DENTRO DEL METRO' "$SRC"; then
+            echo 'FAIL: Spanish visible-text token detected.'
+            exit 1
+          fi
+          mkdir -p qa_preview
+          sha256sum "$SRC" "$QA" > qa_preview/SOURCE_SHA256SUMS.txt
+
+      - name: Prepare pinned ManimCE environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg zip imagemagick
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL runtime gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_metro_relativity_v3_2d_english_20260828
+          rm -rf media_pql
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.06 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql metro_relativity_v3_2d_english.py Physics9MetroRelativityV3 \
+                --format=mp4 --media_dir=/manim/media_pql --disable_caching
+            ' 2>&1 | tee qa_preview/render_pql.log
+          PQL="$(find media_pql -type f -name 'Physics9MetroRelativityV3.mp4' -print -quit)"
+          test -n "$PQL" && test -s "$PQL"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_metro_relativity_v3_2d_english_20260828
+          rm -rf media_pqh final_out package
+          mkdir -p final_out
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh metro_relativity_v3_2d_english.py Physics9MetroRelativityV3 \
+                --format=mp4 --media_dir=/manim/media_pqh --disable_caching
+            ' 2>&1 | tee final_out/render_pqh.log
+          FINAL="$(find media_pqh -type f -name 'Physics9MetroRelativityV3.mp4' -print -quit)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" final_out/Physics9_Metro_Relativity_V3_2D_ENGLISH_FINAL_pqh.mp4
+
+      - name: Strict technical QA and full decode
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Physics9_Metro_Relativity_V3_2D_ENGLISH_FINAL_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          FRAMES="$(ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tframes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+            "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$FRAMES" > final_out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          python - <<'PY'
+          from pathlib import Path
+          row=Path('final_out/VIDEO_TECHNICAL.tsv').read_text().splitlines()[1].split('\t')
+          duration=float(row[5]); frames=int(row[6])
+          assert 120 <= duration <= 300, duration
+          assert frames > 3000, frames
+          PY
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> final_out/full_decode.log
+          test ! -s final_out/full_decode.log
+          sha256sum "$F" > final_out/SHA256SUMS.txt
+
+      - name: Every-frame automated visual scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Physics9_Metro_Relativity_V3_2D_ENGLISH_FINAL_pqh.mp4
+          ffmpeg -nostdin -v error -i "$F" -vf scale=320:180 -pix_fmt gray -f rawvideo final_out/all_frames_gray.raw
+          python - <<'PY'
+          from pathlib import Path
+          import csv
+          W,H=320,180
+          frame_bytes=W*H
+          raw=Path('final_out/all_frames_gray.raw').read_bytes()
+          assert len(raw)%frame_bytes==0, (len(raw), frame_bytes)
+          n=len(raw)//frame_bytes
+          rows=[]
+          blank=0
+          very_sparse=0
+          border_heavy=0
+          for i in range(n):
+              fr=raw[i*frame_bytes:(i+1)*frame_bytes]
+              dark_n=sum(p<245 for p in fr)
+              frac=dark_n/frame_bytes
+              if dark_n==0: blank+=1
+              if frac<0.004: very_sparse+=1
+              border=0
+              for y in range(H):
+                  row0=y*W
+                  for x in range(W):
+                      if x<6 or x>=W-6 or y<6 or y>=H-6:
+                          if fr[row0+x] < 235:
+                              border += 1
+              border_frac=border/max(dark_n,1)
+              if border_frac>0.22 and dark_n>200: border_heavy+=1
+              rows.append((i, frac, border_frac))
+          with open('final_out/FRAME_BY_FRAME_SCAN.csv','w',newline='') as f:
+              w=csv.writer(f); w.writerow(['frame','dark_fraction','border_dark_fraction']); w.writerows(rows)
+          Path('final_out/FRAME_SCAN_SUMMARY.txt').write_text(
+              f'frames_scanned={n}\nblank_frames={blank}\nvery_sparse_frames={very_sparse}\nborder_heavy_frames={border_heavy}\n'
+          )
+          tech=Path('final_out/VIDEO_TECHNICAL.tsv').read_text().splitlines()[1].split('\t')
+          expected=int(tech[6])
+          assert n==expected, (n, expected)
+          assert blank < n*0.08, (blank,n)
+          assert very_sparse < n*0.12, (very_sparse,n)
+          PY
+          rm final_out/all_frames_gray.raw
+
+      - name: Distributed visual QA frames and contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Physics9_Metro_Relativity_V3_2D_ENGLISH_FINAL_pqh.mp4
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          mkdir -p final_out/audit_frames
+          for INDEX in $(seq -w 0 35); do
+            T="$(python -c "print(float('$DUR')*(int('$INDEX')+0.5)/36.0)")"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "final_out/audit_frames/frame_${INDEX}.png"
+          done
+          montage final_out/audit_frames/*.png -thumbnail 480x270 -tile 4x9 -geometry +10+20 \
+            -background white -quality 90 final_out/CONTACT_SHEET.jpg
+          test -s final_out/CONTACT_SHEET.jpg
+
+      - name: Build reproducible V3 project ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_metro_relativity_v3_2d_english_20260828
+          ROOT=package/Physics9_Metro_Relativity_V3_2D_ENGLISH_FINAL_PQH_PROJECT
+          mkdir -p "$ROOT/src" "$ROOT/qa/audit_frames" "$ROOT/workflow"
+          cp "$JOB/metro_relativity_v3_2d_english.py" "$ROOT/src/"
+          cp "$JOB/QA_FRAME_BY_FRAME_V2_TO_V3.md" "$ROOT/qa/"
+          cp final_out/Physics9_Metro_Relativity_V3_2D_ENGLISH_FINAL_pqh.mp4 "$ROOT/"
+          cp final_out/VIDEO_TECHNICAL.tsv final_out/SHA256SUMS.txt final_out/full_decode.log \
+             final_out/render_pqh.log final_out/CONTACT_SHEET.jpg final_out/FRAME_BY_FRAME_SCAN.csv \
+             final_out/FRAME_SCAN_SUMMARY.txt "$ROOT/qa/"
+          cp qa_preview/render_pql.log qa_preview/SOURCE_SHA256SUMS.txt "$ROOT/qa/"
+          cp final_out/audit_frames/*.png "$ROOT/qa/audit_frames/"
+          cp .github/workflows/physics9_metro_relativity_v3_2d_pqh_20260828.yml "$ROOT/workflow/"
+          (cd package && zip -qr Physics9_Metro_Relativity_V3_2D_ENGLISH_FINAL_PQH_PROJECT.zip Physics9_Metro_Relativity_V3_2D_ENGLISH_FINAL_PQH_PROJECT)
+          test -s package/Physics9_Metro_Relativity_V3_2D_ENGLISH_FINAL_PQH_PROJECT.zip
+
+      - name: Publish V3 final MP4 and QA manifest to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST=deliveries/physics9_metro_relativity_v3_20260828
+          mkdir -p "$DEST"
+          cp final_out/Physics9_Metro_Relativity_V3_2D_ENGLISH_FINAL_pqh.mp4 "$DEST/"
+          cp final_out/VIDEO_TECHNICAL.tsv final_out/SHA256SUMS.txt final_out/CONTACT_SHEET.jpg \
+             final_out/FRAME_SCAN_SUMMARY.txt "$DEST/"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DEST"
+          if ! git diff --cached --quiet; then
+            git commit -m "render: publish Physics 9 metro relativity V3 2D English PQH"
+            git push origin HEAD:render/physics9-metro-relativity-v3-2d-only-20260828
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-Metro-Relativity-V3-2D-English-FINAL-PQH
+          path: |
+            package/Physics9_Metro_Relativity_V3_2D_ENGLISH_FINAL_PQH_PROJECT.zip
+            final_out/Physics9_Metro_Relativity_V3_2D_ENGLISH_FINAL_pqh.mp4
+            final_out/VIDEO_TECHNICAL.tsv
+            final_out/SHA256SUMS.txt
+            final_out/FRAME_SCAN_SUMMARY.txt
+            final_out/FRAME_BY_FRAME_SCAN.csv
+            final_out/CONTACT_SHEET.jpg
+            final_out/audit_frames/
+          if-no-files-found: error
+          retention-days: 14
