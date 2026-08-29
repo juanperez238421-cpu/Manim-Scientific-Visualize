@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 """Geometry 8 — Circle Foundations V7 FINAL QA.
 
-This is a surgical projector-safe correction over the V7 master. The complete
-pedagogical timeline, mathematical derivation, semicircle ownership and sector
-motion are inherited unchanged. Only Step 05 is rebuilt so the two ownership
-labels remain comfortably inside the 16:9 safe frame before the rows interlock.
+Projector-safe corrections over the V7 master. The complete pedagogical timeline,
+mathematical derivation, semicircle ownership and sector motion are inherited
+unchanged. This QA subclass only rebuilds the interlock-label panel (Step 05)
+and the base-measurement panel (Step 07) to keep every element inside the 16:9
+safe frame while preserving the exact mathematics.
 
 Target: Manim Community Edition 0.20.1, 1920x1080, 30 fps, literal -pqh.
 """
@@ -33,8 +34,11 @@ from Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827 import (  # noqa:
 class Geometry8CircleFoundationsHalvesTwoRows20260829V7FinalQA(
     Geometry8CircleFoundationsHalvesTwoRows20260829V7Master
 ):
-    """V7 master with final safe-frame correction for the interlock labels."""
+    """V7 master with final projector-safe corrections."""
 
+    # ------------------------------------------------------------------
+    # 05 — Interlock labels: compact ownership reinforcement
+    # ------------------------------------------------------------------
     def step_5_interlock_halves_pair_first(self) -> None:
         h = self.header(
             5,
@@ -48,9 +52,6 @@ class Geometry8CircleFoundationsHalvesTwoRows20260829V7FinalQA(
         row1, row2 = self.half_row_targets(n_total, r, top_y, bottom_y)
         target = self.strip_targets(n_total, r, center=np.array([0.0, -0.10, 0.0]))
 
-        # FINAL QA: shorter ownership labels + a safer center position.
-        # The ownership relationship was already established in Step 04, so these
-        # compact labels reinforce it without competing with the sector geometry.
         row1_lab = self.text("ROW 1 · RIGHT HALF  ↓", 27, BOLD).move_to([-4.55, 1.55, 0])
         row2_lab = self.text("ROW 2 · LEFT HALF   ↑", 27, BOLD).move_to([-4.55, -1.55, 0])
         cue = self.text("FIRST: ONE MATCHED PAIR", 29, BOLD).move_to([0.0, -3.08, 0])
@@ -124,6 +125,79 @@ class Geometry8CircleFoundationsHalvesTwoRows20260829V7FinalQA(
         )
         self.wait(4.2)
         self.clear_stage(VGroup(h, row1, row2, top_line, bottom_line, conserved))
+
+    # ------------------------------------------------------------------
+    # 07 — Base P/2, not P: compact projector-safe panel
+    # ------------------------------------------------------------------
+    def step_7_base_english(self) -> None:
+        h = self.header(
+            7,
+            "THE BASE IS HALF THE PERIMETER",
+            "Each row creates one opposite curved boundary of length P/2. A single base uses only ONE of those boundaries.",
+        )
+        self.add(h)
+
+        n, r = 32, 2.05
+        center = np.array([-1.15, -0.08, 0.0])
+        strip = self.strip_targets(n, r, center=center)
+        arcs_top, arcs_bottom = self.final_row_arc_overlays(n, r, center_y=-0.08)
+        arcs_top.shift(LEFT * 1.15)
+        arcs_bottom.shift(LEFT * 1.15)
+
+        x0, x1 = strip.get_left()[0], strip.get_right()[0]
+        base = DoubleArrow(
+            [x0, -1.52, 0],
+            [x1, -1.52, 0],
+            color=BLACK,
+            buff=0.02,
+            tip_length=0.14,
+            stroke_width=3.0,
+        )
+        base_lab = self.math(r"\text{base}=\frac{P}{2}=\pi r", 43).next_to(base, DOWN, buff=0.10)
+
+        # Shorter labels preserve the exact statement while leaving generous
+        # projector margins on the right-hand explanation column.
+        row1 = self.text("ROW 1  =  P/2", 27, BOLD).move_to([4.65, 0.70, 0])
+        row2 = self.text("ROW 2  =  P/2", 27, BOLD).move_to([4.65, -0.05, 0])
+        choose = self.text("BASE = ONE boundary", 26, BOLD).move_to([4.55, -1.05, 0])
+        notsum = self.text("Do not add both.", 24, BOLD).move_to([4.55, -1.48, 0])
+
+        group = VGroup(
+            strip,
+            arcs_top,
+            arcs_bottom,
+            base,
+            base_lab,
+            row1,
+            row2,
+            choose,
+            notsum,
+            h,
+        )
+        self.assert_safe(group, "v7 final qa step7 base")
+
+        self.play(FadeIn(strip), run_time=0.80)
+        self.play(
+            LaggedStart(*[Create(a) for a in arcs_top], lag_ratio=0.035),
+            FadeIn(row1, shift=LEFT * 0.08),
+            run_time=1.15,
+        )
+        self.wait(1.0)
+        self.play(
+            LaggedStart(*[Create(a) for a in arcs_bottom], lag_ratio=0.035),
+            FadeIn(row2, shift=LEFT * 0.08),
+            run_time=1.15,
+        )
+        self.wait(1.1)
+        self.play(GrowFromCenter(base), Write(base_lab), run_time=1.10)
+        self.play(
+            FadeIn(choose, shift=UP * 0.05),
+            FadeIn(notsum, shift=UP * 0.05),
+            run_time=0.75,
+        )
+        self.play(Indicate(base_lab, color=MID_GRAY, scale_factor=1.03), run_time=0.90)
+        self.wait(4.8)
+        self.clear_stage(group)
 
 
 # Preview QA:
