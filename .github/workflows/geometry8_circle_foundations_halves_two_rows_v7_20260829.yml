@@ -51,10 +51,10 @@ jobs:
           grep -Fq 'FORM TWO SEPARATE ROWS' "$SRC"
           grep -Fq 'RIGHT HALF' "$SRC"
           grep -Fq 'LEFT HALF' "$SRC"
-          grep -Fq '\\pi=\\frac{P}{d}' "$SRC"
+          grep -Fq '\pi=\frac{P}{d}' "$SRC"
           grep -Fq 'd=2r' "$SRC"
-          grep -Fq '\\frac{P}{2}=\\pi r' "$SRC"
-          grep -Fq 'A=(\\pi r)(r)=\\pi r^2' "$SRC"
+          grep -Fq '\frac{P}{2}=\pi r' "$SRC"
+          grep -Fq 'A=(\pi r)(r)=\pi r^2' "$SRC"
 
           if grep -Eq 'FILA|MEDIMOS|SEPARAMOS|ENCAJAMOS|ÁREA DEL CÍRCULO|POR QUÉ' "$SRC"; then
             echo 'Spanish classroom copy detected in English V7 source' >&2
