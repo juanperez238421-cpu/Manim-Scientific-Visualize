@@ -48,7 +48,9 @@ jobs:
           grep -Fq 'shift(RIGHT * 0.95)' "$SRC"
           grep -Fq '_row_owner_tag("ROW 1", "RIGHT HALF"' "$SRC"
           grep -Fq '_row_owner_tag("ROW 2", "LEFT HALF"' "$SRC"
-          grep -Fq 'FadeOut(source_r_lab), FadeOut(source_l_lab)' "$SRC"
+          grep -Fq 'left_stage = left_source.copy().scale(0.82)' "$SRC"
+          grep -Fq 'FadeIn(row1[j], shift=DOWN * 0.14)' "$SRC"
+          grep -Fq 'FadeIn(row2[j], shift=UP * 0.14)' "$SRC"
           grep -Fq 'V10 Step04 ownership corridor too small' "$SRC"
           grep -Fq 'V10 Step04 lifecycle boundary is not empty' "$SRC"
           mkdir -p out qa_out media qa_media
@@ -146,7 +148,6 @@ jobs:
           import av, math, os, sys
           from PIL import Image, ImageDraw
           p=sys.argv[1]
-
           def extract(targets, outdir, prefix):
               saved=[]
               with av.open(p) as c:
@@ -159,35 +160,24 @@ jobs:
                           frame.to_image().convert('RGB').save(fp,quality=94)
                           saved.append(fp); ti+=1
               return saved
-
           with av.open(p) as c:
               duration=float(c.duration)/float(av.time_base)
-          general_targets=[duration*i/121 for i in range(1,121)]
-          general=extract(general_targets,'out/frame_samples_v10_total_qa','frame')
-
-          # Step 04 occupied approximately the middle 40% in previous versions.
-          # This wider 85-155 s burst deliberately oversamples its transitions.
-          burst_targets=[85.0 + (70.0*i/35.0) for i in range(36)]
-          burst_targets=[t for t in burst_targets if t < duration-0.5]
-          burst=extract(burst_targets,'out/frame_samples_v10_step04','step04')
-
+          general=extract([duration*i/121 for i in range(1,121)],'out/frame_samples_v10_total_qa','frame')
+          burst_targets=[84.0 + (76.0*i/38.0) for i in range(39)]
+          burst=extract([t for t in burst_targets if t < duration-0.5],'out/frame_samples_v10_step04','step04')
           def sheet(files, path, cols=4):
               cards=[]
               for fp in files:
                   im=Image.open(fp).convert('RGB'); im.thumbnail((480,270))
                   card=Image.new('RGB',(500,300),'white'); card.paste(im,((500-im.width)//2,8))
                   ImageDraw.Draw(card).text((10,280),os.path.basename(fp),fill='black'); cards.append(card)
-              rows=math.ceil(len(cards)/cols)
-              out=Image.new('RGB',(cols*500,rows*300),'white')
+              rows=math.ceil(len(cards)/cols); out=Image.new('RGB',(cols*500,rows*300),'white')
               for i,im in enumerate(cards): out.paste(im,((i%cols)*500,(i//cols)*300))
               out.save(path,quality=94)
-
           sheet(general,'out/Geometry8_Circle_V10_TOTAL_QA_contact_sheet_120.jpg')
           sheet(burst,'out/Geometry8_Circle_V10_STEP04_transition_sheet.jpg')
-          print('full_timeline_frames=',len(general))
-          print('step04_burst_frames=',len(burst))
-          assert len(general)>=116
-          assert len(burst)>=30
+          print('full_timeline_frames=',len(general)); print('step04_burst_frames=',len(burst))
+          assert len(general)>=116 and len(burst)>=34
           PY
           JOB=render_jobs/geometry8_circle_pedagogical_qa_20260819
           cp "$JOB/Geometry8_Circle_Foundations_HALVES_TWO_ROWS_20260830_V10_TOTAL_QA.py" out/
