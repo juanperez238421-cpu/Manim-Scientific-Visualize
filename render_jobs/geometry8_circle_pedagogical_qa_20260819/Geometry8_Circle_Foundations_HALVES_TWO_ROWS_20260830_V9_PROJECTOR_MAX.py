@@ -31,7 +31,7 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V9ProjectorMax(
     PAUSE_SCALE = 1.32
 
     _TEXT_TARGETS = {
-        "CIRCLE: FROM PERIMETER TO AREA": 64,
+        "CIRCLE: FROM PERIMETER TO AREA": 60,
         "Measure the boundary → split the circle → rearrange the same area": 36,
         "PERIMETER   →   DIAMETER   →   π   →   TWO HALVES   →   TWO ROWS": 31,
         "PERIMETER  P": 36,
