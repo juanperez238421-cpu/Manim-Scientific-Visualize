@@ -2,19 +2,15 @@
 # -*- coding: utf-8 -*-
 """Geometry 8 Circle V10 TOTAL QA.
 
-Human-frame-driven refinement of V9 PROJECTOR MAX.  The principal V9 defect was
+Human-frame-driven refinement of V9 PROJECTOR MAX. The principal V9 defect was
 Step 04: source-half labels, ownership labels and moving sectors could occupy the
-same visual corridor during the half-to-row transformation.  V10 treats that as
+same visual corridor during the half-to-row transformation. V10 treats that as
 an animation-lifecycle problem rather than shrinking the typography.
 
-V10 goals
----------
-* preserve the large projector-first V9 typography;
-* remove Step-04 label/sector overlap at every animation phase;
-* separate ownership labels from the sector rows with an explicit safety gap;
-* measure one row at a time instead of stacking measurement graphics;
-* use deliberate classroom holds between conceptual checkpoints;
-* keep all V8/V9 lifecycle, projector-edge and mathematical QA protections.
+The final V10 pass also removes transient sector pileups discovered in the first
+120-frame/Step-04 burst review: source halves are now faded out before each row
+is revealed sequentially in its final lane. This keeps the ownership idea clear
+without allowing moving wedges to cross through labels or other geometry.
 
 Target: ManimCE 0.20.1, literal -pqh, 1920x1080, 30 fps.
 """
@@ -32,10 +28,8 @@ from Geometry8_Circle_Foundations_HALVES_TWO_ROWS_20260830_V9_PROJECTOR_MAX impo
 class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
     Geometry8CircleFoundationsHalvesTwoRows20260830V9ProjectorMax
 ):
-    """V10: clean staged ownership, larger readable labels, professional holds."""
+    """V10: clean staged ownership, large readable labels, professional holds."""
 
-    # A modest global pause increase keeps the whole lesson copy-friendly while
-    # the Step-04 override below uses purpose-built checkpoint waits.
     PAUSE_SCALE = 1.40
 
     def _row_owner_tag(self, row_name: str, owner: str, center) -> VGroup:
@@ -62,17 +56,17 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
         return float(right_mob.get_left()[0] - left_mob.get_right()[0])
 
     def step_4_two_separate_rows_from_halves(self) -> None:
-        """Rebuild Step 04 so labels and moving sectors never share a corridor."""
+        """Rebuild Step 04 with zero label/sector and zero transition pileup."""
         h = self.header(
             4,
             "FORM TWO SEPARATE ROWS — ONE ROW FROM EACH HALF",
-            "Build one row at a time. Keep each ownership label outside the moving sectors, then measure each row separately.",
+            "Build one row at a time. Keep ownership labels outside the sector lanes, then measure each row separately.",
         )
         self.add(h)
 
         n_total = 24
 
-        # -------------------- A. clean source-halves stage --------------------
+        # A. Source halves: both are visible only during the identification phase.
         source_r = 1.48
         source_center = np.array([0.0, -0.34, 0.0])
         _, right_source, left_source = self.vertical_half_sectors(
@@ -84,7 +78,7 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
         source_r_lab = self.text("RIGHT HALF", 30, BOLD).move_to([2.55, 1.36, 0])
         source_l_lab = self.text("LEFT HALF", 30, BOLD).move_to([-2.55, 1.36, 0])
 
-        # -------------------- B. final row targets ----------------------------
+        # B. Final row system. Use whitespace to preserve the large V9 typography.
         row_r = 1.62
         top_y, bottom_y = 0.66, -0.66
         row1, row2 = self.half_row_targets(n_total, row_r, top_y, bottom_y)
@@ -94,9 +88,6 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
         measures = self.row_measurements_from_halves(
             row1, row2, row_r, top_y, bottom_y
         )
-
-        # V10 uses canvas whitespace instead of shrinking text.  Moving the
-        # complete row system right creates a stable label-to-geometry corridor.
         VGroup(row1, row2, top_arcs, bottom_arcs, measures).shift(RIGHT * 0.95)
 
         row1_tag = self._row_owner_tag("ROW 1", "RIGHT HALF", [-5.48, 0.78, 0])
@@ -109,21 +100,32 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
                 f"V10 Step04 ownership corridor too small: gap1={gap1:.3f}, gap2={gap2:.3f}"
             )
 
-        group = VGroup(
+        # A small lower-stage copy is used to re-establish LEFT HALF ownership
+        # after row 1 is complete. It is removed before row 2 appears.
+        left_stage = left_source.copy().scale(0.82).move_to([0.55, -2.12, 0])
+        left_stage_lab = self.text("LEFT HALF", 27, BOLD).next_to(
+            left_stage, DOWN, buff=0.12
+        )
+
+        preflight = VGroup(
             h,
             right_source,
             left_source,
             source_r_lab,
             source_l_lab,
+            row1,
+            row2,
             row1_tag,
             row2_tag,
             top_arcs,
             bottom_arcs,
             measures,
+            left_stage,
+            left_stage_lab,
         )
-        self.projector_safe(group, "v10 step04 staged layout")
+        self.projector_safe(preflight, "v10 final step04 staged layout")
 
-        # -------------------- C. source inspection ----------------------------
+        # C. Identify the two halves.
         self.play(
             FadeIn(right_source),
             FadeIn(left_source),
@@ -131,58 +133,68 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
             FadeIn(source_l_lab, shift=UP * 0.06),
             run_time=1.10,
         )
-        self.wait(1.70)
+        self.wait(1.80)
 
-        # Focus right half.  Crucially, BOTH source labels are removed before
-        # any sector starts moving.  This eliminates the V9 transition overlap.
+        # D. Focus RIGHT HALF. All source geometry is then cleared BEFORE row 1
+        # appears, so there is no wedge crossing or pileup during the transition.
         self.play(
             Indicate(right_source, scale_factor=1.025, color=GRAY),
             left_source.animate.set_opacity(0.22),
             run_time=0.90,
         )
-        self.wait(0.75)
-        self.play(FadeOut(source_r_lab), FadeOut(source_l_lab), run_time=0.55)
-        self.wait(0.45)
-
-        # -------------------- D. right half -> row 1 --------------------------
+        self.wait(0.80)
         self.play(
-            AnimationGroup(
-                *[
-                    Transform(right_source[j], row1[j])
-                    for j in range(n_total // 2)
-                ],
-                lag_ratio=0.052,
-            ),
-            run_time=2.70,
-            rate_func=smooth,
+            FadeOut(source_r_lab),
+            FadeOut(source_l_lab),
+            FadeOut(left_source),
+            run_time=0.62,
         )
-        self.wait(1.15)
+        self.play(FadeOut(right_source, shift=UP * 0.10), run_time=0.72)
+        self.wait(0.55)
+
+        # E. Reveal ROW 1 directly in its final lane, piece-by-piece.
+        self.play(
+            LaggedStart(
+                *[FadeIn(row1[j], shift=DOWN * 0.14) for j in range(n_total // 2)],
+                lag_ratio=0.055,
+            ),
+            run_time=1.95,
+        )
         self.play(FadeIn(row1_tag, shift=RIGHT * 0.08), run_time=0.72)
-        self.wait(2.05)
+        self.wait(2.30)
 
-        # -------------------- E. left half -> row 2 ---------------------------
-        self.play(left_source.animate.set_opacity(1.0), run_time=0.55)
+        # F. Re-establish LEFT HALF in an isolated lower stage. It never shares
+        # a corridor with row 1 and is removed before row 2 is revealed.
         self.play(
-            Indicate(left_source, scale_factor=1.025, color=GRAY),
-            run_time=0.80,
+            FadeIn(left_stage, shift=UP * 0.06),
+            FadeIn(left_stage_lab, shift=UP * 0.04),
+            run_time=0.90,
         )
-        self.wait(0.70)
+        self.wait(1.20)
         self.play(
-            AnimationGroup(
-                *[
-                    Transform(left_source[j], row2[j])
-                    for j in range(n_total // 2)
-                ],
-                lag_ratio=0.052,
+            Indicate(left_stage, scale_factor=1.025, color=GRAY),
+            run_time=0.82,
+        )
+        self.wait(0.72)
+        self.play(
+            FadeOut(left_stage_lab),
+            FadeOut(left_stage, shift=DOWN * 0.10),
+            run_time=0.68,
+        )
+        self.wait(0.55)
+
+        # G. Reveal ROW 2 directly in its own lane.
+        self.play(
+            LaggedStart(
+                *[FadeIn(row2[j], shift=UP * 0.14) for j in range(n_total // 2)],
+                lag_ratio=0.055,
             ),
-            run_time=2.70,
-            rate_func=smooth,
+            run_time=1.95,
         )
-        self.wait(1.15)
         self.play(FadeIn(row2_tag, shift=RIGHT * 0.08), run_time=0.72)
-        self.wait(2.35)
+        self.wait(2.45)
 
-        # -------------------- F. measure ROW 1 only ---------------------------
+        # H. Measure ROW 1 only.
         self.play(
             LaggedStart(*[Create(a) for a in top_arcs], lag_ratio=0.055),
             run_time=1.30,
@@ -194,16 +206,16 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
             Write(measures[5]),
             run_time=1.20,
         )
-        self.wait(2.45)
+        self.wait(2.55)
         self.play(
             FadeOut(top_arcs),
             FadeOut(measures[0]), FadeOut(measures[1]),
             FadeOut(measures[4]), FadeOut(measures[5]),
             run_time=0.70,
         )
-        self.wait(0.65)
+        self.wait(0.70)
 
-        # -------------------- G. measure ROW 2 only ---------------------------
+        # I. Measure ROW 2 only.
         self.play(
             LaggedStart(*[Create(a) for a in bottom_arcs], lag_ratio=0.055),
             run_time=1.30,
@@ -215,16 +227,16 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
             Write(measures[7]),
             run_time=1.20,
         )
-        self.wait(2.55)
+        self.wait(2.65)
         self.play(
             FadeOut(bottom_arcs),
             FadeOut(measures[2]), FadeOut(measures[3]),
             FadeOut(measures[6]), FadeOut(measures[7]),
             run_time=0.70,
         )
-        self.wait(0.75)
+        self.wait(0.80)
 
-        # -------------------- H. clean mathematical checkpoint ----------------
+        # J. Final clean checkpoint.
         checkpoint = self.big_formula(
             r"\text{TWO SEPARATE ROWS}\qquad\frac{P}{2}=\pi r\quad\text{for each row}",
             10.55,
@@ -233,11 +245,9 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
         self.projector_safe(checkpoint, "v10 step04 final checkpoint")
         self.play(FadeIn(checkpoint, shift=UP * 0.07), run_time=0.95)
         self.play(Circumscribe(checkpoint[1], color=GRAY, time_width=0.90), run_time=1.20)
-        self.wait(5.10)
+        self.wait(5.20)
 
-        self.clear_stage(
-            VGroup(h, right_source, left_source, row1_tag, row2_tag, checkpoint)
-        )
+        self.clear_stage(VGroup(h, row1, row2, row1_tag, row2_tag, checkpoint))
 
         if self.mobjects:
             residuals = list(self.mobjects)
