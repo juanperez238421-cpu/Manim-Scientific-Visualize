@@ -3,9 +3,9 @@
 """Geometry 8 Circle V9 PROJECTOR MAX.
 
 Targeted legibility refinement of V8 FINAL4 after inspecting the full rendered
-241 s timeline.  This pass deliberately avoids a global scene scale (which can
-reintroduce merges) and instead enlarges the persistent classroom labels,
-measurement math, checkpoints, opening/closing typography, and header copy.
+241 s timeline. This pass avoids a global scene scale and instead enlarges the
+persistent classroom labels, measurement math, checkpoints, opening/closing
+typography, and header copy while preserving FINAL4 geometry.
 
 Target: ManimCE 0.20.1, literal -pqh, 1920x1080, 30 fps.
 """
@@ -31,9 +31,9 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V9ProjectorMax(
     PAUSE_SCALE = 1.32
 
     _TEXT_TARGETS = {
-        "CIRCLE: FROM PERIMETER TO AREA": 60,
+        "CIRCLE: FROM PERIMETER TO AREA": 64,
         "Measure the boundary → split the circle → rearrange the same area": 36,
-        "PERIMETER   →   DIAMETER   →   π   →   TWO HALVES   →   TWO ROWS": 31,
+        "PERIMETER   →   DIAMETER   →   π   →   TWO HALVES   →   TWO ROWS": 34,
         "PERIMETER  P": 36,
         "CENTER": 30,
         "THE DEFINITION OF π": 36,
@@ -95,13 +95,9 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V9ProjectorMax(
         }
         target = max(target, float(boosts.get(latex, target)))
         box = RoundedRectangle(
-            width=width,
-            height=1.32,
-            corner_radius=0.14,
-            stroke_color=BLACK,
-            stroke_width=2.25,
-            fill_color=PAPER,
-            fill_opacity=1,
+            width=width, height=1.32, corner_radius=0.14,
+            stroke_color=BLACK, stroke_width=2.25,
+            fill_color=PAPER, fill_opacity=1,
         )
         eq = self.math(latex, target)
         if eq.width > width - 0.48:
@@ -119,15 +115,11 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V9ProjectorMax(
         title_mob = self.text(title, 42, BOLD)
         if title_mob.width > 13.00:
             title_mob.scale_to_fit_width(13.00)
-
         row = VGroup(VGroup(badge, badge_text), title_mob).arrange(RIGHT, buff=0.27)
         row.to_edge(UP, buff=0.14).to_edge(LEFT, buff=0.46)
 
         rule_y = row.get_bottom()[1] - 0.10
-        rule = Line(
-            [-7.52, rule_y, 0], [7.52, rule_y, 0],
-            color=LIGHT_GRAY, stroke_width=2.2,
-        )
+        rule = Line([-7.52, rule_y, 0], [7.52, rule_y, 0], color=LIGHT_GRAY, stroke_width=2.2)
 
         subtitle_mob = self.text(subtitle, 30)
         if subtitle_mob.width > 14.45:
@@ -137,6 +129,35 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V9ProjectorMax(
         group = VGroup(row, rule, subtitle_mob)
         self.projector_safe(group, f"v9 header {number:02d}")
         return group
+
+    def opening_v8(self) -> None:
+        """Maximize each opening element independently before final arrangement."""
+        title = self.text("CIRCLE: FROM PERIMETER TO AREA", 64, BOLD)
+        subtitle = self.text(
+            "Measure the boundary → split the circle → rearrange the same area", 36
+        )
+        flow = self.text(
+            "PERIMETER   →   DIAMETER   →   π   →   TWO HALVES   →   TWO ROWS", 34, BOLD
+        )
+        for mob in (title, subtitle, flow):
+            if mob.width > 14.65:
+                mob.scale_to_fit_width(14.65)
+
+        formula = self.big_formula(
+            r"P=2\pi r\qquad\Longrightarrow\qquad A=\pi r^2", 10.2, 64
+        )
+        group = VGroup(title, subtitle, flow, formula).arrange(DOWN, buff=0.44)
+        self.projector_safe(group, "v9 opening")
+
+        self.play(Write(title), run_time=1.55, rate_func=smooth)
+        self.wait(0.9)
+        self.play(FadeIn(subtitle, shift=UP * 0.10), run_time=0.95)
+        self.wait(0.7)
+        self.play(FadeIn(flow, shift=UP * 0.08), run_time=1.00)
+        self.wait(0.8)
+        self.play(FadeIn(formula, shift=UP * 0.10), run_time=1.00)
+        self.wait(4.8)
+        self.clear_stage(group)
 
     def closing_v8(self) -> None:
         title = self.text("CIRCLE DERIVATION — NOTEBOOK SUMMARY", 50, BOLD)
