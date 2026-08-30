@@ -28,10 +28,10 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V9ProjectorMax(
 ):
     """Projector-first V9: larger secondary copy with FINAL4 geometry preserved."""
 
-    # FINAL4's 7.70-unit gate corresponds to ~36 px at 1920 px width.  V9 keeps
-    # a still-conservative ~29 px geometric margin and separately runs an 18 px
-    # decoded-frame edge scan, allowing the audited 35 pt row labels to stay large.
-    SAFE_X = 7.76
+    # V9 intentionally allows the larger audited labels to use more horizontal
+    # canvas. SAFE_X=7.78 still leaves ~26 px at 1920 width, while the final
+    # decoded-frame QA rejects any visible content entering the outer 18 px.
+    SAFE_X = 7.78
     PAUSE_SCALE = 1.32
 
     _TEXT_TARGETS = {
