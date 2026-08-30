@@ -164,7 +164,11 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V9ProjectorMax(
         self.clear_stage(group)
 
     def closing_v8(self) -> None:
+        """Large notebook summary with independent title/line fit; no whole-group shrink."""
         title = self.text("CIRCLE DERIVATION — NOTEBOOK SUMMARY", 50, BOLD)
+        if title.width > 14.65:
+            title.scale_to_fit_width(14.65)
+
         lines = VGroup(
             self.text("1.  π = P/d  →  P = πd; because d = 2r,  P = 2πr.", 36),
             self.text("2.  A vertical diameter creates two curved semicircle arcs.", 36),
