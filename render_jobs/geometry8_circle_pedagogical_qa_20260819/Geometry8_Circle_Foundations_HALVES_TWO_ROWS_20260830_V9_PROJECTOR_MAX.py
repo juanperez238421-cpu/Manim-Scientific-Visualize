@@ -28,14 +28,12 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V9ProjectorMax(
 ):
     """Projector-first V9: larger secondary copy with FINAL4 geometry preserved."""
 
-    # FINAL4 was already deliberately paced.  Add only a small read-time increase;
-    # motion itself stays fluid rather than becoming uniformly slow.
     PAUSE_SCALE = 1.32
 
     _TEXT_TARGETS = {
         "CIRCLE: FROM PERIMETER TO AREA": 64,
         "Measure the boundary → split the circle → rearrange the same area": 36,
-        "PERIMETER   →   DIAMETER   →   π   →   TWO HALVES   →   TWO ROWS": 34,
+        "PERIMETER   →   DIAMETER   →   π   →   TWO HALVES   →   TWO ROWS": 31,
         "PERIMETER  P": 36,
         "CENTER": 30,
         "THE DEFINITION OF π": 36,
@@ -60,12 +58,10 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V9ProjectorMax(
     }
 
     def text(self, content, size, *args, **kwargs):
-        """Enlarge only audited secondary labels; never globally scale scenes."""
         target = max(float(size), float(self._TEXT_TARGETS.get(content, size)))
         return super().text(content, target, *args, **kwargs)
 
     def math(self, latex, size, *args, **kwargs):
-        """Increase measurement labels while leaving already-large equations stable."""
         target = float(size)
         if latex == "d" and target >= 50:
             target = max(target, 54)
@@ -87,7 +83,6 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V9ProjectorMax(
         return super().math(latex, target, *args, **kwargs)
 
     def big_formula(self, latex: str, width: float = 7.0, size: int = 50) -> VGroup:
-        """Larger checkpoint equations, still auto-fit inside their validated boxes."""
         target = float(size)
         boosts = {
             r"P=2\pi r\qquad\Longrightarrow\qquad A=\pi r^2": 64,
@@ -115,7 +110,6 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V9ProjectorMax(
         return VGroup(box, eq)
 
     def header(self, number: int, title: str, subtitle: str) -> VGroup:
-        """FINAL4 safe anchor with a larger default projector type scale."""
         badge = RoundedRectangle(
             width=0.88, height=0.60, corner_radius=0.10,
             stroke_color=BLACK, stroke_width=2.35,
@@ -145,7 +139,6 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V9ProjectorMax(
         return group
 
     def closing_v8(self) -> None:
-        """A genuinely larger notebook summary: individual fit only, no group shrink."""
         title = self.text("CIRCLE DERIVATION — NOTEBOOK SUMMARY", 50, BOLD)
         lines = VGroup(
             self.text("1.  π = P/d  →  P = πd; because d = 2r,  P = 2πr.", 36),
