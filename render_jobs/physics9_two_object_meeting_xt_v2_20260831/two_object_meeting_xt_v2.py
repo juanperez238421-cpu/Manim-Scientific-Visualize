@@ -4,8 +4,8 @@
 
 The V1 PQH render passed mathematical and technical QA, but dense visual review
 found one release-blocking transient defect inherited from the shared header
-implementation: ReplacementTransform between unrelated section titles can
-produce a frame of colliding/warped glyphs.
+implementation: glyph interpolation between unrelated section titles can
+produce a frame of colliding/warped text.
 
 V2 preserves the complete accepted V1 lesson and replaces section-title glyph
 morphs with an intentional fade-out/fade-in state change. No mathematical,
