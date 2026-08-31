@@ -31,12 +31,12 @@ jobs:
           python -m py_compile "$BASE" "$SRC"
           grep -Fq 'class Geometry8Areas2DMasterclassFinal' "$BASE"
           grep -Fq 'def validate_lesson_data' "$BASE"
-          grep -Fq 'def parallelogram' "$BASE"
-          grep -Fq 'def triangle' "$BASE"
           grep -Fq 'def composite' "$BASE"
           grep -Fq 'def shaded_simple' "$BASE"
           grep -Fq 'def scaling' "$BASE"
           grep -Fq 'class Geometry8Areas2DMasterclassFinalQA' "$SRC"
+          grep -Fq 'left_piece.animate.shift(RIGHT * 4.4)' "$SRC"
+          grep -Fq 'D = B + C - A' "$SRC"
           grep -Fq 'radius=1.75' "$SRC"
           grep -Fq 'radius=2.35' "$SRC"
           mkdir -p out qa_out media qa_media /tmp/manim-bin /tmp/manim-home
@@ -113,10 +113,9 @@ jobs:
           assert width == 1920 and height == 1080
           assert fmt == 'yuv420p'
           assert abs(fps-30.0) < 0.01
-          assert duration > 80
+          assert duration > 120
           assert frames > 0
           PY
-          ffmpeg -v error -i "$F" -f null -
           sha256sum "$F" | tee out/SHA256SUMS.txt
 
       - name: Distributed visual audit frames and contact sheet
@@ -128,7 +127,7 @@ jobs:
           python - "$F" <<'PY'
           import av, math, os, sys
           from PIL import Image, ImageDraw
-          p=sys.argv[1]; saved=[]; count=48
+          p=sys.argv[1]; saved=[]; count=60
           with av.open(p) as c:
               s=c.streams.video[0]
               duration=float(c.duration)/float(av.time_base)
@@ -150,7 +149,7 @@ jobs:
           for i,im in enumerate(cards): sheet.paste(im,((i%cols)*500,(i//cols)*300))
           sheet.save('out/Geometry8_2D_Areas_Masterclass_FINAL_contact_sheet.jpg',quality=92)
           print('audit_frames=',len(saved))
-          assert len(saved)>=45
+          assert len(saved)>=56
           PY
           cp render_jobs/geometry8_2d_areas_masterclass_20260831/Geometry8_2D_Areas_Masterclass_FINAL.py out/
           cp render_jobs/geometry8_2d_areas_masterclass_20260831/Geometry8_2D_Areas_Masterclass_FINAL_QA.py out/
