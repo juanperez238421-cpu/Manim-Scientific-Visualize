@@ -2,14 +2,10 @@
 # -*- coding: utf-8 -*-
 """Geometry 8 Circle V10 TOTAL QA.
 
-Human-frame-driven refinement of V9 PROJECTOR MAX. The principal V9 defect was
-Step 04: source-half labels, ownership labels and moving sectors could occupy the
-same visual corridor during the half-to-row transformation. V10 treats that as
-an animation-lifecycle problem rather than shrinking the typography.
-
-The final V10 pass also removes transient sector pileups and lowers the complete
-row/measurement system so the top P/2 = pi r annotation never enters the header
-subtitle band.
+Human-frame-driven refinement of V9 PROJECTOR MAX. V10 removes the Step-04
+label/sector collisions, removes transient wedge pileups, lowers the complete
+row/measurement system to protect the header band, and isolates the final
+half-perimeter checkpoint on a clean stage after both rows have been measured.
 
 Target: ManimCE 0.20.1, literal -pqh, 1920x1080, 30 fps.
 """
@@ -54,7 +50,7 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
         return float(right_mob.get_left()[0] - left_mob.get_right()[0])
 
     def step_4_two_separate_rows_from_halves(self) -> None:
-        """Step 04 with isolated source phases, clean lanes and header-safe measures."""
+        """Step 04 with isolated source phases, clean lanes and clean checkpoint."""
         h = self.header(
             4,
             "FORM TWO SEPARATE ROWS — ONE ROW FROM EACH HALF",
@@ -64,7 +60,7 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
 
         n_total = 24
 
-        # A. Source halves are shown only during ownership identification.
+        # A. Source halves are visible only during ownership identification.
         source_r = 1.48
         source_center = np.array([0.0, -0.34, 0.0])
         _, right_source, left_source = self.vertical_half_sectors(
@@ -75,9 +71,8 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
         source_r_lab = self.text("RIGHT HALF", 30, BOLD).move_to([2.55, 1.36, 0])
         source_l_lab = self.text("LEFT HALF", 30, BOLD).move_to([-2.55, 1.36, 0])
 
-        # B. Final row system. First move right for a wide ownership corridor,
-        # then lower the entire system 0.42 units to keep the top measurement
-        # formula completely below the subtitle band.
+        # B. Final row system. Shift right for a wide ownership corridor and
+        # lower 0.42 units so the top P/2 annotation stays below the subtitle.
         row_r = 1.62
         top_y, bottom_y = 0.66, -0.66
         row1, row2 = self.half_row_targets(n_total, row_r, top_y, bottom_y)
@@ -102,6 +97,7 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
                 f"V10 Step04 ownership corridor too small: gap1={gap1:.3f}, gap2={gap2:.3f}"
             )
 
+        # Lower isolated source used only to reconnect LEFT HALF -> ROW 2.
         left_stage = left_source.copy().scale(0.82).move_to([0.55, -2.12, 0])
         left_stage_lab = self.text("LEFT HALF", 27, BOLD).next_to(
             left_stage, DOWN, buff=0.12
@@ -135,7 +131,7 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
         )
         self.wait(1.80)
 
-        # D. Focus RIGHT HALF, then clear all source geometry before row 1 appears.
+        # D. Focus RIGHT HALF, then clear source geometry before row 1 appears.
         self.play(
             Indicate(right_source, scale_factor=1.025, color=GRAY),
             left_source.animate.set_opacity(0.22),
@@ -231,18 +227,28 @@ class Geometry8CircleFoundationsHalvesTwoRows20260830V10TotalQA(
         )
         self.wait(0.80)
 
-        # J. Final clean checkpoint.
+        # J. Remove the rows before the summary equation. This gives the
+        # checkpoint its own clean visual beat and prevents box/sector overlap.
+        self.play(
+            FadeOut(row1),
+            FadeOut(row2),
+            FadeOut(row1_tag),
+            FadeOut(row2_tag),
+            run_time=0.82,
+        )
+        self.wait(0.70)
+
         checkpoint = self.big_formula(
             r"\text{TWO SEPARATE ROWS}\qquad\frac{P}{2}=\pi r\quad\text{for each row}",
             10.55,
             47,
-        ).move_to([0.55, -3.03, 0])
-        self.projector_safe(checkpoint, "v10 step04 final checkpoint")
+        ).move_to([0.0, -0.52, 0])
+        self.projector_safe(checkpoint, "v10 step04 isolated checkpoint")
         self.play(FadeIn(checkpoint, shift=UP * 0.07), run_time=0.95)
         self.play(Circumscribe(checkpoint[1], color=GRAY, time_width=0.90), run_time=1.20)
-        self.wait(5.20)
+        self.wait(5.30)
 
-        self.clear_stage(VGroup(h, row1, row2, row1_tag, row2_tag, checkpoint))
+        self.clear_stage(VGroup(h, checkpoint))
 
         if self.mobjects:
             residuals = list(self.mobjects)
