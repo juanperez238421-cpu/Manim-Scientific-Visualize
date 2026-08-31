@@ -1,0 +1,211 @@
+name: Geometry 8 Circle Exercises FINAL3 HUMAN QA PQH 20260831
+
+on:
+  push:
+    branches: [render/geometry8-circle-exercises-v1-20260831]
+    paths:
+      - 'render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Exercises_AREA_PERIMETER_PARTS_20260831_V1_TOTAL_QA_FINAL3.py'
+      - '.github/workflows/geometry8_circle_exercises_area_perimeter_parts_v1_total_qa_final3_20260831.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-circle-exercises-final3-human-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile complete V10 exercise stack and FINAL3 assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_circle_pedagogical_qa_20260819
+          BASE="$JOB/Geometry8_Circle_Exercises_AREA_PERIMETER_PARTS_20260831_V1_TOTAL_QA.py"
+          F1="$JOB/Geometry8_Circle_Exercises_AREA_PERIMETER_PARTS_20260831_V1_TOTAL_QA_FINAL.py"
+          F2="$JOB/Geometry8_Circle_Exercises_AREA_PERIMETER_PARTS_20260831_V1_TOTAL_QA_FINAL2.py"
+          SRC="$JOB/Geometry8_Circle_Exercises_AREA_PERIMETER_PARTS_20260831_V1_TOTAL_QA_FINAL3.py"
+          python -Werror -m py_compile \
+            "$JOB/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827.py" \
+            "$JOB/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827_V2.py" \
+            "$JOB/Geometry8_Circle_Area_Decomposition_TWO_ROWS_20260827_V3.py" \
+            "$JOB/Geometry8_Circle_Area_Decomposition_TWO_ROWS_20260827_V4_POLISHED.py" \
+            "$JOB/Geometry8_Circle_Area_Decomposition_TWO_ROWS_20260827_V5_FINAL_QA.py" \
+            "$JOB/Geometry8_Circle_Area_TWO_ROWS_ENGLISH_20260827_V6_MASTER.py" \
+            "$JOB/Geometry8_Circle_Foundations_HALVES_TWO_ROWS_20260829_V7_MASTER.py" \
+            "$JOB/Geometry8_Circle_Foundations_HALVES_TWO_ROWS_20260829_V7_FINAL_QA.py" \
+            "$JOB/Geometry8_Circle_Foundations_HALVES_TWO_ROWS_20260829_V8_SENIOR_QA.py" \
+            "$JOB/Geometry8_Circle_Foundations_HALVES_TWO_ROWS_20260829_V8_SENIOR_QA_FINAL.py" \
+            "$JOB/Geometry8_Circle_Foundations_HALVES_TWO_ROWS_20260829_V8_SENIOR_QA_FINAL2.py" \
+            "$JOB/Geometry8_Circle_Foundations_HALVES_TWO_ROWS_20260829_V8_SENIOR_QA_FINAL3.py" \
+            "$JOB/Geometry8_Circle_Foundations_HALVES_TWO_ROWS_20260829_V8_SENIOR_QA_FINAL4.py" \
+            "$JOB/Geometry8_Circle_Foundations_HALVES_TWO_ROWS_20260830_V9_PROJECTOR_MAX.py" \
+            "$JOB/Geometry8_Circle_Foundations_HALVES_TWO_ROWS_20260830_V10_TOTAL_QA.py" \
+            "$BASE" "$F1" "$F2" "$SRC"
+          python - "$BASE" "$F2" "$SRC" <<'PY'
+          from pathlib import Path
+          import sys
+          base=Path(sys.argv[1]).read_text(encoding='utf-8')
+          f2=Path(sys.argv[2]).read_text(encoding='utf-8')
+          f3=Path(sys.argv[3]).read_text(encoding='utf-8')
+          required=[
+              'A circle has area 49π cm². Find its perimeter.',
+              'A circle has perimeter 20π cm. Find its diameter, radius and area.',
+              'If OA = 6 cm, identify OA and AB, then find AB, perimeter and area.',
+              'A semicircle has area 50π cm².',
+              'A quarter-circle region has area 25π m².',
+              'No arc length',
+          ]
+          assert not [x for x in required if x not in base]
+          assert 'radius=radius' in f2 and 'outer_radius=radius' not in f2
+          for token in [
+              '_formula_stack_panel',
+              'FINAL3 semicircle formula panel',
+              'FINAL3 quarter formula panel',
+              'FINAL3 quarter example panel',
+              'FINAL3 quarter panels too close',
+              'FadeOut(question)',
+          ]:
+              assert token in f3, token
+          PY
+          mkdir -p out qa_out media qa_media
+
+      - name: Literal PQL full-timeline human-QA gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Exercises_AREA_PERIMETER_PARTS_20260831_V1_TOTAL_QA_FINAL3.py
+          mkdir -p /tmp/manim-bin /tmp/manim-home qa_media qa_out
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=0.045
+          manim -pql "$SRC" Geometry8CircleExercisesAreaPerimeterParts20260831V1TotalQAFinal3 \
+            --fps 15 --format=mp4 --media_dir qa_media --disable_caching \
+            2>&1 | tee qa_out/CIRCLE_EXERCISES_FINAL3_pql.log
+          PQL="$(find qa_media -type f -name 'Geometry8CircleExercisesAreaPerimeterParts20260831V1TotalQAFinal3.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+          cp "$PQL" qa_out/Geometry8_Circle_Exercises_FINAL3_20260831_pql.mp4
+
+      - name: Literal PQH final render 1920x1080 30fps
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Exercises_AREA_PERIMETER_PARTS_20260831_V1_TOTAL_QA_FINAL3.py
+          mkdir -p /tmp/manim-bin /tmp/manim-home out media
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=1.0
+          manim -pqh "$SRC" Geometry8CircleExercisesAreaPerimeterParts20260831V1TotalQAFinal3 \
+            --fps 30 --format=mp4 --media_dir media --disable_caching \
+            2>&1 | tee out/CIRCLE_EXERCISES_FINAL3_pqh.log
+          FINAL="$(find media -type f -name 'Geometry8CircleExercisesAreaPerimeterParts20260831V1TotalQAFinal3.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" out/Geometry8_Circle_Exercises_AREA_PERIMETER_PARTS_FINAL3_20260831_FINAL_pqh.mp4
+
+      - name: Full H264 decode format duration and edge QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Geometry8_Circle_Exercises_AREA_PERIMETER_PARTS_FINAL3_20260831_FINAL_pqh.mp4
+          python - "$F" <<'PY' | tee out/VIDEO_TECHNICAL_QA_CIRCLE_EXERCISES_FINAL3.txt
+          import av,os,sys,numpy as np
+          p=sys.argv[1]; frames=0; edge_failures=[]
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              codec=s.codec_context.name; width=s.codec_context.width; height=s.codec_context.height
+              fmt=s.codec_context.format.name if s.codec_context.format else ''
+              fps=float(s.average_rate) if s.average_rate else 0.0
+              duration=float(c.duration)/float(av.time_base) if c.duration else 0.0
+              for frame in c.decode(s):
+                  frames+=1
+                  if frames%30==0:
+                      arr=np.asarray(frame.to_image().convert('L'))
+                      strips=(arr[:,:18],arr[:,-18:],arr[:10,:],arr[-10:,:])
+                      if any(np.count_nonzero(x<238)>8 for x in strips): edge_failures.append(frames)
+          print(f'codec_name={codec}')
+          print(f'width={width}')
+          print(f'height={height}')
+          print(f'pix_fmt={fmt}')
+          print(f'fps={fps:.6f}')
+          print(f'duration={duration:.6f}')
+          print(f'frames_decoded={frames}')
+          print(f'size={os.path.getsize(p)}')
+          print(f'outer_edge_failures={edge_failures[:20]} count={len(edge_failures)}')
+          assert codec=='h264'
+          assert width==1920 and height==1080
+          assert abs(fps-30.0)<0.01
+          assert fmt=='yuv420p'
+          assert duration>220
+          assert frames>0
+          assert not edge_failures
+          PY
+          sha256sum "$F" | tee out/SHA256SUMS_CIRCLE_EXERCISES_FINAL3.txt
+
+      - name: Dense 180-frame QA plus focused fractional derivation burst
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Geometry8_Circle_Exercises_AREA_PERIMETER_PARTS_FINAL3_20260831_FINAL_pqh.mp4
+          mkdir -p out/frame_samples_general out/frame_samples_fractional
+          python - "$F" <<'PY'
+          import av,math,os,sys
+          from PIL import Image,ImageDraw
+          p=sys.argv[1]
+          with av.open(p) as c:
+              duration=float(c.duration)/float(av.time_base)
+          def extract(targets,outdir,prefix):
+              saved=[]
+              with av.open(p) as c:
+                  s=c.streams.video[0]; ti=0
+                  for frame in c.decode(s):
+                      if ti>=len(targets): break
+                      t=float(frame.pts*frame.time_base) if frame.pts is not None else 0.0
+                      if t>=targets[ti]:
+                          fp=f'{outdir}/{prefix}_{ti+1:03d}_{targets[ti]:07.2f}.jpg'
+                          frame.to_image().convert('RGB').save(fp,quality=95)
+                          saved.append(fp); ti+=1
+              return saved
+          general=extract([duration*i/181 for i in range(1,181)],'out/frame_samples_general','frame')
+          fractional_targets=[135.0 + 1.5*i for i in range(80)]
+          fractional_targets=[t for t in fractional_targets if t<duration-0.5]
+          fractional=extract(fractional_targets,'out/frame_samples_fractional','fraction')
+          def sheet(files,path,cols=4):
+              cards=[]
+              for fp in files:
+                  im=Image.open(fp).convert('RGB'); im.thumbnail((480,270))
+                  card=Image.new('RGB',(500,300),'white'); card.paste(im,((500-im.width)//2,8))
+                  ImageDraw.Draw(card).text((10,280),os.path.basename(fp),fill='black'); cards.append(card)
+              rows=math.ceil(len(cards)/cols); out=Image.new('RGB',(cols*500,rows*300),'white')
+              for i,im in enumerate(cards): out.paste(im,((i%cols)*500,(i//cols)*300))
+              out.save(path,quality=95)
+          sheet(general,'out/Geometry8_Circle_Exercises_FINAL3_contact_sheet_180.jpg')
+          sheet(fractional,'out/Geometry8_Circle_Exercises_FINAL3_fractional_burst.jpg')
+          print('general_frames=',len(general)); print('fractional_frames=',len(fractional))
+          assert len(general)>=176
+          assert len(fractional)>=70
+          PY
+          JOB=render_jobs/geometry8_circle_pedagogical_qa_20260819
+          cp "$JOB/Geometry8_Circle_Exercises_AREA_PERIMETER_PARTS_20260831_V1_TOTAL_QA.py" out/
+          cp "$JOB/Geometry8_Circle_Exercises_AREA_PERIMETER_PARTS_20260831_V1_TOTAL_QA_FINAL.py" out/
+          cp "$JOB/Geometry8_Circle_Exercises_AREA_PERIMETER_PARTS_20260831_V1_TOTAL_QA_FINAL2.py" out/
+          cp "$JOB/Geometry8_Circle_Exercises_AREA_PERIMETER_PARTS_20260831_V1_TOTAL_QA_FINAL3.py" out/
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Geometry8-Circle-Exercises-AREA-PERIMETER-PARTS-FINAL3-HUMAN-QA-20260831-PQH
+          path: |
+            out/
+            qa_out/
+          if-no-files-found: warn
+          retention-days: 7
