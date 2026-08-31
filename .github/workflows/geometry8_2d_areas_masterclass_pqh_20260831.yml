@@ -26,16 +26,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          SRC=render_jobs/geometry8_2d_areas_masterclass_20260831/Geometry8_2D_Areas_Masterclass_FINAL.py
-          python -m py_compile "$SRC"
-          grep -Fq 'class Geometry8Areas2DMasterclassFinal' "$SRC"
-          grep -Fq 'def validate_lesson_data' "$SRC"
-          grep -Fq 'def parallelogram' "$SRC"
-          grep -Fq 'def triangle' "$SRC"
-          grep -Fq 'def composite' "$SRC"
-          grep -Fq 'def shaded_simple' "$SRC"
-          grep -Fq 'def shaded_complex' "$SRC"
-          grep -Fq 'def scaling' "$SRC"
+          BASE=render_jobs/geometry8_2d_areas_masterclass_20260831/Geometry8_2D_Areas_Masterclass_FINAL.py
+          SRC=render_jobs/geometry8_2d_areas_masterclass_20260831/Geometry8_2D_Areas_Masterclass_FINAL_QA.py
+          python -m py_compile "$BASE" "$SRC"
+          grep -Fq 'class Geometry8Areas2DMasterclassFinal' "$BASE"
+          grep -Fq 'def validate_lesson_data' "$BASE"
+          grep -Fq 'def parallelogram' "$BASE"
+          grep -Fq 'def triangle' "$BASE"
+          grep -Fq 'def composite' "$BASE"
+          grep -Fq 'def shaded_simple' "$BASE"
+          grep -Fq 'def scaling' "$BASE"
+          grep -Fq 'class Geometry8Areas2DMasterclassFinalQA' "$SRC"
+          grep -Fq 'radius=1.75' "$SRC"
+          grep -Fq 'radius=2.35' "$SRC"
           mkdir -p out qa_out media qa_media /tmp/manim-bin /tmp/manim-home
           printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
           chmod +x /tmp/manim-bin/xdg-open
@@ -46,14 +49,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          SRC=render_jobs/geometry8_2d_areas_masterclass_20260831/Geometry8_2D_Areas_Masterclass_FINAL.py
+          SRC=render_jobs/geometry8_2d_areas_masterclass_20260831/Geometry8_2D_Areas_Masterclass_FINAL_QA.py
           export PATH=/tmp/manim-bin:$PATH
           export HOME=/tmp/manim-home
           export LESSON_TIME_SCALE=0.045
-          manim -pql "$SRC" Geometry8Areas2DMasterclassFinal \
+          manim -pql "$SRC" Geometry8Areas2DMasterclassFinalQA \
             --fps 15 --format=mp4 --media_dir qa_media --disable_caching \
             2>&1 | tee qa_out/Geometry8_2D_Areas_Masterclass_PQL.log
-          PQL="$(find qa_media -type f -name 'Geometry8Areas2DMasterclassFinal.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          PQL="$(find qa_media -type f -name 'Geometry8Areas2DMasterclassFinalQA.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PQL" && test -s "$PQL"
           cp "$PQL" qa_out/Geometry8_2D_Areas_Masterclass_FINAL_pql.mp4
           python - "$PQL" <<'PY'
@@ -69,14 +72,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          SRC=render_jobs/geometry8_2d_areas_masterclass_20260831/Geometry8_2D_Areas_Masterclass_FINAL.py
+          SRC=render_jobs/geometry8_2d_areas_masterclass_20260831/Geometry8_2D_Areas_Masterclass_FINAL_QA.py
           export PATH=/tmp/manim-bin:$PATH
           export HOME=/tmp/manim-home
           export LESSON_TIME_SCALE=1.0
-          manim -pqh "$SRC" Geometry8Areas2DMasterclassFinal \
+          manim -pqh "$SRC" Geometry8Areas2DMasterclassFinalQA \
             --fps 30 --format=mp4 --media_dir media --disable_caching \
             2>&1 | tee out/Geometry8_2D_Areas_Masterclass_PQH.log
-          FINAL="$(find media -type f -name 'Geometry8Areas2DMasterclassFinal.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          FINAL="$(find media -type f -name 'Geometry8Areas2DMasterclassFinalQA.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$FINAL" && test -s "$FINAL"
           cp "$FINAL" out/Geometry8_2D_Areas_Masterclass_FINAL_pqh.mp4
 
@@ -150,6 +153,7 @@ jobs:
           assert len(saved)>=45
           PY
           cp render_jobs/geometry8_2d_areas_masterclass_20260831/Geometry8_2D_Areas_Masterclass_FINAL.py out/
+          cp render_jobs/geometry8_2d_areas_masterclass_20260831/Geometry8_2D_Areas_Masterclass_FINAL_QA.py out/
 
       - uses: actions/upload-artifact@v4
         if: always()
