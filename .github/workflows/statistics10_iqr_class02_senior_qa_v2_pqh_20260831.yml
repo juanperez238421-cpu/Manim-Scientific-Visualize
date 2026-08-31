@@ -1,0 +1,287 @@
+name: Statistics10 IQR Class02 SENIOR QA V2 FINAL PQH 20260831
+
+on:
+  push:
+    branches:
+      - render/statistics10-iqr-class02-senior-qa-v2-20260831
+    paths:
+      - 'render_jobs/statistics10_iqr_class02_compare_boxplots_20260831/**'
+      - '.github/workflows/statistics10_iqr_class02_senior_qa_v2_pqh_20260831.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - name: Checkout exact Senior QA V2 branch
+        uses: actions/checkout@v4
+        with:
+          ref: render/statistics10-iqr-class02-senior-qa-v2-20260831
+
+      - name: Generate V2 from exact committed V1 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/statistics10_iqr_class02_compare_boxplots_20260831
+          BASE="$JOB/Statistics10_IQR_Class02_Compare_Boxplots_FINAL.py"
+          PATCH="$JOB/apply_senior_qa_v2.py"
+          V2="$JOB/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2.py"
+          STYLE="$JOB/jp_classroom_style.py"
+          CHECK="$JOB/check_manim_style.py"
+          QA="$JOB/SENIOR_QA_V1_TO_V2.md"
+          PDF_BUILDER="$JOB/build_presentation_pdf.py"
+          for f in "$BASE" "$PATCH" "$STYLE" "$CHECK" "$QA" "$PDF_BUILDER"; do test -s "$f"; done
+          python "$PATCH" "$BASE" "$V2"
+          test -s "$V2"
+          python -m py_compile "$BASE" "$V2" "$STYLE" "$CHECK" "$PDF_BUILDER"
+          python "$CHECK" "$V2" | tee static_style_qa_v2.txt
+          grep -q 'Senior QA V2' "$V2"
+          grep -q 'READ_EXAMPLE = (3, 8, 9, 11, 13, 16, 18, 35)' "$V2"
+          grep -q 'common_axis(0, 40, 5' "$V2"
+          grep -q '35 is beyond the upper fence' "$V2"
+          grep -q 'Circumscribe(equations\[3\]' "$V2"
+          grep -q 'focus_a = RoundedRectangle' "$V2"
+          if grep -q 'common_axis(0, 30, 5' "$V2"; then echo 'FAIL: old 0-30 read axis survived'; exit 1; fi
+          mkdir -p qa_preview final_out final_out/audit_frames final_out/pdf_slides package
+          sha256sum "$BASE" "$PATCH" "$V2" "$STYLE" "$QA" > qa_preview/SOURCE_SHA256SUMS_V2.txt
+
+      - name: Prepare pinned render and QA environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg zip imagemagick poppler-utils
+          python -m pip install --disable-pip-version-check --quiet pillow reportlab
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+          ffmpeg -version | head -n 1
+
+      - name: Literal PQL complete-timeline runtime gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/statistics10_iqr_class02_compare_boxplots_20260831
+          rm -rf media_pql_v2
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.07 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2.py \
+                Statistics10IQRClass02CompareBoxplotsFinal \
+                --format=mp4 --media_dir=/manim/media_pql_v2 --disable_caching
+            ' 2>&1 | tee qa_preview/render_pql_v2.log
+          PQL="$(find media_pql_v2 -type f -name 'Statistics10IQRClass02CompareBoxplotsFinal.mp4' -print -quit)"
+          test -n "$PQL" && test -s "$PQL"
+
+      - name: Literal PQH Senior QA V2 final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/statistics10_iqr_class02_compare_boxplots_20260831
+          rm -rf media_pqh_v2
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2.py \
+                Statistics10IQRClass02CompareBoxplotsFinal \
+                --format=mp4 --media_dir=/manim/media_pqh_v2 --disable_caching
+            ' 2>&1 | tee final_out/render_pqh_v2.log
+          FINAL="$(find media_pqh_v2 -type f -name 'Statistics10IQRClass02CompareBoxplotsFinal.mp4' -print -quit)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_FINAL_pqh.mp4
+
+      - name: Strict media QA and complete decode
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_FINAL_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          FRAMES="$(ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tframes\tbytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+            "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$FRAMES" "$SIZE" > final_out/VIDEO_TECHNICAL_V2.tsv
+          test "$W" = 1920; test "$H" = 1080; test "$FPS" = 30/1; test "$CODEC" = h264; test "$PIX" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> final_out/full_decode_v2.log
+          test ! -s final_out/full_decode_v2.log
+
+      - name: Every-frame blank sparse and border scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_FINAL_pqh.mp4
+          ffmpeg -nostdin -v error -i "$F" -vf scale=320:180 -pix_fmt gray -f rawvideo final_out/all_frames_gray_v2.raw
+          python - <<'PY'
+          from pathlib import Path
+          import csv
+          W,H=320,180; B=W*H
+          raw=Path('final_out/all_frames_gray_v2.raw').read_bytes(); assert len(raw)%B==0
+          n=len(raw)//B
+          border_idx=[y*W+x for y in range(H) for x in range(W) if x<5 or x>=W-5 or y<5 or y>=H-5]
+          blank=sparse=border_heavy=0; rows=[]
+          for i in range(n):
+              fr=raw[i*B:(i+1)*B]
+              dark_n=sum(p<245 for p in fr); dark_frac=dark_n/B
+              if dark_n==0: blank+=1
+              if dark_frac<0.004: sparse+=1
+              border_dark=sum(fr[j]<235 for j in border_idx)
+              border_frac=border_dark/max(dark_n,1)
+              if border_frac>0.20 and dark_n>200: border_heavy+=1
+              rows.append((i,dark_frac,border_frac))
+          with open('final_out/FRAME_BY_FRAME_SCAN_V2.csv','w',newline='') as f:
+              w=csv.writer(f); w.writerow(['frame','dark_fraction','border_dark_fraction']); w.writerows(rows)
+          Path('final_out/FRAME_SCAN_SUMMARY_V2.txt').write_text(
+              f'frames_scanned={n}\nblank_frames={blank}\nvery_sparse_frames={sparse}\nborder_heavy_frames={border_heavy}\n')
+          assert blank < n*0.10
+          assert sparse < n*0.16
+          assert border_heavy < n*0.02
+          PY
+          rm final_out/all_frames_gray_v2.raw
+
+      - name: Dense 120-frame senior visual audit and contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_FINAL_pqh.mp4
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          rm -rf final_out/audit_frames && mkdir -p final_out/audit_frames
+          for INDEX in $(seq -w 0 119); do
+            T="$(python -c "print(float('$DUR')*(int('$INDEX')+0.5)/120.0)")"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "final_out/audit_frames/frame_${INDEX}.png"
+          done
+          test "$(find final_out/audit_frames -type f -name '*.png' | wc -l)" -eq 120
+          montage final_out/audit_frames/*.png -thumbnail 320x180 -tile 6x20 -geometry +7+12 -background white -quality 90 final_out/CONTACT_SHEET_120_V2.jpg
+          test -s final_out/CONTACT_SHEET_120_V2.jpg
+
+      - name: Build and verify presentation PDF and cover
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/statistics10_iqr_class02_compare_boxplots_20260831
+          python "$JOB/build_presentation_pdf.py" \
+            final_out/audit_frames \
+            final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_PRESENTATION.pdf \
+            final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_COVER.png \
+            final_out/pdf_slides --pages 16
+          PDF=final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_PRESENTATION.pdf
+          PNG=final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_COVER.png
+          test -s "$PDF" && test -s "$PNG"
+          PAGES="$(pdfinfo "$PDF" | awk '/^Pages:/ {print $2}')"; test "$PAGES" = 16
+          mkdir -p final_out/pdf_verify
+          pdftoppm -f 1 -singlefile -png -r 120 "$PDF" final_out/pdf_verify/page_first >/dev/null 2>&1
+          pdftoppm -f 16 -singlefile -png -r 120 "$PDF" final_out/pdf_verify/page_last >/dev/null 2>&1
+          test -s final_out/pdf_verify/page_first.png; test -s final_out/pdf_verify/page_last.png
+          printf 'pages=%s\nfirst_page_render=PASS\nlast_page_render=PASS\n' "$PAGES" > final_out/PDF_QA_V2.txt
+
+      - name: Assemble QA evidence and checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/statistics10_iqr_class02_compare_boxplots_20260831
+          F=final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_FINAL_pqh.mp4
+          PDF=final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_PRESENTATION.pdf
+          PNG=final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_COVER.png
+          sha256sum "$F" "$PDF" "$PNG" "$JOB/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2.py" "$JOB/apply_senior_qa_v2.py" > final_out/SHA256SUMS_V2.txt
+          {
+            echo '# Statistics 10 IQR Class 2 - Senior QA V2 automated result'
+            echo
+            echo '- Deterministic V1 -> V2 patch: PASS'
+            echo '- Python compile: PASS'
+            echo '- Static JP classroom style QA: PASS'
+            echo '- Read-example visible-axis domain guard: PASS'
+            echo '- Literal PQL complete-timeline gate: PASS'
+            echo '- Literal PQH render: PASS'
+            echo '- H.264 / 1920x1080 / 30 fps / yuv420p: PASS'
+            echo '- Full FFmpeg decode: PASS'
+            echo '- Every-frame blank/sparse/border scan: PASS'
+            echo '- 120-frame distributed visual audit: generated'
+            echo '- 16-page presentation PDF: PASS'
+            echo '- Representative PNG cover: PASS'
+            echo '- SHA-256 manifest: generated'
+            echo
+            cat final_out/VIDEO_TECHNICAL_V2.tsv
+            echo
+            cat final_out/FRAME_SCAN_SUMMARY_V2.txt
+            echo
+            cat final_out/PDF_QA_V2.txt
+          } > final_out/SENIOR_QA_RESULT_V2.md
+
+      - name: Build reproducible Senior QA V2 package
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/statistics10_iqr_class02_compare_boxplots_20260831
+          ROOT=package/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_FINAL_PQH_PROJECT
+          mkdir -p "$ROOT/src" "$ROOT/docs" "$ROOT/qa/audit_frames" "$ROOT/render" "$ROOT/workflow"
+          cp "$JOB/Statistics10_IQR_Class02_Compare_Boxplots_FINAL.py" "$ROOT/src/V1_BASE.py"
+          cp "$JOB/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2.py" "$ROOT/src/"
+          cp "$JOB/apply_senior_qa_v2.py" "$JOB/jp_classroom_style.py" "$JOB/check_manim_style.py" "$JOB/build_presentation_pdf.py" "$ROOT/src/"
+          cp "$JOB/SENIOR_QA_V1_TO_V2.md" "$JOB/STORYBOARD.md" "$JOB/RENDER_PROTOCOL.md" "$ROOT/docs/"
+          cp final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_FINAL_pqh.mp4 "$ROOT/render/"
+          cp final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_PRESENTATION.pdf "$ROOT/render/"
+          cp final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_COVER.png "$ROOT/render/"
+          cp final_out/VIDEO_TECHNICAL_V2.tsv final_out/FRAME_SCAN_SUMMARY_V2.txt final_out/FRAME_BY_FRAME_SCAN_V2.csv \
+             final_out/CONTACT_SHEET_120_V2.jpg final_out/PDF_QA_V2.txt final_out/SENIOR_QA_RESULT_V2.md \
+             final_out/SHA256SUMS_V2.txt final_out/full_decode_v2.log final_out/render_pqh_v2.log "$ROOT/qa/"
+          cp final_out/audit_frames/*.png "$ROOT/qa/audit_frames/"
+          cp .github/workflows/statistics10_iqr_class02_senior_qa_v2_pqh_20260831.yml "$ROOT/workflow/"
+          (cd package && zip -qr Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_FULL_PACKAGE.zip Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_FINAL_PQH_PROJECT)
+          sha256sum package/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_FULL_PACKAGE.zip > package/PACKAGE_SHA256_V2.txt
+
+      - name: Persist Senior QA V2 delivery to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/statistics10_iqr_class02_compare_boxplots_20260831
+          DEST=deliveries/statistics10_iqr_class02_senior_qa_v2_20260831
+          mkdir -p "$DEST"
+          cp final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_FINAL_pqh.mp4 "$DEST/"
+          cp final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_PRESENTATION.pdf "$DEST/"
+          cp final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_COVER.png "$DEST/"
+          cp final_out/CONTACT_SHEET_120_V2.jpg final_out/VIDEO_TECHNICAL_V2.tsv final_out/FRAME_SCAN_SUMMARY_V2.txt final_out/SENIOR_QA_RESULT_V2.md final_out/SHA256SUMS_V2.txt "$DEST/"
+          cp package/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_FULL_PACKAGE.zip "$DEST/"
+          cp package/PACKAGE_SHA256_V2.txt "$DEST/"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DEST" "$JOB/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2.py"
+          if ! git diff --cached --quiet; then
+            git commit -m "render: publish Statistics 10 IQR Class 2 Senior QA V2"
+            git push origin HEAD:render/statistics10-iqr-class02-senior-qa-v2-20260831
+          fi
+
+      - name: Upload final Senior QA V2 package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Statistics10-IQR-Class02-SENIOR-QA-V2-FINAL-PQH-20260831
+          path: |
+            package/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_FULL_PACKAGE.zip
+            package/PACKAGE_SHA256_V2.txt
+            final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_FINAL_pqh.mp4
+            final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_PRESENTATION.pdf
+            final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V2_COVER.png
+            final_out/CONTACT_SHEET_120_V2.jpg
+            final_out/SENIOR_QA_RESULT_V2.md
+            final_out/VIDEO_TECHNICAL_V2.tsv
+            final_out/FRAME_SCAN_SUMMARY_V2.txt
+            final_out/audit_frames/
+          if-no-files-found: error
+          retention-days: 14
