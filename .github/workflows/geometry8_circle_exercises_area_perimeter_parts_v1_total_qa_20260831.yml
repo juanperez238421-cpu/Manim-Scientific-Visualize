@@ -45,12 +45,24 @@ jobs:
             "$JOB/Geometry8_Circle_Foundations_HALVES_TWO_ROWS_20260830_V9_PROJECTOR_MAX.py" \
             "$JOB/Geometry8_Circle_Foundations_HALVES_TWO_ROWS_20260830_V10_TOTAL_QA.py" \
             "$SRC"
-          grep -Fq 'A circle has area 49π cm². Find its perimeter.' "$SRC"
-          grep -Fq 'A circle has perimeter 20π cm. Find its diameter, radius and area.' "$SRC"
-          grep -Fq 'A_{1/2}=\\frac{1}{2}\\pi r^2' "$SRC"
-          grep -Fq 'A_{1/4}=\\frac{1}{4}\\pi r^2' "$SRC"
-          grep -Fq 'No arc length' "$SRC"
-          grep -Fq 'YOUR TURN — calculate before the solution appears' "$SRC"
+          python - "$SRC" <<'PY'
+          from pathlib import Path
+          import sys
+          text=Path(sys.argv[1]).read_text(encoding='utf-8')
+          required=[
+              'A circle has area 49π cm². Find its perimeter.',
+              'A circle has perimeter 20π cm. Find its diameter, radius and area.',
+              r'A_{1/2}=\frac{1}{2}\pi r^2',
+              r'A_{1/4}=\frac{1}{4}\pi r^2',
+              'No arc length',
+              'YOUR TURN — calculate before the solution appears',
+              'exercise_semicircle_inverse',
+              'exercise_quarter_inverse',
+          ]
+          missing=[x for x in required if x not in text]
+          print('missing assertions:', missing)
+          assert not missing
+          PY
           mkdir -p out qa_out media qa_media
 
       - name: Literal PQL complete-timeline exercise gate
@@ -146,10 +158,8 @@ jobs:
           import av, math, os, sys
           from PIL import Image, ImageDraw
           p=sys.argv[1]
-
           with av.open(p) as c:
               duration=float(c.duration)/float(av.time_base)
-
           def extract(targets, outdir, prefix):
               saved=[]
               with av.open(p) as c:
@@ -162,13 +172,11 @@ jobs:
                           frame.to_image().convert('RGB').save(fp,quality=94)
                           saved.append(fp); ti+=1
               return saved
-
           general_targets=[duration*i/145 for i in range(1,145)]
           general=extract(general_targets,'out/frame_samples_general','frame')
           fractional_targets=[duration*(0.54 + 0.40*i/44) for i in range(45)]
           fractional_targets=[t for t in fractional_targets if t < duration-0.5]
           fractional=extract(fractional_targets,'out/frame_samples_fractional','fraction')
-
           def sheet(files, path, cols=4):
               cards=[]
               for fp in files:
@@ -179,7 +187,6 @@ jobs:
               out=Image.new('RGB',(cols*500,rows*300),'white')
               for i,im in enumerate(cards): out.paste(im,((i%cols)*500,(i//cols)*300))
               out.save(path,quality=94)
-
           sheet(general,'out/Geometry8_Circle_Exercises_V1_TOTAL_QA_contact_sheet_144.jpg')
           sheet(fractional,'out/Geometry8_Circle_Exercises_V1_FRACTIONAL_QA_sheet.jpg')
           print('general_frames=',len(general))
