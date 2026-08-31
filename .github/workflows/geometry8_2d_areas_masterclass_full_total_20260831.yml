@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   render-full-total-package:
@@ -21,8 +21,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Bootstrap protocol and render full package
         shell: bash
@@ -33,22 +31,6 @@ jobs:
           base64 -d "$P" | gzip -dc > "$JOB/run_geometry8_2d_areas_full_protocol.sh"
           chmod +x "$JOB/run_geometry8_2d_areas_full_protocol.sh"
           bash "$JOB/run_geometry8_2d_areas_full_protocol.sh"
-
-      - name: Persist exact reconstructed sources on render branch
-        if: success()
-        shell: bash
-        run: |
-          set -euo pipefail
-          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
-          rm -rf "$JOB/payloads"
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$JOB"
-          if ! git diff --cached --quiet; then
-            git commit -m 'Persist Geometry 8 2D areas final rendered sources [skip ci]'
-            git push origin "HEAD:${GITHUB_REF_NAME}"
-          fi
 
       - uses: actions/upload-artifact@v4
         if: always()
