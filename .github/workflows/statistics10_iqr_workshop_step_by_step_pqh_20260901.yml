@@ -32,7 +32,7 @@ jobs:
           test -s "$J/jp_classroom_style.py"
           python -m py_compile "$S" "$J/jp_classroom_style.py"
           grep -q 'class Statistics10IQRWorkshopStepByStepFinal' "$S"
-          grep -q 'STEP 1' "$S"
+          grep -q 'def step_badge' "$S"
           grep -q 'problem4_construct_boxplot' "$S"
           grep -q 'independent_practice' "$S"
           grep -q 'exit_ticket' "$S"
@@ -205,5 +205,3 @@ jobs:
             final_out/SHA256SUMS.txt
             Statistics10_IQR_Workshop_STEP_BY_STEP_FULL_PACKAGE.zip
           retention-days: 14
-
-# retrigger after workflow file exists on branch
