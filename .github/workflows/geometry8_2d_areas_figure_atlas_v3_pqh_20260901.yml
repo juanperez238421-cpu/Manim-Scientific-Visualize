@@ -1,0 +1,198 @@
+name: Geometry 8 2D Areas Figure Atlas V3 FINAL PQH 20260901
+
+on:
+  push:
+    branches:
+      - agent/geometry8-2d-areas-figure-atlas-v3-20260901
+    paths:
+      - 'render_jobs/geometry8_2d_areas_masterclass_20260831/**'
+      - '.github/workflows/geometry8_2d_areas_figure_atlas_v3_pqh_20260901.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-v3-final-pqh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Static, structural and render-environment gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          MASTER="$JOB/Geometry8_2D_Areas_FigureByFigure_V3.py"
+          python -m py_compile \
+            "$JOB/Geometry8_2D_Areas_Masterclass_FINAL.py" \
+            "$JOB/Geometry8_2D_Areas_Masterclass_FINAL_QA.py" \
+            "$JOB/geometry8_area_atlas_helpers_v3.py" \
+            "$JOB/geometry8_area_atlas_basic_v3.py" \
+            "$JOB/geometry8_area_atlas_quads_v3.py" \
+            "$JOB/geometry8_area_atlas_circle_polygon_v3.py" \
+            "$JOB/geometry8_area_atlas_circle_parts_v3.py" \
+            "$MASTER"
+          grep -Fq 'class Geometry8Areas2DFigureByFigureV3' "$MASTER"
+          for method in \
+            square_explicit rectangle_explicit triangle_explicit parallelogram_explicit \
+            trapezoid_explicit rhombus_explicit circle_explicit regular_polygon_explicit \
+            semicircle_explicit quarter_circle_explicit formula_atlas final_method; do
+              grep -Rq "def ${method}" "$JOB"
+          done
+          mkdir -p out qa_out media pql_media /tmp/manim-bin /tmp/manim-home
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+
+      - name: Literal PQL full-timeline gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=0.045
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          cd "$JOB"
+          manim -pql Geometry8_2D_Areas_FigureByFigure_V3.py \
+            Geometry8Areas2DFigureByFigureV3 \
+            --fps 15 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/pql_media" \
+            2>&1 | tee "$GITHUB_WORKSPACE/qa_out/Geometry8_2D_Areas_FigureByFigure_V3_PQL.log"
+          cd "$GITHUB_WORKSPACE"
+          PQL="$(find pql_media -type f -name 'Geometry8Areas2DFigureByFigureV3.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+          cp "$PQL" qa_out/Geometry8_2D_Areas_FigureByFigure_V3_FINAL_pql.mp4
+          python - "$PQL" <<'PY'
+          import av, sys
+          frames=0
+          with av.open(sys.argv[1]) as c:
+              for _ in c.decode(c.streams.video[0]):
+                  frames += 1
+          print('PQL decoded frames:', frames)
+          assert frames > 0
+          PY
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=1.0
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          cd "$JOB"
+          manim -pqh Geometry8_2D_Areas_FigureByFigure_V3.py \
+            Geometry8Areas2DFigureByFigureV3 \
+            --fps 30 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/media" \
+            2>&1 | tee "$GITHUB_WORKSPACE/out/Geometry8_2D_Areas_FigureByFigure_V3_PQH.log"
+          cd "$GITHUB_WORKSPACE"
+          VIDEO="$(find media -type f -name 'Geometry8Areas2DFigureByFigureV3.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$VIDEO" && test -s "$VIDEO"
+          cp "$VIDEO" out/Geometry8_2D_Areas_FigureByFigure_V3_FINAL_pqh.mp4
+
+      - name: Full technical video QA and complete decode
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Geometry8_2D_Areas_FigureByFigure_V3_FINAL_pqh.mp4
+          python - "$VIDEO" <<'PY' | tee qa_out/VIDEO_TECHNICAL_QA.txt
+          import av, os, sys
+          p=sys.argv[1]
+          frames=0
+          last_pts=None
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              codec=s.codec_context.name
+              width=s.codec_context.width
+              height=s.codec_context.height
+              fmt=s.codec_context.format.name if s.codec_context.format else ''
+              fps=float(s.average_rate) if s.average_rate else 0.0
+              duration=float(c.duration)/float(av.time_base) if c.duration else 0.0
+              for frame in c.decode(s):
+                  frames += 1
+                  last_pts=frame.pts
+          print(f'codec_name={codec}')
+          print(f'width={width}')
+          print(f'height={height}')
+          print(f'pix_fmt={fmt}')
+          print(f'fps={fps:.6f}')
+          print(f'duration={duration:.6f}')
+          print(f'frames_decoded={frames}')
+          print(f'last_pts={last_pts}')
+          print(f'size={os.path.getsize(p)}')
+          assert codec == 'h264'
+          assert width == 1920 and height == 1080
+          assert fmt == 'yuv420p'
+          assert abs(fps-30.0) < 0.05
+          assert duration > 120
+          assert frames > 4000
+          assert os.path.getsize(p) > 1_000_000
+          PY
+          sha256sum "$VIDEO" | tee qa_out/SHA256SUMS.txt
+
+      - name: Distributed visual audit frames and contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Geometry8_2D_Areas_FigureByFigure_V3_FINAL_pqh.mp4
+          mkdir -p qa_out/audit_frames
+          python - "$VIDEO" <<'PY'
+          import av, math, os, sys
+          from PIL import Image, ImageDraw
+          p=sys.argv[1]
+          saved=[]
+          count=60
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              duration=float(c.duration)/float(av.time_base)
+              targets=[duration*i/(count+1) for i in range(1,count+1)]
+              ti=0
+              for frame in c.decode(s):
+                  if ti>=len(targets):
+                      break
+                  t=float(frame.pts*frame.time_base) if frame.pts is not None else 0.0
+                  if t>=targets[ti]:
+                      fp=f'qa_out/audit_frames/frame_{ti+1:02d}_{targets[ti]:07.2f}.jpg'
+                      frame.to_image().convert('RGB').save(fp,quality=92)
+                      saved.append(fp)
+                      ti+=1
+          cards=[]
+          for fp in saved:
+              im=Image.open(fp).convert('RGB')
+              im.thumbnail((480,270))
+              card=Image.new('RGB',(500,300),'white')
+              card.paste(im,((500-im.width)//2,8))
+              ImageDraw.Draw(card).text((10,280),os.path.basename(fp),fill='black')
+              cards.append(card)
+          cols=4
+          rows=math.ceil(len(cards)/cols)
+          sheet=Image.new('RGB',(cols*500,rows*300),'white')
+          for i,im in enumerate(cards):
+              sheet.paste(im,((i%cols)*500,(i//cols)*300))
+          sheet.save('qa_out/Geometry8_2D_Areas_FigureByFigure_V3_FINAL_contact_sheet.jpg',quality=92)
+          print('audit_frames=',len(saved))
+          assert len(saved)>=56
+          PY
+          cp render_jobs/geometry8_2d_areas_masterclass_20260831/Geometry8_2D_Areas_FigureByFigure_V3.py out/
+          cp render_jobs/geometry8_2d_areas_masterclass_20260831/geometry8_area_atlas_helpers_v3.py out/
+          cp render_jobs/geometry8_2d_areas_masterclass_20260831/geometry8_area_atlas_basic_v3.py out/
+          cp render_jobs/geometry8_2d_areas_masterclass_20260831/geometry8_area_atlas_quads_v3.py out/
+          cp render_jobs/geometry8_2d_areas_masterclass_20260831/geometry8_area_atlas_circle_polygon_v3.py out/
+          cp render_jobs/geometry8_2d_areas_masterclass_20260831/geometry8_area_atlas_circle_parts_v3.py out/
+
+      - name: Upload final video package
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Geometry8-2D-Areas-FigureByFigure-V3-FINAL-PQH-20260901
+          path: |
+            out/
+            qa_out/
+          if-no-files-found: error
+          retention-days: 14
