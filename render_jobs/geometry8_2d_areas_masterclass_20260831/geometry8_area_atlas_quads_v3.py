@@ -48,7 +48,8 @@ class Geometry8AreaQuadrilateralFiguresMixin:
         h=self.header(8,"5 · TRAPEZOID","Two parallel bases, B and b, share one perpendicular height h.")
         strip=self.stage_strip(); self.add(h,strip)
 
-        A=np.array([-5.80,-1.30,0]); Bp=np.array([-1.20,-1.30,0]); C=np.array([-2.10,1.25,0]); D=np.array([-4.75,1.25,0]); foot=np.array([D[0],A[1],0])
+        # Compact left-side construction leaves room for the correctly joined duplicate.
+        A=np.array([-6.35,-1.30,0]); Bp=np.array([-3.25,-1.30,0]); C=np.array([-3.85,1.25,0]); D=np.array([-5.55,1.25,0]); foot=np.array([D[0],A[1],0])
         trap=Polygon(A,Bp,C,D,stroke_color=INK,stroke_width=5,fill_color=FILL,fill_opacity=.66)
 
         self.mark_stage(strip,0)
@@ -63,12 +64,19 @@ class Geometry8AreaQuadrilateralFiguresMixin:
         self.play(GrowFromCenter(dB[0]),GrowFromCenter(db[0]),FadeIn(dB[1]),FadeIn(db[1]),Create(alt),GrowFromCenter(dh[0]),FadeIn(dh[1]),FadeIn(self.right_mark(foot)),run_time=.82)
 
         self.mark_stage(strip,2)
-        small=trap.copy().set_fill(PAPER,opacity=.90).set_stroke(MID,width=4)
-        target_center=np.array([-3.50,1.55,0])
-        self.add(small)
-        self.play(small.animate.rotate(PI).move_to(target_center),run_time=1.05,rate_func=smooth)
+        # A 180° rotation about the midpoint of the right leg makes the duplicate
+        # share that leg exactly. The union is a true parallelogram with base B+b.
+        copy=trap.copy().set_fill(PAPER,opacity=.90).set_stroke(MID,width=4)
+        pivot=(Bp+C)/2
+        self.add(copy)
+        self.play(Rotate(copy,angle=PI,about_point=pivot),run_time=1.05,rate_func=smooth)
+        copy_A=Bp+C-A
+        copy_D=Bp+C-D
+        para=Polygon(A,copy_D,copy_A,D,stroke_color=INK,stroke_width=4,fill_opacity=0)
+        sum_base=self.dimension(A+DOWN*.37,copy_D+DOWN*.37,"B+b",DOWN,34)
+        self.play(FadeOut(dB),FadeOut(db),Create(para),GrowFromCenter(sum_base[0]),FadeIn(sum_base[1]),run_time=.58)
         deriv=VGroup(
-            self.txt("2 congruent trapezoids form a parallelogram",26,True),
+            self.txt("2 congruent trapezoids → one parallelogram",26,True),
             self.eq(r"2A=(B+b)h",43),
             self.box(r"A=\frac{(B+b)h}{2}",6.1,55),
         ).arrange(DOWN,buff=.22).move_to(RIGHT*3.55)
@@ -76,7 +84,7 @@ class Geometry8AreaQuadrilateralFiguresMixin:
             self.play(FadeIn(item,shift=UP*.03),run_time=.38); self.wait(.24)
 
         self.mark_stage(strip,3)
-        self.play(FadeOut(deriv),FadeOut(small),run_time=.32)
+        self.play(FadeOut(deriv),FadeOut(copy),FadeOut(para),FadeOut(sum_base),run_time=.32)
         ex=self.example_stack("Given: B = 10 cm, b = 6 cm, h = 4 cm",r"A=\frac{(B+b)h}{2}",r"A=\frac{(10+6)(4)}{2}",r"A=32\ \mathrm{cm}^2")
         self.show_example(ex)
         self.wait(.80); self.wipe()
