@@ -1,0 +1,229 @@
+name: Reusable ManimCE PQH Direct GitHub Publish
+
+on:
+  workflow_call:
+    inputs:
+      artifact_name:
+        description: "Name of the validated artifact uploaded earlier in the same workflow run"
+        required: true
+        type: string
+      video_filename:
+        description: "Exact validated MP4 filename inside the artifact"
+        required: true
+        type: string
+      expected_sha256:
+        description: "SHA-256 of the QA-approved MP4"
+        required: true
+        type: string
+      target_path:
+        description: "Repository path; must be under published_renders/ and end in .mp4"
+        required: true
+        type: string
+      target_branch:
+        description: "Branch to publish to. Empty means current/head branch."
+        required: false
+        default: ""
+        type: string
+    outputs:
+      direct_download_url:
+        description: "Verified raw.githubusercontent.com direct MP4 URL"
+        value: ${{ jobs.publish.outputs.direct_download_url }}
+      published_size:
+        description: "Verified published file size in bytes"
+        value: ${{ jobs.publish.outputs.published_size }}
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  publish:
+    name: Publish validated MP4 binary directly to GitHub
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      direct_download_url: ${{ steps.publish.outputs.direct_url }}
+      published_size: ${{ steps.publish.outputs.published_size }}
+
+    steps:
+      - name: Download validated artifact from this workflow run
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: downloaded_artifact
+
+      - name: Re-verify exact validated MP4
+        id: verify
+        shell: bash
+        env:
+          VIDEO_FILENAME: ${{ inputs.video_filename }}
+          EXPECTED_SHA256: ${{ inputs.expected_sha256 }}
+          TARGET_PATH: ${{ inputs.target_path }}
+        run: |
+          set -euo pipefail
+
+          case "$TARGET_PATH" in
+            published_renders/*.mp4) ;;
+            *)
+              echo "ERROR: target_path must match published_renders/*.mp4"
+              exit 1
+              ;;
+          esac
+
+          VIDEO="$(find downloaded_artifact -type f -name "$VIDEO_FILENAME" -print -quit)"
+          test -n "$VIDEO"
+          test -s "$VIDEO"
+
+          # GitHub repository file safety margin below the 100 MiB hard limit.
+          SIZE="$(stat -c%s "$VIDEO")"
+          MAX_BYTES=$((95 * 1024 * 1024))
+          if [ "$SIZE" -ge "$MAX_BYTES" ]; then
+            echo "ERROR: validated MP4 is ${SIZE} bytes; direct-repository protocol requires <95 MiB."
+            exit 1
+          fi
+
+          ACTUAL_SHA256="$(sha256sum "$VIDEO" | awk '{print $1}')"
+          EXPECTED_NORMALIZED="$(printf '%s' "$EXPECTED_SHA256" | tr 'A-F' 'a-f')"
+          echo "Expected SHA-256: $EXPECTED_NORMALIZED"
+          echo "Actual SHA-256:   $ACTUAL_SHA256"
+          test "$ACTUAL_SHA256" = "$EXPECTED_NORMALIZED"
+
+          # Lightweight publication gate. Full technical/visual QA belongs upstream.
+          ffprobe -v error \
+            -select_streams v:0 \
+            -show_entries stream=codec_name,width,height,pix_fmt \
+            -show_entries format=format_name,duration,size \
+            -of default=noprint_wrappers=1 \
+            "$VIDEO" | tee publication_ffprobe.txt
+
+          cp "$VIDEO" validated_publish.mp4
+          echo "size=$SIZE" >> "$GITHUB_OUTPUT"
+
+      - name: Publish real MP4 binary with GitHub Git Data API and verify Contents API
+        id: publish
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_PATH: ${{ inputs.target_path }}
+          REQUESTED_TARGET_BRANCH: ${{ inputs.target_branch }}
+          EXPECTED_SIZE: ${{ steps.verify.outputs.size }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64
+          import json
+          import os
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+
+          token = os.environ['GH_TOKEN']
+          repo = os.environ['GITHUB_REPOSITORY']
+          target = os.environ['TARGET_PATH']
+          expected_size = int(os.environ['EXPECTED_SIZE'])
+          requested_branch = os.environ.get('REQUESTED_TARGET_BRANCH', '').strip()
+          branch = (
+              requested_branch
+              or os.environ.get('GITHUB_HEAD_REF', '').strip()
+              or os.environ.get('GITHUB_REF_NAME', '').strip()
+          )
+          if not branch:
+              raise RuntimeError('Unable to determine publication branch')
+          if not target.startswith('published_renders/') or not target.endswith('.mp4'):
+              raise RuntimeError('Invalid target path for canonical protocol')
+
+          api = f'https://api.github.com/repos/{repo}'
+
+          def request(method, url, payload=None):
+              data = None if payload is None else json.dumps(payload).encode('utf-8')
+              req = urllib.request.Request(url, data=data, method=method)
+              req.add_header('Authorization', f'Bearer {token}')
+              req.add_header('Accept', 'application/vnd.github+json')
+              req.add_header('X-GitHub-Api-Version', '2022-11-28')
+              if data is not None:
+                  req.add_header('Content-Type', 'application/json')
+              try:
+                  with urllib.request.urlopen(req, timeout=240) as response:
+                      body = response.read()
+                      return json.loads(body) if body else {}
+              except urllib.error.HTTPError as exc:
+                  print(exc.read().decode('utf-8', errors='replace'))
+                  raise
+
+          encoded_branch = urllib.parse.quote(branch, safe='/')
+          ref = request('GET', f'{api}/git/ref/heads/{encoded_branch}')
+          parent = ref['object']['sha']
+          commit = request('GET', f'{api}/git/commits/{parent}')
+          base_tree = commit['tree']['sha']
+
+          with open('validated_publish.mp4', 'rb') as handle:
+              encoded_video = base64.b64encode(handle.read()).decode('ascii')
+
+          blob = request('POST', f'{api}/git/blobs', {
+              'content': encoded_video,
+              'encoding': 'base64',
+          })
+
+          tree = request('POST', f'{api}/git/trees', {
+              'base_tree': base_tree,
+              'tree': [{
+                  'path': target,
+                  'mode': '100644',
+                  'type': 'blob',
+                  'sha': blob['sha'],
+              }],
+          })
+
+          new_commit = request('POST', f'{api}/git/commits', {
+              'message': f'Publish validated ManimCE PQH render: {target} [skip ci]',
+              'tree': tree['sha'],
+              'parents': [parent],
+          })
+
+          request('PATCH', f'{api}/git/refs/heads/{encoded_branch}', {
+              'sha': new_commit['sha'],
+              'force': False,
+          })
+
+          encoded_target = urllib.parse.quote(target, safe='/')
+          contents = request(
+              'GET',
+              f'{api}/contents/{encoded_target}?ref={urllib.parse.quote(branch, safe="")}',
+          )
+          if contents.get('type') != 'file':
+              raise RuntimeError('Published GitHub object is not a file')
+          published_size = int(contents.get('size', -1))
+          if published_size != expected_size:
+              raise RuntimeError(
+                  f'Published size mismatch: expected {expected_size}, got {published_size}'
+              )
+
+          direct_url = contents.get('download_url')
+          if not direct_url or not direct_url.startswith('https://raw.githubusercontent.com/'):
+              raise RuntimeError(f'GitHub did not return a raw direct download URL: {direct_url!r}')
+
+          print(f'Published commit: {new_commit["sha"]}')
+          print(f'Published bytes:  {published_size}')
+          print(f'DIRECT_DOWNLOAD: {direct_url}')
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as out:
+              out.write(f'direct_url={direct_url}\n')
+              out.write(f'published_size={published_size}\n')
+          PY
+
+      - name: Write delivery summary
+        shell: bash
+        env:
+          DIRECT_URL: ${{ steps.publish.outputs.direct_url }}
+          PUBLISHED_SIZE: ${{ steps.publish.outputs.published_size }}
+          VIDEO_FILENAME: ${{ inputs.video_filename }}
+          EXPECTED_SHA256: ${{ inputs.expected_sha256 }}
+        run: |
+          {
+            echo "## ManimCE PQH Direct GitHub Delivery — PASS"
+            echo
+            echo "- File: \`$VIDEO_FILENAME\`"
+            echo "- Published bytes: \`$PUBLISHED_SIZE\`"
+            echo "- SHA-256: \`$EXPECTED_SHA256\`"
+            echo "- Direct MP4: $DIRECT_URL"
+          } >> "$GITHUB_STEP_SUMMARY"
