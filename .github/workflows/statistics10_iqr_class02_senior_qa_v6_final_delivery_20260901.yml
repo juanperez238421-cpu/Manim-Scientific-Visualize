@@ -1,0 +1,224 @@
+name: Statistics10 IQR Class02 SENIOR QA V6 FINAL DELIVERY 20260901
+
+on:
+  push:
+    branches:
+      - render/statistics10-iqr-class02-senior-qa-v6-20260831
+    paths:
+      - '.github/workflows/statistics10_iqr_class02_senior_qa_v6_final_delivery_20260901.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout exact V6 branch
+        uses: actions/checkout@v4
+        with:
+          ref: render/statistics10-iqr-class02-senior-qa-v6-20260831
+
+      - name: Build exact V6 source and static QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          J=render_jobs/statistics10_iqr_class02_compare_boxplots_20260831
+          B=$J/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V5.py
+          P=$J/apply_senior_qa_v6.py
+          S=$J/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V6.py
+          test -s "$B"; test -s "$P"; test -s "$J/jp_classroom_style.py"; test -s "$J/check_manim_style.py"
+          python "$P" "$B" "$S"
+          python -m py_compile "$B" "$P" "$S" "$J/jp_classroom_style.py" "$J/check_manim_style.py"
+          python "$J/check_manim_style.py" "$S" | tee static_style_qa_v6.txt
+          grep -q 'scene 08 IQR annotations' "$S"
+          grep -q 'scene 09 whisker callouts' "$S"
+          grep -q 'scene 11 fence label versus outlier label' "$S"
+          grep -q 'scene 11 outlier label versus whisker label' "$S"
+          mkdir -p qa_preview final_out final_out/audit_frames package
+          sha256sum "$B" "$P" "$S" "$J/jp_classroom_style.py" > qa_preview/SOURCE_SHA256SUMS_V6.txt
+
+      - name: Prepare pinned ManimCE environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg zip
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL complete-timeline gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          J=render_jobs/statistics10_iqr_class02_compare_boxplots_20260831
+          rm -rf media_pql_v6
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.07 \
+            -v "$PWD:/manim" -w "/manim/$J" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" >/tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V6.py \
+                Statistics10IQRClass02CompareBoxplotsFinal \
+                --format=mp4 --media_dir=/manim/media_pql_v6 --disable_caching
+            ' 2>&1 | tee qa_preview/render_pql_v6.log
+          PQL="$(find media_pql_v6 -type f -name 'Statistics10IQRClass02CompareBoxplotsFinal.mp4' -print -quit)"
+          test -n "$PQL" && test -s "$PQL"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          J=render_jobs/statistics10_iqr_class02_compare_boxplots_20260831
+          rm -rf media_pqh_v6
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w "/manim/$J" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" >/tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V6.py \
+                Statistics10IQRClass02CompareBoxplotsFinal \
+                --format=mp4 --media_dir=/manim/media_pqh_v6 --disable_caching
+            ' 2>&1 | tee final_out/render_pqh_v6.log
+          F="$(find media_pqh_v6 -type f -name 'Statistics10IQRClass02CompareBoxplotsFinal.mp4' -print -quit)"
+          test -n "$F" && test -s "$F"
+          cp "$F" final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V6_FINAL_pqh.mp4
+
+      - name: Strict technical QA and complete decode
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V6_FINAL_pqh.mp4
+          W=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")
+          H=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")
+          FPS=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")
+          C=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")
+          PIX=$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")
+          D=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")
+          N=$(ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "$F")
+          SZ=$(stat -c%s "$F")
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tframes\tbytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$C" "$PIX" "$D" "$N" "$SZ" > final_out/VIDEO_TECHNICAL_V6.tsv
+          test "$W" = 1920; test "$H" = 1080; test "$FPS" = 30/1; test "$C" = h264; test "$PIX" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> final_out/full_decode_v6.log
+          test ! -s final_out/full_decode_v6.log
+
+      - name: Every-frame blank sparse border scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V6_FINAL_pqh.mp4
+          ffmpeg -nostdin -v error -i "$F" -vf scale=320:180 -pix_fmt gray -f rawvideo final_out/all_frames_v6.raw
+          python - <<'PY'
+          from pathlib import Path
+          W,H=320,180; B=W*H
+          raw=Path('final_out/all_frames_v6.raw').read_bytes(); assert len(raw)%B==0
+          n=len(raw)//B
+          border=[y*W+x for y in range(H) for x in range(W) if x<5 or x>=W-5 or y<5 or y>=H-5]
+          blank=sparse=edge=0
+          for i in range(n):
+              f=raw[i*B:(i+1)*B]
+              d=sum(p<245 for p in f)
+              blank += (d==0)
+              sparse += (d/B<0.004)
+              e=sum(f[j]<235 for j in border)/max(d,1)
+              edge += (e>0.20 and d>200)
+          Path('final_out/FRAME_SCAN_SUMMARY_V6.txt').write_text(
+              f'frames_scanned={n}\nblank_frames={blank}\nvery_sparse_frames={sparse}\nborder_heavy_frames={edge}\n'
+          )
+          assert blank < n*0.10
+          assert sparse < n*0.16
+          assert edge < n*0.02
+          PY
+          rm final_out/all_frames_v6.raw
+
+      - name: Dense 200-frame visual audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V6_FINAL_pqh.mp4
+          D=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")
+          rm -rf final_out/audit_frames && mkdir -p final_out/audit_frames
+          for I in $(seq -w 0 199); do
+            T=$(python -c "print(float('$D')*(int('$I')+0.5)/200.0)")
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "final_out/audit_frames/frame_${I}.png"
+          done
+          test "$(find final_out/audit_frames -type f -name '*.png' | wc -l)" -eq 200
+          ffmpeg -nostdin -loglevel error -framerate 1 -pattern_type glob -i 'final_out/audit_frames/frame_*.png' \
+            -vf 'scale=320:180,tile=10x20' -frames:v 1 -update 1 final_out/CONTACT_SHEET_200_V6.jpg
+          test -s final_out/CONTACT_SHEET_200_V6.jpg
+
+      - name: Assemble V6 evidence and reproducible package
+        shell: bash
+        run: |
+          set -euo pipefail
+          J=render_jobs/statistics10_iqr_class02_compare_boxplots_20260831
+          F=final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V6_FINAL_pqh.mp4
+          sha256sum "$F" "$J/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V6.py" "$J/apply_senior_qa_v6.py" > final_out/SHA256SUMS_V6.txt
+          {
+            echo '# Statistics 10 IQR Class 2 - Senior QA V6 final delivery'
+            echo
+            echo '- Exact V5 source used as base: PASS'
+            echo '- Deterministic V5 -> V6 source patch: PASS'
+            echo '- Python compile + static classroom QA: PASS'
+            echo '- Scene 08 runtime overlap guards: PASS'
+            echo '- Scene 09 runtime overlap guards: PASS'
+            echo '- Scene 11 runtime overlap guards: PASS'
+            echo '- Literal PQL complete-timeline gate: PASS'
+            echo '- Literal PQH final render: PASS'
+            echo '- H.264 / 1920x1080 / 30 fps / yuv420p: PASS'
+            echo '- Full FFmpeg decode: PASS'
+            echo '- Every-frame scan: PASS'
+            echo '- 200-frame distributed visual audit: generated'
+            echo '- SHA-256 manifest: generated'
+            echo
+            cat final_out/VIDEO_TECHNICAL_V6.tsv
+            echo
+            cat final_out/FRAME_SCAN_SUMMARY_V6.txt
+          } > final_out/SENIOR_QA_RESULT_V6.md
+          R=package/Statistics10_IQR_Class02_SENIOR_QA_V6_FINAL_PQH
+          mkdir -p "$R/src" "$R/render" "$R/qa"
+          cp "$J/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V6.py" "$J/apply_senior_qa_v6.py" "$J/jp_classroom_style.py" "$R/src/"
+          cp "$F" "$R/render/"
+          cp final_out/CONTACT_SHEET_200_V6.jpg final_out/SENIOR_QA_RESULT_V6.md final_out/VIDEO_TECHNICAL_V6.tsv final_out/FRAME_SCAN_SUMMARY_V6.txt final_out/SHA256SUMS_V6.txt "$R/qa/"
+          (cd package && zip -qr ../Statistics10_IQR_Class02_SENIOR_QA_V6_FULL_PACKAGE.zip Statistics10_IQR_Class02_SENIOR_QA_V6_FINAL_PQH)
+          test -s Statistics10_IQR_Class02_SENIOR_QA_V6_FULL_PACKAGE.zip
+
+      - name: Persist V6 delivery to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          D=deliveries/statistics10_iqr_class02_senior_qa_v6_20260901
+          mkdir -p "$D"
+          cp final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V6_FINAL_pqh.mp4 final_out/CONTACT_SHEET_200_V6.jpg final_out/SENIOR_QA_RESULT_V6.md final_out/VIDEO_TECHNICAL_V6.tsv final_out/FRAME_SCAN_SUMMARY_V6.txt final_out/SHA256SUMS_V6.txt "$D/"
+          cp Statistics10_IQR_Class02_SENIOR_QA_V6_FULL_PACKAGE.zip "$D/"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$D" "$J" 2>/dev/null || true
+          git add "$D" render_jobs/statistics10_iqr_class02_compare_boxplots_20260831/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V6.py
+          if ! git diff --cached --quiet; then
+            git commit -m 'render: publish Statistics 10 IQR Class 2 Senior QA V6 final delivery'
+            git push origin HEAD:render/statistics10-iqr-class02-senior-qa-v6-20260831
+          fi
+
+      - name: Upload V6 final artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Statistics10-IQR-Class02-SENIOR-QA-V6-FINAL-PQH-20260901
+          path: |
+            final_out/Statistics10_IQR_Class02_Compare_Boxplots_SENIOR_QA_V6_FINAL_pqh.mp4
+            final_out/CONTACT_SHEET_200_V6.jpg
+            final_out/SENIOR_QA_RESULT_V6.md
+            final_out/VIDEO_TECHNICAL_V6.tsv
+            final_out/FRAME_SCAN_SUMMARY_V6.txt
+            final_out/SHA256SUMS_V6.txt
+            Statistics10_IQR_Class02_SENIOR_QA_V6_FULL_PACKAGE.zip
+          retention-days: 14
