@@ -1,0 +1,129 @@
+name: Publish Geometry 8 V5 MP4 directly to GitHub
+
+on:
+  push:
+    branches:
+      - agent/geometry8-2d-areas-v5-parallelogram-precision-20260901
+    paths:
+      - '.github/workflows/publish_geometry8_v5_render_direct_github_20260901.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  publish-validated-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Download exact validated GitHub Actions render artifact
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ARTIFACT_ID=9822474783
+          curl -L --fail-with-body \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            -o artifact.zip \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip"
+
+          python - <<'PY'
+          import zipfile
+          with zipfile.ZipFile('artifact.zip') as z:
+              z.extractall('artifact')
+          PY
+
+          VIDEO="$(find artifact -type f -name 'Geometry8_2D_Areas_FigureByFigure_V5_SENIOR_FINAL_pqh.mp4' -print -quit)"
+          test -n "$VIDEO"
+          test -s "$VIDEO"
+          cp "$VIDEO" Geometry8_2D_Areas_FigureByFigure_V5_SENIOR_FINAL_pqh.mp4
+
+          EXPECTED='2d83d32a9d5d9d1963f831ed4e703ffc4e69b90ff98b48824df153b28718c13b'
+          ACTUAL="$(sha256sum Geometry8_2D_Areas_FigureByFigure_V5_SENIOR_FINAL_pqh.mp4 | awk '{print $1}')"
+          echo "Validated SHA-256: ${ACTUAL}"
+          test "$ACTUAL" = "$EXPECTED"
+
+      - name: Publish real MP4 binary with GitHub Git Data API
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_PATH: published_renders/Geometry8_2D_Areas_FigureByFigure_V5_SENIOR_FINAL_pqh.mp4
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64
+          import json
+          import os
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+
+          token = os.environ['GH_TOKEN']
+          repo = os.environ['GITHUB_REPOSITORY']
+          parent = os.environ['GITHUB_SHA']
+          branch = os.environ['GITHUB_REF_NAME']
+          target = os.environ['TARGET_PATH']
+          video = 'Geometry8_2D_Areas_FigureByFigure_V5_SENIOR_FINAL_pqh.mp4'
+          api = f'https://api.github.com/repos/{repo}'
+
+          def request(method, url, payload=None):
+              data = None if payload is None else json.dumps(payload).encode('utf-8')
+              req = urllib.request.Request(url, data=data, method=method)
+              req.add_header('Authorization', f'Bearer {token}')
+              req.add_header('Accept', 'application/vnd.github+json')
+              req.add_header('X-GitHub-Api-Version', '2022-11-28')
+              if data is not None:
+                  req.add_header('Content-Type', 'application/json')
+              try:
+                  with urllib.request.urlopen(req, timeout=180) as r:
+                      body = r.read()
+                      return json.loads(body) if body else {}
+              except urllib.error.HTTPError as e:
+                  print(e.read().decode('utf-8', errors='replace'))
+                  raise
+
+          commit = request('GET', f'{api}/git/commits/{parent}')
+          base_tree = commit['tree']['sha']
+
+          with open(video, 'rb') as f:
+              encoded = base64.b64encode(f.read()).decode('ascii')
+
+          blob = request('POST', f'{api}/git/blobs', {
+              'content': encoded,
+              'encoding': 'base64',
+          })
+          print('blob_sha=', blob['sha'])
+
+          tree = request('POST', f'{api}/git/trees', {
+              'base_tree': base_tree,
+              'tree': [{
+                  'path': target,
+                  'mode': '100644',
+                  'type': 'blob',
+                  'sha': blob['sha'],
+              }],
+          })
+
+          new_commit = request('POST', f'{api}/git/commits', {
+              'message': 'Publish validated Geometry 8 V5 senior PQH MP4 [skip ci]',
+              'tree': tree['sha'],
+              'parents': [parent],
+          })
+          print('commit_sha=', new_commit['sha'])
+
+          ref_branch = urllib.parse.quote(branch, safe='/')
+          request('PATCH', f'{api}/git/refs/heads/{ref_branch}', {
+              'sha': new_commit['sha'],
+              'force': False,
+          })
+
+          raw_branch = urllib.parse.quote(branch, safe='/')
+          raw_path = urllib.parse.quote(target, safe='/')
+          print(f'RAW_DOWNLOAD=https://raw.githubusercontent.com/{repo}/{raw_branch}/{raw_path}')
+          print(f'GITHUB_FILE=https://github.com/{repo}/blob/{raw_branch}/{raw_path}?raw=1')
+          PY
