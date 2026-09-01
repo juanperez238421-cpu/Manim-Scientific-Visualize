@@ -104,14 +104,12 @@ jobs:
           ffmpeg -nostdin -v error -i "$F" -f null - 2> final_out/full_decode.log
           test ! -s final_out/full_decode.log
 
-          # Every-second audit across the full timeline.
           rm -rf final_out/audit_frames_1s && mkdir -p final_out/audit_frames_1s
           ffmpeg -nostdin -loglevel error -i "$F" -vf fps=1 -q:v 2 final_out/audit_frames_1s/sec_%03d.jpg
           COUNT1="$(find final_out/audit_frames_1s -type f -name '*.jpg' | wc -l)"
           test "$COUNT1" -ge 70
           montage final_out/audit_frames_1s/*.jpg -thumbnail 384x216 -tile 6x -geometry +7+9 -background white -quality 90 final_out/CONTACT_SHEET_1S_ALL.jpg
 
-          # 36 evenly distributed high-resolution audit frames.
           rm -rf final_out/audit_frames_36 && mkdir -p final_out/audit_frames_36
           for INDEX in $(seq -w 0 35); do
             T="$(python -c "print(float('$DUR')*(int('$INDEX')+0.5)/36.0)")"
@@ -183,3 +181,5 @@ jobs:
             final_out/SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 30
+
+# synchronization trigger after workflow file exists on the PR branch
