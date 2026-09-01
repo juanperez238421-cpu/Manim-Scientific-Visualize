@@ -118,11 +118,13 @@ jobs:
                   frames += 1
                   last_pts=frame.pts
           size=os.path.getsize(p)
+          effective_fps=(frames/duration) if duration else 0.0
           print(f'codec_name={codec}')
           print(f'width={width}')
           print(f'height={height}')
           print(f'pix_fmt={fmt}')
-          print(f'fps={fps:.6f}')
+          print(f'container_fps={fps:.6f}')
+          print(f'effective_fps={effective_fps:.6f}')
           print(f'duration={duration:.6f}')
           print(f'frames_decoded={frames}')
           print(f'last_pts={last_pts}')
@@ -131,11 +133,18 @@ jobs:
           assert width == 1920 and height == 1080
           assert fmt == 'yuv420p'
           assert abs(fps-30.0) < 0.05
+          assert abs(effective_fps-30.0) < 0.05
           assert duration > 125
           assert frames > 4000
           assert size > 1_000_000
           PY
-          ffmpeg -v error -i "$VIDEO" -f null -
+          # Decode every video frame a second time with ffmpeg. Rawvideo output to
+          # /dev/null avoids null-muxer DTS false positives while keeping decoder
+          # failures fatal under -err_detect explode.
+          ffmpeg -v error -err_detect explode -i "$VIDEO" -map 0:v:0 \
+            -f rawvideo -pix_fmt gray -y /dev/null \
+            2>qa_out/FFMPEG_FULL_DECODE.txt
+          test ! -s qa_out/FFMPEG_FULL_DECODE.txt || cat qa_out/FFMPEG_FULL_DECODE.txt
           sha256sum "$VIDEO" | tee qa_out/SHA256SUMS.txt
 
       - name: Senior distributed visual and safe-edge audit
