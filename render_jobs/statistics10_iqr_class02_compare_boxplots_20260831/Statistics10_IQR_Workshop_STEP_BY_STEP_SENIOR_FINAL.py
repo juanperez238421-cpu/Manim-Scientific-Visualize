@@ -68,9 +68,12 @@ class Statistics10IQRWorkshopStepByStepSeniorFinal(Statistics10IQRWorkshopStepBy
         self.reveal_rows([center, spread, outlier], pause=PAUSE_EXPLAIN)
         self.wait(PAUSE_READ)
 
-        # Senior-QA correction: never force the conclusion below the common axis.
-        # Clear the three explanatory rows, then give the conclusion its own lane.
-        self.play(FadeOut(VGroup(center, spread, outlier)), run_time=RUN_QUICK)
+        # Senior-QA correction: the conclusion receives a dedicated uncluttered
+        # presentation state instead of competing with the axis or boxplots.
+        self.play(
+            FadeOut(VGroup(center, spread, outlier, axis, pa, pb)),
+            run_time=RUN_QUICK,
+        )
         conclusion = self.note_panel(
             "Statistical conclusion",
             [
@@ -81,7 +84,7 @@ class Statistics10IQRWorkshopStepByStepSeniorFinal(Statistics10IQRWorkshopStepBy
             width=8.9,
             body_size=22,
         )
-        conclusion.move_to([0.85, 1.45, 0])
+        conclusion.move_to([0, 0.25, 0])
         self.assert_content_safe(conclusion, "comparison conclusion panel")
         self.play(FadeIn(conclusion, shift=UP * 0.05), run_time=RUN_NORMAL)
         self.wait(PAUSE_WORK)
