@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   render-v5-senior-final-pqh:
@@ -181,6 +181,26 @@ jobs:
           cp "$JOB/geometry8_area_atlas_senior_v4.py" out/
           cp "$JOB/Geometry8_2D_Areas_FigureByFigure_V3.py" out/
           cp "$JOB/geometry8_area_atlas_quads_v3.py" out/
+
+      - name: Publish validated MP4 directly to GitHub branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=out/Geometry8_2D_Areas_FigureByFigure_V5_SENIOR_FINAL_pqh.mp4
+          DEST=published_renders/Geometry8_2D_Areas_FigureByFigure_V5_SENIOR_FINAL_pqh.mp4
+          test -s "$SRC"
+          mkdir -p "$(dirname "$DEST")"
+          cp "$SRC" "$DEST"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f "$DEST"
+          if git diff --cached --quiet; then
+            echo "Published render already matches GitHub branch."
+          else
+            git commit -m "Publish V5 senior PQH render [skip ci]"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
 
       - name: Upload V5 senior final package
         uses: actions/upload-artifact@v4
