@@ -33,7 +33,7 @@ jobs:
             "$JOB/Geometry8_2D_Areas_Masterclass_FINAL_QA.py" \
             "$JOB/geometry8_area_atlas_helpers_v3.py" \
             "$JOB/geometry8_area_atlas_basic_v3.py" \
-            "$JOB/geometry8_area_atlas_quadrilaterals_v3.py" \
+            "$JOB/geometry8_area_atlas_quads_v3.py" \
             "$JOB/geometry8_area_atlas_circle_polygon_v3.py" \
             "$JOB/geometry8_area_atlas_circle_parts_v3.py" \
             "$JOB/Geometry8_2D_Areas_FigureByFigure_V3.py"
@@ -47,7 +47,7 @@ jobs:
           cd "$JOB"
           LESSON_TIME_SCALE=0.045 manim -pql \
             Geometry8_2D_Areas_FigureByFigure_V3.py \
-            Geometry8AreasFigureByFigureV3 \
+            Geometry8Areas2DFigureByFigureV3 \
             --disable_caching \
             --media_dir "$GITHUB_WORKSPACE/pql_media"
 
@@ -60,7 +60,7 @@ jobs:
           cd "$JOB"
           LESSON_TIME_SCALE=1.0 manim -pqh \
             Geometry8_2D_Areas_FigureByFigure_V3.py \
-            Geometry8AreasFigureByFigureV3 \
+            Geometry8Areas2DFigureByFigureV3 \
             --disable_caching \
             --media_dir "$GITHUB_WORKSPACE/media" \
             -o Geometry8_2D_Areas_FigureByFigure_V3_FINAL_pqh.mp4
