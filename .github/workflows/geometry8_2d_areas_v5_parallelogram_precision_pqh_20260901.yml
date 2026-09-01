@@ -1,0 +1,194 @@
+name: Geometry 8 2D Areas V5 PARALLELOGRAM PRECISION FINAL PQH
+
+on:
+  push:
+    branches:
+      - agent/geometry8-2d-areas-v5-parallelogram-precision-20260901
+    paths:
+      - 'render_jobs/geometry8_2d_areas_masterclass_20260831/**'
+      - '.github/workflows/geometry8_2d_areas_v5_parallelogram_precision_pqh_20260901.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-v5-senior-final-pqh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Senior static geometry gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          python -m py_compile \
+            "$JOB/Geometry8_2D_Areas_Masterclass_FINAL.py" \
+            "$JOB/Geometry8_2D_Areas_Masterclass_FINAL_QA.py" \
+            "$JOB/Geometry8_2D_Areas_FigureByFigure_V3.py" \
+            "$JOB/geometry8_area_atlas_helpers_v3.py" \
+            "$JOB/geometry8_area_atlas_basic_v3.py" \
+            "$JOB/geometry8_area_atlas_quads_v3.py" \
+            "$JOB/geometry8_area_atlas_circle_polygon_v3.py" \
+            "$JOB/geometry8_area_atlas_circle_parts_v3.py" \
+            "$JOB/geometry8_area_atlas_senior_v4.py" \
+            "$JOB/geometry8_area_parallelogram_precision_v5.py" \
+            "$JOB/Geometry8_2D_Areas_FigureByFigure_V5_SENIOR.py"
+          grep -Fq 'translation = B - A' "$JOB/geometry8_area_parallelogram_precision_v5.py"
+          grep -Fq 'assert np.allclose(E + translation, F)' "$JOB/geometry8_area_parallelogram_precision_v5.py"
+          grep -Fq 'assert np.allclose(D + translation, C)' "$JOB/geometry8_area_parallelogram_precision_v5.py"
+          grep -Fq 'rect_db = self.dimension(E + DOWN*.35, F + DOWN*.35, "b", DOWN)' "$JOB/geometry8_area_parallelogram_precision_v5.py"
+          mkdir -p out qa_out media pql_media /tmp/manim-bin /tmp/manim-home
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+
+      - name: PQL complete timeline gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=0.05
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          cd "$JOB"
+          manim -pql Geometry8_2D_Areas_FigureByFigure_V5_SENIOR.py \
+            Geometry8Areas2DFigureByFigureV5Senior \
+            --fps 15 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/pql_media" \
+            2>&1 | tee "$GITHUB_WORKSPACE/qa_out/Geometry8_2D_Areas_V5_SENIOR_PQL.log"
+          cd "$GITHUB_WORKSPACE"
+          PQL="$(find pql_media -type f -name 'Geometry8Areas2DFigureByFigureV5Senior.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+
+      - name: PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=1.0
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          cd "$JOB"
+          manim -pqh Geometry8_2D_Areas_FigureByFigure_V5_SENIOR.py \
+            Geometry8Areas2DFigureByFigureV5Senior \
+            --fps 30 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/media" \
+            2>&1 | tee "$GITHUB_WORKSPACE/out/Geometry8_2D_Areas_V5_SENIOR_PQH.log"
+          cd "$GITHUB_WORKSPACE"
+          VIDEO="$(find media -type f -name 'Geometry8Areas2DFigureByFigureV5Senior.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$VIDEO" && test -s "$VIDEO"
+          cp "$VIDEO" out/Geometry8_2D_Areas_FigureByFigure_V5_SENIOR_FINAL_pqh.mp4
+
+      - name: Full decode and technical QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Geometry8_2D_Areas_FigureByFigure_V5_SENIOR_FINAL_pqh.mp4
+          python - "$VIDEO" <<'PY' | tee qa_out/VIDEO_TECHNICAL_QA.txt
+          import av, os, sys
+          p=sys.argv[1]
+          frames=0
+          first_pts=None
+          last_pts=None
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              codec=s.codec_context.name
+              width=s.codec_context.width
+              height=s.codec_context.height
+              fmt=s.codec_context.format.name if s.codec_context.format else ''
+              fps=float(s.average_rate) if s.average_rate else 0.0
+              duration=float(c.duration)/float(av.time_base) if c.duration else 0.0
+              for frame in c.decode(s):
+                  frames += 1
+                  if first_pts is None:
+                      first_pts=frame.pts
+                  last_pts=frame.pts
+          size=os.path.getsize(p)
+          print(f'codec_name={codec}')
+          print(f'width={width}')
+          print(f'height={height}')
+          print(f'pix_fmt={fmt}')
+          print(f'average_fps={fps:.6f}')
+          print(f'duration={duration:.6f}')
+          print(f'frames_decoded={frames}')
+          print(f'first_pts={first_pts}')
+          print(f'last_pts={last_pts}')
+          print(f'size={size}')
+          assert codec == 'h264'
+          assert width == 1920 and height == 1080
+          assert fmt == 'yuv420p'
+          assert 29.8 <= fps <= 30.2
+          assert duration > 125
+          assert frames > 4000
+          assert size > 1_000_000
+          PY
+          sha256sum "$VIDEO" | tee qa_out/SHA256SUMS.txt
+
+      - name: Distributed visual audit contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Geometry8_2D_Areas_FigureByFigure_V5_SENIOR_FINAL_pqh.mp4
+          mkdir -p qa_out/audit_frames
+          python - "$VIDEO" <<'PY' | tee qa_out/VISUAL_AUDIT.txt
+          import av, math, os, sys
+          from PIL import Image, ImageDraw
+          p=sys.argv[1]
+          count=72
+          saved=[]
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              duration=float(c.duration)/float(av.time_base)
+              targets=[duration*i/(count+1) for i in range(1,count+1)]
+              ti=0
+              for frame in c.decode(s):
+                  if ti>=len(targets): break
+                  t=float(frame.pts*frame.time_base) if frame.pts is not None else 0.0
+                  if t>=targets[ti]:
+                      arr=frame.to_ndarray(format='rgb24')
+                      fp=f'qa_out/audit_frames/frame_{ti+1:02d}_{targets[ti]:07.2f}.jpg'
+                      Image.fromarray(arr).save(fp,quality=92)
+                      saved.append(fp)
+                      ti+=1
+          assert len(saved) >= 68
+          cards=[]
+          for fp in saved:
+              im=Image.open(fp).convert('RGB'); im.thumbnail((480,270))
+              card=Image.new('RGB',(500,300),'white')
+              card.paste(im,((500-im.width)//2,8))
+              ImageDraw.Draw(card).text((10,280),os.path.basename(fp),fill='black')
+              cards.append(card)
+          cols=4; rows=math.ceil(len(cards)/cols)
+          sheet=Image.new('RGB',(cols*500,rows*300),'white')
+          for i,im in enumerate(cards): sheet.paste(im,((i%cols)*500,(i//cols)*300))
+          sheet.save('qa_out/Geometry8_2D_Areas_V5_SENIOR_FINAL_contact_sheet.jpg',quality=92)
+          print('audit_frames=',len(saved))
+          PY
+
+      - name: Package source and QA evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          cp "$JOB/Geometry8_2D_Areas_FigureByFigure_V5_SENIOR.py" out/
+          cp "$JOB/geometry8_area_parallelogram_precision_v5.py" out/
+          cp "$JOB/geometry8_area_atlas_senior_v4.py" out/
+          cp "$JOB/Geometry8_2D_Areas_FigureByFigure_V3.py" out/
+          cp "$JOB/geometry8_area_atlas_quads_v3.py" out/
+
+      - name: Upload V5 senior final package
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Geometry8-2D-Areas-V5-PARALLELOGRAM-PRECISION-FINAL-PQH-20260901
+          path: |
+            out/
+            qa_out/
+          if-no-files-found: error
+          retention-days: 14
