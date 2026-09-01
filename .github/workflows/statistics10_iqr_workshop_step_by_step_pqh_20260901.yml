@@ -205,3 +205,5 @@ jobs:
             final_out/SHA256SUMS.txt
             Statistics10_IQR_Workshop_STEP_BY_STEP_FULL_PACKAGE.zip
           retention-days: 14
+
+# retrigger after workflow file exists on branch
