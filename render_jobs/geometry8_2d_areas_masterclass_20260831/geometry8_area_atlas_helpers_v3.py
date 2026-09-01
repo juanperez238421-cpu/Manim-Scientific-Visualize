@@ -74,6 +74,9 @@ class Geometry8AreaAtlasHelpersMixin:
             self.txt("FIGURE-BY-FIGURE CONSTRUCTION ATLAS", 58, True),
             self.txt("Build it · name its parts · derive its area · solve one example", 31),
         ).arrange(DOWN, buff=.17).shift(UP * 1.65)
+        # The opening is intentionally fit as one unit: this keeps the long
+        # atlas title inside the 16:9 safe area on every renderer/font metric.
+        self.fit(title, 14.55, 2.05)
 
         labels = ["1  CONSTRUCT", "2  PARTS", "3  DERIVE", "4  EXAMPLE"]
         cards = VGroup()
@@ -92,6 +95,7 @@ class Geometry8AreaAtlasHelpersMixin:
         cards.arrange(RIGHT, buff=.25).shift(DOWN * .35)
 
         note = self.txt("Every formula must come from the geometry — not from memorization alone.", 31, True).shift(DOWN * 2.15)
+        self.fit(note, 14.30, .65)
 
         self.play(Write(title[0]), run_time=.70)
         self.play(Write(title[1]), FadeIn(title[2]), run_time=1.00)
