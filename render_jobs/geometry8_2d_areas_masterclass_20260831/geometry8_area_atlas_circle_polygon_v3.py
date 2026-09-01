@@ -69,8 +69,15 @@ class Geometry8AreaCirclePolygonMixin:
         side_mid=(vertices[0]+vertices[1])/2
         ap=DashedLine(center,side_mid,color=INK,stroke_width=2.8)
         alab=self.eq("a",35).next_to(ap,RIGHT,buff=.07)
+        side=Line(vertices[0],vertices[1])
+        slab=self.eq("s",34).next_to(side,UR,buff=.05)
+        # The apothem is perpendicular to a side; show this explicitly because
+        # it is the height used in every center triangle.
+        ap_dir=(side_mid-center)/np.linalg.norm(side_mid-center)
+        side_dir=(vertices[1]-vertices[0])/np.linalg.norm(vertices[1]-vertices[0])
+        right=self.right_mark(side_mid,-ap_dir,side_dir,.22)
         plab=self.eq(r"P=\text{sum of all side lengths}",31).move_to([-3.70,-2.45,0])
-        self.play(LaggedStart(*[Create(s) for s in spokes],lag_ratio=.06),Create(ap),FadeIn(alab),FadeIn(plab),run_time=.85)
+        self.play(LaggedStart(*[Create(s) for s in spokes],lag_ratio=.06),Create(ap),FadeIn(alab),FadeIn(slab),FadeIn(right),FadeIn(plab),run_time=.85)
 
         self.mark_stage(strip,2)
         one=Polygon(center,vertices[0],vertices[1],stroke_color=INK,stroke_width=3,fill_color=WHITE,fill_opacity=.80)
