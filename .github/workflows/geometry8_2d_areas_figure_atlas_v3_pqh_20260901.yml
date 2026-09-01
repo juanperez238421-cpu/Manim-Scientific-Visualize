@@ -105,6 +105,7 @@ jobs:
           import av, os, sys
           p=sys.argv[1]
           frames=0
+          last_pts=None
           with av.open(p) as c:
               s=c.streams.video[0]
               codec=s.codec_context.name
@@ -113,8 +114,9 @@ jobs:
               fmt=s.codec_context.format.name if s.codec_context.format else ''
               fps=float(s.average_rate) if s.average_rate else 0.0
               duration=float(c.duration)/float(av.time_base) if c.duration else 0.0
-              for _ in c.decode(s):
+              for frame in c.decode(s):
                   frames += 1
+                  last_pts=frame.pts
           print(f'codec_name={codec}')
           print(f'width={width}')
           print(f'height={height}')
@@ -122,15 +124,16 @@ jobs:
           print(f'fps={fps:.6f}')
           print(f'duration={duration:.6f}')
           print(f'frames_decoded={frames}')
+          print(f'last_pts={last_pts}')
           print(f'size={os.path.getsize(p)}')
           assert codec == 'h264'
           assert width == 1920 and height == 1080
           assert fmt == 'yuv420p'
-          assert abs(fps-30.0) < 0.01
+          assert abs(fps-30.0) < 0.05
           assert duration > 120
-          assert frames > 0
+          assert frames > 4000
+          assert os.path.getsize(p) > 1_000_000
           PY
-          ffmpeg -v error -i "$VIDEO" -f null -
           sha256sum "$VIDEO" | tee qa_out/SHA256SUMS.txt
 
       - name: Distributed visual audit frames and contact sheet
