@@ -1,0 +1,152 @@
+name: Geometry 8 Circle Pedagogical Senior QA PQH 20260819
+
+on:
+  pull_request:
+    branches: [main, agent/geometry8-circle-final-total-20260818]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-pedagogical-sequence:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.ref == 'agent/geometry8-circle-pedagogical-senior-qa-20260819'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct audited source stack
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_circle_pedagogical_qa_20260819
+          mkdir -p "$JOB" out qa_media qa_out media
+
+          cat render_jobs/geometry8_circle_20260818/f_*.b64 | base64 -d | gzip -dc > "$JOB/Geometry8_Circle_Fundamentals_FINAL.py"
+          cat render_jobs/geometry8_circle_20260818/w_*.b64 | base64 -d | gzip -dc > "$JOB/Geometry8_Circle_Workshop_FINAL.py"
+          cat render_jobs/geometry8_circle_20260818/s_*.b64 | base64 -d | gzip -dc > "$JOB/jp_classroom_style.py"
+          cp render_jobs/geometry8_circle_class2_20260818/Geometry8_Circle_Class2_Parts_Arcs.py "$JOB/Geometry8_Circle_Class2_Parts_Arcs.py"
+
+          # Preserve the validated Class-2 TeX hotfix from the existing render workflow.
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Class2_Parts_Arcs.py')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('\\\\qquad"\\n            r"m\\\\angle AVB', '\\\\qquad "\\n            r"m\\\\angle AVB')
+          p.write_text(s, encoding='utf-8')
+          PY
+
+          python -Werror -m py_compile \
+            "$JOB/jp_classroom_style.py" \
+            "$JOB/Geometry8_Circle_Fundamentals_FINAL.py" \
+            "$JOB/Geometry8_Circle_Class2_Parts_Arcs.py" \
+            "$JOB/Geometry8_Circle_Workshop_FINAL.py" \
+            "$JOB/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA.py"
+
+          grep -q 'class Geometry8CirclePedagogicalSequenceSeniorQA' "$JOB/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA.py"
+          grep -q 'QA_CARD_WIDTH = 5.85' "$JOB/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA.py"
+          grep -q 'def _show_guided_solution' "$JOB/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA.py"
+          grep -q 'Fundamentals' "$JOB/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA.py"
+          grep -q 'Class 2' "$JOB/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA.py"
+          grep -q 'Workshop' "$JOB/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA.py"
+
+      - name: Literal PQL runtime and projection QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/manim-bin /tmp/manim-home qa_media qa_out
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=0.08
+
+          manim -pql \
+            render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA.py \
+            Geometry8CirclePedagogicalSequenceSeniorQA \
+            --fps 15 --format=mp4 --media_dir qa_media --disable_caching \
+            2>&1 | tee qa_out/PEDAGOGICAL_SEQUENCE_pql.log
+
+          PQL="$(find qa_media -type f -name 'Geometry8CirclePedagogicalSequenceSeniorQA.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+          cp "$PQL" qa_out/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA_pql.mp4
+          mkdir -p qa_out/pql_frames
+          ffmpeg -nostdin -v error -i "$PQL" -vf "fps=1/2,scale=960:-2" -q:v 3 qa_out/pql_frames/frame_%03d.jpg
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/manim-bin /tmp/manim-home out media
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=1.0
+
+          manim -pqh \
+            render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA.py \
+            Geometry8CirclePedagogicalSequenceSeniorQA \
+            --fps 30 --format=mp4 --media_dir media --disable_caching \
+            2>&1 | tee out/PEDAGOGICAL_SEQUENCE_pqh.log
+
+          FINAL="$(find media -type f -name 'Geometry8CirclePedagogicalSequenceSeniorQA.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" out/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA_FINAL_pqh.mp4
+
+      - name: Technical verification and dense visual audit frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA_FINAL_pqh.mp4
+
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+            -show_entries format=duration,size \
+            -of default=noprint_wrappers=1 "$F" | tee out/VIDEO_TECHNICAL.txt
+
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")" = 1920
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")" = 1080
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")" = 30/1
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")" = h264
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null -
+
+          mkdir -p out/frame_samples
+          DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          python - "$DURATION" <<'PY' > /tmp/times.txt
+          import sys
+          d=float(sys.argv[1])
+          # 48 evenly spaced audit points, avoiding transition endpoints.
+          for i in range(1,49):
+              print(f"{d*i/49:.3f}")
+          PY
+          i=1
+          while read -r t; do
+            ffmpeg -nostdin -v error -ss "$t" -i "$F" -frames:v 1 -q:v 2 \
+              "out/frame_samples/frame_$(printf '%02d' "$i").jpg"
+            i=$((i+1))
+          done < /tmp/times.txt
+
+          sha256sum "$F" > out/SHA256SUMS.txt
+          cp render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA.py out/
+          cp render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Fundamentals_FINAL.py out/
+          cp render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Class2_Parts_Arcs.py out/
+          cp render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Workshop_FINAL.py out/
+          cp render_jobs/geometry8_circle_pedagogical_qa_20260819/jp_classroom_style.py out/
+          cp qa_out/PEDAGOGICAL_SEQUENCE_pql.log out/
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Geometry8-Circle-PEDAGOGICAL-SENIOR-QA-FINAL-PQH
+          path: |
+            out/
+            qa_out/
+          if-no-files-found: error
+          retention-days: 7

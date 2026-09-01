@@ -1,0 +1,223 @@
+name: Geometry 8 Circle Measurement to Area V4 Senior Projector QA PQH 20260823
+
+on:
+  pull_request:
+    branches: [agent/geometry8-circle-pedagogical-senior-qa-20260819]
+  push:
+    branches: [agent/geometry8-circle-measurement-area-20260823]
+    paths:
+      - 'render_jobs/geometry8_circle_pedagogical_qa_20260819/**'
+      - '.github/workflows/geometry8_circle_measurement_area_20260823.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-circle-measurement-area-v4:
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.pull_request.head.ref == 'agent/geometry8-circle-measurement-area-20260823'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct audited Circle stack and compile V4
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_circle_pedagogical_qa_20260819
+          mkdir -p "$JOB" out qa_media qa_out media
+
+          cat render_jobs/geometry8_circle_20260818/f_*.b64 | base64 -d | gzip -dc > "$JOB/Geometry8_Circle_Fundamentals_FINAL.py"
+          cat render_jobs/geometry8_circle_20260818/w_*.b64 | base64 -d | gzip -dc > "$JOB/Geometry8_Circle_Workshop_FINAL.py"
+          cat render_jobs/geometry8_circle_20260818/s_*.b64 | base64 -d | gzip -dc > "$JOB/jp_classroom_style.py"
+          cp render_jobs/geometry8_circle_class2_20260818/Geometry8_Circle_Class2_Parts_Arcs.py "$JOB/Geometry8_Circle_Class2_Parts_Arcs.py"
+
+          python -Werror -m py_compile \
+            "$JOB/jp_classroom_style.py" \
+            "$JOB/Geometry8_Circle_Fundamentals_FINAL.py" \
+            "$JOB/Geometry8_Circle_Class2_Parts_Arcs.py" \
+            "$JOB/Geometry8_Circle_Workshop_FINAL.py" \
+            "$JOB/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA.py" \
+            "$JOB/Geometry8_Circle_PEDAGOGICAL_SEQUENCE_SENIOR_QA_V2.py" \
+            "$JOB/Geometry8_Circle_Measurement_To_Area_20260823.py" \
+            "$JOB/Geometry8_Circle_Measurement_To_Area_20260823_V2.py" \
+            "$JOB/Geometry8_Circle_V3_Primitives.py" \
+            "$JOB/Geometry8_Circle_V3_Measurement.py" \
+            "$JOB/Geometry8_Circle_V3_Area.py" \
+            "$JOB/Geometry8_Circle_V3_Exercises.py" \
+            "$JOB/Geometry8_Circle_Measurement_To_Area_20260823_V3.py" \
+            "$JOB/Geometry8_Circle_V4_Senior_QA.py" \
+            "$JOB/Geometry8_Circle_V4_Senior_QA_Fixes.py" \
+            "$JOB/Geometry8_Circle_Measurement_To_Area_20260823_V4.py"
+
+          python - <<'PY'
+          import av
+          from PIL import Image
+          print('PyAV:', av.__version__)
+          print('Pillow:', Image.__version__)
+          PY
+
+          grep -Fq 'class Geometry8CircleMeasurementArea20260823V4' "$JOB/Geometry8_Circle_Measurement_To_Area_20260823_V4.py"
+          grep -Fq 'def _v4_zoom' "$JOB/Geometry8_Circle_V4_Senior_QA.py"
+          grep -Fq 'V4_THINK = 5.20' "$JOB/Geometry8_Circle_V4_Senior_QA.py"
+          grep -Fq 'V4 panel content exceeds' "$JOB/Geometry8_Circle_V4_Senior_QA.py"
+          grep -Fq 'CircleV4SeniorQAFixesMixin' "$JOB/Geometry8_Circle_Measurement_To_Area_20260823_V4.py"
+
+      - name: PQL full-timeline V4 runtime and safe-frame gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/manim-bin /tmp/manim-home qa_media qa_out
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=0.05
+
+          manim -pql \
+            render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Measurement_To_Area_20260823_V4.py \
+            Geometry8CircleMeasurementArea20260823V4 \
+            --fps 15 --format=mp4 --media_dir qa_media --disable_caching \
+            2>&1 | tee qa_out/MEASUREMENT_TO_AREA_V4_pql.log
+
+          PQL="$(find qa_media -type f -name 'Geometry8CircleMeasurementArea20260823V4.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+          cp "$PQL" qa_out/Geometry8_Circle_Measurement_To_Area_20260823_V4_pql.mp4
+
+          python - "$PQL" <<'PY'
+          import av, sys
+          path=sys.argv[1]
+          frames=0
+          with av.open(path) as c:
+              stream=c.streams.video[0]
+              for _ in c.decode(stream):
+                  frames += 1
+          assert frames > 0, 'PQL decoder returned zero frames'
+          print(f'V4 PQL decoded successfully: {frames} frames')
+          PY
+
+      - name: PQH final V4 render after PQL acceptance
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/manim-bin /tmp/manim-home out media
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=1.0
+
+          manim -pqh \
+            render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Measurement_To_Area_20260823_V4.py \
+            Geometry8CircleMeasurementArea20260823V4 \
+            --fps 30 --format=mp4 --media_dir media --disable_caching \
+            2>&1 | tee out/MEASUREMENT_TO_AREA_V4_pqh.log
+
+          FINAL="$(find media -type f -name 'Geometry8CircleMeasurementArea20260823V4.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" out/Geometry8_Circle_Measurement_To_Area_20260823_V4_FINAL_pqh.mp4
+
+      - name: Mandatory V4 technical verification with PyAV
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Geometry8_Circle_Measurement_To_Area_20260823_V4_FINAL_pqh.mp4
+          python - "$F" <<'PY' | tee out/VIDEO_TECHNICAL_V4.txt
+          import av, sys, os
+          path=sys.argv[1]
+          with av.open(path) as c:
+              s=c.streams.video[0]
+              codec=s.codec_context.name
+              width=s.codec_context.width
+              height=s.codec_context.height
+              fmt=s.codec_context.format.name if s.codec_context.format else ''
+              fps=float(s.average_rate) if s.average_rate else 0.0
+              duration=(float(c.duration) / float(av.time_base)) if c.duration else 0.0
+              frames=0
+              for _ in c.decode(s):
+                  frames += 1
+          size=os.path.getsize(path)
+          print(f'codec_name={codec}')
+          print(f'width={width}')
+          print(f'height={height}')
+          print(f'pix_fmt={fmt}')
+          print(f'fps={fps:.6f}')
+          print(f'duration={duration:.6f}')
+          print(f'frames_decoded={frames}')
+          print(f'size={size}')
+          assert width == 1920
+          assert height == 1080
+          assert abs(fps - 30.0) < 0.001
+          assert codec == 'h264'
+          assert fmt == 'yuv420p'
+          assert frames > 0
+          assert duration > 1.0
+          PY
+          sha256sum "$F" > out/SHA256SUMS_V4.txt
+
+      - name: Build V4 visual QA contact sheet and source bundle
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          F=out/Geometry8_Circle_Measurement_To_Area_20260823_V4_FINAL_pqh.mp4
+          mkdir -p out/frame_samples_v4
+          if test -s "$F"; then
+            python - "$F" <<'PY'
+          import av, sys, os, math
+          from PIL import Image, ImageOps, ImageDraw
+          path=sys.argv[1]
+          out='out/frame_samples_v4'
+          os.makedirs(out, exist_ok=True)
+          with av.open(path) as c:
+              stream=c.streams.video[0]
+              duration=(float(c.duration)/float(av.time_base)) if c.duration else 1.0
+              targets=[duration*i/37 for i in range(1,37)]
+              ti=0
+              saved=[]
+              for frame in c.decode(stream):
+                  if ti >= len(targets): break
+                  t=float(frame.pts * frame.time_base) if frame.pts is not None else 0.0
+                  if t >= targets[ti]:
+                      img=frame.to_image().convert('RGB')
+                      fp=f'{out}/frame_{ti+1:02d}_{targets[ti]:07.2f}.jpg'
+                      img.save(fp, quality=90)
+                      saved.append(fp); ti += 1
+          thumbs=[]
+          for fp in saved:
+              im=Image.open(fp).convert('RGB'); im.thumbnail((480,270))
+              card=Image.new('RGB',(500,300),'white'); card.paste(im,((500-im.width)//2,8))
+              ImageDraw.Draw(card).text((10,280),os.path.basename(fp),fill='black')
+              thumbs.append(card)
+          if thumbs:
+              cols=3; rows=math.ceil(len(thumbs)/cols)
+              sheet=Image.new('RGB',(cols*500,rows*300),'white')
+              for i,im in enumerate(thumbs): sheet.paste(im,((i%cols)*500,(i//cols)*300))
+              sheet.save('out/Geometry8_Circle_V4_FINAL_contact_sheet.jpg',quality=90)
+          print(f'QA samples saved: {len(saved)}')
+          PY
+          fi
+
+          JOB=render_jobs/geometry8_circle_pedagogical_qa_20260819
+          cp "$JOB/Geometry8_Circle_Measurement_To_Area_20260823_V3.py" out/ 2>/dev/null || true
+          cp "$JOB/Geometry8_Circle_V4_Senior_QA.py" out/ 2>/dev/null || true
+          cp "$JOB/Geometry8_Circle_V4_Senior_QA_Fixes.py" out/ 2>/dev/null || true
+          cp "$JOB/Geometry8_Circle_Measurement_To_Area_20260823_V4.py" out/ 2>/dev/null || true
+          cp "$JOB/jp_classroom_style.py" out/ 2>/dev/null || true
+          cp qa_out/MEASUREMENT_TO_AREA_V4_pql.log out/ 2>/dev/null || true
+          cp qa_out/Geometry8_Circle_Measurement_To_Area_20260823_V4_pql.mp4 out/ 2>/dev/null || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Geometry8-Circle-Measurement-To-Area-20260823-V4-SENIOR-PROJECTOR-FINAL-PQH
+          path: |
+            out/
+            qa_out/
+          if-no-files-found: error
+          retention-days: 7
