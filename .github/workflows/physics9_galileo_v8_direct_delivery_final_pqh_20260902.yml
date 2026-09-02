@@ -1,0 +1,190 @@
+name: Physics9 Galileo V8 Direct Delivery Final PQH
+
+on:
+  pull_request:
+    branches:
+      - render/physics9-galileo-v7-visual-redesign-20260902
+    paths:
+      - 'render_jobs/physics9_galileo_inclined_plane_20260901/Physics9_Galileo_V8_DIRECT_DELIVERY_FINAL.py'
+      - '.github/workflows/physics9_galileo_v8_direct_delivery_final_pqh_20260902.yml'
+
+permissions:
+  contents: write
+
+env:
+  JOB: render_jobs/physics9_galileo_inclined_plane_20260901
+  SRC: Physics9_Galileo_V8_DIRECT_DELIVERY_FINAL.py
+  SCENE: Physics9GalileoV8DirectDeliveryFinal
+  FINAL_NAME: Physics9_Galileo_V8_DIRECT_DELIVERY_FINAL_pqh.mp4
+
+jobs:
+  render-v8:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout V8 head branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Validate source and renderer
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile "$JOB/$SRC"
+          grep -q '^class Physics9GalileoV8DirectDeliveryFinal' "$JOB/$SRC"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg imagemagick zip
+          python -m pip install --quiet opencv-python-headless
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+          mkdir -p preview_v8 final_v8 final_v8/audit_frames candidate_renders published_renders
+
+      - name: Literal PQL full-timeline gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf media_pql_v8
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql "$SRC" "$SCENE" --format=mp4 --media_dir=/manim/media_pql_v8 --disable_caching
+            ' 2>&1 | tee preview_v8/render_v8_pql.log
+          PQL="$(find media_pql_v8 -type f -name "${SCENE}.mp4" -print -quit)"
+          test -n "$PQL" && test -s "$PQL"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf media_pqh_v8
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh "$SRC" "$SCENE" --format=mp4 --media_dir=/manim/media_pqh_v8 --disable_caching
+            ' 2>&1 | tee final_v8/render_v8_pqh.log
+          FINAL="$(find media_pqh_v8 -type f -name "${SCENE}.mp4" -print -quit)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" "final_v8/$FINAL_NAME"
+
+      - name: Upload the real V8 PQH MP4 immediately
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9_Galileo_V8_REAL_PQH_MP4
+          path: final_v8/${{ env.FINAL_NAME }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish direct-download V8 candidate immediately
+        shell: bash
+        run: |
+          set -euo pipefail
+          F="final_v8/$FINAL_NAME"
+          DEST="candidate_renders/$FINAL_NAME"
+          cp "$F" "$DEST"
+          sha256sum "$DEST" > "candidate_renders/${FINAL_NAME%.mp4}.sha256"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DEST" "candidate_renders/${FINAL_NAME%.mp4}.sha256"
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish real Physics 9 Galileo V8 PQH candidate [skip ci]"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
+      - name: Technical decode and boundary QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          F="final_v8/$FINAL_NAME"
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          FRAMES="$(ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tframes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$FRAMES" > final_v8/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> final_v8/full_decode.log
+          test ! -s final_v8/full_decode.log
+
+          VIDEO="$F" python - <<'PY'
+          import cv2, os
+          cap=cv2.VideoCapture(os.environ['VIDEO'])
+          n=0; edge=[]
+          while True:
+              ok, frame=cap.read()
+              if not ok:
+                  break
+              gray=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+              dark=gray < 70
+              # 4-pixel hard boundary: no text/figure may touch the frame edge.
+              if dark[:4,:].any() or dark[-4:,:].any() or dark[:,:4].any() or dark[:,-4:].any():
+                  edge.append(n)
+              n += 1
+          cap.release()
+          with open('final_v8/EVERY_FRAME_SCAN.tsv','w') as fh:
+              fh.write(f'frames_scanned\tedge_touch_frames\n{n}\t{len(edge)}\n')
+          if edge:
+              open('final_v8/EVERY_FRAME_EDGE_HITS.txt','w').write('\n'.join(map(str, edge)))
+              raise SystemExit(f'outer-edge content detected in {len(edge)} frames')
+          PY
+
+      - name: Generate QA contact sheet and checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          F="final_v8/$FINAL_NAME"
+          ffmpeg -nostdin -loglevel error -i "$F" -vf fps=1/3 -q:v 2 final_v8/audit_frames/sec_%04d.jpg
+          montage final_v8/audit_frames/*.jpg -thumbnail 384x216 -tile 6x -geometry +7+9 -background white -quality 90 final_v8/CONTACT_SHEET_3S_ALL.jpg
+          sha256sum "$F" > final_v8/SHA256SUMS.txt
+          zip -j final_v8/Physics9_Galileo_V8_DIRECT_DELIVERY_FINAL_PQH.zip \
+            "$F" final_v8/VIDEO_TECHNICAL.tsv final_v8/EVERY_FRAME_SCAN.tsv \
+            final_v8/CONTACT_SHEET_3S_ALL.jpg final_v8/SHA256SUMS.txt
+
+      - name: Publish validated V8 final
+        shell: bash
+        run: |
+          set -euo pipefail
+          F="final_v8/$FINAL_NAME"
+          DEST="published_renders/$FINAL_NAME"
+          cp "$F" "$DEST"
+          sha256sum "$DEST" > "published_renders/${FINAL_NAME%.mp4}.sha256"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DEST" "published_renders/${FINAL_NAME%.mp4}.sha256"
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish validated Physics 9 Galileo V8 PQH final [skip ci]"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
+      - name: Upload complete validated V8 package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9_Galileo_V8_DIRECT_DELIVERY_FINAL_PQH
+          path: |
+            final_v8/${{ env.FINAL_NAME }}
+            final_v8/Physics9_Galileo_V8_DIRECT_DELIVERY_FINAL_PQH.zip
+            final_v8/VIDEO_TECHNICAL.tsv
+            final_v8/EVERY_FRAME_SCAN.tsv
+            final_v8/CONTACT_SHEET_3S_ALL.jpg
+            final_v8/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
