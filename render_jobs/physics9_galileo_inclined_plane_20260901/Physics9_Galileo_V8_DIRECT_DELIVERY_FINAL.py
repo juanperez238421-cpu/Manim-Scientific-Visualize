@@ -29,9 +29,7 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
     """V7.1 content with senior pacing and smoother scene transitions."""
 
     def construct(self):
-        # The V7 scene methods resolve these constants from the V7 module at
-        # runtime, so updating them here uniformly slows the whole lesson
-        # without duplicating the pedagogical scene code.
+        # V8 direct-delivery render retrigger after Docker env propagation fix.
         v7mod.RUN = 1.30
         v7mod.RUN_FAST = 0.95
         v7mod.RUN_SLOW = 1.85
