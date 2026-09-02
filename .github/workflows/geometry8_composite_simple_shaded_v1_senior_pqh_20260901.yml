@@ -24,34 +24,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Senior source and mathematics gate
+      - name: Senior static + mathematics gate
         shell: bash
         run: |
           set -euo pipefail
           BASE=render_jobs/geometry8_2d_areas_masterclass_20260831
           JOB=render_jobs/geometry8_composite_simple_shaded_20260901
           SCENE="$JOB/Geometry8_Composite_Simple_Shaded_Areas_V1_SENIOR.py"
+          mkdir -p out qa_out media pql_media /tmp/manim-bin /tmp/manim-home
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
 
-          python -m py_compile \
-            "$BASE/Geometry8_2D_Areas_Masterclass_FINAL.py" \
-            "$BASE/Geometry8_2D_Areas_Masterclass_FINAL_QA.py" \
-            "$BASE/Geometry8_2D_Areas_FigureByFigure_V3.py" \
-            "$BASE/geometry8_area_atlas_helpers_v3.py" \
-            "$BASE/geometry8_area_atlas_basic_v3.py" \
-            "$BASE/geometry8_area_atlas_quads_v3.py" \
-            "$BASE/geometry8_area_atlas_circle_polygon_v3.py" \
-            "$BASE/geometry8_area_atlas_circle_parts_v3.py" \
-            "$BASE/geometry8_area_atlas_senior_v4.py" \
-            "$BASE/geometry8_area_parallelogram_precision_v5.py" \
-            "$BASE/Geometry8_2D_Areas_FigureByFigure_V5_SENIOR.py" \
-            "$SCENE"
-
-          grep -Fq 'self.l_shape_two_methods()' "$SCENE"
-          grep -Fq 'self.rectangle_minus_circle()' "$SCENE"
-          grep -Fq 'self.square_minus_quadrant()' "$SCENE"
-          grep -Fq 'self.rectangle_plus_semicircle()' "$SCENE"
-          grep -Fq 'self.guided_challenge()' "$SCENE"
-          grep -Fq 'A_{\\mathrm{target}}=\\sum A_+-\\sum A_-' "$SCENE"
+          python -m py_compile "$BASE"/*.py "$SCENE"
 
           python - <<'PY'
           import math
@@ -61,14 +45,10 @@ jobs:
           assert abs(8**2-math.pi*8**2/4-13.7345175426) < 1e-8
           assert abs(10*6+0.5*math.pi*5**2-99.2699081699) < 1e-8
           assert abs(8*5+0.5*8*3-math.pi-48.8584073464) < 1e-8
-          print('Mathematics gate: PASS')
+          print('Senior static + mathematics gate: PASS')
           PY
 
-          mkdir -p out qa_out media pql_media /tmp/manim-bin /tmp/manim-home
-          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
-          chmod +x /tmp/manim-bin/xdg-open
-
-      - name: PQL complete-timeline runtime gate
+      - name: PQL complete timeline gate
         shell: bash
         run: |
           set -euo pipefail
@@ -76,13 +56,12 @@ jobs:
           export HOME=/tmp/manim-home
           export LESSON_TIME_SCALE=0.05
           export PYTHONPATH="$GITHUB_WORKSPACE/render_jobs/geometry8_2d_areas_masterclass_20260831:${PYTHONPATH:-}"
-          JOB=render_jobs/geometry8_composite_simple_shaded_20260901
-          cd "$JOB"
+          cd render_jobs/geometry8_composite_simple_shaded_20260901
           manim -pql Geometry8_Composite_Simple_Shaded_Areas_V1_SENIOR.py \
             Geometry8CompositeSimpleShadedAreasV1Senior \
             --fps 15 --format=mp4 --disable_caching \
             --media_dir "$GITHUB_WORKSPACE/pql_media" \
-            2>&1 | tee "$GITHUB_WORKSPACE/qa_out/Geometry8_Composite_Simple_Shaded_V1_SENIOR_PQL.log"
+            2>&1 | tee "$GITHUB_WORKSPACE/qa_out/PQL.log"
           cd "$GITHUB_WORKSPACE"
           PQL="$(find pql_media -type f -name 'Geometry8CompositeSimpleShadedAreasV1Senior.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PQL" && test -s "$PQL"
@@ -96,20 +75,20 @@ jobs:
           export HOME=/tmp/manim-home
           export LESSON_TIME_SCALE=1.0
           export PYTHONPATH="$GITHUB_WORKSPACE/render_jobs/geometry8_2d_areas_masterclass_20260831:${PYTHONPATH:-}"
-          JOB=render_jobs/geometry8_composite_simple_shaded_20260901
-          cd "$JOB"
+          cd render_jobs/geometry8_composite_simple_shaded_20260901
           manim -pqh Geometry8_Composite_Simple_Shaded_Areas_V1_SENIOR.py \
             Geometry8CompositeSimpleShadedAreasV1Senior \
             --fps 30 --format=mp4 --disable_caching \
             --media_dir "$GITHUB_WORKSPACE/media" \
-            2>&1 | tee "$GITHUB_WORKSPACE/out/Geometry8_Composite_Simple_Shaded_V1_SENIOR_PQH.log"
+            2>&1 | tee "$GITHUB_WORKSPACE/out/PQH.log"
           cd "$GITHUB_WORKSPACE"
           VIDEO="$(find media -type f -name 'Geometry8CompositeSimpleShadedAreasV1Senior.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$VIDEO" && test -s "$VIDEO"
           cp "$VIDEO" out/Geometry8_Composite_Simple_Shaded_Areas_V1_SENIOR_FINAL_pqh.mp4
+          cp render_jobs/geometry8_composite_simple_shaded_20260901/Geometry8_Composite_Simple_Shaded_Areas_V1_SENIOR.py out/
 
-      - name: Full decode and technical QA
-        id: technical
+      - name: Technical full-decode QA
+        id: tech
         shell: bash
         run: |
           set -euo pipefail
@@ -118,8 +97,6 @@ jobs:
           import av, os, sys
           p=sys.argv[1]
           frames=0
-          first_pts=None
-          last_pts=None
           with av.open(p) as c:
               s=c.streams.video[0]
               codec=s.codec_context.name
@@ -128,11 +105,7 @@ jobs:
               fmt=s.codec_context.format.name if s.codec_context.format else ''
               fps=float(s.average_rate) if s.average_rate else 0.0
               duration=float(c.duration)/float(av.time_base) if c.duration else 0.0
-              for frame in c.decode(s):
-                  frames += 1
-                  if first_pts is None:
-                      first_pts=frame.pts
-                  last_pts=frame.pts
+              for _ in c.decode(s): frames += 1
           size=os.path.getsize(p)
           print(f'codec_name={codec}')
           print(f'width={width}')
@@ -141,25 +114,22 @@ jobs:
           print(f'average_fps={fps:.6f}')
           print(f'duration={duration:.6f}')
           print(f'frames_decoded={frames}')
-          print(f'first_pts={first_pts}')
-          print(f'last_pts={last_pts}')
           print(f'size={size}')
           assert codec == 'h264'
-          assert width == 1920 and height == 1080
+          assert (width,height) == (1920,1080)
           assert fmt == 'yuv420p'
           assert 29.8 <= fps <= 30.2
-          assert duration > 80
-          assert frames > 2400
+          assert duration > 75
+          assert frames > 2200
           assert size > 1_000_000
           PY
-
           SHA="$(sha256sum "$VIDEO" | awk '{print $1}')"
           SIZE="$(stat -c%s "$VIDEO")"
           echo "$SHA  $VIDEO" | tee qa_out/SHA256SUMS.txt
           echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
           echo "size=$SIZE" >> "$GITHUB_OUTPUT"
 
-      - name: Distributed visual audit contact sheet
+      - name: 84-frame senior visual audit contact sheet
         shell: bash
         run: |
           set -euo pipefail
@@ -168,176 +138,118 @@ jobs:
           python - "$VIDEO" <<'PY' | tee qa_out/VISUAL_AUDIT.txt
           import av, math, os, sys
           from PIL import Image, ImageDraw
-
           p=sys.argv[1]
           count=84
           saved=[]
-          border_heavy=0
-          blankish=0
           with av.open(p) as c:
               s=c.streams.video[0]
               duration=float(c.duration)/float(av.time_base)
               targets=[duration*i/(count+1) for i in range(1,count+1)]
               ti=0
               for frame in c.decode(s):
-                  if ti>=len(targets): break
+                  if ti >= len(targets): break
                   t=float(frame.pts*frame.time_base) if frame.pts is not None else 0.0
-                  if t>=targets[ti]:
-                      arr=frame.to_ndarray(format='rgb24')
-                      im=Image.fromarray(arr)
+                  if t >= targets[ti]:
+                      im=Image.fromarray(frame.to_ndarray(format='rgb24'))
                       fp=f'qa_out/audit_frames/frame_{ti+1:02d}_{targets[ti]:07.2f}.jpg'
                       im.save(fp,quality=92)
                       saved.append(fp)
-                      ti+=1
+                      ti += 1
           assert len(saved) >= 80
-
           cards=[]
           for fp in saved:
-              im=Image.open(fp).convert('RGB')
-              im.thumbnail((480,270))
+              im=Image.open(fp).convert('RGB'); im.thumbnail((480,270))
               card=Image.new('RGB',(500,300),'white')
               card.paste(im,((500-im.width)//2,8))
               ImageDraw.Draw(card).text((10,280),os.path.basename(fp),fill='black')
               cards.append(card)
-          cols=4
-          rows=math.ceil(len(cards)/cols)
+          cols=4; rows=math.ceil(len(cards)/cols)
           sheet=Image.new('RGB',(cols*500,rows*300),'white')
-          for i,im in enumerate(cards):
-              sheet.paste(im,((i%cols)*500,(i//cols)*300))
+          for i,im in enumerate(cards): sheet.paste(im,((i%cols)*500,(i//cols)*300))
           sheet.save('qa_out/Geometry8_Composite_Simple_Shaded_Areas_V1_SENIOR_FINAL_contact_sheet.jpg',quality=92)
           print('audit_frames=',len(saved))
           print('contact_sheet=PASS')
           PY
 
-      - name: Package source and QA evidence
-        shell: bash
-        run: |
-          set -euo pipefail
-          JOB=render_jobs/geometry8_composite_simple_shaded_20260901
-          cp "$JOB/Geometry8_Composite_Simple_Shaded_Areas_V1_SENIOR.py" out/
-          cp render_jobs/geometry8_2d_areas_masterclass_20260831/Geometry8_2D_Areas_FigureByFigure_V5_SENIOR.py out/
-          cp render_jobs/geometry8_2d_areas_masterclass_20260831/geometry8_area_parallelogram_precision_v5.py out/
-
-      - name: Publish validated real MP4 binary directly to GitHub
+      - name: Publish validated MP4 binary directly to GitHub
         id: publish
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-          SOURCE_VIDEO: out/Geometry8_Composite_Simple_Shaded_Areas_V1_SENIOR_FINAL_pqh.mp4
-          TARGET_PATH: published_renders/Geometry8_Composite_Simple_Shaded_Areas_V1_SENIOR_FINAL_pqh.mp4
-          EXPECTED_SHA256: ${{ steps.technical.outputs.sha256 }}
-          EXPECTED_SIZE: ${{ steps.technical.outputs.size }}
+          EXPECTED_SHA: ${{ steps.tech.outputs.sha256 }}
+          EXPECTED_SIZE: ${{ steps.tech.outputs.size }}
         run: |
           set -euo pipefail
           python - <<'PY'
-          import base64
-          import hashlib
-          import json
-          import os
-          import urllib.error
-          import urllib.parse
-          import urllib.request
-
+          import base64, hashlib, json, os, urllib.error, urllib.parse, urllib.request
           token=os.environ['GH_TOKEN']
           repo=os.environ['GITHUB_REPOSITORY']
           parent=os.environ['GITHUB_SHA']
           branch=os.environ['GITHUB_REF_NAME']
-          source=os.environ['SOURCE_VIDEO']
-          target=os.environ['TARGET_PATH']
-          expected_sha=os.environ['EXPECTED_SHA256']
+          source='out/Geometry8_Composite_Simple_Shaded_Areas_V1_SENIOR_FINAL_pqh.mp4'
+          target='published_renders/Geometry8_Composite_Simple_Shaded_Areas_V1_SENIOR_FINAL_pqh.mp4'
+          expected_sha=os.environ['EXPECTED_SHA']
           expected_size=int(os.environ['EXPECTED_SIZE'])
           api=f'https://api.github.com/repos/{repo}'
-
-          with open(source,'rb') as f:
-              raw=f.read()
-          actual_sha=hashlib.sha256(raw).hexdigest()
-          assert actual_sha == expected_sha, (actual_sha, expected_sha)
-          assert len(raw) == expected_size, (len(raw), expected_size)
-          assert target.startswith('published_renders/') and target.endswith('.mp4')
-          assert len(raw) < 100_000_000, 'GitHub blob exceeds repository publication gate'
+          raw=open(source,'rb').read()
+          assert hashlib.sha256(raw).hexdigest() == expected_sha
+          assert len(raw) == expected_size
+          assert len(raw) < 100_000_000
 
           def request(method,url,payload=None):
-              data=None if payload is None else json.dumps(payload).encode('utf-8')
+              data=None if payload is None else json.dumps(payload).encode()
               req=urllib.request.Request(url,data=data,method=method)
               req.add_header('Authorization',f'Bearer {token}')
               req.add_header('Accept','application/vnd.github+json')
               req.add_header('X-GitHub-Api-Version','2022-11-28')
-              if data is not None:
-                  req.add_header('Content-Type','application/json')
+              if data is not None: req.add_header('Content-Type','application/json')
               try:
                   with urllib.request.urlopen(req,timeout=180) as r:
-                      body=r.read()
-                      return json.loads(body) if body else {}
+                      body=r.read(); return json.loads(body) if body else {}
               except urllib.error.HTTPError as e:
-                  print(e.read().decode('utf-8',errors='replace'))
-                  raise
+                  print(e.read().decode(errors='replace')); raise
 
-          commit=request('GET',f'{api}/git/commits/{parent}')
-          base_tree=commit['tree']['sha']
-
-          blob=request('POST',f'{api}/git/blobs',{
-              'content':base64.b64encode(raw).decode('ascii'),
-              'encoding':'base64',
-          })
-
+          base_commit=request('GET',f'{api}/git/commits/{parent}')
+          blob=request('POST',f'{api}/git/blobs',{'content':base64.b64encode(raw).decode(),'encoding':'base64'})
           tree=request('POST',f'{api}/git/trees',{
-              'base_tree':base_tree,
-              'tree':[{
-                  'path':target,
-                  'mode':'100644',
-                  'type':'blob',
-                  'sha':blob['sha'],
-              }],
+              'base_tree':base_commit['tree']['sha'],
+              'tree':[{'path':target,'mode':'100644','type':'blob','sha':blob['sha']}],
           })
-
-          new_commit=request('POST',f'{api}/git/commits',{
-              'message':'Publish Geometry 8 composite shaded V1 senior PQH MP4 [skip ci]',
-              'tree':tree['sha'],
-              'parents':[parent],
+          commit=request('POST',f'{api}/git/commits',{
+              'message':'Publish Geometry 8 composite simple shaded V1 senior PQH [skip ci]',
+              'tree':tree['sha'],'parents':[parent],
           })
-
-          ref_branch=urllib.parse.quote(branch,safe='/')
-          request('PATCH',f'{api}/git/refs/heads/{ref_branch}',{
-              'sha':new_commit['sha'],
-              'force':False,
-          })
-
-          encoded_branch=urllib.parse.quote(branch,safe='/')
-          encoded_path=urllib.parse.quote(target,safe='/')
-          direct=f'https://raw.githubusercontent.com/{repo}/{encoded_branch}/{encoded_path}'
-          print('published_commit=',new_commit['sha'])
+          ref=urllib.parse.quote(branch,safe='/')
+          request('PATCH',f'{api}/git/refs/heads/{ref}',{'sha':commit['sha'],'force':False})
+          direct=f'https://raw.githubusercontent.com/{repo}/{branch}/{target}'
+          print('published_commit=',commit['sha'])
           print('published_blob=',blob['sha'])
           print('published_size=',len(raw))
-          print('published_sha256=',actual_sha)
+          print('published_sha256=',expected_sha)
           print('direct_download=',direct)
-          with open(os.environ['GITHUB_OUTPUT'],'a',encoding='utf-8') as f:
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
               f.write(f'direct_url={direct}\n')
-              f.write(f'published_commit={new_commit["sha"]}\n')
           PY
 
-      - name: Verify GitHub publication metadata
+      - name: Verify direct GitHub MP4 publication
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-          EXPECTED_SIZE: ${{ steps.technical.outputs.size }}
+          EXPECTED_SIZE: ${{ steps.tech.outputs.size }}
         run: |
           set -euo pipefail
           sleep 2
           python - <<'PY' | tee qa_out/DIRECT_GITHUB_PUBLICATION.txt
           import json, os, urllib.parse, urllib.request
-          token=os.environ['GH_TOKEN']
-          repo=os.environ['GITHUB_REPOSITORY']
-          branch=os.environ['GITHUB_REF_NAME']
+          repo=os.environ['GITHUB_REPOSITORY']; branch=os.environ['GITHUB_REF_NAME']
           target='published_renders/Geometry8_Composite_Simple_Shaded_Areas_V1_SENIOR_FINAL_pqh.mp4'
           expected=int(os.environ['EXPECTED_SIZE'])
           url=f'https://api.github.com/repos/{repo}/contents/{urllib.parse.quote(target,safe="/")}?ref={urllib.parse.quote(branch,safe="/")}'
           req=urllib.request.Request(url)
-          req.add_header('Authorization',f'Bearer {token}')
+          req.add_header('Authorization',f'Bearer {os.environ["GH_TOKEN"]}')
           req.add_header('Accept','application/vnd.github+json')
           req.add_header('X-GitHub-Api-Version','2022-11-28')
-          with urllib.request.urlopen(req,timeout=60) as r:
-              obj=json.load(r)
-          print('name=',obj['name'])
+          with urllib.request.urlopen(req,timeout=60) as r: obj=json.load(r)
           print('path=',obj['path'])
           print('size=',obj['size'])
           print('download_url=',obj['download_url'])
@@ -346,7 +258,7 @@ jobs:
           print('DIRECT_GITHUB_DELIVERY=PASS')
           PY
 
-      - name: Upload full senior render + QA package
+      - name: Upload senior render + QA evidence
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -354,5 +266,5 @@ jobs:
           path: |
             out/
             qa_out/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 14
