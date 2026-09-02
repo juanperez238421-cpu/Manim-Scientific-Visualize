@@ -29,7 +29,6 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
     """V7.1 content with senior pacing and smoother scene transitions."""
 
     def construct(self):
-        # V8 direct-delivery render retrigger after Docker env propagation fix.
         v7mod.RUN = 1.30
         v7mod.RUN_FAST = 0.95
         v7mod.RUN_SLOW = 1.85
@@ -37,17 +36,13 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
         v7mod.PAUSE_READ = 2.90
         v7mod.PAUSE_EXPLAIN = 4.10
         v7mod.PAUSE_WORK = 5.20
-
-        # V7.1's header override imported RUN by value; update its module-level
-        # copy too so section headers enter at the same calmer pace.
         v71mod.RUN = 1.30
-
         super().construct()
 
     def clear_stage(self):
         """Use a smooth full-stage fade instead of an abrupt scene reset."""
         if self.mobjects:
-            stage = VGroup(*self.mobjects)
+            stage = Group(*self.mobjects)
             self.play(
                 FadeOut(stage, shift=DOWN * 0.025),
                 run_time=0.95,
