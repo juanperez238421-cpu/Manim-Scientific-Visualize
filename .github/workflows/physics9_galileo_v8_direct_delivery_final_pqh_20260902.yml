@@ -47,6 +47,8 @@ jobs:
           rm -rf media_pql_v8
           docker run --rm --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home \
+            -e SRC="$SRC" \
+            -e SCENE="$SCENE" \
             -v "$PWD:/manim" -w "/manim/$JOB" \
             --entrypoint bash manimcommunity/manim:v0.20.1 -c '
               set -euo pipefail
@@ -66,6 +68,8 @@ jobs:
           rm -rf media_pqh_v8
           docker run --rm --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home \
+            -e SRC="$SRC" \
+            -e SCENE="$SCENE" \
             -v "$PWD:/manim" -w "/manim/$JOB" \
             --entrypoint bash manimcommunity/manim:v0.20.1 -c '
               set -euo pipefail
