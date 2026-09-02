@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Physics 9 — Galileo V8 Direct Delivery Final, frame-QA revision.
+"""Physics 9 — Galileo V8 Direct Delivery Final, total frame-QA revision.
 
-This revision keeps the complete V8 lesson/pacing while rebuilding the three
-layouts where frame-by-frame review of the rendered 1920x1080 video exposed
-actual element collisions:
+This revision keeps the complete V8 lesson/pacing while rebuilding every area
+identified in a frame-by-frame review of the rendered 1920x1080 video:
 
-* Scene 07: ramp-data table vs. interval-distance heading;
-* Scene 09: free-fall table column headings + lower explanatory note;
-* Scene 12: live timer vs. 1 kg / 10 kg release labels and impact callout.
+* Scene 02: sequential algebra transitions remove transform-frame scribbling;
+* Scene 07: ramp-data table is isolated from interval-distance analysis;
+* Scene 09: free-fall headings, table body, note and equations have dedicated bands;
+* Scene 09: equation bridge is sequential, eliminating transient formula merging;
+* Scene 12: live timer is isolated from the 1 kg / 10 kg labels;
+* Scene 12: impact callout is moved below the falling bodies with a hard gap.
 
-The corrected layouts use explicit left/right zones, larger inter-object gaps,
-and runtime bounding-box assertions so a future edit cannot silently recreate
-those overlaps.
+Critical layouts use runtime bounding-box assertions so later edits cannot
+silently recreate the same overlaps.
 
 Target: ManimCE 0.20.1, 1920x1080, 30 fps, literal -pql -> -pqh.
 """
@@ -83,6 +84,80 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
             )
 
     # ------------------------------------------------------------------
+    # Scene 02 — no simultaneous text/formula transforms
+    # ------------------------------------------------------------------
+    def derive_position_equation_v7(self):
+        RUN = v7mod.RUN
+        self.header_v7(
+            2,
+            "DEDUCE THE UNIFORM-MOTION POSITION EQUATION",
+            "Start with the definition of velocity, replace displacement, then isolate final position.",
+        )
+
+        steps = [
+            self.math(r"v=\frac{\Delta x}{\Delta t}", 50),
+            self.math(r"v=\frac{x-x_i}{t}", 50),
+            self.math(r"vt=x-x_i", 50),
+            self.math(r"\boxed{x=x_i+vt}", 56),
+        ]
+        labels = [
+            "1  Definition of velocity",
+            "2  Replace displacement: Δx = x - xᵢ",
+            "3  Multiply both sides by t",
+            "4  Isolate the final position x",
+        ]
+
+        label = self.txt(labels[0], 28, BOLD).move_to([-3.8, 1.45, 0])
+        current = steps[0].move_to([2.2, 0.55, 0])
+        separator = Line([0.0, -2.4, 0], [0.0, 1.8, 0], color=v7mod.LIGHT_GRAY, stroke_width=1.5)
+        symbol_box = self.note_panel(
+            "SYMBOLS",
+            [
+                "xᵢ  initial position",
+                "x   final position",
+                "v   constant velocity",
+                "t   elapsed time",
+            ],
+            width=4.8, title_size=27, body_size=24,
+        ).move_to([-3.8, -0.55, 0])
+
+        self.play(
+            FadeIn(symbol_box), Create(separator), FadeIn(label), Write(current),
+            run_time=v7mod.RUN_SLOW,
+        )
+        self.wait(v7mod.PAUSE_SHORT)
+
+        # The old V8 transformed both strings at once. During intermediate
+        # frames glyphs crossed and looked like overlapping/scribbled formulas.
+        # Fully remove the old pair before introducing the next pair.
+        for i in range(1, 4):
+            new_label = self.txt(labels[i], 28, BOLD).move_to(label)
+            nxt = steps[i].move_to(current)
+            self.play(
+                FadeOut(label, shift=UP * 0.025),
+                FadeOut(current, shift=DOWN * 0.025),
+                run_time=0.48,
+            )
+            self.play(
+                FadeIn(new_label, shift=DOWN * 0.025),
+                FadeIn(nxt, shift=UP * 0.025),
+                run_time=v7mod.RUN_SLOW,
+            )
+            label = new_label
+            current = nxt
+            self.wait(v7mod.PAUSE_SHORT)
+
+        conclusion = self.txt(
+            "final position = initial position + distance added by the motion",
+            25, BOLD, color=v7mod.DARK_GRAY,
+        )
+        self.fit(conclusion, 11.8, 0.55)
+        conclusion.to_edge(DOWN, buff=0.42)
+        self.play(FadeIn(conclusion), run_time=RUN)
+        self.wait(v7mod.PAUSE_EXPLAIN)
+        self.clear_stage()
+
+    # ------------------------------------------------------------------
     # Scene 07 — rebuild with explicit left/right zones
     # ------------------------------------------------------------------
     def galileo_data_analysis_v7(self):
@@ -93,8 +168,6 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
             "The time intervals stay fixed at 0.50 s, but the distance traveled during each interval grows.",
         )
 
-        # LEFT ZONE: compact but large five-row table.  Its right edge ends at
-        # x=-1.05, leaving a hard visual gutter before the interval analysis.
         x_cols = [-5.25, -3.65, -2.05]
         y_rows = [1.40, 0.78, 0.16, -0.46, -1.08, -1.70]
         headings = VGroup(
@@ -121,8 +194,6 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
         hline = Line([-6.25, 1.08, 0], [-1.05, 1.08, 0], color=v7mod.LIGHT_GRAY, stroke_width=1.4)
         table_group = VGroup(table_border, headings, rows, hline)
 
-        # RIGHT ZONE: title and bars are centered farther right.  The title is
-        # fitted to a known width instead of being allowed to grow into table.
         right_title = self.txt("DISTANCE DURING EACH 0.50 s INTERVAL", 27, BOLD)
         self.fit(right_title, 5.10, 0.55)
         right_title.move_to([3.70, 1.48, 0])
@@ -172,7 +243,6 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
             "Use the same 0.50 s clock spacing. Near Earth, a released object follows y = 1/2 g t² with g ≈ 9.81 m/s².",
         )
 
-        # LEFT: falling object, moved farther left to free horizontal room.
         x = -4.55
         top_y, bottom_y = 1.58, -1.48
         times = np.array([0.00, 0.50, 1.00, 1.50, 2.00])
@@ -186,9 +256,6 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
         ).move_to([x, ys[0], 0])
         ghosts = VGroup(*[Dot([x, y, 0], radius=0.05, color=v7mod.MID_GRAY) for y in ys])
 
-        # RIGHT: three columns with dedicated width envelopes.  The third
-        # heading uses Δy notation so the pedagogical meaning is preserved
-        # without forcing three long strings into the same horizontal band.
         row_x = [-0.25, 2.10, 4.95]
         head1 = self.txt("time t (s)", 24, BOLD)
         head2 = self.txt("distance y (m)", 24, BOLD)
@@ -214,18 +281,18 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
                 self.txt("—" if i == 0 else f"{interval[i]:0.2f}", 26).move_to([row_x[2], y, 0]),
             ))
 
-        # Explanatory note and equations get their own lower band.  In V8 the
-        # note sat directly on the last table row; here there is a hard gap.
+        # Separate lower bands: row -> note -> equation.  These values include
+        # extra margin beyond the minimum detected in the failed PQL assertion.
         note = self.txt("same structure: position ∝ time²", 25, BOLD)
-        note.move_to([2.45, -1.78, 0])
+        note.move_to([2.45, -1.92, 0])
         eq_start = self.formula_panel(
             r"s=0.40t^2\quad\text{(ramp reconstruction)}",
             width=5.55, height=0.82, size=29,
-        ).move_to([2.45, -2.42, 0])
+        ).move_to([2.45, -2.64, 0])
         eq_fall = self.formula_panel(
             r"\boxed{y=\frac12gt^2}",
             width=5.55, height=0.86, size=42,
-        ).move_to([2.45, -2.42, 0])
+        ).move_to([2.45, -2.64, 0])
 
         self._assert_disjoint(body[-1], note, pad=0.12, label="scene09 body/note")
         self._assert_disjoint(note, eq_start, pad=0.10, label="scene09 note/equation")
@@ -243,13 +310,17 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
                 )
         self.play(FadeIn(eq_start), run_time=RUN)
         self.wait(v7mod.PAUSE_READ)
-        self.play(ReplacementTransform(eq_start, eq_fall), run_time=v7mod.RUN_SLOW)
+
+        # Do not morph two complex LaTeX panels through one another.  Old panel
+        # becomes fully absent before the free-fall law enters.
+        self.play(FadeOut(eq_start, shift=DOWN * 0.03), run_time=0.55)
+        self.play(FadeIn(eq_fall, shift=UP * 0.03), run_time=v7mod.RUN_SLOW)
         self.play(FadeIn(note), run_time=RUN)
         self.wait(v7mod.PAUSE_EXPLAIN)
         self.clear_stage()
 
     # ------------------------------------------------------------------
-    # Scene 12 — move live clock away from mass labels; clear impact zone
+    # Scene 12 — isolate live clock from labels and impact callout
     # ------------------------------------------------------------------
     def pisa_numeric_drop_v7(self):
         RUN = v7mod.RUN
@@ -263,7 +334,6 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
         t_hit = math.sqrt(2 * h / g)
         vf = g * t_hit
 
-        # LEFT DROP ZONE
         x1, x2 = -4.65, -2.75
         top_y, bottom_y = 1.42, -1.58
         p1 = Line([x1, top_y, 0], [x1, bottom_y, 0], color=v7mod.LIGHT_GRAY, stroke_width=2)
@@ -282,31 +352,32 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
         )
         hlab = self.math(r"h=20\,\mathrm{m}", 26).next_to(height, LEFT, buff=0.10)
 
-        # RIGHT CALCULATION ZONE.  The clock now lives here instead of over
-        # the two mass labels, eliminating the collision visible in V8.
-        calc_title = self.txt("SOLVE THE FALL TIME", 29, BOLD).move_to([3.65, 1.55, 0])
+        calc_title = self.txt("SOLVE THE FALL TIME", 29, BOLD).move_to([3.65, 1.62, 0])
         clock_box = RoundedRectangle(
             width=3.00, height=0.58, corner_radius=0.08,
             stroke_color=v7mod.MID_GRAY, stroke_width=1.4,
             fill_color=WHITE, fill_opacity=1,
-        ).move_to([3.65, 1.02, 0])
+        ).move_to([3.65, 0.95, 0])
         clock_label = self.txt("elapsed time:", 22, BOLD)
         clock_num = DecimalNumber(0.0, num_decimal_places=2, font_size=32, color=BLACK)
         clock_unit = self.txt("s", 22, BOLD)
         clock_content = VGroup(clock_label, clock_num, clock_unit).arrange(RIGHT, buff=0.10).move_to(clock_box)
         clock = VGroup(clock_box, clock_content)
 
-        e1 = self.math(r"h=\frac12gt^2", 40).move_to([3.65, 0.42, 0])
-        e2 = self.math(r"20=\frac12(9.81)t^2", 39).move_to([3.65, -0.18, 0])
-        e3 = self.math(r"t=\sqrt{\frac{2(20)}{9.81}}", 39).move_to([3.65, -0.80, 0])
+        e1 = self.math(r"h=\frac12gt^2", 40).move_to([3.65, 0.22, 0])
+        e2 = self.math(r"20=\frac12(9.81)t^2", 39).move_to([3.65, -0.42, 0])
+        e3 = self.math(r"t=\sqrt{\frac{2(20)}{9.81}}", 39).move_to([3.65, -1.07, 0])
         e4 = self.formula_panel(
             r"\boxed{t\approx2.02\,\mathrm{s}}",
             width=4.15, height=0.86, size=39,
-        ).move_to([3.65, -1.52, 0])
+        ).move_to([3.65, -1.80, 0])
 
         self._assert_disjoint(labels, clock, pad=0.20, label="scene12 labels/clock")
         self._assert_disjoint(calc_title, clock, pad=0.07, label="scene12 title/clock")
         self._assert_disjoint(clock, e1, pad=0.09, label="scene12 clock/e1")
+        self._assert_disjoint(e1, e2, pad=0.08, label="scene12 e1/e2")
+        self._assert_disjoint(e2, e3, pad=0.08, label="scene12 e2/e3")
+        self._assert_disjoint(e3, e4, pad=0.08, label="scene12 e3/e4")
 
         self.play(
             Create(p1), Create(p2), Create(ground),
@@ -335,12 +406,12 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
         impact = self.formula_panel(
             r"\boxed{t_1=t_2=2.02\,\mathrm{s}}",
             width=4.55, height=0.78, size=33,
-        ).move_to([-3.70, -2.28, 0])
-        speed = self.math(rf"v_f=gt\approx{vf:.1f}\,\mathrm{{m/s}}", 29).move_to([3.65, -2.32, 0])
+        ).move_to([-3.70, -2.47, 0])
+        speed = self.math(rf"v_f=gt\approx{vf:.1f}\,\mathrm{{m/s}}", 29).move_to([3.65, -2.52, 0])
 
-        # At impact the callout remains clearly below the balls/ground.
         balls_at_impact = VGroup(b1, b2)
         self._assert_disjoint(balls_at_impact, impact, pad=0.10, label="scene12 balls/impact")
+        self._assert_disjoint(e4, speed, pad=0.10, label="scene12 e4/speed")
 
         self.play(FadeIn(impact), FadeIn(speed), run_time=RUN)
         self.wait(v7mod.PAUSE_EXPLAIN)
