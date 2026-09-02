@@ -89,3 +89,5 @@ The transformation is visually attractive but pedagogically imprecise: the compl
 5. Dense distributed contact sheet plus targeted geometry frames.
 6. Source-level assertions for distinct six-view helpers and coherent dimensions.
 7. SHA-256 and direct GitHub publication of the exact validated MP4.
+
+Workflow trigger: V2 senior render gate enabled after the workflow definition was committed.
