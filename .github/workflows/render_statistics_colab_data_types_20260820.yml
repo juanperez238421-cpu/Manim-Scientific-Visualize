@@ -1,0 +1,143 @@
+name: Render Statistics Colab Data Types 20260820
+
+on:
+  push:
+    branches:
+      - render/statistics-colab-data-types-20260820
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct JP classroom style and static QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/statistics_colab_data_types
+          mkdir -p "$JOB/style_chunks" out
+          STYLE_BASE='https://raw.githubusercontent.com/juanperez238421-cpu/IJR---Seminario/render-sem11-oop-v10-20260818/render_jobs/sem11_oop_v10/chunks'
+          for I in 00 01 02 03 04; do
+            curl -fsSL "$STYLE_BASE/style_$I" -o "$JOB/style_chunks/style_$I"
+          done
+          cat "$JOB"/style_chunks/style_* > "$JOB/jp_classroom_style.py"
+          python -m py_compile "$JOB/Statistics_Colab_Data_Types.py" "$JOB/jp_classroom_style.py"
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('render_jobs/statistics_colab_data_types/Statistics_Colab_Data_Types.py')
+          s=p.read_text(encoding='utf-8')
+          required=[
+              'class StatisticsColabDataTypes',
+              'df.dtypes',
+              'type(score)',
+              'PYTHON TYPE ≠ STATISTICAL VARIABLE TYPE',
+              'self.validate_lesson_data',
+              'self.process_map',
+          ]
+          missing=[x for x in required if x not in s]
+          assert not missing, f'missing lesson architecture: {missing}'
+          assert 'D:\\' not in s and 'C:\\' not in s, 'absolute Windows path detected'
+          print('STATIC_QA=PASS')
+          PY
+          sha256sum "$JOB/Statistics_Colab_Data_Types.py" "$JOB/jp_classroom_style.py" > out/SOURCE_SHA256.txt
+
+      - name: Prepare ManimCE 0.20.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Accelerated PQL layout gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/statistics_colab_data_types
+          rm -rf media_pql
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.12 \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pql $JOB/Statistics_Colab_Data_Types.py StatisticsColabDataTypes \
+                --fps 15 --format=mp4 --media_dir media_pql --disable_caching
+            " 2>&1 | tee out/render_pql.log
+          P="$(find media_pql -type f -name 'StatisticsColabDataTypes.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$P" && test -s "$P"
+          cp "$P" out/Statistics_Colab_Data_Types_QA_pql.mp4
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/statistics_colab_data_types
+          rm -rf media
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pqh $JOB/Statistics_Colab_Data_Types.py StatisticsColabDataTypes \
+                --fps 30 --format=mp4 --media_dir media --disable_caching
+            " 2>&1 | tee out/render_pqh.log
+          F="$(find media -type f -name 'StatisticsColabDataTypes.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$F" && test -s "$F"
+          cp "$F" out/Statistics_Colab_Data_Types_FINAL_pqh.mp4
+          cp "$JOB/Statistics_Colab_Data_Types.py" out/
+          cp "$JOB/jp_classroom_style.py" out/
+
+      - name: Technical QA and package
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Statistics_Colab_Data_Types_FINAL_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\n%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" > out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
+          ffmpeg -nostdin -loglevel error -i "$F" -vf "fps=1/12,scale=560:-1,tile=4x3:padding=6:margin=8" -frames:v 1 out/QA_CONTACT_SHEET.jpg
+          sha256sum "$F" out/Statistics_Colab_Data_Types.py out/jp_classroom_style.py > out/SHA256SUMS.txt
+          printf 'Scene: StatisticsColabDataTypes\nTopic: Data Types in Google Colab for Statistics\nManimCE: 0.20.1\nFinal: literal -pqh, 1920x1080, 30 fps, H.264/yuv420p\nQA: py_compile + PQL + PQH + ffprobe + full decode + contact sheet + SHA-256\n' > out/RENDER_INFO.txt
+          cd out
+          zip -9 Statistics_Colab_Data_Types_FINAL_PQH_Package.zip \
+            Statistics_Colab_Data_Types_FINAL_pqh.mp4 Statistics_Colab_Data_Types.py jp_classroom_style.py \
+            VIDEO_TECHNICAL.tsv SOURCE_SHA256.txt SHA256SUMS.txt RENDER_INFO.txt render_pql.log render_pqh.log full_decode.log QA_CONTACT_SHEET.jpg
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Statistics-Colab-Data-Types-PQH-20260820
+          path: |
+            out/Statistics_Colab_Data_Types_FINAL_pqh.mp4
+            out/Statistics_Colab_Data_Types_FINAL_PQH_Package.zip
+            out/Statistics_Colab_Data_Types.py
+            out/jp_classroom_style.py
+            out/VIDEO_TECHNICAL.tsv
+            out/SOURCE_SHA256.txt
+            out/SHA256SUMS.txt
+            out/RENDER_INFO.txt
+            out/QA_CONTACT_SHEET.jpg
+          if-no-files-found: error
+          retention-days: 7
