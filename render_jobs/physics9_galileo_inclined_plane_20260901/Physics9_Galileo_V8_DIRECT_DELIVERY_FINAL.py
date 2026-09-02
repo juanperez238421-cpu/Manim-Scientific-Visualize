@@ -364,13 +364,15 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
         clock_content = VGroup(clock_label, clock_num, clock_unit).arrange(RIGHT, buff=0.10).move_to(clock_box)
         clock = VGroup(clock_box, clock_content)
 
+        # Dedicated equation bands.  The previous render had only ~0.06 scene
+        # units between the first two formulas; here every band has >0.15.
         e1 = self.math(r"h=\frac12gt^2", 40).move_to([3.65, 0.22, 0])
-        e2 = self.math(r"20=\frac12(9.81)t^2", 39).move_to([3.65, -0.42, 0])
-        e3 = self.math(r"t=\sqrt{\frac{2(20)}{9.81}}", 39).move_to([3.65, -1.07, 0])
+        e2 = self.math(r"20=\frac12(9.81)t^2", 39).move_to([3.65, -0.60, 0])
+        e3 = self.math(r"t=\sqrt{\frac{2(20)}{9.81}}", 39).move_to([3.65, -1.42, 0])
         e4 = self.formula_panel(
             r"\boxed{t\approx2.02\,\mathrm{s}}",
             width=4.15, height=0.86, size=39,
-        ).move_to([3.65, -1.80, 0])
+        ).move_to([3.65, -2.38, 0])
 
         self._assert_disjoint(labels, clock, pad=0.20, label="scene12 labels/clock")
         self._assert_disjoint(calc_title, clock, pad=0.07, label="scene12 title/clock")
@@ -385,8 +387,10 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
             run_time=RUN,
         )
         self.play(FadeIn(calc_title), FadeIn(clock), Write(e1), run_time=RUN)
-        self.play(TransformFromCopy(e1, e2), run_time=RUN)
-        self.play(TransformFromCopy(e2, e3), run_time=RUN)
+        # Use staged entrance instead of formula-to-formula copying.  This
+        # prevents transient doubled glyphs while each calculation is revealed.
+        self.play(FadeIn(e2, shift=UP * 0.03), run_time=RUN)
+        self.play(FadeIn(e3, shift=UP * 0.03), run_time=RUN)
         self.play(FadeIn(e4), run_time=RUN)
         self.wait(v7mod.PAUSE_READ)
 
@@ -407,7 +411,7 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
             r"\boxed{t_1=t_2=2.02\,\mathrm{s}}",
             width=4.55, height=0.78, size=33,
         ).move_to([-3.70, -2.47, 0])
-        speed = self.math(rf"v_f=gt\approx{vf:.1f}\,\mathrm{{m/s}}", 29).move_to([3.65, -2.52, 0])
+        speed = self.math(rf"v_f=gt\approx{vf:.1f}\,\mathrm{{m/s}}", 29).move_to([3.65, -3.20, 0])
 
         balls_at_impact = VGroup(b1, b2)
         self._assert_disjoint(balls_at_impact, impact, pad=0.10, label="scene12 balls/impact")
