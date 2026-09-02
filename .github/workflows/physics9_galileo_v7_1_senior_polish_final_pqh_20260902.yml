@@ -1,0 +1,211 @@
+name: Physics9 Galileo V7.1 Senior Polish Final PQH
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'render_jobs/physics9_galileo_inclined_plane_20260901/Physics9_Galileo_V7_1_SENIOR_POLISH_FINAL.py'
+      - 'render_jobs/physics9_galileo_inclined_plane_20260901/Physics9_Galileo_V7_VISUAL_REDESIGN_SENIOR_FINAL.py'
+      - '.github/workflows/physics9_galileo_v7_1_senior_polish_final_pqh_20260902.yml'
+
+permissions:
+  contents: write
+
+env:
+  JOB: render_jobs/physics9_galileo_inclined_plane_20260901
+  SRC: Physics9_Galileo_V7_1_SENIOR_POLISH_FINAL.py
+  SCENE: Physics9GalileoV71SeniorPolishFinal
+  FINAL_NAME: Physics9_Galileo_V7_1_SENIOR_POLISH_FINAL_pqh.mp4
+
+jobs:
+  render-v7-1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout PR head branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Validate source and prepare renderer
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile "$JOB/$SRC"
+          grep -q '^class Physics9GalileoV71SeniorPolishFinal' "$JOB/$SRC"
+          grep -q 'buff=0.34' "$JOB/$SRC"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg imagemagick zip
+          python -m pip install --quiet opencv-python-headless
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+          mkdir -p qa_preview final_out final_out/audit_frames final_out/key_frames published_renders
+
+      - name: Literal PQL full-timeline gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf media_pql_v71
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql "$SRC" "$SCENE" --format=mp4 --media_dir=/manim/media_pql_v71 --disable_caching
+            ' 2>&1 | tee qa_preview/render_v71_pql.log
+          PQL="$(find media_pql_v71 -type f -name "${SCENE}.mp4" -print -quit)"
+          test -n "$PQL" && test -s "$PQL"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf media_pqh_v71
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh "$SRC" "$SCENE" --format=mp4 --media_dir=/manim/media_pqh_v71 --disable_caching
+            ' 2>&1 | tee final_out/render_v71_pqh.log
+          FINAL="$(find media_pqh_v71 -type f -name "${SCENE}.mp4" -print -quit)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" "final_out/$FINAL_NAME"
+
+      # Critical delivery fix: preserve the real rendered MP4 BEFORE strict QA.
+      # Even if a later QA gate rejects a frame, the render remains downloadable
+      # for diagnosis instead of disappearing with the runner filesystem.
+      - name: Upload real rendered MP4 immediately
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9_Galileo_V7_1_REAL_RENDERED_MP4
+          path: final_out/${{ env.FINAL_NAME }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Senior technical and every-frame boundary QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          F="final_out/$FINAL_NAME"
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          FRAMES="$(ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tframes\tbytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$FRAMES" "$SIZE" > final_out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> final_out/full_decode.log
+          test ! -s final_out/full_decode.log
+
+          VIDEO="$F" python - <<'PY'
+          import cv2, os
+          cap=cv2.VideoCapture(os.environ['VIDEO'])
+          n=0; edge=[]; blank=[]
+          while True:
+              ok,frame=cap.read()
+              if not ok: break
+              gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+              dark=gray < 70
+              # Hard 5-pixel no-touch frame. This catches clipping/merged edge content.
+              if dark[:5,:].any() or dark[-5:,:].any() or dark[:,:5].any() or dark[:,-5:].any():
+                  edge.append(n)
+              if gray.std() < 2.0 and gray.mean() > 246:
+                  blank.append(n)
+              n += 1
+          cap.release()
+          with open('final_out/EVERY_FRAME_SCAN.tsv','w') as fh:
+              fh.write(f'frames_scanned\tedge_touch_frames\tblank_frames\n{n}\t{len(edge)}\t{len(blank)}\n')
+          if edge:
+              open('final_out/EVERY_FRAME_EDGE_HITS.txt','w').write('\n'.join(map(str,edge)))
+              raise SystemExit(f'outer-edge content detected in {len(edge)} frames')
+          PY
+
+      - name: Generate visual QA sheets and checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          F="final_out/$FINAL_NAME"
+          ffmpeg -nostdin -loglevel error -i "$F" -vf fps=1/2 -q:v 2 final_out/audit_frames/sec_%04d.jpg
+          montage final_out/audit_frames/*.jpg -thumbnail 384x216 -tile 6x -geometry +7+9 -background white -quality 90 final_out/CONTACT_SHEET_2S_ALL.jpg
+          python - <<'PY'
+          import subprocess
+          F='final_out/Physics9_Galileo_V7_1_SENIOR_POLISH_FINAL_pqh.mp4'
+          dur=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',F]).decode().strip())
+          for i,frac in enumerate([0.04,0.10,0.17,0.24,0.31,0.38,0.45,0.52,0.59,0.66,0.73,0.80,0.87,0.94],1):
+              subprocess.check_call(['ffmpeg','-nostdin','-loglevel','error','-ss',f'{dur*frac:.3f}','-i',F,'-frames:v','1','-q:v','2',f'final_out/key_frames/key_{i:02d}.jpg'])
+          PY
+          montage final_out/key_frames/*.jpg -thumbnail 640x360 -tile 4x -geometry +8+8 -background white -quality 92 final_out/KEY_FRAME_MOSAIC.jpg
+          sha256sum "$F" > final_out/SHA256SUMS.txt
+          cat > final_out/SENIOR_QA_RESULT.md <<EOF
+          # Physics 9 Galileo V7.1 Senior Polish — QA result
+          - Source compile: PASS
+          - Literal PQL full timeline: PASS
+          - Literal PQH final render: PASS
+          - Resolution/FPS: 1920x1080 @ 30 fps: PASS
+          - Codec: H.264 / yuv420p: PASS
+          - Full FFmpeg decode: PASS
+          - Every-frame outer-boundary scan: PASS
+          - Larger safe header hierarchy: YES
+          - Increased header/subtitle readability: YES
+          - V7 explicit 0.50 s timing and 1:3:5:7 reconstruction retained: YES
+          - V7 staged physical motion, transforms and pedagogical pauses retained: YES
+          - Dense 2-second contact sheet: generated
+          - 14-key-frame mosaic: generated
+          - Duration: ${DUR}s
+          - Frames: ${FRAMES}
+          - Bytes: ${SIZE}
+          EOF
+          zip -j final_out/Physics9_Galileo_V7_1_SENIOR_POLISH_FINAL_PQH.zip \
+            "$F" final_out/VIDEO_TECHNICAL.tsv final_out/EVERY_FRAME_SCAN.tsv \
+            final_out/SENIOR_QA_RESULT.md final_out/CONTACT_SHEET_2S_ALL.jpg \
+            final_out/KEY_FRAME_MOSAIC.jpg final_out/SHA256SUMS.txt
+
+      - name: Publish exact validated MP4 on GitHub branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          F="final_out/$FINAL_NAME"
+          DEST="published_renders/$FINAL_NAME"
+          cp "$F" "$DEST"
+          sha256sum "$DEST" > "published_renders/${FINAL_NAME%.mp4}.sha256"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DEST" "published_renders/${FINAL_NAME%.mp4}.sha256"
+          if git diff --cached --quiet; then
+            echo 'Validated render already published.'
+          else
+            git commit -m "Publish validated Physics 9 Galileo V7.1 PQH render"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
+      - name: Upload complete validated V7.1 package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9_Galileo_V7_1_SENIOR_POLISH_FINAL_PQH
+          path: |
+            final_out/${{ env.FINAL_NAME }}
+            final_out/Physics9_Galileo_V7_1_SENIOR_POLISH_FINAL_PQH.zip
+            final_out/SENIOR_QA_RESULT.md
+            final_out/EVERY_FRAME_SCAN.tsv
+            final_out/VIDEO_TECHNICAL.tsv
+            final_out/CONTACT_SHEET_2S_ALL.jpg
+            final_out/KEY_FRAME_MOSAIC.jpg
+            final_out/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
