@@ -57,3 +57,7 @@ class Physics9GalileoV8DirectDeliveryFinal(Physics9GalileoV71SeniorPolishFinal):
             )
         self.clear()
         self.wait(0.22)
+
+
+# Isolated V8 PR trigger: this file intentionally changes after PR creation so
+# the dedicated pull_request workflow is scheduled from the V8 head revision.
