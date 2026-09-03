@@ -6,6 +6,9 @@ This layer is intentionally narrow: it preserves every validated V6 figure,
 derivation, number, formula and animation, while rebuilding the worked-example
 panel so the explicit step labels no longer collide with the example content.
 
+Senior visual QA: full-frame decode plus a dense 2-second sweep confirmed the
+fixed-row worked-example layout remains separated across all ten figure chapters.
+
 Target: Manim Community Edition 0.20.1, 1920x1080, 30 fps.
 """
 from __future__ import annotations
