@@ -26,6 +26,9 @@ from Geometry8_2D_Areas_Masterclass_FINAL_QA import *
 class Geometry8AreaSeniorLayoutV8Mixin:
     """Frame-safe senior layout overrides on top of V7."""
 
+    # ------------------------------------------------------------------
+    # Reusable senior layout helpers
+    # ------------------------------------------------------------------
     def _safe_panel(self, width, height, center, stroke=LIGHT, fill=WHITE, opacity=.985):
         panel = RoundedRectangle(
             width=width,
@@ -53,6 +56,9 @@ class Geometry8AreaSeniorLayoutV8Mixin:
         body.move_to(panel)
         return VGroup(panel, body)
 
+    # ------------------------------------------------------------------
+    # Rectangle: isolate the derivation from the h dimension arrow.
+    # ------------------------------------------------------------------
     def rectangle_explicit(self):
         h = self.header(5, "2 · RECTANGLE", "Opposite sides are equal; base and perpendicular height count columns and rows.")
         strip = self.stage_strip(); self.add(h, strip)
@@ -88,6 +94,9 @@ class Geometry8AreaSeniorLayoutV8Mixin:
         self.show_example(ex)
         self.wait(.80); self.wipe()
 
+    # ------------------------------------------------------------------
+    # Trapezoid: external h gutter + sequential dimension replacement.
+    # ------------------------------------------------------------------
     def trapezoid_explicit(self):
         h=self.header(8,"5 · TRAPEZOID","Two parallel bases, B and b, share one perpendicular height h.")
         strip=self.stage_strip(); self.add(h,strip)
@@ -115,7 +124,9 @@ class Geometry8AreaSeniorLayoutV8Mixin:
         copy_D=Bp+C-D
         para=Polygon(A,copy_D,copy_A,D,stroke_color=INK,stroke_width=4,fill_opacity=0)
         sum_base=self.dimension(A+DOWN*.37,copy_D+DOWN*.37,"B+b",DOWN,34)
-        self.play(FadeOut(dB),FadeOut(db),Create(para),GrowFromCenter(sum_base[0]),FadeIn(sum_base[1]),run_time=.58)
+        # Do not cross-fade B with B+b in the same screen band.
+        self.play(FadeOut(dB), FadeOut(db), run_time=.26)
+        self.play(Create(para),GrowFromCenter(sum_base[0]),FadeIn(sum_base[1]),run_time=.58)
         deriv=VGroup(
             self.txt("2 congruent trapezoids → one parallelogram",26,True),
             self.eq(r"2A=(B+b)h",43),
@@ -130,6 +141,9 @@ class Geometry8AreaSeniorLayoutV8Mixin:
         self.show_example(ex)
         self.wait(.80); self.wipe()
 
+    # ------------------------------------------------------------------
+    # Circle: proof text / sector strip / base dimension / result are bands.
+    # ------------------------------------------------------------------
     def circle_explicit(self):
         h = self.header(
             10,
@@ -216,7 +230,8 @@ class Geometry8AreaSeniorLayoutV8Mixin:
 
         left_x = x0 - .10
         right_x = x0 + (n-1)*step + .16
-        base_y = -1.58
+        # V8 QA pass 2: lower the base band and result band to preserve air gaps.
+        base_y = -1.72
         base = self.dimension([left_x, base_y, 0], [right_x, base_y, 0], r"\pi r", DOWN, 31)
         height = self.dimension(
             [right_x+.35, -radius/2 + sector_y, 0],
@@ -225,7 +240,7 @@ class Geometry8AreaSeniorLayoutV8Mixin:
         )
         self.play(GrowFromCenter(base[0]), FadeIn(base[1]), GrowFromCenter(height[0]), FadeIn(height[1]), run_time=.60)
 
-        formula = self.box(r"A=(\pi r)(r)=\pi r^2", 5.60, 52).move_to(RIGHT*3.50 + DOWN*2.50)
+        formula = self.box(r"A=(\pi r)(r)=\pi r^2", 5.60, 52).move_to(RIGHT*3.50 + DOWN*2.82)
         self.play(FadeIn(formula), run_time=.45)
         self.wait(.95)
 
@@ -244,6 +259,9 @@ class Geometry8AreaSeniorLayoutV8Mixin:
         self.show_example(ex)
         self.wait(.80); self.wipe()
 
+    # ------------------------------------------------------------------
+    # Atlas: fixed internal zones; long titles left-anchor inside the card.
+    # ------------------------------------------------------------------
     def _formula_card_v6(self, kind, name, formula, symbols):
         inherited = super()._formula_card_v6(kind, name, formula, symbols)
         _, title_row, figure, formula_group, sym = inherited
@@ -259,7 +277,9 @@ class Geometry8AreaSeniorLayoutV8Mixin:
         )
         c = card.get_center()
 
-        self._place_in_zone(title_row, c + LEFT*1.78 + UP*.50, 2.78, .31)
+        self.fit(title_row, 2.52, .31)
+        title_row.set_y(c[1] + .50)
+        title_row.align_to(card, LEFT).shift(RIGHT*.24)
         self._place_in_zone(figure, c + LEFT*1.84 + DOWN*.19, 2.20, .72)
         self._place_in_zone(formula_group, c + RIGHT*1.63 + UP*.12, 2.70, .64)
         self._place_in_zone(sym, c + RIGHT*1.63 + DOWN*.49, 2.72, .23)
@@ -301,6 +321,7 @@ class Geometry8AreaSeniorLayoutV8Mixin:
             for card, pos in zip(cards, positions):
                 card.move_to(pos)
 
+            # Reveal by rows to keep the visual scan predictable.
             for i, card in enumerate(cards):
                 self.play(FadeIn(card, shift=UP*.04), run_time=.34)
                 if i in (1,3,4): self.wait(.42)
