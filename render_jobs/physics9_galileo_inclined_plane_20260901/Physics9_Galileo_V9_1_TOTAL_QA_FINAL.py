@@ -8,7 +8,8 @@ larger geometric safety margins:
 
 * Scene 09 uses three genuinely independent table columns, short two-line
   headers, a shallower table, and reserved note/equation bands.
-* Scene 12 uses 0.26-unit equation gaps and a lower isolated impact callout.
+* Scene 12 uses 0.26-unit equation gaps, then consolidates the derivation before
+  displaying the final impact-speed result in a dedicated safe-frame band.
 * Existing V9/V8 runtime bounding-box checks remain active; this revision does
   not bypass QA in order to obtain a render.
 
@@ -231,6 +232,7 @@ class Physics9GalileoV91TotalQAFinal(Physics9GalileoV9TotalQAFinal):
         self.wait(v7mod.PAUSE_READ)
 
         tracker = ValueTracker(0.0)
+
         def y(alpha):
             return top_y + (bottom_y - top_y) * (alpha**2)
 
@@ -248,20 +250,32 @@ class Physics9GalileoV91TotalQAFinal(Physics9GalileoV9TotalQAFinal):
         self.play(FadeIn(e3, shift=UP * 0.03), run_time=RUN)
         self.wait(0.55)
         self.play(FadeIn(e4), run_time=RUN)
-        self.wait(0.45)
+        self.wait(0.55)
+
+        # Consolidate the completed derivation before adding the final speed.
+        # This creates a large, readable result band and prevents the former
+        # speed label from extending below the safe frame.
+        self.play(
+            FadeOut(e1, shift=UP * 0.03),
+            FadeOut(e2, shift=UP * 0.03),
+            FadeOut(e3, shift=UP * 0.03),
+            e4.animate.move_to([3.65, -1.78, 0]),
+            run_time=v7mod.RUN_SLOW,
+        )
+        self.wait(0.40)
 
         impact = self.formula_panel(
             r"\boxed{t_1=t_2=2.02\,\mathrm{s}}",
             width=4.55, height=0.78, size=33,
         ).move_to([-3.70, -2.62, 0])
-        speed = self.math(rf"v_f=gt\approx{vf:.1f}\,\mathrm{{m/s}}", 29)
-        speed.next_to(e4, DOWN, buff=0.22)
+        speed = self.math(rf"v_f=gt\approx{vf:.1f}\,\mathrm{{m/s}}", 29).move_to([3.65, -2.62, 0])
 
         self._assert_disjoint(VGroup(b1, b2), impact, pad=0.20, label="scene12 balls/impact")
-        self._assert_disjoint(e4, speed, pad=0.14, label="scene12 e4/speed")
+        self._assert_disjoint(e4, speed, pad=0.18, label="scene12 e4/speed")
         self._assert_inside(impact, "scene12 impact")
+        self._assert_inside(e4, "scene12 consolidated e4")
         self._assert_inside(speed, "scene12 speed")
 
-        self.play(FadeIn(impact), FadeIn(speed), run_time=RUN)
+        self.play(FadeIn(impact), FadeIn(speed, shift=UP * 0.03), run_time=RUN)
         self.wait(v7mod.PAUSE_EXPLAIN)
         self.clear_stage()
