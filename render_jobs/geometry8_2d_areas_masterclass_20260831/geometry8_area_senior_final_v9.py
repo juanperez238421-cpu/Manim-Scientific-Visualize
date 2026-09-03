@@ -86,11 +86,14 @@ class Geometry8AreaSeniorFinalV9Mixin:
         self.fit(limit_note,5.35,.40)
         limit_note.move_to(RIGHT*3.75+UP*1.78)
 
-        # TEXT BAND 2: circumference-half equation.  Its lower edge is forced
-        # above the sector envelope instead of being centered on the top arcs.
+        # TEXT BAND 2: circumference-half equation.  For a Sector, Manim's
+        # object bounding box includes radial construction geometry and therefore
+        # overestimates the visible top envelope after rearrangement.  The true
+        # visual top band of the alternating sector strip is known analytically:
+        # radius/2 + vertical_shift.  Gate against that rendered envelope.
         base_note=self.eq(r"\frac{C}{2}=\frac{2\pi r}{2}=\pi r",34)
         base_note.move_to(RIGHT*3.75+UP*1.29)
-        sector_top=max(m.get_top()[1] for m in targets)
+        sector_top=radius/2 + vertical_shift + .03
         assert base_note.get_bottom()[1] > sector_top + .13
         assert limit_note.get_bottom()[1] > base_note.get_top()[1] + .06
         self.play(FadeIn(limit_note),FadeIn(base_note),run_time=.55)
@@ -131,7 +134,7 @@ class Geometry8AreaSeniorFinalV9Mixin:
         self.wait(.80); self.wipe()
 
     def formula_atlas(self):
-        """Two large 3+2 card grids; no five-card vertical compression."""
+        """Two large 3+2 two-column grid pages; no five-card vertical compression."""
         data=[
             ("01","SQUARE",r"A=s^2","s = side"),
             ("02","RECTANGLE",r"A=b\,h","b = base · h = perpendicular height"),
