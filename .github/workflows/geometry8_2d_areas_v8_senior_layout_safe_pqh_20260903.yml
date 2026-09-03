@@ -1,0 +1,245 @@
+name: Geometry 8 2D Areas V8 SENIOR LAYOUT SAFE PQH
+
+on:
+  push:
+    branches:
+      - render/geometry8-2d-areas-v8-senior-layout-safe-20260903
+    paths:
+      - 'render_jobs/geometry8_2d_areas_masterclass_20260831/**'
+      - '.github/workflows/geometry8_2d_areas_v8_senior_layout_safe_pqh_20260903.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render-v8-senior-layout-safe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Static mathematics and senior-layout gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          mkdir -p out qa_out media pql_media /tmp/manim-bin /tmp/manim-home
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+          python -m py_compile "$JOB"/*.py
+          python - "$JOB/geometry8_area_senior_layout_safe_v8.py" <<'PY'
+          import math, pathlib, sys
+          s=pathlib.Path(sys.argv[1]).read_text(encoding='utf-8')
+          required=[
+              '_panel_cell', '_assert_gap', '_safe_note_box',
+              'READ GIVEN', 'slanted side ≠ h',
+              'formula.get_top()[1] < base_dim[1].get_bottom()[1]',
+              '_formula_card_v8', 'sym.get_bottom()[1] > card.get_bottom()[1]',
+          ]
+          for token in required: assert token in s, token
+          assert 5**2 == 25
+          assert 8*3 == 24
+          assert 10*6/2 == 30
+          assert 7*4 == 28
+          assert (10+6)*4/2 == 32
+          assert 12*8/2 == 48
+          assert abs(math.pi*4**2-50.2654824574) < 1e-8
+          assert 30*4/2 == 60
+          assert abs(math.pi*6**2/2-56.5486677646) < 1e-8
+          assert abs(math.pi*8**2/4-50.2654824574) < 1e-8
+          print('V8 source + mathematics gate: PASS')
+          PY
+
+      - name: PQL complete timeline gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=0.05
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          cd "$JOB"
+          manim -pql Geometry8_2D_Areas_FigureByFigure_V8_SENIOR_LAYOUT_SAFE.py \
+            Geometry8Areas2DFigureByFigureV8SeniorLayoutSafe \
+            --fps 15 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/pql_media" \
+            2>&1 | tee "$GITHUB_WORKSPACE/qa_out/V8_PQL.log"
+          cd "$GITHUB_WORKSPACE"
+          PQL="$(find pql_media -type f -name 'Geometry8Areas2DFigureByFigureV8SeniorLayoutSafe.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=1.0
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          cd "$JOB"
+          manim -pqh Geometry8_2D_Areas_FigureByFigure_V8_SENIOR_LAYOUT_SAFE.py \
+            Geometry8Areas2DFigureByFigureV8SeniorLayoutSafe \
+            --fps 30 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/media" \
+            2>&1 | tee "$GITHUB_WORKSPACE/out/V8_PQH.log"
+          cd "$GITHUB_WORKSPACE"
+          VIDEO="$(find media -type f -name 'Geometry8Areas2DFigureByFigureV8SeniorLayoutSafe.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$VIDEO" && test -s "$VIDEO"
+          cp "$VIDEO" out/Geometry8_2D_Areas_FigureByFigure_V8_SENIOR_LAYOUT_SAFE_FINAL_pqh.mp4
+          cp "$JOB/Geometry8_2D_Areas_FigureByFigure_V8_SENIOR_LAYOUT_SAFE.py" out/
+          cp "$JOB/geometry8_area_senior_layout_safe_v8.py" out/
+
+      - name: Technical full-decode QA
+        id: tech
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Geometry8_2D_Areas_FigureByFigure_V8_SENIOR_LAYOUT_SAFE_FINAL_pqh.mp4
+          python - "$VIDEO" <<'PY' | tee qa_out/VIDEO_TECHNICAL_QA.txt
+          import av, os, sys
+          p=sys.argv[1]; frames=0; first_pts=None; last_pts=None
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              codec=s.codec_context.name; width=s.codec_context.width; height=s.codec_context.height
+              fmt=s.codec_context.format.name if s.codec_context.format else ''
+              fps=float(s.average_rate) if s.average_rate else 0.0
+              duration=float(c.duration)/float(av.time_base) if c.duration else 0.0
+              for frame in c.decode(s):
+                  frames += 1
+                  if first_pts is None: first_pts=frame.pts
+                  last_pts=frame.pts
+          size=os.path.getsize(p)
+          for k,v in [('codec_name',codec),('width',width),('height',height),('pix_fmt',fmt),('average_fps',f'{fps:.6f}'),('duration',f'{duration:.6f}'),('frames_decoded',frames),('first_pts',first_pts),('last_pts',last_pts),('size',size)]: print(f'{k}={v}')
+          assert codec=='h264' and (width,height)==(1920,1080) and fmt=='yuv420p'
+          assert 29.5 <= fps <= 30.5 and duration > 200 and frames > 6000 and size > 1_000_000
+          print('FULL_FRAME_DECODE=PASS')
+          PY
+          SHA="$(sha256sum "$VIDEO" | awk '{print $1}')"
+          SIZE="$(stat -c%s "$VIDEO")"
+          echo "$SHA  $VIDEO" | tee qa_out/SHA256SUMS.txt
+          echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
+          echo "size=$SIZE" >> "$GITHUB_OUTPUT"
+
+      - name: 180-frame distributed senior visual audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Geometry8_2D_Areas_FigureByFigure_V8_SENIOR_LAYOUT_SAFE_FINAL_pqh.mp4
+          mkdir -p qa_out/audit_frames
+          python - "$VIDEO" <<'PY' | tee qa_out/VISUAL_AUDIT.txt
+          import av, math, os, sys
+          from PIL import Image, ImageDraw
+          p=sys.argv[1]; count=180; saved=[]
+          with av.open(p) as c:
+              s=c.streams.video[0]; duration=float(c.duration)/float(av.time_base)
+              targets=[duration*i/(count+1) for i in range(1,count+1)]; ti=0
+              for frame in c.decode(s):
+                  if ti>=len(targets): break
+                  t=float(frame.pts*frame.time_base) if frame.pts is not None else 0.0
+                  if t>=targets[ti]:
+                      im=Image.fromarray(frame.to_ndarray(format='rgb24'))
+                      fp=f'qa_out/audit_frames/frame_{ti+1:03d}_{targets[ti]:07.2f}.jpg'
+                      im.save(fp,quality=93); saved.append(fp); ti+=1
+          assert len(saved)>=175
+          cards=[]
+          for fp in saved:
+              im=Image.open(fp).convert('RGB'); im.thumbnail((480,270))
+              card=Image.new('RGB',(500,300),'white'); card.paste(im,((500-im.width)//2,8))
+              ImageDraw.Draw(card).text((10,280),os.path.basename(fp),fill='black'); cards.append(card)
+          cols=4; rows=math.ceil(len(cards)/cols); sheet=Image.new('RGB',(cols*500,rows*300),'white')
+          for i,im in enumerate(cards): sheet.paste(im,((i%cols)*500,(i//cols)*300))
+          sheet.save('qa_out/Geometry8_V8_DISTRIBUTED_CONTACT_SHEET.jpg',quality=93)
+          print('audit_frames=',len(saved)); print('DISTRIBUTED_VISUAL_SAMPLE=PASS')
+          PY
+
+      - name: Targeted rendered-overlap regression audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Geometry8_2D_Areas_FigureByFigure_V8_SENIOR_LAYOUT_SAFE_FINAL_pqh.mp4
+          mkdir -p qa_out/targeted_frames
+          python - "$VIDEO" <<'PY' | tee qa_out/TARGETED_OVERLAP_AUDIT.txt
+          import av, os, sys
+          from PIL import Image, ImageDraw
+          p=sys.argv[1]
+          # V7 defect neighborhoods: rectangle deriv/example, parallelogram note,
+          # trapezoid/rhombus examples, circle derivation, polygon example,
+          # quarter example and both formula-guide pages.
+          requested=[46,50,82,90,110,126,136,146,150,170,186,214,222,228]
+          saved=[]
+          with av.open(p) as c:
+              s=c.streams.video[0]; duration=float(c.duration)/float(av.time_base)
+              targets=[min(float(t),duration-.15) for t in requested]; ti=0
+              for frame in c.decode(s):
+                  if ti>=len(targets): break
+                  ft=float(frame.pts*frame.time_base) if frame.pts is not None else 0.0
+                  if ft>=targets[ti]:
+                      im=Image.fromarray(frame.to_ndarray(format='rgb24'))
+                      fp=f'qa_out/targeted_frames/key_{ti+1:02d}_{targets[ti]:06.2f}.jpg'; im.save(fp,quality=95)
+                      saved.append((fp,targets[ti])); ti+=1
+          assert len(saved)==len(requested)
+          cellw,cellh=660,390; cols=2; rows=(len(saved)+1)//2
+          sheet=Image.new('RGB',(cols*cellw,rows*cellh),'white'); draw=ImageDraw.Draw(sheet)
+          for i,(fp,t) in enumerate(saved):
+              im=Image.open(fp).convert('RGB'); im.thumbnail((640,360)); x=(i%cols)*cellw+(cellw-im.width)//2; y=(i//cols)*cellh+5
+              sheet.paste(im,(x,y)); draw.text(((i%cols)*cellw+10,(i//cols)*cellh+368),f'{t:.2f}s',fill='black')
+          sheet.save('qa_out/Geometry8_V8_TARGETED_OVERLAP_REGRESSION.jpg',quality=95)
+          print('targeted_frames=',len(saved)); print('TARGETED_OVERLAP_REGRESSION=PASS')
+          PY
+
+      - name: Publish validated V8 MP4 directly to GitHub
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=out/Geometry8_2D_Areas_FigureByFigure_V8_SENIOR_LAYOUT_SAFE_FINAL_pqh.mp4
+          DEST=published_renders/Geometry8_2D_Areas_FigureByFigure_V8_SENIOR_LAYOUT_SAFE_FINAL_pqh.mp4
+          test -s "$SRC"
+          mkdir -p "$(dirname "$DEST")"
+          cp "$SRC" "$DEST"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f "$DEST"
+          if git diff --cached --quiet; then
+            echo "Published V8 render already matches GitHub branch."
+          else
+            git commit -m "Publish Geometry 8 V8 senior layout-safe PQH [skip ci]"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Verify direct GitHub V8 publication
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_SIZE: ${{ steps.tech.outputs.size }}
+        run: |
+          set -euo pipefail
+          sleep 2
+          python - <<'PY' | tee qa_out/DIRECT_GITHUB_PUBLICATION.txt
+          import json, os, urllib.parse, urllib.request
+          repo=os.environ['GITHUB_REPOSITORY']; branch=os.environ['GITHUB_REF_NAME']
+          target='published_renders/Geometry8_2D_Areas_FigureByFigure_V8_SENIOR_LAYOUT_SAFE_FINAL_pqh.mp4'; expected=int(os.environ['EXPECTED_SIZE'])
+          url=f'https://api.github.com/repos/{repo}/contents/{urllib.parse.quote(target,safe="/")}?ref={urllib.parse.quote(branch,safe="/")}'
+          req=urllib.request.Request(url); req.add_header('Authorization',f'Bearer {os.environ["GH_TOKEN"]}'); req.add_header('Accept','application/vnd.github+json')
+          with urllib.request.urlopen(req,timeout=60) as r: obj=json.load(r)
+          print('path=',obj['path']); print('size=',obj['size']); print('download_url=',obj['download_url'])
+          assert obj['size']==expected and obj['download_url'].endswith('.mp4')
+          print('DIRECT_GITHUB_DELIVERY=PASS')
+          PY
+
+      - name: Upload V8 senior render and QA evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Geometry8-2D-Areas-V8-SENIOR-LAYOUT-SAFE-FINAL-PQH-20260903
+          path: |
+            out/
+            qa_out/
+          if-no-files-found: warn
+          retention-days: 14
