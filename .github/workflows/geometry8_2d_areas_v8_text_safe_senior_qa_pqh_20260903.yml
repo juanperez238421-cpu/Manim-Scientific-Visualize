@@ -72,9 +72,17 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           PQL="$(find pql_media -type f -name 'Geometry8Areas2DFigureByFigureV8TextSafe.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PQL" && test -s "$PQL"
-          grep -Fq 'Rendered Geometry8Areas2DFigureByFigureV8TextSafe' qa_out/Geometry8_2D_Areas_V8_TEXT_SAFE_PQL.log
+          python - "$PQL" <<'PY' | tee qa_out/PQL_FILE_QA.txt
+          import av, os, sys
+          p=sys.argv[1]
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              frame=next(c.decode(s), None)
+              assert frame is not None
+              print(f'PQL_FILE=PASS codec={s.codec_context.name} size={os.path.getsize(p)}')
+          PY
 
-      - name: PQH final render
+      - name: PQH full final render
         shell: bash
         run: |
           set -euo pipefail
@@ -92,7 +100,6 @@ jobs:
           VIDEO="$(find media -type f -name 'Geometry8Areas2DFigureByFigureV8TextSafe.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$VIDEO" && test -s "$VIDEO"
           cp "$VIDEO" out/Geometry8_2D_Areas_FigureByFigure_V8_TEXT_SAFE_SENIOR_QA_FINAL_pqh.mp4
-          grep -Fq 'Rendered Geometry8Areas2DFigureByFigureV8TextSafe' out/Geometry8_2D_Areas_V8_TEXT_SAFE_PQH.log
 
       - name: Full-frame decode and technical QA
         shell: bash
@@ -176,7 +183,8 @@ jobs:
               cards.append(card)
           cols=4; rows=math.ceil(len(cards)/cols)
           sheet=Image.new('RGB',(cols*500,rows*300),'white')
-          for i,im in enumerate(cards): sheet.paste(im,((i%cols)*500,(i//cols)*300))
+          for i,im in enumerate(cards):
+              sheet.paste(im,((i%cols)*500,(i//cols)*300))
           sheet.save('qa_out/Geometry8_2D_Areas_V8_TEXT_SAFE_contact_sheet.jpg',quality=94)
           print('audit_frames=',len(saved))
           print('DENSE_DISTRIBUTED_VISUAL_SAMPLE=PASS')
@@ -210,9 +218,9 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -f "$DEST"
           if git diff --cached --quiet; then
-            echo "Published V8 render already matches GitHub branch."
+            echo 'Published V8 render already matches GitHub branch.'
           else
-            git commit -m "Publish Geometry 8 V8 text-safe PQH [skip ci]"
+            git commit -m 'Publish Geometry 8 V8 text-safe PQH [skip ci]'
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
 
@@ -220,7 +228,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: Geometry8-2D-Areas-V8-TEXT-SAFE-SENIOR-QA-FINAL-PQH-20260903
+          name: Geometry8-2D-Areas-V8-TEXT-SAFE-SENIOR-QA-FINAL-PQH-20260904
           path: |
             out/
             qa_out/
