@@ -70,6 +70,28 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
+      - name: Persist PQL failure tail on PR branch
+        if: failure()
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f preview_v91/render_v91_pql.log || exit 0
+          OUT="$JOB/V9_1_LAST_PQL_ERROR.txt"
+          {
+            echo "Physics9 Galileo V9.1 — latest PQL failure tail"
+            echo "workflow_run=${{ github.run_id }}"
+            echo "source_commit=${{ github.event.pull_request.head.sha }}"
+            echo
+            tail -n 180 preview_v91/render_v91_pql.log
+          } > "$OUT"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$OUT"
+          if ! git diff --cached --quiet; then
+            git commit -m "Record V9.1 PQL failure for QA diagnosis [skip ci]"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
       - name: Literal PQH final render
         shell: bash
         run: |
