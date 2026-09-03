@@ -1,0 +1,299 @@
+name: Dibujo Tecnico Clase 6 ISO Projection Systems V3 SENIOR TOTAL PQH
+
+on:
+  push:
+    branches:
+      - render/dibujo-tecnico-clase6-iso-projection-v2-senior-qa-20260902
+    paths:
+      - 'render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL.py'
+      - 'render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/SENIOR_QA_V2_TO_V3.md'
+      - '.github/workflows/dibujo_tecnico_clase6_iso_projection_v3_senior_total_20260902.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render-class6-iso-v3-senior-total:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Senior source and geometry gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/dibujo_tecnico_clase6_iso_projection_20260902
+          mkdir -p out qa_out media pql_media /tmp/manim-bin /tmp/manim-home
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+          V1="$JOB/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V1_SENIOR.py"
+          V2="$JOB/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V2_SENIOR_QA.py"
+          V3="$JOB/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL.py"
+          test -s "$V1" && test -s "$V2" && test -s "$V3"
+          python -m py_compile "$V1" "$V2" "$V3"
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL.py')
+          s=p.read_text(encoding='utf-8')
+          required=[
+              'class TechnicalDrawingClass6ISOV3',
+              'parallel_bundle', '_extract_view_to_target',
+              'Transform(hplane, unfolded_plane)', 'Transform(top_view, unfolded_top)',
+              'make_house_solid', 'ONE COHERENT 3D OBJECT',
+              'UNFOLD TOP PLANE 90', 'FRONT + TOP ARE NOW COPLANAR',
+              'THIRD-ANGLE PLACEMENT', 'FIRST-ANGLE PLACEMENT',
+              '1.25', '1.10', '2.10', '1.5', '2.2',
+          ]
+          missing=[x for x in required if x not in s]
+          assert not missing, missing
+          # Post-render defects from V2 must not reappear in V3.
+          assert 'TransformFromCopy(front' not in s
+          assert 'TransformFromCopy(top' not in s
+          print('V3 senior source and geometry gate: PASS')
+          PY
+
+      - name: Literal PQL complete-timeline gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=0.055
+          cd render_jobs/dibujo_tecnico_clase6_iso_projection_20260902
+          manim -pql Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL.py \
+            TechnicalDrawingClass6ISOV3 \
+            --fps 15 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/pql_media" \
+            2>&1 | tee "$GITHUB_WORKSPACE/qa_out/PQL.log"
+          cd "$GITHUB_WORKSPACE"
+          PQL="$(find pql_media -type f -name 'TechnicalDrawingClass6ISOV3.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+          cp "$PQL" qa_out/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL_pql.mp4
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=1.0
+          cd render_jobs/dibujo_tecnico_clase6_iso_projection_20260902
+          manim -pqh Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL.py \
+            TechnicalDrawingClass6ISOV3 \
+            --fps 30 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/media" \
+            2>&1 | tee "$GITHUB_WORKSPACE/out/PQH.log"
+          cd "$GITHUB_WORKSPACE"
+          VIDEO="$(find media -type f -name 'TechnicalDrawingClass6ISOV3.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$VIDEO" && test -s "$VIDEO"
+          cp "$VIDEO" out/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL_FINAL_pqh.mp4
+          cp render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL.py out/
+          cp render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/SENIOR_QA_V2_TO_V3.md out/
+
+      - name: Full decode plus every-frame hard-border scan
+        id: tech
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL_FINAL_pqh.mp4
+          python - "$VIDEO" <<'PY' | tee qa_out/VIDEO_TECHNICAL_AND_EDGE_QA.txt
+          import av, os, sys, numpy as np
+          p=sys.argv[1]
+          frames=0; unsafe=[]; blank=[]; sparse=[]
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              codec=s.codec_context.name
+              width=s.codec_context.width
+              height=s.codec_context.height
+              fmt=s.codec_context.format.name if s.codec_context.format else ''
+              fps=float(s.average_rate) if s.average_rate else 0.0
+              duration=float(c.duration)/float(av.time_base) if c.duration else 0.0
+              for frame in c.decode(s):
+                  arr=frame.to_ndarray(format='gray')
+                  dark=arr < 235
+                  ratio=float(dark.mean())
+                  edge=np.concatenate([
+                      dark[:8,:].ravel(), dark[-8:,:].ravel(),
+                      dark[:,:8].ravel(), dark[:,-8:].ravel(),
+                  ])
+                  if edge.mean() > 0.0005: unsafe.append(frames)
+                  if ratio < 0.00015: blank.append(frames)
+                  elif ratio < 0.00065: sparse.append(frames)
+                  frames += 1
+          size=os.path.getsize(p)
+          print(f'codec_name={codec}')
+          print(f'width={width}')
+          print(f'height={height}')
+          print(f'pix_fmt={fmt}')
+          print(f'average_fps={fps:.6f}')
+          print(f'duration={duration:.6f}')
+          print(f'frames_decoded={frames}')
+          print(f'size={size}')
+          print(f'unsafe_border_frames={len(unsafe)}')
+          print(f'blank_transition_frames={len(blank)}')
+          print(f'sparse_transition_frames={len(sparse)}')
+          if unsafe[:30]: print('unsafe_samples=', unsafe[:30])
+          assert codec == 'h264'
+          assert (width,height) == (1920,1080)
+          assert fmt == 'yuv420p'
+          assert 29.8 <= fps <= 30.2
+          assert duration > 100
+          assert frames > 3000
+          assert size > 1_000_000
+          assert len(unsafe) == 0, f'unsafe hard-border contact in {len(unsafe)} frames'
+          PY
+          SHA="$(sha256sum "$VIDEO" | awk '{print $1}')"
+          SIZE="$(stat -c%s "$VIDEO")"
+          echo "$SHA  $VIDEO" | tee qa_out/SHA256SUMS.txt
+          echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
+          echo "size=$SIZE" >> "$GITHUB_OUTPUT"
+
+      - name: 120-frame senior visual audit plus targeted geometry frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL_FINAL_pqh.mp4
+          mkdir -p qa_out/audit_frames qa_out/targeted_frames
+          python - "$VIDEO" <<'PY' | tee qa_out/VISUAL_AUDIT.txt
+          import av, math, os, sys
+          from PIL import Image, ImageDraw
+          p=sys.argv[1]; count=120; saved=[]
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              duration=float(c.duration)/float(av.time_base)
+              targets=[duration*i/(count+1) for i in range(1,count+1)]
+              ti=0
+              for frame in c.decode(s):
+                  if ti >= len(targets): break
+                  t=float(frame.pts*frame.time_base) if frame.pts is not None else 0.0
+                  if t >= targets[ti]:
+                      im=Image.fromarray(frame.to_ndarray(format='rgb24'))
+                      fp=f'qa_out/audit_frames/frame_{ti+1:03d}_{targets[ti]:07.2f}.jpg'
+                      im.save(fp,quality=92); saved.append(fp); ti += 1
+          assert len(saved) >= 116
+          cards=[]
+          for fp in saved:
+              im=Image.open(fp).convert('RGB'); im.thumbnail((480,270))
+              card=Image.new('RGB',(500,300),'white'); card.paste(im,((500-im.width)//2,8))
+              ImageDraw.Draw(card).text((10,280),os.path.basename(fp),fill='black'); cards.append(card)
+          cols=4; rows=math.ceil(len(cards)/cols)
+          sheet=Image.new('RGB',(cols*500,rows*300),'white')
+          for i,im in enumerate(cards): sheet.paste(im,((i%cols)*500,(i//cols)*300))
+          sheet.save('qa_out/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL_contact_sheet.jpg',quality=92)
+          print('audit_frames=',len(saved))
+          print('duration=',duration)
+          print('contact_sheet=PASS')
+          PY
+          # Fixed-time targeted frames cover the rebuilt 3D/projection middle of the lesson.
+          for T in 14 18 22 26 30 34 72 76 80 84 88 92 96 100 112 116 120 124 128 132; do
+            ffmpeg -hide_banner -loglevel error -ss "$T" -i "$VIDEO" -frames:v 1 -q:v 2 "qa_out/targeted_frames/t_${T}s.jpg" || true
+          done
+
+      - name: Publish exact validated V3 MP4 and source to GitHub
+        id: publish
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_SHA: ${{ steps.tech.outputs.sha256 }}
+          EXPECTED_SIZE: ${{ steps.tech.outputs.size }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64, hashlib, json, os, urllib.error, urllib.parse, urllib.request
+          token=os.environ['GH_TOKEN']; repo=os.environ['GITHUB_REPOSITORY']
+          parent=os.environ['GITHUB_SHA']; branch=os.environ['GITHUB_REF_NAME']
+          video_source='out/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL_FINAL_pqh.mp4'
+          source_file='out/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL.py'
+          qa_file='out/SENIOR_QA_V2_TO_V3.md'
+          video_target='published_renders/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL_FINAL_pqh.mp4'
+          source_target='render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL.py'
+          qa_target='render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/SENIOR_QA_V2_TO_V3.md'
+          expected_sha=os.environ['EXPECTED_SHA']; expected_size=int(os.environ['EXPECTED_SIZE'])
+          api=f'https://api.github.com/repos/{repo}'
+          video=open(video_source,'rb').read(); source=open(source_file,'rb').read(); qa=open(qa_file,'rb').read()
+          assert hashlib.sha256(video).hexdigest() == expected_sha
+          assert len(video) == expected_size
+          assert len(video) < 100_000_000
+          def request(method,url,payload=None):
+              data=None if payload is None else json.dumps(payload).encode()
+              req=urllib.request.Request(url,data=data,method=method)
+              req.add_header('Authorization',f'Bearer {token}')
+              req.add_header('Accept','application/vnd.github+json')
+              req.add_header('X-GitHub-Api-Version','2022-11-28')
+              if data is not None: req.add_header('Content-Type','application/json')
+              try:
+                  with urllib.request.urlopen(req,timeout=180) as r:
+                      body=r.read(); return json.loads(body) if body else {}
+              except urllib.error.HTTPError as e:
+                  print(e.read().decode(errors='replace')); raise
+          base=request('GET',f'{api}/git/commits/{parent}')
+          blobs=[]
+          for path,data in [(video_target,video),(source_target,source),(qa_target,qa)]:
+              b=request('POST',f'{api}/git/blobs',{'content':base64.b64encode(data).decode(),'encoding':'base64'})
+              blobs.append({'path':path,'mode':'100644','type':'blob','sha':b['sha']})
+          tree=request('POST',f'{api}/git/trees',{'base_tree':base['tree']['sha'],'tree':blobs})
+          commit=request('POST',f'{api}/git/commits',{
+              'message':'Publish Class 6 ISO V3 senior total PQH [skip ci]',
+              'tree':tree['sha'],'parents':[parent]
+          })
+          ref=urllib.parse.quote(branch,safe='/')
+          request('PATCH',f'{api}/git/refs/heads/{ref}',{'sha':commit['sha'],'force':False})
+          open('qa_out/PUBLISHED_COMMIT.txt','w').write(commit['sha']+'\n')
+          print('published_commit=',commit['sha'])
+          print('published_size=',len(video))
+          print('published_sha256=',expected_sha)
+          print('target=',video_target)
+          PY
+          echo "commit_sha=$(cat qa_out/PUBLISHED_COMMIT.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: Verify exact published commit and direct MP4 download
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_SHA: ${{ steps.tech.outputs.sha256 }}
+          EXPECTED_SIZE: ${{ steps.tech.outputs.size }}
+          PUBLISHED_COMMIT: ${{ steps.publish.outputs.commit_sha }}
+        run: |
+          set -euo pipefail
+          python - <<'PY' | tee qa_out/DIRECT_GITHUB_PUBLICATION.txt
+          import json, os, urllib.parse, urllib.request
+          repo=os.environ['GITHUB_REPOSITORY']; ref=os.environ['PUBLISHED_COMMIT']
+          target='published_renders/Dibujo_Tecnico_Clase6_ISO_Projection_Systems_V3_SENIOR_TOTAL_FINAL_pqh.mp4'
+          expected=int(os.environ['EXPECTED_SIZE'])
+          url=f'https://api.github.com/repos/{repo}/contents/{urllib.parse.quote(target,safe="/")}?ref={urllib.parse.quote(ref,safe="")}'
+          req=urllib.request.Request(url)
+          req.add_header('Authorization',f'Bearer {os.environ["GH_TOKEN"]}')
+          req.add_header('Accept','application/vnd.github+json')
+          req.add_header('X-GitHub-Api-Version','2022-11-28')
+          with urllib.request.urlopen(req,timeout=60) as r: obj=json.load(r)
+          print('published_ref=',ref)
+          print('path=',obj['path'])
+          print('size=',obj['size'])
+          print('download_url=',obj['download_url'])
+          assert obj['size'] == expected
+          assert obj['download_url'].endswith('.mp4')
+          open('qa_out/DIRECT_DOWNLOAD_URL.txt','w').write(obj['download_url']+'\n')
+          PY
+          URL="$(cat qa_out/DIRECT_DOWNLOAD_URL.txt)"
+          curl -fL --retry 4 --retry-delay 2 "$URL" -o qa_out/re_downloaded_exact_v3.mp4
+          test "$(stat -c%s qa_out/re_downloaded_exact_v3.mp4)" = "$EXPECTED_SIZE"
+          test "$(sha256sum qa_out/re_downloaded_exact_v3.mp4 | awk '{print $1}')" = "$EXPECTED_SHA"
+          echo "DIRECT_GITHUB_DOWNLOAD_SHA256=PASS" | tee -a qa_out/DIRECT_GITHUB_PUBLICATION.txt
+
+      - name: Upload V3 render and QA evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Dibujo-Tecnico-Clase6-ISO-Projection-Systems-V3-SENIOR-TOTAL-FINAL-PQH-20260902
+          path: |
+            out/
+            qa_out/
+          if-no-files-found: warn
+          retention-days: 14
