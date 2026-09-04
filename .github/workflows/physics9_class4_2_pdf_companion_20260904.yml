@@ -1,0 +1,82 @@
+name: Physics 9 Class 4-2 Full PDF Companion 20260904
+
+on:
+  push:
+    branches:
+      - render/physics9-position-to-velocity-graph-class4-2-20260904-v1
+    paths:
+      - 'render_jobs/physics9_position_to_velocity_graph_class4_2_20260904/pdf_source/**'
+      - '.github/workflows/physics9_class4_2_pdf_companion_20260904.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build_pdf:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: render/physics9-position-to-velocity-graph-class4-2-20260904-v1
+
+      - name: Install PDF build and QA dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq latexmk texlive-latex-recommended texlive-latex-extra texlive-pictures poppler-utils
+
+      - name: Compile exact 16:9 companion PDF
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC='render_jobs/physics9_position_to_velocity_graph_class4_2_20260904/pdf_source/Physics9_Position_to_Velocity_Graph_Class4_2_FULL_DOCUMENT.tex'
+          OUT='pdf_build'
+          mkdir -p "$OUT"
+          latexmk -pdf -interaction=nonstopmode -halt-on-error -output-directory="$OUT" "$SRC"
+          PDF="$OUT/Physics9_Position_to_Velocity_Graph_Class4_2_FULL_DOCUMENT.pdf"
+          test -s "$PDF"
+
+      - name: Strict PDF QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          PDF='pdf_build/Physics9_Position_to_Velocity_Graph_Class4_2_FULL_DOCUMENT.pdf'
+          PAGES="$(pdfinfo "$PDF" | awk '/^Pages:/ {print $2}')"
+          SIZE="$(pdfinfo "$PDF" | awk -F': +' '/^Page size:/ {print $2}')"
+          test "$PAGES" = '10'
+          mkdir -p pdf_qa/pages
+          pdftoppm -png -r 120 "$PDF" pdf_qa/pages/page >/dev/null 2>&1
+          COUNT="$(find pdf_qa/pages -type f -name 'page-*.png' | wc -l | tr -d ' ')"
+          test "$COUNT" = '10'
+          sha256sum "$PDF" > pdf_qa/PDF_SHA256SUMS.txt
+          printf 'pages=%s\npage_size=%s\nrasterized_pages=%s\n' "$PAGES" "$SIZE" "$COUNT" > pdf_qa/PDF_QA.txt
+
+      - name: Publish direct GitHub PDF delivery
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST='deliveries/physics9_position_to_velocity_graph_class4_2_20260904'
+          mkdir -p "$DEST"
+          cp pdf_build/Physics9_Position_to_Velocity_Graph_Class4_2_FULL_DOCUMENT.pdf "$DEST/"
+          cp pdf_qa/PDF_SHA256SUMS.txt pdf_qa/PDF_QA.txt "$DEST/"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$DEST/Physics9_Position_to_Velocity_Graph_Class4_2_FULL_DOCUMENT.pdf" "$DEST/PDF_SHA256SUMS.txt" "$DEST/PDF_QA.txt"
+          if ! git diff --cached --quiet; then
+            git commit -m 'docs: publish Physics 9 Class 4-2 full PDF companion'
+            git push origin HEAD:render/physics9-position-to-velocity-graph-class4-2-20260904-v1
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-Class4-2-FULL-PDF
+          path: |
+            pdf_build/Physics9_Position_to_Velocity_Graph_Class4_2_FULL_DOCUMENT.pdf
+            pdf_qa/PDF_SHA256SUMS.txt
+            pdf_qa/PDF_QA.txt
+            pdf_qa/pages/
+          if-no-files-found: error
+          retention-days: 14
