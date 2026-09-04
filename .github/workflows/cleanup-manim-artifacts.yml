@@ -1,0 +1,62 @@
+name: Cleanup ManimCE Actions Storage
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/cleanup-manim-artifacts.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '17 5 * * *'
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Delete all existing Actions artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          repo="${GITHUB_REPOSITORY}"
+          deleted=0
+          failed=0
+
+          while IFS= read -r artifact_id; do
+            [ -z "$artifact_id" ] && continue
+            if gh api --method DELETE "/repos/${repo}/actions/artifacts/${artifact_id}" >/dev/null 2>&1; then
+              deleted=$((deleted + 1))
+            else
+              failed=$((failed + 1))
+            fi
+          done < <(gh api --paginate "/repos/${repo}/actions/artifacts?per_page=100" --jq '.artifacts[].id')
+
+          echo "Deleted artifacts: ${deleted}"
+          echo "Failed artifact deletions: ${failed}"
+          echo "deleted_artifacts=${deleted}" >> "$GITHUB_STEP_SUMMARY"
+          echo "failed_artifact_deletions=${failed}" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Delete Actions caches
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh cache delete --all --repo "$GITHUB_REPOSITORY" || true
+          echo "Actions caches cleanup requested." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Cleanup policy note
+        shell: bash
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<'EOF'
+
+          ## ManimCE storage policy
+          - Repository source/protocol files are untouched.
+          - GitHub Pages repositories are untouched.
+          - Actions artifacts/caches in this ManimCE repository are disposable build outputs and are removed.
+          - This housekeeping job runs daily so Actions storage does not accumulate again.
+          EOF
