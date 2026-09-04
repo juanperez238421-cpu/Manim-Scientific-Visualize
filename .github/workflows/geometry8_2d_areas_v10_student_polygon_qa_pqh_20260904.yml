@@ -1,0 +1,219 @@
+name: Geometry 8 2D Areas V10 STUDENT POLYGON QA PQH
+
+on:
+  push:
+    branches:
+      - render/geometry8-2d-areas-v10-student-polygon-qa-20260904
+    paths:
+      - 'render_jobs/geometry8_2d_areas_masterclass_20260831/**'
+      - '.github/workflows/geometry8_2d_areas_v10_student_polygon_qa_pqh_20260904.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-v10-student-polygon-qa-pqh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Static Senior QA gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          python -m py_compile \
+            "$JOB/Geometry8_2D_Areas_Masterclass_FINAL.py" \
+            "$JOB/Geometry8_2D_Areas_Masterclass_FINAL_QA.py" \
+            "$JOB/Geometry8_2D_Areas_FigureByFigure_V3.py" \
+            "$JOB/geometry8_area_atlas_helpers_v3.py" \
+            "$JOB/geometry8_area_atlas_basic_v3.py" \
+            "$JOB/geometry8_area_atlas_quads_v3.py" \
+            "$JOB/geometry8_area_atlas_circle_polygon_v3.py" \
+            "$JOB/geometry8_area_atlas_circle_parts_v3.py" \
+            "$JOB/geometry8_area_atlas_senior_v4.py" \
+            "$JOB/geometry8_area_parallelogram_precision_v5.py" \
+            "$JOB/Geometry8_2D_Areas_FigureByFigure_V5_SENIOR.py" \
+            "$JOB/geometry8_area_explicit_steps_v6.py" \
+            "$JOB/Geometry8_2D_Areas_FigureByFigure_V6_EXPLICIT_GUIDE.py" \
+            "$JOB/geometry8_area_overlap_free_v7.py" \
+            "$JOB/Geometry8_2D_Areas_FigureByFigure_V7_OVERLAP_FREE.py" \
+            "$JOB/geometry8_area_senior_layout_v8.py" \
+            "$JOB/Geometry8_2D_Areas_FigureByFigure_V8_SENIOR_LAYOUT.py" \
+            "$JOB/geometry8_area_polygon_circle_v9.py" \
+            "$JOB/Geometry8_2D_Areas_FigureByFigure_V9_POLYGON_CIRCLE_QA.py" \
+            "$JOB/geometry8_area_polygon_v10.py" \
+            "$JOB/Geometry8_2D_Areas_FigureByFigure_V10_STUDENT_POLYGON_QA.py"
+          grep -Fq 'n = 12' "$JOB/geometry8_area_polygon_circle_v9.py"
+          grep -Fq 'COMMON PENTAGON · 5 SIDES' "$JOB/geometry8_area_polygon_v10.py"
+          grep -Fq 'FadeOut(familiar)' "$JOB/geometry8_area_polygon_v10.py"
+          grep -Fq 'roof_h_label.next_to(roof_alt, RIGHT' "$JOB/geometry8_area_polygon_v10.py"
+          grep -Fq 'REGULAR HEXAGON · APOTHEM SHORTCUT' "$JOB/geometry8_area_polygon_v10.py"
+          mkdir -p out qa_out media pql_media /tmp/manim-bin /tmp/manim-home
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+
+      - name: PQL complete timeline gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=0.05
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          cd "$JOB"
+          manim -pql Geometry8_2D_Areas_FigureByFigure_V10_STUDENT_POLYGON_QA.py \
+            Geometry8Areas2DFigureByFigureV10StudentPolygonQA \
+            --fps 15 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/pql_media" \
+            2>&1 | tee "$GITHUB_WORKSPACE/qa_out/Geometry8_2D_Areas_V10_PQL.log"
+          cd "$GITHUB_WORKSPACE"
+          PQL="$(find pql_media -type f -name 'Geometry8Areas2DFigureByFigureV10StudentPolygonQA.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+
+      - name: PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=1.0
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          cd "$JOB"
+          manim -pqh Geometry8_2D_Areas_FigureByFigure_V10_STUDENT_POLYGON_QA.py \
+            Geometry8Areas2DFigureByFigureV10StudentPolygonQA \
+            --fps 30 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/media" \
+            2>&1 | tee "$GITHUB_WORKSPACE/out/Geometry8_2D_Areas_V10_PQH.log"
+          cd "$GITHUB_WORKSPACE"
+          VIDEO="$(find media -type f -name 'Geometry8Areas2DFigureByFigureV10StudentPolygonQA.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$VIDEO" && test -s "$VIDEO"
+          cp "$VIDEO" out/Geometry8_2D_Areas_FigureByFigure_V10_STUDENT_POLYGON_QA_FINAL_pqh.mp4
+
+      - name: Full-frame decode and technical QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Geometry8_2D_Areas_FigureByFigure_V10_STUDENT_POLYGON_QA_FINAL_pqh.mp4
+          python - "$VIDEO" <<'PY' | tee qa_out/VIDEO_TECHNICAL_QA.txt
+          import av, os, sys
+          p=sys.argv[1]
+          frames=0
+          first_pts=None
+          last_pts=None
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              codec=s.codec_context.name
+              width=s.codec_context.width
+              height=s.codec_context.height
+              fmt=s.codec_context.format.name if s.codec_context.format else ''
+              fps=float(s.average_rate) if s.average_rate else 0.0
+              duration=float(c.duration)/float(av.time_base) if c.duration else 0.0
+              for frame in c.decode(s):
+                  frames += 1
+                  if first_pts is None:
+                      first_pts=frame.pts
+                  last_pts=frame.pts
+          size=os.path.getsize(p)
+          print(f'codec_name={codec}')
+          print(f'width={width}')
+          print(f'height={height}')
+          print(f'pix_fmt={fmt}')
+          print(f'average_fps={fps:.6f}')
+          print(f'duration={duration:.6f}')
+          print(f'frames_decoded={frames}')
+          print(f'first_pts={first_pts}')
+          print(f'last_pts={last_pts}')
+          print(f'size={size}')
+          assert codec == 'h264'
+          assert width == 1920 and height == 1080
+          assert fmt == 'yuv420p'
+          assert 29.5 <= fps <= 30.5
+          assert duration > 200
+          assert frames > 6000
+          assert first_pts is not None and last_pts is not None
+          assert size > 1_000_000
+          print('FULL_FRAME_DECODE=PASS')
+          PY
+          sha256sum "$VIDEO" | tee qa_out/SHA256SUMS.txt
+
+      - name: Distributed and targeted visual audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Geometry8_2D_Areas_FigureByFigure_V10_STUDENT_POLYGON_QA_FINAL_pqh.mp4
+          mkdir -p qa_out/audit_frames qa_out/targeted_frames
+          python - "$VIDEO" <<'PY' | tee qa_out/VISUAL_AUDIT.txt
+          import av, math, os, sys
+          from PIL import Image, ImageDraw
+          p=sys.argv[1]
+          count=156
+          saved=[]
+          targeted={149,150,151,152,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178}
+          targeted_saved=set()
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              duration=float(c.duration)/float(av.time_base)
+              targets=[duration*i/(count+1) for i in range(1,count+1)]
+              ti=0
+              for frame in c.decode(s):
+                  if frame.pts is None:
+                      continue
+                  t=float(frame.pts*frame.time_base)
+                  while ti < len(targets) and t >= targets[ti]:
+                      arr=frame.to_ndarray(format='rgb24')
+                      fp=f'qa_out/audit_frames/frame_{ti+1:03d}_{targets[ti]:07.2f}.jpg'
+                      Image.fromarray(arr).save(fp,quality=92)
+                      saved.append(fp)
+                      ti += 1
+                  sec=int(t)
+                  if sec in targeted and sec not in targeted_saved:
+                      arr=frame.to_ndarray(format='rgb24')
+                      Image.fromarray(arr).save(f'qa_out/targeted_frames/t{sec:03d}.jpg',quality=94)
+                      targeted_saved.add(sec)
+          assert len(saved) >= 150
+          assert len(targeted_saved) >= 17
+          cards=[]
+          for fp in saved:
+              im=Image.open(fp).convert('RGB'); im.thumbnail((480,270))
+              card=Image.new('RGB',(500,300),'white')
+              card.paste(im,((500-im.width)//2,8))
+              ImageDraw.Draw(card).text((10,280),os.path.basename(fp),fill='black')
+              cards.append(card)
+          cols=4
+          rows=math.ceil(len(cards)/cols)
+          sheet=Image.new('RGB',(cols*500,rows*300),'white')
+          for i,im in enumerate(cards):
+              sheet.paste(im,((i%cols)*500,(i//cols)*300))
+          sheet.save('qa_out/Geometry8_2D_Areas_V10_contact_sheet.jpg',quality=92)
+          print('audit_frames=',len(saved))
+          print('targeted_frames=',len(targeted_saved))
+          print('DISTRIBUTED_VISUAL_SAMPLE=PASS')
+          PY
+
+      - name: Package source and QA evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          cp "$JOB/Geometry8_2D_Areas_FigureByFigure_V10_STUDENT_POLYGON_QA.py" out/
+          cp "$JOB/geometry8_area_polygon_v10.py" out/
+          cp "$JOB/Geometry8_2D_Areas_FigureByFigure_V9_POLYGON_CIRCLE_QA.py" out/
+          cp "$JOB/geometry8_area_polygon_circle_v9.py" out/
+
+      - name: Upload V10 final package
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Geometry8-2D-Areas-V10-STUDENT-POLYGON-QA-FINAL-PQH-20260904
+          path: |
+            out/
+            qa_out/
+          if-no-files-found: error
+          retention-days: 14
