@@ -20,27 +20,31 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Delete all existing Actions artifacts
+      - name: Delete all existing Actions artifacts in parallel
         shell: bash
         run: |
           set -euo pipefail
           repo="${GITHUB_REPOSITORY}"
-          deleted=0
-          failed=0
+          ids_file="$(mktemp)"
 
-          while IFS= read -r artifact_id; do
-            [ -z "$artifact_id" ] && continue
-            if gh api --method DELETE "/repos/${repo}/actions/artifacts/${artifact_id}" >/dev/null 2>&1; then
-              deleted=$((deleted + 1))
-            else
-              failed=$((failed + 1))
-            fi
-          done < <(gh api --paginate "/repos/${repo}/actions/artifacts?per_page=100" --jq '.artifacts[].id')
+          gh api --paginate "/repos/${repo}/actions/artifacts?per_page=100" --jq '.artifacts[].id' > "$ids_file"
+          total="$(wc -l < "$ids_file" | tr -d ' ')"
+          echo "Artifacts found: ${total}"
 
+          if [ "$total" -gt 0 ]; then
+            export repo GH_TOKEN
+            cat "$ids_file" | xargs -r -n1 -P16 bash -c '
+              id="$1"
+              gh api --method DELETE "/repos/${repo}/actions/artifacts/${id}" >/dev/null 2>&1 || true
+            ' _
+          fi
+
+          remaining="$(gh api --paginate "/repos/${repo}/actions/artifacts?per_page=100" --jq '.artifacts[].id' | wc -l | tr -d ' ')"
+          deleted=$(( total - remaining ))
           echo "Deleted artifacts: ${deleted}"
-          echo "Failed artifact deletions: ${failed}"
+          echo "Remaining artifacts: ${remaining}"
           echo "deleted_artifacts=${deleted}" >> "$GITHUB_STEP_SUMMARY"
-          echo "failed_artifact_deletions=${failed}" >> "$GITHUB_STEP_SUMMARY"
+          echo "remaining_artifacts=${remaining}" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Delete Actions caches
         shell: bash
