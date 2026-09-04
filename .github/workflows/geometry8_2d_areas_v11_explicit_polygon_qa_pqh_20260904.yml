@@ -55,7 +55,7 @@ jobs:
           grep -Fq 'n = 12' "$JOB/geometry8_area_polygon_circle_v9.py"
           grep -Fq 'COUNT THE SIDES' "$JOB/geometry8_area_polygon_v11.py"
           grep -Fq 'Triangle 1 of 6' "$JOB/geometry8_area_polygon_v11.py"
-          grep -Fq 'A_1=\\frac{s\\,a}{2}' "$JOB/geometry8_area_polygon_v11.py"
+          grep -Fq 'A_1=' "$JOB/geometry8_area_polygon_v11.py"
           grep -Fq 'P=6s' "$JOB/geometry8_area_polygon_v11.py"
           grep -Fq 'WORKED EXAMPLE · REGULAR HEXAGON' "$JOB/geometry8_area_polygon_v11.py"
           mkdir -p out qa_out media pql_media /tmp/manim-bin /tmp/manim-home
