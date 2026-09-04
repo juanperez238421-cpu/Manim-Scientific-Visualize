@@ -76,17 +76,16 @@ class Geometry8AreaPolygonV10Mixin:
             28,
         )
 
-        # The roof height stays on the central perpendicular altitude. Its
-        # numeric label is offset to the right while TRIANGLE is placed left,
-        # so the two annotations cannot intersect.
+        # Keep the numeric height beside the central altitude. The triangle
+        # name is placed above the roof, so no annotation shares the same zone.
         roof_h_label = self.eq("3\,\mathrm{cm}", 27)
-        roof_h_label.next_to(roof_alt, RIGHT, buff=.12)
-        roof_h_label.shift(UP * .10)
+        roof_h_label.next_to(roof_alt, RIGHT, buff=.15)
+        roof_h_label.shift(DOWN * .06)
 
         rect_label = self.txt("RECTANGLE", 21, True).set_opacity(.66)
         rect_label.move_to([-4.15, -.58, 0])
-        tri_label = self.txt("TRIANGLE", 21, True).set_opacity(.66)
-        tri_label.move_to([-4.92, .88, 0])
+        tri_label = self.txt("TRIANGLE", 20, True).set_opacity(.72)
+        tri_label.next_to(D, UP, buff=.10)
 
         self.play(
             Create(split),
@@ -191,6 +190,11 @@ class Geometry8AreaPolygonV10Mixin:
             FadeIn(one),
             run_time=.86,
         )
+        self.wait(.35)
+
+        # Clear the shortcut heading before the derivation panel occupies the
+        # same right-side teaching zone.
+        self.play(FadeOut(shortcut), run_time=.25)
 
         deriv = self._derivation_panel(
             [
@@ -210,7 +214,7 @@ class Geometry8AreaPolygonV10Mixin:
         self.wait(.90)
 
         self.mark_stage(strip, 3)
-        self.play(FadeOut(deriv), FadeOut(one), FadeOut(shortcut), run_time=.34)
+        self.play(FadeOut(deriv), FadeOut(one), run_time=.34)
         ex = self.example_stack(
             "Given: P = 30 cm, a = 4 cm",
             r"A=\frac{P\,a}{2}",
