@@ -5,6 +5,13 @@
 Full-total lesson based on V11. All validated V11 chapters are preserved.
 Only the regular-polygon derivation panel is replaced by the V12 fixed-zone,
 runtime-guarded overlap-free layout.
+
+V12.1 runtime fix:
+The first GitHub PQL gate correctly detected that the heading
+"AREA OF ONE TRIANGLE" consumed the protected horizontal gutter between the
+isolated triangle and the upper-right formula zone.  Keep the geometric QA
+assertion intact and cap only that heading's rendered width.  This preserves
+readability while guaranteeing a real visual gutter instead of weakening QA.
 """
 from __future__ import annotations
 
@@ -17,6 +24,21 @@ class Geometry8Areas2DFigureByFigureV12PolygonDerivationQA(
     Geometry8Areas2DFigureByFigureV11ExplicitPolygonQA,
 ):
     """Complete V11 curriculum with the corrected V12 polygon derivation."""
+
+    def txt(self, s, size=34, bold=False):
+        """Preserve the classroom style while enforcing the V12 derivation gutter.
+
+        The geometry panel places the extracted triangle at x≈2.1 and the
+        one-triangle formula at x≈4.7.  The long heading is the only object that
+        exceeded its lane in the first V12 runtime QA.  Limiting its width to
+        2.80 scene units keeps the font visually large and leaves >0.16 units of
+        protected whitespace before the formula lane, as required by the
+        unchanged bounding-box assertion in geometry8_area_polygon_v12.py.
+        """
+        mob = super().txt(s, size, bold)
+        if s == "AREA OF ONE TRIANGLE" and size == 18 and mob.width > 2.80:
+            mob.scale_to_fit_width(2.80)
+        return mob
 
     def construct(self):
         super().construct()
