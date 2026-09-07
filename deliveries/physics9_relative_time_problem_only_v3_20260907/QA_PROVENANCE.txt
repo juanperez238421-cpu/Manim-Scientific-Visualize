@@ -1,0 +1,7 @@
+Physics 9 Relative Time Problem Only V3
+Source: physics9_simple_relative_time_v3_problem_only.py
+Render: literal manim -pqh, ManimCE 0.20.1
+Previous exact-source full QA run: 34126790805
+That run passed: source contract, PQL gate, PQH render, 1920x1080/30fps H.264/yuv420p technical checks, full decode, every-frame scan, and distributed contact sheet.
+The previous run failed only at the final git push because the branch advanced concurrently after QA completed.
+This publish retry renders the same unchanged source with the same pinned ManimCE version and literal PQH command.
