@@ -1,0 +1,202 @@
+name: Physics 9 Relative Time Problem Only V3 FINAL PQH 20260907
+
+on:
+  push:
+    branches:
+      - render/physics9-relative-time-problem-only-v3-20260907
+    paths:
+      - 'render_jobs/physics9_simple_relative_time_v1_20260907/physics9_simple_relative_time_v3_problem_only.py'
+      - '.github/workflows/physics9_relative_time_problem_only_v3_pqh_20260907.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: render/physics9-relative-time-problem-only-v3-20260907
+
+      - name: Validate problem-only lesson contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_simple_relative_time_v1_20260907
+          SRC="$JOB/physics9_simple_relative_time_v3_problem_only.py"
+          python -m py_compile "$SRC"
+          grep -q 'class Physics9RelativeTimeProblemOnlyV3' "$SRC"
+          grep -q 'Ana sees the light travel a total distance of 6 m.' "$SRC"
+          grep -q 'Carlos, standing on the road, sees the same light pulse travel 10 m in total.' "$SRC"
+          grep -q 'Find the travel time measured by Ana and by Carlos.' "$SRC"
+          grep -q 'STOP HERE' "$SRC"
+          grep -q 't=\\frac{d}{v}' "$SRC"
+          if grep -Eq '33\.3|20\.?0?\s*ns|Lorentz|gamma|GAMMA|sqrt\(1|time dilation formula|ThreeDScene|ThreeDAxes|set_camera_orientation' "$SRC"; then
+            echo 'FAIL: solution or advanced relativity content detected.'; exit 1
+          fi
+
+      - name: Prepare ManimCE 0.20.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg zip imagemagick
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL runtime gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_simple_relative_time_v1_20260907
+          rm -rf media_v3_pql qa_v3
+          mkdir -p qa_v3
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.06 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql physics9_simple_relative_time_v3_problem_only.py Physics9RelativeTimeProblemOnlyV3 \
+                --format=mp4 --media_dir=/manim/media_v3_pql --disable_caching
+            ' 2>&1 | tee qa_v3/render_pql.log
+          PQL="$(find media_v3_pql -type f -name 'Physics9RelativeTimeProblemOnlyV3.mp4' -print -quit)"
+          test -n "$PQL" && test -s "$PQL"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_simple_relative_time_v1_20260907
+          rm -rf media_v3_pqh final_v3 package_v3
+          mkdir -p final_v3
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh physics9_simple_relative_time_v3_problem_only.py Physics9RelativeTimeProblemOnlyV3 \
+                --format=mp4 --media_dir=/manim/media_v3_pqh --disable_caching
+            ' 2>&1 | tee final_v3/render_pqh.log
+          FINAL="$(find media_v3_pqh -type f -name 'Physics9RelativeTimeProblemOnlyV3.mp4' -print -quit)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" final_v3/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4
+
+      - name: Technical QA and full decode
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_v3/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          FRAMES="$(ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tframes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$FRAMES" > final_v3/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920; test "$H" = 1080; test "$FPS" = 30/1; test "$CODEC" = h264; test "$PIX" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> final_v3/full_decode.log
+          test ! -s final_v3/full_decode.log
+          sha256sum "$F" > final_v3/SHA256SUMS.txt
+
+      - name: Every-frame automated scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_v3/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4
+          ffmpeg -nostdin -v error -i "$F" -vf scale=320:180 -pix_fmt gray -f rawvideo final_v3/all_frames_gray.raw
+          python - <<'PY'
+          from pathlib import Path
+          import csv
+          W,H=320,180; B=W*H
+          raw=Path('final_v3/all_frames_gray.raw').read_bytes(); assert len(raw)%B==0
+          n=len(raw)//B; blank=sparse=border_heavy=0; rows=[]
+          border_idx=[y*W+x for y in range(H) for x in range(W) if x<6 or x>=W-6 or y<6 or y>=H-6]
+          for i in range(n):
+              fr=raw[i*B:(i+1)*B]
+              dark_n=sum(p<245 for p in fr); frac=dark_n/B
+              if dark_n==0: blank+=1
+              if frac<0.0035: sparse+=1
+              border=sum(fr[j]<235 for j in border_idx)
+              border_frac=border/max(dark_n,1)
+              if border_frac>0.22 and dark_n>200: border_heavy+=1
+              rows.append((i,frac,border_frac))
+          with open('final_v3/FRAME_BY_FRAME_SCAN.csv','w',newline='') as f:
+              w=csv.writer(f); w.writerow(['frame','dark_fraction','border_dark_fraction']); w.writerows(rows)
+          Path('final_v3/FRAME_SCAN_SUMMARY.txt').write_text(
+              f'frames_scanned={n}\nblank_frames={blank}\nvery_sparse_frames={sparse}\nborder_heavy_frames={border_heavy}\n')
+          assert blank < n*0.15
+          assert sparse < n*0.25
+          assert border_heavy < n*0.03
+          PY
+          rm final_v3/all_frames_gray.raw
+
+      - name: Distributed visual contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_v3/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          mkdir -p final_v3/audit_frames
+          for INDEX in $(seq -w 0 23); do
+            T="$(python -c "print(float('$DUR')*(int('$INDEX')+0.5)/24.0)")"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "final_v3/audit_frames/frame_${INDEX}.png"
+          done
+          montage final_v3/audit_frames/*.png -thumbnail 480x270 -tile 4x6 -geometry +10+20 -background white -quality 90 final_v3/CONTACT_SHEET.jpg
+          test -s final_v3/CONTACT_SHEET.jpg
+
+      - name: Publish final V3 delivery
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST=deliveries/physics9_relative_time_problem_only_v3_20260907
+          mkdir -p "$DEST"
+          cp final_v3/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4 "$DEST/"
+          cp final_v3/VIDEO_TECHNICAL.tsv final_v3/SHA256SUMS.txt final_v3/FRAME_SCAN_SUMMARY.txt final_v3/CONTACT_SHEET.jpg "$DEST/"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DEST"
+          if ! git diff --cached --quiet; then
+            git commit -m "render: publish Physics 9 problem-only relative-time V3"
+            git push origin HEAD:render/physics9-relative-time-problem-only-v3-20260907
+          fi
+
+      - name: Build reproducible V3 project ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_simple_relative_time_v1_20260907
+          ROOT=package_v3/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_PQH_PROJECT
+          mkdir -p "$ROOT/src" "$ROOT/qa/audit_frames" "$ROOT/workflow"
+          cp "$JOB/physics9_simple_relative_time_v1.py" "$ROOT/src/"
+          cp "$JOB/physics9_simple_relative_time_v3_problem_only.py" "$ROOT/src/"
+          cp final_v3/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4 "$ROOT/"
+          cp final_v3/VIDEO_TECHNICAL.tsv final_v3/SHA256SUMS.txt final_v3/full_decode.log final_v3/render_pqh.log final_v3/CONTACT_SHEET.jpg final_v3/FRAME_SCAN_SUMMARY.txt final_v3/FRAME_BY_FRAME_SCAN.csv "$ROOT/qa/"
+          cp final_v3/audit_frames/*.png "$ROOT/qa/audit_frames/"
+          cp .github/workflows/physics9_relative_time_problem_only_v3_pqh_20260907.yml "$ROOT/workflow/"
+          (cd package_v3 && zip -qr Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_PQH_PROJECT.zip Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_PQH_PROJECT)
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-Relative-Time-Problem-Only-V3-SENIOR-FINAL-PQH
+          path: |
+            package_v3/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_PQH_PROJECT.zip
+            final_v3/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4
+            final_v3/VIDEO_TECHNICAL.tsv
+            final_v3/SHA256SUMS.txt
+            final_v3/FRAME_SCAN_SUMMARY.txt
+            final_v3/FRAME_BY_FRAME_SCAN.csv
+            final_v3/CONTACT_SHEET.jpg
+            final_v3/audit_frames/
+          if-no-files-found: error
+          retention-days: 14
