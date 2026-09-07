@@ -1,0 +1,6 @@
+Noveno B fixed seating by official list order
+ManimCE 0.20.1
+Literal PQL then literal PQH
+1920x1080 30 fps H.264 yuv420p
+PDF built from real final MP4 frames
+PC01 1-3; PC02 4-6; PC03 7-9; PC04 10-12; PC05 13-15; PC06 16-18; PC07 BLOCKED; PC08/PC09 unassigned
