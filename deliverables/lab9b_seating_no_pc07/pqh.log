@@ -1,0 +1,593 @@
+Manim Community v0.20.1
+
+[09/07/26 13:17:29] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 0: FadeIn(Text('NOVENO B · ASIGNACIÓN DE SILLAS')):   0%|          | 0/33 [00:00<?, ?it/s]Animation 0: FadeIn(Text('NOVENO B · ASIGNACIÓN DE SILLAS')):  24%|██▍       | 8/33 [00:00<00:00, 74.91it/s]Animation 0: FadeIn(Text('NOVENO B · ASIGNACIÓN DE SILLAS')):  52%|█████▏    | 17/33 [00:00<00:00, 82.13it/s]Animation 0: FadeIn(Text('NOVENO B · ASIGNACIÓN DE SILLAS')):  85%|████████▍ | 28/33 [00:00<00:00, 90.85it/s]                                                                                                                                 INFO     Animation 0 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00000.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 1: FadeIn(Text('Laboratorio · orden oficial de lista')), etc.:   0%|          | 0/25 [00:00<?, ?it/s]Animation 1: FadeIn(Text('Laboratorio · orden oficial de lista')), etc.:  40%|████      | 10/25 [00:00<00:00, 93.81it/s]Animation 1: FadeIn(Text('Laboratorio · orden oficial de lista')), etc.:  80%|████████  | 20/25 [00:00<00:00, 96.56it/s]                                                                                                                        [09/07/26 13:17:30] INFO     Animation 1 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00001.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 2: FadeIn(Text('MESA 7: SIN ESTUDIANTES')), etc.:   0%|          | 0/25 [00:00<?, ?it/s]Animation 2: FadeIn(Text('MESA 7: SIN ESTUDIANTES')), etc.:  32%|███▏      | 8/25 [00:00<00:00, 70.08it/s]Animation 2: FadeIn(Text('MESA 7: SIN ESTUDIANTES')), etc.:  64%|██████▍   | 16/25 [00:00<00:00, 70.59it/s]Animation 2: FadeIn(Text('MESA 7: SIN ESTUDIANTES')), etc.:  96%|█████████▌| 24/25 [00:00<00:00, 70.03it/s]                                                                                                           [09/07/26 13:17:31] INFO     Animation 2 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00002.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 3 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00003.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 4: FadeOut(Text('NOVENO B · ASIGNACIÓN DE SILLAS')), etc.:   0%|          | 0/25 [00:00<?, ?it/s]Animation 4: FadeOut(Text('NOVENO B · ASIGNACIÓN DE SILLAS')), etc.:  16%|█▌        | 4/25 [00:00<00:00, 35.64it/s]Animation 4: FadeOut(Text('NOVENO B · ASIGNACIÓN DE SILLAS')), etc.:  32%|███▏      | 8/25 [00:00<00:00, 35.27it/s]Animation 4: FadeOut(Text('NOVENO B · ASIGNACIÓN DE SILLAS')), etc.:  48%|████▊     | 12/25 [00:00<00:00, 35.35it/s]Animation 4: FadeOut(Text('NOVENO B · ASIGNACIÓN DE SILLAS')), etc.:  64%|██████▍   | 16/25 [00:00<00:00, 35.47it/s]Animation 4: FadeOut(Text('NOVENO B · ASIGNACIÓN DE SILLAS')), etc.:  80%|████████  | 20/25 [00:00<00:00, 35.68it/s]Animation 4: FadeOut(Text('NOVENO B · ASIGNACIÓN DE SILLAS')), etc.:  96%|█████████▌| 24/25 [00:00<00:00, 35.74it/s]                                                                                                                    [09/07/26 13:17:32] INFO     Animation 4 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00004.mp                         
+                             4'                                                 
+[09/07/26 13:17:33] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 5: FadeIn(VGroup of 2 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 5: FadeIn(VGroup of 2 submobjects):  20%|██        | 5/25 [00:00<00:00, 41.36it/s]Animation 5: FadeIn(VGroup of 2 submobjects):  40%|████      | 10/25 [00:00<00:00, 40.30it/s]Animation 5: FadeIn(VGroup of 2 submobjects):  60%|██████    | 15/25 [00:00<00:00, 39.83it/s]Animation 5: FadeIn(VGroup of 2 submobjects):  76%|███████▌  | 19/25 [00:00<00:00, 39.82it/s]Animation 5: FadeIn(VGroup of 2 submobjects):  92%|█████████▏| 23/25 [00:00<00:00, 39.81it/s]                                                                                             [09/07/26 13:17:34] INFO     Animation 5 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00005.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 6: FadeIn(VGroup of 2 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 6: FadeIn(VGroup of 2 submobjects):  12%|█▏        | 3/25 [00:00<00:00, 27.00it/s]Animation 6: FadeIn(VGroup of 2 submobjects):  24%|██▍       | 6/25 [00:00<00:00, 25.61it/s]Animation 6: FadeIn(VGroup of 2 submobjects):  36%|███▌      | 9/25 [00:00<00:00, 25.22it/s]Animation 6: FadeIn(VGroup of 2 submobjects):  48%|████▊     | 12/25 [00:00<00:00, 25.08it/s]Animation 6: FadeIn(VGroup of 2 submobjects):  60%|██████    | 15/25 [00:00<00:00, 25.13it/s]Animation 6: FadeIn(VGroup of 2 submobjects):  72%|███████▏  | 18/25 [00:00<00:00, 25.15it/s]Animation 6: FadeIn(VGroup of 2 submobjects):  84%|████████▍ | 21/25 [00:00<00:00, 25.16it/s]Animation 6: FadeIn(VGroup of 2 submobjects):  96%|█████████▌| 24/25 [00:00<00:00, 24.73it/s]                                                                                             [09/07/26 13:17:36] INFO     Animation 6 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00006.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 7 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00007.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 8: FadeIn(VGroup of 2 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 8: FadeIn(VGroup of 2 submobjects):  20%|██        | 5/25 [00:00<00:00, 39.95it/s]Animation 8: FadeIn(VGroup of 2 submobjects):  36%|███▌      | 9/25 [00:00<00:00, 39.00it/s]Animation 8: FadeIn(VGroup of 2 submobjects):  52%|█████▏    | 13/25 [00:00<00:00, 38.67it/s]Animation 8: FadeIn(VGroup of 2 submobjects):  68%|██████▊   | 17/25 [00:00<00:00, 38.61it/s]Animation 8: FadeIn(VGroup of 2 submobjects):  84%|████████▍ | 21/25 [00:00<00:00, 38.32it/s]Animation 8: FadeIn(VGroup of 2 submobjects): 100%|██████████| 25/25 [00:00<00:00, 38.57it/s]                                                                                             [09/07/26 13:17:37] INFO     Animation 8 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00008.mp                         
+                             4'                                                 
+[09/07/26 13:17:38] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 9 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00009.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 10: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/25 [00:00<?, ?it/s]Animation 10: FadeOut(VGroup of 2 submobjects), etc.:   8%|▊         | 2/25 [00:00<00:01, 12.10it/s]Animation 10: FadeOut(VGroup of 2 submobjects), etc.:  16%|█▌        | 4/25 [00:00<00:01, 11.87it/s]Animation 10: FadeOut(VGroup of 2 submobjects), etc.:  24%|██▍       | 6/25 [00:00<00:01, 11.85it/s]Animation 10: FadeOut(VGroup of 2 submobjects), etc.:  32%|███▏      | 8/25 [00:00<00:01, 11.69it/s]Animation 10: FadeOut(VGroup of 2 submobjects), etc.:  40%|████      | 10/25 [00:00<00:01, 11.74it/s]Animation 10: FadeOut(VGroup of 2 submobjects), etc.:  48%|████▊     | 12/25 [00:01<00:01, 11.72it/s]Animation 10: FadeOut(VGroup of 2 submobjects), etc.:  56%|█████▌    | 14/25 [00:01<00:00, 11.71it/s]Animation 10: FadeOut(VGroup of 2 submobjects), etc.:  64%|██████▍   | 16/25 [00:01<00:00, 11.69it/s]Animation 10: FadeOut(VGroup of 2 submobjects), etc.:  72%|███████▏  | 18/25 [00:01<00:00, 11.69it/s]Animation 10: FadeOut(VGroup of 2 submobjects), etc.:  80%|████████  | 20/25 [00:01<00:00, 11.69it/s]Animation 10: FadeOut(VGroup of 2 submobjects), etc.:  88%|████████▊ | 22/25 [00:01<00:00, 11.68it/s]Animation 10: FadeOut(VGroup of 2 submobjects), etc.:  96%|█████████▌| 24/25 [00:02<00:00, 11.69it/s]                                                                                                     [09/07/26 13:17:42] INFO     Animation 10 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00010.mp                         
+                             4'                                                 
+[09/07/26 13:17:43] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 11: FadeIn(VGroup of 2 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 11: FadeIn(VGroup of 2 submobjects):  16%|█▌        | 4/25 [00:00<00:00, 39.33it/s]Animation 11: FadeIn(VGroup of 2 submobjects):  32%|███▏      | 8/25 [00:00<00:00, 36.88it/s]Animation 11: FadeIn(VGroup of 2 submobjects):  48%|████▊     | 12/25 [00:00<00:00, 36.23it/s]Animation 11: FadeIn(VGroup of 2 submobjects):  64%|██████▍   | 16/25 [00:00<00:00, 35.89it/s]Animation 11: FadeIn(VGroup of 2 submobjects):  80%|████████  | 20/25 [00:00<00:00, 36.05it/s]Animation 11: FadeIn(VGroup of 2 submobjects): 100%|██████████| 25/25 [00:00<00:00, 37.67it/s]                                                                                              [09/07/26 13:17:44] INFO     Animation 11 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00011.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 12: FadeIn(VGroup of 3 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 12: FadeIn(VGroup of 3 submobjects):  12%|█▏        | 3/25 [00:00<00:00, 26.65it/s]Animation 12: FadeIn(VGroup of 3 submobjects):  24%|██▍       | 6/25 [00:00<00:00, 24.72it/s]Animation 12: FadeIn(VGroup of 3 submobjects):  36%|███▌      | 9/25 [00:00<00:00, 24.17it/s]Animation 12: FadeIn(VGroup of 3 submobjects):  48%|████▊     | 12/25 [00:00<00:00, 23.97it/s]Animation 12: FadeIn(VGroup of 3 submobjects):  60%|██████    | 15/25 [00:00<00:00, 23.78it/s]Animation 12: FadeIn(VGroup of 3 submobjects):  72%|███████▏  | 18/25 [00:00<00:00, 23.52it/s]Animation 12: FadeIn(VGroup of 3 submobjects):  84%|████████▍ | 21/25 [00:00<00:00, 22.85it/s]Animation 12: FadeIn(VGroup of 3 submobjects):  96%|█████████▌| 24/25 [00:01<00:00, 22.57it/s]                                                                                              [09/07/26 13:17:45] INFO     Animation 12 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00012.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 13: FadeIn(VGroup of 2 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 13: FadeIn(VGroup of 2 submobjects):  16%|█▌        | 4/25 [00:00<00:00, 30.20it/s]Animation 13: FadeIn(VGroup of 2 submobjects):  32%|███▏      | 8/25 [00:00<00:00, 28.32it/s]Animation 13: FadeIn(VGroup of 2 submobjects):  44%|████▍     | 11/25 [00:00<00:00, 27.95it/s]Animation 13: FadeIn(VGroup of 2 submobjects):  56%|█████▌    | 14/25 [00:00<00:00, 27.68it/s]Animation 13: FadeIn(VGroup of 2 submobjects):  68%|██████▊   | 17/25 [00:00<00:00, 27.49it/s]Animation 13: FadeIn(VGroup of 2 submobjects):  80%|████████  | 20/25 [00:00<00:00, 27.35it/s]Animation 13: FadeIn(VGroup of 2 submobjects):  92%|█████████▏| 23/25 [00:00<00:00, 27.19it/s]                                                                                              [09/07/26 13:17:47] INFO     Animation 13 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00013.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 14 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00014.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 15: Create(SurroundingRectangle), etc.:   0%|          | 0/25 [00:00<?, ?it/s]Animation 15: Create(SurroundingRectangle), etc.:  56%|█████▌    | 14/25 [00:00<00:00, 136.67it/s]                                                                                                  [09/07/26 13:17:48] INFO     Animation 15 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00015.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/07/26 13:17:49] INFO     Animation 16 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00016.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 17: FadeOut(SurroundingRectangle), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 17: FadeOut(SurroundingRectangle), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 136.09it/s]                                                                                                                       INFO     Animation 17 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00017.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 18: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/25 [00:00<?, ?it/s]Animation 18: FadeOut(VGroup of 2 submobjects), etc.:   8%|▊         | 2/25 [00:00<00:02, 10.97it/s]Animation 18: FadeOut(VGroup of 2 submobjects), etc.:  16%|█▌        | 4/25 [00:00<00:01, 10.71it/s]Animation 18: FadeOut(VGroup of 2 submobjects), etc.:  24%|██▍       | 6/25 [00:00<00:01, 10.65it/s]Animation 18: FadeOut(VGroup of 2 submobjects), etc.:  32%|███▏      | 8/25 [00:00<00:01, 10.58it/s]Animation 18: FadeOut(VGroup of 2 submobjects), etc.:  40%|████      | 10/25 [00:00<00:01, 10.59it/s]Animation 18: FadeOut(VGroup of 2 submobjects), etc.:  48%|████▊     | 12/25 [00:01<00:01, 10.56it/s]Animation 18: FadeOut(VGroup of 2 submobjects), etc.:  56%|█████▌    | 14/25 [00:01<00:01, 10.53it/s]Animation 18: FadeOut(VGroup of 2 submobjects), etc.:  64%|██████▍   | 16/25 [00:01<00:00, 10.52it/s]Animation 18: FadeOut(VGroup of 2 submobjects), etc.:  72%|███████▏  | 18/25 [00:01<00:00, 10.47it/s]Animation 18: FadeOut(VGroup of 2 submobjects), etc.:  80%|████████  | 20/25 [00:01<00:00, 10.49it/s]Animation 18: FadeOut(VGroup of 2 submobjects), etc.:  88%|████████▊ | 22/25 [00:02<00:00, 10.52it/s]Animation 18: FadeOut(VGroup of 2 submobjects), etc.:  96%|█████████▌| 24/25 [00:02<00:00, 10.53it/s]                                                                                                     [09/07/26 13:17:53] INFO     Animation 18 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00018.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 19: FadeIn(VGroup of 3 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 19: FadeIn(VGroup of 3 submobjects):  12%|█▏        | 3/25 [00:00<00:00, 25.81it/s]Animation 19: FadeIn(VGroup of 3 submobjects):  24%|██▍       | 6/25 [00:00<00:00, 23.52it/s]Animation 19: FadeIn(VGroup of 3 submobjects):  36%|███▌      | 9/25 [00:00<00:00, 22.84it/s]Animation 19: FadeIn(VGroup of 3 submobjects):  48%|████▊     | 12/25 [00:00<00:00, 22.54it/s]Animation 19: FadeIn(VGroup of 3 submobjects):  60%|██████    | 15/25 [00:00<00:00, 22.42it/s]Animation 19: FadeIn(VGroup of 3 submobjects):  72%|███████▏  | 18/25 [00:00<00:00, 22.25it/s]Animation 19: FadeIn(VGroup of 3 submobjects):  84%|████████▍ | 21/25 [00:00<00:00, 22.15it/s]Animation 19: FadeIn(VGroup of 3 submobjects):  96%|█████████▌| 24/25 [00:01<00:00, 22.14it/s]                                                                                              [09/07/26 13:17:55] INFO     Animation 19 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00019.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 20: FadeIn(VGroup of 3 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 20: FadeIn(VGroup of 3 submobjects):  20%|██        | 5/25 [00:00<00:00, 40.42it/s]Animation 20: FadeIn(VGroup of 3 submobjects):  40%|████      | 10/25 [00:00<00:00, 39.18it/s]Animation 20: FadeIn(VGroup of 3 submobjects):  56%|█████▌    | 14/25 [00:00<00:00, 39.08it/s]Animation 20: FadeIn(VGroup of 3 submobjects):  72%|███████▏  | 18/25 [00:00<00:00, 38.99it/s]Animation 20: FadeIn(VGroup of 3 submobjects):  88%|████████▊ | 22/25 [00:00<00:00, 38.82it/s]                                                                                              [09/07/26 13:17:57] INFO     Animation 20 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00020.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 21: Create(SurroundingRectangle):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                                      INFO     Animation 21 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00021.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 22: FadeIn(Text('1')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 22: FadeIn(Text('1')), etc.:  13%|█▎        | 2/15 [00:00<00:00, 19.18it/s]Animation 22: FadeIn(Text('1')), etc.:  27%|██▋       | 4/15 [00:00<00:00, 19.08it/s]Animation 22: FadeIn(Text('1')), etc.:  40%|████      | 6/15 [00:00<00:00, 19.00it/s]Animation 22: FadeIn(Text('1')), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 18.87it/s]Animation 22: FadeIn(Text('1')), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 18.87it/s]Animation 22: FadeIn(Text('1')), etc.:  80%|████████  | 12/15 [00:00<00:00, 18.93it/s]Animation 22: FadeIn(Text('1')), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 18.95it/s]                                                                                      [09/07/26 13:17:58] INFO     Animation 22 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00022.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 23: FadeIn(Text('2')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 23: FadeIn(Text('2')), etc.:  13%|█▎        | 2/15 [00:00<00:00, 19.23it/s]Animation 23: FadeIn(Text('2')), etc.:  27%|██▋       | 4/15 [00:00<00:00, 19.17it/s]Animation 23: FadeIn(Text('2')), etc.:  40%|████      | 6/15 [00:00<00:00, 19.09it/s]Animation 23: FadeIn(Text('2')), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 19.02it/s]Animation 23: FadeIn(Text('2')), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 19.01it/s]Animation 23: FadeIn(Text('2')), etc.:  80%|████████  | 12/15 [00:00<00:00, 18.66it/s]Animation 23: FadeIn(Text('2')), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 18.47it/s]                                                                                      [09/07/26 13:17:59] INFO     Animation 23 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00023.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 24: FadeIn(Text('3')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 24: FadeIn(Text('3')), etc.:  13%|█▎        | 2/15 [00:00<00:00, 19.36it/s]Animation 24: FadeIn(Text('3')), etc.:  27%|██▋       | 4/15 [00:00<00:00, 19.22it/s]Animation 24: FadeIn(Text('3')), etc.:  40%|████      | 6/15 [00:00<00:00, 19.20it/s]Animation 24: FadeIn(Text('3')), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 19.20it/s]Animation 24: FadeIn(Text('3')), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 19.14it/s]Animation 24: FadeIn(Text('3')), etc.:  80%|████████  | 12/15 [00:00<00:00, 19.14it/s]Animation 24: FadeIn(Text('3')), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 19.21it/s]                                                                                      [09/07/26 13:18:00] INFO     Animation 24 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00024.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 25 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00025.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 26: FadeOut(SurroundingRectangle):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                                       INFO     Animation 26 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00026.mp                         
+                             4'                                                 
+[09/07/26 13:18:01] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 27: ReplacementTransform(VGroup of 3 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 27: ReplacementTransform(VGroup of 3 submobjects):   8%|▊         | 2/25 [00:00<00:01, 14.24it/s]Animation 27: ReplacementTransform(VGroup of 3 submobjects):  16%|█▌        | 4/25 [00:00<00:01, 14.03it/s]Animation 27: ReplacementTransform(VGroup of 3 submobjects):  24%|██▍       | 6/25 [00:00<00:01, 14.02it/s]Animation 27: ReplacementTransform(VGroup of 3 submobjects):  32%|███▏      | 8/25 [00:00<00:01, 13.98it/s]Animation 27: ReplacementTransform(VGroup of 3 submobjects):  40%|████      | 10/25 [00:00<00:01, 13.91it/s]Animation 27: ReplacementTransform(VGroup of 3 submobjects):  48%|████▊     | 12/25 [00:00<00:00, 13.91it/s]Animation 27: ReplacementTransform(VGroup of 3 submobjects):  56%|█████▌    | 14/25 [00:01<00:00, 13.84it/s]Animation 27: ReplacementTransform(VGroup of 3 submobjects):  64%|██████▍   | 16/25 [00:01<00:00, 13.81it/s]Animation 27: ReplacementTransform(VGroup of 3 submobjects):  72%|███████▏  | 18/25 [00:01<00:00, 13.81it/s]Animation 27: ReplacementTransform(VGroup of 3 submobjects):  80%|████████  | 20/25 [00:01<00:00, 13.87it/s]Animation 27: ReplacementTransform(VGroup of 3 submobjects):  88%|████████▊ | 22/25 [00:01<00:00, 13.94it/s]Animation 27: ReplacementTransform(VGroup of 3 submobjects):  96%|█████████▌| 24/25 [00:01<00:00, 13.97it/s]                                                                                                            [09/07/26 13:18:04] INFO     Animation 27 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00027.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 28: Create(SurroundingRectangle):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                                      INFO     Animation 28 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00028.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 29: FadeIn(Text('4')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 29: FadeIn(Text('4')), etc.:  13%|█▎        | 2/15 [00:00<00:00, 19.37it/s]Animation 29: FadeIn(Text('4')), etc.:  27%|██▋       | 4/15 [00:00<00:00, 19.21it/s]Animation 29: FadeIn(Text('4')), etc.:  40%|████      | 6/15 [00:00<00:00, 19.14it/s]Animation 29: FadeIn(Text('4')), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 19.13it/s]Animation 29: FadeIn(Text('4')), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 19.06it/s]Animation 29: FadeIn(Text('4')), etc.:  80%|████████  | 12/15 [00:00<00:00, 18.72it/s]Animation 29: FadeIn(Text('4')), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 18.48it/s]                                                                                      [09/07/26 13:18:05] INFO     Animation 29 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00029.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 30: FadeIn(Text('5')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 30: FadeIn(Text('5')), etc.:  13%|█▎        | 2/15 [00:00<00:00, 19.12it/s]Animation 30: FadeIn(Text('5')), etc.:  27%|██▋       | 4/15 [00:00<00:00, 18.81it/s]Animation 30: FadeIn(Text('5')), etc.:  40%|████      | 6/15 [00:00<00:00, 18.83it/s]Animation 30: FadeIn(Text('5')), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 18.58it/s]Animation 30: FadeIn(Text('5')), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 18.67it/s]Animation 30: FadeIn(Text('5')), etc.:  80%|████████  | 12/15 [00:00<00:00, 18.67it/s]Animation 30: FadeIn(Text('5')), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 18.71it/s]                                                                                      [09/07/26 13:18:06] INFO     Animation 30 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00030.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 31: FadeIn(Text('6')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 31: FadeIn(Text('6')), etc.:  13%|█▎        | 2/15 [00:00<00:00, 19.33it/s]Animation 31: FadeIn(Text('6')), etc.:  27%|██▋       | 4/15 [00:00<00:00, 19.20it/s]Animation 31: FadeIn(Text('6')), etc.:  40%|████      | 6/15 [00:00<00:00, 18.94it/s]Animation 31: FadeIn(Text('6')), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 17.59it/s]Animation 31: FadeIn(Text('6')), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 17.64it/s]Animation 31: FadeIn(Text('6')), etc.:  80%|████████  | 12/15 [00:00<00:00, 17.78it/s]Animation 31: FadeIn(Text('6')), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 17.84it/s]                                                                                      [09/07/26 13:18:07] INFO     Animation 31 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00031.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 32 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00032.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 33: FadeOut(SurroundingRectangle):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                   [09/07/26 13:18:08] INFO     Animation 33 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00033.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 34: ReplacementTransform(VGroup of 3 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 34: ReplacementTransform(VGroup of 3 submobjects):  16%|█▌        | 4/25 [00:00<00:00, 31.76it/s]Animation 34: ReplacementTransform(VGroup of 3 submobjects):  32%|███▏      | 8/25 [00:00<00:00, 31.78it/s]Animation 34: ReplacementTransform(VGroup of 3 submobjects):  48%|████▊     | 12/25 [00:00<00:00, 31.53it/s]Animation 34: ReplacementTransform(VGroup of 3 submobjects):  64%|██████▍   | 16/25 [00:00<00:00, 31.29it/s]Animation 34: ReplacementTransform(VGroup of 3 submobjects):  80%|████████  | 20/25 [00:00<00:00, 31.27it/s]Animation 34: ReplacementTransform(VGroup of 3 submobjects):  96%|█████████▌| 24/25 [00:00<00:00, 31.27it/s]                                                                                                            [09/07/26 13:18:09] INFO     Animation 34 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00034.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 35: Create(SurroundingRectangle):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                  [09/07/26 13:18:10] INFO     Animation 35 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00035.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 36: FadeIn(Text('7')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 36: FadeIn(Text('7')), etc.:  20%|██        | 3/15 [00:00<00:00, 20.11it/s]Animation 36: FadeIn(Text('7')), etc.:  40%|████      | 6/15 [00:00<00:00, 20.13it/s]Animation 36: FadeIn(Text('7')), etc.:  60%|██████    | 9/15 [00:00<00:00, 20.02it/s]Animation 36: FadeIn(Text('7')), etc.:  80%|████████  | 12/15 [00:00<00:00, 20.05it/s]Animation 36: FadeIn(Text('7')), etc.: 100%|██████████| 15/15 [00:00<00:00, 20.07it/s]                                                                                      [09/07/26 13:18:11] INFO     Animation 36 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00036.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 37: FadeIn(Text('8')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 37: FadeIn(Text('8')), etc.:  20%|██        | 3/15 [00:00<00:00, 20.23it/s]Animation 37: FadeIn(Text('8')), etc.:  40%|████      | 6/15 [00:00<00:00, 20.10it/s]Animation 37: FadeIn(Text('8')), etc.:  60%|██████    | 9/15 [00:00<00:00, 20.08it/s]Animation 37: FadeIn(Text('8')), etc.:  80%|████████  | 12/15 [00:00<00:00, 20.12it/s]Animation 37: FadeIn(Text('8')), etc.: 100%|██████████| 15/15 [00:00<00:00, 20.09it/s]                                                                                                          INFO     Animation 37 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00037.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 38: FadeIn(Text('9')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 38: FadeIn(Text('9')), etc.:  20%|██        | 3/15 [00:00<00:00, 20.06it/s]Animation 38: FadeIn(Text('9')), etc.:  40%|████      | 6/15 [00:00<00:00, 20.10it/s]Animation 38: FadeIn(Text('9')), etc.:  60%|██████    | 9/15 [00:00<00:00, 20.05it/s]Animation 38: FadeIn(Text('9')), etc.:  80%|████████  | 12/15 [00:00<00:00, 20.07it/s]Animation 38: FadeIn(Text('9')), etc.: 100%|██████████| 15/15 [00:00<00:00, 20.03it/s]                                                                                      [09/07/26 13:18:12] INFO     Animation 38 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00038.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/07/26 13:18:13] INFO     Animation 39 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00039.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 40: FadeOut(SurroundingRectangle):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                                       INFO     Animation 40 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00040.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 41: ReplacementTransform(VGroup of 3 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 41: ReplacementTransform(VGroup of 3 submobjects):   8%|▊         | 2/25 [00:00<00:01, 12.94it/s]Animation 41: ReplacementTransform(VGroup of 3 submobjects):  16%|█▌        | 4/25 [00:00<00:01, 12.85it/s]Animation 41: ReplacementTransform(VGroup of 3 submobjects):  24%|██▍       | 6/25 [00:00<00:01, 12.83it/s]Animation 41: ReplacementTransform(VGroup of 3 submobjects):  32%|███▏      | 8/25 [00:00<00:01, 12.80it/s]Animation 41: ReplacementTransform(VGroup of 3 submobjects):  40%|████      | 10/25 [00:00<00:01, 12.78it/s]Animation 41: ReplacementTransform(VGroup of 3 submobjects):  48%|████▊     | 12/25 [00:00<00:01, 12.76it/s]Animation 41: ReplacementTransform(VGroup of 3 submobjects):  56%|█████▌    | 14/25 [00:01<00:00, 12.77it/s]Animation 41: ReplacementTransform(VGroup of 3 submobjects):  64%|██████▍   | 16/25 [00:01<00:00, 12.79it/s]Animation 41: ReplacementTransform(VGroup of 3 submobjects):  72%|███████▏  | 18/25 [00:01<00:00, 12.80it/s]Animation 41: ReplacementTransform(VGroup of 3 submobjects):  80%|████████  | 20/25 [00:01<00:00, 12.80it/s]Animation 41: ReplacementTransform(VGroup of 3 submobjects):  88%|████████▊ | 22/25 [00:01<00:00, 12.80it/s]Animation 41: ReplacementTransform(VGroup of 3 submobjects):  96%|█████████▌| 24/25 [00:01<00:00, 12.83it/s]                                                                                                            [09/07/26 13:18:16] INFO     Animation 41 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00041.mp                         
+                             4'                                                 
+[09/07/26 13:18:17] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 42: Create(SurroundingRectangle):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                                      INFO     Animation 42 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00042.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 43: FadeIn(Text('10')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 43: FadeIn(Text('10')), etc.:  20%|██        | 3/15 [00:00<00:00, 20.24it/s]Animation 43: FadeIn(Text('10')), etc.:  40%|████      | 6/15 [00:00<00:00, 19.74it/s]Animation 43: FadeIn(Text('10')), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 19.66it/s]Animation 43: FadeIn(Text('10')), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 19.57it/s]Animation 43: FadeIn(Text('10')), etc.:  80%|████████  | 12/15 [00:00<00:00, 19.53it/s]Animation 43: FadeIn(Text('10')), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 19.46it/s]                                                                                       [09/07/26 13:18:18] INFO     Animation 43 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00043.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 44: FadeIn(Text('11')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 44: FadeIn(Text('11')), etc.:  20%|██        | 3/15 [00:00<00:00, 20.54it/s]Animation 44: FadeIn(Text('11')), etc.:  40%|████      | 6/15 [00:00<00:00, 20.47it/s]Animation 44: FadeIn(Text('11')), etc.:  60%|██████    | 9/15 [00:00<00:00, 20.39it/s]Animation 44: FadeIn(Text('11')), etc.:  80%|████████  | 12/15 [00:00<00:00, 20.35it/s]Animation 44: FadeIn(Text('11')), etc.: 100%|██████████| 15/15 [00:00<00:00, 20.41it/s]                                                                                       [09/07/26 13:18:19] INFO     Animation 44 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00044.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 45: FadeIn(Text('12')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 45: FadeIn(Text('12')), etc.:  20%|██        | 3/15 [00:00<00:00, 20.49it/s]Animation 45: FadeIn(Text('12')), etc.:  40%|████      | 6/15 [00:00<00:00, 20.46it/s]Animation 45: FadeIn(Text('12')), etc.:  60%|██████    | 9/15 [00:00<00:00, 20.39it/s]Animation 45: FadeIn(Text('12')), etc.:  80%|████████  | 12/15 [00:00<00:00, 20.31it/s]Animation 45: FadeIn(Text('12')), etc.: 100%|██████████| 15/15 [00:00<00:00, 20.36it/s]                                                                                       [09/07/26 13:18:20] INFO     Animation 45 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00045.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 46 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00046.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 47: FadeOut(SurroundingRectangle):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                                       INFO     Animation 47 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00047.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 48: ReplacementTransform(VGroup of 3 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):   4%|▍         | 1/25 [00:00<00:02,  9.27it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):   8%|▊         | 2/25 [00:00<00:02,  9.08it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  12%|█▏        | 3/25 [00:00<00:02,  9.03it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  16%|█▌        | 4/25 [00:00<00:02,  9.01it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  20%|██        | 5/25 [00:00<00:02,  8.96it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  24%|██▍       | 6/25 [00:00<00:02,  8.95it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  28%|██▊       | 7/25 [00:00<00:02,  8.92it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  32%|███▏      | 8/25 [00:00<00:01,  8.92it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  36%|███▌      | 9/25 [00:01<00:01,  8.91it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  40%|████      | 10/25 [00:01<00:01,  8.91it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  44%|████▍     | 11/25 [00:01<00:01,  8.89it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  48%|████▊     | 12/25 [00:01<00:01,  8.90it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  52%|█████▏    | 13/25 [00:01<00:01,  8.86it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  56%|█████▌    | 14/25 [00:01<00:01,  8.87it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  60%|██████    | 15/25 [00:01<00:01,  8.81it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  64%|██████▍   | 16/25 [00:01<00:01,  8.83it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  68%|██████▊   | 17/25 [00:01<00:00,  8.82it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  72%|███████▏  | 18/25 [00:02<00:00,  8.83it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  76%|███████▌  | 19/25 [00:02<00:00,  8.85it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  80%|████████  | 20/25 [00:02<00:00,  8.87it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  84%|████████▍ | 21/25 [00:02<00:00,  8.91it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  88%|████████▊ | 22/25 [00:02<00:00,  8.84it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  92%|█████████▏| 23/25 [00:02<00:00,  8.81it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects):  96%|█████████▌| 24/25 [00:02<00:00,  8.80it/s]Animation 48: ReplacementTransform(VGroup of 3 submobjects): 100%|██████████| 25/25 [00:02<00:00,  8.70it/s]                                                                                                            [09/07/26 13:18:25] INFO     Animation 48 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00048.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 49: Create(SurroundingRectangle):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                                      INFO     Animation 49 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00049.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 50: FadeIn(Text('13')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 50: FadeIn(Text('13')), etc.:  20%|██        | 3/15 [00:00<00:00, 20.82it/s]Animation 50: FadeIn(Text('13')), etc.:  40%|████      | 6/15 [00:00<00:00, 20.77it/s]Animation 50: FadeIn(Text('13')), etc.:  60%|██████    | 9/15 [00:00<00:00, 20.73it/s]Animation 50: FadeIn(Text('13')), etc.:  80%|████████  | 12/15 [00:00<00:00, 20.63it/s]Animation 50: FadeIn(Text('13')), etc.: 100%|██████████| 15/15 [00:00<00:00, 20.62it/s]                                                                                       [09/07/26 13:18:26] INFO     Animation 50 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00050.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 51: FadeIn(Text('14')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 51: FadeIn(Text('14')), etc.:  20%|██        | 3/15 [00:00<00:00, 21.17it/s]Animation 51: FadeIn(Text('14')), etc.:  40%|████      | 6/15 [00:00<00:00, 21.09it/s]Animation 51: FadeIn(Text('14')), etc.:  60%|██████    | 9/15 [00:00<00:00, 21.04it/s]Animation 51: FadeIn(Text('14')), etc.:  80%|████████  | 12/15 [00:00<00:00, 21.03it/s]Animation 51: FadeIn(Text('14')), etc.: 100%|██████████| 15/15 [00:00<00:00, 21.05it/s]                                                                                       [09/07/26 13:18:27] INFO     Animation 51 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00051.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 52: FadeIn(Text('15')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 52: FadeIn(Text('15')), etc.:  20%|██        | 3/15 [00:00<00:00, 20.93it/s]Animation 52: FadeIn(Text('15')), etc.:  40%|████      | 6/15 [00:00<00:00, 20.90it/s]Animation 52: FadeIn(Text('15')), etc.:  60%|██████    | 9/15 [00:00<00:00, 20.92it/s]Animation 52: FadeIn(Text('15')), etc.:  80%|████████  | 12/15 [00:00<00:00, 20.58it/s]Animation 52: FadeIn(Text('15')), etc.: 100%|██████████| 15/15 [00:00<00:00, 20.25it/s]                                                                                       [09/07/26 13:18:28] INFO     Animation 52 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00052.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 53 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00053.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 54: FadeOut(SurroundingRectangle):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                   [09/07/26 13:18:29] INFO     Animation 54 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00054.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 55: ReplacementTransform(VGroup of 3 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):   4%|▍         | 1/25 [00:00<00:03,  7.33it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):   8%|▊         | 2/25 [00:00<00:03,  7.21it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  12%|█▏        | 3/25 [00:00<00:03,  7.16it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  16%|█▌        | 4/25 [00:00<00:02,  7.15it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  20%|██        | 5/25 [00:00<00:02,  7.19it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  24%|██▍       | 6/25 [00:00<00:02,  7.21it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  28%|██▊       | 7/25 [00:00<00:02,  7.22it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  32%|███▏      | 8/25 [00:01<00:02,  7.22it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  36%|███▌      | 9/25 [00:01<00:02,  7.20it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  40%|████      | 10/25 [00:01<00:02,  7.20it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  44%|████▍     | 11/25 [00:01<00:01,  7.20it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  48%|████▊     | 12/25 [00:01<00:01,  7.20it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  52%|█████▏    | 13/25 [00:01<00:01,  7.20it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  56%|█████▌    | 14/25 [00:01<00:01,  7.21it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  60%|██████    | 15/25 [00:02<00:01,  7.23it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  64%|██████▍   | 16/25 [00:02<00:01,  7.24it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  68%|██████▊   | 17/25 [00:02<00:01,  7.25it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  72%|███████▏  | 18/25 [00:02<00:00,  7.26it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  76%|███████▌  | 19/25 [00:02<00:00,  7.27it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  80%|████████  | 20/25 [00:02<00:00,  7.26it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  84%|████████▍ | 21/25 [00:02<00:00,  7.25it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  88%|████████▊ | 22/25 [00:03<00:00,  7.27it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  92%|█████████▏| 23/25 [00:03<00:00,  7.28it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects):  96%|█████████▌| 24/25 [00:03<00:00,  7.27it/s]Animation 55: ReplacementTransform(VGroup of 3 submobjects): 100%|██████████| 25/25 [00:03<00:00,  7.29it/s]                                                                                                            [09/07/26 13:18:35] INFO     Animation 55 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00055.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 56: Create(SurroundingRectangle):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                                      INFO     Animation 56 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00056.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 57: FadeIn(Text('16')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 57: FadeIn(Text('16')), etc.:  20%|██        | 3/15 [00:00<00:00, 21.25it/s]Animation 57: FadeIn(Text('16')), etc.:  40%|████      | 6/15 [00:00<00:00, 21.20it/s]Animation 57: FadeIn(Text('16')), etc.:  60%|██████    | 9/15 [00:00<00:00, 20.78it/s]Animation 57: FadeIn(Text('16')), etc.:  80%|████████  | 12/15 [00:00<00:00, 20.42it/s]Animation 57: FadeIn(Text('16')), etc.: 100%|██████████| 15/15 [00:00<00:00, 20.23it/s]                                                                                       [09/07/26 13:18:36] INFO     Animation 57 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00057.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 58: FadeIn(Text('17')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 58: FadeIn(Text('17')), etc.:  20%|██        | 3/15 [00:00<00:00, 21.33it/s]Animation 58: FadeIn(Text('17')), etc.:  40%|████      | 6/15 [00:00<00:00, 21.22it/s]Animation 58: FadeIn(Text('17')), etc.:  60%|██████    | 9/15 [00:00<00:00, 20.59it/s]Animation 58: FadeIn(Text('17')), etc.:  80%|████████  | 12/15 [00:00<00:00, 20.31it/s]Animation 58: FadeIn(Text('17')), etc.: 100%|██████████| 15/15 [00:00<00:00, 20.12it/s]                                                                                       [09/07/26 13:18:37] INFO     Animation 58 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00058.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 59: FadeIn(Text('18')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 59: FadeIn(Text('18')), etc.:  20%|██        | 3/15 [00:00<00:00, 21.31it/s]Animation 59: FadeIn(Text('18')), etc.:  40%|████      | 6/15 [00:00<00:00, 21.23it/s]Animation 59: FadeIn(Text('18')), etc.:  60%|██████    | 9/15 [00:00<00:00, 20.70it/s]Animation 59: FadeIn(Text('18')), etc.:  80%|████████  | 12/15 [00:00<00:00, 20.28it/s]Animation 59: FadeIn(Text('18')), etc.: 100%|██████████| 15/15 [00:00<00:00, 20.52it/s]                                                                                       [09/07/26 13:18:38] INFO     Animation 59 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00059.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 60 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00060.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 61: FadeOut(SurroundingRectangle):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                                       INFO     Animation 61 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00061.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/07/26 13:18:39] INFO     Animation 62 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00062.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 63: FadeOut(VGroup of 3 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 63: FadeOut(VGroup of 3 submobjects):  16%|█▌        | 4/25 [00:00<00:00, 31.75it/s]Animation 63: FadeOut(VGroup of 3 submobjects):  32%|███▏      | 8/25 [00:00<00:00, 31.49it/s]Animation 63: FadeOut(VGroup of 3 submobjects):  48%|████▊     | 12/25 [00:00<00:00, 31.36it/s]Animation 63: FadeOut(VGroup of 3 submobjects):  64%|██████▍   | 16/25 [00:00<00:00, 31.38it/s]Animation 63: FadeOut(VGroup of 3 submobjects):  80%|████████  | 20/25 [00:00<00:00, 31.32it/s]Animation 63: FadeOut(VGroup of 3 submobjects):  96%|█████████▌| 24/25 [00:00<00:00, 31.22it/s]                                                                                               [09/07/26 13:18:40] INFO     Animation 63 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00063.mp                         
+                             4'                                                 
+[09/07/26 13:18:41] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 64: FadeIn(VGroup of 2 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 64: FadeIn(VGroup of 2 submobjects):  20%|██        | 5/25 [00:00<00:00, 40.68it/s]Animation 64: FadeIn(VGroup of 2 submobjects):  40%|████      | 10/25 [00:00<00:00, 39.61it/s]Animation 64: FadeIn(VGroup of 2 submobjects):  56%|█████▌    | 14/25 [00:00<00:00, 39.39it/s]Animation 64: FadeIn(VGroup of 2 submobjects):  72%|███████▏  | 18/25 [00:00<00:00, 38.93it/s]Animation 64: FadeIn(VGroup of 2 submobjects):  88%|████████▊ | 22/25 [00:00<00:00, 38.98it/s]                                                                                              [09/07/26 13:18:42] INFO     Animation 64 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00064.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 65 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00065.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 66: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/25 [00:00<?, ?it/s]Animation 66: FadeOut(VGroup of 2 submobjects), etc.:   8%|▊         | 2/25 [00:00<00:02, 11.48it/s]Animation 66: FadeOut(VGroup of 2 submobjects), etc.:  16%|█▌        | 4/25 [00:00<00:01, 11.25it/s]Animation 66: FadeOut(VGroup of 2 submobjects), etc.:  24%|██▍       | 6/25 [00:00<00:01, 11.19it/s]Animation 66: FadeOut(VGroup of 2 submobjects), etc.:  32%|███▏      | 8/25 [00:00<00:01, 11.14it/s]Animation 66: FadeOut(VGroup of 2 submobjects), etc.:  40%|████      | 10/25 [00:00<00:01, 11.13it/s]Animation 66: FadeOut(VGroup of 2 submobjects), etc.:  48%|████▊     | 12/25 [00:01<00:01, 11.14it/s]Animation 66: FadeOut(VGroup of 2 submobjects), etc.:  56%|█████▌    | 14/25 [00:01<00:00, 11.16it/s]Animation 66: FadeOut(VGroup of 2 submobjects), etc.:  64%|██████▍   | 16/25 [00:01<00:00, 11.16it/s]Animation 66: FadeOut(VGroup of 2 submobjects), etc.:  72%|███████▏  | 18/25 [00:01<00:00, 11.15it/s]Animation 66: FadeOut(VGroup of 2 submobjects), etc.:  80%|████████  | 20/25 [00:01<00:00, 11.15it/s]Animation 66: FadeOut(VGroup of 2 submobjects), etc.:  88%|████████▊ | 22/25 [00:01<00:00, 11.15it/s]Animation 66: FadeOut(VGroup of 2 submobjects), etc.:  96%|█████████▌| 24/25 [00:02<00:00, 11.03it/s]                                                                                                     [09/07/26 13:18:46] INFO     Animation 66 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00066.mp                         
+                             4'                                                 
+[09/07/26 13:18:47] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 67: FadeIn(VGroup of 2 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 67: FadeIn(VGroup of 2 submobjects):  24%|██▍       | 6/25 [00:00<00:00, 51.59it/s]Animation 67: FadeIn(VGroup of 2 submobjects):  48%|████▊     | 12/25 [00:00<00:00, 50.37it/s]Animation 67: FadeIn(VGroup of 2 submobjects):  72%|███████▏  | 18/25 [00:00<00:00, 49.98it/s]Animation 67: FadeIn(VGroup of 2 submobjects):  92%|█████████▏| 23/25 [00:00<00:00, 48.63it/s]                                                                                              [09/07/26 13:18:48] INFO     Animation 67 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00067.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 68: FadeIn(VGroup of 3 submobjects), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:   6%|▌         | 2/33 [00:00<00:01, 15.52it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  12%|█▏        | 4/33 [00:00<00:02, 14.09it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  18%|█▊        | 6/33 [00:00<00:01, 13.78it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  24%|██▍       | 8/33 [00:00<00:01, 13.60it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  30%|███       | 10/33 [00:00<00:01, 13.48it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  36%|███▋      | 12/33 [00:00<00:01, 13.43it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  42%|████▏     | 14/33 [00:01<00:01, 13.38it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  48%|████▊     | 16/33 [00:01<00:01, 13.35it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  55%|█████▍    | 18/33 [00:01<00:01, 13.40it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  61%|██████    | 20/33 [00:01<00:00, 13.44it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  67%|██████▋   | 22/33 [00:01<00:00, 13.42it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  73%|███████▎  | 24/33 [00:01<00:00, 13.43it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  79%|███████▉  | 26/33 [00:01<00:00, 13.46it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  85%|████████▍ | 28/33 [00:02<00:00, 13.48it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  91%|█████████ | 30/33 [00:02<00:00, 13.48it/s]Animation 68: FadeIn(VGroup of 3 submobjects), etc.:  97%|█████████▋| 32/33 [00:02<00:00, 13.50it/s]                                                                                                    [09/07/26 13:18:51] INFO     Animation 68 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00068.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/07/26 13:18:52] INFO     Animation 69 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00069.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 70: FadeIn(VGroup of 2 submobjects):   0%|          | 0/25 [00:00<?, ?it/s]Animation 70: FadeIn(VGroup of 2 submobjects):  28%|██▊       | 7/25 [00:00<00:00, 63.39it/s]Animation 70: FadeIn(VGroup of 2 submobjects):  56%|█████▌    | 14/25 [00:00<00:00, 62.69it/s]Animation 70: FadeIn(VGroup of 2 submobjects):  84%|████████▍ | 21/25 [00:00<00:00, 62.59it/s]                                                                                              [09/07/26 13:18:53] INFO     Animation 70 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00070.mp                         
+                             4'                                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/07/26 13:18:54] INFO     Animation 71 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/partial_m                         
+                             ovie_files/Lab9BFixedSeati                         
+                             ngNoPC07/uncached_00071.mp                         
+                             4'                                                 
+                    INFO     Combining to Movie file.   scene_file_writer.py:753
+[09/07/26 13:18:55] INFO                                scene_file_writer.py:904
+                             File ready at                                      
+                             '/manim/media/videos/lab9b                         
+                             _seating/1080p30/Lab9BFixe                         
+                             dSeatingNoPC07.mp4'                                
+                                                                                
+                    INFO     Rendered Lab9BFixedSeatingNoPC07       scene.py:278
+                             Played 72 animations                               
+                    INFO     Previewed File at:                  file_ops.py:236
+                             '/manim/media/videos/lab9b_seating/                
+                             1080p30/Lab9BFixedSeatingNoPC07.mp4                
+                             '                                                  
+You are using manim version v0.20.1, but version v0.21.0 is available.
+You should consider upgrading via pip install -U manim
