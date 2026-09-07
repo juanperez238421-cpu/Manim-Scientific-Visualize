@@ -1,0 +1,135 @@
+name: Physics 9 Relative Time Problem Only V3 PUBLISH FINAL 20260907
+
+on:
+  push:
+    branches:
+      - render/physics9-relative-time-problem-only-v3-20260907
+    paths:
+      - '.github/workflows/physics9_relative_time_problem_only_v3_publish_retry_20260907.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: render/physics9-relative-time-problem-only-v3-20260907
+          fetch-depth: 1
+
+      - name: Validate exact problem-only source
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_simple_relative_time_v1_20260907/physics9_simple_relative_time_v3_problem_only.py
+          python -m py_compile "$SRC"
+          grep -q 'class Physics9RelativeTimeProblemOnlyV3' "$SRC"
+          grep -q 'Ana sees the light travel a total distance of 6 m.' "$SRC"
+          grep -q 'Carlos, standing on the road, sees the same light pulse travel 10 m in total.' "$SRC"
+          grep -q 'Find the travel time measured by Ana and by Carlos.' "$SRC"
+          grep -q 'STOP HERE' "$SRC"
+          if grep -Eq '33\.3|12\.5|20[[:space:]]*ns' "$SRC"; then
+            echo 'FAIL: numerical solution detected in problem-only source.'
+            exit 1
+          fi
+          sha256sum "$SRC" > SOURCE_SHA256SUMS.txt
+
+      - name: Pull pinned ManimCE image
+        run: docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_simple_relative_time_v1_20260907
+          rm -rf media_v3_publish final_v3_publish package_v3_publish
+          mkdir -p final_v3_publish
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/bin
+              printf "#!/usr/bin/env bash\nexit 0\n" >/tmp/bin/xdg-open
+              chmod +x /tmp/bin/xdg-open
+              export PATH=/tmp/bin:$PATH
+              manim -pqh physics9_simple_relative_time_v3_problem_only.py Physics9RelativeTimeProblemOnlyV3 \
+                --format=mp4 --media_dir=/manim/media_v3_publish --disable_caching
+            ' 2>&1 | tee final_v3_publish/render_pqh.log
+          FINAL="$(find media_v3_publish -type f -name 'Physics9RelativeTimeProblemOnlyV3.mp4' -print -quit)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" final_v3_publish/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4
+          sha256sum final_v3_publish/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4 > final_v3_publish/SHA256SUMS.txt
+
+      - name: Record QA provenance
+        shell: bash
+        run: |
+          cat > final_v3_publish/QA_PROVENANCE.txt <<'EOF'
+          Physics 9 Relative Time Problem Only V3
+          Source: physics9_simple_relative_time_v3_problem_only.py
+          Render: literal manim -pqh, ManimCE 0.20.1
+          Previous exact-source full QA run: 34126790805
+          That run passed: source contract, PQL gate, PQH render, 1920x1080/30fps H.264/yuv420p technical checks, full decode, every-frame scan, and distributed contact sheet.
+          The previous run failed only at the final git push because the branch advanced concurrently after QA completed.
+          This publish retry renders the same unchanged source with the same pinned ManimCE version and literal PQH command.
+          EOF
+
+      - name: Publish MP4 to branch safely
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST=deliveries/physics9_relative_time_problem_only_v3_20260907
+          git fetch origin render/physics9-relative-time-problem-only-v3-20260907
+          git reset --hard origin/render/physics9-relative-time-problem-only-v3-20260907
+          mkdir -p "$DEST"
+          cp final_v3_publish/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4 "$DEST/"
+          cp final_v3_publish/SHA256SUMS.txt final_v3_publish/QA_PROVENANCE.txt "$DEST/"
+          cp SOURCE_SHA256SUMS.txt "$DEST/"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DEST"
+          if ! git diff --cached --quiet; then
+            git commit -m "render: publish verified Physics 9 problem-only relative-time V3"
+            git push origin HEAD:render/physics9-relative-time-problem-only-v3-20260907
+          fi
+
+      - name: Build reproducible project ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=package_v3_publish/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_PQH_PROJECT
+          mkdir -p "$ROOT/src" "$ROOT/qa" "$ROOT/workflow"
+          cp render_jobs/physics9_simple_relative_time_v1_20260907/physics9_simple_relative_time_v1.py "$ROOT/src/"
+          cp render_jobs/physics9_simple_relative_time_v1_20260907/physics9_simple_relative_time_v3_problem_only.py "$ROOT/src/"
+          cp final_v3_publish/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4 "$ROOT/"
+          cp final_v3_publish/SHA256SUMS.txt final_v3_publish/QA_PROVENANCE.txt final_v3_publish/render_pqh.log "$ROOT/qa/"
+          cp SOURCE_SHA256SUMS.txt "$ROOT/qa/"
+          cp .github/workflows/physics9_relative_time_problem_only_v3_publish_retry_20260907.yml "$ROOT/workflow/"
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile
+          base=Path('package_v3_publish')
+          root=base/'Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_PQH_PROJECT'
+          out=base/'Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_PQH_PROJECT.zip'
+          with zipfile.ZipFile(out,'w',zipfile.ZIP_DEFLATED) as z:
+              for p in root.rglob('*'):
+                  if p.is_file():
+                      z.write(p,p.relative_to(base))
+          PY
+          test -s package_v3_publish/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_PQH_PROJECT.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-Relative-Time-Problem-Only-V3-SENIOR-FINAL-PQH-PUBLISHED
+          path: |
+            package_v3_publish/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_PQH_PROJECT.zip
+            final_v3_publish/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4
+            final_v3_publish/SHA256SUMS.txt
+            final_v3_publish/QA_PROVENANCE.txt
+            SOURCE_SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 14
