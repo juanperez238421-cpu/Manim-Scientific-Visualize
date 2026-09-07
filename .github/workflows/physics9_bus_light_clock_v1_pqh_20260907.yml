@@ -32,7 +32,7 @@ jobs:
           grep -q 'L = 3.0' "$SRC"
           grep -q 'GAMMA = 1.25' "$SRC"
           grep -q '12.5' "$SRC"
-          grep -q 'TIME DILATION' "$SRC"
+          grep -q 'DILATACIÓN TEMPORAL' "$SRC"
           if grep -Eq 'ThreeDScene|ThreeDAxes|Prism\(|Sphere\(|Cylinder\(|set_camera_orientation|ambient_camera_rotation' "$SRC"; then
             echo 'FAIL: 3D API detected.'; exit 1
           fi
