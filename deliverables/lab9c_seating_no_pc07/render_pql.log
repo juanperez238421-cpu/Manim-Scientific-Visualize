@@ -1,0 +1,1121 @@
+Manim Community v0.20.1
+
+[09/07/26 14:23:22] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 0: FadeIn(Text('NOVENO C · ASIGNACIÓN DE SILLAS')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                       INFO     Animation 0 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0000                         
+                             0.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 1: FadeIn(Text('FUNDAMENTOS DE FÍSICA · 07/09/2026')), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                                INFO     Animation 1 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0000                         
+                             1.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 2: FadeIn(Text('PC07: NO USAR')), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                           INFO     Animation 2 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0000                         
+                             2.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 3: FadeIn(Text('PC08 recibe los números 19–20; su silla C queda libre.')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                                              INFO     Animation 3 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0000                         
+                             3.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 4 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0000                         
+                             4.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 5: FadeOut(Text('NOVENO C · ASIGNACIÓN DE SILLAS')), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                          [09/07/26 14:23:23] INFO     Animation 5 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0000                         
+                             5.mp4'                                             
+[09/07/26 14:23:24] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 6: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                       INFO     Animation 6 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0000                         
+                             6.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 7: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                       INFO     Animation 7 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0000                         
+                             7.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/07/26 14:23:25] INFO     Animation 8 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0000                         
+                             8.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 9: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                       INFO     Animation 9 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0000                         
+                             9.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 10 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0001                         
+                             0.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 11: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 11: FadeOut(VGroup of 2 submobjects), etc.: 100%|██████████| 2/2 [00:00<00:00, 11.36it/s]                                                                                                   [09/07/26 14:23:26] INFO     Animation 11 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0001                         
+                             1.mp4'                                             
+[09/07/26 14:23:27] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 12: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 12 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0001                         
+                             2.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 13: FadeIn(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                    [09/07/26 14:23:28] INFO     Animation 13 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0001                         
+                             3.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 14: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 14 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0001                         
+                             4.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 15 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0001                         
+                             5.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 16: Create(SurroundingRectangle), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                       [09/07/26 14:23:29] INFO     Animation 16 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0001                         
+                             6.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 17 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0001                         
+                             7.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 18: FadeOut(SurroundingRectangle), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                            INFO     Animation 18 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0001                         
+                             8.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 19 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0001                         
+                             9.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 20: FadeOut(SurroundingRectangle), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                            INFO     Animation 20 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0002                         
+                             0.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 21: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 21: FadeOut(VGroup of 2 submobjects), etc.: 100%|██████████| 2/2 [00:00<00:00, 10.08it/s]                                                                                                   [09/07/26 14:23:30] INFO     Animation 21 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0002                         
+                             1.mp4'                                             
+[09/07/26 14:23:31] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 22: FadeIn(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                    [09/07/26 14:23:32] INFO     Animation 22 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0002                         
+                             2.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 23: FadeIn(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 23 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0002                         
+                             3.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 24: Create(SurroundingRectangle):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                     INFO     Animation 24 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0002                         
+                             4.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 25: FadeIn(Text('1')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                INFO     Animation 25 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0002                         
+                             5.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 26: FadeIn(Text('2')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                            [09/07/26 14:23:33] INFO     Animation 26 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0002                         
+                             6.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 27: FadeIn(Text('3')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                INFO     Animation 27 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0002                         
+                             7.mp4'                                             
+                    WARNING  The original duration of              scene.py:1118
+                             Lab9CFixedSeatingNoPC07.wait(), 0.033              
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible duration of                  
+                             0.0333333 seconds instead.                         
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 28 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0002                         
+                             8.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 29: FadeOut(SurroundingRectangle):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                      INFO     Animation 29 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0002                         
+                             9.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 30: ReplacementTransform(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 30: ReplacementTransform(VGroup of 3 submobjects): 100%|██████████| 2/2 [00:00<00:00, 11.20it/s]                                                                                                          [09/07/26 14:23:35] INFO     Animation 30 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0003                         
+                             0.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 31: Create(SurroundingRectangle):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                     INFO     Animation 31 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0003                         
+                             1.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 32: FadeIn(Text('4')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                INFO     Animation 32 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0003                         
+                             2.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 33: FadeIn(Text('5')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                INFO     Animation 33 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0003                         
+                             3.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 34: FadeIn(Text('6')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                INFO     Animation 34 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0003                         
+                             4.mp4'                                             
+                    WARNING  The original duration of              scene.py:1118
+                             Lab9CFixedSeatingNoPC07.wait(), 0.033              
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible duration of                  
+                             0.0333333 seconds instead.                         
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 35 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0003                         
+                             5.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/07/26 14:23:36] WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 36: FadeOut(SurroundingRectangle):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                      INFO     Animation 36 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0003                         
+                             6.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 37: ReplacementTransform(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 37: ReplacementTransform(VGroup of 3 submobjects): 100%|██████████| 2/2 [00:00<00:00, 13.01it/s]                                                                                                          [09/07/26 14:23:37] INFO     Animation 37 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0003                         
+                             7.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 38: Create(SurroundingRectangle):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                     INFO     Animation 38 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0003                         
+                             8.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 39: FadeIn(Text('7')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                INFO     Animation 39 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0003                         
+                             9.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 40: FadeIn(Text('8')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                            [09/07/26 14:23:38] INFO     Animation 40 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0004                         
+                             0.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 41: FadeIn(Text('9')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                INFO     Animation 41 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0004                         
+                             1.mp4'                                             
+                    WARNING  The original duration of              scene.py:1118
+                             Lab9CFixedSeatingNoPC07.wait(), 0.033              
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible duration of                  
+                             0.0333333 seconds instead.                         
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 42 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0004                         
+                             2.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 43: FadeOut(SurroundingRectangle):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                      INFO     Animation 43 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0004                         
+                             3.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 44: ReplacementTransform(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 44: ReplacementTransform(VGroup of 3 submobjects): 100%|██████████| 2/2 [00:00<00:00, 11.82it/s]                                                                                                          [09/07/26 14:23:40] INFO     Animation 44 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0004                         
+                             4.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 45: Create(SurroundingRectangle):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                     INFO     Animation 45 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0004                         
+                             5.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 46: FadeIn(Text('10')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                 INFO     Animation 46 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0004                         
+                             6.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 47: FadeIn(Text('11')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                 INFO     Animation 47 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0004                         
+                             7.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 48: FadeIn(Text('12')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                 INFO     Animation 48 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0004                         
+                             8.mp4'                                             
+                    WARNING  The original duration of              scene.py:1118
+                             Lab9CFixedSeatingNoPC07.wait(), 0.033              
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible duration of                  
+                             0.0333333 seconds instead.                         
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 49 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0004                         
+                             9.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 50: FadeOut(SurroundingRectangle):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                      INFO     Animation 50 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0005                         
+                             0.mp4'                                             
+[09/07/26 14:23:41] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 51: ReplacementTransform(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 51: ReplacementTransform(VGroup of 3 submobjects):  50%|█████     | 1/2 [00:00<00:00,  7.72it/s]Animation 51: ReplacementTransform(VGroup of 3 submobjects): 100%|██████████| 2/2 [00:00<00:00,  7.49it/s]                                                                                                          [09/07/26 14:23:43] INFO     Animation 51 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0005                         
+                             1.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 52: Create(SurroundingRectangle):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                     INFO     Animation 52 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0005                         
+                             2.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 53: FadeIn(Text('13')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                 INFO     Animation 53 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0005                         
+                             3.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 54: FadeIn(Text('14')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                 INFO     Animation 54 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0005                         
+                             4.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 55: FadeIn(Text('15')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                 INFO     Animation 55 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0005                         
+                             5.mp4'                                             
+                    WARNING  The original duration of              scene.py:1118
+                             Lab9CFixedSeatingNoPC07.wait(), 0.033              
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible duration of                  
+                             0.0333333 seconds instead.                         
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 56 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0005                         
+                             6.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/07/26 14:23:44] WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 57: FadeOut(SurroundingRectangle):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                      INFO     Animation 57 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0005                         
+                             7.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 58: ReplacementTransform(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 58: ReplacementTransform(VGroup of 3 submobjects):  50%|█████     | 1/2 [00:00<00:00,  7.40it/s]Animation 58: ReplacementTransform(VGroup of 3 submobjects): 100%|██████████| 2/2 [00:00<00:00,  7.18it/s]                                                                                                          [09/07/26 14:23:46] INFO     Animation 58 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0005                         
+                             8.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 59: Create(SurroundingRectangle):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                     INFO     Animation 59 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0005                         
+                             9.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 60: FadeIn(Text('16')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                             [09/07/26 14:23:47] INFO     Animation 60 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0006                         
+                             0.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 61: FadeIn(Text('17')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                 INFO     Animation 61 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0006                         
+                             1.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 62: FadeIn(Text('18')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                 INFO     Animation 62 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0006                         
+                             2.mp4'                                             
+                    WARNING  The original duration of              scene.py:1118
+                             Lab9CFixedSeatingNoPC07.wait(), 0.033              
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible duration of                  
+                             0.0333333 seconds instead.                         
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 63 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0006                         
+                             3.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 64: FadeOut(SurroundingRectangle):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                      INFO     Animation 64 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0006                         
+                             4.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 65: ReplacementTransform(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                  [09/07/26 14:23:48] INFO     Animation 65 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0006                         
+                             5.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 66: Create(SurroundingRectangle):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                     INFO     Animation 66 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0006                         
+                             6.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 67: FadeIn(Text('19')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                 INFO     Animation 67 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0006                         
+                             7.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 68: FadeIn(Text('20')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                 INFO     Animation 68 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0006                         
+                             8.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 69 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0006                         
+                             9.mp4'                                             
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    WARNING  The original total run_time of        scene.py:1118
+                             Lab9CFixedSeatingNoPC07.play(), 0.03               
+                             seconds, is too short for the current              
+                             frame rate of 30 FPS. Rendering with               
+                             the shortest possible total run_time               
+                             of 0.0333333 seconds instead.                      
+Animation 70: FadeOut(SurroundingRectangle):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                      INFO     Animation 70 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0007                         
+                             0.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/07/26 14:23:49] INFO     Animation 71 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0007                         
+                             1.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 72: FadeOut(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 72 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0007                         
+                             2.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 73: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 73 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0007                         
+                             3.mp4'                                             
+[09/07/26 14:23:50] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 74 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0007                         
+                             4.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 75: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 75: FadeOut(VGroup of 2 submobjects), etc.: 100%|██████████| 2/2 [00:00<00:00, 10.23it/s]                                                                                                   [09/07/26 14:23:51] INFO     Animation 75 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0007                         
+                             5.mp4'                                             
+[09/07/26 14:23:52] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 76: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 76 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0007                         
+                             6.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 77: FadeIn(VGroup of 3 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 77: FadeIn(VGroup of 3 submobjects), etc.: 100%|██████████| 2/2 [00:00<00:00, 13.82it/s]                                                                                                  [09/07/26 14:23:53] INFO     Animation 77 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0007                         
+                             7.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 78 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0007                         
+                             8.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 79: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 79 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0007                         
+                             9.mp4'                                             
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/07/26 14:23:54] INFO     Animation 80 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/parti                         
+                             al_movie_files/Lab9CFixedS                         
+                             eatingNoPC07/uncached_0008                         
+                             0.mp4'                                             
+                    INFO     Combining to Movie file.   scene_file_writer.py:753
+                    INFO                                scene_file_writer.py:904
+                             File ready at                                      
+                             '/manim/media_pql/videos/l                         
+                             ab9c_seating/1080p30/Lab9C                         
+                             FixedSeatingNoPC07.mp4'                            
+                                                                                
+                    INFO     Rendered Lab9CFixedSeatingNoPC07       scene.py:278
+                             Played 81 animations                               
+                    INFO     Previewed File at:                  file_ops.py:236
+                             '/manim/media_pql/videos/lab9c_seat                
+                             ing/1080p30/Lab9CFixedSeatingNoPC07                
+                             .mp4'                                              
+You are using manim version v0.20.1, but version v0.21.0 is available.
+You should consider upgrading via pip install -U manim
