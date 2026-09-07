@@ -104,7 +104,6 @@ jobs:
         run: |
           set -euo pipefail
           VIDEO=out/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V6_FULL_TOTAL_FINAL_pqh.mp4
-          ffmpeg -v error -i "$VIDEO" -f null -
           python - "$VIDEO" <<'PY' | tee qa_out/VIDEO_QA.txt
           import av, os, sys
           p=sys.argv[1]
