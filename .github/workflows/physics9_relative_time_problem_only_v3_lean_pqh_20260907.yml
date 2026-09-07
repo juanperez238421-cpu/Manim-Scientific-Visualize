@@ -1,0 +1,190 @@
+name: Physics 9 Relative Time Problem Only V3 LEAN FINAL PQH 20260907
+
+on:
+  push:
+    branches:
+      - render/physics9-relative-time-problem-only-v3-20260907
+    paths:
+      - 'render_jobs/physics9_simple_relative_time_v1_20260907/physics9_simple_relative_time_v3_problem_only.py'
+      - '.github/workflows/physics9_relative_time_problem_only_v3_lean_pqh_20260907.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: render/physics9-relative-time-problem-only-v3-20260907
+          fetch-depth: 1
+
+      - name: Validate problem-only source
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_simple_relative_time_v1_20260907/physics9_simple_relative_time_v3_problem_only.py
+          python -m py_compile "$SRC"
+          grep -q 'class Physics9RelativeTimeProblemOnlyV3' "$SRC"
+          grep -q 'Ana sees the light travel a total distance of 6 m.' "$SRC"
+          grep -q 'Carlos, standing on the road, sees the same light pulse travel 10 m in total.' "$SRC"
+          grep -q 'STOP HERE' "$SRC"
+          if grep -Eq '33\.3|12\.5|20[[:space:]]*ns' "$SRC"; then
+            echo 'FAIL: a numerical solution was found in the problem-only source.'; exit 1
+          fi
+
+      - name: Pull pinned ManimCE image
+        run: docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_simple_relative_time_v1_20260907
+          rm -rf media_v3_lean_pql
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.06 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/bin
+              printf "#!/usr/bin/env bash\nexit 0\n" >/tmp/bin/xdg-open
+              chmod +x /tmp/bin/xdg-open
+              export PATH=/tmp/bin:$PATH
+              manim -pql physics9_simple_relative_time_v3_problem_only.py Physics9RelativeTimeProblemOnlyV3 \
+                --format=mp4 --media_dir=/manim/media_v3_lean_pql --disable_caching
+            '
+          test -s "$(find media_v3_lean_pql -type f -name 'Physics9RelativeTimeProblemOnlyV3.mp4' -print -quit)"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_simple_relative_time_v1_20260907
+          rm -rf media_v3_lean_pqh final_v3_lean package_v3_lean
+          mkdir -p final_v3_lean
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/bin
+              printf "#!/usr/bin/env bash\nexit 0\n" >/tmp/bin/xdg-open
+              chmod +x /tmp/bin/xdg-open
+              export PATH=/tmp/bin:$PATH
+              manim -pqh physics9_simple_relative_time_v3_problem_only.py Physics9RelativeTimeProblemOnlyV3 \
+                --format=mp4 --media_dir=/manim/media_v3_lean_pqh --disable_caching
+            ' 2>&1 | tee final_v3_lean/render_pqh.log
+          FINAL="$(find media_v3_lean_pqh -type f -name 'Physics9RelativeTimeProblemOnlyV3.mp4' -print -quit)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" final_v3_lean/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4
+
+      - name: Technical QA and full decode
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=/manim/final_v3_lean/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4
+          probe() { docker run --rm -v "$PWD:/manim" --entrypoint ffprobe manimcommunity/manim:v0.20.1 "$@" "$F"; }
+          W="$(probe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0)"
+          H="$(probe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0)"
+          FPS="$(probe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0)"
+          CODEC="$(probe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0)"
+          PIX="$(probe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0)"
+          DUR="$(probe -v error -show_entries format=duration -of csv=p=0)"
+          FRAMES="$(probe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0)"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tframes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$FRAMES" > final_v3_lean/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920; test "$H" = 1080; test "$FPS" = 30/1; test "$CODEC" = h264; test "$PIX" = yuv420p
+          docker run --rm -v "$PWD:/manim" --entrypoint ffmpeg manimcommunity/manim:v0.20.1 \
+            -nostdin -v error -i "$F" -f null - 2> final_v3_lean/full_decode.log
+          test ! -s final_v3_lean/full_decode.log
+          sha256sum final_v3_lean/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4 > final_v3_lean/SHA256SUMS.txt
+
+      - name: Every-frame scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=/manim/final_v3_lean/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4
+          docker run --rm -v "$PWD:/manim" --entrypoint ffmpeg manimcommunity/manim:v0.20.1 \
+            -nostdin -v error -i "$F" -vf scale=320:180 -pix_fmt gray -f rawvideo /manim/final_v3_lean/all_frames.raw
+          python - <<'PY'
+          from pathlib import Path
+          W,H=320,180; B=W*H
+          p=Path('final_v3_lean/all_frames.raw'); raw=p.read_bytes(); assert len(raw)%B==0
+          n=len(raw)//B; blank=sparse=border=0
+          bi=[y*W+x for y in range(H) for x in range(W) if x<6 or x>=W-6 or y<6 or y>=H-6]
+          for i in range(n):
+              fr=raw[i*B:(i+1)*B]; dark=sum(v<245 for v in fr); frac=dark/B
+              blank += dark==0; sparse += frac<0.0035
+              bd=sum(fr[j]<235 for j in bi)
+              border += (dark>200 and bd/max(dark,1)>0.22)
+          Path('final_v3_lean/FRAME_SCAN_SUMMARY.txt').write_text(
+              f'frames_scanned={n}\nblank_frames={blank}\nvery_sparse_frames={sparse}\nborder_heavy_frames={border}\n')
+          assert blank < n*.15 and sparse < n*.25 and border < n*.03
+          p.unlink()
+          PY
+
+      - name: Distributed contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=/manim/final_v3_lean/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4
+          DUR="$(docker run --rm -v "$PWD:/manim" --entrypoint ffprobe manimcommunity/manim:v0.20.1 -v error -show_entries format=duration -of csv=p=0 "$F")"
+          INTERVAL="$(python -c "print(max(float('$DUR')/24.0,0.1))")"
+          docker run --rm -v "$PWD:/manim" --entrypoint ffmpeg manimcommunity/manim:v0.20.1 \
+            -nostdin -v error -i "$F" -vf "fps=1/$INTERVAL,scale=480:270,tile=4x6:padding=8:margin=8:color=white" \
+            -frames:v 1 /manim/final_v3_lean/CONTACT_SHEET.jpg
+          test -s final_v3_lean/CONTACT_SHEET.jpg
+
+      - name: Publish delivery
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST=deliveries/physics9_relative_time_problem_only_v3_20260907
+          mkdir -p "$DEST"
+          cp final_v3_lean/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4 "$DEST/"
+          cp final_v3_lean/VIDEO_TECHNICAL.tsv final_v3_lean/SHA256SUMS.txt final_v3_lean/FRAME_SCAN_SUMMARY.txt final_v3_lean/CONTACT_SHEET.jpg "$DEST/"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DEST"
+          if ! git diff --cached --quiet; then
+            git commit -m "render: publish Physics 9 relative-time problem-only V3 final"
+            git pull --rebase origin render/physics9-relative-time-problem-only-v3-20260907 || true
+            git push origin HEAD:render/physics9-relative-time-problem-only-v3-20260907
+          fi
+
+      - name: Build project ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=package_v3_lean/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_PQH_PROJECT
+          mkdir -p "$ROOT/src" "$ROOT/qa" "$ROOT/workflow"
+          cp render_jobs/physics9_simple_relative_time_v1_20260907/physics9_simple_relative_time_v1.py "$ROOT/src/"
+          cp render_jobs/physics9_simple_relative_time_v1_20260907/physics9_simple_relative_time_v3_problem_only.py "$ROOT/src/"
+          cp final_v3_lean/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4 "$ROOT/"
+          cp final_v3_lean/VIDEO_TECHNICAL.tsv final_v3_lean/SHA256SUMS.txt final_v3_lean/FRAME_SCAN_SUMMARY.txt final_v3_lean/CONTACT_SHEET.jpg final_v3_lean/render_pqh.log "$ROOT/qa/"
+          cp .github/workflows/physics9_relative_time_problem_only_v3_lean_pqh_20260907.yml "$ROOT/workflow/"
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile
+          base=Path('package_v3_lean'); root=base/'Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_PQH_PROJECT'
+          out=base/'Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_PQH_PROJECT.zip'
+          with zipfile.ZipFile(out,'w',zipfile.ZIP_DEFLATED) as z:
+              for p in root.rglob('*'):
+                  if p.is_file(): z.write(p,p.relative_to(base))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-Relative-Time-Problem-Only-V3-SENIOR-FINAL-PQH-LEAN
+          path: |
+            package_v3_lean/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_PQH_PROJECT.zip
+            final_v3_lean/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4
+            final_v3_lean/VIDEO_TECHNICAL.tsv
+            final_v3_lean/SHA256SUMS.txt
+            final_v3_lean/FRAME_SCAN_SUMMARY.txt
+            final_v3_lean/CONTACT_SHEET.jpg
+          if-no-files-found: error
+          retention-days: 14
