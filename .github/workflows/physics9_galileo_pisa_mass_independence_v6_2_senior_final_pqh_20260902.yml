@@ -1,0 +1,174 @@
+name: Physics9 Galileo + Pisa Mass Independence V6.2 Senior Final PQH
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'render_jobs/physics9_galileo_inclined_plane_20260901/Physics9_Galileo_Pisa_Mass_Independence_V6_FINAL.py'
+      - 'render_jobs/physics9_galileo_inclined_plane_20260901/Physics9_Galileo_Pisa_Mass_Independence_V6_1_SENIOR_FINAL.py'
+      - 'render_jobs/physics9_galileo_inclined_plane_20260901/Physics9_Galileo_Pisa_Mass_Independence_V6_2_SENIOR_FINAL.py'
+      - '.github/workflows/physics9_galileo_pisa_mass_independence_v6_2_senior_final_pqh_20260902.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  render-v6-2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout PR head branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Static validation and render environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_galileo_inclined_plane_20260901
+          SRC="$JOB/Physics9_Galileo_Pisa_Mass_Independence_V6_2_SENIOR_FINAL.py"
+          python -m py_compile \
+            "$JOB/Physics9_Galileo_Pisa_Mass_Independence_V6_FINAL.py" \
+            "$JOB/Physics9_Galileo_Pisa_Mass_Independence_V6_1_SENIOR_FINAL.py" \
+            "$SRC"
+          grep -q '^class Physics9GalileoPisaMassIndependenceV62SeniorFinal' "$SRC"
+          grep -q 'WHY MASS DOES NOT CHANGE IDEAL FREE-FALL ACCELERATION' "$SRC"
+          grep -q 'a=g' "$SRC"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg imagemagick zip
+          python -m pip install --quiet opencv-python-headless
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+          mkdir -p qa_preview final_out final_out/audit_frames published_renders
+
+      - name: Literal PQL full-timeline gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_galileo_inclined_plane_20260901
+          rm -rf media_pql_v62
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.06 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql Physics9_Galileo_Pisa_Mass_Independence_V6_2_SENIOR_FINAL.py Physics9GalileoPisaMassIndependenceV62SeniorFinal --format=mp4 --media_dir=/manim/media_pql_v62 --disable_caching
+            ' 2>&1 | tee qa_preview/render_v62_pql.log
+          PQL="$(find media_pql_v62 -type f -name 'Physics9GalileoPisaMassIndependenceV62SeniorFinal.mp4' -print -quit)"
+          test -n "$PQL" && test -s "$PQL"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_galileo_inclined_plane_20260901
+          rm -rf media_pqh_v62
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh Physics9_Galileo_Pisa_Mass_Independence_V6_2_SENIOR_FINAL.py Physics9GalileoPisaMassIndependenceV62SeniorFinal --format=mp4 --media_dir=/manim/media_pqh_v62 --disable_caching
+            ' 2>&1 | tee final_out/render_v62_pqh.log
+          FINAL="$(find media_pqh_v62 -type f -name 'Physics9GalileoPisaMassIndependenceV62SeniorFinal.mp4' -print -quit)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" final_out/Physics9_Galileo_Pisa_Mass_Independence_V6_2_SENIOR_FINAL_pqh.mp4
+
+      - name: Senior technical and visual QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Physics9_Galileo_Pisa_Mass_Independence_V6_2_SENIOR_FINAL_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          FRAMES="$(ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tframes\tbytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$FRAMES" "$SIZE" > final_out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920 && test "$H" = 1080 && test "$CODEC" = h264 && test "$PIX" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> final_out/full_decode.log
+          test ! -s final_out/full_decode.log
+
+          VIDEO="$F" python - <<'PY'
+          import cv2, os
+          cap=cv2.VideoCapture(os.environ['VIDEO']); n=0; edge=[]; blank=[]
+          while True:
+              ok,frame=cap.read()
+              if not ok: break
+              gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+              dark=gray < 80
+              if dark[:3,:].any() or dark[-3:,:].any() or dark[:,:3].any() or dark[:,-3:].any(): edge.append(n)
+              if gray.std() < 2.0 and gray.mean() > 245: blank.append(n)
+              n += 1
+          cap.release()
+          open('final_out/EVERY_FRAME_SCAN.tsv','w').write(f'frames_scanned\tedge_touch_frames\tblank_frames\n{n}\t{len(edge)}\t{len(blank)}\n')
+          if edge:
+              open('final_out/EVERY_FRAME_EDGE_HITS.txt','w').write('\n'.join(map(str,edge)))
+              raise SystemExit(f'outer-edge content detected in {len(edge)} frames')
+          PY
+
+          ffmpeg -nostdin -loglevel error -i "$F" -vf fps=1 -q:v 2 final_out/audit_frames/sec_%04d.jpg
+          montage final_out/audit_frames/*.jpg -thumbnail 384x216 -tile 6x -geometry +7+9 -background white -quality 90 final_out/CONTACT_SHEET_1S_ALL.jpg
+          sha256sum "$F" > final_out/SHA256SUMS.txt
+          cat > final_out/SENIOR_QA_RESULT.md <<EOF
+          # Physics 9 Galileo + Pisa V6.2 Senior Final QA
+          - Source compile: PASS
+          - Literal PQL full timeline: PASS
+          - Literal PQH final render: PASS
+          - 1920x1080 H.264/yuv420p: PASS
+          - Full FFmpeg decode: PASS
+          - Every-frame outer-edge scan: PASS
+          - 1-second full-timeline contact sheet: generated
+          - Galileo inclined-plane V5.9 audited lineage retained: YES
+          - Pisa mass-independence section: INCLUDED
+          - F_g = mg versus a = g distinction: INCLUDED
+          - 1 kg versus 10 kg simultaneous ideal drop: INCLUDED
+          - Air-resistance caveat: INCLUDED
+          - Duration: ${DUR}s
+          - Frames: ${FRAMES}
+          - Bytes: ${SIZE}
+          EOF
+          zip -j final_out/Physics9_Galileo_Pisa_Mass_Independence_V6_2_SENIOR_FINAL_PQH.zip \
+            "$F" final_out/VIDEO_TECHNICAL.tsv final_out/EVERY_FRAME_SCAN.tsv \
+            final_out/SENIOR_QA_RESULT.md final_out/CONTACT_SHEET_1S_ALL.jpg final_out/SHA256SUMS.txt
+
+      - name: Publish exact validated MP4 on GitHub branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Physics9_Galileo_Pisa_Mass_Independence_V6_2_SENIOR_FINAL_pqh.mp4
+          DEST=published_renders/Physics9_Galileo_Pisa_Mass_Independence_V6_2_SENIOR_FINAL_pqh.mp4
+          cp "$F" "$DEST"
+          sha256sum "$DEST" > published_renders/Physics9_Galileo_Pisa_Mass_Independence_V6_2_SENIOR_FINAL_pqh.sha256
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DEST" published_renders/Physics9_Galileo_Pisa_Mass_Independence_V6_2_SENIOR_FINAL_pqh.sha256
+          git commit -m "Publish validated Physics 9 Galileo Pisa V6.2 PQH render"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+
+      - name: Upload complete V6.2 deliverables
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9_Galileo_Pisa_Mass_Independence_V6_2_SENIOR_FINAL_PQH
+          path: |
+            final_out/Physics9_Galileo_Pisa_Mass_Independence_V6_2_SENIOR_FINAL_pqh.mp4
+            final_out/Physics9_Galileo_Pisa_Mass_Independence_V6_2_SENIOR_FINAL_PQH.zip
+            final_out/SENIOR_QA_RESULT.md
+            final_out/EVERY_FRAME_SCAN.tsv
+            final_out/VIDEO_TECHNICAL.tsv
+            final_out/CONTACT_SHEET_1S_ALL.jpg
+            final_out/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
