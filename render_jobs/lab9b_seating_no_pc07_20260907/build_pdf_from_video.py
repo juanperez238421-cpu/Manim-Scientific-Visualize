@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Triggered after PR creation so the new workflow is evaluated on synchronize.
 from __future__ import annotations
 import argparse, shutil, subprocess, tempfile
 from pathlib import Path
