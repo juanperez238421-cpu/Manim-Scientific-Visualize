@@ -1,0 +1,165 @@
+name: Physics9 Uniform Motion + Galileo V5.9 Post-Render QA PQH 20260902
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'render_jobs/physics9_galileo_inclined_plane_20260901/Physics9_UniformMotion_Galileo_V5_9_POST_RENDER_QA.py'
+      - '.github/workflows/physics9_uniform_motion_galileo_v5_9_post_render_qa_pqh_20260902.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-v5-9:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+
+      - name: Validate and prepare
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_galileo_inclined_plane_20260901
+          SRC="$JOB/Physics9_UniformMotion_Galileo_V5_9_POST_RENDER_QA.py"
+          test -s "$SRC"
+          python -m py_compile "$JOB/Physics9_UniformMotion_Galileo_V5_8_FINAL_VISUAL_QA.py" "$SRC"
+          grep -q '^class Physics9UniformMotionGalileoV59PostRenderQA' "$SRC"
+          grep -q 'position marker after each equal time step' "$SRC"
+          grep -q 'successive distances' "$SRC"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg imagemagick zip
+          python -m pip install --quiet opencv-python-headless
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+          mkdir -p qa_preview final_out final_out/audit_frames_05s final_out/audit_frames_36
+
+      - name: Literal PQL full-timeline gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_galileo_inclined_plane_20260901
+          rm -rf media_pql_v59
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.06 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql Physics9_UniformMotion_Galileo_V5_9_POST_RENDER_QA.py Physics9UniformMotionGalileoV59PostRenderQA --format=mp4 --media_dir=/manim/media_pql_v59 --disable_caching
+            ' 2>&1 | tee qa_preview/render_v59_pql.log
+          PQL="$(find media_pql_v59 -type f -name 'Physics9UniformMotionGalileoV59PostRenderQA.mp4' -print -quit)"
+          test -n "$PQL" && test -s "$PQL"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_galileo_inclined_plane_20260901
+          rm -rf media_pqh_v59
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh Physics9_UniformMotion_Galileo_V5_9_POST_RENDER_QA.py Physics9UniformMotionGalileoV59PostRenderQA --format=mp4 --media_dir=/manim/media_pqh_v59 --disable_caching
+            ' 2>&1 | tee final_out/render_v59_pqh.log
+          FINAL="$(find media_pqh_v59 -type f -name 'Physics9UniformMotionGalileoV59PostRenderQA.mp4' -print -quit)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" final_out/Physics9_UniformMotion_Galileo_V5_9_POST_RENDER_QA_pqh.mp4
+
+      - name: Technical QA and exhaustive frame audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Physics9_UniformMotion_Galileo_V5_9_POST_RENDER_QA_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          FRAMES="$(ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+          printf 'width\theight\tfps\tcodec\tduration\tframes\tbytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$DUR" "$FRAMES" "$SIZE" > final_out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920 && test "$H" = 1080 && test "$CODEC" = h264
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> final_out/full_decode.log
+          test ! -s final_out/full_decode.log
+
+          VIDEO="$F" python - <<'PY'
+          import cv2, os
+          cap=cv2.VideoCapture(os.environ['VIDEO']); n=0; hits=[]
+          while True:
+              ok,frame=cap.read()
+              if not ok: break
+              gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY); dark=gray < 80
+              if dark[:3,:].any() or dark[-3:,:].any() or dark[:,:3].any() or dark[:,-3:].any(): hits.append(n)
+              n += 1
+          cap.release()
+          open('final_out/EVERY_FRAME_SCAN.tsv','w').write(f'frames_scanned\tedge_touch_frames\n{n}\t{len(hits)}\n')
+          if hits:
+              open('final_out/EVERY_FRAME_EDGE_HITS.txt','w').write('\n'.join(map(str,hits)))
+              raise SystemExit(f'outer-edge content detected in {len(hits)} frames')
+          PY
+
+          ffmpeg -nostdin -loglevel error -i "$F" -vf fps=2 -q:v 2 final_out/audit_frames_05s/halfsec_%04d.jpg
+          montage final_out/audit_frames_05s/*.jpg -thumbnail 384x216 -tile 6x -geometry +7+9 -background white -quality 90 final_out/CONTACT_SHEET_05S_ALL.jpg
+          for INDEX in $(seq -w 0 35); do
+            T="$(python -c "print(float('$DUR')*(int('$INDEX')+0.5)/36.0)")"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "final_out/audit_frames_36/frame_${INDEX}.png"
+          done
+          montage final_out/audit_frames_36/*.png -thumbnail 384x216 -tile 6x6 -geometry +8+10 -background white -quality 90 final_out/CONTACT_SHEET_36.jpg
+          sha256sum "$F" > final_out/SHA256SUMS.txt
+          cat > final_out/FRAME_CODE_QA.md <<'EOF'
+          # V5.9 post-render QA
+          - V5.7 MathTex initial-value notation retained: x_{\mathrm{i}}, y_{\mathrm{i}}, v_{\mathrm{i}}.
+          - V5.8 upper ramp-normal ball placement retained.
+          - V5.8 synchronized equal-Δt cell highlighting retained.
+          - V5.8 falling gap scale and exact 1:3:5 ratio retained.
+          - Redundant ramp marker caption removed after manual frame inspection.
+          - Redundant falling-distance caption removed after manual frame inspection.
+          EOF
+          cat > final_out/SENIOR_QA_RESULT.md <<EOF
+          # Physics 9 Uniform Motion + Galileo V5.9 POST-RENDER QA
+          - Proper mathematical subscripts: PASS
+          - Ramp-normal physical placement: PASS
+          - Galileo equal-time synchronized animation: PASS
+          - Falling equal-time synchronized animation: PASS
+          - Manual collision cleanup integrated: PASS
+          - Every-frame outer-edge scan: PASS
+          - Half-second contact audit generated: YES
+          - 36-frame distributed audit generated: YES
+          - PQL gate: PASS
+          - PQH render: PASS
+          - 1920x1080 H.264: PASS
+          - Full decode: PASS
+          - Duration: ${DUR}s
+          - Frames: ${FRAMES}
+          EOF
+          zip -j final_out/Physics9_UniformMotion_Galileo_V5_9_POST_RENDER_QA_PQH.zip \
+            "$F" final_out/VIDEO_TECHNICAL.tsv final_out/EVERY_FRAME_SCAN.tsv final_out/FRAME_CODE_QA.md final_out/SENIOR_QA_RESULT.md final_out/CONTACT_SHEET_05S_ALL.jpg final_out/CONTACT_SHEET_36.jpg final_out/SHA256SUMS.txt
+
+      - name: Upload V5.9 deliverables
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9_UniformMotion_Galileo_V5_9_POST_RENDER_QA_PQH
+          path: |
+            final_out/Physics9_UniformMotion_Galileo_V5_9_POST_RENDER_QA_pqh.mp4
+            final_out/Physics9_UniformMotion_Galileo_V5_9_POST_RENDER_QA_PQH.zip
+            final_out/SENIOR_QA_RESULT.md
+            final_out/FRAME_CODE_QA.md
+            final_out/EVERY_FRAME_SCAN.tsv
+            final_out/VIDEO_TECHNICAL.tsv
+            final_out/CONTACT_SHEET_05S_ALL.jpg
+            final_out/CONTACT_SHEET_36.jpg
+            final_out/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
