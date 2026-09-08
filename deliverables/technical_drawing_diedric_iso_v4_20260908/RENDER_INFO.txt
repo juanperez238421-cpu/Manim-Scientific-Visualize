@@ -1,0 +1,7 @@
+V4 Senior Total: full engineering-graphics redesign of the diedric-system lesson.
+Architecture: ManimCE ThreeDScene + reusable Core/technical_drawing_tools.py.
+Visual improvements: real 3D bracket, ambient camera orbit, six camera directions, physical projection plane, parallel rays, 3D trace, dihedral PV/PH hinge and 90-degree unfolding, visible/hidden/center line hierarchy, dimension lines, first-angle and third-angle physical order, direct view-placement comparison, ISO projection symbols, six-step reading algorithm, timed student challenge.
+Language: Spanish with ISO E / First-angle and ISO A / Third-angle labels.
+Colombia: NTC 1777:2001 described as a technical standard, not legislation by itself; lesson states that it recognizes first- and third-angle methods.
+ManimCE 0.20.1; 1920x1080; 30 fps; H.264; yuv420p.
+QA: Python compile, literal PQL, literal PQH, ffprobe gates, full decode, 28 distributed frame samples, visual-density gate, contact sheet, SHA-256.
