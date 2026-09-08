@@ -1,0 +1,9 @@
+Topic: Sistema diedrico / first-angle versus third-angle projection
+Classroom labels: ISO E / European = first-angle; ISO A / American = third-angle
+NTC 1777:2001 is treated as an important technical reference, not described as legislation.
+NTC 1777:2001 recognizes both first-angle (former E) and third-angle (former A).
+ICONTEC catalogue checked in 2026: NTC-ISO 128-3:2022 is VIGENTE for views, sections and cuts.
+ICONTEC catalogue checked in 2026: NTC 1915:1984 is VIGENTE for building-drawing projection methods.
+ManimCE: 0.20.1
+Pipeline: literal -pql QA then literal -pqh final
+Output: 1920x1080, 30 fps, H.264, yuv420p

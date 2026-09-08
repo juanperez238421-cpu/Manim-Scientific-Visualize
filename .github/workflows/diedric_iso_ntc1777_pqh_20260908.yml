@@ -1,0 +1,149 @@
+name: Diedric ISO A-E NTC1777 PQH 20260908
+
+on:
+  push:
+    branches:
+      - manim/diedric-iso-ntc1777-20260908
+    paths:
+      - .github/workflows/diedric_iso_ntc1777_pqh_20260908.yml
+      - render_jobs/technical_drawing_diedric_iso_20260908/diedric_iso_ntc1777.py
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: manim/diedric-iso-ntc1777-20260908
+          fetch-depth: 0
+
+      - name: Validate source
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/technical_drawing_diedric_iso_20260908/diedric_iso_ntc1777.py
+          python -m py_compile "$SRC"
+          grep -q 'class DihedralISOProjectionNTC1777' "$SRC"
+          grep -q 'FIRST-ANGLE' "$SRC"
+          grep -q 'THIRD-ANGLE' "$SRC"
+          grep -q 'NTC 1777:2001' "$SRC"
+          grep -q 'NTC 1915:1984' "$SRC"
+          ! grep -Eq '[A-Za-z]:\\|/Users/|/home/[^/]+/' "$SRC"
+
+      - name: Install render tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL QA render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/technical_drawing_diedric_iso_20260908/diedric_iso_ntc1777.py
+          SCENE=DihedralISOProjectionNTC1777
+          rm -rf media_pql qa_out
+          mkdir -p qa_out
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=0.08 \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 \
+            -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pql $SRC $SCENE --fps 15 --format=mp4 --media_dir media_pql --disable_caching" \
+            2>&1 | tee qa_out/pql.log
+          PQL="$(find media_pql -type f -name "${SCENE}.mp4" | head -1)"
+          test -n "$PQL"
+          test -s "$PQL"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/technical_drawing_diedric_iso_20260908/diedric_iso_ntc1777.py
+          SCENE=DihedralISOProjectionNTC1777
+          OUT=deliverables/technical_drawing_diedric_iso_20260908
+          rm -rf media "$OUT"
+          mkdir -p "$OUT"
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 \
+            -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pqh $SRC $SCENE --fps 30 --format=mp4 --media_dir media --disable_caching" \
+            2>&1 | tee "$OUT/pqh.log"
+          FINAL="$(find media -type f -name "${SCENE}.mp4" | head -1)"
+          test -n "$FINAL"
+          test -s "$FINAL"
+          cp "$FINAL" "$OUT/TechnicalDrawing_Diedric_ISO_A_E_NTC1777_SENIOR_FINAL_pqh.mp4"
+
+      - name: Technical QA and frame sampling
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=deliverables/technical_drawing_diedric_iso_20260908
+          F="$OUT/TechnicalDrawing_Diedric_ISO_A_E_NTC1777_SENIOR_FINAL_pqh.mp4"
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tbytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > "$OUT/VIDEO_TECHNICAL.tsv"
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/decode.log"
+          mkdir -p "$OUT/qa_frames"
+          for FRAC in 0.04 0.13 0.22 0.31 0.40 0.49 0.58 0.67 0.76 0.85 0.93 0.98; do
+            T="$(awk -v d="$DUR" -v f="$FRAC" 'BEGIN{printf "%.2f",d*f}')"
+            TAG="$(printf '%s' "$FRAC" | tr -d '.')"
+            ffmpeg -y -ss "$T" -i "$F" -frames:v 1 "$OUT/qa_frames/frame_${TAG}.png" >/dev/null 2>&1
+          done
+          ffmpeg -y -pattern_type glob -i "$OUT/qa_frames/frame_*.png" \
+            -vf 'scale=480:-1,tile=4x3:padding=8:margin=8:color=white' \
+            -frames:v 1 "$OUT/qa_contact_sheet.jpg" >/dev/null 2>&1
+          sha256sum "$F" > "$OUT/SHA256SUMS.txt"
+          cp render_jobs/technical_drawing_diedric_iso_20260908/diedric_iso_ntc1777.py "$OUT/TechnicalDrawing_Diedric_ISO_A_E_NTC1777_source.py"
+          cat > "$OUT/RENDER_INFO.txt" <<'EOF'
+          Topic: Sistema diedrico / first-angle vs third-angle projection
+          Classroom labels: ISO E (first-angle), ISO A (third-angle)
+          Normative correction: NTC 1777 is a Colombian technical standard, not legislation by itself.
+          NTC 1777:2001 text recognizes both first-angle and third-angle methods.
+          2026 catalog cross-check: ICONTEC lists NTC 1915:1984 Building drawing - Projection methods as VIGENTE.
+          ManimCE: 0.20.1
+          Pipeline: literal -pql QA then literal -pqh final
+          Output: 1920x1080, 30 fps, H.264, yuv420p
+          EOF
+
+      - name: Persist final delivery to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deliverables/technical_drawing_diedric_iso_20260908
+          if ! git diff --cached --quiet; then
+            git commit -m "render: persist diedric ISO A-E NTC1777 PQH delivery [skip ci]"
+            git push origin HEAD:manim/diedric-iso-ntc1777-20260908
+          fi
+
+      - name: Upload delivery artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DIEDRIC-ISO-A-E-NTC1777-PQH
+          path: deliverables/technical_drawing_diedric_iso_20260908/
+          if-no-files-found: error
+          retention-days: 7
