@@ -98,6 +98,7 @@ class Projection3Dto2DFullTotalV8(Projection3Dto2DSeniorV7):
         return bar
 
 
+# Workflow trigger after the V8 workflow file is present on this branch.
 # Preview:
 # manim -pql Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V8_FULL_TOTAL_DOWNLOAD_SAFE.py Projection3Dto2DFullTotalV8 --disable_caching
 # Final:
