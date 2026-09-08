@@ -1,0 +1,152 @@
+name: Physics 9 Motion Evaluation Review SENIOR FINAL PQH 20260908
+
+on:
+  push:
+    branches:
+      - manim/physics9-motion-evaluation-review-20260908
+    paths-ignore:
+      - 'published_renders/**'
+      - 'render_jobs/physics9_motion_evaluation_review_20260908/physics9_motion_evaluation_review.py'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render_publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconstruct and compile full Python source
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_motion_evaluation_review_20260908
+          cat "$JOB"/bootstrap/source_*.b64 > /tmp/source.b64
+          base64 -d /tmp/source.b64 | gzip -dc > "$JOB/physics9_motion_evaluation_review.py"
+          python -m py_compile "$JOB/physics9_motion_evaluation_review.py"
+          grep -q 'class Physics9MotionEvaluationReview' "$JOB/physics9_motion_evaluation_review.py"
+          wc -c "$JOB/physics9_motion_evaluation_review.py"
+
+      - name: Install QA tools and ManimCE 0.20.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Full-timeline PQL smoke render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_motion_evaluation_review_20260908/physics9_motion_evaluation_review.py
+          rm -rf media_pql qa_pql && mkdir -p qa_pql
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pql $SRC Physics9MotionEvaluationReview --fps 15 --format=mp4 --media_dir media_pql --disable_caching
+            " 2>&1 | tee qa_pql/render_pql.log
+          PREVIEW="$(find media_pql -type f -name 'Physics9MotionEvaluationReview.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PREVIEW" && test -s "$PREVIEW"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_motion_evaluation_review_20260908/physics9_motion_evaluation_review.py
+          rm -rf media_pqh out && mkdir -p out
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pqh $SRC Physics9MotionEvaluationReview --fps 30 --format=mp4 --media_dir media_pqh --disable_caching
+            " 2>&1 | tee out/render_pqh.log
+          FINAL="$(find media_pqh -type f -name 'Physics9MotionEvaluationReview.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" out/Physics9_Motion_Evaluation_Review_V1_SENIOR_FINAL_pqh.mp4
+
+      - name: Technical QA and sampled-frame evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Physics9_Motion_Evaluation_Review_V1_SENIOR_FINAL_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tsize\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > out/VIDEO_QA.tsv
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          python - <<'PY'
+          row=open('out/VIDEO_QA.tsv').read().splitlines()[1].split('\t')
+          dur=float(row[5]); size=int(row[6])
+          assert 80 <= dur <= 300, f'duration={dur}'
+          assert 1_000_000 < size < 95*1024*1024, f'size={size}'
+          print('QA gates PASS', dur, size)
+          PY
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
+          mkdir -p out/audit_frames
+          python - <<'PY'
+          import subprocess
+          dur=float(open('out/VIDEO_QA.tsv').read().splitlines()[1].split('\t')[5])
+          for i,p in enumerate([0.02,0.08,0.14,0.20,0.26,0.32,0.38,0.44,0.50,0.56,0.62,0.68,0.74,0.80,0.86,0.92,0.98]):
+              subprocess.run(['ffmpeg','-nostdin','-loglevel','error','-ss',str(dur*p),'-i','out/Physics9_Motion_Evaluation_Review_V1_SENIOR_FINAL_pqh.mp4','-frames:v','1',f'out/audit_frames/frame_{i:02d}.png'],check=True)
+          PY
+          sha256sum "$F" > out/SHA256SUMS.txt
+
+      - name: Upload QA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-Motion-Evaluation-Review-V1-SENIOR-FINAL-PQH
+          path: |
+            out/Physics9_Motion_Evaluation_Review_V1_SENIOR_FINAL_pqh.mp4
+            out/VIDEO_QA.tsv
+            out/SHA256SUMS.txt
+            out/audit_frames/
+            out/render_pqh.log
+            out/full_decode.log
+            qa_pql/render_pql.log
+            render_jobs/physics9_motion_evaluation_review_20260908/physics9_motion_evaluation_review.py
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Publish exact validated source and MP4 to GitHub branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p published_renders
+          cp out/Physics9_Motion_Evaluation_Review_V1_SENIOR_FINAL_pqh.mp4 published_renders/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add render_jobs/physics9_motion_evaluation_review_20260908/physics9_motion_evaluation_review.py \
+                  published_renders/Physics9_Motion_Evaluation_Review_V1_SENIOR_FINAL_pqh.mp4
+          git rm -r render_jobs/physics9_motion_evaluation_review_20260908/bootstrap
+          git commit -m "Publish Physics 9 motion evaluation review V1 SENIOR FINAL PQH [skip ci]"
+          git push origin HEAD:manim/physics9-motion-evaluation-review-20260908
+
+      - name: Verify direct raw MP4 URL
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/manim/physics9-motion-evaluation-review-20260908/published_renders/Physics9_Motion_Evaluation_Review_V1_SENIOR_FINAL_pqh.mp4"
+          curl -L --fail --silent --show-error --range 0-1023 "$URL" -o /tmp/head.bin
+          test "$(stat -c%s /tmp/head.bin)" -gt 0
+          echo "DIRECT_URL=$URL"
