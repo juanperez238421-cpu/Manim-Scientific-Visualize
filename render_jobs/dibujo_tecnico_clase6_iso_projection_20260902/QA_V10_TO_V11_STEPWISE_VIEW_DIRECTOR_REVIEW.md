@@ -83,3 +83,5 @@ V10 successfully produced a valid artifact even though its Actions run later fai
 5. verify the commit-pinned `raw.githubusercontent.com` MP4 byte-for-byte against the validated artifact.
 
 This ensures that even if publication ever fails, the actual rendered MP4 remains downloadable from the workflow artifact.
+
+Workflow registration trigger: V11 renderer is now registered on the branch; this revision starts the full PQL → PQH → QA → artifact → publication pipeline.
