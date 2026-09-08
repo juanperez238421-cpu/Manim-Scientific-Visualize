@@ -1,0 +1,203 @@
+name: Diedric ISO NTC1777 V3 Redesign PQH 20260908
+
+on:
+  push:
+    branches:
+      - manim/diedric-iso-ntc1777-v3-redesign-20260908
+    paths:
+      - .github/workflows/diedric_iso_ntc1777_v3_redesign_pqh_20260908.yml
+      - render_jobs/technical_drawing_diedric_iso_v3_20260908/diedric_iso_ntc1777_v3.py
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout V3 branch
+        uses: actions/checkout@v4
+        with:
+          ref: manim/diedric-iso-ntc1777-v3-redesign-20260908
+          fetch-depth: 0
+
+      - name: Validate V3 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/technical_drawing_diedric_iso_v3_20260908/diedric_iso_ntc1777_v3.py
+          python -m py_compile "$SRC"
+          grep -q 'class DiedricISOProjectionV3Senior' "$SRC"
+          grep -q 'PROYECCIÓN ORTOGONAL' "$SRC"
+          grep -q 'PRIMER DIEDRO' "$SRC"
+          grep -q 'TERCER DIEDRO' "$SRC"
+          grep -q 'NTC 1777:2001' "$SRC"
+          grep -q 'projection_symbol' "$SRC"
+          grep -q 'mechanical_part' "$SRC"
+          ! grep -Eq '[A-Za-z]:\\|/Users/|/home/[^/]+/' "$SRC"
+
+      - name: Install render and QA tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg python3-pip zip
+          python -m pip install --quiet pillow
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL QA render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/technical_drawing_diedric_iso_v3_20260908/diedric_iso_ntc1777_v3.py
+          SCENE=DiedricISOProjectionV3Senior
+          rm -rf media_pql qa_pql
+          mkdir -p qa_pql
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=0.05 \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 \
+            -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pql $SRC $SCENE --fps 15 --format=mp4 --media_dir media_pql --disable_caching" \
+            2>&1 | tee qa_pql/pql.log
+          PQL="$(find media_pql -type f -name "${SCENE}.mp4" | head -1)"
+          test -n "$PQL"
+          test -s "$PQL"
+          ffmpeg -nostdin -v error -i "$PQL" -f null - 2> qa_pql/pql_decode.log
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/technical_drawing_diedric_iso_v3_20260908/diedric_iso_ntc1777_v3.py
+          SCENE=DiedricISOProjectionV3Senior
+          OUT=deliverables/technical_drawing_diedric_iso_v3_20260908
+          rm -rf media "$OUT"
+          mkdir -p "$OUT"
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 \
+            -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pqh $SRC $SCENE --fps 30 --format=mp4 --media_dir media --disable_caching" \
+            2>&1 | tee "$OUT/pqh.log"
+          FINAL="$(find media -type f -name "${SCENE}.mp4" | head -1)"
+          test -n "$FINAL"
+          test -s "$FINAL"
+          cp "$FINAL" "$OUT/TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V3_SENIOR_REDRAFT_FINAL_pqh.mp4"
+
+      - name: Senior technical QA and visual sampling
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=deliverables/technical_drawing_diedric_iso_v3_20260908
+          F="$OUT/TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V3_SENIOR_REDRAFT_FINAL_pqh.mp4"
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tbytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > "$OUT/VIDEO_TECHNICAL.tsv"
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          awk -v d="$DUR" 'BEGIN { if (d < 175 || d > 320) exit 1; }'
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/decode.log"
+
+          mkdir -p "$OUT/qa_frames"
+          for FRAC in 0.02 0.06 0.10 0.14 0.18 0.22 0.26 0.30 0.34 0.38 0.42 0.46 0.50 0.54 0.58 0.62 0.66 0.70 0.74 0.78 0.82 0.86 0.90 0.96; do
+            T="$(awk -v d="$DUR" -v f="$FRAC" 'BEGIN{printf "%.2f",d*f}')"
+            TAG="$(printf '%s' "$FRAC" | tr -d '.')"
+            ffmpeg -y -ss "$T" -i "$F" -frames:v 1 "$OUT/qa_frames/frame_${TAG}.png" >/dev/null 2>&1
+          done
+
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageOps, ImageDraw
+
+          root = Path('deliverables/technical_drawing_diedric_iso_v3_20260908')
+          frames = sorted((root/'qa_frames').glob('*.png'))
+          if len(frames) != 24:
+              raise SystemExit(f'Expected 24 QA frames, found {len(frames)}')
+
+          rows=[]
+          nonblank=0
+          for p in frames:
+              im=Image.open(p).convert('RGB').resize((320,180))
+              pix=list(im.getdata())
+              # Background is near #F7F9FC; count pixels meaningfully different.
+              changed=sum(1 for r,g,b in pix if abs(r-247)+abs(g-249)+abs(b-252) > 38)
+              ratio=changed/len(pix)
+              rows.append((p.name,ratio))
+              if ratio > 0.020:
+                  nonblank += 1
+          (root/'VISUAL_DENSITY_QA.tsv').write_text(
+              'frame\tnonbackground_ratio\n'+'\n'.join(f'{n}\t{r:.6f}' for n,r in rows)+'\n',
+              encoding='utf-8'
+          )
+          print('Visually populated samples:', nonblank, '/', len(frames))
+          if nonblank < 22:
+              raise SystemExit('Too many nearly blank sampled frames')
+
+          thumbs=[]
+          for p in frames:
+              im=Image.open(p).convert('RGB')
+              im.thumbnail((384,216))
+              canvas=Image.new('RGB',(400,246),'white')
+              x=(400-im.width)//2
+              canvas.paste(im,(x,8))
+              d=ImageDraw.Draw(canvas)
+              d.text((12,224),p.stem,fill=(35,45,58))
+              thumbs.append(canvas)
+          sheet=Image.new('RGB',(400*4,246*6),'white')
+          for i,im in enumerate(thumbs):
+              sheet.paste(im,((i%4)*400,(i//4)*246))
+          sheet.save(root/'qa_contact_sheet.jpg',quality=90)
+          PY
+
+          sha256sum "$F" > "$OUT/SHA256SUMS.txt"
+          cp render_jobs/technical_drawing_diedric_iso_v3_20260908/diedric_iso_ntc1777_v3.py "$OUT/TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V3_source.py"
+          cat > "$OUT/RENDER_INFO.txt" <<'EOF'
+          V3 senior visual redesign of the Sistema Diedrico lesson.
+          This is not a cosmetic V2 patch: the lesson was rebuilt around one larger asymmetric mechanical bracket, cleaner orthographic views, explicit projection geometry, a dihedral-plane unfolding sequence, six-view sheet, separate first-angle and third-angle narratives, a direct placement comparison, projection symbols, concise Colombia NTC context, and a timed student prediction challenge.
+          Language: Spanish classroom narration with bilingual projection-method labels.
+          Terminology: Primer diedro / First-angle / ISO E; Tercer diedro / Third-angle / ISO A.
+          Colombia wording: NTC 1777:2001 is described as a technical standard, not legislation by itself; it recognizes first- and third-angle projection methods.
+          ManimCE: 0.20.1
+          Pipeline: literal -pql QA -> literal -pqh final
+          Output: 1920x1080, 30 fps, H.264, yuv420p
+          QA: Python compile + PQL decode + PQH decode + ffprobe gates + 24 distributed visual samples + contact sheet + visual-density gate.
+          EOF
+          (cd "$OUT" && zip -9 -r TechnicalDrawing_Diedric_V3_SENIOR_FULL_TOTAL_PACKAGE.zip \
+            TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V3_SENIOR_REDRAFT_FINAL_pqh.mp4 \
+            TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V3_source.py \
+            VIDEO_TECHNICAL.tsv VISUAL_DENSITY_QA.tsv SHA256SUMS.txt RENDER_INFO.txt decode.log pqh.log qa_contact_sheet.jpg qa_frames)
+          test -s "$OUT/TechnicalDrawing_Diedric_V3_SENIOR_FULL_TOTAL_PACKAGE.zip"
+
+      - name: Persist final V3 delivery to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deliverables/technical_drawing_diedric_iso_v3_20260908
+          if ! git diff --cached --quiet; then
+            git commit -m "render: persist diedric V3 senior redesign PQH [skip ci]"
+            git push origin HEAD:manim/diedric-iso-ntc1777-v3-redesign-20260908
+          fi
+
+      - name: Upload V3 delivery artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DIEDRIC-ISO-V3-SENIOR-REDESIGN-PQH
+          path: deliverables/technical_drawing_diedric_iso_v3_20260908/
+          if-no-files-found: error
+          retention-days: 7
