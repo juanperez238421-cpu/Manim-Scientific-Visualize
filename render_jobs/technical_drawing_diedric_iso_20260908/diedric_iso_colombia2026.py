@@ -5,7 +5,14 @@
 Keeps the complete ISO A / ISO E animation from diedric_iso_ntc1777.py and
 updates the Colombia section after checking the current ICONTEC catalogue.
 """
-from render_jobs.technical_drawing_diedric_iso_20260908.diedric_iso_ntc1777 import *
+from pathlib import Path
+import sys
+
+# Manim loads scene files by path, so make the sibling base scene importable
+# explicitly in Docker/GitHub Actions instead of relying on the repository root
+# being installed as a Python package.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from diedric_iso_ntc1777 import *
 
 
 class DihedralISOProjectionColombia2026(DihedralISOProjectionNTC1777):
