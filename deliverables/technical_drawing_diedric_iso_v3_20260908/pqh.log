@@ -1,0 +1,1018 @@
+Manim Community v0.20.1
+
+[09/08/26 16:53:25] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 0: FadeIn(Text('DIBUJO TÉCNICO · SISTEMA DIÉDRICO')):   0%|          | 0/33 [00:00<?, ?it/s]Animation 0: FadeIn(Text('DIBUJO TÉCNICO · SISTEMA DIÉDRICO')):  24%|██▍       | 8/33 [00:00<00:00, 75.85it/s]Animation 0: FadeIn(Text('DIBUJO TÉCNICO · SISTEMA DIÉDRICO')):  52%|█████▏    | 17/33 [00:00<00:00, 80.07it/s]Animation 0: FadeIn(Text('DIBUJO TÉCNICO · SISTEMA DIÉDRICO')):  79%|███████▉  | 26/33 [00:00<00:00, 80.89it/s]                                                                                                                                   INFO     Animation 0 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00000.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 1: Write(Text('UNA PIEZA 3D → VISTAS 2D')):   0%|          | 0/63 [00:00<?, ?it/s]Animation 1: Write(Text('UNA PIEZA 3D → VISTAS 2D')):  21%|██        | 13/63 [00:00<00:00, 128.64it/s]Animation 1: Write(Text('UNA PIEZA 3D → VISTAS 2D')):  41%|████▏     | 26/63 [00:00<00:00, 117.98it/s]Animation 1: Write(Text('UNA PIEZA 3D → VISTAS 2D')):  60%|██████    | 38/63 [00:00<00:00, 110.04it/s]Animation 1: Write(Text('UNA PIEZA 3D → VISTAS 2D')):  79%|███████▉  | 50/63 [00:00<00:00, 104.60it/s]Animation 1: Write(Text('UNA PIEZA 3D → VISTAS 2D')):  97%|█████████▋| 61/63 [00:00<00:00, 95.58it/s]                                                                                                      [09/08/26 16:53:26] INFO     Animation 1 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00001.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 2: FadeIn(Text('Primer diedro · ISO E   vs   Tercer diedro · ISO A')):   0%|          | 0/33 [00:00<?, ?it/s]Animation 2: FadeIn(Text('Primer diedro · ISO E   vs   Tercer diedro · ISO A')):  24%|██▍       | 8/33 [00:00<00:00, 77.12it/s]Animation 2: FadeIn(Text('Primer diedro · ISO E   vs   Tercer diedro · ISO A')):  48%|████▊     | 16/33 [00:00<00:00, 76.12it/s]Animation 2: FadeIn(Text('Primer diedro · ISO E   vs   Tercer diedro · ISO A')):  73%|███████▎  | 24/33 [00:00<00:00, 76.08it/s]Animation 2: FadeIn(Text('Primer diedro · ISO E   vs   Tercer diedro · ISO A')):  97%|█████████▋| 32/33 [00:00<00:00, 76.44it/s]                                                                                                                                [09/08/26 16:53:27] INFO     Animation 2 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00002.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:53:28] INFO     Animation 3 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00003.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 4: Create(Line):   0%|          | 0/33 [00:00<?, ?it/s]Animation 4: Create(Line):  76%|███████▌  | 25/33 [00:00<00:00, 247.47it/s]                                                                           [09/08/26 16:53:29] INFO     Animation 4 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00004.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 5: LaggedStart(Group):   0%|          | 0/63 [00:00<?, ?it/s]Animation 5: LaggedStart(Group):  32%|███▏      | 20/63 [00:00<00:00, 194.48it/s]Animation 5: LaggedStart(Group):  63%|██████▎   | 40/63 [00:00<00:00, 160.81it/s]Animation 5: LaggedStart(Group):  90%|█████████ | 57/63 [00:00<00:00, 156.33it/s]                                                                                 [09/08/26 16:53:30] INFO     Animation 5 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00005.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 6: FadeIn(VGroup of 4 submobjects), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 6: FadeIn(VGroup of 4 submobjects), etc.:  36%|███▋      | 12/33 [00:00<00:00, 112.35it/s]Animation 6: FadeIn(VGroup of 4 submobjects), etc.:  73%|███████▎  | 24/33 [00:00<00:00, 105.01it/s]                                                                                                                        INFO     Animation 6 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00006.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 7: FadeIn(Text('MISMA PIEZA · DISTINTAS DIRECCIONES DE OBSERVACIÓN')):   0%|          | 0/33 [00:00<?, ?it/s]Animation 7: FadeIn(Text('MISMA PIEZA · DISTINTAS DIRECCIONES DE OBSERVACIÓN')):  21%|██        | 7/33 [00:00<00:00, 63.10it/s]Animation 7: FadeIn(Text('MISMA PIEZA · DISTINTAS DIRECCIONES DE OBSERVACIÓN')):  42%|████▏     | 14/33 [00:00<00:00, 64.15it/s]Animation 7: FadeIn(Text('MISMA PIEZA · DISTINTAS DIRECCIONES DE OBSERVACIÓN')):  64%|██████▎   | 21/33 [00:00<00:00, 64.26it/s]Animation 7: FadeIn(Text('MISMA PIEZA · DISTINTAS DIRECCIONES DE OBSERVACIÓN')):  85%|████████▍ | 28/33 [00:00<00:00, 64.04it/s]                                                                                                                                [09/08/26 16:53:31] INFO     Animation 7 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00007.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:53:33] INFO     Animation 8 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00008.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 9: FadeOut(Text('DIBUJO TÉCNICO · SISTEMA DIÉDRICO')), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 9: FadeOut(Text('DIBUJO TÉCNICO · SISTEMA DIÉDRICO')), etc.:  14%|█▍        | 3/21 [00:00<00:00, 22.78it/s]Animation 9: FadeOut(Text('DIBUJO TÉCNICO · SISTEMA DIÉDRICO')), etc.:  29%|██▊       | 6/21 [00:00<00:00, 22.70it/s]Animation 9: FadeOut(Text('DIBUJO TÉCNICO · SISTEMA DIÉDRICO')), etc.:  43%|████▎     | 9/21 [00:00<00:00, 22.43it/s]Animation 9: FadeOut(Text('DIBUJO TÉCNICO · SISTEMA DIÉDRICO')), etc.:  57%|█████▋    | 12/21 [00:00<00:00, 22.45it/s]Animation 9: FadeOut(Text('DIBUJO TÉCNICO · SISTEMA DIÉDRICO')), etc.:  71%|███████▏  | 15/21 [00:00<00:00, 22.35it/s]Animation 9: FadeOut(Text('DIBUJO TÉCNICO · SISTEMA DIÉDRICO')), etc.:  86%|████████▌ | 18/21 [00:00<00:00, 22.45it/s]Animation 9: FadeOut(Text('DIBUJO TÉCNICO · SISTEMA DIÉDRICO')), etc.: 100%|██████████| 21/21 [00:00<00:00, 22.39it/s]                                                                                                                      [09/08/26 16:53:35] INFO     Animation 9 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00009.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 10: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/63 [00:00<?, ?it/s]Animation 10: FadeIn(VGroup of 2 submobjects), etc.:  11%|█         | 7/63 [00:00<00:00, 69.56it/s]Animation 10: FadeIn(VGroup of 2 submobjects), etc.:  22%|██▏       | 14/63 [00:00<00:00, 68.44it/s]Animation 10: FadeIn(VGroup of 2 submobjects), etc.:  33%|███▎      | 21/63 [00:00<00:00, 64.44it/s]Animation 10: FadeIn(VGroup of 2 submobjects), etc.:  44%|████▍     | 28/63 [00:00<00:00, 63.81it/s]Animation 10: FadeIn(VGroup of 2 submobjects), etc.:  56%|█████▌    | 35/63 [00:00<00:00, 64.66it/s]Animation 10: FadeIn(VGroup of 2 submobjects), etc.:  68%|██████▊   | 43/63 [00:00<00:00, 66.41it/s]Animation 10: FadeIn(VGroup of 2 submobjects), etc.:  79%|███████▉  | 50/63 [00:00<00:00, 61.53it/s]Animation 10: FadeIn(VGroup of 2 submobjects), etc.:  90%|█████████ | 57/63 [00:00<00:00, 59.94it/s]                                                                                                    [09/08/26 16:53:37] INFO     Animation 10 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00010.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 11: FadeIn(Polygon), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 11: FadeIn(Polygon), etc.:  33%|███▎      | 11/33 [00:00<00:00, 109.18it/s]Animation 11: FadeIn(Polygon), etc.:  67%|██████▋   | 22/33 [00:00<00:00, 108.97it/s]                                                                                                         INFO     Animation 11 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00011.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:53:38] INFO     Animation 12 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00012.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 13: GrowArrow(Arrow):   0%|          | 0/33 [00:00<?, ?it/s]Animation 13: GrowArrow(Arrow):  70%|██████▉   | 23/33 [00:00<00:00, 217.71it/s]                                                                                [09/08/26 16:53:39] INFO     Animation 13 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00013.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 14: LaggedStart(Group):   0%|          | 0/47 [00:00<?, ?it/s]Animation 14: LaggedStart(Group):  57%|█████▋    | 27/47 [00:00<00:00, 258.10it/s]                                                                                  [09/08/26 16:53:40] INFO     Animation 14 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00014.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:53:41] INFO     Animation 15 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00015.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 16: Create(VGroup of 5 submobjects):   0%|          | 0/47 [00:00<?, ?it/s]Animation 16: Create(VGroup of 5 submobjects):  45%|████▍     | 21/47 [00:00<00:00, 208.01it/s]Animation 16: Create(VGroup of 5 submobjects):  89%|████████▉ | 42/47 [00:00<00:00, 199.48it/s]                                                                                               [09/08/26 16:53:42] INFO     Animation 16 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00016.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 17: Indicate(VGroup of 5 submobjects):   0%|          | 0/47 [00:00<?, ?it/s]Animation 17: Indicate(VGroup of 5 submobjects):  43%|████▎     | 20/47 [00:00<00:00, 190.56it/s]Animation 17: Indicate(VGroup of 5 submobjects):  85%|████████▌ | 40/47 [00:00<00:00, 189.55it/s]                                                                                                 [09/08/26 16:53:43] INFO     Animation 17 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00017.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:53:44] INFO     Animation 18 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00018.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 19: FadeOut(VGroup of 4 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 19: FadeOut(VGroup of 4 submobjects), etc.:  86%|████████▌ | 18/21 [00:00<00:00, 175.34it/s]                                                                                                                          INFO     Animation 19 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00019.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 20: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 20: FadeIn(VGroup of 2 submobjects), etc.:  33%|███▎      | 11/33 [00:00<00:00, 104.90it/s]Animation 20: FadeIn(VGroup of 2 submobjects), etc.:  67%|██████▋   | 22/33 [00:00<00:00, 101.95it/s]Animation 20: FadeIn(VGroup of 2 submobjects), etc.: 100%|██████████| 33/33 [00:00<00:00, 98.77it/s]                                                                                                     [09/08/26 16:53:45] INFO     Animation 20 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00020.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 21: TransformFromCopy(VGroup of 5 submobjects):   0%|          | 0/63 [00:00<?, ?it/s]Animation 21: TransformFromCopy(VGroup of 5 submobjects):  29%|██▊       | 18/63 [00:00<00:00, 172.30it/s]Animation 21: TransformFromCopy(VGroup of 5 submobjects):  57%|█████▋    | 36/63 [00:00<00:00, 165.95it/s]Animation 21: TransformFromCopy(VGroup of 5 submobjects):  84%|████████▍ | 53/63 [00:00<00:00, 162.36it/s]                                                                                                          [09/08/26 16:53:46] INFO     Animation 21 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00021.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 22: FadeIn(VGroup of 2 submobjects):   0%|          | 0/33 [00:00<?, ?it/s]Animation 22: FadeIn(VGroup of 2 submobjects):  36%|███▋      | 12/33 [00:00<00:00, 111.04it/s]Animation 22: FadeIn(VGroup of 2 submobjects):  73%|███████▎  | 24/33 [00:00<00:00, 109.23it/s]                                                                                                                   INFO     Animation 22 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00022.mp4'                                   
+[09/08/26 16:53:47] INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:53:49] INFO     Animation 23 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00023.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 24: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 24: FadeOut(VGroup of 3 submobjects), etc.:  10%|▉         | 2/21 [00:00<00:01, 18.29it/s]Animation 24: FadeOut(VGroup of 3 submobjects), etc.:  19%|█▉        | 4/21 [00:00<00:00, 17.97it/s]Animation 24: FadeOut(VGroup of 3 submobjects), etc.:  29%|██▊       | 6/21 [00:00<00:00, 17.91it/s]Animation 24: FadeOut(VGroup of 3 submobjects), etc.:  38%|███▊      | 8/21 [00:00<00:00, 17.86it/s]Animation 24: FadeOut(VGroup of 3 submobjects), etc.:  48%|████▊     | 10/21 [00:00<00:00, 17.86it/s]Animation 24: FadeOut(VGroup of 3 submobjects), etc.:  57%|█████▋    | 12/21 [00:00<00:00, 17.89it/s]Animation 24: FadeOut(VGroup of 3 submobjects), etc.:  67%|██████▋   | 14/21 [00:00<00:00, 17.84it/s]Animation 24: FadeOut(VGroup of 3 submobjects), etc.:  76%|███████▌  | 16/21 [00:00<00:00, 17.80it/s]Animation 24: FadeOut(VGroup of 3 submobjects), etc.:  86%|████████▌ | 18/21 [00:01<00:00, 17.81it/s]Animation 24: FadeOut(VGroup of 3 submobjects), etc.:  95%|█████████▌| 20/21 [00:01<00:00, 17.91it/s]                                                                                                     [09/08/26 16:53:51] INFO     Animation 24 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00024.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 25: FadeIn(Polygon), etc.:   0%|          | 0/47 [00:00<?, ?it/s]Animation 25: FadeIn(Polygon), etc.:  51%|█████     | 24/47 [00:00<00:00, 238.38it/s]                                                                                     [09/08/26 16:53:52] INFO     Animation 25 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00025.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 26: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 26: FadeIn(VGroup of 2 submobjects), etc.:  27%|██▋       | 9/33 [00:00<00:00, 80.36it/s]Animation 26: FadeIn(VGroup of 2 submobjects), etc.:  55%|█████▍    | 18/33 [00:00<00:00, 78.39it/s]Animation 26: FadeIn(VGroup of 2 submobjects), etc.:  79%|███████▉  | 26/33 [00:00<00:00, 78.51it/s]                                                                                                    [09/08/26 16:53:53] INFO     Animation 26 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00026.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 27: DrawBorderThenFill(VGroup of 4 submobjects), etc.:   0%|          | 0/63 [00:00<?, ?it/s]Animation 27: DrawBorderThenFill(VGroup of 4 submobjects), etc.:  16%|█▌        | 10/63 [00:00<00:00, 91.05it/s]Animation 27: DrawBorderThenFill(VGroup of 4 submobjects), etc.:  32%|███▏      | 20/63 [00:00<00:00, 85.13it/s]Animation 27: DrawBorderThenFill(VGroup of 4 submobjects), etc.:  46%|████▌     | 29/63 [00:00<00:00, 77.20it/s]Animation 27: DrawBorderThenFill(VGroup of 4 submobjects), etc.:  62%|██████▏   | 39/63 [00:00<00:00, 83.35it/s]Animation 27: DrawBorderThenFill(VGroup of 4 submobjects), etc.:  78%|███████▊  | 49/63 [00:00<00:00, 86.31it/s]Animation 27: DrawBorderThenFill(VGroup of 4 submobjects), etc.:  92%|█████████▏| 58/63 [00:00<00:00, 87.08it/s]                                                                                                                [09/08/26 16:53:54] INFO     Animation 27 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00027.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:53:55] INFO     Animation 28 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00028.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 29: LaggedStart(Group):   0%|          | 0/47 [00:00<?, ?it/s]Animation 29: LaggedStart(Group):  60%|█████▉    | 28/47 [00:00<00:00, 271.92it/s]                                                                                  [09/08/26 16:53:56] INFO     Animation 29 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00029.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 30: Create(VGroup of 5 submobjects):   0%|          | 0/47 [00:00<?, ?it/s]Animation 30: Create(VGroup of 5 submobjects):  51%|█████     | 24/47 [00:00<00:00, 239.88it/s]                                                                                               [09/08/26 16:53:57] INFO     Animation 30 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00030.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:53:58] INFO     Animation 31 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00031.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 32: LaggedStart(Group):   0%|          | 0/47 [00:00<?, ?it/s]Animation 32: LaggedStart(Group):  49%|████▉     | 23/47 [00:00<00:00, 226.86it/s]                                                                                                      INFO     Animation 32 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00032.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 33: Create(VGroup of 6 submobjects):   0%|          | 0/47 [00:00<?, ?it/s]Animation 33: Create(VGroup of 6 submobjects):  45%|████▍     | 21/47 [00:00<00:00, 197.76it/s]Animation 33: Create(VGroup of 6 submobjects):  87%|████████▋ | 41/47 [00:00<00:00, 192.29it/s]                                                                                               [09/08/26 16:53:59] INFO     Animation 33 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00033.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:54:01] INFO     Animation 34 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00034.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 35: FadeOut(VGroup of 4 submobjects), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 35: FadeOut(VGroup of 4 submobjects), etc.:  30%|███       | 10/33 [00:00<00:00, 89.73it/s]Animation 35: FadeOut(VGroup of 4 submobjects), etc.:  61%|██████    | 20/33 [00:00<00:00, 90.78it/s]Animation 35: FadeOut(VGroup of 4 submobjects), etc.:  91%|█████████ | 30/33 [00:00<00:00, 89.42it/s]                                                                                                                         INFO     Animation 35 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00035.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 36: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/47 [00:00<?, ?it/s]Animation 36: FadeIn(VGroup of 2 submobjects), etc.:  19%|█▉        | 9/47 [00:00<00:00, 83.30it/s]Animation 36: FadeIn(VGroup of 2 submobjects), etc.:  38%|███▊      | 18/47 [00:00<00:00, 81.00it/s]Animation 36: FadeIn(VGroup of 2 submobjects), etc.:  57%|█████▋    | 27/47 [00:00<00:00, 79.96it/s]Animation 36: FadeIn(VGroup of 2 submobjects), etc.:  74%|███████▍  | 35/47 [00:00<00:00, 79.78it/s]Animation 36: FadeIn(VGroup of 2 submobjects), etc.:  91%|█████████▏| 43/47 [00:00<00:00, 78.43it/s]                                                                                                    [09/08/26 16:54:02] INFO     Animation 36 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00036.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 37: TransformFromCopy(VGroup of 5 submobjects):   0%|          | 0/47 [00:00<?, ?it/s]Animation 37: TransformFromCopy(VGroup of 5 submobjects):  38%|███▊      | 18/47 [00:00<00:00, 173.24it/s]Animation 37: TransformFromCopy(VGroup of 5 submobjects):  77%|███████▋  | 36/47 [00:00<00:00, 173.12it/s]                                                                                                          [09/08/26 16:54:03] INFO     Animation 37 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00037.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 38: TransformFromCopy(VGroup of 6 submobjects):   0%|          | 0/47 [00:00<?, ?it/s]Animation 38: TransformFromCopy(VGroup of 6 submobjects):  43%|████▎     | 20/47 [00:00<00:00, 192.23it/s]Animation 38: TransformFromCopy(VGroup of 6 submobjects):  85%|████████▌ | 40/47 [00:00<00:00, 185.78it/s]                                                                                                          [09/08/26 16:54:04] INFO     Animation 38 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00038.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 39: GrowArrow(Arrow), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 39: GrowArrow(Arrow), etc.:  36%|███▋      | 12/33 [00:00<00:00, 113.26it/s]Animation 39: GrowArrow(Arrow), etc.:  73%|███████▎  | 24/33 [00:00<00:00, 116.08it/s]                                                                                      [09/08/26 16:54:05] INFO     Animation 39 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00039.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:54:07] INFO     Animation 40 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00040.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 41: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 41: FadeOut(VGroup of 3 submobjects), etc.:  10%|▉         | 2/21 [00:00<00:00, 19.35it/s]Animation 41: FadeOut(VGroup of 3 submobjects), etc.:  19%|█▉        | 4/21 [00:00<00:00, 19.13it/s]Animation 41: FadeOut(VGroup of 3 submobjects), etc.:  29%|██▊       | 6/21 [00:00<00:00, 18.97it/s]Animation 41: FadeOut(VGroup of 3 submobjects), etc.:  38%|███▊      | 8/21 [00:00<00:00, 18.82it/s]Animation 41: FadeOut(VGroup of 3 submobjects), etc.:  48%|████▊     | 10/21 [00:00<00:00, 18.76it/s]Animation 41: FadeOut(VGroup of 3 submobjects), etc.:  57%|█████▋    | 12/21 [00:00<00:00, 18.82it/s]Animation 41: FadeOut(VGroup of 3 submobjects), etc.:  67%|██████▋   | 14/21 [00:00<00:00, 18.90it/s]Animation 41: FadeOut(VGroup of 3 submobjects), etc.:  76%|███████▌  | 16/21 [00:00<00:00, 18.86it/s]Animation 41: FadeOut(VGroup of 3 submobjects), etc.:  86%|████████▌ | 18/21 [00:00<00:00, 18.83it/s]Animation 41: FadeOut(VGroup of 3 submobjects), etc.:  95%|█████████▌| 20/21 [00:01<00:00, 18.93it/s]                                                                                                     [09/08/26 16:54:09] INFO     Animation 41 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00041.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 42: FadeIn(Circle), etc.:   0%|          | 0/63 [00:00<?, ?it/s]Animation 42: FadeIn(Circle), etc.:  14%|█▍        | 9/63 [00:00<00:00, 87.75it/s]Animation 42: FadeIn(Circle), etc.:  29%|██▊       | 18/63 [00:00<00:00, 85.85it/s]Animation 42: FadeIn(Circle), etc.:  43%|████▎     | 27/63 [00:00<00:00, 83.36it/s]Animation 42: FadeIn(Circle), etc.:  57%|█████▋    | 36/63 [00:00<00:00, 84.03it/s]Animation 42: FadeIn(Circle), etc.:  73%|███████▎  | 46/63 [00:00<00:00, 86.37it/s]Animation 42: FadeIn(Circle), etc.:  87%|████████▋ | 55/63 [00:00<00:00, 82.85it/s]                                                                                   [09/08/26 16:54:10] INFO     Animation 42 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00042.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:54:11] INFO     Animation 43 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00043.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 44: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 44: FadeIn(VGroup of 2 submobjects), etc.:  76%|███████▌  | 16/21 [00:00<00:00, 152.46it/s]                                                                                                     [09/08/26 16:54:12] INFO     Animation 44 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00044.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 45: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 45: FadeIn(VGroup of 2 submobjects), etc.:  67%|██████▋   | 14/21 [00:00<00:00, 133.12it/s]                                                                                                                         INFO     Animation 45 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00045.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 46: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 46: FadeIn(VGroup of 2 submobjects), etc.:  71%|███████▏  | 15/21 [00:00<00:00, 146.46it/s]                                                                                                                         INFO     Animation 46 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00046.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 47: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 47: FadeIn(VGroup of 2 submobjects), etc.:  67%|██████▋   | 14/21 [00:00<00:00, 135.06it/s]                                                                                                     [09/08/26 16:54:13] INFO     Animation 47 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00047.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 48: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 48: FadeIn(VGroup of 2 submobjects), etc.:  62%|██████▏   | 13/21 [00:00<00:00, 128.42it/s]                                                                                                                         INFO     Animation 48 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00048.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 49: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 49: FadeIn(VGroup of 2 submobjects), etc.:  67%|██████▋   | 14/21 [00:00<00:00, 136.25it/s]                                                                                                     [09/08/26 16:54:14] INFO     Animation 49 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00049.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:54:15] INFO     Animation 50 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00050.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 51: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 51: FadeOut(VGroup of 2 submobjects), etc.:  12%|█▏        | 4/33 [00:00<00:00, 35.25it/s]Animation 51: FadeOut(VGroup of 2 submobjects), etc.:  24%|██▍       | 8/33 [00:00<00:00, 34.54it/s]Animation 51: FadeOut(VGroup of 2 submobjects), etc.:  36%|███▋      | 12/33 [00:00<00:00, 34.52it/s]Animation 51: FadeOut(VGroup of 2 submobjects), etc.:  48%|████▊     | 16/33 [00:00<00:00, 34.37it/s]Animation 51: FadeOut(VGroup of 2 submobjects), etc.:  61%|██████    | 20/33 [00:00<00:00, 34.35it/s]Animation 51: FadeOut(VGroup of 2 submobjects), etc.:  73%|███████▎  | 24/33 [00:00<00:00, 34.23it/s]Animation 51: FadeOut(VGroup of 2 submobjects), etc.:  85%|████████▍ | 28/33 [00:00<00:00, 34.09it/s]Animation 51: FadeOut(VGroup of 2 submobjects), etc.:  97%|█████████▋| 32/33 [00:00<00:00, 33.93it/s]                                                                                                     [09/08/26 16:54:17] INFO     Animation 51 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00051.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 52: LaggedStart(Group):   0%|          | 0/86 [00:00<?, ?it/s]Animation 52: LaggedStart(Group):   6%|▌         | 5/86 [00:00<00:01, 47.48it/s]Animation 52: LaggedStart(Group):  12%|█▏        | 10/86 [00:00<00:01, 44.92it/s]Animation 52: LaggedStart(Group):  17%|█▋        | 15/86 [00:00<00:01, 43.63it/s]Animation 52: LaggedStart(Group):  23%|██▎       | 20/86 [00:00<00:01, 42.73it/s]Animation 52: LaggedStart(Group):  29%|██▉       | 25/86 [00:00<00:01, 41.11it/s]Animation 52: LaggedStart(Group):  35%|███▍      | 30/86 [00:00<00:01, 39.41it/s]Animation 52: LaggedStart(Group):  40%|███▉      | 34/86 [00:00<00:01, 38.47it/s]Animation 52: LaggedStart(Group):  44%|████▍     | 38/86 [00:00<00:01, 37.38it/s]Animation 52: LaggedStart(Group):  49%|████▉     | 42/86 [00:01<00:01, 36.57it/s]Animation 52: LaggedStart(Group):  53%|█████▎    | 46/86 [00:01<00:01, 32.71it/s]Animation 52: LaggedStart(Group):  58%|█████▊    | 50/86 [00:01<00:01, 29.99it/s]Animation 52: LaggedStart(Group):  63%|██████▎   | 54/86 [00:01<00:01, 30.05it/s]Animation 52: LaggedStart(Group):  67%|██████▋   | 58/86 [00:01<00:00, 30.15it/s]Animation 52: LaggedStart(Group):  72%|███████▏  | 62/86 [00:01<00:00, 30.71it/s]Animation 52: LaggedStart(Group):  77%|███████▋  | 66/86 [00:01<00:00, 30.89it/s]Animation 52: LaggedStart(Group):  81%|████████▏ | 70/86 [00:02<00:00, 29.75it/s]Animation 52: LaggedStart(Group):  86%|████████▌ | 74/86 [00:02<00:00, 30.03it/s]Animation 52: LaggedStart(Group):  91%|█████████ | 78/86 [00:02<00:00, 29.51it/s]Animation 52: LaggedStart(Group):  94%|█████████▍| 81/86 [00:02<00:00, 29.52it/s]Animation 52: LaggedStart(Group):  98%|█████████▊| 84/86 [00:02<00:00, 29.06it/s]                                                                                 [09/08/26 16:54:20] INFO     Animation 52 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00052.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:54:22] INFO     Animation 53 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00053.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 54: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 54: FadeOut(VGroup of 3 submobjects), etc.:  14%|█▍        | 3/21 [00:00<00:00, 20.27it/s]Animation 54: FadeOut(VGroup of 3 submobjects), etc.:  29%|██▊       | 6/21 [00:00<00:00, 20.55it/s]Animation 54: FadeOut(VGroup of 3 submobjects), etc.:  43%|████▎     | 9/21 [00:00<00:00, 20.65it/s]Animation 54: FadeOut(VGroup of 3 submobjects), etc.:  57%|█████▋    | 12/21 [00:00<00:00, 20.68it/s]Animation 54: FadeOut(VGroup of 3 submobjects), etc.:  71%|███████▏  | 15/21 [00:00<00:00, 20.47it/s]Animation 54: FadeOut(VGroup of 3 submobjects), etc.:  86%|████████▌ | 18/21 [00:00<00:00, 20.47it/s]Animation 54: FadeOut(VGroup of 3 submobjects), etc.: 100%|██████████| 21/21 [00:01<00:00, 20.49it/s]                                                                                                     [09/08/26 16:54:24] INFO     Animation 54 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00054.mp4'                                   
+[09/08/26 16:54:25] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 55: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/63 [00:00<?, ?it/s]Animation 55: FadeIn(VGroup of 2 submobjects), etc.:  11%|█         | 7/63 [00:00<00:00, 69.38it/s]Animation 55: FadeIn(VGroup of 2 submobjects), etc.:  22%|██▏       | 14/63 [00:00<00:00, 68.53it/s]Animation 55: FadeIn(VGroup of 2 submobjects), etc.:  33%|███▎      | 21/63 [00:00<00:00, 65.66it/s]Animation 55: FadeIn(VGroup of 2 submobjects), etc.:  44%|████▍     | 28/63 [00:00<00:00, 64.01it/s]Animation 55: FadeIn(VGroup of 2 submobjects), etc.:  56%|█████▌    | 35/63 [00:00<00:00, 63.52it/s]Animation 55: FadeIn(VGroup of 2 submobjects), etc.:  68%|██████▊   | 43/63 [00:00<00:00, 66.05it/s]Animation 55: FadeIn(VGroup of 2 submobjects), etc.:  79%|███████▉  | 50/63 [00:00<00:00, 62.46it/s]Animation 55: FadeIn(VGroup of 2 submobjects), etc.:  90%|█████████ | 57/63 [00:00<00:00, 60.79it/s]                                                                                                    [09/08/26 16:54:26] INFO     Animation 55 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00055.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 56: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 56: FadeIn(VGroup of 2 submobjects), etc.:  27%|██▋       | 9/33 [00:00<00:00, 87.61it/s]Animation 56: FadeIn(VGroup of 2 submobjects), etc.:  55%|█████▍    | 18/33 [00:00<00:00, 85.38it/s]Animation 56: FadeIn(VGroup of 2 submobjects), etc.:  82%|████████▏ | 27/33 [00:00<00:00, 85.35it/s]                                                                                                    [09/08/26 16:54:27] INFO     Animation 56 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00056.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 57: GrowArrow(Arrow):   0%|          | 0/33 [00:00<?, ?it/s]Animation 57: GrowArrow(Arrow):  79%|███████▉  | 26/33 [00:00<00:00, 257.14it/s]                                                                                                    INFO     Animation 57 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00057.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 58: GrowArrow(Arrow):   0%|          | 0/33 [00:00<?, ?it/s]Animation 58: GrowArrow(Arrow):  79%|███████▉  | 26/33 [00:00<00:00, 256.45it/s]                                                                                [09/08/26 16:54:28] INFO     Animation 58 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00058.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:54:29] INFO     Animation 59 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00059.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 60: FadeIn(VGroup of 2 submobjects):   0%|          | 0/33 [00:00<?, ?it/s]Animation 60: FadeIn(VGroup of 2 submobjects):  27%|██▋       | 9/33 [00:00<00:00, 89.91it/s]Animation 60: FadeIn(VGroup of 2 submobjects):  55%|█████▍    | 18/33 [00:00<00:00, 88.26it/s]Animation 60: FadeIn(VGroup of 2 submobjects):  82%|████████▏ | 27/33 [00:00<00:00, 87.20it/s]                                                                                              [09/08/26 16:54:30] INFO     Animation 60 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00060.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:54:31] INFO     Animation 61 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00061.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 62: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 62: FadeOut(VGroup of 2 submobjects), etc.:  12%|█▏        | 4/33 [00:00<00:00, 35.91it/s]Animation 62: FadeOut(VGroup of 2 submobjects), etc.:  24%|██▍       | 8/33 [00:00<00:00, 35.80it/s]Animation 62: FadeOut(VGroup of 2 submobjects), etc.:  36%|███▋      | 12/33 [00:00<00:00, 35.48it/s]Animation 62: FadeOut(VGroup of 2 submobjects), etc.:  48%|████▊     | 16/33 [00:00<00:00, 35.46it/s]Animation 62: FadeOut(VGroup of 2 submobjects), etc.:  61%|██████    | 20/33 [00:00<00:00, 35.30it/s]Animation 62: FadeOut(VGroup of 2 submobjects), etc.:  73%|███████▎  | 24/33 [00:00<00:00, 35.46it/s]Animation 62: FadeOut(VGroup of 2 submobjects), etc.:  85%|████████▍ | 28/33 [00:00<00:00, 35.73it/s]Animation 62: FadeOut(VGroup of 2 submobjects), etc.:  97%|█████████▋| 32/33 [00:00<00:00, 35.88it/s]                                                                                                     [09/08/26 16:54:33] INFO     Animation 62 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00062.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 63: FadeIn(Text('PRIMER DIEDRO')):   0%|          | 0/33 [00:00<?, ?it/s]Animation 63: FadeIn(Text('PRIMER DIEDRO')):  39%|███▉      | 13/33 [00:00<00:00, 126.06it/s]Animation 63: FadeIn(Text('PRIMER DIEDRO')):  82%|████████▏ | 27/33 [00:00<00:00, 129.31it/s]                                                                                                                 INFO     Animation 63 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00063.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 64: FadeIn(VGroup of 4 submobjects):   0%|          | 0/33 [00:00<?, ?it/s]Animation 64: FadeIn(VGroup of 4 submobjects):  39%|███▉      | 13/33 [00:00<00:00, 121.19it/s]Animation 64: FadeIn(VGroup of 4 submobjects):  79%|███████▉  | 26/33 [00:00<00:00, 124.30it/s]                                                                                               [09/08/26 16:54:34] INFO     Animation 64 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00064.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 65: FadeIn(Text('PLANTA ↓')), etc.:   0%|          | 0/47 [00:00<?, ?it/s]Animation 65: FadeIn(Text('PLANTA ↓')), etc.:  21%|██▏       | 10/47 [00:00<00:00, 91.86it/s]Animation 65: FadeIn(Text('PLANTA ↓')), etc.:  43%|████▎     | 20/47 [00:00<00:00, 95.33it/s]Animation 65: FadeIn(Text('PLANTA ↓')), etc.:  66%|██████▌   | 31/47 [00:00<00:00, 99.24it/s]Animation 65: FadeIn(Text('PLANTA ↓')), etc.:  89%|████████▉ | 42/47 [00:00<00:00, 101.40it/s]                                                                                              [09/08/26 16:54:35] INFO     Animation 65 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00065.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 66: FadeIn(Text('LATERAL D. ←')), etc.:   0%|          | 0/47 [00:00<?, ?it/s]Animation 66: FadeIn(Text('LATERAL D. ←')), etc.:  23%|██▎       | 11/47 [00:00<00:00, 105.56it/s]Animation 66: FadeIn(Text('LATERAL D. ←')), etc.:  47%|████▋     | 22/47 [00:00<00:00, 102.54it/s]Animation 66: FadeIn(Text('LATERAL D. ←')), etc.:  70%|███████   | 33/47 [00:00<00:00, 103.00it/s]Animation 66: FadeIn(Text('LATERAL D. ←')), etc.:  94%|█████████▎| 44/47 [00:00<00:00, 99.91it/s]                                                                                                  [09/08/26 16:54:36] INFO     Animation 66 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00066.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:54:38] INFO     Animation 67 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00067.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 68: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 68: FadeOut(VGroup of 3 submobjects), etc.:  10%|▉         | 2/21 [00:00<00:01, 17.72it/s]Animation 68: FadeOut(VGroup of 3 submobjects), etc.:  19%|█▉        | 4/21 [00:00<00:00, 17.56it/s]Animation 68: FadeOut(VGroup of 3 submobjects), etc.:  29%|██▊       | 6/21 [00:00<00:00, 17.26it/s]Animation 68: FadeOut(VGroup of 3 submobjects), etc.:  38%|███▊      | 8/21 [00:00<00:00, 16.92it/s]Animation 68: FadeOut(VGroup of 3 submobjects), etc.:  48%|████▊     | 10/21 [00:00<00:00, 17.28it/s]Animation 68: FadeOut(VGroup of 3 submobjects), etc.:  57%|█████▋    | 12/21 [00:00<00:00, 17.46it/s]Animation 68: FadeOut(VGroup of 3 submobjects), etc.:  67%|██████▋   | 14/21 [00:00<00:00, 17.60it/s]Animation 68: FadeOut(VGroup of 3 submobjects), etc.:  76%|███████▌  | 16/21 [00:00<00:00, 17.71it/s]Animation 68: FadeOut(VGroup of 3 submobjects), etc.:  86%|████████▌ | 18/21 [00:01<00:00, 17.80it/s]Animation 68: FadeOut(VGroup of 3 submobjects), etc.:  95%|█████████▌| 20/21 [00:01<00:00, 17.76it/s]                                                                                                     [09/08/26 16:54:40] INFO     Animation 68 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00068.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 69: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/63 [00:00<?, ?it/s]Animation 69: FadeIn(VGroup of 2 submobjects), etc.:  13%|█▎        | 8/63 [00:00<00:00, 71.14it/s]Animation 69: FadeIn(VGroup of 2 submobjects), etc.:  25%|██▌       | 16/63 [00:00<00:00, 70.40it/s]Animation 69: FadeIn(VGroup of 2 submobjects), etc.:  38%|███▊      | 24/63 [00:00<00:00, 67.01it/s]Animation 69: FadeIn(VGroup of 2 submobjects), etc.:  49%|████▉     | 31/63 [00:00<00:00, 65.69it/s]Animation 69: FadeIn(VGroup of 2 submobjects), etc.:  62%|██████▏   | 39/63 [00:00<00:00, 67.82it/s]Animation 69: FadeIn(VGroup of 2 submobjects), etc.:  73%|███████▎  | 46/63 [00:00<00:00, 68.24it/s]Animation 69: FadeIn(VGroup of 2 submobjects), etc.:  84%|████████▍ | 53/63 [00:00<00:00, 62.75it/s]Animation 69: FadeIn(VGroup of 2 submobjects), etc.:  95%|█████████▌| 60/63 [00:00<00:00, 60.52it/s]                                                                                                    [09/08/26 16:54:42] INFO     Animation 69 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00069.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 70: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 70: FadeIn(VGroup of 2 submobjects), etc.:  27%|██▋       | 9/33 [00:00<00:00, 85.20it/s]Animation 70: FadeIn(VGroup of 2 submobjects), etc.:  55%|█████▍    | 18/33 [00:00<00:00, 84.50it/s]Animation 70: FadeIn(VGroup of 2 submobjects), etc.:  82%|████████▏ | 27/33 [00:00<00:00, 83.81it/s]                                                                                                    [09/08/26 16:54:43] INFO     Animation 70 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00070.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 71: GrowArrow(Arrow):   0%|          | 0/33 [00:00<?, ?it/s]Animation 71: GrowArrow(Arrow):  79%|███████▉  | 26/33 [00:00<00:00, 247.80it/s]                                                                                                    INFO     Animation 71 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00071.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 72: GrowArrow(Arrow):   0%|          | 0/33 [00:00<?, ?it/s]Animation 72: GrowArrow(Arrow):  82%|████████▏ | 27/33 [00:00<00:00, 266.76it/s]                                                                                [09/08/26 16:54:44] INFO     Animation 72 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00072.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:54:45] INFO     Animation 73 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00073.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 74: FadeIn(VGroup of 2 submobjects):   0%|          | 0/33 [00:00<?, ?it/s]Animation 74: FadeIn(VGroup of 2 submobjects):  27%|██▋       | 9/33 [00:00<00:00, 89.81it/s]Animation 74: FadeIn(VGroup of 2 submobjects):  55%|█████▍    | 18/33 [00:00<00:00, 88.54it/s]Animation 74: FadeIn(VGroup of 2 submobjects):  82%|████████▏ | 27/33 [00:00<00:00, 86.89it/s]                                                                                              [09/08/26 16:54:46] INFO     Animation 74 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00074.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:54:47] INFO     Animation 75 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00075.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 76: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 76: FadeOut(VGroup of 2 submobjects), etc.:  12%|█▏        | 4/33 [00:00<00:00, 35.67it/s]Animation 76: FadeOut(VGroup of 2 submobjects), etc.:  24%|██▍       | 8/33 [00:00<00:00, 35.16it/s]Animation 76: FadeOut(VGroup of 2 submobjects), etc.:  36%|███▋      | 12/33 [00:00<00:00, 35.18it/s]Animation 76: FadeOut(VGroup of 2 submobjects), etc.:  48%|████▊     | 16/33 [00:00<00:00, 34.06it/s]Animation 76: FadeOut(VGroup of 2 submobjects), etc.:  61%|██████    | 20/33 [00:00<00:00, 33.21it/s]Animation 76: FadeOut(VGroup of 2 submobjects), etc.:  73%|███████▎  | 24/33 [00:00<00:00, 32.68it/s]Animation 76: FadeOut(VGroup of 2 submobjects), etc.:  85%|████████▍ | 28/33 [00:00<00:00, 32.63it/s]Animation 76: FadeOut(VGroup of 2 submobjects), etc.:  97%|█████████▋| 32/33 [00:00<00:00, 32.70it/s]                                                                                                     [09/08/26 16:54:48] INFO     Animation 76 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00076.mp4'                                   
+[09/08/26 16:54:49] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 77: FadeIn(Text('TERCER DIEDRO')):   0%|          | 0/33 [00:00<?, ?it/s]Animation 77: FadeIn(Text('TERCER DIEDRO')):  39%|███▉      | 13/33 [00:00<00:00, 128.82it/s]Animation 77: FadeIn(Text('TERCER DIEDRO')):  82%|████████▏ | 27/33 [00:00<00:00, 129.19it/s]                                                                                                                 INFO     Animation 77 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00077.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 78: FadeIn(VGroup of 4 submobjects):   0%|          | 0/33 [00:00<?, ?it/s]Animation 78: FadeIn(VGroup of 4 submobjects):  39%|███▉      | 13/33 [00:00<00:00, 121.16it/s]Animation 78: FadeIn(VGroup of 4 submobjects):  79%|███████▉  | 26/33 [00:00<00:00, 117.11it/s]                                                                                               [09/08/26 16:54:50] INFO     Animation 78 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00078.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 79: FadeIn(Text('PLANTA ↑')), etc.:   0%|          | 0/47 [00:00<?, ?it/s]Animation 79: FadeIn(Text('PLANTA ↑')), etc.:  23%|██▎       | 11/47 [00:00<00:00, 105.29it/s]Animation 79: FadeIn(Text('PLANTA ↑')), etc.:  47%|████▋     | 22/47 [00:00<00:00, 102.56it/s]Animation 79: FadeIn(Text('PLANTA ↑')), etc.:  70%|███████   | 33/47 [00:00<00:00, 100.22it/s]Animation 79: FadeIn(Text('PLANTA ↑')), etc.:  94%|█████████▎| 44/47 [00:00<00:00, 98.70it/s]                                                                                              [09/08/26 16:54:51] INFO     Animation 79 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00079.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 80: FadeIn(Text('LATERAL D. →')), etc.:   0%|          | 0/47 [00:00<?, ?it/s]Animation 80: FadeIn(Text('LATERAL D. →')), etc.:  17%|█▋        | 8/47 [00:00<00:00, 79.63it/s]Animation 80: FadeIn(Text('LATERAL D. →')), etc.:  36%|███▌      | 17/47 [00:00<00:00, 85.64it/s]Animation 80: FadeIn(Text('LATERAL D. →')), etc.:  57%|█████▋    | 27/47 [00:00<00:00, 91.73it/s]Animation 80: FadeIn(Text('LATERAL D. →')), etc.:  79%|███████▊  | 37/47 [00:00<00:00, 93.76it/s]Animation 80: FadeIn(Text('LATERAL D. →')), etc.: 100%|██████████| 47/47 [00:00<00:00, 95.67it/s]                                                                                                 [09/08/26 16:54:52] INFO     Animation 80 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00080.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:54:54] INFO     Animation 81 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00081.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 82: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 82: FadeOut(VGroup of 3 submobjects), etc.:  10%|▉         | 2/21 [00:00<00:01, 18.01it/s]Animation 82: FadeOut(VGroup of 3 submobjects), etc.:  19%|█▉        | 4/21 [00:00<00:00, 17.81it/s]Animation 82: FadeOut(VGroup of 3 submobjects), etc.:  29%|██▊       | 6/21 [00:00<00:00, 17.72it/s]Animation 82: FadeOut(VGroup of 3 submobjects), etc.:  38%|███▊      | 8/21 [00:00<00:00, 17.74it/s]Animation 82: FadeOut(VGroup of 3 submobjects), etc.:  48%|████▊     | 10/21 [00:00<00:00, 17.66it/s]Animation 82: FadeOut(VGroup of 3 submobjects), etc.:  57%|█████▋    | 12/21 [00:00<00:00, 17.72it/s]Animation 82: FadeOut(VGroup of 3 submobjects), etc.:  67%|██████▋   | 14/21 [00:00<00:00, 17.66it/s]Animation 82: FadeOut(VGroup of 3 submobjects), etc.:  76%|███████▌  | 16/21 [00:00<00:00, 17.55it/s]Animation 82: FadeOut(VGroup of 3 submobjects), etc.:  86%|████████▌ | 18/21 [00:01<00:00, 17.54it/s]Animation 82: FadeOut(VGroup of 3 submobjects), etc.:  95%|█████████▌| 20/21 [00:01<00:00, 17.42it/s]                                                                                                     [09/08/26 16:54:56] INFO     Animation 82 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00082.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 83: Create(Line), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 83: Create(Line), etc.:  24%|██▍       | 8/33 [00:00<00:00, 72.67it/s]Animation 83: Create(Line), etc.:  48%|████▊     | 16/33 [00:00<00:00, 71.75it/s]Animation 83: Create(Line), etc.:  73%|███████▎  | 24/33 [00:00<00:00, 72.15it/s]Animation 83: Create(Line), etc.:  97%|█████████▋| 32/33 [00:00<00:00, 72.85it/s]                                                                                 [09/08/26 16:54:57] INFO     Animation 83 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00083.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 84: LaggedStart(Group):   0%|          | 0/47 [00:00<?, ?it/s]Animation 84: LaggedStart(Group):  21%|██▏       | 10/47 [00:00<00:00, 98.90it/s]Animation 84: LaggedStart(Group):  43%|████▎     | 20/47 [00:00<00:00, 92.21it/s]Animation 84: LaggedStart(Group):  64%|██████▍   | 30/47 [00:00<00:00, 88.51it/s]Animation 84: LaggedStart(Group):  83%|████████▎ | 39/47 [00:00<00:00, 84.62it/s]                                                                                 [09/08/26 16:54:58] INFO     Animation 84 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00084.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 85: LaggedStart(Group):   0%|          | 0/47 [00:00<?, ?it/s]Animation 85: LaggedStart(Group):  21%|██▏       | 10/47 [00:00<00:00, 96.88it/s]Animation 85: LaggedStart(Group):  43%|████▎     | 20/47 [00:00<00:00, 89.20it/s]Animation 85: LaggedStart(Group):  62%|██████▏   | 29/47 [00:00<00:00, 88.53it/s]Animation 85: LaggedStart(Group):  81%|████████  | 38/47 [00:00<00:00, 85.36it/s]Animation 85: LaggedStart(Group): 100%|██████████| 47/47 [00:00<00:00, 86.16it/s]                                                                                 [09/08/26 16:54:59] INFO     Animation 85 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00085.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 86: LaggedStart(Group):   0%|          | 0/47 [00:00<?, ?it/s]Animation 86: LaggedStart(Group):  21%|██▏       | 10/47 [00:00<00:00, 93.46it/s]Animation 86: LaggedStart(Group):  43%|████▎     | 20/47 [00:00<00:00, 92.03it/s]Animation 86: LaggedStart(Group):  64%|██████▍   | 30/47 [00:00<00:00, 90.74it/s]Animation 86: LaggedStart(Group):  85%|████████▌ | 40/47 [00:00<00:00, 90.85it/s]                                                                                 [09/08/26 16:55:00] INFO     Animation 86 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00086.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 87: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 87: FadeIn(VGroup of 2 submobjects), etc.:  30%|███       | 10/33 [00:00<00:00, 99.44it/s]Animation 87: FadeIn(VGroup of 2 submobjects), etc.:  61%|██████    | 20/33 [00:00<00:00, 96.03it/s]Animation 87: FadeIn(VGroup of 2 submobjects), etc.:  91%|█████████ | 30/33 [00:00<00:00, 96.49it/s]                                                                                                    [09/08/26 16:55:01] INFO     Animation 87 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00087.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:55:03] INFO     Animation 88 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00088.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 89: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 89: FadeOut(VGroup of 3 submobjects), etc.:  10%|▉         | 2/21 [00:00<00:01, 15.66it/s]Animation 89: FadeOut(VGroup of 3 submobjects), etc.:  19%|█▉        | 4/21 [00:00<00:01, 15.52it/s]Animation 89: FadeOut(VGroup of 3 submobjects), etc.:  29%|██▊       | 6/21 [00:00<00:00, 15.48it/s]Animation 89: FadeOut(VGroup of 3 submobjects), etc.:  38%|███▊      | 8/21 [00:00<00:00, 15.42it/s]Animation 89: FadeOut(VGroup of 3 submobjects), etc.:  48%|████▊     | 10/21 [00:00<00:00, 15.33it/s]Animation 89: FadeOut(VGroup of 3 submobjects), etc.:  57%|█████▋    | 12/21 [00:00<00:00, 15.35it/s]Animation 89: FadeOut(VGroup of 3 submobjects), etc.:  67%|██████▋   | 14/21 [00:00<00:00, 15.30it/s]Animation 89: FadeOut(VGroup of 3 submobjects), etc.:  76%|███████▌  | 16/21 [00:01<00:00, 15.24it/s]Animation 89: FadeOut(VGroup of 3 submobjects), etc.:  86%|████████▌ | 18/21 [00:01<00:00, 15.11it/s]Animation 89: FadeOut(VGroup of 3 submobjects), etc.:  95%|█████████▌| 20/21 [00:01<00:00, 15.12it/s]                                                                                                     [09/08/26 16:55:06] INFO     Animation 89 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00089.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 90: Create(Line):   0%|          | 0/33 [00:00<?, ?it/s]Animation 90: Create(Line):  79%|███████▉  | 26/33 [00:00<00:00, 258.10it/s]                                                                                                INFO     Animation 90 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00090.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 91: DrawBorderThenFill(VGroup of 3 submobjects), etc.:   0%|          | 0/63 [00:00<?, ?it/s]Animation 91: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  11%|█         | 7/63 [00:00<00:00, 68.27it/s]Animation 91: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  22%|██▏       | 14/63 [00:00<00:00, 66.70it/s]Animation 91: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  33%|███▎      | 21/63 [00:00<00:00, 66.08it/s]Animation 91: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  44%|████▍     | 28/63 [00:00<00:00, 65.53it/s]Animation 91: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  56%|█████▌    | 35/63 [00:00<00:00, 66.30it/s]Animation 91: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  68%|██████▊   | 43/63 [00:00<00:00, 67.36it/s]Animation 91: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  79%|███████▉  | 50/63 [00:00<00:00, 64.38it/s]Animation 91: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  90%|█████████ | 57/63 [00:00<00:00, 62.43it/s]                                                                                                                [09/08/26 16:55:08] INFO     Animation 91 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00091.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 92: DrawBorderThenFill(VGroup of 3 submobjects), etc.:   0%|          | 0/63 [00:00<?, ?it/s]Animation 92: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  11%|█         | 7/63 [00:00<00:00, 67.26it/s]Animation 92: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  22%|██▏       | 14/63 [00:00<00:00, 66.03it/s]Animation 92: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  33%|███▎      | 21/63 [00:00<00:00, 65.10it/s]Animation 92: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  44%|████▍     | 28/63 [00:00<00:00, 64.48it/s]Animation 92: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  56%|█████▌    | 35/63 [00:00<00:00, 64.37it/s]Animation 92: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  68%|██████▊   | 43/63 [00:00<00:00, 66.42it/s]Animation 92: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  79%|███████▉  | 50/63 [00:00<00:00, 64.75it/s]Animation 92: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  90%|█████████ | 57/63 [00:00<00:00, 61.53it/s]                                                                                                                [09/08/26 16:55:09] INFO     Animation 92 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00092.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:55:11] INFO     Animation 93 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00093.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 94: FadeIn(RoundedRectangle), etc.:   0%|          | 0/47 [00:00<?, ?it/s]Animation 94: FadeIn(RoundedRectangle), etc.:   9%|▊         | 4/47 [00:00<00:01, 39.59it/s]Animation 94: FadeIn(RoundedRectangle), etc.:  17%|█▋        | 8/47 [00:00<00:00, 39.42it/s]Animation 94: FadeIn(RoundedRectangle), etc.:  26%|██▌       | 12/47 [00:00<00:00, 39.45it/s]Animation 94: FadeIn(RoundedRectangle), etc.:  34%|███▍      | 16/47 [00:00<00:00, 39.65it/s]Animation 94: FadeIn(RoundedRectangle), etc.:  43%|████▎     | 20/47 [00:00<00:00, 39.69it/s]Animation 94: FadeIn(RoundedRectangle), etc.:  51%|█████     | 24/47 [00:00<00:00, 39.52it/s]Animation 94: FadeIn(RoundedRectangle), etc.:  60%|█████▉    | 28/47 [00:00<00:00, 38.90it/s]Animation 94: FadeIn(RoundedRectangle), etc.:  68%|██████▊   | 32/47 [00:00<00:00, 38.68it/s]Animation 94: FadeIn(RoundedRectangle), etc.:  77%|███████▋  | 36/47 [00:00<00:00, 39.07it/s]Animation 94: FadeIn(RoundedRectangle), etc.:  87%|████████▋ | 41/47 [00:01<00:00, 39.60it/s]Animation 94: FadeIn(RoundedRectangle), etc.:  96%|█████████▌| 45/47 [00:01<00:00, 37.93it/s]                                                                                             [09/08/26 16:55:13] INFO     Animation 94 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00094.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:55:15] INFO     Animation 95 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00095.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 96: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 96: FadeOut(VGroup of 3 submobjects), etc.:  10%|▉         | 2/21 [00:00<00:01, 14.73it/s]Animation 96: FadeOut(VGroup of 3 submobjects), etc.:  19%|█▉        | 4/21 [00:00<00:01, 14.65it/s]Animation 96: FadeOut(VGroup of 3 submobjects), etc.:  29%|██▊       | 6/21 [00:00<00:01, 14.57it/s]Animation 96: FadeOut(VGroup of 3 submobjects), etc.:  38%|███▊      | 8/21 [00:00<00:00, 14.59it/s]Animation 96: FadeOut(VGroup of 3 submobjects), etc.:  48%|████▊     | 10/21 [00:00<00:00, 14.61it/s]Animation 96: FadeOut(VGroup of 3 submobjects), etc.:  57%|█████▋    | 12/21 [00:00<00:00, 14.62it/s]Animation 96: FadeOut(VGroup of 3 submobjects), etc.:  67%|██████▋   | 14/21 [00:00<00:00, 14.62it/s]Animation 96: FadeOut(VGroup of 3 submobjects), etc.:  76%|███████▌  | 16/21 [00:01<00:00, 14.62it/s]Animation 96: FadeOut(VGroup of 3 submobjects), etc.:  86%|████████▌ | 18/21 [00:01<00:00, 14.65it/s]Animation 96: FadeOut(VGroup of 3 submobjects), etc.:  95%|█████████▌| 20/21 [00:01<00:00, 14.63it/s]                                                                                                     [09/08/26 16:55:18] INFO     Animation 96 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00096.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 97: DrawBorderThenFill(VGroup of 3 submobjects), etc.:   0%|          | 0/47 [00:00<?, ?it/s]Animation 97: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  21%|██▏       | 10/47 [00:00<00:00, 90.21it/s]Animation 97: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  43%|████▎     | 20/47 [00:00<00:00, 89.82it/s]Animation 97: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  64%|██████▍   | 30/47 [00:00<00:00, 92.40it/s]Animation 97: DrawBorderThenFill(VGroup of 3 submobjects), etc.:  87%|████████▋ | 41/47 [00:00<00:00, 96.35it/s]                                                                                                                [09/08/26 16:55:19] INFO     Animation 97 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00097.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 98: FadeIn(VGroup of 4 submobjects), etc.:   0%|          | 0/47 [00:00<?, ?it/s]Animation 98: FadeIn(VGroup of 4 submobjects), etc.:  19%|█▉        | 9/47 [00:00<00:00, 82.63it/s]Animation 98: FadeIn(VGroup of 4 submobjects), etc.:  38%|███▊      | 18/47 [00:00<00:00, 80.85it/s]Animation 98: FadeIn(VGroup of 4 submobjects), etc.:  57%|█████▋    | 27/47 [00:00<00:00, 80.23it/s]Animation 98: FadeIn(VGroup of 4 submobjects), etc.:  77%|███████▋  | 36/47 [00:00<00:00, 79.05it/s]Animation 98: FadeIn(VGroup of 4 submobjects), etc.:  94%|█████████▎| 44/47 [00:00<00:00, 77.05it/s]                                                                                                    [09/08/26 16:55:20] INFO     Animation 98 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00098.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 99: FadeIn(VGroup of 2 submobjects):   0%|          | 0/33 [00:00<?, ?it/s]Animation 99: FadeIn(VGroup of 2 submobjects):  27%|██▋       | 9/33 [00:00<00:00, 80.23it/s]Animation 99: FadeIn(VGroup of 2 submobjects):  55%|█████▍    | 18/33 [00:00<00:00, 78.58it/s]Animation 99: FadeIn(VGroup of 2 submobjects):  79%|███████▉  | 26/33 [00:00<00:00, 78.47it/s]                                                                                              [09/08/26 16:55:21] INFO     Animation 99 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00099.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 100: FadeIn(VGroup of 2 submobjects):   0%|          | 0/21 [00:00<?, ?it/s]                                                                                                          INFO     Animation 100 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00100.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:55:22] INFO     Animation 101 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00101.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 102: FadeOut(VGroup of 2 submobjects):   0%|          | 0/21 [00:00<?, ?it/s]                                                                                                           INFO     Animation 102 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00102.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 103: FadeIn(VGroup of 2 submobjects):   0%|          | 0/21 [00:00<?, ?it/s]                                                                                                          INFO     Animation 103 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00103.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:55:23] INFO     Animation 104 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00104.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 105: FadeOut(VGroup of 2 submobjects):   0%|          | 0/21 [00:00<?, ?it/s]                                                                                                           INFO     Animation 105 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00105.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 106: FadeIn(VGroup of 2 submobjects):   0%|          | 0/21 [00:00<?, ?it/s]Animation 106: FadeIn(VGroup of 2 submobjects): 100%|██████████| 21/21 [00:00<00:00, 206.78it/s]                                                                                                                    INFO     Animation 106 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00106.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:55:24] INFO     Animation 107 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00107.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 108: FadeOut(VGroup of 2 submobjects):   0%|          | 0/21 [00:00<?, ?it/s]                                                                                                           INFO     Animation 108 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00108.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 109: FadeIn(VGroup of 2 submobjects):   0%|          | 0/21 [00:00<?, ?it/s]                                                                                                          INFO     Animation 109 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00109.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:55:25] INFO     Animation 110 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00110.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 111: FadeOut(VGroup of 2 submobjects):   0%|          | 0/21 [00:00<?, ?it/s]                                                                                                           INFO     Animation 111 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00111.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 112: FadeIn(VGroup of 2 submobjects):   0%|          | 0/21 [00:00<?, ?it/s]                                                                                      [09/08/26 16:55:26] INFO     Animation 112 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00112.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 113 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00113.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 114: FadeOut(VGroup of 2 submobjects):   0%|          | 0/21 [00:00<?, ?it/s]Animation 114: FadeOut(VGroup of 2 submobjects): 100%|██████████| 21/21 [00:00<00:00, 199.48it/s]                                                                                                                     INFO     Animation 114 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00114.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 115: FadeOut(Text('PLANTA ?')), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 115: FadeOut(Text('PLANTA ?')), etc.:  18%|█▊        | 6/33 [00:00<00:00, 52.78it/s]Animation 115: FadeOut(Text('PLANTA ?')), etc.:  36%|███▋      | 12/33 [00:00<00:00, 52.06it/s]Animation 115: FadeOut(Text('PLANTA ?')), etc.:  55%|█████▍    | 18/33 [00:00<00:00, 51.74it/s]Animation 115: FadeOut(Text('PLANTA ?')), etc.:  73%|███████▎  | 24/33 [00:00<00:00, 51.83it/s]Animation 115: FadeOut(Text('PLANTA ?')), etc.:  91%|█████████ | 30/33 [00:00<00:00, 51.96it/s]                                                                                               [09/08/26 16:55:28] INFO     Animation 115 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00115.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 116: FadeIn(VGroup of 4 submobjects), etc.:   0%|          | 0/63 [00:00<?, ?it/s]Animation 116: FadeIn(VGroup of 4 submobjects), etc.:  13%|█▎        | 8/63 [00:00<00:00, 78.36it/s]Animation 116: FadeIn(VGroup of 4 submobjects), etc.:  25%|██▌       | 16/63 [00:00<00:00, 77.29it/s]Animation 116: FadeIn(VGroup of 4 submobjects), etc.:  38%|███▊      | 24/63 [00:00<00:00, 76.78it/s]Animation 116: FadeIn(VGroup of 4 submobjects), etc.:  51%|█████     | 32/63 [00:00<00:00, 76.07it/s]Animation 116: FadeIn(VGroup of 4 submobjects), etc.:  63%|██████▎   | 40/63 [00:00<00:00, 75.55it/s]Animation 116: FadeIn(VGroup of 4 submobjects), etc.:  76%|███████▌  | 48/63 [00:00<00:00, 73.56it/s]Animation 116: FadeIn(VGroup of 4 submobjects), etc.:  89%|████████▉ | 56/63 [00:00<00:00, 65.76it/s]Animation 116: FadeIn(VGroup of 4 submobjects), etc.: 100%|██████████| 63/63 [00:00<00:00, 64.08it/s]                                                                                                     [09/08/26 16:55:29] INFO     Animation 116 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00116.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:55:31] INFO     Animation 117 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00117.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 118: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 118: FadeOut(VGroup of 3 submobjects), etc.:  14%|█▍        | 3/21 [00:00<00:00, 20.00it/s]Animation 118: FadeOut(VGroup of 3 submobjects), etc.:  29%|██▊       | 6/21 [00:00<00:00, 19.83it/s]Animation 118: FadeOut(VGroup of 3 submobjects), etc.:  38%|███▊      | 8/21 [00:00<00:00, 19.86it/s]Animation 118: FadeOut(VGroup of 3 submobjects), etc.:  48%|████▊     | 10/21 [00:00<00:00, 19.39it/s]Animation 118: FadeOut(VGroup of 3 submobjects), etc.:  57%|█████▋    | 12/21 [00:00<00:00, 19.14it/s]Animation 118: FadeOut(VGroup of 3 submobjects), etc.:  67%|██████▋   | 14/21 [00:00<00:00, 19.00it/s]Animation 118: FadeOut(VGroup of 3 submobjects), etc.:  76%|███████▌  | 16/21 [00:00<00:00, 18.88it/s]Animation 118: FadeOut(VGroup of 3 submobjects), etc.:  86%|████████▌ | 18/21 [00:00<00:00, 18.80it/s]Animation 118: FadeOut(VGroup of 3 submobjects), etc.:  95%|█████████▌| 20/21 [00:01<00:00, 18.75it/s]                                                                                                      [09/08/26 16:55:33] INFO     Animation 118 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00118.mp4'                                   
+[09/08/26 16:55:34] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 119: FadeIn(Text('MÉTODO DE LECTURA')), etc.:   0%|          | 0/63 [00:00<?, ?it/s]Animation 119: FadeIn(Text('MÉTODO DE LECTURA')), etc.:  13%|█▎        | 8/63 [00:00<00:00, 77.10it/s]Animation 119: FadeIn(Text('MÉTODO DE LECTURA')), etc.:  25%|██▌       | 16/63 [00:00<00:00, 71.89it/s]Animation 119: FadeIn(Text('MÉTODO DE LECTURA')), etc.:  38%|███▊      | 24/63 [00:00<00:00, 69.20it/s]Animation 119: FadeIn(Text('MÉTODO DE LECTURA')), etc.:  49%|████▉     | 31/63 [00:00<00:00, 66.90it/s]Animation 119: FadeIn(Text('MÉTODO DE LECTURA')), etc.:  60%|██████    | 38/63 [00:00<00:00, 64.27it/s]Animation 119: FadeIn(Text('MÉTODO DE LECTURA')), etc.:  71%|███████▏  | 45/63 [00:00<00:00, 57.81it/s]Animation 119: FadeIn(Text('MÉTODO DE LECTURA')), etc.:  81%|████████  | 51/63 [00:00<00:00, 52.53it/s]Animation 119: FadeIn(Text('MÉTODO DE LECTURA')), etc.:  90%|█████████ | 57/63 [00:00<00:00, 49.82it/s]Animation 119: FadeIn(Text('MÉTODO DE LECTURA')), etc.: 100%|██████████| 63/63 [00:01<00:00, 48.05it/s]                                                                                                       [09/08/26 16:55:35] INFO     Animation 119 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00119.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 120: LaggedStart(Group):   0%|          | 0/76 [00:00<?, ?it/s]Animation 120: LaggedStart(Group):   7%|▋         | 5/76 [00:00<00:01, 44.19it/s]Animation 120: LaggedStart(Group):  13%|█▎        | 10/76 [00:00<00:01, 42.27it/s]Animation 120: LaggedStart(Group):  20%|█▉        | 15/76 [00:00<00:01, 41.24it/s]Animation 120: LaggedStart(Group):  26%|██▋       | 20/76 [00:00<00:01, 39.87it/s]Animation 120: LaggedStart(Group):  32%|███▏      | 24/76 [00:00<00:01, 38.84it/s]Animation 120: LaggedStart(Group):  37%|███▋      | 28/76 [00:00<00:01, 37.30it/s]Animation 120: LaggedStart(Group):  42%|████▏     | 32/76 [00:00<00:01, 36.12it/s]Animation 120: LaggedStart(Group):  47%|████▋     | 36/76 [00:00<00:01, 35.73it/s]Animation 120: LaggedStart(Group):  53%|█████▎    | 40/76 [00:01<00:01, 35.52it/s]Animation 120: LaggedStart(Group):  58%|█████▊    | 44/76 [00:01<00:00, 33.78it/s]Animation 120: LaggedStart(Group):  63%|██████▎   | 48/76 [00:01<00:00, 31.24it/s]Animation 120: LaggedStart(Group):  68%|██████▊   | 52/76 [00:01<00:00, 30.62it/s]Animation 120: LaggedStart(Group):  74%|███████▎  | 56/76 [00:01<00:00, 30.51it/s]Animation 120: LaggedStart(Group):  79%|███████▉  | 60/76 [00:01<00:00, 30.80it/s]Animation 120: LaggedStart(Group):  84%|████████▍ | 64/76 [00:01<00:00, 31.01it/s]Animation 120: LaggedStart(Group):  89%|████████▉ | 68/76 [00:01<00:00, 31.20it/s]Animation 120: LaggedStart(Group):  95%|█████████▍| 72/76 [00:02<00:00, 30.95it/s]Animation 120: LaggedStart(Group): 100%|██████████| 76/76 [00:02<00:00, 31.10it/s]                                                                                  [09/08/26 16:55:38] INFO     Animation 120 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00120.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 121: DrawBorderThenFill(VGroup of 4 submobjects), etc.:   0%|          | 0/63 [00:00<?, ?it/s]Animation 121: DrawBorderThenFill(VGroup of 4 submobjects), etc.:  14%|█▍        | 9/63 [00:00<00:00, 85.72it/s]Animation 121: DrawBorderThenFill(VGroup of 4 submobjects), etc.:  29%|██▊       | 18/63 [00:00<00:00, 81.03it/s]Animation 121: DrawBorderThenFill(VGroup of 4 submobjects), etc.:  43%|████▎     | 27/63 [00:00<00:00, 78.26it/s]Animation 121: DrawBorderThenFill(VGroup of 4 submobjects), etc.:  57%|█████▋    | 36/63 [00:00<00:00, 79.99it/s]Animation 121: DrawBorderThenFill(VGroup of 4 submobjects), etc.:  73%|███████▎  | 46/63 [00:00<00:00, 85.60it/s]Animation 121: DrawBorderThenFill(VGroup of 4 submobjects), etc.:  87%|████████▋ | 55/63 [00:00<00:00, 84.69it/s]                                                                                                                 [09/08/26 16:55:39] INFO     Animation 121 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00121.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 122: FadeIn(VGroup of 2 submobjects):   0%|          | 0/33 [00:00<?, ?it/s]Animation 122: FadeIn(VGroup of 2 submobjects):  33%|███▎      | 11/33 [00:00<00:00, 102.84it/s]Animation 122: FadeIn(VGroup of 2 submobjects):  67%|██████▋   | 22/33 [00:00<00:00, 101.91it/s]Animation 122: FadeIn(VGroup of 2 submobjects): 100%|██████████| 33/33 [00:00<00:00, 100.76it/s]                                                                                                [09/08/26 16:55:40] INFO     Animation 122 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00122.mp4'                                   
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/08/26 16:55:42] INFO     Animation 123 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             partial_movie_files/Diedri                         
+                             cISOProjectionV3Senior/unc                         
+                             ached_00123.mp4'                                   
+                    INFO     Combining to Movie file.   scene_file_writer.py:753
+[09/08/26 16:55:43] INFO                                scene_file_writer.py:904
+                             File ready at                                      
+                             '/manim/media/videos/diedr                         
+                             ic_iso_ntc1777_v3/1080p30/                         
+                             DiedricISOProjectionV3Seni                         
+                             or.mp4'                                            
+                                                                                
+                    INFO     The partial movie          scene_file_writer.py:874
+                             directory is full (> 100                           
+                             files). Therefore, manim                           
+                             has removed the 25 oldest                          
+                             file(s). You can change                            
+                             this behaviour by changing                         
+                             max_files_cached in                                
+                             config.                                            
+                    INFO     Rendered DiedricISOProjectionV3Senior  scene.py:278
+                             Played 124 animations                              
+                    INFO     Previewed File at:                  file_ops.py:236
+                             '/manim/media/videos/diedric_iso_nt                
+                             c1777_v3/1080p30/DiedricISOProjecti                
+                             onV3Senior.mp4'                                    
+You are using manim version v0.20.1, but version v0.21.0 is available.
+You should consider upgrading via pip install -U manim

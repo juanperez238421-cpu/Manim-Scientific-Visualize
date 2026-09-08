@@ -1,0 +1,9 @@
+V3 senior visual redesign of the Sistema Diedrico lesson.
+This is not a cosmetic V2 patch: the lesson was rebuilt around one larger asymmetric mechanical bracket, cleaner orthographic views, explicit projection geometry, a dihedral-plane unfolding sequence, six-view sheet, separate first-angle and third-angle narratives, a direct placement comparison, projection symbols, concise Colombia NTC context, and a timed student prediction challenge.
+Language: Spanish classroom narration with bilingual projection-method labels.
+Terminology: Primer diedro / First-angle / ISO E; Tercer diedro / Third-angle / ISO A.
+Colombia wording: NTC 1777:2001 is described as a technical standard, not legislation by itself; it recognizes first- and third-angle projection methods.
+ManimCE: 0.20.1
+Pipeline: literal -pql QA -> literal -pqh final
+Output: 1920x1080, 30 fps, H.264, yuv420p
+QA: Python compile + PQL decode + PQH decode + ffprobe gates + 24 distributed visual samples + contact sheet + visual-density gate.
