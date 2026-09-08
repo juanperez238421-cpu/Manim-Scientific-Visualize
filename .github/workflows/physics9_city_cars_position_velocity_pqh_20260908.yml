@@ -1,4 +1,4 @@
-name: Physics 9 City Cars Position Velocity SENIOR FINAL PQH 20260908
+name: Physics 9 City Cars Position Velocity V2 SENIOR FINAL PQH 20260908
 
 on:
   push:
@@ -17,10 +17,10 @@ jobs:
     timeout-minutes: 180
     env:
       JOB: render_jobs/physics9_city_cars_20260908
-      SOURCE: physics9_city_cars_position_velocity.py
-      SCENE: Physics9CityCars
-      FINAL_NAME: Physics9_City_Cars_Position_Velocity_V1_SENIOR_FINAL_pqh.mp4
-      ARTIFACT_NAME: Physics9-City-Cars-Position-Velocity-V1-SENIOR-FINAL-PQH
+      SOURCE: physics9_city_cars_position_velocity_v2.py
+      SCENE: Physics9CityCarsV2
+      FINAL_NAME: Physics9_City_Cars_Position_Velocity_V2_SENIOR_FINAL_pqh.mp4
+      ARTIFACT_NAME: Physics9-City-Cars-Position-Velocity-V2-SENIOR-FINAL-PQH
 
     steps:
       - uses: actions/checkout@v4
@@ -31,11 +31,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m py_compile "$JOB/$SOURCE"
-          grep -q 'class Physics9CityCars' "$JOB/$SOURCE"
-          grep -q 'CITY_DISTANCE_KM = 240.0' "$JOB/$SOURCE"
-          grep -q 'V_A_KMH = 80.0' "$JOB/$SOURCE"
-          grep -q 'V_B_KMH = -40.0' "$JOB/$SOURCE"
+          python -m py_compile "$JOB/physics9_city_cars_position_velocity.py" "$JOB/$SOURCE"
+          grep -q 'class Physics9CityCarsV2' "$JOB/$SOURCE"
+          grep -q 'CITY_DISTANCE_KM = 240.0' "$JOB/physics9_city_cars_position_velocity.py"
+          grep -q 'V_A_KMH = 80.0' "$JOB/physics9_city_cars_position_velocity.py"
+          grep -q 'V_B_KMH = -40.0' "$JOB/physics9_city_cars_position_velocity.py"
 
       - name: Install QA tools and ManimCE 0.20.1
         shell: bash
@@ -136,7 +136,9 @@ jobs:
             echo "sha256=$SHA"
             echo "full_decode=PASS"
             echo "visual_evidence=contact_sheet.jpg"
+            echo "layout_revision=V2 dynamic long-header fit + final takeaway safe-width fit"
           } > out/VIDEO_QA.txt
+          cp "$JOB/physics9_city_cars_position_velocity.py" out/
           cp "$JOB/$SOURCE" out/
           cp qa_pql/render_pql.log out/
           echo "sha=$SHA" >> "$GITHUB_OUTPUT"
@@ -149,6 +151,7 @@ jobs:
           name: ${{ env.ARTIFACT_NAME }}
           path: |
             out/${{ env.FINAL_NAME }}
+            out/physics9_city_cars_position_velocity.py
             out/${{ env.SOURCE }}
             out/VIDEO_QA.txt
             out/SHA256SUMS.txt
@@ -171,7 +174,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "published_renders/$FINAL_NAME"
-          git commit -m "Publish Physics 9 city cars SENIOR FINAL PQH [skip ci]"
+          git commit -m "Publish Physics 9 city cars V2 SENIOR FINAL PQH [skip ci]"
           git push origin HEAD:${GITHUB_REF_NAME}
 
       - name: Verify direct raw MP4 URL
