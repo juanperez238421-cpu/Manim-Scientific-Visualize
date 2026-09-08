@@ -53,7 +53,6 @@ s = s.replace(
     "* the five-step method and final synthesis use separate upper-layout controls;",
 )
 
-# Correct generated-file command comments as well.
 s = s.replace(
     "Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V9_UPSHIFT_FULL_QA.py Projection3Dto2DV10UpShiftDirectorQA",
     "Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V10_UPSHIFT_DIRECTOR_QA.py Projection3Dto2DV10UpShiftDirectorQA",
@@ -75,3 +74,5 @@ assert not missing, missing
 DST.write_text(s, encoding="utf-8")
 print(DST)
 print(f"generated_chars={len(s)}")
+
+# Trigger marker: workflow exists on this branch before this commit.
