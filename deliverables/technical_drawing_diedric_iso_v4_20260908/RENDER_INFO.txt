@@ -1,0 +1,9 @@
+V4 Senior QA correction over the V3 engineering redesign.
+Manual V3 frame inspection found and V4 corrects: translucent/muddy pseudo-3D shadow geometry, orthographic projection-plane label collision, dihedral ground-line label collision, first-angle panel/text/rule overlap, third-angle plan/header collision, challenge prompt overlap, and final closing-title clipping.
+V4 keeps the strong V3 sections: mechanical-bracket visual narrative, projection rays, dihedral-plane transfer, six-view overview, direct first/third-angle comparison, projection symbols, Colombia NTC context, and timed challenge.
+Terminology: Primer diedro / First-angle / ISO E; Tercer diedro / Third-angle / ISO A.
+Colombia wording: NTC 1777:2001 is a technical standard, not legislation by itself; the lesson presents both first- and third-angle projection methods.
+ManimCE: 0.20.1
+Pipeline: literal -pql QA -> literal -pqh final
+Output: 1920x1080, 30 fps, H.264, yuv420p
+QA: source compile + PQL decode + PQH full decode + ffprobe gates + 25 distributed visual frames + 7 targeted manual-QA frames + contact sheet + density gate.
