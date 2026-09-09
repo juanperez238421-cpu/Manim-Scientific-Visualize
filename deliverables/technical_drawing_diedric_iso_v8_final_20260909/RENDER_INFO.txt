@@ -1,0 +1,4 @@
+V8 FINAL. Post-render QA correction of V8 Lower/Large.
+3D geometry remains lowered and restored to larger scale. Enlarged 2D projection layouts remain intact. The final correction moves the ISO A method badge in section 09 into a dedicated lower-left cell after the first V8 contact sheet revealed a residual collision with the FRONT card.
+ManimCE 0.20.1; 1920x1080; 30 fps; H.264; yuv420p.
+QA: compile, PQL, PQH, full decode, runtime layout assertions, 72 distributed frames, final contact sheet and SHA-256.
