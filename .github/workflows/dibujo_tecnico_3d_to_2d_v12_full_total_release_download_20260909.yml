@@ -1,0 +1,320 @@
+name: Dibujo Tecnico 3D to 2D V12 FULL TOTAL RELEASE DOWNLOAD
+
+on:
+  push:
+    branches:
+      - render/dibujo-tecnico-3d-to-2d-v12-full-total-release-download-20260909
+    paths:
+      - 'render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/build_v12_full_total_release_download.py'
+      - 'render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/QA_V12_FULL_TOTAL_RELEASE_DOWNLOAD.md'
+      - '.github/workflows/dibujo_tecnico_3d_to_2d_v12_full_total_release_download_20260909.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render-v12-full-total:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build V12 source and static QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/dibujo_tecnico_clase6_iso_projection_20260902
+          python "$JOB/build_v12_full_total_release_download.py"
+          SRC="$JOB/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FULL_TOTAL_RELEASE_DOWNLOAD.py"
+          test -s "$SRC"
+          python -m py_compile "$SRC"
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FULL_TOTAL_RELEASE_DOWNLOAD.py')
+          s=p.read_text(encoding='utf-8')
+          required=[
+              'class Projection3Dto2DV12FullTotalReleaseDownload',
+              'V12_GLOBAL_PACE = 1.20',
+              'FOLD_EXTRA_UPSHIFT = 1.20',
+              'CONSTRUCCIÓN 2D · UNA VISTA A LA VEZ · V12',
+              'ALZADO · PASO 1/3',
+              'PLANTA · PASO 3/3',
+              'PERFIL · PASO 3/3',
+              'front_card.animate.scale(0.50).move_to',
+              'top_card.animate.scale(0.50).move_to',
+              'right_card.animate.scale(0.50).move_to',
+              'angle=-PI / 2',
+              'run_time=T(4.80)',
+              'UN OBJETO · TRES DESCRIPCIONES 2D',
+          ]
+          missing=[x for x in required if x not in s]
+          assert not missing, missing
+          assert 'Projection3Dto2DV11StepwiseViewsDirectorQA' not in s
+          print('V12_STATIC_QA=PASS')
+          PY
+          mkdir -p /tmp/manim-bin /tmp/manim-home pql_media media out qa_out qa_out/audit_frames package
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+
+      - name: Full-timeline PQL smoke render
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH HOME=/tmp/manim-home LESSON_TIME_SCALE=0.06
+          cd render_jobs/dibujo_tecnico_clase6_iso_projection_20260902
+          manim -pql Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FULL_TOTAL_RELEASE_DOWNLOAD.py \
+            Projection3Dto2DV12FullTotalReleaseDownload --fps 15 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/pql_media" 2>&1 | tee "$GITHUB_WORKSPACE/qa_out/PQL.log"
+          cd "$GITHUB_WORKSPACE"
+          PQL="$(find pql_media -type f -name 'Projection3Dto2DV12FullTotalReleaseDownload.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+          cp "$PQL" qa_out/Diedrico_V12_pql.mp4
+
+      - name: Literal PQH final render 1920x1080 30fps
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH HOME=/tmp/manim-home LESSON_TIME_SCALE=1.0
+          cd render_jobs/dibujo_tecnico_clase6_iso_projection_20260902
+          manim -pqh Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FULL_TOTAL_RELEASE_DOWNLOAD.py \
+            Projection3Dto2DV12FullTotalReleaseDownload --fps 30 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/media" 2>&1 | tee "$GITHUB_WORKSPACE/out/PQH.log"
+          cd "$GITHUB_WORKSPACE"
+          VIDEO="$(find media -type f -name 'Projection3Dto2DV12FullTotalReleaseDownload.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$VIDEO" && test -s "$VIDEO"
+          cp "$VIDEO" out/Diedrico_V12_FULL_TOTAL.mp4
+          cp "$VIDEO" out/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FULL_TOTAL_RELEASE_DOWNLOAD_FINAL_pqh.mp4
+          cp render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FULL_TOTAL_RELEASE_DOWNLOAD.py out/
+          cp render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/QA_V12_FULL_TOTAL_RELEASE_DOWNLOAD.md out/
+
+      - name: Full decode and robust frame-by-frame QA
+        id: qa
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Diedrico_V12_FULL_TOTAL.mp4
+          python - "$VIDEO" <<'PY' | tee qa_out/FULL_TOTAL_QA.txt
+          import av, numpy as np, statistics, os, sys, hashlib
+          p=sys.argv[1]
+          frames=0; audited=0; near_blank=0
+          fracs=[]; widths=[]; heights=[]; temporal=[]; prev=None
+          with av.open(p) as c:
+              stream=c.streams.video[0]
+              codec=stream.codec_context.name
+              width=stream.codec_context.width; height=stream.codec_context.height
+              pix=stream.codec_context.format.name if stream.codec_context.format else ''
+              fps=float(stream.average_rate) if stream.average_rate else 0.0
+              duration=float(c.duration)/float(av.time_base) if c.duration else 0.0
+              for frame in c.decode(stream):
+                  frames += 1
+                  if frames % 6:
+                      continue
+                  audited += 1
+                  arr=frame.to_ndarray(format='gray')
+                  mask=arr < 242
+                  frac=float(mask.mean()); fracs.append(frac)
+                  ys,xs=np.where(mask)
+                  if len(xs):
+                      widths.append(int(xs.max()-xs.min()+1)); heights.append(int(ys.max()-ys.min()+1))
+                  else:
+                      widths.append(0); heights.append(0)
+                  if frac < 0.0012:
+                      near_blank += 1
+                  tiny=arr[::60,::60].astype(np.float32)
+                  if prev is not None:
+                      temporal.append(float(np.mean(np.abs(tiny-prev))))
+                  prev=tiny
+          size=os.path.getsize(p)
+          medw=float(statistics.median(widths)); p10w=float(np.percentile(widths,10)); medh=float(statistics.median(heights))
+          medfrac=float(statistics.median(fracs)); p10frac=float(np.percentile(fracs,10))
+          changing=sum(d>0.15 for d in temporal)
+          sha=hashlib.sha256(open(p,'rb').read()).hexdigest()
+          print(f'codec_name={codec}')
+          print(f'width={width}')
+          print(f'height={height}')
+          print(f'pix_fmt={pix}')
+          print(f'average_fps={fps:.6f}')
+          print(f'duration={duration:.6f}')
+          print(f'frames_decoded={frames}')
+          print(f'file_size={size}')
+          print(f'sha256={sha}')
+          print(f'audited_samples={audited}')
+          print(f'median_bbox_width={medw}')
+          print(f'p10_bbox_width={p10w}')
+          print(f'median_bbox_height={medh}')
+          print(f'median_content_fraction={medfrac}')
+          print(f'p10_content_fraction={p10frac}')
+          print(f'near_blank_samples={near_blank}')
+          print(f'changing_samples={changing}')
+          assert codec=='h264', codec
+          assert (width,height)==(1920,1080), (width,height)
+          assert pix=='yuv420p', pix
+          assert 29.8 <= fps <= 30.2, fps
+          assert duration > 105.0, duration
+          assert frames > 3150, frames
+          assert size > 2_000_000, size
+          assert audited > 500, audited
+          assert medw > 600 and p10w > 250 and medh > 180, (medw,p10w,medh)
+          assert medfrac > 0.008 and p10frac > 0.001, (medfrac,p10frac)
+          assert near_blank < max(35, int(audited*0.08)), (near_blank,audited)
+          assert changing > 40, changing
+          print('TECHNICAL_QA=PASS')
+          print('FULL_TIMELINE_FRAME_QA=PASS')
+          PY
+          SHA="$(sha256sum "$VIDEO" | awk '{print $1}')"
+          SIZE="$(stat -c%s "$VIDEO")"
+          echo "$SHA  $VIDEO" | tee qa_out/SHA256SUMS.txt
+          echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
+          echo "size=$SIZE" >> "$GITHUB_OUTPUT"
+
+      - name: Generate 120-frame visual contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Diedrico_V12_FULL_TOTAL.mp4
+          python - "$VIDEO" <<'PY' | tee qa_out/VISUAL_AUDIT.txt
+          import av, math, os, sys
+          from PIL import Image, ImageDraw
+          p=sys.argv[1]; count=120; saved=[]
+          with av.open(p) as c:
+              s=c.streams.video[0]; duration=float(c.duration)/float(av.time_base)
+              targets=[duration*i/(count+1) for i in range(1,count+1)]; ti=0
+              for frame in c.decode(s):
+                  if ti>=len(targets): break
+                  t=float(frame.pts*frame.time_base) if frame.pts is not None else 0.0
+                  if t>=targets[ti]:
+                      im=Image.fromarray(frame.to_ndarray(format='rgb24'))
+                      fp=f'qa_out/audit_frames/frame_{ti+1:03d}_{targets[ti]:07.2f}.jpg'
+                      im.save(fp,quality=88); saved.append(fp); ti+=1
+          assert len(saved)>=116, len(saved)
+          cards=[]
+          for fp in saved:
+              im=Image.open(fp).convert('RGB'); im.thumbnail((480,270))
+              card=Image.new('RGB',(500,300),'white'); card.paste(im,((500-im.width)//2,8))
+              ImageDraw.Draw(card).text((10,280),os.path.basename(fp),fill='black'); cards.append(card)
+          cols=4; rows=math.ceil(len(cards)/cols); sheet=Image.new('RGB',(cols*500,rows*300),'white')
+          for i,im in enumerate(cards): sheet.paste(im,((i%cols)*500,(i//cols)*300))
+          sheet.save('qa_out/Diedrico_V12_FULL_TOTAL_contact_sheet.jpg',quality=90)
+          print('audit_frames=',len(saved)); print('duration=',duration); print('contact_sheet=PASS')
+          PY
+
+      - name: Publish as GitHub Release MP4 asset and re-download byte-for-byte
+        id: release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_SHA: ${{ steps.qa.outputs.sha256 }}
+          EXPECTED_SIZE: ${{ steps.qa.outputs.size }}
+          TAG: diedrico-v12-full-total-20260909
+          ASSET: Diedrico_V12_FULL_TOTAL.mp4
+        run: |
+          set -euo pipefail
+          python - <<'PY' | tee qa_out/RELEASE_QA.txt
+          import hashlib, json, os, time, urllib.error, urllib.parse, urllib.request
+          token=os.environ['GH_TOKEN']; repo=os.environ['GITHUB_REPOSITORY']; tag=os.environ['TAG']; asset_name=os.environ['ASSET']
+          expected_sha=os.environ['EXPECTED_SHA']; expected_size=int(os.environ['EXPECTED_SIZE'])
+          path='out/Diedrico_V12_FULL_TOTAL.mp4'
+          data=open(path,'rb').read()
+          assert len(data)==expected_size and hashlib.sha256(data).hexdigest()==expected_sha
+          api=f'https://api.github.com/repos/{repo}'
+          headers={'Authorization':f'Bearer {token}','Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          def req_json(method,url,payload=None):
+              body=None if payload is None else json.dumps(payload).encode()
+              h=dict(headers)
+              if body is not None: h['Content-Type']='application/json'
+              r=urllib.request.Request(url,data=body,method=method,headers=h)
+              with urllib.request.urlopen(r,timeout=180) as f:
+                  raw=f.read(); return json.loads(raw) if raw else {}
+          try:
+              release=req_json('GET',f'{api}/releases/tags/{urllib.parse.quote(tag)}')
+          except urllib.error.HTTPError as e:
+              if e.code!=404: raise
+              release=req_json('POST',f'{api}/releases',{
+                  'tag_name':tag,
+                  'target_commitish':os.environ['GITHUB_SHA'],
+                  'name':'Diedrico V12 Full Total — Direct MP4 Download',
+                  'body':'Fresh ManimCE 0.20.1 PQH render. The MP4 release asset is independently re-downloaded and SHA-256 verified by CI.',
+                  'draft':False,
+                  'prerelease':False,
+              })
+          rid=release['id']
+          for a in release.get('assets',[]):
+              if a.get('name')==asset_name:
+                  req_json('DELETE',f"{api}/releases/assets/{a['id']}")
+          upload=f'https://uploads.github.com/repos/{repo}/releases/{rid}/assets?name={urllib.parse.quote(asset_name)}'
+          uh=dict(headers); uh['Content-Type']='video/mp4'; uh['Content-Length']=str(len(data))
+          ur=urllib.request.Request(upload,data=data,method='POST',headers=uh)
+          with urllib.request.urlopen(ur,timeout=300) as f:
+              asset=json.loads(f.read())
+          url=asset['browser_download_url']
+          time.sleep(3)
+          r=urllib.request.Request(url,headers={'User-Agent':'V12-release-byte-verifier'})
+          with urllib.request.urlopen(r,timeout=300) as f:
+              downloaded=f.read(); final_url=f.geturl(); disposition=f.headers.get('Content-Disposition',''); ctype=f.headers.get('Content-Type','')
+          got_sha=hashlib.sha256(downloaded).hexdigest(); got_size=len(downloaded)
+          assert got_size==expected_size, (got_size,expected_size)
+          assert got_sha==expected_sha, (got_sha,expected_sha)
+          open('qa_out/V12_RELEASE_REDOWNLOAD.mp4','wb').write(downloaded)
+          open('qa_out/RELEASE_ASSET_URL.txt','w').write(url+'\n')
+          print(f'release_id={rid}')
+          print(f'asset_id={asset["id"]}')
+          print(f'browser_download_url={url}')
+          print(f'final_url={final_url}')
+          print(f'content_type={ctype}')
+          print(f'content_disposition={disposition}')
+          print(f'redownload_size={got_size}')
+          print(f'redownload_sha256={got_sha}')
+          print('RELEASE_ASSET_REDOWNLOAD_QA=PASS')
+          PY
+          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,pix_fmt,avg_frame_rate -show_entries format=duration,size -of default=nw=1 qa_out/V12_RELEASE_REDOWNLOAD.mp4 | tee qa_out/RELEASE_FFPROBE.txt
+          cmp -s out/Diedrico_V12_FULL_TOTAL.mp4 qa_out/V12_RELEASE_REDOWNLOAD.mp4
+          echo 'BYTE_FOR_BYTE_RELEASE_MATCH=PASS' | tee -a qa_out/RELEASE_QA.txt
+          URL="$(cat qa_out/RELEASE_ASSET_URL.txt)"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare deterministic V12 package
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp out/Diedrico_V12_FULL_TOTAL.mp4 package/
+          cp out/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FULL_TOTAL_RELEASE_DOWNLOAD_FINAL_pqh.mp4 package/
+          cp out/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FULL_TOTAL_RELEASE_DOWNLOAD.py package/
+          cp out/QA_V12_FULL_TOTAL_RELEASE_DOWNLOAD.md package/
+          cp qa_out/FULL_TOTAL_QA.txt package/
+          cp qa_out/SHA256SUMS.txt package/
+          cp qa_out/VISUAL_AUDIT.txt package/
+          cp qa_out/Diedrico_V12_FULL_TOTAL_contact_sheet.jpg package/
+          cp qa_out/RELEASE_QA.txt package/
+          cp qa_out/RELEASE_FFPROBE.txt package/
+          cp qa_out/RELEASE_ASSET_URL.txt package/
+          cp out/PQH.log package/
+          test "$(sha256sum package/Diedrico_V12_FULL_TOTAL.mp4 | awk '{print $1}')" = "${{ steps.qa.outputs.sha256 }}"
+
+      - name: Upload compact V12 fallback artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Diedrico_V12_FULL_TOTAL_REAL_MP4
+          path: package/
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Final delivery summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo '## Diedrico V12 Full Total'
+            echo
+            echo "**Direct GitHub Release MP4:** ${{ steps.release.outputs.url }}"
+            echo
+            echo "SHA-256: ${{ steps.qa.outputs.sha256 }}"
+            echo "Bytes: ${{ steps.qa.outputs.size }}"
+            echo
+            echo 'Release asset was downloaded back from GitHub and compared byte-for-byte with the rendered PQH file.'
+          } >> "$GITHUB_STEP_SUMMARY"
