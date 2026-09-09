@@ -1,0 +1,220 @@
+name: Dibujo Tecnico 3D to 2D V13 FLUID STEPWISE
+
+on:
+  push:
+    branches:
+      - render/dibujo-tecnico-3d-to-2d-v13-fluid-stepwise-pauses-20260909
+    paths:
+      - 'render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V13_FLUID_STEPWISE.py'
+      - '.github/workflows/dibujo_tecnico_3d_to_2d_v13_fluid_stepwise_20260909.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render-v13-fluid-stepwise:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Static QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/dibujo_tecnico_clase6_iso_projection_20260902
+          SRC="$JOB/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V13_FLUID_STEPWISE.py"
+          test -s "$SRC"
+          python -m py_compile "$SRC"
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V13_FLUID_STEPWISE.py')
+          s=p.read_text(encoding='utf-8')
+          required=[
+              'class Projection3Dto2DV13FluidStepwise',
+              'ANIMATION_FACTOR', 'PAUSE_FACTOR', 'MICRO_BREATH',
+              'Projection3Dto2DV12FixedFullTotal',
+              'kwargs.setdefault("rate_func", smooth)',
+          ]
+          missing=[x for x in required if x not in s]
+          assert not missing, missing
+          print('V13_STATIC_QA=PASS')
+          PY
+          mkdir -p /tmp/manim-bin /tmp/manim-home pql_media media out package qa_out published_renders
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+
+      - name: Full-timeline PQL runtime gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=0.07 V13_ANIMATION_FACTOR=0.40 V13_PAUSE_FACTOR=0.35 V13_MICRO_BREATH=0
+          cd render_jobs/dibujo_tecnico_clase6_iso_projection_20260902
+          manim -pql Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V13_FLUID_STEPWISE.py \
+            Projection3Dto2DV13FluidStepwise --fps 15 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/pql_media" 2>&1 | tee "$GITHUB_WORKSPACE/qa_out/PQL.log"
+          cd "$GITHUB_WORKSPACE"
+          PQL="$(find pql_media -type f -name 'Projection3Dto2DV13FluidStepwise.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+          echo 'PQL_FULL_TIMELINE=PASS'
+
+      - name: Literal PQH final render 1920x1080 30fps
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=1.0
+          unset V13_ANIMATION_FACTOR V13_PAUSE_FACTOR V13_MICRO_BREATH V13_BREATH_THRESHOLD || true
+          cd render_jobs/dibujo_tecnico_clase6_iso_projection_20260902
+          manim -pqh Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V13_FLUID_STEPWISE.py \
+            Projection3Dto2DV13FluidStepwise --fps 30 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/media" 2>&1 | tee "$GITHUB_WORKSPACE/qa_out/PQH.log"
+          cd "$GITHUB_WORKSPACE"
+          VIDEO="$(find media -type f -name 'Projection3Dto2DV13FluidStepwise.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$VIDEO" && test -s "$VIDEO"
+          cp "$VIDEO" out/Diedrico_3D_to_2D_V13_FLUID_STEPWISE.mp4
+          cp "$VIDEO" out/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V13_FLUID_STEPWISE_FINAL_pqh.mp4
+          echo 'PQH_LITERAL_RENDER=PASS'
+
+      - name: Hard technical QA and full decode
+        id: tech
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Diedrico_3D_to_2D_V13_FLUID_STEPWISE.mp4
+          python - "$VIDEO" <<'PY' | tee qa_out/TECHNICAL_QA.txt
+          import av, os, sys
+          p=sys.argv[1]; frames=0
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              codec=s.codec_context.name
+              width=s.codec_context.width; height=s.codec_context.height
+              pix=s.codec_context.format.name if s.codec_context.format else ''
+              fps=float(s.average_rate) if s.average_rate else 0.0
+              duration=float(c.duration)/float(av.time_base) if c.duration else 0.0
+              for _ in c.decode(s): frames += 1
+          size=os.path.getsize(p)
+          print(f'codec_name={codec}')
+          print(f'width={width}')
+          print(f'height={height}')
+          print(f'pix_fmt={pix}')
+          print(f'average_fps={fps:.6f}')
+          print(f'duration={duration:.6f}')
+          print(f'frames_decoded={frames}')
+          print(f'file_size={size}')
+          assert codec=='h264', codec
+          assert (width,height)==(1920,1080), (width,height)
+          assert pix=='yuv420p', pix
+          assert 29.8 <= fps <= 30.2, fps
+          assert duration > 150.0, duration
+          assert frames > 4500, frames
+          assert size > 2_000_000, size
+          print('FULL_DECODE=PASS')
+          print('TECHNICAL_QA=PASS')
+          PY
+          SHA="$(sha256sum "$VIDEO" | awk '{print $1}')"
+          SIZE="$(stat -c%s "$VIDEO")"
+          echo "$SHA  $VIDEO" | tee qa_out/SHA256SUMS.txt
+          echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
+          echo "size=$SIZE" >> "$GITHUB_OUTPUT"
+
+      - name: Generate timeline audit frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Diedrico_3D_to_2D_V13_FLUID_STEPWISE.mp4
+          mkdir -p qa_out/audit_frames
+          python - "$VIDEO" <<'PY' | tee qa_out/VISUAL_AUDIT.txt
+          import av, os, sys
+          from PIL import Image
+          p=sys.argv[1]; count=72; saved=0
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              duration=float(c.duration)/float(av.time_base)
+              targets=[duration*i/(count+1) for i in range(1,count+1)]
+              ti=0
+              for frame in c.decode(s):
+                  if ti>=len(targets): break
+                  t=float(frame.pts*frame.time_base) if frame.pts is not None else 0.0
+                  if t>=targets[ti]:
+                      im=Image.fromarray(frame.to_ndarray(format='rgb24'))
+                      im.save(f'qa_out/audit_frames/frame_{ti+1:03d}_{targets[ti]:07.2f}.jpg', quality=88)
+                      saved += 1; ti += 1
+          assert saved >= 70, saved
+          print(f'audit_frames={saved}')
+          print(f'duration={duration:.6f}')
+          print('TIMELINE_AUDIT=PASS')
+          PY
+
+      - name: Upload V13 full-total artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Diedrico_3D_to_2D_V13_FLUID_STEPWISE_FULL_TOTAL
+          path: |
+            out/Diedrico_3D_to_2D_V13_FLUID_STEPWISE.mp4
+            out/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V13_FLUID_STEPWISE_FINAL_pqh.mp4
+            qa_out/TECHNICAL_QA.txt
+            qa_out/SHA256SUMS.txt
+            qa_out/VISUAL_AUDIT.txt
+            qa_out/audit_frames/
+            qa_out/PQH.log
+            qa_out/PQL.log
+            render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V13_FLUID_STEPWISE.py
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Publish exact validated MP4 to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Diedrico_3D_to_2D_V13_FLUID_STEPWISE.mp4
+          EXPECTED_SHA='${{ steps.tech.outputs.sha256 }}'
+          EXPECTED_SIZE='${{ steps.tech.outputs.size }}'
+          cp "$VIDEO" published_renders/Diedrico_3D_to_2D_V13_FLUID_STEPWISE.mp4
+          cp "$VIDEO" published_renders/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V13_FLUID_STEPWISE_FINAL_pqh.mp4
+          test "$(sha256sum published_renders/Diedrico_3D_to_2D_V13_FLUID_STEPWISE.mp4 | awk '{print $1}')" = "$EXPECTED_SHA"
+          test "$(stat -c%s published_renders/Diedrico_3D_to_2D_V13_FLUID_STEPWISE.mp4)" = "$EXPECTED_SIZE"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add published_renders/Diedrico_3D_to_2D_V13_FLUID_STEPWISE.mp4 \
+                  published_renders/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V13_FLUID_STEPWISE_FINAL_pqh.mp4
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish V13 fluid stepwise validated PQH render'
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+          echo 'BRANCH_PUBLICATION=PASS'
+
+      - name: Verify commit-pinned raw GitHub bytes
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ steps.tech.outputs.sha256 }}
+          EXPECTED_SIZE: ${{ steps.tech.outputs.size }}
+        run: |
+          set -euo pipefail
+          COMMIT="$(git rev-parse HEAD)"
+          export RAW_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${COMMIT}/published_renders/Diedrico_3D_to_2D_V13_FLUID_STEPWISE.mp4"
+          python - <<'PY'
+          import hashlib, os, time, urllib.request
+          url=os.environ['RAW_URL']; expected=os.environ['EXPECTED_SHA']; size=int(os.environ['EXPECTED_SIZE'])
+          data=None
+          for attempt in range(8):
+              try:
+                  with urllib.request.urlopen(url, timeout=90) as r: data=r.read()
+                  if data: break
+              except Exception:
+                  if attempt == 7: raise
+                  time.sleep(4)
+          assert data is not None
+          assert len(data)==size, (len(data), size)
+          assert hashlib.sha256(data).hexdigest()==expected
+          print('RAW_GITHUB_REDOWNLOAD=PASS')
+          print(url)
+          PY
