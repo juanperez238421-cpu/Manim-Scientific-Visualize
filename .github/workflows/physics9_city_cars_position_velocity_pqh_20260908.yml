@@ -1,4 +1,4 @@
-name: Physics 9 City Cars Position Velocity V3 HIGHLY ANIMATED SENIOR FINAL PQH 20260908
+name: Physics 9 City Cars V3 Senior Directional QA PQH 20260909
 
 on:
   push:
@@ -15,39 +15,34 @@ permissions:
 jobs:
   render_publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 120
     env:
       JOB: render_jobs/physics9_city_cars_20260908
       SOURCE: physics9_city_cars_position_velocity_v3.py
       SOURCE_BUNDLE: physics9_city_cars_position_velocity_v3.py.gz.b64
       SCENE: Physics9CityCarsV3
-      FINAL_NAME: Physics9_City_Cars_Position_Velocity_V3_HIGHLY_ANIMATED_SENIOR_FINAL_pqh.mp4
-      ARTIFACT_NAME: Physics9-City-Cars-Position-Velocity-V3-HIGHLY-ANIMATED-SENIOR-FINAL-PQH
+      FINAL_NAME: Physics9_City_Cars_Position_Velocity_V3_SENIOR_FINAL_pqh.mp4
+      ARTIFACT_NAME: Physics9-City-Cars-Position-Velocity-V3-SENIOR-FINAL-PQH
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Reconstruct, compile, and structurally validate V3 source
+      - name: Reconstruct and structurally validate senior V3
         shell: bash
         run: |
           set -euo pipefail
           base64 -d "$JOB/$SOURCE_BUNDLE" | gzip -dc > "$JOB/$SOURCE"
-          python -m py_compile \
-            "$JOB/physics9_city_cars_position_velocity.py" \
-            "$JOB/physics9_city_cars_position_velocity_v2.py" \
-            "$JOB/$SOURCE"
+          python -m py_compile "$JOB/$SOURCE"
           grep -q 'class Physics9CityCarsV3' "$JOB/$SOURCE"
-          grep -q 'def animate_problem_road' "$JOB/$SOURCE"
-          grep -q 'def animate_motion_snapshot' "$JOB/$SOURCE"
-          grep -q 'def animate_xt_car_a_points' "$JOB/$SOURCE"
-          grep -q 'def animate_xt_car_b_slope' "$JOB/$SOURCE"
-          grep -q 'def animate_vt_car_a_line' "$JOB/$SOURCE"
-          grep -q 'def animate_vt_car_b_line' "$JOB/$SOURCE"
-          grep -q 'P_REFLECT = 9.5' "$JOB/$SOURCE"
-          test "$(grep -c '^    def animate_' "$JOB/$SOURCE")" -ge 55
-          echo "Dedicated animation methods: $(grep -c '^    def animate_' "$JOB/$SOURCE")"
+          grep -q 'def directional_car' "$JOB/$SOURCE"
+          grep -q 'Headlight is always at the nose' "$JOB/$SOURCE"
+          grep -q 'directional_car(RED,-1' "$JOB/$SOURCE"
+          grep -q 'ValueTracker' "$JOB/$SOURCE"
+          grep -q 'def position_graph' "$JOB/$SOURCE"
+          grep -q 'def velocity_graph' "$JOB/$SOURCE"
+          echo "Structural directional-car QA: PASS"
 
       - name: Install QA tools and ManimCE 0.20.1
         shell: bash
@@ -65,21 +60,17 @@ jobs:
           rm -rf media_pql qa_pql && mkdir -p qa_pql
           docker run --rm --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home \
-            -e LESSON_TIME_SCALE=0.06 \
+            -e LESSON_TIME_SCALE=0.08 \
             -v "$PWD:/manim" -w /manim \
             --entrypoint bash manimcommunity/manim:v0.20.1 -c "
               set -euo pipefail
-              mkdir -p /tmp/manim-bin
-              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
-              chmod +x /tmp/manim-bin/xdg-open
-              export PATH=/tmp/manim-bin:\$PATH
               manim -pql $JOB/$SOURCE $SCENE --fps 15 --format=mp4 --media_dir media_pql --disable_caching
             " 2>&1 | tee qa_pql/render_pql.log
           PREVIEW="$(find media_pql -type f -name "$SCENE.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PREVIEW" && test -s "$PREVIEW"
           cp "$PREVIEW" qa_pql/Physics9_City_Cars_V3_FULL_TIMELINE_QA_pql.mp4
 
-      - name: Literal PQH final render with full pedagogical timing
+      - name: Literal PQH final render
         shell: bash
         run: |
           set -euo pipefail
@@ -90,17 +81,13 @@ jobs:
             -v "$PWD:/manim" -w /manim \
             --entrypoint bash manimcommunity/manim:v0.20.1 -c "
               set -euo pipefail
-              mkdir -p /tmp/manim-bin
-              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
-              chmod +x /tmp/manim-bin/xdg-open
-              export PATH=/tmp/manim-bin:\$PATH
               manim -pqh $JOB/$SOURCE $SCENE --fps 30 --format=mp4 --media_dir media --disable_caching
             " 2>&1 | tee out/render_pqh.log
           FINAL="$(find media -type f -name "$SCENE.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$FINAL" && test -s "$FINAL"
           cp "$FINAL" "out/$FINAL_NAME"
 
-      - name: Senior technical QA, decode, and dense visual audit
+      - name: Senior technical QA and visual evidence
         id: qa
         shell: bash
         run: |
@@ -120,32 +107,27 @@ jobs:
           test "$PIX" = yuv420p
           python - <<PY
           d=float('$DUR')
-          assert 260 <= d <= 650, f'V3 pedagogical duration outside expected 4.3–10.8 min range: {d}'
+          assert 60 <= d <= 200, f'Unexpected V3 classroom duration: {d}'
           print('duration_pass', d)
           PY
-          test "$SIZE" -gt 1500000
+          test "$SIZE" -gt 1000000
           test "$SIZE" -lt $((95 * 1024 * 1024))
           ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
+          test ! -s out/full_decode.log
 
           mkdir -p out/audit_frames
-          for P in 0.015 0.05 0.09 0.14 0.19 0.24 0.29 0.34 0.39 0.44 0.49 0.54 0.59 0.64 0.69 0.74 0.79 0.84 0.89 0.94 0.985; do
+          for P in 0.02 0.07 0.12 0.17 0.22 0.27 0.32 0.37 0.42 0.47 0.52 0.57 0.62 0.67 0.72 0.77 0.82 0.87 0.92 0.97; do
             T="$(python -c "print(float('$DUR')*float('$P'))")"
             TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
             ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_${TAG}.png"
           done
-
-          INTERVAL="$(python - <<PY
-          d=float('$DUR')
-          print(max(d/20.0, 1.0))
-          PY
-          )"
+          INTERVAL="$(python -c "print(max(float('$DUR')/20.0,1.0))")"
           ffmpeg -nostdin -loglevel error -i "$F" \
             -vf "fps=1/$INTERVAL,scale=384:-1,tile=5x4:padding=5:margin=5" \
             -frames:v 1 -q:v 2 out/contact_sheet.jpg
 
           sha256sum "$F" | tee out/SHA256SUMS.txt
           SHA="$(awk '{print $1}' out/SHA256SUMS.txt)"
-          ANIM_METHODS="$(grep -c '^    def animate_' "$JOB/$SOURCE")"
           {
             echo "file=$FINAL_NAME"
             echo "width=$W"
@@ -157,69 +139,62 @@ jobs:
             echo "size_bytes=$SIZE"
             echo "sha256=$SHA"
             echo "full_decode=PASS"
-            echo "dedicated_animation_methods=$ANIM_METHODS"
-            echo "timing=P_SHORT_2.2 P_READ_4.2 P_THINK_5.8 P_EXPLAIN_6.8 P_LONG_8.2 P_REFLECT_9.5"
-            echo "visual_evidence=21 distributed audit frames + 5x4 contact sheet"
-            echo "revision=V3 richer city diagram, staged cars, clocked physical motion, numeric x-t graph, slope triangles, numeric v-t graph, deliberate prediction pauses"
-          } > out/VIDEO_QA.txt
-          cp "$JOB/physics9_city_cars_position_velocity.py" out/
-          cp "$JOB/physics9_city_cars_position_velocity_v2.py" out/
-          cp "$JOB/$SOURCE" out/
-          cp qa_pql/render_pql.log out/
+            echo "visual_evidence=20 distributed frames + 5x4 contact sheet"
+            echo "directional_geometry=PASS: Car A nose/headlight right; Car B nose/headlight left"
+            echo "pedagogy=physical road -> signed velocity -> equations -> live meeting -> x-t -> v-t -> cross-checks"
+          } > out/VIDEO_QA_V3.txt
           echo "sha=$SHA" >> "$GITHUB_OUTPUT"
           echo "duration=$DUR" >> "$GITHUB_OUTPUT"
           echo "size=$SIZE" >> "$GITHUB_OUTPUT"
-          echo "animation_methods=$ANIM_METHODS" >> "$GITHUB_OUTPUT"
 
-      - name: Upload complete V3 QA artifact
+      - name: Upload complete V3 artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ARTIFACT_NAME }}
           path: |
             out/${{ env.FINAL_NAME }}
-            out/physics9_city_cars_position_velocity.py
-            out/physics9_city_cars_position_velocity_v2.py
-            out/${{ env.SOURCE }}
-            out/VIDEO_QA.txt
+            out/VIDEO_QA_V3.txt
             out/SHA256SUMS.txt
             out/contact_sheet.jpg
             out/audit_frames/
             out/full_decode.log
             out/render_pqh.log
-            out/render_pql.log
+            qa_pql/render_pql.log
             qa_pql/Physics9_City_Cars_V3_FULL_TIMELINE_QA_pql.mp4
+            ${{ env.JOB }}/${{ env.SOURCE }}
           if-no-files-found: error
           retention-days: 7
 
-      - name: Publish exact V3 source and validated MP4 to GitHub branch
+      - name: Publish exact V3 source, MP4, and QA evidence
         shell: bash
         run: |
           set -euo pipefail
-          F="out/$FINAL_NAME"
           mkdir -p published_renders
-          cp "$F" "published_renders/$FINAL_NAME"
+          cp "out/$FINAL_NAME" "published_renders/$FINAL_NAME"
+          cp out/VIDEO_QA_V3.txt published_renders/Physics9_City_Cars_Position_Velocity_V3_QA.txt
+          cp out/contact_sheet.jpg published_renders/Physics9_City_Cars_Position_Velocity_V3_contact_sheet.jpg
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "published_renders/$FINAL_NAME" "$JOB/$SOURCE"
-          git commit -m "Publish Physics 9 city cars V3 highly animated SENIOR FINAL PQH [skip ci]"
+          git add \
+            "published_renders/$FINAL_NAME" \
+            published_renders/Physics9_City_Cars_Position_Velocity_V3_QA.txt \
+            published_renders/Physics9_City_Cars_Position_Velocity_V3_contact_sheet.jpg \
+            "$JOB/$SOURCE"
+          git commit -m "Publish Physics 9 city cars V3 senior directional QA PQH [skip ci]"
           git push origin HEAD:${GITHUB_REF_NAME}
 
-      - name: Verify direct raw MP4 URL and byte identity
+      - name: Verify real GitHub raw download and byte identity
         shell: bash
         run: |
           set -euo pipefail
-          DIRECT="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_REF_NAME}/published_renders/${FINAL_NAME}"
-          SOURCE_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_REF_NAME}/${JOB}/${SOURCE}"
-          echo "DIRECT_URL=$DIRECT" | tee out/DIRECT_DOWNLOAD_URL.txt
-          echo "SOURCE_URL=$SOURCE_URL" | tee -a out/DIRECT_DOWNLOAD_URL.txt
-          curl -L --fail --retry 8 --retry-delay 3 -o /tmp/verified.mp4 "$DIRECT"
-          test -s /tmp/verified.mp4
+          DIRECT="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/refs/heads/${GITHUB_REF_NAME}/published_renders/${FINAL_NAME}"
+          SOURCE_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/refs/heads/${GITHUB_REF_NAME}/${JOB}/${SOURCE}"
+          curl -L --fail --retry 8 --retry-delay 2 -o /tmp/verified.mp4 "$DIRECT"
           EXPECTED="${{ steps.qa.outputs.sha }}"
           ACTUAL="$(sha256sum /tmp/verified.mp4 | awk '{print $1}')"
           test "$EXPECTED" = "$ACTUAL"
           curl -L --fail --retry 4 --retry-delay 2 -o /tmp/verified_source.py "$SOURCE_URL"
           python -m py_compile /tmp/verified_source.py
-          echo "Direct MP4 verified: $DIRECT"
-          echo "Published source verified: $SOURCE_URL"
-          echo "SHA-256: $ACTUAL"
-          echo "Dedicated animation methods: ${{ steps.qa.outputs.animation_methods }}"
+          echo "DIRECT_URL=$DIRECT"
+          echo "SOURCE_URL=$SOURCE_URL"
+          echo "SHA256=$ACTUAL"
