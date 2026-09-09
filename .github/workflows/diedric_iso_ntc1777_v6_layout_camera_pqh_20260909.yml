@@ -1,0 +1,197 @@
+name: Diedric ISO NTC1777 V6 Layout Camera PQH 20260909
+
+on:
+  push:
+    branches:
+      - manim/diedric-iso-ntc1777-v6-layout-camera-20260909
+    paths:
+      - .github/workflows/diedric_iso_ntc1777_v6_layout_camera_pqh_20260909.yml
+      - render_jobs/technical_drawing_diedric_iso_v6_20260909/diedric_iso_ntc1777_v6.py
+      - render_jobs/technical_drawing_diedric_iso_v5_20260909/diedric_iso_ntc1777_v5.py
+      - render_jobs/technical_drawing_diedric_iso_v5_20260909/diedric_iso_ntc1777_v5_final.py
+      - Core/technical_drawing_tools.py
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout V6 branch
+        uses: actions/checkout@v4
+        with:
+          ref: manim/diedric-iso-ntc1777-v6-layout-camera-20260909
+          fetch-depth: 0
+
+      - name: Validate V6 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/technical_drawing_diedric_iso_v6_20260909/diedric_iso_ntc1777_v6.py
+          python -m py_compile "$SRC" \
+            render_jobs/technical_drawing_diedric_iso_v5_20260909/diedric_iso_ntc1777_v5.py \
+            render_jobs/technical_drawing_diedric_iso_v5_20260909/diedric_iso_ntc1777_v5_final.py \
+            Core/technical_drawing_tools.py
+          grep -q 'class DiedricISOProjectionV6SeniorLayoutQA' "$SRC"
+          grep -q 'No Circumscribe fill artefacts' "$SRC"
+          grep -q 'zoom=1.15' "$SRC"
+          grep -q 'VISTAS AL LADO OPUESTO' "$SRC"
+          grep -q 'VISTAS EN EL MISMO LADO' "$SRC"
+          ! grep -Eq '[A-Za-z]:\\|/Users/|/home/[^/]+/' "$SRC"
+
+      - name: Install render and QA tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo rm -f /etc/apt/sources.list.d/google-chrome.list /etc/apt/sources.list.d/google-chrome*.list || true
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg python3-pip zip
+          python -m pip install --quiet pillow
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL QA render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/technical_drawing_diedric_iso_v6_20260909/diedric_iso_ntc1777_v6.py
+          SCENE=DiedricISOProjectionV6SeniorLayoutQA
+          rm -rf media_pql qa_pql
+          mkdir -p qa_pql
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=0.04 \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 \
+            -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pql $SRC $SCENE --fps 15 --format=mp4 --media_dir media_pql --disable_caching" \
+            2>&1 | tee qa_pql/pql.log
+          PQL="$(find media_pql -type f -name "${SCENE}.mp4" | head -1)"
+          test -n "$PQL"
+          test -s "$PQL"
+          ffmpeg -nostdin -v error -i "$PQL" -f null - 2> qa_pql/pql_decode.log
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/technical_drawing_diedric_iso_v6_20260909/diedric_iso_ntc1777_v6.py
+          SCENE=DiedricISOProjectionV6SeniorLayoutQA
+          OUT=deliverables/technical_drawing_diedric_iso_v6_20260909
+          rm -rf media "$OUT"
+          mkdir -p "$OUT"
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 \
+            -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pqh $SRC $SCENE --fps 30 --format=mp4 --media_dir media --disable_caching" \
+            2>&1 | tee "$OUT/pqh.log"
+          FINAL="$(find media -type f -name "${SCENE}.mp4" | head -1)"
+          test -n "$FINAL"
+          test -s "$FINAL"
+          cp "$FINAL" "$OUT/TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V6_LAYOUT_CAMERA_FINAL_pqh.mp4"
+
+      - name: Technical QA and dense visual report
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=deliverables/technical_drawing_diedric_iso_v6_20260909
+          F="$OUT/TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V6_LAYOUT_CAMERA_FINAL_pqh.mp4"
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tbytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > "$OUT/VIDEO_TECHNICAL.tsv"
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          awk -v d="$DUR" 'BEGIN { if (d < 300 || d > 540) exit 1; }'
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/decode.log"
+
+          mkdir -p "$OUT/qa_frames"
+          for FRAC in 0.015 0.035 0.055 0.075 0.095 0.115 0.135 0.155 0.175 0.195 0.215 0.235 0.255 0.275 0.295 0.315 0.335 0.355 0.375 0.395 0.415 0.435 0.455 0.475 0.495 0.515 0.535 0.555 0.575 0.595 0.615 0.635 0.655 0.675 0.695 0.715 0.735 0.755 0.775 0.795 0.815 0.835 0.855 0.875 0.895 0.915 0.945 0.975; do
+            T="$(awk -v d="$DUR" -v f="$FRAC" 'BEGIN{printf "%.2f",d*f}')"
+            TAG="$(printf '%s' "$FRAC" | tr -d '.')"
+            ffmpeg -y -ss "$T" -i "$F" -frames:v 1 "$OUT/qa_frames/frame_${TAG}.png" >/dev/null 2>&1
+          done
+
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageDraw
+          root=Path('deliverables/technical_drawing_diedric_iso_v6_20260909')
+          frames=sorted((root/'qa_frames').glob('*.png'))
+          rows=[]
+          thumbs=[]
+          for p in frames:
+              im=Image.open(p).convert('RGB')
+              small=im.resize((320,180))
+              pix=list(small.getdata())
+              changed=sum(1 for r,g,b in pix if abs(r-246)+abs(g-248)+abs(b-251)>38)
+              rows.append((p.name,changed/len(pix)))
+              im.thumbnail((384,216))
+              canvas=Image.new('RGB',(400,246),'white')
+              canvas.paste(im,((400-im.width)//2,8))
+              ImageDraw.Draw(canvas).text((12,224),p.stem,fill=(35,45,58))
+              thumbs.append(canvas)
+          (root/'VISUAL_DENSITY_QA.tsv').write_text('frame\tnonbackground_ratio\n'+'\n'.join(f'{n}\t{r:.6f}' for n,r in rows)+'\n',encoding='utf-8')
+          cols=4; rows_n=(len(thumbs)+cols-1)//cols
+          sheet=Image.new('RGB',(cols*400,rows_n*246),'white')
+          for i,im in enumerate(thumbs): sheet.paste(im,((i%cols)*400,(i//cols)*246))
+          sheet.save(root/'qa_contact_sheet.jpg',quality=91)
+          PY
+
+          sha256sum "$F" > "$OUT/SHA256SUMS.txt"
+          cp render_jobs/technical_drawing_diedric_iso_v6_20260909/diedric_iso_ntc1777_v6.py "$OUT/TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V6_source.py"
+          cp Core/technical_drawing_tools.py "$OUT/technical_drawing_tools.py"
+          cat > "$OUT/RENDER_INFO.txt" <<'EOF'
+          V6 Senior Layout/Camera QA.
+          Built after direct frame review of the real V5 PQH render.
+          Main corrections: larger 3D object and 2D views; strict header/content safe zones; rebalanced first-angle/third-angle layouts; larger comparison/symbol/algorithm/challenge screens; smoother and longer observer camera holds; removal of V5 view-card colour-fill highlight artefact; less empty space.
+          ManimCE 0.20.1; 1920x1080; 30 fps; H.264; yuv420p.
+          QA: compile, literal PQL, literal PQH, ffprobe gates, full decode, 48 distributed frame samples, contact sheet and SHA-256.
+          EOF
+          (cd "$OUT" && zip -9 -r TechnicalDrawing_Diedric_V6_LAYOUT_CAMERA_FULL_PACKAGE.zip \
+            TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V6_LAYOUT_CAMERA_FINAL_pqh.mp4 \
+            TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V6_source.py technical_drawing_tools.py \
+            VIDEO_TECHNICAL.tsv VISUAL_DENSITY_QA.tsv SHA256SUMS.txt RENDER_INFO.txt decode.log pqh.log qa_contact_sheet.jpg qa_frames)
+          test -s "$OUT/TechnicalDrawing_Diedric_V6_LAYOUT_CAMERA_FULL_PACKAGE.zip"
+
+      - name: Persist V6 delivery to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deliverables/technical_drawing_diedric_iso_v6_20260909
+          if ! git diff --cached --quiet; then
+            git commit -m "render: persist diedric V6 layout camera PQH [skip ci]"
+            git push origin HEAD:manim/diedric-iso-ntc1777-v6-layout-camera-20260909
+          fi
+
+      - name: Upload V6 delivery artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DIEDRIC-ISO-V6-LAYOUT-CAMERA-PQH
+          path: deliverables/technical_drawing_diedric_iso_v6_20260909/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DIEDRIC-ISO-V6-DIAGNOSTICS
+          path: |
+            qa_pql/
+            deliverables/technical_drawing_diedric_iso_v6_20260909/
+          if-no-files-found: ignore
+          retention-days: 3
