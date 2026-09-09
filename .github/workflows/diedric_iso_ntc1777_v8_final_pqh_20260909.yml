@@ -1,0 +1,203 @@
+name: Diedric ISO NTC1777 V8 Final PQH 20260909
+
+on:
+  push:
+    branches:
+      - manim/diedric-iso-ntc1777-v8-lower-large-20260909
+    paths:
+      - .github/workflows/diedric_iso_ntc1777_v8_final_pqh_20260909.yml
+      - render_jobs/technical_drawing_diedric_iso_v8_20260909/diedric_iso_ntc1777_v8_final.py
+      - render_jobs/technical_drawing_diedric_iso_v8_20260909/diedric_iso_ntc1777_v8.py
+      - render_jobs/technical_drawing_diedric_iso_v7_20260909/diedric_iso_ntc1777_v7.py
+      - render_jobs/technical_drawing_diedric_iso_v6_20260909/diedric_iso_ntc1777_v6.py
+      - render_jobs/technical_drawing_diedric_iso_v5_20260909/diedric_iso_ntc1777_v5.py
+      - render_jobs/technical_drawing_diedric_iso_v5_20260909/diedric_iso_ntc1777_v5_final.py
+      - Core/technical_drawing_tools.py
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout V8 branch
+        uses: actions/checkout@v4
+        with:
+          ref: manim/diedric-iso-ntc1777-v8-lower-large-20260909
+          fetch-depth: 0
+
+      - name: Validate final V8 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/technical_drawing_diedric_iso_v8_20260909/diedric_iso_ntc1777_v8_final.py
+          python -m py_compile "$SRC" \
+            render_jobs/technical_drawing_diedric_iso_v8_20260909/diedric_iso_ntc1777_v8.py \
+            render_jobs/technical_drawing_diedric_iso_v7_20260909/diedric_iso_ntc1777_v7.py \
+            render_jobs/technical_drawing_diedric_iso_v6_20260909/diedric_iso_ntc1777_v6.py \
+            render_jobs/technical_drawing_diedric_iso_v5_20260909/diedric_iso_ntc1777_v5.py \
+            render_jobs/technical_drawing_diedric_iso_v5_20260909/diedric_iso_ntc1777_v5_final.py \
+            Core/technical_drawing_tools.py
+          grep -q 'class DiedricISOProjectionV8Final' "$SRC"
+          grep -q 'method = badge' "$SRC"
+          grep -q 'assert_disjoint(method' "$SRC"
+
+      - name: Install render and QA tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo rm -f /etc/apt/sources.list.d/google-chrome.list /etc/apt/sources.list.d/google-chrome*.list || true
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg python3-pip zip
+          python -m pip install --quiet pillow
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL QA render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/technical_drawing_diedric_iso_v8_20260909/diedric_iso_ntc1777_v8_final.py
+          SCENE=DiedricISOProjectionV8Final
+          rm -rf media_pql qa_pql
+          mkdir -p qa_pql
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=0.04 \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 \
+            -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pql $SRC $SCENE --fps 15 --format=mp4 --media_dir media_pql --disable_caching" \
+            2>&1 | tee qa_pql/pql.log
+          PQL="$(find media_pql -type f -name "${SCENE}.mp4" | head -1)"
+          test -n "$PQL"
+          test -s "$PQL"
+          ffmpeg -nostdin -v error -i "$PQL" -f null - 2> qa_pql/pql_decode.log
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/technical_drawing_diedric_iso_v8_20260909/diedric_iso_ntc1777_v8_final.py
+          SCENE=DiedricISOProjectionV8Final
+          OUT=deliverables/technical_drawing_diedric_iso_v8_final_20260909
+          rm -rf media "$OUT"
+          mkdir -p "$OUT"
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 \
+            -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pqh $SRC $SCENE --fps 30 --format=mp4 --media_dir media --disable_caching" \
+            2>&1 | tee "$OUT/pqh.log"
+          FINAL="$(find media -type f -name "${SCENE}.mp4" | head -1)"
+          test -n "$FINAL"
+          test -s "$FINAL"
+          cp "$FINAL" "$OUT/TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V8_FINAL_pqh.mp4"
+
+      - name: Technical QA and 72-frame final inspection
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=deliverables/technical_drawing_diedric_iso_v8_final_20260909
+          F="$OUT/TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V8_FINAL_pqh.mp4"
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tbytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > "$OUT/VIDEO_TECHNICAL.tsv"
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          awk -v d="$DUR" 'BEGIN { if (d < 320 || d > 570) exit 1; }'
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/decode.log"
+
+          mkdir -p "$OUT/qa_frames"
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess
+          root=Path('deliverables/technical_drawing_diedric_iso_v8_final_20260909')
+          f=root/'TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V8_FINAL_pqh.mp4'
+          dur=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(f)],text=True).strip())
+          for i in range(72):
+              frac=0.012 + i*(0.976-0.012)/71
+              t=dur*frac
+              out=root/'qa_frames'/f'frame_{i:02d}_{t:07.2f}s.png'
+              subprocess.run(['ffmpeg','-y','-ss',f'{t:.3f}','-i',str(f),'-frames:v','1',str(out)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,check=True)
+          PY
+
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageDraw
+          root=Path('deliverables/technical_drawing_diedric_iso_v8_final_20260909')
+          frames=sorted((root/'qa_frames').glob('*.png'))
+          if len(frames)!=72: raise SystemExit(f'Expected 72 QA frames, found {len(frames)}')
+          thumbs=[]; rows=[]
+          for p in frames:
+              im=Image.open(p).convert('RGB')
+              small=im.resize((320,180)); pix=list(small.getdata())
+              changed=sum(1 for r,g,b in pix if abs(r-246)+abs(g-248)+abs(b-251)>38)
+              rows.append((p.name,changed/len(pix)))
+              im.thumbnail((384,216)); c=Image.new('RGB',(400,246),'white')
+              c.paste(im,((400-im.width)//2,8)); ImageDraw.Draw(c).text((12,224),p.stem,fill=(35,45,58)); thumbs.append(c)
+          (root/'VISUAL_DENSITY_QA.tsv').write_text('frame\tnonbackground_ratio\n'+'\n'.join(f'{n}\t{r:.6f}' for n,r in rows)+'\n',encoding='utf-8')
+          cols=6; sheet=Image.new('RGB',(2400,((len(thumbs)+5)//6)*246),'white')
+          for i,im in enumerate(thumbs): sheet.paste(im,((i%6)*400,(i//6)*246))
+          sheet.save(root/'qa_contact_sheet.jpg',quality=92)
+          PY
+
+          sha256sum "$F" > "$OUT/SHA256SUMS.txt"
+          cp render_jobs/technical_drawing_diedric_iso_v8_20260909/diedric_iso_ntc1777_v8_final.py "$OUT/TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V8_FINAL_source.py"
+          cp render_jobs/technical_drawing_diedric_iso_v8_20260909/diedric_iso_ntc1777_v8.py "$OUT/V8_base_source.py"
+          cp render_jobs/technical_drawing_diedric_iso_v7_20260909/diedric_iso_ntc1777_v7.py "$OUT/V7_base_source.py"
+          cp render_jobs/technical_drawing_diedric_iso_v6_20260909/diedric_iso_ntc1777_v6.py "$OUT/V6_base_source.py"
+          cp Core/technical_drawing_tools.py "$OUT/technical_drawing_tools.py"
+          cat > "$OUT/RENDER_INFO.txt" <<'EOF'
+          V8 FINAL. Post-render QA correction of V8 Lower/Large.
+          3D geometry remains lowered and restored to larger scale. Enlarged 2D projection layouts remain intact. The final correction moves the ISO A method badge in section 09 into a dedicated lower-left cell after the first V8 contact sheet revealed a residual collision with the FRONT card.
+          ManimCE 0.20.1; 1920x1080; 30 fps; H.264; yuv420p.
+          QA: compile, PQL, PQH, full decode, runtime layout assertions, 72 distributed frames, final contact sheet and SHA-256.
+          EOF
+          (cd "$OUT" && zip -9 -r TechnicalDrawing_Diedric_V8_FINAL_FULL_PACKAGE.zip \
+            TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V8_FINAL_pqh.mp4 \
+            TechnicalDrawing_Diedric_ISO_A_E_NTC1777_V8_FINAL_source.py V8_base_source.py V7_base_source.py V6_base_source.py technical_drawing_tools.py \
+            VIDEO_TECHNICAL.tsv VISUAL_DENSITY_QA.tsv SHA256SUMS.txt RENDER_INFO.txt decode.log pqh.log qa_contact_sheet.jpg qa_frames)
+
+      - name: Persist final V8 delivery to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deliverables/technical_drawing_diedric_iso_v8_final_20260909
+          if ! git diff --cached --quiet; then
+            git commit -m "render: persist diedric V8 final PQH [skip ci]"
+            git push origin HEAD:manim/diedric-iso-ntc1777-v8-lower-large-20260909
+          fi
+
+      - name: Upload final V8 delivery artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DIEDRIC-ISO-V8-FINAL-PQH
+          path: deliverables/technical_drawing_diedric_iso_v8_final_20260909/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DIEDRIC-ISO-V8-FINAL-DIAGNOSTICS
+          path: |
+            qa_pql/
+            deliverables/technical_drawing_diedric_iso_v8_final_20260909/
+          if-no-files-found: ignore
+          retention-days: 3
