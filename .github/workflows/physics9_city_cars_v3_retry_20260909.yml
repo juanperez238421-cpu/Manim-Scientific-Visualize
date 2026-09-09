@@ -79,7 +79,7 @@ jobs:
           test -n "$PREVIEW" && test -s "$PREVIEW"
           cp "$PREVIEW" qa_pql/Physics9_City_Cars_V3_FULL_TIMELINE_QA_pql.mp4
 
-      - name: Render literal PQH V3
+      - name: Render literal PQH V3 at senior classroom pacing
         shell: bash
         run: |
           set -uo pipefail
@@ -87,7 +87,7 @@ jobs:
           set +e
           docker run --rm --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home \
-            -e LESSON_TIME_SCALE=1.0 \
+            -e LESSON_TIME_SCALE=2.5 \
             -v "$PWD:/manim" -w /manim \
             --entrypoint bash manimcommunity/manim:v0.20.1 -c "
               set -euo pipefail
@@ -126,7 +126,7 @@ jobs:
           test "$PIX" = yuv420p
           python - <<PY
           d=float('$DUR')
-          assert 120 <= d <= 700, f'Unexpected V3 classroom duration: {d}'
+          assert 170 <= d <= 500, f'Unexpected V3 senior classroom duration: {d}'
           print('duration_pass', d)
           PY
           test "$SIZE" -gt 1000000
@@ -155,6 +155,7 @@ jobs:
             echo "size_bytes=$SIZE"
             echo "sha256=$SHA"
             echo "full_decode=PASS"
+            echo "classroom_pacing_scale=2.5"
             echo "directional_geometry=V3 mirrored car bodies and explicit motion arrows"
             echo "visual_evidence=20 distributed frames + 5x4 contact sheet"
           } > out/VIDEO_QA_V3.txt
@@ -193,7 +194,7 @@ jobs:
                   published_renders/Physics9_City_Cars_Position_Velocity_V3_QA.txt \
                   published_renders/Physics9_City_Cars_Position_Velocity_V3_contact_sheet.jpg \
                   "$JOB/$SOURCE"
-          git commit -m "Publish Physics 9 city cars V3 senior final PQH [skip ci]"
+          git commit -m "Publish Physics 9 city cars V3 senior paced PQH [skip ci]"
           git push origin HEAD:${GITHUB_REF_NAME}
 
       - name: Verify real GitHub raw download and byte identity
