@@ -41,14 +41,17 @@ jobs:
           grep -q 'ValueTracker' "$JOB/$SOURCE"
           echo 'V3 source reconstruction: PASS'
 
-      - name: Pull ManimCE 0.20.1 container and verify host QA tools
+      - name: Install stable QA tools and pull ManimCE 0.20.1
         shell: bash
         run: |
           set -euo pipefail
-          docker pull manimcommunity/manim:v0.20.1
-          command -v ffprobe
-          command -v ffmpeg
+          sudo find /etc/apt/sources.list.d -maxdepth 1 -type f \( -iname '*chrome*' -o -iname '*google*' \) -print -delete || true
+          sudo apt-get clean
+          sudo rm -rf /var/lib/apt/lists/*
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
           ffprobe -version | head -1
+          docker pull manimcommunity/manim:v0.20.1
 
       - name: Accelerated full-timeline smoke render
         shell: bash
