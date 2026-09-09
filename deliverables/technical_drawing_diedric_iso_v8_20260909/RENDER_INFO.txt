@@ -1,0 +1,6 @@
+V8 Lower/Large — direct correction of the real V7 PQH render.
+Core condition: vertical clearance is achieved by explicit placement and safe cells, NOT by shrinking the principal educational geometry.
+3D corrections: opening scale restored to 0.90 and centre moved down; observer 3D scale restored from V7 0.74 to 0.90 with per-view world-space centering; projection construction shifted as one coherent unit; closing hero enlarged and lowered.
+2D corrections: enlarged six-view overview, ISO E/A projection cards, direct-comparison tiles, algorithm views and challenge views. Runtime bounding-box disjoint assertions guard critical 2D cells.
+ManimCE 0.20.1; 1920x1080; 30 fps; H.264; yuv420p.
+QA: compile, PQL, PQH, ffprobe gates, full decode, 72 distributed frame samples, contact sheet, SHA-256.
