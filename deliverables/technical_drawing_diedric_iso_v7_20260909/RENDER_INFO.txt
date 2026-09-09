@@ -1,0 +1,4 @@
+V7 Safe Layout — correction of user-identified V6 composition failures.
+Targeted visual fixes: lowered opening 3D model; per-observer camera zoom below 1.0; no header/subtitle intrusion; non-intersecting first-angle/third-angle projection cross layouts; compact independent ISO E / ISO A comparison tiles; six-step algorithm with dedicated symbol, orthographic and reconstruction cells; challenge rebuilt with the same compact tile system.
+ManimCE 0.20.1; 1920x1080; 30 fps; H.264; yuv420p.
+QA: Python compile, literal PQL, literal PQH, ffprobe gates, full ffmpeg decode, >=55 distributed visual samples, contact sheet and SHA-256.
