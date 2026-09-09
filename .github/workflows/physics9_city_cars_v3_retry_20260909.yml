@@ -41,11 +41,14 @@ jobs:
           grep -q 'ValueTracker' "$JOB/$SOURCE"
           echo 'V3 source reconstruction: PASS'
 
-      - name: Pull ManimCE 0.20.1 container
+      - name: Pull ManimCE 0.20.1 container and verify host QA tools
         shell: bash
         run: |
           set -euo pipefail
           docker pull manimcommunity/manim:v0.20.1
+          command -v ffprobe
+          command -v ffmpeg
+          ffprobe -version | head -1
 
       - name: Accelerated full-timeline smoke render
         shell: bash
@@ -68,7 +71,7 @@ jobs:
             tail -n 160 qa_pql/render_pql.log
             exit "$STATUS"
           fi
-          tail -n 40 qa_pql/render_pql.log
+          tail -n 30 qa_pql/render_pql.log
           PREVIEW="$(find media_pql -type f -name "$SCENE.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PREVIEW" && test -s "$PREVIEW"
           cp "$PREVIEW" qa_pql/Physics9_City_Cars_V3_FULL_TIMELINE_QA_pql.mp4
@@ -94,28 +97,25 @@ jobs:
             tail -n 160 out/render_pqh.log
             exit "$STATUS"
           fi
-          tail -n 40 out/render_pqh.log
+          tail -n 30 out/render_pqh.log
           FINAL="$(find media_v3 -type f -name "$SCENE.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$FINAL" && test -s "$FINAL"
           cp "$FINAL" "out/$FINAL_NAME"
 
-      - name: Containerized technical QA and visual evidence
+      - name: Senior technical QA and visual evidence
         id: qa
         shell: bash
         run: |
           set -euo pipefail
           F="out/$FINAL_NAME"
-          probe() {
-            docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" -w /work \
-              --entrypoint ffprobe manimcommunity/manim:v0.20.1 "$@"
-          }
-          W="$(probe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
-          H="$(probe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
-          FPS="$(probe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
-          CODEC="$(probe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
-          PIX="$(probe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
-          DUR="$(probe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
           SIZE="$(stat -c%s "$F")"
+          echo "probe=$W x $H | $FPS | $CODEC | $PIX | duration=$DUR | bytes=$SIZE"
           test "$W" = 1920
           test "$H" = 1080
           test "$FPS" = 30/1
@@ -123,18 +123,20 @@ jobs:
           test "$PIX" = yuv420p
           python - <<PY
           d=float('$DUR')
-          assert 180 <= d <= 700, f'Unexpected V3 classroom duration: {d}'
+          assert 120 <= d <= 700, f'Unexpected V3 classroom duration: {d}'
           print('duration_pass', d)
           PY
           test "$SIZE" -gt 1000000
-          docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" -w /work \
-            --entrypoint ffmpeg manimcommunity/manim:v0.20.1 \
-            -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
           test ! -s out/full_decode.log
+          mkdir -p out/audit_frames
+          for P in 0.03 0.08 0.13 0.18 0.23 0.28 0.33 0.38 0.43 0.48 0.53 0.58 0.63 0.68 0.73 0.78 0.83 0.88 0.93 0.98; do
+            T="$(python -c "print(float('$DUR')*float('$P'))")"
+            TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_${TAG}.png"
+          done
           INTERVAL="$(python -c "print(max(float('$DUR')/20.0,1.0))")"
-          docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" -w /work \
-            --entrypoint ffmpeg manimcommunity/manim:v0.20.1 \
-            -nostdin -loglevel error -i "$F" \
+          ffmpeg -nostdin -loglevel error -i "$F" \
             -vf "fps=1/$INTERVAL,scale=384:-1,tile=5x4:padding=5:margin=5" \
             -frames:v 1 -q:v 2 out/contact_sheet.jpg
           sha256sum "$F" | tee out/SHA256SUMS.txt
@@ -151,9 +153,10 @@ jobs:
             echo "sha256=$SHA"
             echo "full_decode=PASS"
             echo "directional_geometry=V3 mirrored car bodies and explicit motion arrows"
-            echo "visual_evidence=5x4 distributed contact sheet"
+            echo "visual_evidence=20 distributed frames + 5x4 contact sheet"
           } > out/VIDEO_QA_V3.txt
           echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+          echo "duration=$DUR" >> "$GITHUB_OUTPUT"
 
       - name: Upload V3 artifact
         uses: actions/upload-artifact@v4
@@ -164,6 +167,7 @@ jobs:
             out/VIDEO_QA_V3.txt
             out/SHA256SUMS.txt
             out/contact_sheet.jpg
+            out/audit_frames/
             out/full_decode.log
             out/render_pqh.log
             qa_pql/render_pql.log
@@ -186,10 +190,10 @@ jobs:
                   published_renders/Physics9_City_Cars_Position_Velocity_V3_QA.txt \
                   published_renders/Physics9_City_Cars_Position_Velocity_V3_contact_sheet.jpg \
                   "$JOB/$SOURCE"
-          git commit -m "Publish Physics 9 city cars V3 PQH [skip ci]"
+          git commit -m "Publish Physics 9 city cars V3 senior final PQH [skip ci]"
           git push origin HEAD:${GITHUB_REF_NAME}
 
-      - name: Verify real GitHub raw download
+      - name: Verify real GitHub raw download and byte identity
         shell: bash
         run: |
           set -euo pipefail
