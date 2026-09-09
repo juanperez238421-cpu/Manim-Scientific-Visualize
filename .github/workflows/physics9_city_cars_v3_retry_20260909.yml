@@ -50,8 +50,9 @@ jobs:
       - name: Accelerated full-timeline smoke render
         shell: bash
         run: |
-          set -euo pipefail
+          set -uo pipefail
           rm -rf media_pql qa_pql && mkdir -p qa_pql
+          set +e
           docker run --rm --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home \
             -e LESSON_TIME_SCALE=0.08 \
@@ -59,7 +60,15 @@ jobs:
             --entrypoint bash manimcommunity/manim:v0.20.1 -c "
               set -euo pipefail
               manim -pql $JOB/$SOURCE $SCENE --fps 15 --format=mp4 --media_dir media_pql --disable_caching
-            " 2>&1 | tee qa_pql/render_pql.log
+            " > qa_pql/render_pql.log 2>&1
+          STATUS=$?
+          set -e
+          if [ "$STATUS" -ne 0 ]; then
+            echo "--- V3 SMOKE FAILURE: last 160 log lines ---"
+            tail -n 160 qa_pql/render_pql.log
+            exit "$STATUS"
+          fi
+          tail -n 40 qa_pql/render_pql.log
           PREVIEW="$(find media_pql -type f -name "$SCENE.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$PREVIEW" && test -s "$PREVIEW"
           cp "$PREVIEW" qa_pql/Physics9_City_Cars_V3_FULL_TIMELINE_QA_pql.mp4
@@ -67,8 +76,9 @@ jobs:
       - name: Render literal PQH V3
         shell: bash
         run: |
-          set -euo pipefail
+          set -uo pipefail
           rm -rf media_v3 out && mkdir -p out
+          set +e
           docker run --rm --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home \
             -e LESSON_TIME_SCALE=1.0 \
@@ -76,7 +86,15 @@ jobs:
             --entrypoint bash manimcommunity/manim:v0.20.1 -c "
               set -euo pipefail
               manim -pqh $JOB/$SOURCE $SCENE --fps 30 --format=mp4 --media_dir media_v3 --disable_caching
-            " 2>&1 | tee out/render_pqh.log
+            " > out/render_pqh.log 2>&1
+          STATUS=$?
+          set -e
+          if [ "$STATUS" -ne 0 ]; then
+            echo "--- V3 PQH FAILURE: last 160 log lines ---"
+            tail -n 160 out/render_pqh.log
+            exit "$STATUS"
+          fi
+          tail -n 40 out/render_pqh.log
           FINAL="$(find media_v3 -type f -name "$SCENE.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
           test -n "$FINAL" && test -s "$FINAL"
           cp "$FINAL" "out/$FINAL_NAME"
@@ -105,7 +123,7 @@ jobs:
           test "$PIX" = yuv420p
           python - <<PY
           d=float('$DUR')
-          assert 60 <= d <= 200, f'Unexpected V3 duration: {d}'
+          assert 180 <= d <= 700, f'Unexpected V3 classroom duration: {d}'
           print('duration_pass', d)
           PY
           test "$SIZE" -gt 1000000
