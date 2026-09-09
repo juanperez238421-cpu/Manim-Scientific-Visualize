@@ -1,0 +1,351 @@
+name: Dibujo Tecnico 3D to 2D V12 FIXED FULL TOTAL
+
+on:
+  push:
+    branches:
+      - render/dibujo-tecnico-3d-to-2d-v12-fixed-full-total-20260909
+    paths:
+      - 'render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/build_v12_fixed_full_total.py'
+      - 'render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/QA_V11_TO_V12_FIXED_FULL_TOTAL.md'
+      - '.github/workflows/dibujo_tecnico_3d_to_2d_v12_fixed_full_total_20260909.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render-v12-fixed-full-total:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate complete V12 source and static QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/dibujo_tecnico_clase6_iso_projection_20260902
+          python "$JOB/build_v12_fixed_full_total.py"
+          V12="$JOB/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FIXED_FULL_TOTAL.py"
+          test -s "$V12"
+          python -m py_compile "$V12"
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FIXED_FULL_TOTAL.py')
+          s=p.read_text(encoding='utf-8')
+          required=[
+              'class Projection3Dto2DV12FixedFullTotal',
+              'V11_GLOBAL_PACE = 1.25',
+              'FOLD_EXTRA_UPSHIFT = 1.20',
+              'CONSTRUCCIÓN 2D · UNA VISTA A LA VEZ',
+              'ALZADO · PASO 1/3',
+              'PLANTA · PASO 3/3',
+              'PERFIL · PASO 3/3',
+              'VISTAS TERMINADAS',
+              'front_card.animate.scale(0.50).move_to',
+              'top_card.animate.scale(0.50).move_to',
+              'right_card.animate.scale(0.50).move_to',
+              'angle=-PI / 2',
+              'run_time=T(4.80)',
+              'UN OBJETO · TRES DESCRIPCIONES 2D',
+          ]
+          missing=[x for x in required if x not in s]
+          assert not missing, missing
+          print('V12_STATIC_QA=PASS')
+          PY
+          mkdir -p /tmp/manim-bin /tmp/manim-home pql_media media out qa_out qa_out/audit_frames package_raw package_full
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+
+      - name: Full-timeline PQL runtime gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH HOME=/tmp/manim-home LESSON_TIME_SCALE=0.08
+          cd render_jobs/dibujo_tecnico_clase6_iso_projection_20260902
+          manim -pql Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FIXED_FULL_TOTAL.py \
+            Projection3Dto2DV12FixedFullTotal --fps 15 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/pql_media" 2>&1 | tee "$GITHUB_WORKSPACE/qa_out/PQL.log"
+          cd "$GITHUB_WORKSPACE"
+          PQL="$(find pql_media -type f -name 'Projection3Dto2DV12FixedFullTotal.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+          cp "$PQL" qa_out/Diedrico_3D_to_2D_V12_pql.mp4
+          echo 'PQL_FULL_TIMELINE=PASS'
+
+      - name: Literal PQH final render 1920x1080 30fps
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH=/tmp/manim-bin:$PATH HOME=/tmp/manim-home LESSON_TIME_SCALE=1.0
+          cd render_jobs/dibujo_tecnico_clase6_iso_projection_20260902
+          manim -pqh Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FIXED_FULL_TOTAL.py \
+            Projection3Dto2DV12FixedFullTotal --fps 30 --format=mp4 --disable_caching \
+            --media_dir "$GITHUB_WORKSPACE/media" 2>&1 | tee "$GITHUB_WORKSPACE/out/PQH.log"
+          cd "$GITHUB_WORKSPACE"
+          VIDEO="$(find media -type f -name 'Projection3Dto2DV12FixedFullTotal.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$VIDEO" && test -s "$VIDEO"
+          cp "$VIDEO" out/Diedrico_3D_to_2D_V12.mp4
+          cp "$VIDEO" out/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FIXED_FULL_TOTAL_FINAL_pqh.mp4
+          cp render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FIXED_FULL_TOTAL.py out/
+          cp render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/QA_V11_TO_V12_FIXED_FULL_TOTAL.md out/
+          echo 'PQH_LITERAL_RENDER=PASS'
+
+      - name: Hard technical QA and full decode
+        id: tech
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Diedrico_3D_to_2D_V12.mp4
+          python - "$VIDEO" <<'PY' | tee qa_out/TECHNICAL_QA.txt
+          import av, os, sys
+          p=sys.argv[1]
+          frames=0
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              codec=s.codec_context.name
+              width=s.codec_context.width
+              height=s.codec_context.height
+              pix=s.codec_context.format.name if s.codec_context.format else ''
+              fps=float(s.average_rate) if s.average_rate else 0.0
+              duration=float(c.duration)/float(av.time_base) if c.duration else 0.0
+              for _ in c.decode(s): frames += 1
+          size=os.path.getsize(p)
+          print(f'codec_name={codec}')
+          print(f'width={width}')
+          print(f'height={height}')
+          print(f'pix_fmt={pix}')
+          print(f'average_fps={fps:.6f}')
+          print(f'duration={duration:.6f}')
+          print(f'frames_decoded={frames}')
+          print(f'file_size={size}')
+          assert codec=='h264', codec
+          assert (width,height)==(1920,1080), (width,height)
+          assert pix=='yuv420p', pix
+          assert 29.8 <= fps <= 30.2, fps
+          assert duration > 120.0, duration
+          assert frames > 3600, frames
+          assert size > 2_000_000, size
+          print('FULL_DECODE=PASS')
+          print('TECHNICAL_QA=PASS')
+          PY
+          SHA="$(sha256sum "$VIDEO" | awk '{print $1}')"
+          SIZE="$(stat -c%s "$VIDEO")"
+          echo "$SHA  $VIDEO" | tee qa_out/SHA256SUMS.txt
+          echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
+          echo "size=$SIZE" >> "$GITHUB_OUTPUT"
+
+      - name: Preserve exact PQH MP4 immediately after hard QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp out/Diedrico_3D_to_2D_V12.mp4 package_raw/
+          cp out/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FIXED_FULL_TOTAL_FINAL_pqh.mp4 package_raw/
+          cp out/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FIXED_FULL_TOTAL.py package_raw/
+          cp qa_out/TECHNICAL_QA.txt qa_out/SHA256SUMS.txt out/PQH.log package_raw/
+          test "$(sha256sum package_raw/Diedrico_3D_to_2D_V12.mp4 | awk '{print $1}')" = "${{ steps.tech.outputs.sha256 }}"
+
+      - name: Upload hard-QA V12 real MP4 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Diedrico_3D_to_2D_V12_REAL_MP4_HARD_QA
+          path: package_raw/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Whole-timeline spatial diagnostics
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Diedrico_3D_to_2D_V12.mp4
+          python - "$VIDEO" <<'PY' | tee qa_out/SPATIAL_QA.txt
+          import av, numpy as np, statistics, sys
+          p=sys.argv[1]
+          widths=[]; heights=[]; fracs=[]; centers=[]
+          sampled=near_blank=edge_hits=0
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              for n,frame in enumerate(c.decode(s), start=1):
+                  if n % 6: continue
+                  sampled += 1
+                  arr=frame.to_ndarray(format='gray')
+                  mask=arr < 242
+                  ys,xs=np.where(mask)
+                  frac=float(mask.mean()); fracs.append(frac)
+                  if len(xs):
+                      widths.append(int(xs.max()-xs.min()+1))
+                      heights.append(int(ys.max()-ys.min()+1))
+                      centers.append(float((ys.min()+ys.max())/2))
+                  else:
+                      widths.append(0); heights.append(0); centers.append(540.0)
+                  if frac < 0.0014: near_blank += 1
+                  border=int((arr[:5,:] < 220).sum() + (arr[-5:,:] < 220).sum() + (arr[:,:5] < 220).sum() + (arr[:,-5:] < 220).sum())
+                  if border > 180: edge_hits += 1
+          medw=float(statistics.median(widths)); p10=float(np.percentile(widths,10))
+          medh=float(statistics.median(heights)); medfrac=float(statistics.median(fracs)); medcy=float(statistics.median(centers))
+          print(f'sampled_frames={sampled}')
+          print(f'median_bbox_width={medw}')
+          print(f'p10_bbox_width={p10}')
+          print(f'median_bbox_height={medh}')
+          print(f'median_content_fraction={medfrac}')
+          print(f'median_content_center_y={medcy}')
+          print(f'near_blank_samples={near_blank}')
+          print(f'edge_hit_samples={edge_hits}')
+          # These are corruption/clipping guards, not aesthetic width quotas.
+          assert sampled > 600, sampled
+          assert medfrac > 0.005, medfrac
+          assert medh > 120, medh
+          assert near_blank < 100, near_blank
+          assert edge_hits < 100, edge_hits
+          print('FULL_TIMELINE_SPATIAL_QA=PASS')
+          PY
+
+      - name: Generate 144-frame visual contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO=out/Diedrico_3D_to_2D_V12.mp4
+          python - "$VIDEO" <<'PY' | tee qa_out/VISUAL_AUDIT.txt
+          import av, math, os, sys
+          from PIL import Image, ImageDraw
+          p=sys.argv[1]; count=144; saved=[]
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              duration=float(c.duration)/float(av.time_base)
+              targets=[duration*i/(count+1) for i in range(1,count+1)]
+              ti=0
+              for frame in c.decode(s):
+                  if ti>=len(targets): break
+                  t=float(frame.pts*frame.time_base) if frame.pts is not None else 0.0
+                  if t>=targets[ti]:
+                      im=Image.fromarray(frame.to_ndarray(format='rgb24'))
+                      fp=f'qa_out/audit_frames/frame_{ti+1:03d}_{targets[ti]:07.2f}.jpg'
+                      im.save(fp,quality=90); saved.append(fp); ti+=1
+          assert len(saved)>=140, len(saved)
+          cards=[]
+          for fp in saved:
+              im=Image.open(fp).convert('RGB'); im.thumbnail((480,270))
+              card=Image.new('RGB',(500,300),'white'); card.paste(im,((500-im.width)//2,8))
+              ImageDraw.Draw(card).text((10,280),os.path.basename(fp),fill='black'); cards.append(card)
+          cols=4; rows=math.ceil(len(cards)/cols)
+          sheet=Image.new('RGB',(cols*500,rows*300),'white')
+          for i,im in enumerate(cards): sheet.paste(im,((i%cols)*500,(i//cols)*300))
+          sheet.save('qa_out/Diedrico_3D_to_2D_V12_contact_sheet.jpg',quality=90)
+          print(f'audit_frames={len(saved)}')
+          print(f'duration={duration:.6f}')
+          print('CONTACT_SHEET=PASS')
+          PY
+
+      - name: Prepare full deterministic V12 package
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp out/Diedrico_3D_to_2D_V12.mp4 package_full/
+          cp out/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FIXED_FULL_TOTAL_FINAL_pqh.mp4 package_full/
+          cp out/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FIXED_FULL_TOTAL.py package_full/
+          cp out/QA_V11_TO_V12_FIXED_FULL_TOTAL.md package_full/
+          cp qa_out/TECHNICAL_QA.txt qa_out/SPATIAL_QA.txt qa_out/SHA256SUMS.txt qa_out/VISUAL_AUDIT.txt package_full/
+          cp qa_out/Diedrico_3D_to_2D_V12_contact_sheet.jpg package_full/
+          cp out/PQH.log qa_out/PQL.log package_full/
+          test "$(sha256sum package_full/Diedrico_3D_to_2D_V12.mp4 | awk '{print $1}')" = "${{ steps.tech.outputs.sha256 }}"
+
+      - name: Upload full-total checked V12 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Diedrico_3D_to_2D_V12_FULL_TOTAL_CHECKED
+          path: package_full/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Publish exact validated V12 MP4 to GitHub
+        id: publish
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_SHA: ${{ steps.tech.outputs.sha256 }}
+          EXPECTED_SIZE: ${{ steps.tech.outputs.size }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64, hashlib, json, os, urllib.parse, urllib.request
+          token=os.environ['GH_TOKEN']; repo=os.environ['GITHUB_REPOSITORY']; branch=os.environ['GITHUB_REF_NAME']
+          expected_sha=os.environ['EXPECTED_SHA']; expected_size=int(os.environ['EXPECTED_SIZE'])
+          video=open('out/Diedrico_3D_to_2D_V12.mp4','rb').read()
+          source_path='render_jobs/dibujo_tecnico_clase6_iso_projection_20260902/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FIXED_FULL_TOTAL.py'
+          source=open(source_path,'rb').read()
+          assert len(video)==expected_size
+          assert hashlib.sha256(video).hexdigest()==expected_sha
+          api=f'https://api.github.com/repos/{repo}'
+          headers={'Authorization':f'Bearer {token}','Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}
+          def req(method,url,payload=None):
+              data=None if payload is None else json.dumps(payload).encode()
+              r=urllib.request.Request(url,data=data,method=method,headers=headers)
+              if data is not None: r.add_header('Content-Type','application/json')
+              with urllib.request.urlopen(r,timeout=180) as f:
+                  body=f.read(); return json.loads(body) if body else {}
+          vblob=req('POST',f'{api}/git/blobs',{'content':base64.b64encode(video).decode(),'encoding':'base64'})
+          sblob=req('POST',f'{api}/git/blobs',{'content':base64.b64encode(source).decode(),'encoding':'base64'})
+          ref_path=urllib.parse.quote(branch,safe='/')
+          ref=req('GET',f'{api}/git/ref/heads/{ref_path}')
+          parent=ref['object']['sha']
+          base=req('GET',f'{api}/git/commits/{parent}')
+          entries=[
+              {'path':'published_renders/Diedrico_3D_to_2D_V12.mp4','mode':'100644','type':'blob','sha':vblob['sha']},
+              {'path':'published_renders/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FIXED_FULL_TOTAL_FINAL_pqh.mp4','mode':'100644','type':'blob','sha':vblob['sha']},
+              {'path':source_path,'mode':'100644','type':'blob','sha':sblob['sha']},
+          ]
+          tree=req('POST',f'{api}/git/trees',{'base_tree':base['tree']['sha'],'tree':entries})
+          commit=req('POST',f'{api}/git/commits',{'message':'Publish validated Sistema Diedrico V12 full-total MP4','tree':tree['sha'],'parents':[parent]})
+          req('PATCH',f'{api}/git/refs/heads/{ref_path}',{'sha':commit['sha'],'force':False})
+          open('qa_out/PUBLISHED_COMMIT.txt','w').write(commit['sha']+'\n')
+          print('PUBLISHED_COMMIT='+commit['sha'])
+          print('GITHUB_PUBLICATION=PASS')
+          PY
+          PUB="$(cat qa_out/PUBLISHED_COMMIT.txt)"
+          echo "commit=$PUB" >> "$GITHUB_OUTPUT"
+
+      - name: Verify commit-pinned GitHub MP4 byte-for-byte
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ steps.tech.outputs.sha256 }}
+          EXPECTED_SIZE: ${{ steps.tech.outputs.size }}
+          PUB_COMMIT: ${{ steps.publish.outputs.commit }}
+        run: |
+          set -euo pipefail
+          python - <<'PY' | tee qa_out/DIRECT_REDOWNLOAD_QA.txt
+          import hashlib, os, urllib.request
+          repo=os.environ['GITHUB_REPOSITORY']; commit=os.environ['PUB_COMMIT']
+          sha=os.environ['EXPECTED_SHA']; size=int(os.environ['EXPECTED_SIZE'])
+          paths=[
+              'published_renders/Diedrico_3D_to_2D_V12.mp4',
+              'published_renders/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FIXED_FULL_TOTAL_FINAL_pqh.mp4',
+          ]
+          for path in paths:
+              url=f'https://raw.githubusercontent.com/{repo}/{commit}/{path}'
+              with urllib.request.urlopen(url,timeout=180) as r: data=r.read()
+              got=hashlib.sha256(data).hexdigest()
+              print(url)
+              print(f'bytes={len(data)} sha256={got}')
+              assert len(data)==size, (len(data),size)
+              assert got==sha, (got,sha)
+          dl=f'https://github.com/{repo}/raw/{commit}/published_renders/Diedrico_3D_to_2D_V12.mp4?download=1'
+          open('qa_out/DIRECT_DOWNLOAD_URL.txt','w').write(dl+'\n')
+          print('DOWNLOAD_URL='+dl)
+          print('DIRECT_REDOWNLOAD=PASS')
+          PY
+
+      - name: Upload publication proof
+        uses: actions/upload-artifact@v4
+        with:
+          name: Diedrico_3D_to_2D_V12_PUBLICATION_PROOF
+          path: |
+            qa_out/PUBLISHED_COMMIT.txt
+            qa_out/DIRECT_REDOWNLOAD_QA.txt
+            qa_out/DIRECT_DOWNLOAD_URL.txt
+            qa_out/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 7
