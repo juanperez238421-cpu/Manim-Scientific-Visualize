@@ -1,0 +1,15 @@
+file=Physics9_City_Cars_Position_Velocity_V4_JP_CLASSROOM_FINAL_pqh.mp4
+width=1920
+height=1080
+fps=30/1
+codec=h264
+pix_fmt=yuv420p
+duration=169.433333
+size_bytes=7195821
+sha256=9c0d5eeb27db7afbacbfff9dea81e59dc8d6c095b4d8c1d446757b110b552d97
+full_decode=PASS
+style=JP Classroom Standard: white canvas, numbered persistent headers, monochrome UI, safe zones, consistent panels
+semantic_accents=Car A blue, Car B red, meeting/check result green only
+diagram_preserved=V3 asymmetric mirrored car bodies, nose/headlight direction, road/city model, live meeting
+pedagogy=physical model -> signs -> x(t) -> stepwise solve -> live motion -> x-t -> v-t -> independent checks -> method map
+visual_evidence=20 distributed frames + 5x4 contact sheet
