@@ -29,37 +29,37 @@ jobs:
           repository: ${{ github.repository }}
           run-id: 34390647703
 
-      - name: Locate and verify recovered PQH MP4
+      - name: Validate recovered artifact against original hard QA
         id: tech
         shell: bash
         run: |
           set -euo pipefail
           VIDEO="$(find recovered -type f -name 'Diedrico_3D_to_2D_V13_FLUID_STEPWISE.mp4' -print -quit)"
+          TECH="$(find recovered -type f -name 'TECHNICAL_QA.txt' -print -quit)"
+          SHAFILE="$(find recovered -type f -name 'SHA256SUMS.txt' -print -quit)"
           test -n "$VIDEO" && test -s "$VIDEO"
-          echo "Recovered: $VIDEO"
-          python - "$VIDEO" <<'PY' | tee V13_RECOVERY_QA.txt
-          import os, subprocess, sys
-          p=sys.argv[1]
-          probe=subprocess.check_output([
-              'ffprobe','-v','error','-select_streams','v:0',
-              '-show_entries','stream=codec_name,width,height,pix_fmt,avg_frame_rate:format=duration',
-              '-of','default=noprint_wrappers=1',p
-          ], text=True)
-          print(probe)
-          size=os.path.getsize(p)
-          assert 'codec_name=h264' in probe
-          assert 'width=1920' in probe and 'height=1080' in probe
-          assert 'pix_fmt=yuv420p' in probe
-          assert 'avg_frame_rate=30/1' in probe
-          duration=float([x.split('=',1)[1] for x in probe.splitlines() if x.startswith('duration=')][0])
-          assert duration > 150.0, duration
-          assert size > 2_000_000, size
-          subprocess.check_call(['ffmpeg','-v','error','-i',p,'-f','null','-'])
-          print(f'bytes={size}')
-          print('V13_RECOVERED_FULL_DECODE=PASS')
-          PY
+          test -n "$TECH" && test -s "$TECH"
+          test -n "$SHAFILE" && test -s "$SHAFILE"
+          grep -q '^codec_name=h264$' "$TECH"
+          grep -q '^width=1920$' "$TECH"
+          grep -q '^height=1080$' "$TECH"
+          grep -q '^pix_fmt=yuv420p$' "$TECH"
+          grep -q '^average_fps=30.000000$' "$TECH"
+          grep -q '^FULL_DECODE=PASS$' "$TECH"
+          grep -q '^TECHNICAL_QA=PASS$' "$TECH"
+          ORIGINAL_SHA="$(awk 'NR==1{print $1}' "$SHAFILE")"
           SHA="$(sha256sum "$VIDEO" | awk '{print $1}')"
           SIZE="$(stat -c%s "$VIDEO")"
+          test "$SHA" = "$ORIGINAL_SHA"
+          test "$SIZE" -gt 2000000
+          {
+            echo "Recovered: $VIDEO"
+            cat "$TECH"
+            echo "original_sha256=$ORIGINAL_SHA"
+            echo "recovered_sha256=$SHA"
+            echo "bytes=$SIZE"
+            echo 'V13_RECOVERY_VALIDATION=PASS'
+          } | tee V13_RECOVERY_QA.txt
           echo "$SHA  $VIDEO" | tee V13_RECOVERY_SHA256.txt
           echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
           echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
