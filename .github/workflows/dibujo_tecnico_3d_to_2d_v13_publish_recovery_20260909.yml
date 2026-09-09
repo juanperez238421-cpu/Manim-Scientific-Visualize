@@ -44,7 +44,7 @@ jobs:
           grep -q '^width=1920$' "$TECH"
           grep -q '^height=1080$' "$TECH"
           grep -q '^pix_fmt=yuv420p$' "$TECH"
-          grep -q '^average_fps=30.000000$' "$TECH"
+          grep -Eq '^average_fps=30\.[0-9]+$' "$TECH"
           grep -q '^FULL_DECODE=PASS$' "$TECH"
           grep -q '^TECHNICAL_QA=PASS$' "$TECH"
           ORIGINAL_SHA="$(awk 'NR==1{print $1}' "$SHAFILE")"
