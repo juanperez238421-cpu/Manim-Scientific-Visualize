@@ -1,0 +1,5 @@
+V6 Senior Layout/Camera QA.
+Built after direct frame review of the real V5 PQH render.
+Main corrections: larger 3D object and 2D views; strict header/content safe zones; rebalanced first-angle/third-angle layouts; larger comparison/symbol/algorithm/challenge screens; smoother and longer observer camera holds; removal of V5 view-card colour-fill highlight artefact; less empty space.
+ManimCE 0.20.1; 1920x1080; 30 fps; H.264; yuv420p.
+QA: compile, literal PQL, literal PQH, ffprobe gates, full decode, 48 distributed frame samples, contact sheet and SHA-256.
