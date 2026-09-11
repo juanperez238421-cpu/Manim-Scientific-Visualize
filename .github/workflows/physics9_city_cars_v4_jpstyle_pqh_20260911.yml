@@ -1,0 +1,207 @@
+name: Physics 9 City Cars V4 JP Style PQH 20260911
+
+on:
+  push:
+    branches:
+      - manim/physics9-city-cars-jpstyle-v4-20260911
+    paths-ignore:
+      - 'published_renders/**'
+      - 'render_jobs/physics9_city_cars_jpstyle_v4_20260911/physics9_city_cars_position_velocity_v4_jpstyle.py'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render_publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      JOB: render_jobs/physics9_city_cars_jpstyle_v4_20260911
+      SOURCE: physics9_city_cars_position_velocity_v4_jpstyle.py
+      PAYLOAD: physics9_city_cars_position_velocity_v4_jpstyle.py.gz.b64
+      STYLE: jp_classroom_style.py
+      CHECKER: check_manim_style.py
+      SCENE: Physics9CityCarsJPStyleV4
+      FINAL_NAME: Physics9_City_Cars_Position_Velocity_V4_JPSTYLE_SENIOR_FINAL_pqh.mp4
+      QA_NAME: Physics9_City_Cars_Position_Velocity_V4_JPSTYLE_QA.txt
+      CONTACT_NAME: Physics9_City_Cars_Position_Velocity_V4_JPSTYLE_contact_sheet.jpg
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconstruct exact V4 source and run JP style gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          base64 -d "$JOB/$PAYLOAD" | gzip -dc > "$JOB/$SOURCE"
+          python -m py_compile "$JOB/$SOURCE" "$JOB/$STYLE" "$JOB/$CHECKER"
+          python "$JOB/$CHECKER" "$JOB/$SOURCE"
+          grep -q 'class Physics9CityCarsJPStyleV4(JPMathClassroomScene)' "$JOB/$SOURCE"
+          grep -q 'standard_opening' "$JOB/$SOURCE"
+          grep -q 'set_header' "$JOB/$SOURCE"
+          grep -q 'assert_content_safe' "$JOB/$SOURCE"
+          grep -q 'ValueTracker' "$JOB/$SOURCE"
+          grep -q 'POSITION–TIME GRAPH' "$JOB/$SOURCE"
+          grep -q 'VELOCITY–TIME GRAPH' "$JOB/$SOURCE"
+          echo 'JP classroom structural QA: PASS'
+
+      - name: Install render and media QA dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          ffprobe -version | head -1
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Full-timeline accelerated literal PQL gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf media_pql qa_pql
+          mkdir -p qa_pql
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=0.07 \
+            -e PYTHONPATH="/manim/$JOB" \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/bin
+              ln -sf /bin/true /tmp/bin/xdg-open
+              export PATH=\"/tmp/bin:\$PATH\"
+              manim -pql $JOB/$SOURCE $SCENE --fps 15 --format=mp4 --media_dir media_pql --disable_caching
+            " 2>&1 | tee qa_pql/render_pql.log
+          PREVIEW="$(find media_pql -type f -name "$SCENE.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PREVIEW" && test -s "$PREVIEW"
+          cp "$PREVIEW" qa_pql/Physics9_City_Cars_V4_JPSTYLE_FULL_TIMELINE_QA_pql.mp4
+
+      - name: Literal PQH final render — ManimCE 0.20.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf media out
+          mkdir -p out
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=1.0 \
+            -e PYTHONPATH="/manim/$JOB" \
+            -v "$PWD:/manim" -w /manim \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/bin
+              ln -sf /bin/true /tmp/bin/xdg-open
+              export PATH=\"/tmp/bin:\$PATH\"
+              manim -pqh $JOB/$SOURCE $SCENE --fps 30 --format=mp4 --media_dir media --disable_caching
+            " 2>&1 | tee out/render_pqh.log
+          FINAL="$(find media -type f -name "$SCENE.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" "out/$FINAL_NAME"
+
+      - name: Technical QA, full decode and distributed visual evidence
+        id: qa
+        shell: bash
+        run: |
+          set -euo pipefail
+          F="out/$FINAL_NAME"
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          python - <<PY
+          d=float('$DUR')
+          assert 90 <= d <= 480, f'Unexpected classroom duration: {d}'
+          print('duration_pass', d)
+          PY
+          test "$SIZE" -gt 1000000
+          test "$SIZE" -lt $((95 * 1024 * 1024))
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
+          test ! -s out/full_decode.log
+
+          mkdir -p out/audit_frames
+          for P in 0.02 0.07 0.12 0.17 0.22 0.27 0.32 0.37 0.42 0.47 0.52 0.57 0.62 0.67 0.72 0.77 0.82 0.87 0.92 0.97; do
+            T="$(python -c "print(float('$DUR')*float('$P'))")"
+            TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_${TAG}.png"
+          done
+          INTERVAL="$(python -c "print(max(float('$DUR')/20.0,1.0))")"
+          ffmpeg -nostdin -loglevel error -i "$F" \
+            -vf "fps=1/$INTERVAL,scale=384:-1,tile=5x4:padding=5:margin=5" \
+            -frames:v 1 -q:v 2 "out/$CONTACT_NAME"
+
+          sha256sum "$F" | tee out/SHA256SUMS.txt
+          SOURCE_SHA="$(sha256sum "$JOB/$SOURCE" | awk '{print $1}')"
+          STYLE_SHA="$(sha256sum "$JOB/$STYLE" | awk '{print $1}')"
+          VIDEO_SHA="$(awk '{print $1}' out/SHA256SUMS.txt)"
+          {
+            echo "file=$FINAL_NAME"
+            echo "scene=$SCENE"
+            echo "width=$W"
+            echo "height=$H"
+            echo "fps=$FPS"
+            echo "codec=$CODEC"
+            echo "pix_fmt=$PIX"
+            echo "duration=$DUR"
+            echo "size_bytes=$SIZE"
+            echo "video_sha256=$VIDEO_SHA"
+            echo "source_sha256=$SOURCE_SHA"
+            echo "style_sha256=$STYLE_SHA"
+            echo "full_decode=PASS"
+            echo "pql_full_timeline=PASS"
+            echo "jp_static_style_qa=PASS"
+            echo "visual_evidence=20 distributed frames + 5x4 contact sheet"
+            echo "pedagogy=road -> signed velocity -> x(t) -> equal position -> live meeting -> x-t -> v-t -> checks -> method map"
+            echo "visual_contract=1920x1080 white background black/gray hierarchy persistent numbered headers safe-layout assertions"
+          } > "out/$QA_NAME"
+          echo "video_sha=$VIDEO_SHA" >> "$GITHUB_OUTPUT"
+          echo "duration=$DUR" >> "$GITHUB_OUTPUT"
+          echo "size=$SIZE" >> "$GITHUB_OUTPUT"
+
+      - name: Publish exact V4 MP4, source and QA evidence to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p published_renders
+          cp "out/$FINAL_NAME" "published_renders/$FINAL_NAME"
+          cp "out/$QA_NAME" "published_renders/$QA_NAME"
+          cp "out/$CONTACT_NAME" "published_renders/$CONTACT_NAME"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            "published_renders/$FINAL_NAME" \
+            "published_renders/$QA_NAME" \
+            "published_renders/$CONTACT_NAME" \
+            "$JOB/$SOURCE"
+          git commit -m "Publish Physics 9 city cars V4 JP classroom PQH [skip ci]"
+          git push origin HEAD:${GITHUB_REF_NAME}
+
+      - name: Verify real raw GitHub downloads and byte identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          DIRECT="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/refs/heads/${GITHUB_REF_NAME}/published_renders/${FINAL_NAME}"
+          SOURCE_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/refs/heads/${GITHUB_REF_NAME}/${JOB}/${SOURCE}"
+          QA_URL="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/refs/heads/${GITHUB_REF_NAME}/published_renders/${QA_NAME}"
+          curl -L --fail --retry 8 --retry-delay 2 -o /tmp/verified.mp4 "$DIRECT"
+          EXPECTED="${{ steps.qa.outputs.video_sha }}"
+          ACTUAL="$(sha256sum /tmp/verified.mp4 | awk '{print $1}')"
+          test "$EXPECTED" = "$ACTUAL"
+          curl -L --fail --retry 4 --retry-delay 2 -o /tmp/verified_source.py "$SOURCE_URL"
+          python -m py_compile /tmp/verified_source.py
+          curl -L --fail --retry 4 --retry-delay 2 -o /tmp/verified_qa.txt "$QA_URL"
+          grep -q 'full_decode=PASS' /tmp/verified_qa.txt
+          echo "DIRECT_URL=$DIRECT"
+          echo "SOURCE_URL=$SOURCE_URL"
+          echo "QA_URL=$QA_URL"
+          echo "SHA256=$ACTUAL"
