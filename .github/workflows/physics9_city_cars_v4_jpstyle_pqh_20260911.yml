@@ -70,6 +70,9 @@ jobs:
             -v "$PWD:/manim" -w /manim \
             --entrypoint bash manimcommunity/manim:v0.20.1 -c "
               set -euo pipefail
+              mkdir -p /tmp/bin
+              ln -sf /bin/true /tmp/bin/xdg-open
+              export PATH=\"/tmp/bin:\$PATH\"
               manim -pql $JOB/$SOURCE $SCENE --fps 15 --format=mp4 --media_dir media_pql --disable_caching
             " 2>&1 | tee qa_pql/render_pql.log
           PREVIEW="$(find media_pql -type f -name "$SCENE.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
@@ -89,6 +92,9 @@ jobs:
             -v "$PWD:/manim" -w /manim \
             --entrypoint bash manimcommunity/manim:v0.20.1 -c "
               set -euo pipefail
+              mkdir -p /tmp/bin
+              ln -sf /bin/true /tmp/bin/xdg-open
+              export PATH=\"/tmp/bin:\$PATH\"
               manim -pqh $JOB/$SOURCE $SCENE --fps 30 --format=mp4 --media_dir media --disable_caching
             " 2>&1 | tee out/render_pqh.log
           FINAL="$(find media -type f -name "$SCENE.mp4" -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
