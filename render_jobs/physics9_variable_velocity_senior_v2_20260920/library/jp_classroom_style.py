@@ -194,21 +194,18 @@ class JPClassroomScene(MovingCameraScene):
         subtitle_text.next_to(rule, DOWN, buff=0.08).align_to(title_row, LEFT)
 
         new_header = VGroup(title_row, rule)
-        if self.header_group is None:
-            self.header_group = new_header
-            self.add(new_header)
-        else:
-            old_header = self.header_group
-            self.header_group = new_header
-            self.play(ReplacementTransform(old_header, new_header), run_time=RUN_QUICK)
+        old_header = self.header_group
+        old_subtitle = self.subtitle_group
+        self.header_group = new_header
+        self.subtitle_group = subtitle_text
 
-        if self.subtitle_group is None:
-            self.subtitle_group = subtitle_text
-            self.add(subtitle_text)
+        if old_header is None and old_subtitle is None:
+            self.add(new_header, subtitle_text)
         else:
-            old_subtitle = self.subtitle_group
-            self.subtitle_group = subtitle_text
-            self.play(ReplacementTransform(old_subtitle, subtitle_text), run_time=RUN_QUICK)
+            fading_out = [mob for mob in (old_header, old_subtitle) if mob is not None]
+            if fading_out:
+                self.play(*[FadeOut(mob) for mob in fading_out], run_time=RUN_QUICK * 0.55)
+            self.play(FadeIn(new_header), FadeIn(subtitle_text), run_time=RUN_QUICK * 0.55)
 
     def clear_stage(self, keep_header: bool = True) -> None:
         keep_family_ids: set[int] = set()
