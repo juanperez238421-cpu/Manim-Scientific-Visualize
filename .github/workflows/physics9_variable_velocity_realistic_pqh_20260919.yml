@@ -24,9 +24,15 @@ jobs:
           set -euo pipefail
           FILE=render_jobs/physics9_variable_velocity_20260919/physics9_variable_velocity_realistic.py
           python -m py_compile "$FILE"
-          grep -q "class VariableVelocityRealWorld(Scene)" "$FILE"
-          grep -q "a=\\frac" "$FILE"
-          grep -q "v=v(t)" "$FILE"
+          python - <<'PY'
+          from pathlib import Path
+          p = Path("render_jobs/physics9_variable_velocity_20260919/physics9_variable_velocity_realistic.py")
+          s = p.read_text(encoding="utf-8")
+          assert "class VariableVelocityRealWorld(Scene)" in s
+          assert "def velocity_time_analysis" in s
+          assert "def acceleration_bridge" in s
+          print("source_validation_pass")
+          PY
 
       - name: Install verification tools and pull ManimCE
         shell: bash
