@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   render:
@@ -15,6 +15,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: physics9-variable-velocity-realistic-20260919
 
       - name: Validate Python source
         shell: bash
@@ -119,6 +121,23 @@ jobs:
           EOF
           cd out
           zip -9 -r Physics9_VariableVelocity_RealisticMotion_FULL_FINAL_PQH_Package.zip             Physics9_VariableVelocity_RealisticMotion_FULL_FINAL_pqh.mp4             physics9_variable_velocity_realistic.py VIDEO_TECHNICAL.tsv             SHA256SUMS.txt RENDER_INFO.txt render_pqh.log render_pql.log             full_decode.log audit_frames/
+
+      - name: Publish verified MP4 to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p deliveries/physics9
+          cp out/Physics9_VariableVelocity_RealisticMotion_FULL_FINAL_pqh.mp4 deliveries/physics9/
+          cp out/Physics9_VariableVelocity_RealisticMotion_FULL_FINAL_PQH_Package.zip deliveries/physics9/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deliveries/physics9/
+          if git diff --cached --quiet; then
+            echo "No delivery changes to publish"
+          else
+            git commit -m "render: publish Physics9 variable velocity PQH [skip ci]"
+            git push origin HEAD:physics9-variable-velocity-realistic-20260919
+          fi
 
       - uses: actions/upload-artifact@v4
         with:
