@@ -421,7 +421,7 @@ class VariableVelocityRealWorld(Scene):
             ("ACELERAR", "0 → 70 km/h", "a > 0", GREEN),
             ("FRENAR", "70 → 25", "a < 0", RED),
             ("DETENIDO", "v = 0 constante", "a = 0", AMBER),
-            ("CRUCERO", "v casi constante", "a ≈ 0", BLUE),
+            ("CRUCERO", "v casi constante", r"a \\approx 0", BLUE),
         ]
         for title, middle, bottom, col in data:
             box = RoundedRectangle(
