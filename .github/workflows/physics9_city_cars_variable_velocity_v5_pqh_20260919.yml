@@ -31,9 +31,10 @@ jobs:
           SRC="$JOB/physics9_city_cars_variable_velocity_v5.py"
 
           cp "$BASE/jp_classroom_style.py" "$JOB/jp_classroom_style.py"
+          cp "$BASE/jp_classroom_style_base.py" "$JOB/jp_classroom_style_base.py"
           cp "$BASE/check_manim_style.py" "$JOB/check_manim_style.py"
 
-          python -m py_compile "$SRC" "$JOB/jp_classroom_style.py" "$JOB/check_manim_style.py"
+          python -m py_compile "$SRC" "$JOB/jp_classroom_style.py" "$JOB/jp_classroom_style_base.py" "$JOB/check_manim_style.py"
           python "$JOB/check_manim_style.py" "$SRC"
 
           grep -q 'class Physics9CityCarsVariableVelocityV5' "$SRC"
@@ -50,7 +51,7 @@ jobs:
           fi
 
           mkdir -p qa_preview
-          sha256sum "$SRC" "$JOB/jp_classroom_style.py" > qa_preview/SOURCE_SHA256SUMS.txt
+          sha256sum "$SRC" "$JOB/jp_classroom_style.py" "$JOB/jp_classroom_style_base.py" > qa_preview/SOURCE_SHA256SUMS.txt
 
       - name: Prepare pinned ManimCE environment
         shell: bash
@@ -263,6 +264,7 @@ jobs:
           mkdir -p "$ROOT/src" "$ROOT/qa/audit_frames" "$ROOT/workflow"
           cp "$JOB/physics9_city_cars_variable_velocity_v5.py" "$ROOT/src/"
           cp "$JOB/jp_classroom_style.py" "$ROOT/src/"
+          cp "$JOB/jp_classroom_style_base.py" "$ROOT/src/"
           cp "$F" "$ROOT/"
           cp final_out/VIDEO_TECHNICAL.tsv final_out/SHA256SUMS.txt final_out/full_decode.log \
              final_out/render_pqh.log final_out/FRAME_SCAN_SUMMARY.txt final_out/FRAME_BY_FRAME_SCAN.csv \
