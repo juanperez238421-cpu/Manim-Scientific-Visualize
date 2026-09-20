@@ -1,0 +1,33 @@
+PHYSICS 9 — CITY CARS VARIABLE VELOCITY V5
+Senior classroom render and QA
+
+Pedagogical lineage:
+- direct continuation of City Cars V4 constant-velocity model
+- preserves City A = 0 km, City B = 240 km
+- preserves Car B = -40 km/h
+- replaces Car A = constant +80 km/h with:
+    0.00–0.75 h : +80 km/h
+    0.75–1.25 h : 0 km/h (lunch)
+    1.25–1.75 h : +60 km/h (traffic builds)
+    1.75–2.00 h : 0 km/h (accident stop)
+    2.00–3.00 h : +30 km/h (heavy traffic)
+- new meeting event = 3.00 h, 120 km from City A
+- average velocity of Car A to meeting = 40 km/h
+- braking micro-example = 80 km/h to 0 in 8 s -> a ≈ -2.78 m/s²
+
+Conceptual objective:
+A more realistic description of motion requires velocity as a function of time.
+Real driving includes repeated velocity changes and continuous transitions during braking/acceleration.
+Acceleration describes the rate at which velocity changes.
+
+Technical acceptance:
+- Python compile + static style QA
+- literal PQL full-timeline runtime gate
+- literal PQH final render
+- 1920x1080
+- 30 fps
+- H.264 / yuv420p
+- full FFmpeg decode
+- every-frame blank/border scan
+- 48-frame distributed visual QA contact sheet
+- SHA-256
