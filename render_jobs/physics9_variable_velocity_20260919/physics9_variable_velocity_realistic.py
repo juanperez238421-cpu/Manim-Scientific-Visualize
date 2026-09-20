@@ -418,7 +418,7 @@ class VariableVelocityRealWorld(Scene):
 
         cards = VGroup()
         data = [
-            ("ACELERAR", "70 → 0 no; 0 → 70", "a > 0", GREEN),
+            ("ACELERAR", "0 → 70 km/h", "a > 0", GREEN),
             ("FRENAR", "70 → 25", "a < 0", RED),
             ("DETENIDO", "v = 0 constante", "a = 0", AMBER),
             ("CRUCERO", "v casi constante", "a ≈ 0", BLUE),
@@ -496,7 +496,7 @@ class VariableVelocityRealWorld(Scene):
         self.play(LaggedStart(*[FadeIn(x) for x in ritems], lag_ratio=0.15), run_time=1.2)
 
         close = Text(
-            "Una descripción más realista del movimiento requiere seguir cómo cambia la velocidad instante a instante.",
+            "Una descripción más realista del movimiento involucra cambios continuos de velocidad: hay que seguir v instante a instante.",
             font_size=26, color=PURPLE, weight=BOLD
         ).to_edge(DOWN, buff=0.35)
         self.play(FadeIn(close, shift=UP * 0.12))
