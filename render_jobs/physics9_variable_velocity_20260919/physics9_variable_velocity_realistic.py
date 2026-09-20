@@ -146,7 +146,7 @@ class VariableVelocityRealWorld(Scene):
         # Numerical integral of v(t): km/h * h = km
         samples = np.linspace(0, t, max(2, int(t * 4) + 2))
         vals = np.array([cls.v_profile(s) for s in samples])
-        return np.trapz(vals, samples / 60.0)
+        return np.trapezoid(vals, samples / 60.0)
 
     # ------------------------------------------------------------------
     # Scene 0
