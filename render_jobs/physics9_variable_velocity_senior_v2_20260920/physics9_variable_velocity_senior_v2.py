@@ -196,6 +196,7 @@ class Physics9VariableVelocitySeniorV2(JPMathClassroomScene):
         title = self.text("VELOCIDAD DEL AUTO", 20, BOLD)
         speed = DecimalNumber(value, num_decimal_places=0, font_size=44, color=BLACK_TEXT)
         unit = self.text("km/h", 21, MEDIUM).next_to(speed, RIGHT, buff=0.12)
+        unit.add_updater(lambda mob: mob.next_to(speed, RIGHT, buff=0.12))
         numeric = VGroup(speed, unit)
         content = VGroup(title, numeric).arrange(DOWN, buff=0.14)
         box = RoundedRectangle(
@@ -321,9 +322,17 @@ class Physics9VariableVelocitySeniorV2(JPMathClassroomScene):
         layout = self.split_layout(left_panel.group, right, left_width=9.0, right_width=4.8, max_height=5.25, center_y=-0.42)
         self.assert_content_safe(layout.group, "section 1 layout")
 
+        car_y = road[0].get_center()[1] + 0.10
+        car_positions = np.linspace(
+            road[0].get_left()[0] + 0.48,
+            road[0].get_right()[0] - 0.48,
+            5,
+        )
+        car.move_to([car_positions[0], car_y, 0])
+
         self.play(FadeIn(left_panel.group), FadeIn(right), run_time=RUN_NORMAL)
-        for i, x in enumerate(np.linspace(-2.35, 2.35, 5)[1:], start=1):
-            self.play(car.animate.move_to([x, 0.10, 0]), run_time=0.72, rate_func=linear)
+        for x in car_positions[1:]:
+            self.play(car.animate.move_to([x, car_y, 0]), run_time=0.72, rate_func=linear)
             self.wait(PAUSE_SHORT * 0.40)
         self.wait(PAUSE_EXPLAIN)
         self.clear_stage()
@@ -382,12 +391,13 @@ class Physics9VariableVelocitySeniorV2(JPMathClassroomScene):
             self.play(
                 car.animate.move_to([x, road[0].get_center()[1] + 0.10, 0]),
                 ChangeDecimalToValue(speed, target_v),
-                ReplacementTransform(current_event, target_event),
+                FadeOut(current_event),
                 run_time=run_time,
                 rate_func=smooth,
             )
+            self.play(FadeIn(target_event, shift=UP * 0.06), run_time=0.28)
             current_event = target_event
-            self.wait(PAUSE_SHORT * 0.55)
+            self.wait(PAUSE_SHORT * 0.45)
 
         conclusion = self.formula_panel(r"v=v(t)", width=4.4, height=1.02, font_size=39)
         conclusion.move_to([2.15, -3.18, 0])
@@ -448,13 +458,14 @@ class Physics9VariableVelocitySeniorV2(JPMathClassroomScene):
                 dash_length=0.07, color=MID_GRAY, stroke_width=1.5,
             )
             self.play(
-                ReplacementTransform(current, target),
+                FadeOut(current),
                 Transform(dot, new_dot),
                 Transform(guide, new_guide),
-                run_time=0.80,
+                run_time=0.62,
             )
+            self.play(FadeIn(target, shift=UP * 0.05), run_time=0.28)
             current = target
-            self.wait(PAUSE_READ * 0.55)
+            self.wait(PAUSE_READ * 0.48)
 
         self.wait(PAUSE_EXPLAIN)
         self.clear_stage()
@@ -513,13 +524,14 @@ class Physics9VariableVelocitySeniorV2(JPMathClassroomScene):
                 dash_length=0.07, color=MID_GRAY, stroke_width=1.5,
             )
             self.play(
-                ReplacementTransform(current, target),
+                FadeOut(current),
                 Transform(dot, new_dot),
                 Transform(guide, new_guide),
-                run_time=0.82,
+                run_time=0.62,
             )
+            self.play(FadeIn(target, shift=UP * 0.05), run_time=0.28)
             current = target
-            self.wait(PAUSE_READ * 0.50)
+            self.wait(PAUSE_READ * 0.44)
 
         self.wait(PAUSE_EXPLAIN)
         self.clear_stage()
@@ -565,7 +577,8 @@ class Physics9VariableVelocitySeniorV2(JPMathClassroomScene):
         stage = VGroup(formula, cards, note)
         self.assert_content_safe(stage, "section 5 stage")
 
-        self.play(Write(formula[1]), FadeIn(formula[0]))
+        self.play(FadeIn(formula[0]), run_time=RUN_QUICK)
+        self.play(Write(formula[1]), run_time=RUN_NORMAL)
         self.play(LaggedStart(*[FadeIn(card, shift=UP * 0.10) for card in cards], lag_ratio=0.12), run_time=RUN_SLOW)
         self.play(FadeIn(note))
         self.wait(PAUSE_EXPLAIN)
