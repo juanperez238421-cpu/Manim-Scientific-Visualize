@@ -1,0 +1,154 @@
+name: Geometry 8 Circle Area Decomposition V2 FINAL PQH 20260827
+
+on:
+  push:
+    branches: [render/geometry8-circle-area-decomposition-stepbystep-20260827]
+    paths:
+      - 'render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827.py'
+      - 'render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827_V2.py'
+      - '.github/workflows/geometry8_circle_area_decomposition_stepbystep_v2_20260827.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile source stack
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_circle_pedagogical_qa_20260819
+          mkdir -p qa_out_v2 out_v2 qa_media_v2 media_v2
+          python -Werror -m py_compile \
+            "$JOB/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827.py" \
+            "$JOB/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827_V2.py"
+          grep -Fq 'class Geometry8CircleAreaDecomposition20260827V2' "$JOB/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827_V2.py"
+
+      - name: Literal PQL runtime and safe-frame gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827_V2.py
+          mkdir -p /tmp/manim-bin /tmp/manim-home qa_out_v2 qa_media_v2
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=0.05
+          manim -pql "$SRC" Geometry8CircleAreaDecomposition20260827V2 \
+            --fps 15 --format=mp4 --media_dir qa_media_v2 --disable_caching \
+            2>&1 | tee qa_out_v2/CIRCLE_AREA_V2_pql.log
+          PQL="$(find qa_media_v2 -type f -name 'Geometry8CircleAreaDecomposition20260827V2.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+          cp "$PQL" qa_out_v2/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827_V2_pql.mp4
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827_V2.py
+          mkdir -p /tmp/manim-bin /tmp/manim-home out_v2 media_v2
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=1.0
+          manim -pqh "$SRC" Geometry8CircleAreaDecomposition20260827V2 \
+            --fps 30 --format=mp4 --media_dir media_v2 --disable_caching \
+            2>&1 | tee out_v2/CIRCLE_AREA_V2_pqh.log
+          FINAL="$(find media_v2 -type f -name 'Geometry8CircleAreaDecomposition20260827V2.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" out_v2/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827_V2_FINAL_pqh.mp4
+
+      - name: Full technical QA and decode
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out_v2/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827_V2_FINAL_pqh.mp4
+          python - "$F" <<'PY' | tee out_v2/VIDEO_TECHNICAL_QA_V2.txt
+          import av, os, sys
+          p=sys.argv[1]
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              codec=s.codec_context.name
+              width=s.codec_context.width
+              height=s.codec_context.height
+              fmt=s.codec_context.format.name if s.codec_context.format else ''
+              fps=float(s.average_rate) if s.average_rate else 0.0
+              duration=float(c.duration)/float(av.time_base) if c.duration else 0.0
+              frames=0
+              for _ in c.decode(s): frames += 1
+          print(f'codec={codec}')
+          print(f'width={width}')
+          print(f'height={height}')
+          print(f'pix_fmt={fmt}')
+          print(f'fps={fps:.6f}')
+          print(f'duration={duration:.6f}')
+          print(f'frames={frames}')
+          print(f'size={os.path.getsize(p)}')
+          assert codec == 'h264'
+          assert width == 1920 and height == 1080
+          assert abs(fps-30.0) < 0.001
+          assert fmt == 'yuv420p'
+          assert duration > 20 and frames > 0
+          PY
+          sha256sum "$F" | tee out_v2/SHA256SUMS_V2.txt
+
+      - name: Visual QA contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out_v2/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827_V2_FINAL_pqh.mp4
+          mkdir -p out_v2/frame_samples
+          python - "$F" <<'PY'
+          import av, math, os, sys
+          from PIL import Image, ImageDraw
+          p=sys.argv[1]
+          saved=[]
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              duration=float(c.duration)/float(av.time_base)
+              targets=[duration*i/31 for i in range(1,31)]
+              ti=0
+              for frame in c.decode(s):
+                  if ti>=len(targets): break
+                  t=float(frame.pts*frame.time_base) if frame.pts is not None else 0
+                  if t>=targets[ti]:
+                      fp=f'out_v2/frame_samples/frame_{ti+1:02d}_{targets[ti]:06.2f}.jpg'
+                      frame.to_image().convert('RGB').save(fp, quality=90)
+                      saved.append(fp); ti+=1
+          cards=[]
+          for fp in saved:
+              im=Image.open(fp).convert('RGB'); im.thumbnail((480,270))
+              card=Image.new('RGB',(500,300),'white'); card.paste(im,((500-im.width)//2,8))
+              ImageDraw.Draw(card).text((10,280),os.path.basename(fp),fill='black')
+              cards.append(card)
+          cols=3; rows=math.ceil(len(cards)/cols)
+          sheet=Image.new('RGB',(cols*500,rows*300),'white')
+          for i,im in enumerate(cards): sheet.paste(im,((i%cols)*500,(i//cols)*300))
+          sheet.save('out_v2/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_V2_contact_sheet.jpg', quality=90)
+          print('audit_frames=',len(saved))
+          PY
+          cp render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827.py out_v2/
+          cp render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827_V2.py out_v2/
+          cp qa_out_v2/CIRCLE_AREA_V2_pql.log out_v2/
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Geometry8-Circle-Area-Decomposition-STEP-BY-STEP-V2-20260827-FINAL-PQH
+          path: |
+            out_v2/
+            qa_out_v2/
+          if-no-files-found: warn
+          retention-days: 7
