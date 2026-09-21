@@ -127,3 +127,18 @@ The V4 delivery is accepted only if:
 - Automated **every-frame** border scan passes.
 - Section-focused audit frames and contact sheets show no escaping cars, clipped text, overlapping panels, or graph misalignment.
 - Final MP4 and QA package are published to the branch.
+
+
+## Secondary post-render V4 QA
+
+After the first successful V4 render, the new video was sampled again at one-second intervals across the full timeline.
+
+Two residual presentation defects were found and corrected before final delivery:
+
+1. **Semantic mismatch during route transitions.**
+   The previous event card faded out during the same animation in which the speed readout was already changing. This could briefly show, for example, "Lunch stop" while the speed value was increasing. The fix now removes the previous label first, then animates the speed/car change, and only then reveals the next numbered event.
+
+2. **Final synthesis takeaway overlapped the lower process cards.**
+   The `realistic motion ⇒ v = v(t)` formula panel occupied the same vertical band as the bottom process row. The final layout now reserves a dedicated middle band for the takeaway and moves the 2×2 process map lower while remaining inside the safe content zone.
+
+The final accepted render therefore requires a second complete PQH cycle after these fixes.
