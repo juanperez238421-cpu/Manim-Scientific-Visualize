@@ -489,12 +489,18 @@ class Physics9VariableVelocitySeniorV4ForensicQA(JPMathClassroomScene):
             target_timeline = self.timeline_badges(len(ROUTE_STEPS), active=idx).move_to(current_timeline)
 
             x = road_left + item["fraction"] * (road_right - road_left)
+            # Remove the previous event label BEFORE velocity changes.
+            # This prevents a transient contradiction such as "Lunch stop"
+            # being visible while the speed readout is already increasing.
+            self.play(
+                FadeOut(current_card),
+                FadeOut(current_timeline),
+                run_time=0.18,
+            )
             self.play(
                 car.animate.move_to([x, car_y, 0]),
                 ChangeDecimalToValue(speed_number, item["speed"]),
-                FadeOut(current_card),
-                FadeOut(current_timeline),
-                run_time=0.92 if idx != 4 else 0.65,
+                run_time=0.74 if idx != 4 else 0.48,
                 rate_func=smooth,
             )
             self.play(
@@ -773,13 +779,15 @@ class Physics9VariableVelocitySeniorV4ForensicQA(JPMathClassroomScene):
             card_height=1.00,
             columns=2,
         )
-        steps.move_to([0, -2.30, 0])
+        # Keep a dedicated vertical band between the comparison and the
+        # 2x2 process map. This avoids any overlap with the bottom-row cards.
+        steps.move_to([0, -2.72, 0])
 
         takeaway = self.formula_panel(
             r"\text{realistic motion}\;\Rightarrow\;v=v(t)",
-            width=6.2, height=0.95, font_size=31,
+            width=6.2, height=0.90, font_size=30,
         )
-        takeaway.move_to([0, -3.48, 0])
+        takeaway.move_to([0, -1.28, 0])
 
         stage = VGroup(comparison.group, steps, takeaway)
         self.assert_content_safe(stage, "section 6")
