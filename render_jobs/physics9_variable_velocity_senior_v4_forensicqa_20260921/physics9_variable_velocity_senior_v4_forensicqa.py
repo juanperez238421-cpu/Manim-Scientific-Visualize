@@ -424,7 +424,10 @@ class Physics9VariableVelocitySeniorV4ForensicQA(JPMathClassroomScene):
         car_y = road[0].get_center()[1] + 0.10
         car_positions = np.linspace(road_left, road_right, 5)
         car.move_to([car_positions[0], car_y, 0])
-        assert road_left < car_positions[0] <= car_positions[-1] < road_right + 1e-9
+        assert all(
+            road[0].get_left()[0] < x < road[0].get_right()[0]
+            for x in car_positions
+        )
 
         self.play(FadeIn(left_panel.group), FadeIn(right), run_time=RUN_NORMAL)
         for x in car_positions[1:]:
