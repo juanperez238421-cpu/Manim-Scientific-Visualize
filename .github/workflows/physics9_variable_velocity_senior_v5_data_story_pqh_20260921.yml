@@ -52,9 +52,15 @@ jobs:
           ]
           missing = [item for item in required if item not in s]
           assert not missing, f"Missing V5 data-story contract elements: {missing}"
-          assert len(__import__("ast").literal_eval(
-              s[s.index("GRAPH_STEPS = [")+14:s.index("]\n\n\ndef velocity_at")+1]
-          )) == 12
+          import ast
+          tree = ast.parse(s)
+          graph_steps = None
+          for node in tree.body:
+              if isinstance(node, ast.Assign):
+                  if any(isinstance(t, ast.Name) and t.id == "GRAPH_STEPS" for t in node.targets):
+                      graph_steps = ast.literal_eval(node.value)
+                      break
+          assert graph_steps is not None and len(graph_steps) == 12, "Expected 12 exact velocity-time intervals"
 
           forbidden_spanish = [
               "FUNDAMENTOS", "CIUDAD", "VELOCIDAD DEL AUTO", "IDEA CENTRAL",
