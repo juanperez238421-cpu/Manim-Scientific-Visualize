@@ -53,7 +53,7 @@ def main(path_str: str) -> int:
             break
     if re.search(r"background_color\s*=\s*[\"']?(?!WHITE|#ffffff|#FFFFFF)", source):
         warnings.append("Review non-standard background_color assignment.")
-    if "RED" in source or "BLUE" in source or "GREEN" in source:
+    if re.search(r"\\b(?:RED|BLUE|GREEN)\\b", source):
         warnings.append("Colored emphasis detected. Standard default is monochrome unless explicitly requested.")
     for node in classes:
         for item in node.body:
