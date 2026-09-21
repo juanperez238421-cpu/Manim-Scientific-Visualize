@@ -452,7 +452,7 @@ class Physics9VariableVelocitySeniorV5DataStory(JPMathClassroomScene):
         )
 
         rows = []
-        for (t, v), x in zip(PROFILE[:7], POSITIONS[:7]):
+        for (t, v), x in zip(PROFILE[:6], POSITIONS[:6]):
             rows.append([f"{t:.0f}", f"{v:.0f}", f"{x:.1f}"])
         table = self.simple_table(
             ["time (min)", "velocity (km/h)", "position (km)"],
@@ -462,7 +462,7 @@ class Physics9VariableVelocitySeniorV5DataStory(JPMathClassroomScene):
         table.move_to([-2.65, -0.55, 0])
 
         idea = self.note_panel(
-            "FIRST HALF OF THE TRIP",
+            "LOG 1 — 0 TO 60 MIN",
             [
                 "0–10 min: acceleration",
                 "10–35 min: constant 70 km/h",
@@ -499,7 +499,7 @@ class Physics9VariableVelocitySeniorV5DataStory(JPMathClassroomScene):
         )
 
         rows = []
-        for (t, v), x in zip(PROFILE[6:], POSITIONS[6:]):
+        for (t, v), x in zip(PROFILE[5:], POSITIONS[5:]):
             rows.append([f"{t:.0f}", f"{v:.0f}", f"{x:.1f}"])
         table = self.simple_table(
             ["time (min)", "velocity (km/h)", "position (km)"],
@@ -509,7 +509,7 @@ class Physics9VariableVelocitySeniorV5DataStory(JPMathClassroomScene):
         table.move_to([-2.65, -0.55, 0])
 
         idea = self.note_panel(
-            "SECOND HALF OF THE TRIP",
+            "LOG 2 — 60 TO 120 MIN",
             [
                 "60–75 min: constant 65 km/h",
                 "75–82 min: brake for accident",
