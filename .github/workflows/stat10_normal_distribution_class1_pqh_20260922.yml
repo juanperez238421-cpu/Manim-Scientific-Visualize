@@ -1,0 +1,235 @@
+name: Statistics10 Normal Distribution Class1 FINAL PQH 20260922
+
+on:
+  push:
+    branches:
+      - render/stat10-normal-distribution-class1-20260922
+    paths:
+      - 'render_jobs/stat10_normal_distribution_class1_20260922/**'
+      - '.github/workflows/stat10_normal_distribution_class1_pqh_20260922.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - name: Checkout exact render branch
+        uses: actions/checkout@v4
+        with:
+          ref: render/stat10-normal-distribution-class1-20260922
+
+      - name: Reconstruct lesson payload and shared classroom tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/stat10_normal_distribution_class1_20260922
+          python "$JOB/bootstrap/decode_payload.py" "$JOB"
+          git fetch --depth=1 origin render/statistics10-iqr-class02-compare-boxplots-20260831
+          git show FETCH_HEAD:render_jobs/statistics10_iqr_class02_compare_boxplots_20260831/jp_classroom_style.py > "$JOB/jp_classroom_style.py"
+          git show FETCH_HEAD:render_jobs/statistics10_iqr_class02_compare_boxplots_20260831/check_manim_style.py > "$JOB/check_manim_style.py"
+
+      - name: Validate source and prepare QA tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/stat10_normal_distribution_class1_20260922
+          python -m py_compile             "$JOB/stat10_normal_distribution_class1.py"             "$JOB/jp_classroom_style.py"             "$JOB/check_manim_style.py"             "$JOB/build_presentation_pdf.py"
+          python "$JOB/check_manim_style.py" "$JOB/stat10_normal_distribution_class1.py" | tee static_style_qa.txt
+          grep -q '^class Statistics10NormalDistributionClass1Final' "$JOB/stat10_normal_distribution_class1.py"
+          for method in             opening bridge_from_boxplots raw_data organize_histogram distribution_shapes             histogram_to_curve build_normal_curve symmetry one_center whole_population tails             introduce_mu introduce_sigma visual_comparison mu_sigma_together test_scores_example             approximately_normal normal_or_not connect_statistics empirical_rule_preview             final_summary exit_frame; do
+            grep -q "def ${method}" "$JOB/stat10_normal_distribution_class1.py"
+          done
+          if grep -Eq '([A-Za-z]:\\|/Users/|/home/[^/]+/Desktop)' "$JOB/stat10_normal_distribution_class1.py"; then
+            echo 'FAIL: non-portable absolute path found'; exit 1
+          fi
+          mkdir -p qa_preview final_out/qa package
+
+      - name: Install rendering and PDF dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg zip poppler-utils
+          python -m pip install --disable-pip-version-check --quiet pillow reportlab
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+          ffmpeg -version | head -n 1
+
+      - name: Literal PQL full-timeline gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/stat10_normal_distribution_class1_20260922
+          rm -rf media_pql
+          docker run --rm --user "$(id -u):$(id -g)"             -e HOME=/tmp/manim-home             -e LESSON_TIME_SCALE=0.04             -v "$PWD:/manim"             -w "/manim/$JOB"             --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql                 stat10_normal_distribution_class1.py                 Statistics10NormalDistributionClass1Final                 --format=mp4                 --media_dir=/manim/media_pql                 --disable_caching
+            ' 2>&1 | tee qa_preview/render_pql.log
+          PQL="$(find media_pql -type f -name 'Statistics10NormalDistributionClass1Final.mp4' -print -quit)"
+          test -n "$PQL" && test -s "$PQL"
+
+      - name: Literal PQH final 1080p60 render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/stat10_normal_distribution_class1_20260922
+          rm -rf media_pqh
+          docker run --rm --user "$(id -u):$(id -g)"             -e HOME=/tmp/manim-home             -e LESSON_TIME_SCALE=1.65             -v "$PWD:/manim"             -w "/manim/$JOB"             --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh                 stat10_normal_distribution_class1.py                 Statistics10NormalDistributionClass1Final                 --format=mp4                 --media_dir=/manim/media_pqh                 --disable_caching
+            ' 2>&1 | tee final_out/render_pqh.log
+          FINAL="$(find media_pqh -type f -name 'Statistics10NormalDistributionClass1Final.mp4' -print -quit)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" final_out/Stat10_Normal_Distribution_Class1_FINAL_1080p60.mp4
+
+      - name: Technical video QA and full decode
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Stat10_Normal_Distribution_Class1_FINAL_1080p60.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          FRAMES="$(ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tframes\tbytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n'             "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$FRAMES" "$SIZE" > final_out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 60/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> final_out/full_decode.log
+          test ! -s final_out/full_decode.log
+
+      - name: Extract requested QA frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=final_out/Stat10_Normal_Distribution_Class1_FINAL_1080p60.mp4
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          mkdir -p final_out/qa
+          python - "$DUR" > final_out/qa/timestamps.tsv <<'PY'
+          import sys
+          d=float(sys.argv[1])
+          for label,p in [(10,.10),(25,.25),(40,.40),(55,.55),(70,.70),(85,.85),(100,.995)]:
+              print(f"{label}\t{d*p:.6f}")
+          PY
+          while IFS=$'\t' read -r LABEL T; do
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "final_out/qa/frame_${LABEL}.png"
+          done < final_out/qa/timestamps.tsv
+          test "$(find final_out/qa -name 'frame_*.png' | wc -l)" -eq 7
+
+      - name: Build keyframe PDF and visual contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/stat10_normal_distribution_class1_20260922
+          python "$JOB/build_presentation_pdf.py"             final_out/qa             final_out/Stat10_Normal_Distribution_Class1_FINAL.pdf
+          test -s final_out/Stat10_Normal_Distribution_Class1_FINAL.pdf
+          PAGES="$(pdfinfo final_out/Stat10_Normal_Distribution_Class1_FINAL.pdf | awk '/^Pages:/ {print $2}')"
+          test "$PAGES" = 7
+          mkdir -p final_out/pdf_verify
+          pdftoppm -f 1 -singlefile -png -r 110 final_out/Stat10_Normal_Distribution_Class1_FINAL.pdf final_out/pdf_verify/page_first >/dev/null 2>&1
+          pdftoppm -f 7 -singlefile -png -r 110 final_out/Stat10_Normal_Distribution_Class1_FINAL.pdf final_out/pdf_verify/page_last >/dev/null 2>&1
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageDraw
+          paths=[Path(f'final_out/qa/frame_{n}.png') for n in [10,25,40,55,70,85,100]]
+          thumbs=[]
+          for p in paths:
+              im=Image.open(p).convert('RGB')
+              im.thumbnail((480,270))
+              canvas=Image.new('RGB',(500,300),'white')
+              canvas.paste(im,((500-im.width)//2,10))
+              d=ImageDraw.Draw(canvas)
+              d.text((12,280),p.stem,fill='black')
+              thumbs.append(canvas)
+          sheet=Image.new('RGB',(1000,1200),'white')
+          for i,im in enumerate(thumbs):
+              x=(i%2)*500; y=(i//2)*300
+              sheet.paste(im,(x,y))
+          sheet.save('final_out/CONTACT_SHEET_7.jpg',quality=90)
+          PY
+          test -s final_out/CONTACT_SHEET_7.jpg
+
+      - name: Assemble QA report and SHA-256 manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/stat10_normal_distribution_class1_20260922
+          F=final_out/Stat10_Normal_Distribution_Class1_FINAL_1080p60.mp4
+          PDF=final_out/Stat10_Normal_Distribution_Class1_FINAL.pdf
+          sha256sum             "$F" "$PDF"             "$JOB/stat10_normal_distribution_class1.py"             "$JOB/jp_classroom_style.py"             > final_out/SHA256SUMS.txt
+          {
+            echo '# Statistics 10 - Normal Distribution Class 1 - QA'
+            echo
+            echo '- Python compile: PASS'
+            echo '- Static JP classroom style QA: PASS / warnings reviewed'
+            echo '- Literal PQL timeline gate: PASS'
+            echo '- Literal PQH render: PASS'
+            echo '- 1920x1080 / 60 fps / H.264 / yuv420p: PASS'
+            echo '- Full FFmpeg decode: PASS'
+            echo '- Requested 7 keyframes extracted: PASS'
+            echo '- Keyframe PDF (7 pages): PASS'
+            echo '- Visual contact sheet: generated'
+            echo '- SHA-256 manifest: generated'
+            echo
+            cat final_out/VIDEO_TECHNICAL.tsv
+          } > final_out/SENIOR_QA_RESULT.md
+
+      - name: Build reproducible project package
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/stat10_normal_distribution_class1_20260922
+          ROOT=package/Stat10_Normal_Distribution_Class1_FINAL_PROJECT
+          mkdir -p "$ROOT/qa" "$ROOT/render"
+          cp "$JOB/stat10_normal_distribution_class1.py" "$ROOT/"
+          cp "$JOB/jp_classroom_style.py" "$JOB/check_manim_style.py" "$JOB/build_presentation_pdf.py" "$ROOT/"
+          cp "$JOB/README.md" "$ROOT/"
+          cp final_out/Stat10_Normal_Distribution_Class1_FINAL_1080p60.mp4 "$ROOT/render/"
+          cp final_out/Stat10_Normal_Distribution_Class1_FINAL.pdf "$ROOT/render/"
+          cp final_out/qa/frame_*.png "$ROOT/qa/"
+          cp final_out/qa/timestamps.tsv final_out/CONTACT_SHEET_7.jpg final_out/VIDEO_TECHNICAL.tsv              final_out/SENIOR_QA_RESULT.md final_out/SHA256SUMS.txt final_out/full_decode.log "$ROOT/qa/"
+          (cd package && zip -qr Stat10_Normal_Distribution_Class1_FULL_PACKAGE.zip Stat10_Normal_Distribution_Class1_FINAL_PROJECT)
+          sha256sum package/Stat10_Normal_Distribution_Class1_FULL_PACKAGE.zip > package/PACKAGE_SHA256.txt
+
+      - name: Upload final classroom artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Stat10-Normal-Distribution-Class1-FINAL-1080p60-20260922
+          path: |
+            final_out/Stat10_Normal_Distribution_Class1_FINAL_1080p60.mp4
+            final_out/Stat10_Normal_Distribution_Class1_FINAL.pdf
+            final_out/qa/frame_10.png
+            final_out/qa/frame_25.png
+            final_out/qa/frame_40.png
+            final_out/qa/frame_55.png
+            final_out/qa/frame_70.png
+            final_out/qa/frame_85.png
+            final_out/qa/frame_100.png
+            final_out/CONTACT_SHEET_7.jpg
+            final_out/VIDEO_TECHNICAL.tsv
+            final_out/SENIOR_QA_RESULT.md
+            final_out/SHA256SUMS.txt
+            package/Stat10_Normal_Distribution_Class1_FULL_PACKAGE.zip
+            package/PACKAGE_SHA256.txt
+            render_jobs/stat10_normal_distribution_class1_20260922/stat10_normal_distribution_class1.py
+            render_jobs/stat10_normal_distribution_class1_20260922/README.md
+          if-no-files-found: error
+          retention-days: 14
