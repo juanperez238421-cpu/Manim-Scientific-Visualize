@@ -735,7 +735,7 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
         row1 = VGroup(step1, step2).arrange(RIGHT, buff=0.35)
         row2 = VGroup(step3, step4).arrange(RIGHT, buff=0.35)
         derivation = VGroup(row1, row2, final).arrange(DOWN, buff=0.22)
-        derivation.move_to([0, 0.80, 0])
+        derivation.move_to([0, 0.62, 0])
 
         meaning = self.note_panel(
             "READ THE SYMBOLS",
@@ -747,7 +747,7 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
             ],
             width=6.4,
             body_size=20,
-        ).move_to([-3.65, -2.15, 0])
+        ).move_to([-3.65, -2.25, 0])
 
         graph_note = self.note_panel(
             "CONNECT IT TO THE GRAPH",
@@ -759,7 +759,7 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
             ],
             width=6.4,
             body_size=20,
-        ).move_to([3.65, -2.15, 0])
+        ).move_to([3.65, -2.25, 0])
 
         stage = VGroup(derivation, meaning, graph_note)
         self.assert_content_safe(stage, "section 6")
