@@ -940,12 +940,12 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
                 "For a fixed slope, the acceleration along the track is approximately constant.",
                 "That is exactly the condition behind our constant-acceleration equations.",
             ],
-            width=12.8,
-            body_size=20,
-        ).move_to([0, -2.82, 0])
+            width=11.6,
+            body_size=21,
+        ).move_to([0, -0.55, 0])
 
-        stage = VGroup(comparison.group, idea)
-        self.assert_content_safe(stage, "section 8")
+        self.assert_content_safe(comparison.group, "section 8 comparison")
+        self.assert_content_safe(idea, "section 8 concept card")
 
         # Re-anchor moving balls after layout transformations.
         fall_ball.move_to(fall_track.get_start())
@@ -967,6 +967,7 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
             rate_func=rate_functions.ease_in_quad,
             pause=1.80,
         )
+        self.paced_play(FadeOut(comparison.group), run_time=0.45, pause=0.80)
         self.paced_play(FadeIn(idea), pause=2.20)
         self.wait(PAUSE_EXPLAIN)
         self.clear_stage()
@@ -1062,9 +1063,10 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
                 "3. Calculate (x - x₀)/t².",
                 "4. Ask whether the value stays approximately constant.",
             ],
-            width=7.4,
+            width=5.25,
             body_size=18,
-        ).move_to([-0.20, -3.18, 0])
+        ).move_to([5.25, -0.45, 0])
+        self.assert_content_safe(VGroup(left.group, test_note), "section 9 final test card")
 
         self.paced_play(FadeIn(left.group), pause=1.10)
         self.paced_play(FadeIn(eq0), pause=1.15)
@@ -1087,6 +1089,7 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
             )
             previous = point
 
+        self.paced_play(FadeOut(right), run_time=0.45, pause=0.70)
         self.paced_play(FadeIn(test_note), pause=2.40)
         self.wait(PAUSE_SUMMARY)
         self.clear_stage()
