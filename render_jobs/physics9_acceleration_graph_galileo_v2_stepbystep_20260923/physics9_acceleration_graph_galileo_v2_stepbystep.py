@@ -942,7 +942,7 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
             ],
             width=12.8,
             body_size=20,
-        ).move_to([0, -2.95, 0])
+        ).move_to([0, -2.82, 0])
 
         stage = VGroup(comparison.group, idea)
         self.assert_content_safe(stage, "section 8")
