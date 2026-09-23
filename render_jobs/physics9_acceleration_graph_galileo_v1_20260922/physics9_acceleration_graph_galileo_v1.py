@@ -608,7 +608,7 @@ class Physics9AccelerationGraphGalileoV1(JPMathClassroomScene):
             title="The full acceleration history",
             caption="Above zero: speeding up | on zero: constant velocity | below zero: slowing down",
         )
-        panel.group.move_to([-2.15, -0.45, 0])
+        panel.group.move_to([-2.15, -0.68, 0])
 
         strongest_pos = max(ACCEL_INTERVALS, key=lambda d: d["a"])
         strongest_neg = min(ACCEL_INTERVALS, key=lambda d: d["a"])
@@ -645,7 +645,7 @@ class Physics9AccelerationGraphGalileoV1(JPMathClassroomScene):
                 body_size=18,
             ),
         ).arrange(DOWN, buff=0.18)
-        notes.move_to([5.25, -0.45, 0])
+        notes.move_to([5.25, -0.68, 0])
 
         stage = VGroup(panel.group, notes)
         self.assert_content_safe(stage, "section 5")
