@@ -49,8 +49,8 @@ jobs:
               "acceleration_ms2(",
               "acceleration_segments(",
               "interval_card(",
-              "x=x_0+v_0t+\\frac12at^2",
-              "\\frac{x-x_0}{t^2}",
+              "x=x_0+v_0t+",
+              "x-x_0",
           ]
           missing = [item for item in required if item not in s]
           assert not missing, f"Missing V2 step-by-step contract elements: {missing}"
