@@ -712,11 +712,11 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
         )
 
         step1 = self.formula_panel(
-            r"a=rac{Delta v}{Delta t}",
+            r"a=\frac{\Delta v}{\Delta t}",
             width=4.4, height=1.00, font_size=39,
         )
         step2 = self.formula_panel(
-            r"a=rac{v-v_0}{t}",
+            r"a=\frac{v-v_0}{t}",
             width=4.4, height=1.00, font_size=39,
         )
         step3 = self.formula_panel(
@@ -728,7 +728,7 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
             width=4.4, height=1.00, font_size=39,
         )
         final = self.formula_panel(
-            r"oxed{v=v_0+at}",
+            r"\boxed{v=v_0+at}",
             width=5.4, height=1.18, font_size=43,
         )
 
@@ -809,23 +809,23 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
         )
 
         area1 = self.formula_panel(
-            r"A_{mathrm{rect}}=v_0t",
+            r"A_{\mathrm{rect}}=v_0t",
             width=5.3, height=0.92, font_size=35,
         )
         area2a = self.formula_panel(
-            r"A_{	riangle}=rac12(mathrm{base})(mathrm{height})",
+            r"A_{\triangle}=\frac12(\mathrm{base})(\mathrm{height})",
             width=5.3, height=0.92, font_size=31,
         )
         area2b = self.formula_panel(
-            r"A_{	riangle}=rac12(t)(at)=rac12at^2",
+            r"A_{\triangle}=\frac12(t)(at)=\frac12at^2",
             width=5.3, height=0.92, font_size=31,
         )
         combine = self.formula_panel(
-            r"Delta x=v_0t+rac12at^2",
+            r"\Delta x=v_0t+\frac12at^2",
             width=5.3, height=1.00, font_size=36,
         )
         final_eq = self.formula_panel(
-            r"oxed{x=x_0+v_0t+rac12at^2}",
+            r"\boxed{x=x_0+v_0t+\frac12at^2}",
             width=5.5, height=1.15, font_size=38,
         )
         right = VGroup(area1, area2a, area2b, combine, final_eq).arrange(DOWN, buff=0.14)
@@ -1002,15 +1002,15 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
 
         eq0 = self.formula_panel(r"v_0=0", width=5.25, height=0.82, font_size=32)
         eq1 = self.formula_panel(
-            r"x=x_0+v_0t+rac12at^2",
+            r"x=x_0+v_0t+\frac12at^2",
             width=5.25, height=0.95, font_size=32,
         )
         eq2 = self.formula_panel(
-            r"x-x_0=rac12at^2",
+            r"x-x_0=\frac12at^2",
             width=5.25, height=0.95, font_size=34,
         )
         eq3 = self.formula_panel(
-            r"oxed{rac{x-x_0}{t^2}=rac12a=mathrm{constant}}",
+            r"\boxed{\frac{x-x_0}{t^2}=\frac12a=\mathrm{constant}}",
             width=5.25, height=1.05, font_size=31,
         )
         prediction = self.note_panel(
@@ -1036,19 +1036,17 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
         )
         self.assert_content_safe(layout.group, "section 9")
 
-        # All ramp geometry below is generated AFTER the layout transform.
         release = ramp.get_end()
-        bottom = ramp.get_start()
         ball.move_to(release)
 
         time_values = [1, 2, 3, 4]
         square_values = [1, 4, 9, 16]
         marker_fracs = [1 - q / 16 for q in square_values]
-        marker_points = [ramp.point_from_proportion(max(0.0, f)) for f in marker_fracs]
+        marker_points = [ramp.point_from_proportion(max(0.0, frac)) for frac in marker_fracs]
 
         marks = VGroup()
         mark_labels = VGroup()
-        for t_value, q_value, point in zip(time_values, square_values, marker_points):
+        for t_value, point in zip(time_values, marker_points):
             mark = Line(DOWN * 0.12, UP * 0.12, color=BLACK_LINE, stroke_width=2.0)
             mark.rotate(ramp.get_angle() + PI / 2)
             mark.move_to(point)
@@ -1077,9 +1075,8 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
 
         self.paced_play(FadeIn(marks), FadeIn(mark_labels), pause=1.50)
 
-        # Equal animation durations represent equal time intervals.
         previous = release
-        for t_value, point in zip(time_values, marker_points):
+        for point in marker_points:
             travel = Line(previous, point, color=LIGHT_GRAY, stroke_width=4.5)
             self.paced_play(
                 FadeIn(travel),
