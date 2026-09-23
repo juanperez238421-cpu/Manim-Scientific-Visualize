@@ -379,13 +379,9 @@ class Physics9AccelerationGraphGalileoV1(JPMathClassroomScene):
         p0 = axes.c2p(1, 2)
         p1 = axes.c2p(8, 8)
         line = Line(p0, p1, color=BLACK_LINE, stroke_width=4.0)
-        run = Line(axes.c2p(1, 2), axes.c2p(8, 2), color=MID_GRAY, stroke_width=2)
-        rise = Line(axes.c2p(8, 2), axes.c2p(8, 8), color=MID_GRAY, stroke_width=2)
-        dv = self.text("Δv", 19, BOLD).next_to(rise, RIGHT, buff=0.08)
-        dt = self.text("Δt", 19, BOLD).next_to(run, DOWN, buff=0.08)
         xlab = self.text("time", 16).next_to(axes.x_axis, DOWN, buff=0.16)
         ylab = self.text("velocity", 16).rotate(PI/2).next_to(axes.y_axis, LEFT, buff=0.16)
-        slope_fig = VGroup(axes, line, run, rise, dv, dt, xlab, ylab)
+        slope_fig = VGroup(axes, line, xlab, ylab)
 
         left = self.figure_panel(
             slope_fig,
@@ -425,8 +421,15 @@ class Physics9AccelerationGraphGalileoV1(JPMathClassroomScene):
             center_y=-0.45,
         )
         self.assert_content_safe(layout.group, "section 2")
+
+        # Generate the slope triangle only after the final layout transform.
+        run = Line(axes.c2p(1, 2), axes.c2p(8, 2), color=MID_GRAY, stroke_width=2)
+        rise = Line(axes.c2p(8, 2), axes.c2p(8, 8), color=MID_GRAY, stroke_width=2)
+        dv = self.text("Δv", 19, BOLD).next_to(rise, RIGHT, buff=0.08)
+        dt = self.text("Δt", 19, BOLD).next_to(run, DOWN, buff=0.08)
+
         self.play(FadeIn(left.group), FadeIn(right))
-        self.play(Create(run), Create(rise), run_time=0.9)
+        self.play(Create(run), Create(rise), FadeIn(dv), FadeIn(dt), run_time=0.9)
         self.wait(PAUSE_EXPLAIN)
         self.clear_stage()
 
@@ -442,7 +445,6 @@ class Physics9AccelerationGraphGalileoV1(JPMathClassroomScene):
 
         axes = self.acceleration_axes()
         labels = self.acceleration_axis_labels(axes)
-        a_segments = self.acceleration_segments(axes)
         base = VGroup(axes, labels)
 
         panel = self.figure_panel(
@@ -453,6 +455,9 @@ class Physics9AccelerationGraphGalileoV1(JPMathClassroomScene):
             caption="Because each v(t) segment is linear, acceleration is constant inside each interval.",
         )
         panel.group.move_to([-2.25, -0.45, 0])
+
+        # Generate graph levels after the axes reach their final coordinates.
+        a_segments = self.acceleration_segments(axes)
 
         current_card = self.interval_card(ACCEL_INTERVALS[0], width=4.50).move_to([5.25, 0.65, 0])
         current_formula = self.slope_formula_card(ACCEL_INTERVALS[0], width=4.50).move_to([5.25, -2.00, 0])
@@ -521,8 +526,7 @@ class Physics9AccelerationGraphGalileoV1(JPMathClassroomScene):
 
         axes = self.acceleration_axes()
         labels = self.acceleration_axis_labels(axes)
-        a_segments = self.acceleration_segments(axes)
-        base = VGroup(axes, labels, *a_segments[:6])
+        base = VGroup(axes, labels)
 
         panel = self.figure_panel(
             base,
@@ -533,12 +537,16 @@ class Physics9AccelerationGraphGalileoV1(JPMathClassroomScene):
         )
         panel.group.move_to([-2.25, -0.45, 0])
 
+        # Build levels only after panel placement; first six are prior knowledge.
+        a_segments = self.acceleration_segments(axes)
+        known_levels = VGroup(*a_segments[:6])
+
         current_card = self.interval_card(ACCEL_INTERVALS[6], width=4.50).move_to([5.25, 0.65, 0])
         current_formula = self.slope_formula_card(ACCEL_INTERVALS[6], width=4.50).move_to([5.25, -2.00, 0])
 
         stage = VGroup(panel.group, current_card, current_formula)
         self.assert_content_safe(stage, "section 4")
-        self.play(FadeIn(panel.group), FadeIn(current_card), FadeIn(current_formula))
+        self.play(FadeIn(panel.group), FadeIn(known_levels), FadeIn(current_card), FadeIn(current_formula))
 
         for local_i, d in enumerate(ACCEL_INTERVALS[6:]):
             global_i = local_i + 6
@@ -679,9 +687,10 @@ class Physics9AccelerationGraphGalileoV1(JPMathClassroomScene):
             height=1.15,
             font_size=42,
         )
-        derivation = VGroup(step1, step2, step3, step4).arrange(RIGHT, buff=0.22)
-        derivation.scale_to_fit_width(13.9)
-        derivation.move_to([0, 1.10, 0])
+        row1 = VGroup(step1, step2).arrange(RIGHT, buff=0.28)
+        row2 = VGroup(step3, step4).arrange(RIGHT, buff=0.28)
+        derivation = VGroup(row1, row2).arrange(DOWN, buff=0.20)
+        derivation.move_to([0, 1.00, 0])
 
         meaning = self.note_panel(
             "WHAT THE EQUATION SAYS",
@@ -742,29 +751,9 @@ class Physics9AccelerationGraphGalileoV1(JPMathClassroomScene):
         p0 = axes.c2p(0, v0)
         p1 = axes.c2p(t_end, v_end)
         line = Line(p0, p1, color=BLACK_LINE, stroke_width=4.0)
-
-        rect = Polygon(
-            axes.c2p(0, 0),
-            axes.c2p(t_end, 0),
-            axes.c2p(t_end, v0),
-            axes.c2p(0, v0),
-            stroke_color=MID_GRAY,
-            stroke_width=1.5,
-            fill_color=VERY_LIGHT_GRAY,
-            fill_opacity=0.65,
-        )
-        tri = Polygon(
-            axes.c2p(0, v0),
-            axes.c2p(t_end, v0),
-            axes.c2p(t_end, v_end),
-            stroke_color=BLACK_LINE,
-            stroke_width=1.4,
-            fill_color=LIGHT_GRAY,
-            fill_opacity=0.55,
-        )
         xlab = self.text("time", 16).next_to(axes.x_axis, DOWN, buff=0.17)
         ylab = self.text("velocity", 16).rotate(PI/2).next_to(axes.y_axis, LEFT, buff=0.17)
-        fig = VGroup(axes, rect, tri, line, xlab, ylab)
+        fig = VGroup(axes, line, xlab, ylab)
 
         left = self.figure_panel(
             fig,
@@ -810,6 +799,27 @@ class Physics9AccelerationGraphGalileoV1(JPMathClassroomScene):
             center_y=-0.45,
         )
         self.assert_content_safe(layout.group, "section 7")
+
+        # Create the geometric areas after the axes have been placed by layout.
+        rect = Polygon(
+            axes.c2p(0, 0),
+            axes.c2p(t_end, 0),
+            axes.c2p(t_end, v0),
+            axes.c2p(0, v0),
+            stroke_color=MID_GRAY,
+            stroke_width=1.5,
+            fill_color=VERY_LIGHT_GRAY,
+            fill_opacity=0.65,
+        )
+        tri = Polygon(
+            axes.c2p(0, v0),
+            axes.c2p(t_end, v0),
+            axes.c2p(t_end, v_end),
+            stroke_color=BLACK_LINE,
+            stroke_width=1.4,
+            fill_color=LIGHT_GRAY,
+            fill_opacity=0.55,
+        )
 
         self.play(FadeIn(left.group))
         self.play(FadeIn(rect), FadeIn(area1), run_time=0.55)
@@ -907,12 +917,15 @@ class Physics9AccelerationGraphGalileoV1(JPMathClassroomScene):
         )
         self.assert_content_safe(layout.group, "section 8")
 
+        # Re-anchor the ball to the transformed ramp before animation.
+        ball.move_to(ramp.point_from_proportion(0.88))
+        target = ramp.point_from_proportion(0.18)
+
         self.play(FadeIn(left.group), FadeIn(start_from_rest))
         self.play(FadeIn(general), run_time=0.45)
         self.play(FadeIn(simplify), run_time=0.45)
         self.play(FadeIn(prediction), run_time=0.55)
 
-        target = [-2.75, -1.42, 0]
         self.play(ball.animate.move_to(target), run_time=1.20, rate_func=rate_functions.ease_in_quad)
         self.wait(PAUSE_SUMMARY)
         self.clear_stage()
