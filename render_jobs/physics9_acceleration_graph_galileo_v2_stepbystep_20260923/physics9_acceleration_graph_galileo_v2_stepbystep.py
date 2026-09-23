@@ -1063,9 +1063,9 @@ class Physics9AccelerationGraphGalileoV2StepByStep(JPMathClassroomScene):
                 "3. Calculate (x - x₀)/t².",
                 "4. Ask whether the value stays approximately constant.",
             ],
-            width=5.25,
+            width=4.95,
             body_size=18,
-        ).move_to([5.25, -0.45, 0])
+        ).move_to([5.10, -0.45, 0])
         self.assert_content_safe(VGroup(left.group, test_note), "section 9 final test card")
 
         self.paced_play(FadeIn(left.group), pause=1.10)
