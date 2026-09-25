@@ -72,6 +72,13 @@ jobs:
           test -n "$FINAL" && test -s "$FINAL"
           cp "$FINAL" out/Agentic_Manim_Showcase_GPT56_FULL_FINAL_pqh.mp4
 
+      - name: Install FFmpeg QA dependency
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
       - name: Technical QA + full decode + contact sheet
         shell: bash
         run: |
