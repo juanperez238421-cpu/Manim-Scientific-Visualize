@@ -7,6 +7,12 @@ on:
     paths:
       - "render_jobs/agentic_manim_showcase_gpt56_20260924/**"
       - ".github/workflows/agentic_manim_showcase_gpt56_20260924.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "render_jobs/agentic_manim_showcase_gpt56_20260924/**"
+      - ".github/workflows/agentic_manim_showcase_gpt56_20260924.yml"
   workflow_dispatch:
 
 permissions:
