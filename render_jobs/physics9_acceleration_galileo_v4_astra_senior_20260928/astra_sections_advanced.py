@@ -231,10 +231,10 @@ class AstraAdvancedSections:
         ramp_ball = ball.copy().move_to(ramp_end)
         ramp_label = self.text("INCLINED PLANE", 31, BOLD).move_to([-2.55, 1.78, 0])
         longer = self.text("LONGER MEASURABLE Δt", 34, BOLD).move_to([3.55, 0.45, 0])
-        model = self.text(
-            "For a rolling ball, the exact a depends on rotational inertia.",
-            25,
-        ).move_to([3.55, -0.28, 0])
+        model = VGroup(
+            self.text("Exact ramp a depends on", 25),
+            self.text("rolling / sliding mechanics.", 25),
+        ).arrange(DOWN, buff=0.06).move_to([3.45, -0.30, 0])
         invariant = self.text(
             "Experimental target: a ≈ constant",
             29, BOLD,
