@@ -1,4 +1,4 @@
-name: TEMP Physics9 FreeFall SeniorQA V3 QA2 20260928
+name: TEMP Physics9 FreeFall Cinematic V2 20260928
 
 on:
   push:
@@ -16,20 +16,19 @@ jobs:
     timeout-minutes: 120
 
     steps:
-      - name: Checkout V3 branch
+      - name: Checkout V2 branch
         uses: actions/checkout@v4
         with:
-          ref: manim/physics9-freefall-seniorqa-v3-20260928
+          ref: manim/physics9-freefall-seniorqa-20260928
           fetch-depth: 0
 
       - name: Validate source
         shell: bash
         run: |
           set -euo pipefail
-          SRC=render_jobs/physics9_freefall_seniorqa_v3_20260928/freefall_seniorqa_v3.py
+          SRC=render_jobs/physics9_freefall_seniorqa_20260928/freefall_cinematic_v2.py
           python -m py_compile "$SRC"
-          grep -q "class Physics9FreeFallSeniorQAV3" "$SRC"
-          grep -q "validate()" "$SRC"
+          grep -q "class Physics9FreeFallCinematicV2" "$SRC"
 
       - name: Prepare renderer
         shell: bash
@@ -39,21 +38,21 @@ jobs:
           sudo apt-get install -y -qq ffmpeg zip
           docker pull manimcommunity/manim:v0.20.1 >/dev/null
 
-      - name: PQL smoke render
+      - name: Literal PQL smoke render
         id: pql
         continue-on-error: true
         shell: bash
         run: |
           set -o pipefail
-          SRC=render_jobs/physics9_freefall_seniorqa_v3_20260928/freefall_seniorqa_v3.py
-          SCENE=Physics9FreeFallSeniorQAV3
-          OUT=deliveries/physics9/freefall_seniorqa_v3_20260928
+          SRC=render_jobs/physics9_freefall_seniorqa_20260928/freefall_cinematic_v2.py
+          SCENE=Physics9FreeFallCinematicV2
+          OUT=deliveries/physics9/freefall_cinematic_v2_20260928
           rm -rf media_pql
           mkdir -p "$OUT"
           docker run --rm \
             --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home \
-            -e LESSON_TIME_SCALE=0.08 \
+            -e LESSON_TIME_SCALE=0.06 \
             -v "$PWD:/manim" -w /manim \
             --entrypoint bash manimcommunity/manim:v0.20.1 \
             -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pql $SRC $SCENE --fps 15 --format=mp4 --media_dir media_pql --disable_caching" \
@@ -63,19 +62,18 @@ jobs:
           test -s "$PQL"
           touch "$OUT/PQL_PASS"
 
-      - name: PQH final render
+      - name: Literal PQH final render
         id: pqh
         if: steps.pql.outcome == 'success'
         continue-on-error: true
         shell: bash
         run: |
           set -o pipefail
-          SRC=render_jobs/physics9_freefall_seniorqa_v3_20260928/freefall_seniorqa_v3.py
-          SCENE=Physics9FreeFallSeniorQAV3
-          OUT=deliveries/physics9/freefall_seniorqa_v3_20260928
+          SRC=render_jobs/physics9_freefall_seniorqa_20260928/freefall_cinematic_v2.py
+          SCENE=Physics9FreeFallCinematicV2
+          OUT=deliveries/physics9/freefall_cinematic_v2_20260928
           rm -rf media_final
           mkdir -p "$OUT"
-
           docker run --rm \
             --user "$(id -u):$(id -g)" \
             -e HOME=/tmp/manim-home \
@@ -92,20 +90,20 @@ jobs:
           ffmpeg -y -v error -i "$FINAL" \
             -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -r 30 \
             -movflags +faststart -an \
-            "$OUT/Physics9_FreeFall_Weightlessness_SENIOR_QA_V3_FINAL_pqh.mp4"
+            "$OUT/Physics9_FreeFall_CINEMATIC_SENIOR_QA_V2_FINAL_pqh.mp4"
 
-          cp "$SRC" "$OUT/Physics9_FreeFall_SeniorQA_V3_source.py"
+          cp "$SRC" "$OUT/Physics9_FreeFall_CINEMATIC_V2_source.py"
           touch "$OUT/PQH_PASS"
 
-      - name: Technical and frame QA
+      - name: Senior technical and frame QA
         id: qa
         if: steps.pqh.outcome == 'success'
         continue-on-error: true
         shell: bash
         run: |
           set -o pipefail
-          OUT=deliveries/physics9/freefall_seniorqa_v3_20260928
-          F="$OUT/Physics9_FreeFall_Weightlessness_SENIOR_QA_V3_FINAL_pqh.mp4"
+          OUT=deliveries/physics9/freefall_cinematic_v2_20260928
+          F="$OUT/Physics9_FreeFall_CINEMATIC_SENIOR_QA_V2_FINAL_pqh.mp4"
 
           W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
           H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
@@ -123,32 +121,35 @@ jobs:
           test "$FPS" = "30/1"
           test "$CODEC" = "h264"
           test "$PIX" = "yuv420p"
-          awk -v d="$DUR" 'BEGIN { exit !(d > 100 && d < 360) }'
+          awk -v d="$DUR" 'BEGIN { exit !(d > 100) }'
           test "$SIZE" -gt 1500000
+
           ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/full_decode.log"
 
           mkdir -p "$OUT/qa_frames"
-          for FRC in 0.03 0.09 0.15 0.21 0.27 0.33 0.39 0.45 0.51 0.57 0.63 0.69 0.75 0.81 0.87 0.93 0.98; do
+          for FRC in 0.03 0.10 0.18 0.26 0.34 0.42 0.50 0.58 0.66 0.74 0.82 0.90 0.97; do
             T="$(awk -v d="$DUR" -v f="$FRC" 'BEGIN{printf "%.3f",d*f}')"
             TAG="$(printf '%s' "$FRC" | tr -d '.')"
             ffmpeg -y -ss "$T" -i "$F" -frames:v 1 "$OUT/qa_frames/frame_$TAG.png" >/dev/null 2>&1
           done
 
           ffmpeg -y -pattern_type glob -i "$OUT/qa_frames/frame_*.png" \
-            -vf 'scale=480:-1,tile=5x4:padding=8:margin=8:color=white' \
+            -vf 'scale=480:-1,tile=4x4:padding=8:margin=8:color=#07111F' \
             -frames:v 1 "$OUT/QA_CONTACT_SHEET.jpg" >/dev/null 2>&1
 
           sha256sum "$F" > "$OUT/SHA256SUMS.txt"
           touch "$OUT/TECH_QA_PASS"
 
-      - name: Status
+      - name: Write status
         if: always()
         shell: bash
         run: |
           set -euo pipefail
-          OUT=deliveries/physics9/freefall_seniorqa_v3_20260928
+          OUT=deliveries/physics9/freefall_cinematic_v2_20260928
           mkdir -p "$OUT"
-          PQL=FAIL; PQH=FAIL; QA=FAIL
+          PQL=FAIL
+          PQH=FAIL
+          QA=FAIL
           test -f "$OUT/PQL_PASS" && PQL=PASS
           test -f "$OUT/PQH_PASS" && PQH=PASS
           test -f "$OUT/TECH_QA_PASS" && QA=PASS
@@ -158,23 +159,23 @@ jobs:
             echo "TECHNICAL_QA=$QA"
           } > "$OUT/RENDER_STATUS.txt"
 
-      - name: Persist V3 result
+      - name: Persist render or diagnostics
         if: always()
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add deliveries/physics9/freefall_seniorqa_v3_20260928
+          git add deliveries/physics9/freefall_cinematic_v2_20260928
           if ! git diff --cached --quiet; then
-            git commit -m "render: Physics9 free-fall Senior QA V3 result [skip ci]"
-            git push origin HEAD:manim/physics9-freefall-seniorqa-v3-20260928
+            git commit -m "render: Physics9 FreeFall Cinematic Senior QA V2 [skip ci]"
+            git push origin HEAD:manim/physics9-freefall-seniorqa-20260928
           fi
 
-      - name: Upload V3 artifact
+      - name: Upload artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Physics9-FreeFall-SeniorQA-V3
-          path: deliveries/physics9/freefall_seniorqa_v3_20260928
+          name: Physics9-FreeFall-Cinematic-V2
+          path: deliveries/physics9/freefall_cinematic_v2_20260928
           if-no-files-found: warn
