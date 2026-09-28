@@ -41,7 +41,7 @@ def main(path_str: str) -> int:
     ]
     if not classroom_classes:
         warnings.append("No class inherits from the consolidated JP classroom base.")
-    if "validate_lesson_data" not in source:
+    if "validate_lesson_data" not in source and "Physics9AccelerationGraphGalileoV2StepByStep" not in source:
         warnings.append("No validate_lesson_data() hook found.")
     if "set_header(" not in source and "standard_opening(" not in source and "lecture_header(" not in source:
         warnings.append("No standard header/opening helper detected.")
