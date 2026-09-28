@@ -43,7 +43,7 @@ def main(path_str: str) -> int:
         warnings.append("No class inherits from the consolidated JP classroom base.")
     if "validate_lesson_data" not in source:
         warnings.append("No validate_lesson_data() hook found.")
-    if "set_header(" not in source and "standard_opening(" not in source:
+    if "set_header(" not in source and "standard_opening(" not in source and "lecture_header(" not in source:
         warnings.append("No standard header/opening helper detected.")
     if "clear_stage(" not in source and "standard_closing(" not in source:
         warnings.append("No clear_stage()/standard_closing() helper detected.")
