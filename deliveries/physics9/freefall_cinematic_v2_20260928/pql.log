@@ -1,12 +1,12 @@
 Manim Community v0.20.1
 
-[09/28/26 16:40:06] INFO     Writing                     tex_file_writing.py:110
+[09/28/26 16:45:23] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}N=0\special                        
                              {dvisvgm:raw </g>} to                              
                              media_pql/Tex/f40a3a19aceba                        
                              03d.tex                                            
-[09/28/26 16:40:07] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}\vec                               
                              g\special{dvisvgm:raw </g>}                        
@@ -22,7 +22,7 @@ Manim Community v0.20.1
                              sics9FreeFallCinematicV2/u                         
                              ncached_00000.mp4'                                 
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 1: Create(RoundedRectangle), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                      INFO     Animation 1 : Partial      scene_file_writer.py:601
+Animation 1: Create(RoundedRectangle), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                  [09/28/26 16:45:24] INFO     Animation 1 : Partial      scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -38,7 +38,7 @@ Manim Community v0.20.1
                              sics9FreeFallCinematicV2/u                         
                              ncached_00002.mp4'                                 
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 3: _MethodAnimation(VGroup of 4 submobjects), etc.:   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                   [09/28/26 16:40:08] INFO     Animation 3 : Partial      scene_file_writer.py:601
+Animation 3: _MethodAnimation(VGroup of 4 submobjects), etc.:   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                                       INFO     Animation 3 : Partial      scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -83,7 +83,7 @@ Manim Community v0.20.1
                              30/partial_movie_files/Phy                         
                              sics9FreeFallCinematicV2/u                         
                              ncached_00006.mp4'                                 
-                    INFO     Writing                     tex_file_writing.py:110
+[09/28/26 16:45:25] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}\vec                               
                              W=m\vec                                            
@@ -91,7 +91,7 @@ Manim Community v0.20.1
                              to                                                 
                              media_pql/Tex/cc88307ff5f03                        
                              7f1.tex                                            
-[09/28/26 16:40:09] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}\vec a=\vec                        
                              g\special{dvisvgm:raw </g>}                        
@@ -130,7 +130,7 @@ Manim Community v0.20.1
                              to                                                 
                              media_pql/Tex/98b697a604a1d                        
                              c6d.tex                                            
-[09/28/26 16:40:10] INFO     Writing                     tex_file_writing.py:110
+[09/28/26 16:45:26] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}m\vec g =                          
                              m\vec a\special{dvisvgm:raw                        
@@ -227,7 +227,7 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-                    WARNING  The original total run_time of        scene.py:1118
+[09/28/26 16:45:27] WARNING  The original total run_time of        scene.py:1118
                              Physics9FreeFallCinematicV2.play(),                
                              0.033 seconds, is too short for the                
                              current frame rate of 30 FPS.                      
@@ -249,7 +249,7 @@ Manim Community v0.20.1
                              duration of 0.0333333 seconds                      
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-[09/28/26 16:40:11] INFO     Animation 15 : Partial     scene_file_writer.py:601
+                    INFO     Animation 15 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -280,7 +280,7 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-[09/28/26 16:40:12] WARNING  The original total run_time of        scene.py:1118
+[09/28/26 16:45:28] WARNING  The original total run_time of        scene.py:1118
                              Physics9FreeFallCinematicV2.play(),                
                              0.027 seconds, is too short for the                
                              current frame rate of 30 FPS.                      
@@ -318,7 +318,7 @@ Manim Community v0.20.1
                              media_pql/Tex/6c1ff052d29a3                        
                              b72.tex                                            
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 20: FadeIn(MathTex('\\vec v')), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                     [09/28/26 16:40:13] INFO     Animation 20 : Partial     scene_file_writer.py:601
+Animation 20: FadeIn(MathTex('\\vec v')), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                     [09/28/26 16:45:29] INFO     Animation 20 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -358,7 +358,7 @@ Manim Community v0.20.1
                              sics9FreeFallCinematicV2/u                         
                              ncached_00024.mp4'                                 
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 25: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                     [09/28/26 16:40:14] INFO     Animation 25 : Partial     scene_file_writer.py:601
+Animation 25: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                     [09/28/26 16:45:30] INFO     Animation 25 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -404,14 +404,14 @@ Manim Community v0.20.1
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-Animation 29: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                           [09/28/26 16:40:15] INFO     Animation 29 : Partial     scene_file_writer.py:601
+Animation 29: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                               INFO     Animation 29 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
                              30/partial_movie_files/Phy                         
                              sics9FreeFallCinematicV2/u                         
                              ncached_00029.mp4'                                 
-                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:45:31] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 30: Create(RoundedRectangle), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                       INFO     Animation 30 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
@@ -450,7 +450,7 @@ Manim Community v0.20.1
                              </g>} to                                           
                              media_pql/Tex/510b19dcf4837                        
                              8da.tex                                            
-[09/28/26 16:40:16] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Caching disabled.              cairo_renderer.py:83
 Animation 34: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 34 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
@@ -459,7 +459,7 @@ Manim Community v0.20.1
                              sics9FreeFallCinematicV2/u                         
                              ncached_00034.mp4'                                 
                     INFO     Caching disabled.              cairo_renderer.py:83
-                    INFO     Animation 35 : Partial     scene_file_writer.py:601
+[09/28/26 16:45:32] INFO     Animation 35 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -494,13 +494,13 @@ Manim Community v0.20.1
                              l{dvisvgm:raw </g>} to                             
                              media_pql/Tex/204f874268f25                        
                              e71.tex                                            
-[09/28/26 16:40:17] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}N\special{d                        
                              visvgm:raw </g>} to                                
                              media_pql/Tex/04d7a3113b3dd                        
                              ff1.tex                                            
-                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:45:33] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 37: FadeIn(VGroup of 4 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                              INFO     Animation 37 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
@@ -531,7 +531,7 @@ Manim Community v0.20.1
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-Animation 39: FadeIn(VGroup of 2 submobjects):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                    [09/28/26 16:40:18] INFO     Animation 39 : Partial     scene_file_writer.py:601
+Animation 39: FadeIn(VGroup of 2 submobjects):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                        INFO     Animation 39 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -598,7 +598,7 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-                    WARNING  The original total run_time of        scene.py:1118
+[09/28/26 16:45:34] WARNING  The original total run_time of        scene.py:1118
                              Physics9FreeFallCinematicV2.play(),                
                              0.03 seconds, is too short for the                 
                              current frame rate of 30 FPS.                      
@@ -643,7 +643,7 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-[09/28/26 16:40:19] WARNING  The original total run_time of        scene.py:1118
+                    WARNING  The original total run_time of        scene.py:1118
                              Physics9FreeFallCinematicV2.play(),                
                              0.027 seconds, is too short for the                
                              current frame rate of 30 FPS.                      
@@ -657,7 +657,7 @@ Manim Community v0.20.1
                              30/partial_movie_files/Phy                         
                              sics9FreeFallCinematicV2/u                         
                              ncached_00046.mp4'                                 
-                    INFO     Writing                     tex_file_writing.py:110
+[09/28/26 16:45:35] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}a_y=+3.0\,\                        
                              mathrm{m/s^2}\special{dvisv                        
@@ -677,14 +677,14 @@ Manim Community v0.20.1
                              visvgm:raw </g>} to                                
                              media_pql/Tex/2e9ca1fca613a                        
                              bcd.tex                                            
-[09/28/26 16:40:20] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}a_y=-3.0\,\                        
                              mathrm{m/s^2}\special{dvisv                        
                              gm:raw </g>} to                                    
                              media_pql/Tex/53636df194719                        
                              9de.tex                                            
-                    INFO     Writing                     tex_file_writing.py:110
+[09/28/26 16:45:36] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}N=409\,\mat                        
                              hrm{N}\special{dvisvgm:raw                         
@@ -697,7 +697,7 @@ Manim Community v0.20.1
                              ial{dvisvgm:raw </g>} to                           
                              media_pql/Tex/72048a16a83ac                        
                              8dd.tex                                            
-[09/28/26 16:40:21] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Caching disabled.              cairo_renderer.py:83
 Animation 47: FadeIn(VGroup of 8 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                              INFO     Animation 47 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
@@ -719,13 +719,13 @@ Manim Community v0.20.1
                              ecial{dvisvgm:raw </g>} to                         
                              media_pql/Tex/84d89b3ee889f                        
                              4dd.tex                                            
-                    INFO     Writing                     tex_file_writing.py:110
+[09/28/26 16:45:37] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}N=m(g-3)\sp                        
                              ecial{dvisvgm:raw </g>} to                         
                              media_pql/Tex/f4e5214e8d385                        
                              8a5.tex                                            
-[09/28/26 16:40:22] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}N=m(g-g)=0\                        
                              special{dvisvgm:raw </g>}                          
@@ -741,7 +741,7 @@ Manim Community v0.20.1
                              sics9FreeFallCinematicV2/u                         
                              ncached_00049.mp4'                                 
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 50: FadeIn(Text('W NO DESAPARECE · N SÍ PUEDE SER CERO')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                              INFO     Animation 50 : Partial     scene_file_writer.py:601
+Animation 50: FadeIn(Text('W NO DESAPARECE · N SÍ PUEDE SER CERO')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                          [09/28/26 16:45:38] INFO     Animation 50 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -764,7 +764,7 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-[09/28/26 16:40:23] WARNING  The original total run_time of        scene.py:1118
+                    WARNING  The original total run_time of        scene.py:1118
                              Physics9FreeFallCinematicV2.play(),                
                              0.027 seconds, is too short for the                
                              current frame rate of 30 FPS.                      
@@ -778,7 +778,7 @@ Manim Community v0.20.1
                              30/partial_movie_files/Phy                         
                              sics9FreeFallCinematicV2/u                         
                              ncached_00052.mp4'                                 
-                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:45:39] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 53: GrowArrow(Arrow), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                               INFO     Animation 53 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
@@ -793,7 +793,7 @@ Manim Community v0.20.1
                              m:raw </g>} to                                     
                              media_pql/Tex/0d61415180865                        
                              68a.tex                                            
-[09/28/26 16:40:24] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Caching disabled.              cairo_renderer.py:83
 Animation 54: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 54 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
@@ -869,7 +869,7 @@ Manim Community v0.20.1
                              to                                                 
                              media_pql/Tex/dd144aaf4d015                        
                              da2.tex                                            
-                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:45:40] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 59: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 59 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
@@ -914,7 +914,7 @@ Manim Community v0.20.1
                              30/partial_movie_files/Phy                         
                              sics9FreeFallCinematicV2/u                         
                              ncached_00061.mp4'                                 
-[09/28/26 16:40:25] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}\frac{dy}{d                        
                              t}=v\;\Rightarrow\;y=y_0+v_                        
@@ -983,7 +983,7 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-[09/28/26 16:40:26] WARNING  The original total run_time of        scene.py:1118
+[09/28/26 16:45:41] WARNING  The original total run_time of        scene.py:1118
                              Physics9FreeFallCinematicV2.play(),                
                              0.027 seconds, is too short for the                
                              current frame rate of 30 FPS.                      
@@ -1027,13 +1027,13 @@ Manim Community v0.20.1
                              visvgm:raw </g>} to                                
                              media_pql/Tex/ab0de9a363d86                        
                              c5f.tex                                            
-                    INFO     Writing                     tex_file_writing.py:110
+[09/28/26 16:45:42] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}.\special{d                        
                              visvgm:raw </g>} to                                
                              media_pql/Tex/85b8d98e778e7                        
                              c96.tex                                            
-[09/28/26 16:40:27] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}2\special{d                        
                              visvgm:raw </g>} to                                
@@ -1048,7 +1048,7 @@ Manim Community v0.20.1
                              sics9FreeFallCinematicV2/u                         
                              ncached_00070.mp4'                                 
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 71: FadeIn(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 71 : Partial     scene_file_writer.py:601
+Animation 71: FadeIn(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                    [09/28/26 16:45:43] INFO     Animation 71 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -1062,7 +1062,7 @@ Manim Community v0.20.1
                              visvgm:raw </g>} to                                
                              media_pql/Tex/9ca767606662f                        
                              643.tex                                            
-[09/28/26 16:40:28] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}1\special{d                        
                              visvgm:raw </g>} to                                
@@ -1080,13 +1080,13 @@ Manim Community v0.20.1
                              visvgm:raw </g>} to                                
                              media_pql/Tex/f7c8a5ee0f168                        
                              adf.tex                                            
-                    INFO     Writing                     tex_file_writing.py:110
+[09/28/26 16:45:44] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}5\special{d                        
                              visvgm:raw </g>} to                                
                              media_pql/Tex/80535c2a91306                        
                              081.tex                                            
-Animation 72: _MethodAnimation(ValueTracker):  29%|██▊       | 2/7 [00:01<00:03,  1.66it/s][09/28/26 16:40:29] INFO     Writing                     tex_file_writing.py:110
+Animation 72: _MethodAnimation(ValueTracker):  29%|██▊       | 2/7 [00:01<00:02,  1.73it/s]                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}6\special{d                        
                              visvgm:raw </g>} to                                
@@ -1104,7 +1104,7 @@ Manim Community v0.20.1
                              visvgm:raw </g>} to                                
                              media_pql/Tex/2f8240ddc5f27                        
                              b7f.tex                                            
-Animation 72: _MethodAnimation(ValueTracker):  43%|████▎     | 3/7 [00:01<00:02,  1.54it/s]Animation 72: _MethodAnimation(ValueTracker): 100%|██████████| 7/7 [00:02<00:00,  4.66it/s]                                                                                           [09/28/26 16:40:30] INFO     Animation 72 : Partial     scene_file_writer.py:601
+Animation 72: _MethodAnimation(ValueTracker):  43%|████▎     | 3/7 [00:01<00:02,  1.59it/s]Animation 72: _MethodAnimation(ValueTracker): 100%|██████████| 7/7 [00:01<00:00,  4.85it/s]                                                                                           [09/28/26 16:45:45] INFO     Animation 72 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -1164,7 +1164,7 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-[09/28/26 16:40:31] WARNING  The original total run_time of        scene.py:1118
+[09/28/26 16:45:46] WARNING  The original total run_time of        scene.py:1118
                              Physics9FreeFallCinematicV2.play(),                
                              0.027 seconds, is too short for the                
                              current frame rate of 30 FPS.                      
@@ -1230,13 +1230,13 @@ Manim Community v0.20.1
                              30/partial_movie_files/Phy                         
                              sics9FreeFallCinematicV2/u                         
                              ncached_00077.mp4'                                 
-[09/28/26 16:40:32] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}y(t)\specia                        
                              l{dvisvgm:raw </g>} to                             
                              media_pql/Tex/6858e273addd5                        
                              181.tex                                            
-                    INFO     Writing                     tex_file_writing.py:110
+[09/28/26 16:45:47] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}v(t)\specia                        
                              l{dvisvgm:raw </g>} to                             
@@ -1257,7 +1257,7 @@ Manim Community v0.20.1
                              sics9FreeFallCinematicV2/u                         
                              ncached_00078.mp4'                                 
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 79: Create(ParametricFunction), etc.:   0%|          | 0/4 [00:00<?, ?it/s]                                                                                     [09/28/26 16:40:33] INFO     Animation 79 : Partial     scene_file_writer.py:601
+Animation 79: Create(ParametricFunction), etc.:   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                         INFO     Animation 79 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -1273,7 +1273,7 @@ Manim Community v0.20.1
                              sics9FreeFallCinematicV2/u                         
                              ncached_00080.mp4'                                 
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 81: FadeIn(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 81 : Partial     scene_file_writer.py:601
+Animation 81: FadeIn(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                    [09/28/26 16:45:48] INFO     Animation 81 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -1281,7 +1281,7 @@ Manim Community v0.20.1
                              sics9FreeFallCinematicV2/u                         
                              ncached_00081.mp4'                                 
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 82: _MethodAnimation(ValueTracker):   0%|          | 0/8 [00:00<?, ?it/s]Animation 82: _MethodAnimation(ValueTracker): 100%|██████████| 8/8 [00:00<00:00, 76.53it/s]                                                                                                               INFO     Animation 82 : Partial     scene_file_writer.py:601
+Animation 82: _MethodAnimation(ValueTracker):   0%|          | 0/8 [00:00<?, ?it/s]                                                                                                       INFO     Animation 82 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -1312,14 +1312,14 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-[09/28/26 16:40:34] WARNING  The original total run_time of        scene.py:1118
+                    WARNING  The original total run_time of        scene.py:1118
                              Physics9FreeFallCinematicV2.play(),                
                              0.027 seconds, is too short for the                
                              current frame rate of 30 FPS.                      
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-Animation 85: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                               INFO     Animation 85 : Partial     scene_file_writer.py:601
+Animation 85: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                           [09/28/26 16:45:49] INFO     Animation 85 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -1342,7 +1342,7 @@ Manim Community v0.20.1
                              30/partial_movie_files/Phy                         
                              sics9FreeFallCinematicV2/u                         
                              ncached_00087.mp4'                                 
-[09/28/26 16:40:35] INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:45:50] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 88: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 88 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
@@ -1359,7 +1359,7 @@ Manim Community v0.20.1
                              sics9FreeFallCinematicV2/u                         
                              ncached_00089.mp4'                                 
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 90: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                    [09/28/26 16:40:36] INFO     Animation 90 : Partial     scene_file_writer.py:601
+Animation 90: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 90 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -1382,7 +1382,7 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-[09/28/26 16:40:37] WARNING  The original total run_time of        scene.py:1118
+[09/28/26 16:45:51] WARNING  The original total run_time of        scene.py:1118
                              Physics9FreeFallCinematicV2.play(),                
                              0.027 seconds, is too short for the                
                              current frame rate of 30 FPS.                      
@@ -1396,7 +1396,7 @@ Manim Community v0.20.1
                              30/partial_movie_files/Phy                         
                              sics9FreeFallCinematicV2/u                         
                              ncached_00092.mp4'                                 
-                    WARNING  The original total run_time of        scene.py:1118
+[09/28/26 16:45:52] WARNING  The original total run_time of        scene.py:1118
                              Physics9FreeFallCinematicV2.play(),                
                              0.0228 seconds, is too short for the               
                              current frame rate of 30 FPS.                      
@@ -1411,7 +1411,7 @@ Manim Community v0.20.1
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-Animation 93: FadeIn(VGroup of 2 submobjects):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                    [09/28/26 16:40:38] INFO     Animation 93 : Partial     scene_file_writer.py:601
+Animation 93: FadeIn(VGroup of 2 submobjects):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                        INFO     Animation 93 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -1500,7 +1500,7 @@ Manim Community v0.20.1
                              duration of 0.0333333 seconds                      
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-                    INFO     Animation 98 : Partial     scene_file_writer.py:601
+[09/28/26 16:45:53] INFO     Animation 98 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -1582,7 +1582,7 @@ Manim Community v0.20.1
                              sics9FreeFallCinematicV2/u                         
                              ncached_00102.mp4'                                 
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 103: FadeIn(Text('FUERZAS → ACELERACIÓN → VELOCIDAD → POSICIÓN')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                  [09/28/26 16:40:39] INFO     Animation 103 : Partial    scene_file_writer.py:601
+Animation 103: FadeIn(Text('FUERZAS → ACELERACIÓN → VELOCIDAD → POSICIÓN')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                                      INFO     Animation 103 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         
@@ -1605,7 +1605,7 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-[09/28/26 16:40:40] WARNING  The original total run_time of        scene.py:1118
+[09/28/26 16:45:54] WARNING  The original total run_time of        scene.py:1118
                              Physics9FreeFallCinematicV2.play(),                
                              0.027 seconds, is too short for the                
                              current frame rate of 30 FPS.                      
@@ -1620,7 +1620,7 @@ Manim Community v0.20.1
                              sics9FreeFallCinematicV2/u                         
                              ncached_00105.mp4'                                 
                     INFO     Combining to Movie file.   scene_file_writer.py:753
-                    INFO                                scene_file_writer.py:904
+[09/28/26 16:45:55] INFO                                scene_file_writer.py:904
                              File ready at                                      
                              '/manim/media_pql/videos/f                         
                              reefall_cinematic_v2/1080p                         

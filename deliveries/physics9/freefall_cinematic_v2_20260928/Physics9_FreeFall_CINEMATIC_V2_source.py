@@ -92,6 +92,7 @@ class Physics9FreeFallCinematicV2(MovingCameraScene):
         sub = self.txt(subtitle,20,NORMAL,MUTED)
         self.fit(sub,13.3,0.55)
         top = VGroup(num,ttl).arrange(RIGHT,buff=0.25)
+        self.fit(top,14.65,0.68)
         grp = VGroup(top,sub).arrange(DOWN,aligned_edge=LEFT,buff=0.10)
         grp.to_corner(UL,buff=0.42)
         rule = Line(LEFT*7.55,RIGHT*7.55,color=GRID,stroke_width=1.4).next_to(grp,DOWN,buff=0.13)
