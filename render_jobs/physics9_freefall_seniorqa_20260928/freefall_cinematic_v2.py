@@ -472,7 +472,10 @@ class Physics9FreeFallCinematicV2(MovingCameraScene):
             ax.move_to(RIGHT*2.9+UP*yy)
             label=self.eq(name,23,col).next_to(ax,LEFT,buff=0.18)
             axes.append((ax,label,col))
-        anims=[]\n        for a,l,c in axes:\n            anims.extend([FadeIn(a), FadeIn(l)])\n        self.play(*anims)
+        anims=[]
+        for a,l,c in axes:
+            anims.extend([FadeIn(a), FadeIn(l)])
+        self.play(*anims)
 
         ax_y,_,_=axes[0]; ax_v,_,_=axes[1]; ax_a,_,_=axes[2]
         curve_y=ax_y.plot(lambda t:H-0.5*G*t*t,x_range=[0,T_HIT],color=YELLOW,stroke_width=3)
