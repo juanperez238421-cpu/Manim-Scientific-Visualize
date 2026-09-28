@@ -165,7 +165,7 @@ class AstraCoreSections:
                 "a = 0 → velocity is constant",
                 "a < 0 → velocity decreases",
             ],
-            meaning="SIGN OF a ≠ DIRECTION OF MOTION",
+            meaning="a SIGN ≠ MOTION DIRECTION",
             width=4.20,
             height=3.55,
         ).move_to(focus)
@@ -272,12 +272,12 @@ class AstraCoreSections:
             dt_s = d["dt"] * 60.0
             p4 = self.focus_panel(
                 "4 / 6  CALCULATE",
-                [],
-                equation=(
-                    rf"a=\frac{{{dv_ms:+.2f}\ \mathrm{{m/s}}}}"
-                    rf"{{{dt_s:.0f}\ \mathrm{{s}}}}"
-                    rf"={d['a']:+.3f}\ \mathrm{{m/s^2}}"
-                ),
+                [
+                    f"Δv = {dv_ms:+.2f} m/s",
+                    f"Δt = {dt_s:.0f} s",
+                ],
+                equation=rf"a=\frac{{{dv_ms:+.2f}}}{{{dt_s:.0f}}}",
+                meaning=f"a = {d['a']:+.3f} m/s²",
                 width=4.20,
                 height=3.55,
             ).move_to(focus)
