@@ -225,6 +225,40 @@ class Physics9AccelerationGraphGalileoV3OpusVisual(
         rail = VGroup(*chips).arrange(DOWN, buff=0.08)
         return rail, chips
 
+    def transform_equation_chain(
+        self,
+        expressions: list[str],
+        *,
+        size: int = 40,
+        position: np.ndarray = ORIGIN,
+        pause: float = 1.0,
+    ) -> MathTex:
+        """Morph one equation into the next while preserving matching symbols."""
+        current = MathTex(
+            expressions[0],
+            font_size=size,
+            color=BLACK_TEXT,
+        ).move_to(position)
+        self.play(Write(current), run_time=0.75)
+        self.wait(pause)
+        for expression in expressions[1:]:
+            target = MathTex(
+                expression,
+                font_size=size,
+                color=BLACK_TEXT,
+            ).move_to(position)
+            self.play(
+                TransformMatchingTex(
+                    current,
+                    target,
+                    transform_mismatches=True,
+                ),
+                run_time=0.85,
+            )
+            current = target
+            self.wait(pause)
+        return current
+
     def activate_reasoning_chip(
         self, chips: list[VGroup], index: int
     ) -> None:
