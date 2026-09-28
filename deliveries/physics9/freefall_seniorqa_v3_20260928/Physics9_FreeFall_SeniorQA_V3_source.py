@@ -496,7 +496,12 @@ class Physics9FreeFallSeniorQAV3(MovingCameraScene):
                        title_size=22,body_size=28).move_to(read)
         n2 = self.vector(LEFT*4.35+DOWN*1.10,UP*1.85,r"N",GREEN,LEFT)
         au = self.vector(LEFT*1.05+DOWN*0.25,UP*1.35,r"\vec a",ORANGE)
-        self.play(Transform(title,t2),Transform(eq,e2),Transform(read,r2),Transform(n,n2),FadeIn(au),run_time=0.85)
+        self.play(
+            FadeOut(title),FadeOut(eq),FadeOut(read),
+            FadeIn(t2),FadeIn(e2),FadeIn(r2),
+            Transform(n,n2),FadeIn(au),run_time=0.72
+        )
+        title,eq,read = t2,e2,r2
         self.wait(1.5)
 
         # Downward acceleration
@@ -506,7 +511,12 @@ class Physics9FreeFallSeniorQAV3(MovingCameraScene):
                        title_size=22,body_size=28).move_to(read)
         n3 = self.vector(LEFT*4.35+DOWN*1.10,UP*0.98,r"N",GREEN,LEFT)
         ad = self.vector(LEFT*1.05+UP*0.80,DOWN*1.35,r"\vec a",ORANGE)
-        self.play(Transform(title,t3),Transform(eq,e3),Transform(read,r3),Transform(n,n3),Transform(au,ad),run_time=0.85)
+        self.play(
+            FadeOut(title),FadeOut(eq),FadeOut(read),
+            FadeIn(t3),FadeIn(e3),FadeIn(r3),
+            Transform(n,n3),Transform(au,ad),run_time=0.72
+        )
+        title,eq,read = t3,e3,r3
         self.wait(1.5)
 
         # Free fall
@@ -516,11 +526,13 @@ class Physics9FreeFallSeniorQAV3(MovingCameraScene):
                        title_size=22,body_size=22).move_to(read)
         af = self.vector(LEFT*1.05+UP*0.80,DOWN*1.55,r"\vec a=\vec g",ORANGE)
         self.play(
-            Transform(title,t4),Transform(eq,e4),Transform(read,r4),
+            FadeOut(title),FadeOut(eq),FadeOut(read),
+            FadeIn(t4),FadeIn(e4),FadeIn(r4),
             FadeOut(n),Transform(au,af),
             person.animate.shift(UP*0.55),scale.animate.shift(DOWN*0.12),
-            run_time=1.0,
+            run_time=0.85,
         )
+        title,eq,read = t4,e4,r4
 
         key = self.txt("N = 0   pero   W = mg ≠ 0",31,BOLD,PURPLE).move_to(RIGHT*3.45+DOWN*2.20)
         self.play(FadeIn(key,scale=1.08))
@@ -668,16 +680,24 @@ class Physics9FreeFallSeniorQAV3(MovingCameraScene):
         tnum.add_updater(lambda d:d.set_value(tracker.get_value()))
         speednum = DecimalNumber(0,num_decimal_places=1,font_size=34,color=BLUE)
         speednum.add_updater(lambda d:d.set_value(G*tracker.get_value()))
-        readout = self.card(
-            "LECTURA EN VIVO",
-            ["", ""],
-            4.4,1.75,fill=WHITE2,accent=INK,
-            title_size=22,body_size=18,
-        ).move_to(RIGHT*3.55+DOWN*2.15)
+        read_box = RoundedRectangle(
+            width=4.45,height=1.90,corner_radius=0.16,
+            stroke_color=LIGHT,stroke_width=1.6,
+            fill_color=WHITE,fill_opacity=1,
+        ).move_to(RIGHT*3.55+DOWN*2.12)
+        read_bar = Rectangle(
+            width=0.10,height=1.70,stroke_width=0,
+            fill_color=INK,fill_opacity=1,
+        ).next_to(read_box.get_left(),RIGHT,buff=0.07)
+        read_title = self.txt("LECTURA EN VIVO",21,BOLD,INK)
+        read_title.next_to(read_box.get_top(),DOWN,buff=0.18)
+        read_title.align_to(read_box,LEFT).shift(RIGHT*0.42)
         trow = VGroup(self.txt("t =",23,BOLD,INK),tnum,self.txt("s",23,color=INK)).arrange(RIGHT,buff=0.08)
         vrow = VGroup(self.txt("|v| =",23,BOLD,BLUE),speednum,self.txt("m/s",23,color=BLUE)).arrange(RIGHT,buff=0.08)
-        rgroup = VGroup(trow,vrow).arrange(DOWN,aligned_edge=LEFT,buff=0.15).move_to(readout[0])
-        self.play(FadeIn(readout[0]),FadeIn(readout[1]),FadeIn(readout[2][0]),FadeIn(rgroup))
+        rgroup = VGroup(trow,vrow).arrange(DOWN,aligned_edge=LEFT,buff=0.13)
+        rgroup.next_to(read_title,DOWN,buff=0.18).align_to(read_title,LEFT)
+        readout = VGroup(read_box,read_bar,read_title,rgroup)
+        self.play(FadeIn(readout))
 
         self.play(tracker.animate.set_value(tmax),run_time=4.8,rate_func=linear)
         tnum.clear_updaters(); speednum.clear_updaters()
