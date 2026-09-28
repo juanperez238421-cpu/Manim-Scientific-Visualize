@@ -1,0 +1,1558 @@
+Manim Community v0.20.1
+
+[09/28/26 16:04:01] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\vec                               
+                             W\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_final/Tex/d300614c015                        
+                             bbcf4.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\vec                               
+                             N\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_final/Tex/017f738c90e                        
+                             7210c.tex                                          
+[09/28/26 16:04:02] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 0: FadeIn(VGroup of 3 submobjects), etc.:   0%|          | 0/24 [00:00<?, ?it/s]Animation 0: FadeIn(VGroup of 3 submobjects), etc.:  75%|███████▌  | 18/24 [00:00<00:00, 176.31it/s]                                                                                                                        INFO     Animation 0 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00000.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 1: GrowArrow(Arrow), etc.:   0%|          | 0/24 [00:00<?, ?it/s]                                                                                               INFO     Animation 1 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00001.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 2: FadeIn(Text('¿QUÉ DESAPARECE CUANDO “NO PESAMOS”?')), etc.:   0%|          | 0/24 [00:00<?, ?it/s]Animation 2: FadeIn(Text('¿QUÉ DESAPARECE CUANDO “NO PESAMOS”?')), etc.:  25%|██▌       | 6/24 [00:00<00:00, 54.24it/s]Animation 2: FadeIn(Text('¿QUÉ DESAPARECE CUANDO “NO PESAMOS”?')), etc.:  50%|█████     | 12/24 [00:00<00:00, 53.42it/s]Animation 2: FadeIn(Text('¿QUÉ DESAPARECE CUANDO “NO PESAMOS”?')), etc.:  75%|███████▌  | 18/24 [00:00<00:00, 53.20it/s]Animation 2: FadeIn(Text('¿QUÉ DESAPARECE CUANDO “NO PESAMOS”?')), etc.: 100%|██████████| 24/24 [00:00<00:00, 53.20it/s]                                                                                                                        [09/28/26 16:04:03] INFO     Animation 2 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00002.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:04] INFO     Animation 3 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00003.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}N\rightarro                        
+                             w 0\qquad W=mg\neq                                 
+                             0\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_final/Tex/4d983a3ed3e                        
+                             0a2db.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 4: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 4: FadeOut(VGroup of 2 submobjects), etc.:  18%|█▊        | 6/33 [00:00<00:00, 53.22it/s]Animation 4: FadeOut(VGroup of 2 submobjects), etc.:  36%|███▋      | 12/33 [00:00<00:00, 53.23it/s]Animation 4: FadeOut(VGroup of 2 submobjects), etc.:  55%|█████▍    | 18/33 [00:00<00:00, 53.38it/s]Animation 4: FadeOut(VGroup of 2 submobjects), etc.:  73%|███████▎  | 24/33 [00:00<00:00, 53.59it/s]Animation 4: FadeOut(VGroup of 2 submobjects), etc.:  91%|█████████ | 30/33 [00:00<00:00, 53.88it/s]                                                                                                    [09/28/26 16:04:05] INFO     Animation 4 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00004.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 5: FadeIn(Text('CAÍDA LIBRE')), etc.:   0%|          | 0/21 [00:00<?, ?it/s]Animation 5: FadeIn(Text('CAÍDA LIBRE')), etc.:  71%|███████▏  | 15/21 [00:00<00:00, 144.46it/s]                                                                                                                    INFO     Animation 5 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00005.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:06] INFO     Animation 6 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00006.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 7: FadeIn(Text('CAÍDA LIBRE · PESO · INGRAVIDEZ')):   0%|          | 0/21 [00:00<?, ?it/s]Animation 7: FadeIn(Text('CAÍDA LIBRE · PESO · INGRAVIDEZ')):  62%|██████▏   | 13/21 [00:00<00:00, 121.65it/s]                                                                                                                                  INFO     Animation 7 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00007.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:07] INFO     Animation 8 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00008.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 9: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 9: FadeOut(VGroup of 3 submobjects), etc.:  27%|██▋       | 4/15 [00:00<00:00, 33.27it/s]Animation 9: FadeOut(VGroup of 3 submobjects), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 33.02it/s]Animation 9: FadeOut(VGroup of 3 submobjects), etc.:  80%|████████  | 12/15 [00:00<00:00, 31.58it/s]                                                                                                    [09/28/26 16:04:08] INFO     Animation 9 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00009.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 10: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/17 [00:00<?, ?it/s]Animation 10: FadeIn(VGroup of 2 submobjects), etc.:  24%|██▎       | 4/17 [00:00<00:00, 39.40it/s]Animation 10: FadeIn(VGroup of 2 submobjects), etc.:  47%|████▋     | 8/17 [00:00<00:00, 38.71it/s]Animation 10: FadeIn(VGroup of 2 submobjects), etc.:  71%|███████   | 12/17 [00:00<00:00, 38.48it/s]Animation 10: FadeIn(VGroup of 2 submobjects), etc.:  94%|█████████▍| 16/17 [00:00<00:00, 38.38it/s]                                                                                                    [09/28/26 16:04:09] INFO     Animation 10 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00010.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\vec W=                            
+                             m\vec g\special{dvisvgm:raw                        
+                             </g>} to                                           
+                             media_final/Tex/0fca589ffd9                        
+                             9aa04.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 11: Create(Line), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 11: Create(Line), etc.:  93%|█████████▎| 28/30 [00:00<00:00, 274.52it/s]                                                                                  [09/28/26 16:04:10] INFO     Animation 11 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00011.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 12: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 12: FadeIn(VGroup of 2 submobjects), etc.:  20%|██        | 6/30 [00:00<00:00, 56.59it/s]Animation 12: FadeIn(VGroup of 2 submobjects), etc.:  40%|████      | 12/30 [00:00<00:00, 55.06it/s]Animation 12: FadeIn(VGroup of 2 submobjects), etc.:  60%|██████    | 18/30 [00:00<00:00, 54.43it/s]Animation 12: FadeIn(VGroup of 2 submobjects), etc.:  80%|████████  | 24/30 [00:00<00:00, 54.17it/s]Animation 12: FadeIn(VGroup of 2 submobjects), etc.: 100%|██████████| 30/30 [00:00<00:00, 54.11it/s]                                                                                                    [09/28/26 16:04:11] INFO     Animation 12 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00012.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 13 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00013.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 14: FadeIn(Text('SOLTAR')):   0%|          | 0/14 [00:00<?, ?it/s]                                                                            [09/28/26 16:04:12] INFO     Animation 14 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00014.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 15: _MethodAnimation(RoundedRectangle), etc.:   0%|          | 0/29 [00:00<?, ?it/s]Animation 15: _MethodAnimation(RoundedRectangle), etc.:  21%|██        | 6/29 [00:00<00:00, 50.29it/s]Animation 15: _MethodAnimation(RoundedRectangle), etc.:  41%|████▏     | 12/29 [00:00<00:00, 49.94it/s]Animation 15: _MethodAnimation(RoundedRectangle), etc.:  59%|█████▊    | 17/29 [00:00<00:00, 49.54it/s]Animation 15: _MethodAnimation(RoundedRectangle), etc.:  76%|███████▌  | 22/29 [00:00<00:00, 49.50it/s]Animation 15: _MethodAnimation(RoundedRectangle), etc.:  93%|█████████▎| 27/29 [00:00<00:00, 49.41it/s]                                                                                                       [09/28/26 16:04:13] INFO     Animation 15 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00015.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 16 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00016.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\vec a=\vec                        
+                             g\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_final/Tex/64058666bc1                        
+                             dd946.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 17: Transform(VGroup of 2 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 17: Transform(VGroup of 2 submobjects), etc.:  17%|█▋        | 5/30 [00:00<00:00, 44.91it/s]Animation 17: Transform(VGroup of 2 submobjects), etc.:  33%|███▎      | 10/30 [00:00<00:00, 43.79it/s]Animation 17: Transform(VGroup of 2 submobjects), etc.:  50%|█████     | 15/30 [00:00<00:00, 43.48it/s]Animation 17: Transform(VGroup of 2 submobjects), etc.:  67%|██████▋   | 20/30 [00:00<00:00, 43.50it/s]Animation 17: Transform(VGroup of 2 submobjects), etc.:  83%|████████▎ | 25/30 [00:00<00:00, 43.28it/s]Animation 17: Transform(VGroup of 2 submobjects), etc.: 100%|██████████| 30/30 [00:00<00:00, 43.01it/s]                                                                                                       [09/28/26 16:04:14] INFO     Animation 17 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00017.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 18: _MethodAnimation(VGroup of 2 submobjects), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 18: _MethodAnimation(VGroup of 2 submobjects), etc.:  18%|█▊        | 6/33 [00:00<00:00, 50.20it/s]Animation 18: _MethodAnimation(VGroup of 2 submobjects), etc.:  36%|███▋      | 12/33 [00:00<00:00, 49.98it/s]Animation 18: _MethodAnimation(VGroup of 2 submobjects), etc.:  52%|█████▏    | 17/33 [00:00<00:00, 49.89it/s]Animation 18: _MethodAnimation(VGroup of 2 submobjects), etc.:  67%|██████▋   | 22/33 [00:00<00:00, 49.71it/s]Animation 18: _MethodAnimation(VGroup of 2 submobjects), etc.:  85%|████████▍ | 28/33 [00:00<00:00, 50.00it/s]                                                                                                              [09/28/26 16:04:15] INFO     Animation 18 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00018.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:16] INFO     Animation 19 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00019.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\boxed{\tex                        
+                             t{Caida\ libre\ ideal:}\                           
+                             \sum\vec F=\vec                                    
+                             W}\special{dvisvgm:raw                             
+                             </g>} to                                           
+                             media_final/Tex/c5726cf767e                        
+                             b46ee.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 20: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 20: FadeIn(VGroup of 2 submobjects):  50%|█████     | 15/30 [00:00<00:00, 142.78it/s]Animation 20: FadeIn(VGroup of 2 submobjects): 100%|██████████| 30/30 [00:00<00:00, 143.18it/s]                                                                                               [09/28/26 16:04:17] INFO     Animation 20 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00020.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:18] INFO     Animation 21 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00021.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 22: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 22: FadeOut(VGroup of 2 submobjects), etc.:  20%|██        | 3/15 [00:00<00:00, 19.83it/s]Animation 22: FadeOut(VGroup of 2 submobjects), etc.:  33%|███▎      | 5/15 [00:00<00:00, 19.54it/s]Animation 22: FadeOut(VGroup of 2 submobjects), etc.:  47%|████▋     | 7/15 [00:00<00:00, 19.44it/s]Animation 22: FadeOut(VGroup of 2 submobjects), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 19.82it/s]Animation 22: FadeOut(VGroup of 2 submobjects), etc.:  80%|████████  | 12/15 [00:00<00:00, 19.84it/s]Animation 22: FadeOut(VGroup of 2 submobjects), etc.: 100%|██████████| 15/15 [00:00<00:00, 20.38it/s]                                                                                                     [09/28/26 16:04:19] INFO     Animation 22 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00022.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 23: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/17 [00:00<?, ?it/s]Animation 23: FadeIn(VGroup of 2 submobjects), etc.:  24%|██▎       | 4/17 [00:00<00:00, 34.57it/s]Animation 23: FadeIn(VGroup of 2 submobjects), etc.:  47%|████▋     | 8/17 [00:00<00:00, 34.28it/s]Animation 23: FadeIn(VGroup of 2 submobjects), etc.:  71%|███████   | 12/17 [00:00<00:00, 34.25it/s]Animation 23: FadeIn(VGroup of 2 submobjects), etc.:  94%|█████████▍| 16/17 [00:00<00:00, 34.25it/s]                                                                                                    [09/28/26 16:04:20] INFO     Animation 23 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00023.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 24: Create(DashedLine), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 24: Create(DashedLine), etc.:  93%|█████████▎| 28/30 [00:00<00:00, 279.27it/s]                                                                                        [09/28/26 16:04:21] INFO     Animation 24 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00024.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\vec                               
+                             a=-g\,\hat                                         
+                             y\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_final/Tex/ac511bcedea                        
+                             d3328.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 25: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 25: FadeIn(VGroup of 2 submobjects), etc.:  53%|█████▎    | 16/30 [00:00<00:00, 159.75it/s]                                                                                                                         INFO     Animation 25 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00025.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 26: FadeIn(VGroup of 3 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 26: FadeIn(VGroup of 3 submobjects):  20%|██        | 6/30 [00:00<00:00, 57.98it/s]Animation 26: FadeIn(VGroup of 3 submobjects):  40%|████      | 12/30 [00:00<00:00, 57.55it/s]Animation 26: FadeIn(VGroup of 3 submobjects):  60%|██████    | 18/30 [00:00<00:00, 51.97it/s]Animation 26: FadeIn(VGroup of 3 submobjects):  80%|████████  | 24/30 [00:00<00:00, 49.54it/s]Animation 26: FadeIn(VGroup of 3 submobjects): 100%|██████████| 30/30 [00:00<00:00, 50.85it/s]                                                                                              [09/28/26 16:04:22] INFO     Animation 26 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00026.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\vec                               
+                             v\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_final/Tex/e65f4f30bad                        
+                             bfa9e.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 27: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]                                                                                     [09/28/26 16:04:23] INFO     Animation 27 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00027.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 28: _MethodAnimation(VGroup of 2 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 28: _MethodAnimation(VGroup of 2 submobjects), etc.:  20%|██        | 6/30 [00:00<00:00, 54.17it/s]Animation 28: _MethodAnimation(VGroup of 2 submobjects), etc.:  40%|████      | 12/30 [00:00<00:00, 54.47it/s]Animation 28: _MethodAnimation(VGroup of 2 submobjects), etc.:  60%|██████    | 18/30 [00:00<00:00, 54.49it/s]Animation 28: _MethodAnimation(VGroup of 2 submobjects), etc.:  80%|████████  | 24/30 [00:00<00:00, 54.39it/s]Animation 28: _MethodAnimation(VGroup of 2 submobjects), etc.: 100%|██████████| 30/30 [00:00<00:00, 54.55it/s]                                                                                                              [09/28/26 16:04:24] INFO     Animation 28 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00028.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 29: Transform(VGroup of 2 submobjects), etc.:   0%|          | 0/27 [00:00<?, ?it/s]Animation 29: Transform(VGroup of 2 submobjects), etc.:  22%|██▏       | 6/27 [00:00<00:00, 54.43it/s]Animation 29: Transform(VGroup of 2 submobjects), etc.:  44%|████▍     | 12/27 [00:00<00:00, 54.85it/s]Animation 29: Transform(VGroup of 2 submobjects), etc.:  67%|██████▋   | 18/27 [00:00<00:00, 54.49it/s]Animation 29: Transform(VGroup of 2 submobjects), etc.:  89%|████████▉ | 24/27 [00:00<00:00, 54.37it/s]                                                                                                                           INFO     Animation 29 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00029.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 30: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/17 [00:00<?, ?it/s]                                                                                            [09/28/26 16:04:25] INFO     Animation 30 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00030.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 31 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00031.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 32: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 32: FadeIn(VGroup of 2 submobjects), etc.:  20%|██        | 6/30 [00:00<00:00, 52.93it/s]Animation 32: FadeIn(VGroup of 2 submobjects), etc.:  40%|████      | 12/30 [00:00<00:00, 53.00it/s]Animation 32: FadeIn(VGroup of 2 submobjects), etc.:  60%|██████    | 18/30 [00:00<00:00, 52.95it/s]Animation 32: FadeIn(VGroup of 2 submobjects), etc.:  80%|████████  | 24/30 [00:00<00:00, 50.09it/s]Animation 32: FadeIn(VGroup of 2 submobjects), etc.: 100%|██████████| 30/30 [00:00<00:00, 48.85it/s]                                                                                                    [09/28/26 16:04:26] INFO     Animation 32 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00032.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 33: _MethodAnimation(VGroup of 2 submobjects), etc.:   0%|          | 0/33 [00:00<?, ?it/s]Animation 33: _MethodAnimation(VGroup of 2 submobjects), etc.:  18%|█▊        | 6/33 [00:00<00:00, 54.37it/s]Animation 33: _MethodAnimation(VGroup of 2 submobjects), etc.:  36%|███▋      | 12/33 [00:00<00:00, 54.58it/s]Animation 33: _MethodAnimation(VGroup of 2 submobjects), etc.:  55%|█████▍    | 18/33 [00:00<00:00, 54.74it/s]Animation 33: _MethodAnimation(VGroup of 2 submobjects), etc.:  73%|███████▎  | 24/33 [00:00<00:00, 54.72it/s]Animation 33: _MethodAnimation(VGroup of 2 submobjects), etc.:  91%|█████████ | 30/33 [00:00<00:00, 54.63it/s]                                                                                                              [09/28/26 16:04:27] INFO     Animation 33 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00033.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v(t)=v_0-gt                        
+                             \qquad                                             
+                             a(t)=-g\special{dvisvgm:raw                        
+                             </g>} to                                           
+                             media_final/Tex/941d452487f                        
+                             0a78b.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 34: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 34: FadeIn(VGroup of 2 submobjects):  53%|█████▎    | 16/30 [00:00<00:00, 138.06it/s]Animation 34: FadeIn(VGroup of 2 submobjects): 100%|██████████| 30/30 [00:00<00:00, 124.65it/s]                                                                                                                   INFO     Animation 34 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00034.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:28] INFO     Animation 35 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00035.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 36: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 36: FadeOut(VGroup of 2 submobjects), etc.:  13%|█▎        | 2/15 [00:00<00:00, 19.99it/s]Animation 36: FadeOut(VGroup of 2 submobjects), etc.:  27%|██▋       | 4/15 [00:00<00:00, 19.65it/s]Animation 36: FadeOut(VGroup of 2 submobjects), etc.:  40%|████      | 6/15 [00:00<00:00, 19.66it/s]Animation 36: FadeOut(VGroup of 2 submobjects), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 19.73it/s]Animation 36: FadeOut(VGroup of 2 submobjects), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 19.73it/s]Animation 36: FadeOut(VGroup of 2 submobjects), etc.:  80%|████████  | 12/15 [00:00<00:00, 19.65it/s]Animation 36: FadeOut(VGroup of 2 submobjects), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 19.64it/s]                                                                                                     [09/28/26 16:04:30] INFO     Animation 36 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00036.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 37: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/17 [00:00<?, ?it/s]Animation 37: FadeIn(VGroup of 2 submobjects), etc.:  24%|██▎       | 4/17 [00:00<00:00, 39.17it/s]Animation 37: FadeIn(VGroup of 2 submobjects), etc.:  47%|████▋     | 8/17 [00:00<00:00, 38.15it/s]Animation 37: FadeIn(VGroup of 2 submobjects), etc.:  71%|███████   | 12/17 [00:00<00:00, 37.49it/s]Animation 37: FadeIn(VGroup of 2 submobjects), etc.:  94%|█████████▍| 16/17 [00:00<00:00, 36.47it/s]                                                                                                    [09/28/26 16:04:31] INFO     Animation 37 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00037.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 38: Create(DashedLine), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 38: Create(DashedLine), etc.:  43%|████▎     | 13/30 [00:00<00:00, 126.39it/s]Animation 38: Create(DashedLine), etc.:  87%|████████▋ | 26/30 [00:00<00:00, 121.87it/s]                                                                                                            INFO     Animation 38 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00038.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}W_1=m_1g\sp                        
+                             ecial{dvisvgm:raw </g>} to                         
+                             media_final/Tex/63b4e95f520                        
+                             2f0cb.tex                                          
+[09/28/26 16:04:32] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}W_5=m_5g\sp                        
+                             ecial{dvisvgm:raw </g>} to                         
+                             media_final/Tex/12891b0c8b3                        
+                             bda75.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 39: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 39: FadeIn(VGroup of 2 submobjects), etc.:  63%|██████▎   | 19/30 [00:00<00:00, 188.15it/s]                                                                                                                         INFO     Animation 39 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00039.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:33] INFO     Animation 40 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00040.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}m_1                                
+                             a_1=m_1g\Rightarrow                                
+                             a_1=g\special{dvisvgm:raw                          
+                             </g>} to                                           
+                             media_final/Tex/97548dffb33                        
+                             82de8.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}m_5                                
+                             a_5=m_5g\Rightarrow                                
+                             a_5=g\special{dvisvgm:raw                          
+                             </g>} to                                           
+                             media_final/Tex/c12ab566550                        
+                             85257.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\boxed{a_1=                        
+                             a_5=g}\special{dvisvgm:raw                         
+                             </g>} to                                           
+                             media_final/Tex/b9699f62b6a                        
+                             3a90d.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 41: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 41: FadeIn(VGroup of 2 submobjects):  67%|██████▋   | 20/30 [00:00<00:00, 198.90it/s]                                                                                               [09/28/26 16:04:34] INFO     Animation 41 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00041.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 42: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 42: FadeIn(VGroup of 2 submobjects):  60%|██████    | 18/30 [00:00<00:00, 171.89it/s]                                                                                                                   INFO     Animation 42 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00042.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 43: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 43: FadeIn(VGroup of 2 submobjects):  80%|████████  | 24/30 [00:00<00:00, 233.66it/s]                                                                                                                   INFO     Animation 43 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00043.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:35] INFO     Animation 44 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00044.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 45: FadeIn(VGroup of 6 submobjects):   0%|          | 0/20 [00:00<?, ?it/s]                                                                                                         INFO     Animation 45 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00045.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 46: _MethodAnimation(VGroup of 2 submobjects), etc.:   0%|          | 0/60 [00:00<?, ?it/s]Animation 46: _MethodAnimation(VGroup of 2 submobjects), etc.:  15%|█▌        | 9/60 [00:00<00:00, 80.46it/s]Animation 46: _MethodAnimation(VGroup of 2 submobjects), etc.:  30%|███       | 18/60 [00:00<00:00, 80.20it/s]Animation 46: _MethodAnimation(VGroup of 2 submobjects), etc.:  45%|████▌     | 27/60 [00:00<00:00, 80.08it/s]Animation 46: _MethodAnimation(VGroup of 2 submobjects), etc.:  60%|██████    | 36/60 [00:00<00:00, 79.17it/s]Animation 46: _MethodAnimation(VGroup of 2 submobjects), etc.:  73%|███████▎  | 44/60 [00:00<00:00, 78.05it/s]Animation 46: _MethodAnimation(VGroup of 2 submobjects), etc.:  87%|████████▋ | 52/60 [00:00<00:00, 70.09it/s]Animation 46: _MethodAnimation(VGroup of 2 submobjects), etc.: 100%|██████████| 60/60 [00:00<00:00, 65.86it/s]                                                                                                              [09/28/26 16:04:36] INFO     Animation 46 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00046.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 47: FadeIn(Text('MISMO TIEMPO DE CAÍDA')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 47: FadeIn(Text('MISMO TIEMPO DE CAÍDA')):  53%|█████▎    | 16/30 [00:00<00:00, 158.06it/s]                                                                                                     [09/28/26 16:04:37] INFO     Animation 47 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00047.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:38] INFO     Animation 48 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00048.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 49: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 49: FadeOut(VGroup of 2 submobjects), etc.:  20%|██        | 3/15 [00:00<00:00, 22.58it/s]Animation 49: FadeOut(VGroup of 2 submobjects), etc.:  40%|████      | 6/15 [00:00<00:00, 22.31it/s]Animation 49: FadeOut(VGroup of 2 submobjects), etc.:  60%|██████    | 9/15 [00:00<00:00, 20.81it/s]Animation 49: FadeOut(VGroup of 2 submobjects), etc.:  80%|████████  | 12/15 [00:00<00:00, 21.34it/s]Animation 49: FadeOut(VGroup of 2 submobjects), etc.: 100%|██████████| 15/15 [00:00<00:00, 21.87it/s]                                                                                                     [09/28/26 16:04:39] INFO     Animation 49 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00049.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 50: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/17 [00:00<?, ?it/s]Animation 50: FadeIn(VGroup of 2 submobjects), etc.:  29%|██▉       | 5/17 [00:00<00:00, 40.19it/s]Animation 50: FadeIn(VGroup of 2 submobjects), etc.:  59%|█████▉    | 10/17 [00:00<00:00, 39.40it/s]Animation 50: FadeIn(VGroup of 2 submobjects), etc.:  82%|████████▏ | 14/17 [00:00<00:00, 39.27it/s]                                                                                                    [09/28/26 16:04:40] INFO     Animation 50 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00050.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}W=mg\specia                        
+                             l{dvisvgm:raw </g>} to                             
+                             media_final/Tex/204f874268f                        
+                             25e71.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}N\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/04d7a3113b3                        
+                             ddff1.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 51: FadeIn(VGroup of 3 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 51: FadeIn(VGroup of 3 submobjects), etc.:  67%|██████▋   | 20/30 [00:00<00:00, 192.23it/s]                                                                                                     [09/28/26 16:04:41] INFO     Animation 51 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00051.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}N-mg=0\Righ                        
+                             tarrow                                             
+                             N=mg\special{dvisvgm:raw                           
+                             </g>} to                                           
+                             media_final/Tex/31104fd4cfe                        
+                             136ae.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 52: FadeIn(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 52: FadeIn(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  27%|██▋       | 8/30 [00:00<00:00, 70.01it/s]Animation 52: FadeIn(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  53%|█████▎    | 16/30 [00:00<00:00, 68.49it/s]Animation 52: FadeIn(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  77%|███████▋  | 23/30 [00:00<00:00, 66.50it/s]Animation 52: FadeIn(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.: 100%|██████████| 30/30 [00:00<00:00, 65.25it/s]                                                                                                                     [09/28/26 16:04:42] INFO     Animation 52 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00052.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:43] INFO     Animation 53 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00053.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}N-mg=ma\Rig                        
+                             htarrow                                            
+                             N=m(g+a)\special{dvisvgm:ra                        
+                             w </g>} to                                         
+                             media_final/Tex/2e2fd6b3035                        
+                             c495d.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\vec                               
+                             a\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_final/Tex/a36486d4400                        
+                             87993.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 54: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:   0%|          | 0/27 [00:00<?, ?it/s]Animation 54: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  19%|█▊        | 5/27 [00:00<00:00, 47.11it/s]Animation 54: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  37%|███▋      | 10/27 [00:00<00:00, 46.13it/s]Animation 54: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  56%|█████▌    | 15/27 [00:00<00:00, 46.03it/s]Animation 54: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  74%|███████▍  | 20/27 [00:00<00:00, 45.81it/s]Animation 54: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  93%|█████████▎| 25/27 [00:00<00:00, 45.79it/s]                                                                                                                        [09/28/26 16:04:44] INFO     Animation 54 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00054.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:45] INFO     Animation 55 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00055.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}N-mg=-ma\Ri                        
+                             ghtarrow                                           
+                             N=m(g-a)\special{dvisvgm:ra                        
+                             w </g>} to                                         
+                             media_final/Tex/129b81c8a35                        
+                             acc18.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 56: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:   0%|          | 0/27 [00:00<?, ?it/s]Animation 56: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  19%|█▊        | 5/27 [00:00<00:00, 47.50it/s]Animation 56: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  37%|███▋      | 10/27 [00:00<00:00, 48.59it/s]Animation 56: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  56%|█████▌    | 15/27 [00:00<00:00, 48.83it/s]Animation 56: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  74%|███████▍  | 20/27 [00:00<00:00, 48.95it/s]Animation 56: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  93%|█████████▎| 25/27 [00:00<00:00, 49.13it/s]                                                                                                                        [09/28/26 16:04:46] INFO     Animation 56 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00056.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:47] INFO     Animation 57 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00057.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}N-mg=-mg\Ri                        
+                             ghtarrow                                           
+                             \boxed{N=0}\special{dvisvgm                        
+                             :raw </g>} to                                      
+                             media_final/Tex/c031b9edd46                        
+                             582bb.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 58: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 58: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  13%|█▎        | 4/30 [00:00<00:00, 37.53it/s]Animation 58: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  27%|██▋       | 8/30 [00:00<00:00, 37.42it/s]Animation 58: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  40%|████      | 12/30 [00:00<00:00, 37.48it/s]Animation 58: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  53%|█████▎    | 16/30 [00:00<00:00, 37.40it/s]Animation 58: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  67%|██████▋   | 20/30 [00:00<00:00, 37.17it/s]Animation 58: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  80%|████████  | 24/30 [00:00<00:00, 37.28it/s]Animation 58: Transform(Text('1 · REPOSO / VELOCIDAD CONSTANTE')), etc.:  93%|█████████▎| 28/30 [00:00<00:00, 37.26it/s]                                                                                                                        [09/28/26 16:04:48] INFO     Animation 58 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00058.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:49] INFO     Animation 59 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00059.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 60: FadeIn(Text('N = 0  ≠  W = 0')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 60: FadeIn(Text('N = 0  ≠  W = 0')):  87%|████████▋ | 26/30 [00:00<00:00, 259.73it/s]                                                                                               [09/28/26 16:04:50] INFO     Animation 60 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00060.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 61 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00061.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 62: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 62: FadeOut(VGroup of 2 submobjects), etc.:  20%|██        | 3/15 [00:00<00:00, 20.08it/s]Animation 62: FadeOut(VGroup of 2 submobjects), etc.:  40%|████      | 6/15 [00:00<00:00, 19.83it/s]Animation 62: FadeOut(VGroup of 2 submobjects), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 19.50it/s]Animation 62: FadeOut(VGroup of 2 submobjects), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 19.60it/s]Animation 62: FadeOut(VGroup of 2 submobjects), etc.:  80%|████████  | 12/15 [00:00<00:00, 19.60it/s]Animation 62: FadeOut(VGroup of 2 submobjects), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 19.67it/s]                                                                                                     [09/28/26 16:04:52] INFO     Animation 62 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00062.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 63: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/17 [00:00<?, ?it/s]Animation 63: FadeIn(VGroup of 2 submobjects), etc.:  24%|██▎       | 4/17 [00:00<00:00, 38.41it/s]Animation 63: FadeIn(VGroup of 2 submobjects), etc.:  47%|████▋     | 8/17 [00:00<00:00, 37.33it/s]Animation 63: FadeIn(VGroup of 2 submobjects), etc.:  71%|███████   | 12/17 [00:00<00:00, 37.34it/s]Animation 63: FadeIn(VGroup of 2 submobjects), etc.:  94%|█████████▍| 16/17 [00:00<00:00, 37.36it/s]                                                                                                    [09/28/26 16:04:53] INFO     Animation 63 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00063.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 64: FadeIn(VGroup of 3 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 64: FadeIn(VGroup of 3 submobjects), etc.:  83%|████████▎ | 25/30 [00:00<00:00, 246.99it/s]                                                                                                                         INFO     Animation 64 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00064.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\vec                               
+                             g\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_final/Tex/23292e7bb85                        
+                             c5dd1.tex                                          
+[09/28/26 16:04:54] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 65: FadeIn(VGroup of 3 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 65: FadeIn(VGroup of 3 submobjects):  87%|████████▋ | 26/30 [00:00<00:00, 247.96it/s]                                                                                                                   INFO     Animation 65 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00065.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 66 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00066.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 67: FadeIn(VGroup of 3 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 67: FadeIn(VGroup of 3 submobjects):  20%|██        | 6/30 [00:00<00:00, 54.43it/s]Animation 67: FadeIn(VGroup of 3 submobjects):  40%|████      | 12/30 [00:00<00:00, 53.20it/s]Animation 67: FadeIn(VGroup of 3 submobjects):  60%|██████    | 18/30 [00:00<00:00, 52.54it/s]Animation 67: FadeIn(VGroup of 3 submobjects):  80%|████████  | 24/30 [00:00<00:00, 51.98it/s]Animation 67: FadeIn(VGroup of 3 submobjects): 100%|██████████| 30/30 [00:00<00:00, 51.70it/s]                                                                                              [09/28/26 16:04:55] INFO     Animation 67 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00067.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 68: _MethodAnimation(VGroup of 4 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 68: _MethodAnimation(VGroup of 4 submobjects), etc.:  20%|██        | 6/30 [00:00<00:00, 53.91it/s]Animation 68: _MethodAnimation(VGroup of 4 submobjects), etc.:  40%|████      | 12/30 [00:00<00:00, 54.10it/s]Animation 68: _MethodAnimation(VGroup of 4 submobjects), etc.:  60%|██████    | 18/30 [00:00<00:00, 53.48it/s]Animation 68: _MethodAnimation(VGroup of 4 submobjects), etc.:  80%|████████  | 24/30 [00:00<00:00, 53.50it/s]Animation 68: _MethodAnimation(VGroup of 4 submobjects), etc.: 100%|██████████| 30/30 [00:00<00:00, 53.34it/s]                                                                                                              [09/28/26 16:04:56] INFO     Animation 68 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00068.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:57] INFO     Animation 69 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00069.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\vec                               
+                             v_{\mathrm{orb}}\special{dv                        
+                             isvgm:raw </g>} to                                 
+                             media_final/Tex/cc976660567                        
+                             ea2a2.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 70: FadeIn(VGroup of 3 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 70: FadeIn(VGroup of 3 submobjects), etc.:  70%|███████   | 21/30 [00:00<00:00, 201.79it/s]                                                                                                                         INFO     Animation 70 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00070.mp4'                                 
+[09/28/26 16:04:58] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 71: FadeIn(VGroup of 3 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 71: FadeIn(VGroup of 3 submobjects):  20%|██        | 6/30 [00:00<00:00, 59.16it/s]Animation 71: FadeIn(VGroup of 3 submobjects):  40%|████      | 12/30 [00:00<00:00, 57.11it/s]Animation 71: FadeIn(VGroup of 3 submobjects):  60%|██████    | 18/30 [00:00<00:00, 56.93it/s]Animation 71: FadeIn(VGroup of 3 submobjects):  80%|████████  | 24/30 [00:00<00:00, 56.26it/s]Animation 71: FadeIn(VGroup of 3 submobjects): 100%|██████████| 30/30 [00:00<00:00, 56.22it/s]                                                                                                                  INFO     Animation 71 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00071.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:04:59] INFO     Animation 72 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00072.mp4'                                 
+[09/28/26 16:05:00] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 73: FadeIn(Text('Matiz senior: localmente “flotan”; a gran escala permanecen gradientes de gravedad (efectos de marea).')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 73: FadeIn(Text('Matiz senior: localmente “flotan”; a gran escala permanecen gradientes de gravedad (efectos de marea).')):  20%|██        | 6/30 [00:00<00:00, 51.60it/s]Animation 73: FadeIn(Text('Matiz senior: localmente “flotan”; a gran escala permanecen gradientes de gravedad (efectos de marea).')):  40%|████      | 12/30 [00:00<00:00, 51.37it/s]Animation 73: FadeIn(Text('Matiz senior: localmente “flotan”; a gran escala permanecen gradientes de gravedad (efectos de marea).')):  60%|██████    | 18/30 [00:00<00:00, 50.94it/s]Animation 73: FadeIn(Text('Matiz senior: localmente “flotan”; a gran escala permanecen gradientes de gravedad (efectos de marea).')):  80%|████████  | 24/30 [00:00<00:00, 51.00it/s]Animation 73: FadeIn(Text('Matiz senior: localmente “flotan”; a gran escala permanecen gradientes de gravedad (efectos de marea).')): 100%|██████████| 30/30 [00:00<00:00, 51.06it/s]                                                                                                                                                                                     [09/28/26 16:05:01] INFO     Animation 73 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00073.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 74 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00074.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 75: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 75: FadeOut(VGroup of 2 submobjects), etc.:  13%|█▎        | 2/15 [00:00<00:01, 12.75it/s]Animation 75: FadeOut(VGroup of 2 submobjects), etc.:  27%|██▋       | 4/15 [00:00<00:00, 12.59it/s]Animation 75: FadeOut(VGroup of 2 submobjects), etc.:  40%|████      | 6/15 [00:00<00:00, 12.57it/s]Animation 75: FadeOut(VGroup of 2 submobjects), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 12.53it/s]Animation 75: FadeOut(VGroup of 2 submobjects), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 12.49it/s]Animation 75: FadeOut(VGroup of 2 submobjects), etc.:  80%|████████  | 12/15 [00:00<00:00, 12.45it/s]Animation 75: FadeOut(VGroup of 2 submobjects), etc.:  93%|█████████▎| 14/15 [00:01<00:00, 12.41it/s]                                                                                                     [09/28/26 16:05:04] INFO     Animation 75 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00075.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 76: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/17 [00:00<?, ?it/s]Animation 76: FadeIn(VGroup of 2 submobjects), etc.:  24%|██▎       | 4/17 [00:00<00:00, 37.02it/s]Animation 76: FadeIn(VGroup of 2 submobjects), etc.:  47%|████▋     | 8/17 [00:00<00:00, 36.29it/s]Animation 76: FadeIn(VGroup of 2 submobjects), etc.:  71%|███████   | 12/17 [00:00<00:00, 36.01it/s]Animation 76: FadeIn(VGroup of 2 submobjects), etc.:  94%|█████████▍| 16/17 [00:00<00:00, 35.67it/s]                                                                                                    [09/28/26 16:05:05] INFO     Animation 76 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00076.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\sum                               
+                             F_y=-mg=ma_y\special{dvisvg                        
+                             m:raw </g>} to                                     
+                             media_final/Tex/0d614151808                        
+                             6568a.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\boxed{a_y=                        
+                             -g}\special{dvisvgm:raw                            
+                             </g>} to                                           
+                             media_final/Tex/9689be2316d                        
+                             3b292.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 77: GrowArrow(Arrow), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 77: GrowArrow(Arrow), etc.:  93%|█████████▎| 28/30 [00:00<00:00, 273.08it/s]                                                                                      [09/28/26 16:05:06] INFO     Animation 77 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00077.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 78: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 78: FadeIn(VGroup of 2 submobjects):  67%|██████▋   | 20/30 [00:00<00:00, 195.34it/s]                                                                                                                   INFO     Animation 78 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00078.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 79: TransformFromCopy(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 79: TransformFromCopy(VGroup of 2 submobjects):  53%|█████▎    | 16/30 [00:00<00:00, 151.40it/s]                                                                                                                              INFO     Animation 79 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00079.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:05:07] INFO     Animation 80 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00080.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 81: FadeIn(VGroup of 3 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 81: FadeIn(VGroup of 3 submobjects):  47%|████▋     | 14/30 [00:00<00:00, 132.68it/s]Animation 81: FadeIn(VGroup of 3 submobjects):  93%|█████████▎| 28/30 [00:00<00:00, 130.77it/s]                                                                                               [09/28/26 16:05:08] INFO     Animation 81 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00081.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 82: GrowArrow(Arrow), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 82: GrowArrow(Arrow), etc.:  43%|████▎     | 13/30 [00:00<00:00, 123.00it/s]Animation 82: GrowArrow(Arrow), etc.:  87%|████████▋ | 26/30 [00:00<00:00, 121.60it/s]                                                                                                          INFO     Animation 82 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00082.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 83: GrowArrow(Arrow), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 83: GrowArrow(Arrow), etc.:  40%|████      | 12/30 [00:00<00:00, 113.54it/s]Animation 83: GrowArrow(Arrow), etc.:  80%|████████  | 24/30 [00:00<00:00, 112.19it/s]                                                                                      [09/28/26 16:05:09] INFO     Animation 83 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00083.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 84 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00084.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v(t)=v_0-gt                        
+                             \special{dvisvgm:raw </g>}                         
+                             to                                                 
+                             media_final/Tex/d0a4e1ea0cd                        
+                             a2860.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}y(t)=y_0+v_                        
+                             0t-\frac12gt^2\special{dvis                        
+                             vgm:raw </g>} to                                   
+                             media_final/Tex/e1a1482c3ab                        
+                             77058.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v^2=v_0^2-2                        
+                             g(y-y_0)\special{dvisvgm:ra                        
+                             w </g>} to                                         
+                             media_final/Tex/f03b6a484f2                        
+                             03e9a.tex                                          
+[09/28/26 16:05:10] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 85: FadeIn(VGroup of 2 submobjects):   0%|          | 0/14 [00:00<?, ?it/s]                                                                                                         INFO     Animation 85 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00085.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 86 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00086.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 87: FadeIn(VGroup of 2 submobjects):   0%|          | 0/14 [00:00<?, ?it/s]                                                                                                         INFO     Animation 87 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00087.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:05:11] INFO     Animation 88 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00088.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 89: FadeIn(VGroup of 2 submobjects):   0%|          | 0/14 [00:00<?, ?it/s]                                                                                                         INFO     Animation 89 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00089.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 90 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00090.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:05:12] INFO     Animation 91 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00091.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 92: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 92: FadeOut(VGroup of 2 submobjects), etc.:  13%|█▎        | 2/15 [00:00<00:00, 18.19it/s]Animation 92: FadeOut(VGroup of 2 submobjects), etc.:  27%|██▋       | 4/15 [00:00<00:00, 17.94it/s]Animation 92: FadeOut(VGroup of 2 submobjects), etc.:  40%|████      | 6/15 [00:00<00:00, 17.89it/s]Animation 92: FadeOut(VGroup of 2 submobjects), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 17.81it/s]Animation 92: FadeOut(VGroup of 2 submobjects), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 17.83it/s]Animation 92: FadeOut(VGroup of 2 submobjects), etc.:  80%|████████  | 12/15 [00:00<00:00, 17.71it/s]Animation 92: FadeOut(VGroup of 2 submobjects), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 17.72it/s]                                                                                                     [09/28/26 16:05:13] INFO     Animation 92 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00092.mp4'                                 
+[09/28/26 16:05:14] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 93: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/17 [00:00<?, ?it/s]Animation 93: FadeIn(VGroup of 2 submobjects), etc.:  24%|██▎       | 4/17 [00:00<00:00, 36.40it/s]Animation 93: FadeIn(VGroup of 2 submobjects), etc.:  47%|████▋     | 8/17 [00:00<00:00, 35.62it/s]Animation 93: FadeIn(VGroup of 2 submobjects), etc.:  71%|███████   | 12/17 [00:00<00:00, 35.49it/s]Animation 93: FadeIn(VGroup of 2 submobjects), etc.:  94%|█████████▍| 16/17 [00:00<00:00, 35.52it/s]                                                                                                    [09/28/26 16:05:15] INFO     Animation 93 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00093.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 94: Create(Line), etc.:   0%|          | 0/30 [00:00<?, ?it/s]                                                                                            INFO     Animation 94 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00094.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 95: FadeIn(VGroup of 10 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 95: FadeIn(VGroup of 10 submobjects):  60%|██████    | 18/30 [00:00<00:00, 170.30it/s]                                                                                                                    INFO     Animation 95 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00095.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 96: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]                                                                                           [09/28/26 16:05:16] INFO     Animation 96 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00096.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 97: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/14 [00:00<?, ?it/s]                                                                                                               INFO     Animation 97 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00097.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 98 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00098.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 99: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/14 [00:00<?, ?it/s]                                                                                                               INFO     Animation 99 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00099.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 100 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00100.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 101: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/14 [00:00<?, ?it/s]                                                                                            [09/28/26 16:05:17] INFO     Animation 101 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00101.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 102 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00102.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 103: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/14 [00:00<?, ?it/s]                                                                                                                INFO     Animation 103 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00103.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 104 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00104.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}y(t)=20-\fr                        
+                             ac12(9.81)t^2\special{dvisv                        
+                             gm:raw </g>} to                                    
+                             media_final/Tex/d6d77d73b9e                        
+                             c6048.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}0=20-\frac1                        
+                             2gt^2\Rightarrow t_{\rm                            
+                             hit}\approx                                        
+                             2.02\,s\special{dvisvgm:raw                        
+                             </g>} to                                           
+                             media_final/Tex/24dea036805                        
+                             25df9.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}|v_{\rm                            
+                             hit}|=gt_{\rm hit}\approx                          
+                             19.81\,m/s\special{dvisvgm:                        
+                             raw </g>} to                                       
+                             media_final/Tex/931373cc5ff                        
+                             229ca.tex                                          
+[09/28/26 16:05:18] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 105: FadeIn(VGroup of 2 submobjects):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                                          INFO     Animation 105 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00105.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 106: FadeIn(VGroup of 2 submobjects):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                                          INFO     Animation 106 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00106.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 107: FadeIn(VGroup of 2 submobjects):   0%|          | 0/15 [00:00<?, ?it/s]                                                                                                          INFO     Animation 107 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00107.mp4'                                 
+[09/28/26 16:05:19] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 108: FadeIn(VGroup of 3 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 108: FadeIn(VGroup of 3 submobjects):  17%|█▋        | 5/30 [00:00<00:00, 41.20it/s]Animation 108: FadeIn(VGroup of 3 submobjects):  33%|███▎      | 10/30 [00:00<00:00, 40.05it/s]Animation 108: FadeIn(VGroup of 3 submobjects):  50%|█████     | 15/30 [00:00<00:00, 39.72it/s]Animation 108: FadeIn(VGroup of 3 submobjects):  63%|██████▎   | 19/30 [00:00<00:00, 39.57it/s]Animation 108: FadeIn(VGroup of 3 submobjects):  77%|███████▋  | 23/30 [00:00<00:00, 39.47it/s]Animation 108: FadeIn(VGroup of 3 submobjects):  90%|█████████ | 27/30 [00:00<00:00, 39.20it/s]                                                                                               [09/28/26 16:05:20] INFO     Animation 108 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00108.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:05:21] INFO     Animation 109 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00109.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 110: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 110: FadeOut(VGroup of 2 submobjects), etc.:  13%|█▎        | 2/15 [00:00<00:00, 14.35it/s]Animation 110: FadeOut(VGroup of 2 submobjects), etc.:  27%|██▋       | 4/15 [00:00<00:00, 14.42it/s]Animation 110: FadeOut(VGroup of 2 submobjects), etc.:  40%|████      | 6/15 [00:00<00:00, 14.48it/s]Animation 110: FadeOut(VGroup of 2 submobjects), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 14.36it/s]Animation 110: FadeOut(VGroup of 2 submobjects), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 14.34it/s]Animation 110: FadeOut(VGroup of 2 submobjects), etc.:  80%|████████  | 12/15 [00:00<00:00, 14.35it/s]Animation 110: FadeOut(VGroup of 2 submobjects), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 14.39it/s]                                                                                                      [09/28/26 16:05:23] INFO     Animation 110 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00110.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 111: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/17 [00:00<?, ?it/s]Animation 111: FadeIn(VGroup of 2 submobjects), etc.:  29%|██▉       | 5/17 [00:00<00:00, 44.12it/s]Animation 111: FadeIn(VGroup of 2 submobjects), etc.:  59%|█████▉    | 10/17 [00:00<00:00, 43.46it/s]Animation 111: FadeIn(VGroup of 2 submobjects), etc.:  88%|████████▊ | 15/17 [00:00<00:00, 42.84it/s]                                                                                                     [09/28/26 16:05:24] INFO     Animation 111 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00111.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 112: Create(Line), etc.:   0%|          | 0/30 [00:00<?, ?it/s]                                                                                             INFO     Animation 112 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00112.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 113: FadeIn(Axes of 2 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 113: FadeIn(Axes of 2 submobjects), etc.:  40%|████      | 12/30 [00:00<00:00, 112.24it/s]Animation 113: FadeIn(Axes of 2 submobjects), etc.:  80%|████████  | 24/30 [00:00<00:00, 111.30it/s]                                                                                                    [09/28/26 16:05:25] INFO     Animation 113 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00113.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 114: Create(ParametricFunction), etc.:   0%|          | 0/36 [00:00<?, ?it/s]Animation 114: Create(ParametricFunction), etc.:  33%|███▎      | 12/36 [00:00<00:00, 119.67it/s]Animation 114: Create(ParametricFunction), etc.:  67%|██████▋   | 24/36 [00:00<00:00, 109.34it/s]Animation 114: Create(ParametricFunction), etc.: 100%|██████████| 36/36 [00:00<00:00, 110.44it/s]                                                                                                                     INFO     Animation 114 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00114.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}0\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/ab0de9a363d                        
+                             86c5f.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}.\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/85b8d98e778                        
+                             e7c96.tex                                          
+[09/28/26 16:05:26] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 115: _MethodAnimation(ValueTracker):   0%|          | 0/138 [00:00<?, ?it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}1\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/e6a566ad7d8                        
+                             76b8c.tex                                          
+Animation 115: _MethodAnimation(ValueTracker):   1%|▏         | 2/138 [00:00<00:13,  9.82it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}3\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/9ca76760666                        
+                             2f643.tex                                          
+Animation 115: _MethodAnimation(ValueTracker):   2%|▏         | 3/138 [00:00<00:18,  7.22it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}4\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/b6e1e0d35a2                        
+                             2cf8a.tex                                          
+Animation 115: _MethodAnimation(ValueTracker):   3%|▎         | 4/138 [00:00<00:21,  6.33it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}6\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/5353eb619e9                        
+                             288a9.tex                                          
+Animation 115: _MethodAnimation(ValueTracker):   4%|▎         | 5/138 [00:00<00:22,  5.88it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}7\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/9babf744f1d                        
+                             8badf.tex                                          
+Animation 115: _MethodAnimation(ValueTracker):   4%|▍         | 6/138 [00:00<00:23,  5.68it/s][09/28/26 16:05:27] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}9\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/f7c8a5ee0f1                        
+                             68adf.tex                                          
+Animation 115: _MethodAnimation(ValueTracker):   5%|▌         | 7/138 [00:01<00:23,  5.55it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}2\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/92c26d21f4d                        
+                             400ae.tex                                          
+Animation 115: _MethodAnimation(ValueTracker):   7%|▋         | 9/138 [00:01<00:18,  6.97it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}5\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/80535c2a913                        
+                             06081.tex                                          
+Animation 115: _MethodAnimation(ValueTracker):   8%|▊         | 11/138 [00:01<00:16,  7.79it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}8\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/2f8240ddc5f                        
+                             27b7f.tex                                          
+Animation 115: _MethodAnimation(ValueTracker):   9%|▉         | 13/138 [00:01<00:15,  8.32it/s]Animation 115: _MethodAnimation(ValueTracker):  14%|█▍        | 19/138 [00:01<00:06, 17.49it/s]Animation 115: _MethodAnimation(ValueTracker):  19%|█▉        | 26/138 [00:02<00:04, 27.28it/s]Animation 115: _MethodAnimation(ValueTracker):  24%|██▍       | 33/138 [00:02<00:02, 35.47it/s]Animation 115: _MethodAnimation(ValueTracker):  28%|██▊       | 39/138 [00:02<00:02, 40.89it/s]Animation 115: _MethodAnimation(ValueTracker):  33%|███▎      | 45/138 [00:02<00:02, 43.66it/s]Animation 115: _MethodAnimation(ValueTracker):  36%|███▌      | 50/138 [00:02<00:01, 44.81it/s]Animation 115: _MethodAnimation(ValueTracker):  40%|███▉      | 55/138 [00:02<00:01, 45.82it/s]Animation 115: _MethodAnimation(ValueTracker):  43%|████▎     | 60/138 [00:02<00:01, 46.68it/s]Animation 115: _MethodAnimation(ValueTracker):  47%|████▋     | 65/138 [00:02<00:01, 47.31it/s]Animation 115: _MethodAnimation(ValueTracker):  51%|█████     | 70/138 [00:02<00:01, 48.01it/s]Animation 115: _MethodAnimation(ValueTracker):  55%|█████▌    | 76/138 [00:02<00:01, 49.44it/s]Animation 115: _MethodAnimation(ValueTracker):  59%|█████▉    | 82/138 [00:03<00:01, 50.69it/s]Animation 115: _MethodAnimation(ValueTracker):  64%|██████▍   | 88/138 [00:03<00:00, 50.88it/s]Animation 115: _MethodAnimation(ValueTracker):  68%|██████▊   | 94/138 [00:03<00:00, 50.69it/s]Animation 115: _MethodAnimation(ValueTracker):  72%|███████▏  | 100/138 [00:03<00:00, 51.12it/s]Animation 115: _MethodAnimation(ValueTracker):  77%|███████▋  | 106/138 [00:03<00:00, 51.16it/s]Animation 115: _MethodAnimation(ValueTracker):  81%|████████  | 112/138 [00:03<00:00, 51.30it/s]Animation 115: _MethodAnimation(ValueTracker):  86%|████████▌ | 118/138 [00:03<00:00, 51.01it/s]Animation 115: _MethodAnimation(ValueTracker):  90%|████████▉ | 124/138 [00:03<00:00, 51.09it/s]Animation 115: _MethodAnimation(ValueTracker):  94%|█████████▍| 130/138 [00:04<00:00, 50.29it/s]Animation 115: _MethodAnimation(ValueTracker):  99%|█████████▊| 136/138 [00:04<00:00, 50.40it/s]                                                                                                [09/28/26 16:05:30] INFO     Animation 115 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00115.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 116 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00116.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 117: FadeIn(Text('La curva y(t), la recta v(t) y la línea a(t) describen el mismo movimiento.')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 117: FadeIn(Text('La curva y(t), la recta v(t) y la línea a(t) describen el mismo movimiento.')):  17%|█▋        | 5/30 [00:00<00:00, 46.11it/s]Animation 117: FadeIn(Text('La curva y(t), la recta v(t) y la línea a(t) describen el mismo movimiento.')):  33%|███▎      | 10/30 [00:00<00:00, 45.30it/s]Animation 117: FadeIn(Text('La curva y(t), la recta v(t) y la línea a(t) describen el mismo movimiento.')):  50%|█████     | 15/30 [00:00<00:00, 43.50it/s]Animation 117: FadeIn(Text('La curva y(t), la recta v(t) y la línea a(t) describen el mismo movimiento.')):  67%|██████▋   | 20/30 [00:00<00:00, 42.22it/s]Animation 117: FadeIn(Text('La curva y(t), la recta v(t) y la línea a(t) describen el mismo movimiento.')):  83%|████████▎ | 25/30 [00:00<00:00, 42.66it/s]Animation 117: FadeIn(Text('La curva y(t), la recta v(t) y la línea a(t) describen el mismo movimiento.')): 100%|██████████| 30/30 [00:00<00:00, 42.90it/s]                                                                                                                                                           [09/28/26 16:05:31] INFO     Animation 117 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00117.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:05:32] INFO     Animation 118 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00118.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 119: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 119: FadeOut(VGroup of 2 submobjects), etc.:  13%|█▎        | 2/15 [00:00<00:00, 19.50it/s]Animation 119: FadeOut(VGroup of 2 submobjects), etc.:  27%|██▋       | 4/15 [00:00<00:00, 18.68it/s]Animation 119: FadeOut(VGroup of 2 submobjects), etc.:  40%|████      | 6/15 [00:00<00:00, 18.23it/s]Animation 119: FadeOut(VGroup of 2 submobjects), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 18.16it/s]Animation 119: FadeOut(VGroup of 2 submobjects), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 18.28it/s]Animation 119: FadeOut(VGroup of 2 submobjects), etc.:  80%|████████  | 12/15 [00:00<00:00, 18.34it/s]Animation 119: FadeOut(VGroup of 2 submobjects), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 18.29it/s]                                                                                                      [09/28/26 16:05:34] INFO     Animation 119 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00119.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 120: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/17 [00:00<?, ?it/s]Animation 120: FadeIn(VGroup of 2 submobjects), etc.:  24%|██▎       | 4/17 [00:00<00:00, 38.09it/s]Animation 120: FadeIn(VGroup of 2 submobjects), etc.:  47%|████▋     | 8/17 [00:00<00:00, 37.89it/s]Animation 120: FadeIn(VGroup of 2 submobjects), etc.:  71%|███████   | 12/17 [00:00<00:00, 37.73it/s]Animation 120: FadeIn(VGroup of 2 submobjects), etc.:  94%|█████████▍| 16/17 [00:00<00:00, 37.49it/s]                                                                                                     [09/28/26 16:05:35] INFO     Animation 120 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00120.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}D\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/ee93b50a78b                        
+                             931c8.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 121: FadeIn(VGroup of 8 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 121: FadeIn(VGroup of 8 submobjects), etc.:  67%|██████▋   | 20/30 [00:00<00:00, 199.20it/s]                                                                                                                          INFO     Animation 121 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00121.mp4'                                 
+[09/28/26 16:05:36] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 122: FadeIn(VGroup of 3 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 122: FadeIn(VGroup of 3 submobjects):  37%|███▋      | 11/30 [00:00<00:00, 106.83it/s]Animation 122: FadeIn(VGroup of 3 submobjects):  73%|███████▎  | 22/30 [00:00<00:00, 105.62it/s]                                                                                                                    INFO     Animation 122 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00122.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 123 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00123.mp4'                                 
+[09/28/26 16:05:37] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 124: Transform(VGroup of 2 submobjects), etc.:   0%|          | 0/24 [00:00<?, ?it/s]Animation 124: Transform(VGroup of 2 submobjects), etc.:  25%|██▌       | 6/24 [00:00<00:00, 54.85it/s]Animation 124: Transform(VGroup of 2 submobjects), etc.:  50%|█████     | 12/24 [00:00<00:00, 54.10it/s]Animation 124: Transform(VGroup of 2 submobjects), etc.:  75%|███████▌  | 18/24 [00:00<00:00, 53.70it/s]Animation 124: Transform(VGroup of 2 submobjects), etc.: 100%|██████████| 24/24 [00:00<00:00, 53.56it/s]                                                                                                                            INFO     Animation 124 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00124.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:05:38] INFO     Animation 125 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00125.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}D\approx                           
+                             mg\special{dvisvgm:raw                             
+                             </g>} to                                           
+                             media_final/Tex/e5bf44c261e                        
+                             0f87d.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 126: Transform(VGroup of 2 submobjects), etc.:   0%|          | 0/24 [00:00<?, ?it/s]Animation 126: Transform(VGroup of 2 submobjects), etc.:  21%|██        | 5/24 [00:00<00:00, 43.25it/s]Animation 126: Transform(VGroup of 2 submobjects), etc.:  42%|████▏     | 10/24 [00:00<00:00, 42.44it/s]Animation 126: Transform(VGroup of 2 submobjects), etc.:  62%|██████▎   | 15/24 [00:00<00:00, 42.27it/s]Animation 126: Transform(VGroup of 2 submobjects), etc.:  83%|████████▎ | 20/24 [00:00<00:00, 42.13it/s]                                                                                                        [09/28/26 16:05:39] INFO     Animation 126 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00126.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}mg-D=ma\qqu                        
+                             ad D\rightarrow                                    
+                             mg\Rightarrow a\rightarrow                         
+                             0\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_final/Tex/625b6aeb432                        
+                             ea496.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 127: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 127: FadeIn(VGroup of 2 submobjects):  60%|██████    | 18/30 [00:00<00:00, 173.58it/s]                                                                                                                    INFO     Animation 127 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00127.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:05:40] INFO     Animation 128 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00128.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 129: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 129: FadeOut(VGroup of 2 submobjects), etc.:  13%|█▎        | 2/15 [00:00<00:00, 19.38it/s]Animation 129: FadeOut(VGroup of 2 submobjects), etc.:  27%|██▋       | 4/15 [00:00<00:00, 19.15it/s]Animation 129: FadeOut(VGroup of 2 submobjects), etc.:  40%|████      | 6/15 [00:00<00:00, 19.02it/s]Animation 129: FadeOut(VGroup of 2 submobjects), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 18.91it/s]Animation 129: FadeOut(VGroup of 2 submobjects), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 18.87it/s]Animation 129: FadeOut(VGroup of 2 submobjects), etc.:  80%|████████  | 12/15 [00:00<00:00, 18.87it/s]Animation 129: FadeOut(VGroup of 2 submobjects), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 18.90it/s]                                                                                                      [09/28/26 16:05:42] INFO     Animation 129 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00129.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 130: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/17 [00:00<?, ?it/s]Animation 130: FadeIn(VGroup of 2 submobjects), etc.:  24%|██▎       | 4/17 [00:00<00:00, 30.88it/s]Animation 130: FadeIn(VGroup of 2 submobjects), etc.:  47%|████▋     | 8/17 [00:00<00:00, 32.03it/s]Animation 130: FadeIn(VGroup of 2 submobjects), etc.:  71%|███████   | 12/17 [00:00<00:00, 32.91it/s]Animation 130: FadeIn(VGroup of 2 submobjects), etc.:  94%|█████████▍| 16/17 [00:00<00:00, 33.26it/s]                                                                                                     [09/28/26 16:05:43] INFO     Animation 130 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00130.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 131: FadeIn(VGroup of 5 submobjects):   0%|          | 0/13 [00:00<?, ?it/s]Animation 131: FadeIn(VGroup of 5 submobjects):  62%|██████▏   | 8/13 [00:00<00:00, 78.11it/s]                                                                                              [09/28/26 16:05:44] INFO     Animation 131 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00131.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 132 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00132.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 133: FadeIn(VGroup of 5 submobjects):   0%|          | 0/13 [00:00<?, ?it/s]Animation 133: FadeIn(VGroup of 5 submobjects):  54%|█████▍    | 7/13 [00:00<00:00, 62.04it/s]                                                                                                                  INFO     Animation 133 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00133.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:05:45] INFO     Animation 134 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00134.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 135: FadeIn(VGroup of 5 submobjects):   0%|          | 0/13 [00:00<?, ?it/s]Animation 135: FadeIn(VGroup of 5 submobjects):  54%|█████▍    | 7/13 [00:00<00:00, 65.55it/s]                                                                                                                  INFO     Animation 135 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00135.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 136 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00136.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 137: FadeIn(VGroup of 5 submobjects):   0%|          | 0/13 [00:00<?, ?it/s]Animation 137: FadeIn(VGroup of 5 submobjects):  54%|█████▍    | 7/13 [00:00<00:00, 63.21it/s]                                                                                              [09/28/26 16:05:46] INFO     Animation 137 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00137.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 138 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00138.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 139: FadeIn(VGroup of 5 submobjects):   0%|          | 0/13 [00:00<?, ?it/s]Animation 139: FadeIn(VGroup of 5 submobjects):  46%|████▌     | 6/13 [00:00<00:00, 58.17it/s]Animation 139: FadeIn(VGroup of 5 submobjects):  92%|█████████▏| 12/13 [00:00<00:00, 57.02it/s]                                                                                               [09/28/26 16:05:47] INFO     Animation 139 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00139.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 140 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00140.mp4'                                 
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\boxed{W=mg                        
+                             \quad\text{mientras}\quad                          
+                             N\ \text{depende del                               
+                             apoyo}}\special{dvisvgm:raw                        
+                             </g>} to                                           
+                             media_final/Tex/ef7c4ef5c91                        
+                             5684d.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 141: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 141: FadeIn(VGroup of 2 submobjects):  43%|████▎     | 13/30 [00:00<00:00, 128.73it/s]Animation 141: FadeIn(VGroup of 2 submobjects):  87%|████████▋ | 26/30 [00:00<00:00, 125.90it/s]                                                                                                [09/28/26 16:05:48] INFO     Animation 141 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00141.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:05:49] INFO     Animation 142 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00142.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 143: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 143: FadeOut(VGroup of 2 submobjects), etc.:   7%|▋         | 1/15 [00:00<00:01,  9.18it/s]Animation 143: FadeOut(VGroup of 2 submobjects), etc.:  13%|█▎        | 2/15 [00:00<00:01,  9.53it/s]Animation 143: FadeOut(VGroup of 2 submobjects), etc.:  27%|██▋       | 4/15 [00:00<00:01,  9.84it/s]Animation 143: FadeOut(VGroup of 2 submobjects), etc.:  33%|███▎      | 5/15 [00:00<00:01,  9.88it/s]Animation 143: FadeOut(VGroup of 2 submobjects), etc.:  47%|████▋     | 7/15 [00:00<00:00,  9.98it/s]Animation 143: FadeOut(VGroup of 2 submobjects), etc.:  60%|██████    | 9/15 [00:00<00:00, 10.01it/s]Animation 143: FadeOut(VGroup of 2 submobjects), etc.:  67%|██████▋   | 10/15 [00:01<00:00, 10.00it/s]Animation 143: FadeOut(VGroup of 2 submobjects), etc.:  80%|████████  | 12/15 [00:01<00:00, 10.02it/s]Animation 143: FadeOut(VGroup of 2 submobjects), etc.:  93%|█████████▎| 14/15 [00:01<00:00, 10.03it/s]                                                                                                      [09/28/26 16:05:51] INFO     Animation 143 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00143.mp4'                                 
+[09/28/26 16:05:52] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 144: FadeIn(Text('MAPA MENTAL FINAL')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 144: FadeIn(Text('MAPA MENTAL FINAL')):  63%|██████▎   | 19/30 [00:00<00:00, 180.91it/s]                                                                                                                      INFO     Animation 144 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00144.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 145: LaggedStart(Group):   0%|          | 0/51 [00:00<?, ?it/s]Animation 145: LaggedStart(Group):  10%|▉         | 5/51 [00:00<00:01, 40.25it/s]Animation 145: LaggedStart(Group):  20%|█▉        | 10/51 [00:00<00:01, 38.96it/s]Animation 145: LaggedStart(Group):  27%|██▋       | 14/51 [00:00<00:00, 37.96it/s]Animation 145: LaggedStart(Group):  35%|███▌      | 18/51 [00:00<00:00, 36.81it/s]Animation 145: LaggedStart(Group):  43%|████▎     | 22/51 [00:00<00:00, 35.29it/s]Animation 145: LaggedStart(Group):  51%|█████     | 26/51 [00:00<00:00, 34.40it/s]Animation 145: LaggedStart(Group):  59%|█████▉    | 30/51 [00:00<00:00, 33.94it/s]Animation 145: LaggedStart(Group):  67%|██████▋   | 34/51 [00:00<00:00, 33.70it/s]Animation 145: LaggedStart(Group):  75%|███████▍  | 38/51 [00:01<00:00, 33.77it/s]Animation 145: LaggedStart(Group):  82%|████████▏ | 42/51 [00:01<00:00, 34.22it/s]Animation 145: LaggedStart(Group):  90%|█████████ | 46/51 [00:01<00:00, 31.23it/s]Animation 145: LaggedStart(Group):  98%|█████████▊| 50/51 [00:01<00:00, 31.71it/s]                                                                                  [09/28/26 16:05:54] INFO     Animation 145 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00145.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:05:55] INFO     Animation 146 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00146.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 147: FadeIn(Text('INGRAVIDEZ APARENTE: NO DESAPARECE LA GRAVEDAD; DESAPARECE EL APOYO.')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 147: FadeIn(Text('INGRAVIDEZ APARENTE: NO DESAPARECE LA GRAVEDAD; DESAPARECE EL APOYO.')):  27%|██▋       | 8/30 [00:00<00:00, 74.27it/s]Animation 147: FadeIn(Text('INGRAVIDEZ APARENTE: NO DESAPARECE LA GRAVEDAD; DESAPARECE EL APOYO.')):  53%|█████▎    | 16/30 [00:00<00:00, 73.11it/s]Animation 147: FadeIn(Text('INGRAVIDEZ APARENTE: NO DESAPARECE LA GRAVEDAD; DESAPARECE EL APOYO.')):  80%|████████  | 24/30 [00:00<00:00, 72.18it/s]                                                                                                                                                                        INFO     Animation 147 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00147.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 148: FadeIn(Text('En caída libre ideal, W = mg sigue presente y N → 0.')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 148: FadeIn(Text('En caída libre ideal, W = mg sigue presente y N → 0.')):  33%|███▎      | 10/30 [00:00<00:00, 96.79it/s]Animation 148: FadeIn(Text('En caída libre ideal, W = mg sigue presente y N → 0.')):  67%|██████▋   | 20/30 [00:00<00:00, 96.10it/s]Animation 148: FadeIn(Text('En caída libre ideal, W = mg sigue presente y N → 0.')): 100%|██████████| 30/30 [00:00<00:00, 94.11it/s]                                                                                                                                    [09/28/26 16:05:56] INFO     Animation 148 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00148.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/28/26 16:05:57] INFO     Animation 149 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00149.mp4'                                 
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 150: FadeOut(Text('MAPA MENTAL FINAL')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 150: FadeOut(Text('MAPA MENTAL FINAL')), etc.:  13%|█▎        | 2/15 [00:00<00:00, 19.53it/s]Animation 150: FadeOut(Text('MAPA MENTAL FINAL')), etc.:  27%|██▋       | 4/15 [00:00<00:00, 19.37it/s]Animation 150: FadeOut(Text('MAPA MENTAL FINAL')), etc.:  40%|████      | 6/15 [00:00<00:00, 19.36it/s]Animation 150: FadeOut(Text('MAPA MENTAL FINAL')), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 19.28it/s]Animation 150: FadeOut(Text('MAPA MENTAL FINAL')), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 19.29it/s]Animation 150: FadeOut(Text('MAPA MENTAL FINAL')), etc.:  80%|████████  | 12/15 [00:00<00:00, 19.21it/s]Animation 150: FadeOut(Text('MAPA MENTAL FINAL')), etc.:  93%|█████████▎| 14/15 [00:00<00:00, 19.07it/s]                                                                                                        [09/28/26 16:05:59] INFO     Animation 150 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/partial_movie_files/Ph                         
+                             ysics9FreeFallSeniorQAV2/u                         
+                             ncached_00150.mp4'                                 
+                    INFO     Combining to Movie file.   scene_file_writer.py:753
+[09/28/26 16:06:00] INFO                                scene_file_writer.py:904
+                             File ready at                                      
+                             '/manim/media_final/videos                         
+                             /freefall_seniorqa_v2/1080                         
+                             p30/Physics9FreeFallSenior                         
+                             QAV2.mp4'                                          
+                                                                                
+                    INFO     The partial movie          scene_file_writer.py:874
+                             directory is full (> 100                           
+                             files). Therefore, manim                           
+                             has removed the 52 oldest                          
+                             file(s). You can change                            
+                             this behaviour by changing                         
+                             max_files_cached in                                
+                             config.                                            
+                    INFO     Rendered Physics9FreeFallSeniorQAV2    scene.py:278
+                             Played 151 animations                              
+                    INFO     Previewed File at:                  file_ops.py:236
+                             '/manim/media_final/videos/freefall                
+                             _seniorqa_v2/1080p30/Physics9FreeFa                
+                             llSeniorQAV2.mp4'                                  
+You are using manim version v0.20.1, but version v0.21.0 is available.
+You should consider upgrading via pip install -U manim
