@@ -77,7 +77,7 @@ required = [
     "TEST  x ∝ t²",
     "one focus state on screen at a time",
     "a SIGN ≠ MOTION DIRECTION",
-    "For a rolling ball, the exact a depends on rotational inertia.",
+    "Exact ramp a depends on",
     r"x-x_0=\left(\frac a2\right)t^2",
 ]
 for item in required:
