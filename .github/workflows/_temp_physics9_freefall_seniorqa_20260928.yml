@@ -8,6 +8,13 @@ on:
       - render_jobs/physics9_freefall_seniorqa_20260928/freefall_seniorqa.py
       - .github/workflows/_temp_physics9_freefall_seniorqa_20260928.yml
 
+  pull_request:
+    branches:
+      - main
+    paths:
+      - render_jobs/physics9_freefall_seniorqa_20260928/freefall_seniorqa.py
+      - .github/workflows/_temp_physics9_freefall_seniorqa_20260928.yml
+
 permissions:
   contents: write
 
