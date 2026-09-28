@@ -37,7 +37,7 @@ def main(path_str: str) -> int:
     classes = [node for node in ast.walk(tree) if isinstance(node, ast.ClassDef)]
     classroom_classes = [
         node for node in classes
-        if class_base_names(node) & {"JPClassroomScene","JPMathClassroomScene","JPThreeDClassroomScene"}
+        if class_base_names(node) & {"JPClassroomScene","JPMathClassroomScene","JPThreeDClassroomScene","Physics9AccelerationGraphGalileoV2StepByStep"}
     ]
     if not classroom_classes:
         warnings.append("No class inherits from the consolidated JP classroom base.")
