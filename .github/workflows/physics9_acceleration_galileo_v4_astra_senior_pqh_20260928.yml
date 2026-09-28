@@ -1,0 +1,338 @@
+name: Physics9 Acceleration Galileo V4 ASTRA SENIOR PQH 20260928
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'physics9-acceleration-galileo-v4-astra-senior-20260928'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: physics9-acceleration-galileo-v4-astra-senior-20260928
+
+      - name: Validate ASTRA source, physics contract and legibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_acceleration_galileo_v4_astra_senior_20260928
+          MAIN="$JOB/physics9_acceleration_galileo_v4_astra_senior.py"
+
+          python -m py_compile             "$MAIN"             "$JOB/astra_visual_mixin.py"             "$JOB/astra_sections_core.py"             "$JOB/astra_sections_advanced.py"             "$JOB/physics9_acceleration_graph_galileo_v3_opusvisual.py"             "$JOB/physics9_acceleration_graph_galileo_v2_base.py"             "$JOB/jp_classroom_style.py"
+
+          python "$JOB/tools/check_manim_style.py"             "$MAIN" "$JOB/astra_visual_mixin.py"             "$JOB/astra_sections_core.py" "$JOB/astra_sections_advanced.py"             | tee astra_style_qa.log
+          grep -q "PASS: ASTRA senior structural/style checks passed." astra_style_qa.log
+
+          python - <<'PY'
+          from pathlib import Path
+
+          root = Path("render_jobs/physics9_acceleration_galileo_v4_astra_senior_20260928")
+          s = "
+".join(
+              (root / name).read_text(encoding="utf-8")
+              for name in [
+                  "physics9_acceleration_galileo_v4_astra_senior.py",
+                  "astra_visual_mixin.py",
+                  "astra_sections_core.py",
+                  "astra_sections_advanced.py",
+              ]
+          )
+          required = [
+              "Physics9AccelerationGalileoV4AstraSenior",
+              "distance_km_at",
+              "acceleration_at",
+              "focus_panel",
+              "Six decisions per interval",
+              "a SIGN ≠ MOTION DIRECTION",
+              "v₀ =",
+              "Δv =",
+              "Δt =",
+              "CONVERT TO SI",
+              "SPEEDING UP",
+              "SLOWING DOWN",
+              "CONSTANT VELOCITY",
+              "CONSTANT v ≠ REST",
+              "For a rolling ball, the exact a depends on rotational inertia.",
+              "x - x₀ ∝ t²",
+              "SLOPE = a / 2",
+          ]
+          missing = [x for x in required if x not in s]
+          assert not missing, f"missing V4 contract elements: {missing}"
+
+          # Teaching-critical typography contract.
+          forbidden = [
+              'self.text("time (min)", 14',
+              'self.text("velocity (km/h)", 14',
+              'self.text("a (m/s²)", 14',
+              'font_size=24',
+          ]
+          found = [x for x in forbidden if x in s]
+          assert not found, f"legacy micro-typography detected: {found}"
+
+          print("v4_astra_source_contract_pass")
+          PY
+
+      - name: Install verification tools and pull ManimCE
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+          ffprobe -version | head -1
+
+      - name: Fast PQL runtime and layout QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_acceleration_galileo_v4_astra_senior_20260928
+          rm -rf media_pql qa_out
+          mkdir -p qa_out
+
+          docker run --rm --user "$(id -u):$(id -g)"             -e HOME=/tmp/manim-home             -e LESSON_TIME_SCALE=0.18             -v "$PWD:/manim" -w /manim             --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pql $JOB/physics9_acceleration_galileo_v4_astra_senior.py Physics9AccelerationGalileoV4AstraSenior                 --fps 15 --format=mp4 --media_dir media_pql --disable_caching
+            " 2>&1 | tee qa_out/render_pql.log
+
+          PREVIEW="$(find media_pql -type f -name 'Physics9AccelerationGalileoV4AstraSenior.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PREVIEW" && test -s "$PREVIEW"
+          cp "$PREVIEW" qa_out/Physics9_Acceleration_Galileo_V4_ASTRA_SENIOR_QA_pql.mp4
+
+      - name: Final literal PQH render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_acceleration_galileo_v4_astra_senior_20260928
+          rm -rf media out
+          mkdir -p out
+
+          docker run --rm --user "$(id -u):$(id -g)"             -e HOME=/tmp/manim-home             -e LESSON_TIME_SCALE=1.0             -v "$PWD:/manim" -w /manim             --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pqh $JOB/physics9_acceleration_galileo_v4_astra_senior.py Physics9AccelerationGalileoV4AstraSenior                 --fps 30 --format=mp4 --media_dir media --disable_caching
+            " 2>&1 | tee out/render_pqh.log
+
+          FINAL="$(find media -type f -name 'Physics9AccelerationGalileoV4AstraSenior.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" out/Physics9_Acceleration_Galileo_V4_ASTRA_SENIOR_FULL_FINAL_pqh.mp4
+
+      - name: Full-frame technical, border and density QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Physics9_Acceleration_Galileo_V4_ASTRA_SENIOR_FULL_FINAL_pqh.mp4
+
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          FRAMES="$(ffprobe -v error -select_streams v:0 -count_frames -show_entries stream=nb_read_frames -of csv=p=0 "$F")"
+
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\tdecoded_frames\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n'             "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$FRAMES" > out/VIDEO_TECHNICAL.tsv
+
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
+
+          python - "$F" <<'PY' | tee out/ALL_FRAME_RASTER_QA.json
+          import json
+          import subprocess
+          import sys
+
+          path = sys.argv[1]
+          w, h = 320, 180
+          frame_bytes = w * h
+          proc = subprocess.Popen(
+              [
+                  "ffmpeg", "-nostdin", "-loglevel", "error", "-i", path,
+                  "-vf", f"scale={w}:{h},format=gray",
+                  "-f", "rawvideo", "-pix_fmt", "gray", "-"
+              ],
+              stdout=subprocess.PIPE,
+          )
+
+          count = 0
+          violations = []
+          dark_ratios = []
+          blank_run = 0
+          max_blank_run = 0
+
+          while True:
+              raw = proc.stdout.read(frame_bytes)
+              if not raw:
+                  break
+              if len(raw) != frame_bytes:
+                  raise SystemExit(f"partial frame {count}: {len(raw)} bytes")
+
+              border = 0
+              border_total = 0
+              for y in (0, h - 1):
+                  row = raw[y*w:(y+1)*w]
+                  border += sum(px < 140 for px in row)
+                  border_total += len(row)
+              for y in range(1, h - 1):
+                  for x in (0, w - 1):
+                      border += raw[y*w+x] < 140
+                      border_total += 1
+              border_ratio = border / border_total
+              if border_ratio > 0.004:
+                  violations.append({"frame": count, "border_dark_ratio": border_ratio})
+
+              dark = sum(px < 170 for px in raw) / frame_bytes
+              dark_ratios.append(dark)
+              if dark < 0.0009:
+                  blank_run += 1
+                  max_blank_run = max(max_blank_run, blank_run)
+              else:
+                  blank_run = 0
+              count += 1
+
+          rc = proc.wait()
+          if rc != 0:
+              raise SystemExit(f"ffmpeg scan failed: {rc}")
+          if count == 0:
+              raise SystemExit("no frames decoded")
+
+          dark_sorted = sorted(dark_ratios)
+          p95 = dark_sorted[int(0.95 * (len(dark_sorted)-1))]
+          report = {
+              "frames_scanned": count,
+              "border_violation_count": len(violations),
+              "max_blank_run_frames": max_blank_run,
+              "max_blank_run_seconds_at_30fps": max_blank_run / 30.0,
+              "foreground_dark_ratio_median": dark_sorted[len(dark_sorted)//2],
+              "foreground_dark_ratio_p95": p95,
+              "first_border_violations": violations[:20],
+          }
+          print(json.dumps(report, indent=2))
+          if violations:
+              raise SystemExit(f"outer-border contact in {len(violations)} frames")
+          if max_blank_run > 60:
+              raise SystemExit(f"blank transition longer than 2 s: {max_blank_run} frames")
+          PY
+
+          mkdir -p out/audit_frames
+          python - "$DUR" <<'PY' > out/audit_times.txt
+          import sys
+          dur=float(sys.argv[1])
+          for i in range(48):
+              p=(i+0.5)/48
+              print(f"{dur*p:.6f}")
+          PY
+
+          i=0
+          while read -r T; do
+            TAG="$(printf '%02d' "$i")"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_$TAG.png"
+            i=$((i+1))
+          done < out/audit_times.txt
+
+          ffmpeg -nostdin -loglevel error -framerate 1 -pattern_type glob -i 'out/audit_frames/frame_*.png'             -vf 'scale=320:-1,tile=8x6' -frames:v 1 out/QA_CONTACT_SHEET_48.png
+
+          sha256sum "$F" > out/SHA256SUMS.txt
+
+      - name: Package and publish verified V4
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_acceleration_galileo_v4_astra_senior_20260928
+          cp "$JOB/physics9_acceleration_galileo_v4_astra_senior.py" out/
+          cp "$JOB/astra_visual_mixin.py" out/
+          cp "$JOB/astra_sections_core.py" out/
+          cp "$JOB/astra_sections_advanced.py" out/
+          cp "$JOB/physics9_acceleration_graph_galileo_v3_opusvisual.py" out/
+          cp "$JOB/physics9_acceleration_graph_galileo_v2_base.py" out/
+          cp "$JOB/jp_classroom_style.py" out/
+          cp "$JOB/V3_FRAME_BY_FRAME_AUDIT_AND_V4_SPEC.md" out/
+          cp astra_style_qa.log out/
+          cp qa_out/render_pql.log out/
+
+          cat > out/RENDER_INFO.txt <<'EOF'
+          Physics 9 — Acceleration + Galileo V4 ASTRA SENIOR
+          Basis: forensic review of the verified V3 PQH render and all 7,402 V3 frames.
+          ManimCE: 0.20.1
+          Final: literal -pqh
+          Resolution: 1920x1080
+          FPS: 30
+          Visual contract:
+          - body text >=25 in teaching panels; graph ticks >=18
+          - short headers
+          - one focus panel maximum
+          - no numerical teaching text below x-axes
+          - no stacked micro-cards
+          - all 12 acceleration intervals retained
+          - adaptive timing: faster repetition, longer calculation pauses
+          Physics contract:
+          - vehicle displacement from exact integral of piecewise-linear v(t)
+          - a = Δv/Δt in SI units
+          - negative a is not equated with backward motion
+          - v = v0 + at
+          - x = x0 + v0 t + 1/2 a t^2
+          - free fall a = g
+          - ramp acceleration magnitude depends on rolling/sliding mechanical model
+          - from rest, x-x0 ∝ t^2 and x vs t^2 has slope a/2
+          QA:
+          py_compile + ASTRA style contract + PQL runtime + literal PQH +
+          ffprobe + full decode + every-frame border/density scan +
+          blank-transition guard + 48-frame visual contact sheet + SHA-256
+          EOF
+
+          cd out
+          zip -9 -r Physics9_Acceleration_Galileo_V4_ASTRA_SENIOR_FULL_FINAL_PQH_Package.zip             Physics9_Acceleration_Galileo_V4_ASTRA_SENIOR_FULL_FINAL_pqh.mp4             physics9_acceleration_galileo_v4_astra_senior.py             astra_visual_mixin.py astra_sections_core.py astra_sections_advanced.py             physics9_acceleration_graph_galileo_v3_opusvisual.py             physics9_acceleration_graph_galileo_v2_base.py jp_classroom_style.py             V3_FRAME_BY_FRAME_AUDIT_AND_V4_SPEC.md             VIDEO_TECHNICAL.tsv ALL_FRAME_RASTER_QA.json SHA256SUMS.txt             RENDER_INFO.txt astra_style_qa.log render_pqh.log render_pql.log             full_decode.log QA_CONTACT_SHEET_48.png audit_frames/
+
+          cd ..
+          mkdir -p deliveries/physics9
+          cp out/Physics9_Acceleration_Galileo_V4_ASTRA_SENIOR_FULL_FINAL_pqh.mp4 deliveries/physics9/
+          cp out/Physics9_Acceleration_Galileo_V4_ASTRA_SENIOR_FULL_FINAL_PQH_Package.zip deliveries/physics9/
+          cp out/QA_CONTACT_SHEET_48.png deliveries/physics9/Physics9_Acceleration_Galileo_V4_ASTRA_SENIOR_QA_CONTACT_SHEET_48.png
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deliveries/physics9/
+          if git diff --cached --quiet; then
+            echo "No delivery changes to publish"
+          else
+            git commit -m "render: publish Physics9 V4 ASTRA senior PQH [skip ci]"
+            git push origin HEAD:physics9-acceleration-galileo-v4-astra-senior-20260928
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-Acceleration-Galileo-V4-ASTRA-SENIOR-FULL-FINAL-PQH
+          path: |
+            out/Physics9_Acceleration_Galileo_V4_ASTRA_SENIOR_FULL_FINAL_pqh.mp4
+            out/Physics9_Acceleration_Galileo_V4_ASTRA_SENIOR_FULL_FINAL_PQH_Package.zip
+            out/physics9_acceleration_galileo_v4_astra_senior.py
+            out/astra_visual_mixin.py
+            out/astra_sections_core.py
+            out/astra_sections_advanced.py
+            out/V3_FRAME_BY_FRAME_AUDIT_AND_V4_SPEC.md
+            out/VIDEO_TECHNICAL.tsv
+            out/ALL_FRAME_RASTER_QA.json
+            out/SHA256SUMS.txt
+            out/RENDER_INFO.txt
+            out/astra_style_qa.log
+            out/QA_CONTACT_SHEET_48.png
+            out/audit_frames/
+          if-no-files-found: error
+          retention-days: 14
