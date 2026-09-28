@@ -229,7 +229,7 @@ class AstraAdvancedSections:
         ramp = Line(ramp_start, ramp_end, color=BLACK_LINE, stroke_width=4.0)
         ramp_floor = Line([-5.65, -2.25, 0], [0.85, -2.25, 0], color=MID_GRAY, stroke_width=2.0)
         ramp_ball = ball.copy().move_to(ramp_end)
-        ramp_label = self.text("INCLINED PLANE", 31, BOLD).move_to([-2.55, 1.78, 0])
+        ramp_label = self.text("INCLINED PLANE", 31, BOLD).move_to([-2.55, 1.62, 0])
         longer = self.text("LONGER MEASURABLE Δt", 34, BOLD).move_to([3.55, 0.45, 0])
         model = VGroup(
             self.text("Exact ramp a depends on", 25),
@@ -239,13 +239,10 @@ class AstraAdvancedSections:
             "Experimental target: a ≈ constant",
             29, BOLD,
         ).move_to([3.55, -1.05, 0])
-        ramp_group = VGroup(question, ramp, ramp_floor, ramp_ball, ramp_label, longer, model, invariant)
+        ramp_group = VGroup(ramp, ramp_floor, ramp_ball, ramp_label, longer, model, invariant)
         self.assert_content_safe(ramp_group, "V4 section 8 ramp")
 
-        self.play(
-            FadeOut(VGroup(fall_track, floor, ball, free_label, free_eq, short, short_note)),
-            run_time=0.45,
-        )
+        self.play(FadeOut(free_group), run_time=0.45)
         self.play(
             FadeIn(VGroup(ramp, ramp_floor, ramp_ball, ramp_label, longer, model, invariant)),
             run_time=0.65,
@@ -288,27 +285,27 @@ class AstraAdvancedSections:
             radius=0.22, stroke_color=BLACK_LINE, stroke_width=2.2,
             fill_color=WHITE_FILL, fill_opacity=1.0,
         ).move_to(ramp_end)
-        release = self.text("RELEASE", 24, BOLD).next_to(ramp_end, UP, buff=0.15)
+        release = self.text("RELEASE", 24, BOLD).next_to(ramp_end, UP, buff=0.26).shift(LEFT * 0.10)
 
         table_box = RoundedRectangle(
-            width=5.05, height=4.25, corner_radius=0.13,
+            width=5.05, height=4.70, corner_radius=0.13,
             stroke_color=BLACK_LINE, stroke_width=1.8,
             fill_color=WHITE_FILL, fill_opacity=1.0,
-        ).move_to([4.80, -0.45, 0])
-        table_title = self.text("EQUAL-TIME MEASUREMENTS", 25, BOLD).next_to(
-            table_box.get_top(), DOWN, buff=0.22
+        ).move_to([4.80, -0.55, 0])
+        table_title = self.text("EQUAL-TIME DATA", 28, BOLD).move_to(
+            table_box.get_top() + DOWN * 0.40
         )
         rows = [
-            self.text("t = 1   →   x / x₁ = 1", 29, BOLD),
-            self.text("t = 2   →   x / x₁ = 4", 29, BOLD),
-            self.text("t = 3   →   x / x₁ = 9", 29, BOLD),
-            self.text("t = 4   →   x / x₁ = 16", 29, BOLD),
+            self.text("t = 1   →   x / x₁ = 1", 27, BOLD),
+            self.text("t = 2   →   x / x₁ = 4", 27, BOLD),
+            self.text("t = 3   →   x / x₁ = 9", 27, BOLD),
+            self.text("t = 4   →   x / x₁ = 16", 27, BOLD),
         ]
-        row_group = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.33).next_to(
-            table_title, DOWN, buff=0.40
+        row_group = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.24).next_to(
+            table_title, DOWN, buff=0.34
         )
         row_group.align_to(table_box, LEFT).shift(RIGHT * 0.38)
-        rule = self.math(r"x-x_0=\frac12at^2", 40).next_to(row_group, DOWN, buff=0.40)
+        rule = self.math(r"x-x_0=\frac12at^2", 38).next_to(row_group, DOWN, buff=0.30)
         rule.align_to(row_group, LEFT)
 
         static = VGroup(ramp, floor, ball, release, table_box, table_title)
@@ -326,7 +323,7 @@ class AstraAdvancedSections:
         self.play(FadeIn(static), FadeIn(marks), run_time=0.75)
         self.wait(0.8)
         for i, p in enumerate(points):
-            pulse = self.text(f"t = {i + 1}", 30, BOLD).move_to([2.35, 1.65, 0])
+            pulse = self.text(f"t = {i + 1}", 32, BOLD).move_to([1.45, 0.55, 0])
             self.play(
                 FadeIn(pulse), ball.animate.move_to(p), FadeIn(rows[i]),
                 run_time=0.85, rate_func=linear,
@@ -396,4 +393,3 @@ class AstraAdvancedSections:
         self.play(FadeOut(VGroup(plot_group, equation)), run_time=0.45)
         self.play(FadeIn(final), run_time=0.55)
         self.wait(2.2)
-        self.clear_stage()
