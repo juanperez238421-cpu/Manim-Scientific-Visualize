@@ -1,0 +1,125 @@
+name: Lab8 ABC PC07 REAL PQH
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'agent/lab8abc-pc7-senior-real-pqh-20260818'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct verified senior Manim sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/lab8abc_pc7_senior_real_20260818
+          mkdir -p "$JOB/library" out qa_out
+          cat "$JOB"/bundle_*.b64 | base64 -d > "$JOB/bundle.tar.gz"
+          tar -xzf "$JOB/bundle.tar.gz" -C "$JOB"
+          mv "$JOB/lab8a_seating_pc7_senior.py" "$JOB/lab8a_seating.py"
+          mv "$JOB/lab8b_seating_pc7_senior.py" "$JOB/lab8b_seating.py"
+          mv "$JOB/lab8c_seating_pc7_senior.py" "$JOB/lab8c_seating.py"
+          mv "$JOB/jp_classroom_style.py" "$JOB/library/jp_classroom_style.py"
+          touch "$JOB/library/__init__.py"
+          python -m py_compile "$JOB/lab8a_seating.py" "$JOB/lab8b_seating.py" "$JOB/lab8c_seating.py" "$JOB/library/jp_classroom_style.py"
+          for F in "$JOB/lab8a_seating.py" "$JOB/lab8b_seating.py" "$JOB/lab8c_seating.py"; do
+            grep -q 'SEATS_BY_PC\[7\] = ("A", "B")' "$F"
+            grep -q 'PC07 · SOLO 2 SILLAS' "$F"
+          done
+
+      - name: Install exact ManimCE and ffmpeg
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: PQL protocol QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/lab8abc_pc7_senior_real_20260818
+          rm -rf media_pql
+          for SPEC in "8A lab8a_seating.py Lab8AFixedSeating" "8B lab8b_seating.py Lab8BFixedSeating" "8C lab8c_seating.py Lab8CFixedSeating"; do
+            set -- $SPEC
+            G="$1"; F="$2"; S="$3"
+            docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.06 -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pql $JOB/$F $S --fps 15 --format=mp4 --media_dir media_pql/$G --disable_caching" 2>&1 | tee "qa_out/${G}_pql.log"
+            P="$(find "media_pql/$G" -type f -name "${S}.mp4" | head -1)"
+            test -s "$P"
+          done
+
+      - name: PQH final protocol render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/lab8abc_pc7_senior_real_20260818
+          rm -rf media
+          for SPEC in "8A lab8a_seating.py Lab8AFixedSeating" "8B lab8b_seating.py Lab8BFixedSeating" "8C lab8c_seating.py Lab8CFixedSeating"; do
+            set -- $SPEC
+            G="$1"; F="$2"; S="$3"
+            docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pqh $JOB/$F $S --fps 30 --format=mp4 --media_dir media/$G --disable_caching" 2>&1 | tee "out/${G}_pqh.log"
+            P="$(find "media/$G" -type f -name "${S}.mp4" | head -1)"
+            test -s "$P"
+            cp "$P" "out/Lab${G}_Fixed_Seating_PC07_2Seats_SENIOR_FINAL_pqh.mp4"
+          done
+
+      - name: Technical and visual QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'group\twidth\theight\tfps\tcodec\tpix_fmt\tduration\n' > out/VIDEO_TECHNICAL.tsv
+          mkdir -p out/qa_frames
+          for G in 8A 8B 8C; do
+            F="out/Lab${G}_Fixed_Seating_PC07_2Seats_SENIOR_FINAL_pqh.mp4"
+            W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+            H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+            R="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+            C="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+            P="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+            D="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+            printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$G" "$W" "$H" "$R" "$C" "$P" "$D" >> out/VIDEO_TECHNICAL.tsv
+            test "$W" = 1920; test "$H" = 1080; test "$R" = 30/1; test "$C" = h264; test "$P" = yuv420p
+            python -c 'import sys; d=float(sys.argv[1]); assert 50 <= d <= 220, d' "$D"
+            ffmpeg -nostdin -v error -i "$F" -f null - 2> "out/${G}_decode.log"
+            T1="$(awk -v d="$D" 'BEGIN{printf "%.2f",d*0.18}')"; T2="$(awk -v d="$D" 'BEGIN{printf "%.2f",d*0.52}')"; T3="$(awk -v d="$D" 'BEGIN{printf "%.2f",d*0.84}')"
+            ffmpeg -y -ss "$T1" -i "$F" -frames:v 1 "out/qa_frames/${G}_01.png" >/dev/null 2>&1
+            ffmpeg -y -ss "$T2" -i "$F" -frames:v 1 "out/qa_frames/${G}_02.png" >/dev/null 2>&1
+            ffmpeg -y -ss "$T3" -i "$F" -frames:v 1 "out/qa_frames/${G}_03.png" >/dev/null 2>&1
+          done
+          sha256sum out/Lab8*_Fixed_Seating_PC07_2Seats_SENIOR_FINAL_pqh.mp4 > out/SHA256SUMS.txt
+
+      - name: Package delivery
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/lab8abc_pc7_senior_real_20260818
+          cp "$JOB/lab8a_seating.py" out/Lab8A_source.py
+          cp "$JOB/lab8b_seating.py" out/Lab8B_source.py
+          cp "$JOB/lab8c_seating.py" out/Lab8C_source.py
+          cp "$JOB/library/jp_classroom_style.py" out/jp_classroom_style.py
+          printf 'ManimCE 0.20.1\nLiteral -pql QA followed by literal -pqh final renders\n1920x1080 @ 30 fps\nPC07 has exactly two chairs: A and B\n8A: 19-20 PC07; 21 PC08-A\n8B: 19-20 PC07; 21-23 PC08\n8C: 19-20 PC07; 21-23 PC08; 24-25 PC09-A/B\n' > out/RENDER_INFO.txt
+          cd out
+          zip -9 Lab8_ABC_PC07_2Seats_SENIOR_REAL_MANIM_PQH_PACKAGE.zip Lab8A_Fixed_Seating_PC07_2Seats_SENIOR_FINAL_pqh.mp4 Lab8B_Fixed_Seating_PC07_2Seats_SENIOR_FINAL_pqh.mp4 Lab8C_Fixed_Seating_PC07_2Seats_SENIOR_FINAL_pqh.mp4 Lab8A_source.py Lab8B_source.py Lab8C_source.py jp_classroom_style.py VIDEO_TECHNICAL.tsv SHA256SUMS.txt RENDER_INFO.txt 8A_pqh.log 8B_pqh.log 8C_pqh.log 8A_decode.log 8B_decode.log 8C_decode.log qa_frames/*.png
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Lab8-ABC-PC07-2Seats-SENIOR-REAL-MANIM-PQH
+          path: |
+            out/Lab8A_Fixed_Seating_PC07_2Seats_SENIOR_FINAL_pqh.mp4
+            out/Lab8B_Fixed_Seating_PC07_2Seats_SENIOR_FINAL_pqh.mp4
+            out/Lab8C_Fixed_Seating_PC07_2Seats_SENIOR_FINAL_pqh.mp4
+            out/Lab8_ABC_PC07_2Seats_SENIOR_REAL_MANIM_PQH_PACKAGE.zip
+            out/VIDEO_TECHNICAL.tsv
+            out/SHA256SUMS.txt
+            out/RENDER_INFO.txt
+            out/qa_frames/*.png
+          if-no-files-found: error
+          retention-days: 7
