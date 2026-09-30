@@ -177,7 +177,7 @@ class Physics9VerticalFreeFallTheoryV4TypographySafe(JPMathClassroomScene):
             statement,
             24,
             max_width=text_width,
-            max_lines=2,
+            max_lines=3,
             min_size=23,
             line_buff=0.035,
         )
@@ -190,13 +190,13 @@ class Physics9VerticalFreeFallTheoryV4TypographySafe(JPMathClassroomScene):
         self.fit_or_fail(
             row,
             width - 0.32,
-            1.30,
-            min_scale=0.94,
+            1.85,
+            min_scale=0.97,
             label=f"phase_card[{title}]",
         )
         box = RoundedRectangle(
             width=width,
-            height=max(1.38, row.height + 0.28),
+            height=max(1.42, row.height + 0.28),
             corner_radius=0.10,
             stroke_color=BLACK_LINE,
             stroke_width=1.45,
