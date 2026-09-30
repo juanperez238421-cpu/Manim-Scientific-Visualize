@@ -1,6 +1,6 @@
 Manim Community v0.20.1
 
-[09/30/26 02:26:30] INFO     Writing                     tex_file_writing.py:110
+[09/30/26 02:49:06] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}\vec                               
                              v\special{dvisvgm:raw </g>}                        
@@ -15,7 +15,7 @@ Manim Community v0.20.1
                              media_pql/Tex/23292e7bb85c5                        
                              dd1.tex                                            
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 0: Write(Text('MOVIMIENTO VERTICAL')), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                INFO     Animation 0 : Partial      scene_file_writer.py:601
+Animation 0: Write(Text('MOVIMIENTO VERTICAL')), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                            [09/30/26 02:49:07] INFO     Animation 0 : Partial      scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -47,7 +47,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00001.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 2: _MethodAnimation(ValueTracker):   0%|          | 0/6 [00:00<?, ?it/s]Animation 2: _MethodAnimation(ValueTracker): 100%|██████████| 6/6 [00:00<00:00, 59.31it/s]                                                                                                              INFO     Animation 2 : Partial      scene_file_writer.py:601
+Animation 2: _MethodAnimation(ValueTracker):   0%|          | 0/6 [00:00<?, ?it/s]Animation 2: _MethodAnimation(ValueTracker):  83%|████████▎ | 5/6 [00:00<00:00, 47.12it/s]                                                                                                              INFO     Animation 2 : Partial      scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -78,7 +78,7 @@ Manim Community v0.20.1
                              0p30/partial_movie_files/P                         
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00003.mp4'                          
-[09/30/26 02:26:31] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Caching disabled.              cairo_renderer.py:83
                     INFO     Animation 4 : Partial      scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -110,7 +110,7 @@ Manim Community v0.20.1
                              0p30/partial_movie_files/P                         
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00005.mp4'                          
-                    INFO     Writing                     tex_file_writing.py:110
+[09/30/26 02:49:08] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}\vec                               
                              N\special{dvisvgm:raw </g>}                        
@@ -157,7 +157,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00007.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 8: _MethodAnimation(Square):   0%|          | 0/3 [00:00<?, ?it/s]                                                                            [09/30/26 02:26:32] INFO     Animation 8 : Partial      scene_file_writer.py:601
+Animation 8: _MethodAnimation(Square):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                INFO     Animation 8 : Partial      scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -173,7 +173,7 @@ Manim Community v0.20.1
                              duration of 0.0333333 seconds                      
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-                    INFO     Animation 9 : Partial      scene_file_writer.py:601
+[09/30/26 02:49:09] INFO     Animation 9 : Partial      scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -244,14 +244,14 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 15: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                    WARNING  The original total run_time of        scene.py:1118
+[09/30/26 02:49:10] WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.027 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-                                                                                           [09/30/26 02:26:33] INFO     Animation 15 : Partial     scene_file_writer.py:601
+Animation 15: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                               INFO     Animation 15 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -277,7 +277,7 @@ Manim Community v0.20.1
                              al{dvisvgm:raw </g>} to                            
                              media_pql/Tex/371d2ac333eba                        
                              a9f.tex                                            
-                    INFO     Writing                     tex_file_writing.py:110
+[09/30/26 02:49:11] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}v_y=0\speci                        
                              al{dvisvgm:raw </g>} to                            
@@ -289,7 +289,7 @@ Manim Community v0.20.1
                              al{dvisvgm:raw </g>} to                            
                              media_pql/Tex/ddced2f4ace45                        
                              6b0.tex                                            
-[09/30/26 02:26:34] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}a_y=-9.81\;                        
                              \mathrm{m/s^2}\quad\text{en                        
@@ -299,7 +299,7 @@ Manim Community v0.20.1
                              media_pql/Tex/514774b2ec65f                        
                              402.tex                                            
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 16: GrowArrow(Arrow), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                               INFO     Animation 16 : Partial     scene_file_writer.py:601
+Animation 16: GrowArrow(Arrow), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                           [09/30/26 02:49:12] INFO     Animation 16 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -331,7 +331,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00017.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 18: _MethodAnimation(ValueTracker):   0%|          | 0/4 [00:00<?, ?it/s]Animation 18: _MethodAnimation(ValueTracker): 100%|██████████| 4/4 [00:00<00:00, 31.82it/s]                                                                                                               INFO     Animation 18 : Partial     scene_file_writer.py:601
+Animation 18: _MethodAnimation(ValueTracker):   0%|          | 0/4 [00:00<?, ?it/s]Animation 18: _MethodAnimation(ValueTracker):  75%|███████▌  | 3/4 [00:00<00:00, 22.07it/s]                                                                                                               INFO     Animation 18 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -347,14 +347,14 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 19: FadeIn(MathTex('v_y=0')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                    WARNING  The original total run_time of        scene.py:1118
+                    WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.03 seconds, is too short for                 
                              the current frame rate of 30 FPS.                  
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-                                                                                                       INFO     Animation 19 : Partial     scene_file_writer.py:601
+Animation 19: FadeIn(MathTex('v_y=0')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                       INFO     Animation 19 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -372,7 +372,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00020.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 21: _MethodAnimation(ValueTracker):   0%|          | 0/4 [00:00<?, ?it/s]Animation 21: _MethodAnimation(ValueTracker):  50%|█████     | 2/4 [00:00<00:00, 18.35it/s]Animation 21: _MethodAnimation(ValueTracker): 100%|██████████| 4/4 [00:00<00:00, 18.58it/s]                                                                                           [09/30/26 02:26:35] INFO     Animation 21 : Partial     scene_file_writer.py:601
+Animation 21: _MethodAnimation(ValueTracker):   0%|          | 0/4 [00:00<?, ?it/s]Animation 21: _MethodAnimation(ValueTracker):  50%|█████     | 2/4 [00:00<00:00, 11.88it/s]Animation 21: _MethodAnimation(ValueTracker): 100%|██████████| 4/4 [00:00<00:00, 11.66it/s]                                                                                           [09/30/26 02:49:13] INFO     Animation 21 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -420,14 +420,14 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-                    WARNING  The original total run_time of        scene.py:1118
+[09/30/26 02:49:14] WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.027 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-Animation 24: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]Animation 24: FadeOut(VGroup of 3 submobjects), etc.: 100%|██████████| 1/1 [00:00<00:00,  6.79it/s]                                                                                                                       INFO     Animation 24 : Partial     scene_file_writer.py:601
+Animation 24: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]Animation 24: FadeOut(VGroup of 3 submobjects), etc.: 100%|██████████| 1/1 [00:00<00:00,  4.45it/s]                                                                                                                       INFO     Animation 24 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -435,7 +435,7 @@ Manim Community v0.20.1
                              0p30/partial_movie_files/P                         
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00024.mp4'                          
-[09/30/26 02:26:36] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}\vec                               
                              W=m\vec                                            
@@ -451,14 +451,14 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 25: FadeIn(Text('FREE-BODY DIAGRAM')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                    WARNING  The original total run_time of        scene.py:1118
+                    WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.024 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-                                                                                                                INFO     Animation 25 : Partial     scene_file_writer.py:601
+Animation 25: FadeIn(Text('FREE-BODY DIAGRAM')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                                INFO     Animation 25 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -467,7 +467,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00025.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 26: GrowArrow(Arrow), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                               INFO     Animation 26 : Partial     scene_file_writer.py:601
+Animation 26: GrowArrow(Arrow), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                           [09/30/26 02:49:15] INFO     Animation 26 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -504,7 +504,7 @@ Manim Community v0.20.1
                              </g>} to                                           
                              media_pql/Tex/20256475fcebf                        
                              a32.tex                                            
-[09/30/26 02:26:37] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Caching disabled.              cairo_renderer.py:83
 Animation 28: Write(MathTex('\\sum F_y=ma_y')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 28 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -514,7 +514,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00028.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 29: TransformMatchingTex(Group):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                    INFO     Animation 29 : Partial     scene_file_writer.py:601
+Animation 29: TransformMatchingTex(Group):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                [09/30/26 02:49:16] INFO     Animation 29 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -575,7 +575,7 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-[09/30/26 02:26:38] WARNING  The original total run_time of        scene.py:1118
+[09/30/26 02:49:17] WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.027 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
@@ -604,7 +604,7 @@ Manim Community v0.20.1
                              vgm:raw </g>} to                                   
                              media_pql/Tex/e1a1482c3ab77                        
                              058.tex                                            
-                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/30/26 02:49:18] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 36: Write(MathTex('a_y=-g')), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                       INFO     Animation 36 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -669,7 +669,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00039.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 40: Write(MathTex('y(t)=y_0+v_0t-\\frac12gt^2')), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                       [09/30/26 02:26:39] INFO     Animation 40 : Partial     scene_file_writer.py:601
+Animation 40: Write(MathTex('y(t)=y_0+v_0t-\\frac12gt^2')), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                           INFO     Animation 40 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -700,7 +700,7 @@ Manim Community v0.20.1
                              to                                                 
                              media_pql/Tex/bb43ea2432e3c                        
                              f3f.tex                                            
-                    INFO     Writing                     tex_file_writing.py:110
+[09/30/26 02:49:19] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}v_y-v_0=-gt                        
                              \special{dvisvgm:raw </g>}                         
@@ -721,14 +721,14 @@ Manim Community v0.20.1
                              </g>} to                                           
                              media_pql/Tex/bbf1553e70081                        
                              f4f.tex                                            
-[09/30/26 02:26:40] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}y-y_0=v_0t-                        
                              \frac12gt^2\special{dvisvgm                        
                              :raw </g>} to                                      
                              media_pql/Tex/c1bcc723f97dd                        
                              570.tex                                            
-                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/30/26 02:49:20] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 42: LaggedStart(Group):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                           INFO     Animation 42 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -778,7 +778,7 @@ Manim Community v0.20.1
                              0p30/partial_movie_files/P                         
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00045.mp4'                          
-[09/30/26 02:26:41] INFO     Writing                     tex_file_writing.py:110
+[09/30/26 02:49:21] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}v_0=0\speci                        
                              al{dvisvgm:raw </g>} to                            
@@ -796,7 +796,7 @@ Manim Community v0.20.1
                              al{dvisvgm:raw </g>} to                            
                              media_pql/Tex/6bc68a2f9a132                        
                              25b.tex                                            
-                    INFO     Caching disabled.              cairo_renderer.py:83
+[09/30/26 02:49:22] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 46: FadeIn(VGroup of 3 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                              INFO     Animation 46 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -806,7 +806,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00046.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 47: _MethodAnimation(ValueTracker):   0%|          | 0/6 [00:00<?, ?it/s]                                                                                   [09/30/26 02:26:42] INFO     Animation 47 : Partial     scene_file_writer.py:601
+Animation 47: _MethodAnimation(ValueTracker):   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                       INFO     Animation 47 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -840,7 +840,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00049.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-                    INFO     Animation 50 : Partial     scene_file_writer.py:601
+[09/30/26 02:49:23] INFO     Animation 50 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -871,7 +871,7 @@ Manim Community v0.20.1
                              0p30/partial_movie_files/P                         
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00051.mp4'                          
-[09/30/26 02:26:43] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}\vec                               
                              a=-\vec                                            
@@ -879,8 +879,8 @@ Manim Community v0.20.1
                              to                                                 
                              media_pql/Tex/f01280133dd9f                        
                              84b.tex                                            
-                    INFO     Caching disabled.              cairo_renderer.py:83
-Animation 52: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 52: FadeIn(VGroup of 2 submobjects), etc.:  50%|█████     | 1/2 [00:00<00:00,  4.93it/s]Animation 52: FadeIn(VGroup of 2 submobjects), etc.: 100%|██████████| 2/2 [00:00<00:00,  4.83it/s]                                                                                                  [09/30/26 02:26:44] INFO     Animation 52 : Partial     scene_file_writer.py:601
+[09/30/26 02:49:24] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 52: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 52: FadeIn(VGroup of 2 submobjects), etc.:  50%|█████     | 1/2 [00:00<00:00,  3.25it/s]Animation 52: FadeIn(VGroup of 2 submobjects), etc.: 100%|██████████| 2/2 [00:00<00:00,  3.15it/s]                                                                                                  [09/30/26 02:49:25] INFO     Animation 52 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -889,13 +889,13 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00052.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 53: _MethodAnimation(ValueTracker):   0%|          | 0/5 [00:00<?, ?it/s]Animation 53: _MethodAnimation(ValueTracker):  20%|██        | 1/5 [00:00<00:00,  9.30it/s]Animation 53: _MethodAnimation(ValueTracker):  40%|████      | 2/5 [00:00<00:00,  8.61it/s]Animation 53: _MethodAnimation(ValueTracker):  60%|██████    | 3/5 [00:00<00:00,  8.51it/s]Animation 53: _MethodAnimation(ValueTracker):  80%|████████  | 4/5 [00:00<00:00,  8.35it/s]Animation 53: _MethodAnimation(ValueTracker): 100%|██████████| 5/5 [00:00<00:00,  8.10it/s]                                                                                                               INFO     Writing                     tex_file_writing.py:110
+Animation 53: _MethodAnimation(ValueTracker):   0%|          | 0/5 [00:00<?, ?it/s]Animation 53: _MethodAnimation(ValueTracker):  20%|██        | 1/5 [00:00<00:00,  6.12it/s]Animation 53: _MethodAnimation(ValueTracker):  40%|████      | 2/5 [00:00<00:00,  5.67it/s]Animation 53: _MethodAnimation(ValueTracker):  60%|██████    | 3/5 [00:00<00:00,  5.49it/s]Animation 53: _MethodAnimation(ValueTracker):  80%|████████  | 4/5 [00:00<00:00,  5.37it/s]Animation 53: _MethodAnimation(ValueTracker): 100%|██████████| 5/5 [00:00<00:00,  5.26it/s]                                                                                           [09/30/26 02:49:26] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}v=0\special                        
                              {dvisvgm:raw </g>} to                              
                              media_pql/Tex/9d938206eef8c                        
                              911.tex                                            
-[09/30/26 02:26:45] INFO     Animation 53 : Partial     scene_file_writer.py:601
+                    INFO     Animation 53 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -904,7 +904,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00053.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 54: _MethodAnimation(ScreenRectangle):   0%|          | 0/2 [00:00<?, ?it/s]Animation 54: _MethodAnimation(ScreenRectangle):  50%|█████     | 1/2 [00:00<00:00,  6.97it/s]Animation 54: _MethodAnimation(ScreenRectangle): 100%|██████████| 2/2 [00:00<00:00,  6.84it/s]                                                                                                                  INFO     Animation 54 : Partial     scene_file_writer.py:601
+Animation 54: _MethodAnimation(ScreenRectangle):   0%|          | 0/2 [00:00<?, ?it/s]Animation 54: _MethodAnimation(ScreenRectangle):  50%|█████     | 1/2 [00:00<00:00,  4.63it/s]Animation 54: _MethodAnimation(ScreenRectangle): 100%|██████████| 2/2 [00:00<00:00,  4.50it/s]                                                                                              [09/30/26 02:49:27] INFO     Animation 54 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -913,7 +913,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00054.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 55: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 55: FadeIn(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  6.82it/s]Animation 55: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  6.56it/s]                                                                                                                INFO     Animation 55 : Partial     scene_file_writer.py:601
+Animation 55: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 55: FadeIn(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  4.51it/s]Animation 55: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  4.44it/s]                                                                                            [09/30/26 02:49:28] INFO     Animation 55 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -922,7 +922,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00055.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-[09/30/26 02:26:46] INFO     Animation 56 : Partial     scene_file_writer.py:601
+                    INFO     Animation 56 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -931,7 +931,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00056.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 57: _MethodAnimation(ScreenRectangle):   0%|          | 0/2 [00:00<?, ?it/s]Animation 57: _MethodAnimation(ScreenRectangle):  50%|█████     | 1/2 [00:00<00:00,  5.94it/s]Animation 57: _MethodAnimation(ScreenRectangle): 100%|██████████| 2/2 [00:00<00:00,  6.37it/s]                                                                                                                  INFO     Animation 57 : Partial     scene_file_writer.py:601
+Animation 57: _MethodAnimation(ScreenRectangle):   0%|          | 0/2 [00:00<?, ?it/s]Animation 57: _MethodAnimation(ScreenRectangle):  50%|█████     | 1/2 [00:00<00:00,  3.98it/s]Animation 57: _MethodAnimation(ScreenRectangle): 100%|██████████| 2/2 [00:00<00:00,  4.20it/s]                                                                                                                  INFO     Animation 57 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -940,7 +940,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00057.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 58: _MethodAnimation(ValueTracker):   0%|          | 0/5 [00:00<?, ?it/s]Animation 58: _MethodAnimation(ValueTracker):  20%|██        | 1/5 [00:00<00:00,  6.95it/s]Animation 58: _MethodAnimation(ValueTracker):  40%|████      | 2/5 [00:00<00:00,  6.76it/s]Animation 58: _MethodAnimation(ValueTracker):  60%|██████    | 3/5 [00:00<00:00,  6.68it/s]Animation 58: _MethodAnimation(ValueTracker):  80%|████████  | 4/5 [00:00<00:00,  6.73it/s]Animation 58: _MethodAnimation(ValueTracker): 100%|██████████| 5/5 [00:00<00:00,  6.69it/s]                                                                                           [09/30/26 02:26:47] INFO     Animation 58 : Partial     scene_file_writer.py:601
+Animation 58: _MethodAnimation(ValueTracker):   0%|          | 0/5 [00:00<?, ?it/s]Animation 58: _MethodAnimation(ValueTracker):  20%|██        | 1/5 [00:00<00:00,  4.60it/s]Animation 58: _MethodAnimation(ValueTracker):  40%|████      | 2/5 [00:00<00:00,  4.50it/s]Animation 58: _MethodAnimation(ValueTracker):  60%|██████    | 3/5 [00:00<00:00,  4.42it/s]Animation 58: _MethodAnimation(ValueTracker):  80%|████████  | 4/5 [00:00<00:00,  4.47it/s]Animation 58: _MethodAnimation(ValueTracker): 100%|██████████| 5/5 [00:01<00:00,  4.44it/s]                                                                                           [09/30/26 02:49:30] INFO     Animation 58 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -965,7 +965,7 @@ Manim Community v0.20.1
                              media_pql/Tex/5ac1bfeab5cbd                        
                              433.tex                                            
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 59: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 59: FadeIn(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  6.79it/s]Animation 59: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  6.61it/s]                                                                                            [09/30/26 02:26:48] INFO     Animation 59 : Partial     scene_file_writer.py:601
+Animation 59: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 59: FadeIn(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  4.36it/s]Animation 59: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  4.35it/s]                                                                                            [09/30/26 02:49:31] INFO     Animation 59 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -990,14 +990,14 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-                    WARNING  The original total run_time of        scene.py:1118
+[09/30/26 02:49:32] WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.027 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-Animation 61: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]Animation 61: FadeOut(VGroup of 3 submobjects), etc.: 100%|██████████| 1/1 [00:00<00:00,  2.63it/s]                                                                                                   [09/30/26 02:26:49] INFO     Animation 61 : Partial     scene_file_writer.py:601
+Animation 61: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]Animation 61: FadeOut(VGroup of 3 submobjects), etc.: 100%|██████████| 1/1 [00:00<00:00,  1.69it/s]                                                                                                                       INFO     Animation 61 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1005,7 +1005,7 @@ Manim Community v0.20.1
                              0p30/partial_movie_files/P                         
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00061.mp4'                          
-                    INFO     Writing                     tex_file_writing.py:110
+[09/30/26 02:49:33] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}m_1g\specia                        
                              l{dvisvgm:raw </g>} to                             
@@ -1042,7 +1042,7 @@ Manim Community v0.20.1
                              </g>} to                                           
                              media_pql/Tex/510b19dcf4837                        
                              8da.tex                                            
-[09/30/26 02:26:50] INFO     Caching disabled.              cairo_renderer.py:83
+[09/30/26 02:49:34] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 64: Write(MathTex('a=\\frac{mg}{m}=g')), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                  INFO     Animation 64 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -1068,14 +1068,14 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 66: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                    WARNING  The original total run_time of        scene.py:1118
+                    WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.027 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-                                                                                                               INFO     Animation 66 : Partial     scene_file_writer.py:601
+Animation 66: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                               INFO     Animation 66 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1083,7 +1083,7 @@ Manim Community v0.20.1
                              0p30/partial_movie_files/P                         
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00066.mp4'                          
-[09/30/26 02:26:51] INFO     Caching disabled.              cairo_renderer.py:83
+[09/30/26 02:49:35] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 67: FadeIn(Line), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                           INFO     Animation 67 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -1109,14 +1109,14 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 69: FadeIn(Dot), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                    WARNING  The original total run_time of        scene.py:1118
+                    WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.03 seconds, is too short for                 
                              the current frame rate of 30 FPS.                  
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-Animation 69: FadeIn(Dot), etc.: 100%|██████████| 1/1 [00:00<00:00,  4.76it/s]                                                                                                  INFO     Animation 69 : Partial     scene_file_writer.py:601
+Animation 69: FadeIn(Dot), etc.:   0%|          | 0/1 [00:00<?, ?it/s]Animation 69: FadeIn(Dot), etc.: 100%|██████████| 1/1 [00:00<00:00,  3.20it/s]                                                                              [09/30/26 02:49:36] INFO     Animation 69 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1125,7 +1125,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00069.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 70: _MethodAnimation(ValueTracker):   0%|          | 0/9 [00:00<?, ?it/s]Animation 70: _MethodAnimation(ValueTracker):  22%|██▏       | 2/9 [00:00<00:00,  9.24it/s]Animation 70: _MethodAnimation(ValueTracker):  33%|███▎      | 3/9 [00:00<00:00,  8.97it/s]Animation 70: _MethodAnimation(ValueTracker):  44%|████▍     | 4/9 [00:00<00:00,  8.78it/s]Animation 70: _MethodAnimation(ValueTracker):  56%|█████▌    | 5/9 [00:00<00:00,  8.60it/s]Animation 70: _MethodAnimation(ValueTracker):  67%|██████▋   | 6/9 [00:00<00:00,  8.57it/s]Animation 70: _MethodAnimation(ValueTracker):  78%|███████▊  | 7/9 [00:00<00:00,  8.58it/s]Animation 70: _MethodAnimation(ValueTracker):  89%|████████▉ | 8/9 [00:00<00:00,  8.58it/s]Animation 70: _MethodAnimation(ValueTracker): 100%|██████████| 9/9 [00:01<00:00,  8.47it/s]                                                                                           [09/30/26 02:26:52] INFO     Animation 70 : Partial     scene_file_writer.py:601
+Animation 70: _MethodAnimation(ValueTracker):   0%|          | 0/9 [00:00<?, ?it/s]Animation 70: _MethodAnimation(ValueTracker):  11%|█         | 1/9 [00:00<00:01,  6.54it/s]Animation 70: _MethodAnimation(ValueTracker):  22%|██▏       | 2/9 [00:00<00:01,  5.87it/s]Animation 70: _MethodAnimation(ValueTracker):  33%|███▎      | 3/9 [00:00<00:01,  5.74it/s]Animation 70: _MethodAnimation(ValueTracker):  44%|████▍     | 4/9 [00:00<00:00,  5.66it/s]Animation 70: _MethodAnimation(ValueTracker):  56%|█████▌    | 5/9 [00:00<00:00,  5.61it/s]Animation 70: _MethodAnimation(ValueTracker):  67%|██████▋   | 6/9 [00:01<00:00,  5.62it/s]Animation 70: _MethodAnimation(ValueTracker):  78%|███████▊  | 7/9 [00:01<00:00,  5.56it/s]Animation 70: _MethodAnimation(ValueTracker):  89%|████████▉ | 8/9 [00:01<00:00,  5.59it/s]Animation 70: _MethodAnimation(ValueTracker): 100%|██████████| 9/9 [00:01<00:00,  5.47it/s]                                                                                           [09/30/26 02:49:38] INFO     Animation 70 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1141,7 +1141,7 @@ Manim Community v0.20.1
                              raw </g>} to                                       
                              media_pql/Tex/80be732bc30c7                        
                              19c.tex                                            
-[09/30/26 02:26:53] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}\text{slope                        
                              of                                                 
@@ -1150,7 +1150,7 @@ Manim Community v0.20.1
                              media_pql/Tex/e2d9fc0753d12                        
                              873.tex                                            
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 71: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 71: FadeIn(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  8.54it/s]Animation 71: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  8.28it/s]                                                                                                                INFO     Animation 71 : Partial     scene_file_writer.py:601
+Animation 71: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 71: FadeIn(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  5.51it/s]Animation 71: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  5.42it/s]                                                                                            [09/30/26 02:49:39] INFO     Animation 71 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1175,14 +1175,14 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-[09/30/26 02:26:54] WARNING  The original total run_time of        scene.py:1118
+                    WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.027 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-Animation 73: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]Animation 73: FadeOut(VGroup of 3 submobjects), etc.: 100%|██████████| 1/1 [00:00<00:00,  2.98it/s]                                                                                                                       INFO     Animation 73 : Partial     scene_file_writer.py:601
+Animation 73: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]Animation 73: FadeOut(VGroup of 3 submobjects), etc.: 100%|██████████| 1/1 [00:00<00:00,  1.95it/s]                                                                                                   [09/30/26 02:49:40] INFO     Animation 73 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1197,7 +1197,7 @@ Manim Community v0.20.1
                              </g>} to                                           
                              media_pql/Tex/1262bce42837d                        
                              478.tex                                            
-                    INFO     Writing                     tex_file_writing.py:110
+[09/30/26 02:49:41] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}t=\sqrt{\fr                        
                              ac{40}{9.81}}\approx                               
@@ -1205,8 +1205,8 @@ Manim Community v0.20.1
                              </g>} to                                           
                              media_pql/Tex/a4d3ec371a203                        
                              1f7.tex                                            
-[09/30/26 02:26:55] INFO     Caching disabled.              cairo_renderer.py:83
-Animation 74: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 74: FadeIn(VGroup of 2 submobjects), etc.:  50%|█████     | 1/2 [00:00<00:00,  5.22it/s]Animation 74: FadeIn(VGroup of 2 submobjects), etc.: 100%|██████████| 2/2 [00:00<00:00,  5.04it/s]                                                                                                                      INFO     Animation 74 : Partial     scene_file_writer.py:601
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 74: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 74: FadeIn(VGroup of 2 submobjects), etc.:  50%|█████     | 1/2 [00:00<00:00,  3.42it/s]Animation 74: FadeIn(VGroup of 2 submobjects), etc.: 100%|██████████| 2/2 [00:00<00:00,  3.34it/s]                                                                                                  [09/30/26 02:49:42] INFO     Animation 74 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1215,7 +1215,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00074.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 75: Write(MathTex('0=20-\\frac12gt^2')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 75: Write(MathTex('0=20-\\frac12gt^2')):  50%|█████     | 1/2 [00:00<00:00,  9.93it/s]Animation 75: Write(MathTex('0=20-\\frac12gt^2')): 100%|██████████| 2/2 [00:00<00:00,  9.67it/s]                                                                                                [09/30/26 02:26:56] INFO     Animation 75 : Partial     scene_file_writer.py:601
+Animation 75: Write(MathTex('0=20-\\frac12gt^2')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 75: Write(MathTex('0=20-\\frac12gt^2')):  50%|█████     | 1/2 [00:00<00:00,  6.56it/s]Animation 75: Write(MathTex('0=20-\\frac12gt^2')): 100%|██████████| 2/2 [00:00<00:00,  6.45it/s]                                                                                                [09/30/26 02:49:43] INFO     Animation 75 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1224,7 +1224,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00075.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 76: Write(MathTex('t=\\sqrt{\\frac{40}{9.81}}\\approx 2.02\\,s')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 76: Write(MathTex('t=\\sqrt{\\frac{40}{9.81}}\\approx 2.02\\,s')):  50%|█████     | 1/2 [00:00<00:00,  9.85it/s]Animation 76: Write(MathTex('t=\\sqrt{\\frac{40}{9.81}}\\approx 2.02\\,s')): 100%|██████████| 2/2 [00:00<00:00,  9.34it/s]                                                                                                                                              INFO     Animation 76 : Partial     scene_file_writer.py:601
+Animation 76: Write(MathTex('t=\\sqrt{\\frac{40}{9.81}}\\approx 2.02\\,s')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 76: Write(MathTex('t=\\sqrt{\\frac{40}{9.81}}\\approx 2.02\\,s')):  50%|█████     | 1/2 [00:00<00:00,  6.46it/s]Animation 76: Write(MathTex('t=\\sqrt{\\frac{40}{9.81}}\\approx 2.02\\,s')): 100%|██████████| 2/2 [00:00<00:00,  6.33it/s]                                                                                                                                              INFO     Animation 76 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1233,7 +1233,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00076.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 77: _MethodAnimation(ValueTracker):   0%|          | 0/6 [00:00<?, ?it/s]Animation 77: _MethodAnimation(ValueTracker):  17%|█▋        | 1/6 [00:00<00:00,  9.86it/s]Animation 77: _MethodAnimation(ValueTracker):  33%|███▎      | 2/6 [00:00<00:00,  8.59it/s]Animation 77: _MethodAnimation(ValueTracker):  50%|█████     | 3/6 [00:00<00:00,  8.35it/s]Animation 77: _MethodAnimation(ValueTracker):  67%|██████▋   | 4/6 [00:00<00:00,  8.24it/s]Animation 77: _MethodAnimation(ValueTracker):  83%|████████▎ | 5/6 [00:00<00:00,  7.97it/s]Animation 77: _MethodAnimation(ValueTracker): 100%|██████████| 6/6 [00:00<00:00,  7.93it/s]                                                                                           [09/30/26 02:26:57] INFO     Animation 77 : Partial     scene_file_writer.py:601
+Animation 77: _MethodAnimation(ValueTracker):   0%|          | 0/6 [00:00<?, ?it/s]Animation 77: _MethodAnimation(ValueTracker):  17%|█▋        | 1/6 [00:00<00:00,  6.45it/s]Animation 77: _MethodAnimation(ValueTracker):  33%|███▎      | 2/6 [00:00<00:00,  5.89it/s]Animation 77: _MethodAnimation(ValueTracker):  50%|█████     | 3/6 [00:00<00:00,  5.73it/s]Animation 77: _MethodAnimation(ValueTracker):  67%|██████▋   | 4/6 [00:00<00:00,  5.58it/s]Animation 77: _MethodAnimation(ValueTracker):  83%|████████▎ | 5/6 [00:00<00:00,  5.45it/s]Animation 77: _MethodAnimation(ValueTracker): 100%|██████████| 6/6 [00:01<00:00,  5.42it/s]                                                                                           [09/30/26 02:49:44] INFO     Animation 77 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1242,7 +1242,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00077.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 78: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 78: FadeIn(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  8.11it/s]Animation 78: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  7.74it/s]                                                                                            [09/30/26 02:26:58] INFO     Animation 78 : Partial     scene_file_writer.py:601
+Animation 78: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 78: FadeIn(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  5.36it/s]Animation 78: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  5.25it/s]                                                                                            [09/30/26 02:49:45] INFO     Animation 78 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1267,14 +1267,14 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-                    WARNING  The original total run_time of        scene.py:1118
+[09/30/26 02:49:46] WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.027 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-Animation 80: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]Animation 80: FadeOut(VGroup of 3 submobjects), etc.: 100%|██████████| 1/1 [00:00<00:00,  2.84it/s]                                                                                                                       INFO     Animation 80 : Partial     scene_file_writer.py:601
+Animation 80: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]Animation 80: FadeOut(VGroup of 3 submobjects), etc.: 100%|██████████| 1/1 [00:00<00:00,  1.84it/s]                                                                                                                       INFO     Animation 80 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1282,7 +1282,7 @@ Manim Community v0.20.1
                              0p30/partial_movie_files/P                         
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00080.mp4'                          
-[09/30/26 02:26:59] INFO     Caching disabled.              cairo_renderer.py:83
+[09/30/26 02:49:47] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 81: Create(Line), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                           INFO     Animation 81 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -1447,7 +1447,7 @@ Manim Community v0.20.1
                              0p30/partial_movie_files/P                         
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00089.mp4'                          
-                    WARNING  The original total run_time of        scene.py:1118
+[09/30/26 02:49:48] WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.0198 seconds, is too short for               
                              the current frame rate of 30 FPS.                  
@@ -1496,7 +1496,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00092.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 93: FadeIn(VGroup of 4 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                    [09/30/26 02:27:00] INFO     Animation 93 : Partial     scene_file_writer.py:601
+Animation 93: FadeIn(VGroup of 4 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 93 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1519,7 +1519,7 @@ Manim Community v0.20.1
                              media_pql/Tex/6121b7ffea3a5                        
                              f76.tex                                            
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 94: FadeIn(Text('cumulative distance at equal times → 1 : 4 : 9 : 16')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                                            INFO     Animation 94 : Partial     scene_file_writer.py:601
+Animation 94: FadeIn(Text('cumulative distance at equal times → 1 : 4 : 9 : 16')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                        [09/30/26 02:49:49] INFO     Animation 94 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1571,7 +1571,7 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-[09/30/26 02:27:01] WARNING  The original total run_time of        scene.py:1118
+[09/30/26 02:49:50] WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.027 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
@@ -1605,7 +1605,7 @@ Manim Community v0.20.1
                              ial{dvisvgm:raw </g>} to                           
                              media_pql/Tex/b2da226f846b3                        
                              7b3.tex                                            
-[09/30/26 02:27:02] INFO     Caching disabled.              cairo_renderer.py:83
+[09/30/26 02:49:51] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 100: FadeIn(Axes of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                             INFO     Animation 100 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -1668,14 +1668,14 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 103: FadeIn(Dot):   0%|          | 0/1 [00:00<?, ?it/s]                    WARNING  The original total run_time of        scene.py:1118
+                    WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.012 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-                                                                                     INFO     Animation 103 : Partial    scene_file_writer.py:601
+Animation 103: FadeIn(Dot):   0%|          | 0/1 [00:00<?, ?it/s]                                                                                     INFO     Animation 103 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1824,13 +1824,13 @@ Manim Community v0.20.1
                              </g>} to                                           
                              media_pql/Tex/16091b69f37c8                        
                              7c5.tex                                            
-                    INFO     Writing                     tex_file_writing.py:110
+[09/30/26 02:49:52] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}g=2m\specia                        
                              l{dvisvgm:raw </g>} to                             
                              media_pql/Tex/4ec0a210e4835                        
                              705.tex                                            
-[09/30/26 02:27:03] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Caching disabled.              cairo_renderer.py:83
 Animation 111: Write(MathTex('m=\\frac{\\Delta d}{\\Delta(t^2)}=\\frac g2')), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                                             INFO     Animation 111 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -1863,7 +1863,7 @@ Manim Community v0.20.1
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-Animation 113: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                                INFO     Animation 113 : Partial    scene_file_writer.py:601
+Animation 113: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                            [09/30/26 02:49:53] INFO     Animation 113 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1888,7 +1888,7 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-[09/30/26 02:27:04] WARNING  The original total run_time of        scene.py:1118
+                    WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.027 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
@@ -1934,7 +1934,7 @@ Manim Community v0.20.1
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-Animation 117: GrowArrow(Arrow), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                INFO     Animation 117 : Partial    scene_file_writer.py:601
+Animation 117: GrowArrow(Arrow), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                            [09/30/26 02:49:54] INFO     Animation 117 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -1966,14 +1966,14 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 119: GrowArrow(Arrow), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                    WARNING  The original total run_time of        scene.py:1118
+                    WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.027 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-                                                                                                INFO     Animation 119 : Partial    scene_file_writer.py:601
+Animation 119: GrowArrow(Arrow), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                INFO     Animation 119 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -2005,14 +2005,14 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 121: GrowArrow(Arrow), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                    WARNING  The original total run_time of        scene.py:1118
+                    WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.027 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-                                                                                                INFO     Animation 121 : Partial    scene_file_writer.py:601
+Animation 121: GrowArrow(Arrow), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                INFO     Animation 121 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -2076,7 +2076,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00124.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 125: FadeIn(Text('A good experiment does not force the data to match the equation — it tests whether the pattern survives measurement uncertainty.')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                                                                                                      [09/30/26 02:27:05] INFO     Animation 125 : Partial    scene_file_writer.py:601
+Animation 125: FadeIn(Text('A good experiment does not force the data to match the equation — it tests whether the pattern survives measurement uncertainty.')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                                                                                                      [09/30/26 02:49:55] INFO     Animation 125 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -2101,7 +2101,7 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-                    WARNING  The original total run_time of        scene.py:1118
+[09/30/26 02:49:56] WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.027 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
@@ -2116,7 +2116,7 @@ Manim Community v0.20.1
                              0p30/partial_movie_files/P                         
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00127.mp4'                          
-[09/30/26 02:27:06] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Caching disabled.              cairo_renderer.py:83
 Animation 128: Write(Text('THEORY COMPLETE')), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                              INFO     Animation 128 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -2126,7 +2126,7 @@ Manim Community v0.20.1
                              hysics9VerticalFreeFallThe                         
                              oryV2/uncached_00128.mp4'                          
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 129: LaggedStart(Group):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                            INFO     Animation 129 : Partial    scene_file_writer.py:601
+Animation 129: LaggedStart(Group):   0%|          | 0/3 [00:00<?, ?it/s]                                                                        [09/30/26 02:49:57] INFO     Animation 129 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
@@ -2178,14 +2178,14 @@ Manim Community v0.20.1
                              total run_time of 0.0333333 seconds                
                              instead.                                           
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 134: FadeOut(Text('THEORY COMPLETE')), etc.:   0%|          | 0/1 [00:00<?, ?it/s][09/30/26 02:27:07] WARNING  The original total run_time of        scene.py:1118
+[09/30/26 02:49:58] WARNING  The original total run_time of        scene.py:1118
                              Physics9VerticalFreeFallTheoryV2.play              
                              (), 0.027 seconds, is too short for                
                              the current frame rate of 30 FPS.                  
                              Rendering with the shortest possible               
                              total run_time of 0.0333333 seconds                
                              instead.                                           
-                                                                                                                INFO     Animation 134 : Partial    scene_file_writer.py:601
+Animation 134: FadeOut(Text('THEORY COMPLETE')), etc.:   0%|          | 0/1 [00:00<?, ?it/s]                                                                                                                INFO     Animation 134 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_vertical_freefall_                         
