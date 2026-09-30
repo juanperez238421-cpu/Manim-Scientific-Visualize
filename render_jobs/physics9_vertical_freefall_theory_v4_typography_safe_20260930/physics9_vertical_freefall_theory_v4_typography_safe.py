@@ -581,7 +581,7 @@ class Physics9VerticalFreeFallTheoryV4TypographySafe(JPMathClassroomScene):
 
         grav = VGroup(
             *[
-                self.vector_arrow([x + 0.55, 0.62, 0], DOWN * 0.78, r"\vec g", label_size=20)
+                self.vector_arrow([x + 0.55, 0.62, 0], DOWN * 0.78, r"\vec g", label_size=23)
                 for x in xs
             ]
         )
@@ -644,7 +644,7 @@ class Physics9VerticalFreeFallTheoryV4TypographySafe(JPMathClassroomScene):
                 [-2.55, y, 0],
                 UP * np.clip(s.v / 11.0, -1.20, 1.20),
                 r"\vec v",
-                label_size=21,
+                label_size=23,
             )
 
         live_v = always_redraw(velocity_visual)
@@ -653,7 +653,7 @@ class Physics9VerticalFreeFallTheoryV4TypographySafe(JPMathClassroomScene):
                 [-3.72, y_scene(t.get_value()), 0],
                 DOWN * 0.78,
                 r"\vec a=-\vec g",
-                label_size=20,
+                label_size=23,
                 label_side=LEFT,
             )
         )
@@ -840,7 +840,7 @@ class Physics9VerticalFreeFallTheoryV4TypographySafe(JPMathClassroomScene):
                 [-2.65, y_scene(t.get_value()), 0],
                 DOWN * max(0.12, min(1.25, abs(state(t.get_value()).v) / 15.5)),
                 r"\vec v",
-                label_size=21,
+                label_size=23,
             )
         )
         hud = self.live_state_panel(
@@ -1001,8 +1001,8 @@ class Physics9VerticalFreeFallTheoryV4TypographySafe(JPMathClassroomScene):
         m1 = self.text("1 kg", 24, BOLD).move_to([-3, 2.15, 0])
         m2 = self.text("5 kg", 24, BOLD).move_to([3, 2.15, 0])
 
-        w1 = self.vector_arrow([-2.45, 0.95, 0], DOWN * 0.70, r"m_1g", label_size=20)
-        w2 = self.vector_arrow([3.60, 0.95, 0], DOWN * 1.18, r"m_2g", label_size=20)
+        w1 = self.vector_arrow([-2.45, 0.95, 0], DOWN * 0.70, r"m_1g", label_size=23)
+        w2 = self.vector_arrow([3.60, 0.95, 0], DOWN * 1.18, r"m_2g", label_size=23)
 
         self.play(FadeIn(guides), FadeIn(b1), FadeIn(b2), FadeIn(m1), FadeIn(m2), FadeIn(w1), FadeIn(w2), run_time=RUN_NORMAL)
         self.play(t.animate.set_value(1.0), run_time=RUN_SLOW * 1.8, rate_func=rate_functions.ease_in_quad)
