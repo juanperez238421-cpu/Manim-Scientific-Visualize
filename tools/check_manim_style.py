@@ -15,6 +15,10 @@ ABSOLUTE_PATH_PATTERNS = [
     re.compile(r"/home/[^/]+/"),
 ]
 
+TEACHING_TEXT_MIN = 23
+GRAPH_TICK_MIN = 18
+FORMULA_MIN = 29
+
 
 def class_base_names(node: ast.ClassDef) -> set[str]:
     names: set[str] = set()
@@ -25,6 +29,62 @@ def class_base_names(node: ast.ClassDef) -> set[str]:
             names.add(base.attr)
     return names
 
+
+def _numeric_arg(call: ast.Call, index: int) -> int | float | None:
+    if len(call.args) <= index:
+        return None
+    node = call.args[index]
+    if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+        return node.value
+    return None
+
+
+def audit_typography(tree: ast.AST, failures: list[str], warnings: list[str]) -> None:
+    """Detect explicit font-size regressions in lesson source."""
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        if isinstance(node.func, ast.Attribute):
+            func_name = node.func.attr
+        elif isinstance(node.func, ast.Name):
+            func_name = node.func.id
+        else:
+            func_name = None
+
+        if func_name == "text":
+            size = _numeric_arg(node, 1)
+            if size is not None:
+                if size < GRAPH_TICK_MIN:
+                    failures.append(f"Line {node.lineno}: Text size {size} < {GRAPH_TICK_MIN}.")
+                elif size < TEACHING_TEXT_MIN:
+                    warnings.append(
+                        f"Line {node.lineno}: Text size {size} is secondary-label territory; "
+                        "do not use it for teaching-critical prose."
+                    )
+
+        if func_name == "math":
+            size = _numeric_arg(node, 1)
+            if size is not None and size < FORMULA_MIN:
+                warnings.append(
+                    f"Line {node.lineno}: Math size {size} < {FORMULA_MIN}; "
+                    "reserve it for compact labels, not derivations."
+                )
+
+        if func_name in {"Tex", "Text", "MathTex"}:
+            for keyword in node.keywords:
+                if keyword.arg == "font_size" and isinstance(keyword.value, ast.Constant):
+                    value = keyword.value.value
+                    if isinstance(value, (int, float)) and value < GRAPH_TICK_MIN:
+                        failures.append(
+                            f"Line {node.lineno}: explicit font_size {value} < {GRAPH_TICK_MIN}."
+                        )
+
+
+def audit_layout_contract(source: str, failures: list[str], warnings: list[str]) -> None:
+    if "text_block(" not in source:
+        warnings.append("No text_block() usage detected; long prose should wrap instead of silently shrinking.")
+    if "assert_content_safe(" not in source and "assert_text_safe(" not in source:
+        warnings.append("No explicit runtime safe-margin assertion detected in lesson source.")
 
 def main(path_str: str) -> int:
     path = Path(path_str)
@@ -74,6 +134,9 @@ def main(path_str: str) -> int:
 
     if "RED" in source or "BLUE" in source or "GREEN" in source:
         warnings.append("Colored emphasis detected. Standard default is monochrome unless explicitly requested.")
+
+    audit_typography(tree, failures, warnings)
+    audit_layout_contract(source, failures, warnings)
 
     # Heuristic for giant monolithic construct methods.
     for node in classes:
