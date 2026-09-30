@@ -1,0 +1,163 @@
+name: Lab9A NO-PC07 REAL PQH
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'render_jobs/lab9a_seating_no_pc07_20260907/lab9a_seating.py'
+      - '.github/workflows/lab9a_no_pc07_pqh_20260907.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'manim/lab9a-seating-no-pc07-20260907'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Static validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/lab9a_seating_no_pc07_20260907/lab9a_seating.py
+          python -m py_compile "$SRC"
+          grep -q 'ACTIVE_PCS: Tuple\[int, ...\] = (1, 2, 3, 4, 5, 6, 8, 9)' "$SRC"
+          grep -q 'BLOCKED_PC = 7' "$SRC"
+          grep -q 'assert all(pc != BLOCKED_PC' "$SRC"
+          grep -q 'PC07 SE OMITE' "$SRC"
+          grep -q 'NINGÚN ESTUDIANTE DE NOVENO A SE UBICA EN LA MESA 7' "$SRC"
+
+      - name: Install exact ManimCE container and ffmpeg
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg zip
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL QA render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/lab9a_seating_no_pc07_20260907/lab9a_seating.py
+          SCENE=Lab9AFixedSeatingNoPC07
+          rm -rf media_pql qa_out
+          mkdir -p qa_out
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=0.06 \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pql $SRC $SCENE --fps 15 --format=mp4 --media_dir media_pql --disable_caching" \
+            2>&1 | tee qa_out/pql.log
+          PQL="$(find media_pql -type f -name "${SCENE}.mp4" | head -1)"
+          test -s "$PQL"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/lab9a_seating_no_pc07_20260907/lab9a_seating.py
+          SCENE=Lab9AFixedSeatingNoPC07
+          rm -rf media
+          mkdir -p deliverables/lab9a_seating_no_pc07
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pqh $SRC $SCENE --fps 30 --format=mp4 --media_dir media --disable_caching" \
+            2>&1 | tee deliverables/lab9a_seating_no_pc07/pqh.log
+          FINAL="$(find media -type f -name "${SCENE}.mp4" | head -1)"
+          test -s "$FINAL"
+          cp "$FINAL" deliverables/lab9a_seating_no_pc07/Lab9A_Fixed_Seating_NO_PC07_SENIOR_FINAL_pqh.mp4
+
+      - name: Technical and visual QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=deliverables/lab9a_seating_no_pc07
+          F="$OUT/Lab9A_Fixed_Seating_NO_PC07_SENIOR_FINAL_pqh.mp4"
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          R="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          C="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          P="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          D="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\n%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$R" "$C" "$P" "$D" > "$OUT/VIDEO_TECHNICAL.tsv"
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$R" = 30/1
+          test "$C" = h264
+          test "$P" = yuv420p
+          python -c 'import sys; d=float(sys.argv[1]); assert 35 <= d <= 180, d' "$D"
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/decode.log"
+          mkdir -p "$OUT/qa_frames"
+          for FRACTION in 0.08 0.25 0.48 0.68 0.88; do
+            T="$(awk -v d="$D" -v f="$FRACTION" 'BEGIN{printf "%.2f",d*f}')"
+            TAG="$(printf '%s' "$FRACTION" | tr -d '.')"
+            ffmpeg -y -ss "$T" -i "$F" -frames:v 1 "$OUT/qa_frames/frame_${TAG}.png" >/dev/null 2>&1
+          done
+          sha256sum "$F" > "$OUT/SHA256SUMS.txt"
+          cat > "$OUT/RENDER_INFO.txt" <<'EOF'
+          Noveno A · fixed seating by official list order
+          ManimCE 0.20.1
+          Literal -pql QA followed by literal -pqh final render
+          1920x1080 @ 30 fps
+          24 students
+          PC01: students 1-3
+          PC02: students 4-6
+          PC03: students 7-9
+          PC04: students 10-12
+          PC05: students 13-15
+          PC06: students 16-18
+          PC07: BLOCKED / NO STUDENTS
+          PC08: students 19-21
+          PC09: students 22-24
+          EOF
+          cp render_jobs/lab9a_seating_no_pc07_20260907/lab9a_seating.py "$OUT/Lab9A_source.py"
+          (cd "$OUT" && zip -9 Lab9A_NO_PC07_SENIOR_REAL_MANIM_PQH_PACKAGE.zip \
+            Lab9A_Fixed_Seating_NO_PC07_SENIOR_FINAL_pqh.mp4 \
+            Lab9A_source.py VIDEO_TECHNICAL.tsv SHA256SUMS.txt RENDER_INFO.txt decode.log pqh.log qa_frames/*.png)
+
+      - name: Persist final delivery on PR branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deliverables/lab9a_seating_no_pc07
+          if git diff --cached --quiet; then
+            echo "No delivery changes to commit"
+          else
+            git commit -m "render: persist Noveno A seating no-PC07 PQH delivery"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
+
+      - name: Upload delivery artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lab9A-NO-PC07-SENIOR-REAL-MANIM-PQH
+          path: |
+            deliverables/lab9a_seating_no_pc07/Lab9A_Fixed_Seating_NO_PC07_SENIOR_FINAL_pqh.mp4
+            deliverables/lab9a_seating_no_pc07/Lab9A_NO_PC07_SENIOR_REAL_MANIM_PQH_PACKAGE.zip
+            deliverables/lab9a_seating_no_pc07/VIDEO_TECHNICAL.tsv
+            deliverables/lab9a_seating_no_pc07/SHA256SUMS.txt
+            deliverables/lab9a_seating_no_pc07/RENDER_INFO.txt
+            deliverables/lab9a_seating_no_pc07/qa_frames/*.png
+          if-no-files-found: error
+          retention-days: 7
