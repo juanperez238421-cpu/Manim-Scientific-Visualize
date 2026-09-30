@@ -1,0 +1,225 @@
+name: Physics9 Vertical FreeFall V4 Typography Safe PQH
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - render_jobs/physics9_vertical_freefall_theory_v4_typography_safe_20260930/**
+      - library/jp_classroom_style.py
+      - tools/check_manim_style.py
+      - .github/workflows/physics9_vertical_freefall_v4_typography_safe_pqh.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    name: Render + QA Physics9 V4 Typography Safe
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout V4 branch
+        uses: actions/checkout@v4
+        with:
+          ref: physics9-v4-typography-safe-layout-20260930
+          fetch-depth: 0
+
+      - name: Static compile + JP style QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_vertical_freefall_theory_v4_typography_safe_20260930/physics9_vertical_freefall_theory_v4_typography_safe.py
+          mkdir -p qa_static
+          python -m py_compile library/jp_classroom_style.py "$SRC"
+          python tools/check_manim_style.py "$SRC" | tee qa_static/style_qa.log
+          grep -q "class Physics9VerticalFreeFallTheoryV4TypographySafe" "$SRC"
+          grep -q "validate_lesson_data" "$SRC"
+          grep -q "standard_opening" "$SRC"
+          grep -q "set_header" "$SRC"
+          grep -q "clear_stage" "$SRC"
+          grep -q "PAUSE_EXPLAIN" "$SRC"
+          grep -q "always_redraw" "$SRC"
+          grep -q "build_table" "$SRC"
+          grep -q "process_map" "$SRC"
+          grep -q "text_block" "$SRC"
+          grep -q "assert_text_safe" "$SRC"
+          grep -q "Physics9VerticalFreeFallTheoryV4TypographySafe" "$SRC"
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          src = Path("render_jobs/physics9_vertical_freefall_theory_v4_typography_safe_20260930/physics9_vertical_freefall_theory_v4_typography_safe.py").read_text(encoding="utf-8")
+          bad = []
+          for m in re.finditer(r'self\.text\([^\n]*?,\s*(\d+)\s*(?:,|\))', src):
+              size = int(m.group(1))
+              if size < 18:
+                  bad.append((m.start(), size))
+          if bad:
+              raise SystemExit(f"FAIL typography floor: {bad}")
+          print("PASS: no explicit Text below 18; teaching prose governed by V4 role floors.")
+          PY
+
+      - name: Prepare ManimCE 0.20.1 + FFmpeg
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+          ffmpeg -version | head -1
+          ffprobe -version | head -1
+
+      - name: Full-timeline PQL protocol gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_vertical_freefall_theory_v4_typography_safe_20260930/physics9_vertical_freefall_theory_v4_typography_safe.py
+          SCENE=Physics9VerticalFreeFallTheoryV4TypographySafe
+          rm -rf media_pql qa_pql
+          mkdir -p qa_pql
+          docker run --rm             --user "$(id -u):$(id -g)"             -e HOME=/tmp/manim-home             -e PYTHONPATH=/manim             -e LESSON_TIME_SCALE=0.05             -v "$PWD:/manim" -w /manim             --entrypoint bash manimcommunity/manim:v0.20.1             -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pql $SRC $SCENE --fps 15 --format=mp4 --media_dir media_pql --disable_caching"             2>&1 | tee qa_pql/pql.log
+          PQL="$(find media_pql -type f -name "$SCENE.mp4" | head -1)"
+          test -n "$PQL"
+          test -s "$PQL"
+
+      - name: PQM visual review gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_vertical_freefall_theory_v4_typography_safe_20260930/physics9_vertical_freefall_theory_v4_typography_safe.py
+          SCENE=Physics9VerticalFreeFallTheoryV4TypographySafe
+          rm -rf media_pqm qa_pqm
+          mkdir -p qa_pqm
+          docker run --rm             --user "$(id -u):$(id -g)"             -e HOME=/tmp/manim-home             -e PYTHONPATH=/manim             -e LESSON_TIME_SCALE=0.18             -v "$PWD:/manim" -w /manim             --entrypoint bash manimcommunity/manim:v0.20.1             -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pqm $SRC $SCENE --fps 20 --format=mp4 --media_dir media_pqm --disable_caching"             2>&1 | tee qa_pqm/pqm.log
+          PQM="$(find media_pqm -type f -name "$SCENE.mp4" | head -1)"
+          test -n "$PQM"
+          test -s "$PQM"
+
+      - name: Literal PQH 1080p final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_vertical_freefall_theory_v4_typography_safe_20260930/physics9_vertical_freefall_theory_v4_typography_safe.py
+          SCENE=Physics9VerticalFreeFallTheoryV4TypographySafe
+          OUT=deliveries/physics9/vertical_freefall_theory_v4_typography_safe_20260930
+
+          rm -rf media_final "$OUT"
+          mkdir -p "$OUT"
+
+          docker run --rm             --user "$(id -u):$(id -g)"             -e HOME=/tmp/manim-home             -e PYTHONPATH=/manim             -e LESSON_TIME_SCALE=1.0             -v "$PWD:/manim" -w /manim             --entrypoint bash manimcommunity/manim:v0.20.1             -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pqh $SRC $SCENE --fps 30 --format=mp4 --media_dir media_final --disable_caching"             2>&1 | tee "$OUT/pqh.log"
+
+          FINAL="$(find media_final -type f -name "$SCENE.mp4" | head -1)"
+          test -n "$FINAL"
+          test -s "$FINAL"
+
+          ffmpeg -y -v error -i "$FINAL"             -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -r 30             -movflags +faststart -an             "$OUT/Physics9_VerticalMotion_FreeFall_THEORY_V4_TYPOGRAPHY_SAFE_FINAL_pqh.mp4"
+
+          cp "$SRC" "$OUT/Physics9_VerticalMotion_FreeFall_THEORY_V4_source.py"
+          cp library/jp_classroom_style.py "$OUT/jp_classroom_style_used.py"
+          if [ -f render_jobs/physics9_vertical_freefall_theory_v4_typography_safe_20260930/README_RENDER.md ]; then
+            cp render_jobs/physics9_vertical_freefall_theory_v4_typography_safe_20260930/README_RENDER.md "$OUT/README_RENDER.md"
+          fi
+          cp render_jobs/physics9_vertical_freefall_theory_v4_typography_safe_20260930/TYPOGRAPHY_SAFE_LAYOUT_SPEC.md "$OUT/TYPOGRAPHY_SAFE_LAYOUT_SPEC.md"
+          cp qa_static/style_qa.log "$OUT/style_qa.log"
+          cp qa_pql/pql.log "$OUT/pql.log"
+          cp qa_pqm/pqm.log "$OUT/pqm.log"
+
+      - name: Technical decode + distributed visual QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=deliveries/physics9/vertical_freefall_theory_v4_typography_safe_20260930
+          F="$OUT/Physics9_VerticalMotion_FreeFall_THEORY_V4_TYPOGRAPHY_SAFE_FINAL_pqh.mp4"
+
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration_s\tsize_bytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n'             "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > "$OUT/VIDEO_TECHNICAL.tsv"
+
+          test "$W" = "1920"
+          test "$H" = "1080"
+          test "$FPS" = "30/1"
+          test "$CODEC" = "h264"
+          test "$PIX" = "yuv420p"
+          awk -v d="$DUR" 'BEGIN { exit !(d > 150) }'
+          test "$SIZE" -gt 2000000
+
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/full_decode.log"
+
+          mkdir -p "$OUT/qa_frames"
+          i=0
+          for FRC in 0.015 0.043 0.071 0.099 0.127 0.155 0.183 0.211 0.239 0.267 0.295 0.323 0.351 0.379 0.407 0.435 0.463 0.491 0.519 0.547 0.575 0.603 0.631 0.659 0.687 0.715 0.743 0.771 0.799 0.827 0.855 0.883 0.911 0.939 0.967 0.985; do
+            T="$(awk -v d="$DUR" -v f="$FRC" 'BEGIN{printf "%.3f",d*f}')"
+            printf -v TAG "%02d" "$i"
+            ffmpeg -y -ss "$T" -i "$F" -frames:v 1 "$OUT/qa_frames/frame_$TAG.png" >/dev/null 2>&1
+            i=$((i+1))
+          done
+
+          COUNT="$(find "$OUT/qa_frames" -type f -name 'frame_*.png' | wc -l)"
+          test "$COUNT" -eq 36
+
+          ffmpeg -y -pattern_type glob -i "$OUT/qa_frames/frame_*.png"             -vf 'scale=320:-1,tile=6x6:padding=6:margin=6:color=white'             -frames:v 1             "$OUT/Physics9_VerticalMotion_FreeFall_THEORY_V4_QA_CONTACT_SHEET_36.png" >/dev/null 2>&1
+
+          sha256sum "$F" > "$OUT/SHA256SUMS.txt"
+
+          {
+            echo "# Physics 9 — Vertical Motion + Free Fall V4 TYPOGRAPHY SAFE"
+            echo
+            echo "- ManimCE: 0.20.1"
+            echo "- JP Classroom style: canonical library copied into delivery"
+            echo "- Resolution: $W x $H"
+            echo "- FPS: $FPS"
+            echo "- Codec: $CODEC"
+            echo "- Pixel format: $PIX"
+            echo "- Duration: $DUR s"
+            echo "- Bytes: $SIZE"
+            echo "- py_compile: PASS"
+            echo "- JP style static QA: PASS"
+            echo "- full-timeline PQL: PASS"
+            echo "- PQM visual-review render: PASS"
+            echo "- literal PQH final: PASS"
+            echo "- full sequential FFmpeg decode: PASS"
+            echo "- distributed visual samples: 36"
+            echo
+            echo "Pedagogical motion design:"
+            echo "- persistent numbered JP section header"
+            echo "- white / monochrome classroom hierarchy"
+            echo "- explicit checkpoint cards and intentional pauses"
+            echo "- continuous motion with dynamic velocity/acceleration vectors"
+            echo "- Newton derivation by equation morphing"
+            echo "- velocity and position equations developed one causal step at a time"
+            echo "- three initial conditions animated simultaneously"
+            echo "- worked upward throw with physical pauses at apex"
+            echo "- synchronized physical object + y(t) + v(t) + a(t)"
+            echo "- 20 m drop solved while motion continues"
+            echo "- equal-time stroboscopic 1:3:5:7 and 1:4:9:16 logic"
+            echo "- d-vs-t parabola transformed into d-vs-t^2 line"
+            echo "- experimental protocol and uncertainty bridge"
+          } > "$OUT/QA_REPORT.md"
+
+      - name: Persist validated V4 delivery to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deliveries/physics9/vertical_freefall_theory_v4_typography_safe_20260930
+          if ! git diff --cached --quiet; then
+            git commit -m "render: publish Physics9 V4 typography-safe PQH [skip ci]"
+            git pull --rebase origin physics9-v4-typography-safe-layout-20260930
+            git push origin HEAD:physics9-v4-typography-safe-layout-20260930
+          fi
+
+      - name: Upload complete V4 package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-Vertical-FreeFall-V4-Typography-Safe
+          path: deliveries/physics9/vertical_freefall_theory_v4_typography_safe_20260930
+          if-no-files-found: error
