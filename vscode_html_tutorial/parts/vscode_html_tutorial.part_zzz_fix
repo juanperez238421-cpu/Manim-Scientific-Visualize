@@ -1,0 +1,38 @@
+
+# Runtime compatibility fixes discovered during native ManimCE 0.20.1 PQL validation.
+_V2_ORIGINAL_SHELL_INIT = VSCodeShell.__init__
+
+
+def _v2_shell_init_with_aliases(self, *args, **kwargs):
+    _V2_ORIGINAL_SHELL_INIT(self, *args, **kwargs)
+    self.regions["menu"] = self.regions["top"]
+    self.regions["terminal"] = self.regions["panel"]
+
+
+VSCodeShell.__init__ = _v2_shell_init_with_aliases
+
+
+def v2_html_line(line, size=17):
+    # Pango in ManimCE 0.20.1 cannot generate character submobjects for a
+    # whitespace-only string when disable_ligatures=True. Use an invisible
+    # glyph to preserve blank-line geometry without triggering that bug.
+    if not line:
+        return Text(".", font=FONT_MONO, font_size=size, color=TEXT_SOFT).set_opacity(0)
+    colors = {}
+    for quoted in re.findall(r'"[^"\n]*"', line):
+        colors[quoted] = ORANGE
+    for token in [
+        "<!DOCTYPE", "<html", "</html", "<head", "</head", "<body", "</body",
+        "<meta", "<title", "</title", "<h1", "</h1", "<p", "</p",
+        "<strong", "</strong",
+    ]:
+        if token in line:
+            colors[token] = BLUE
+    return Text(
+        line,
+        font=FONT_MONO,
+        font_size=size,
+        color=TEXT_SOFT,
+        t2c=colors,
+        disable_ligatures=True,
+    )
