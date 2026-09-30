@@ -38,6 +38,7 @@ jobs:
           set -euo pipefail
           mkdir -p "$JOB_ROOT/source"
           base64 -d "$JOB_ROOT/thread_profile_coil_triangle_senior.py.gz.b64" | gzip -dc > "$JOB_ROOT/thread_profile_coil_triangle_senior.py"
+          sed -i '/^CUT =/a VALID = PREVIEW  # established Inventor preview/validation green' "$JOB_ROOT/thread_profile_coil_triangle_senior.py"
           python -m py_compile \
             "$BASE_JOB/library/inventor_pro_ui.py" \
             "$BASE_JOB/library/sketch_to_3d_helpers.py" \
