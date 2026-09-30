@@ -1,0 +1,130 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Seminar Grade 11 — OOP UML-first presentation, Senior QA V11.
+
+V11 goals relative to V10:
+- preserve the successful object-first conceptual sequence and JP classroom language;
+- rebuild every class representation using conventional UML compartments;
+- increase diagram and typography scale while preserving projector-safe margins;
+- eliminate crossing connectors and all avoidable text/figure overlap;
+- make attributes and methods visually explicit in every class diagram;
+- use canonical UML generalization, realization and composition notation where useful.
+
+Target: ManimCE 0.20.1, horizontal 1920x1080, 30 fps.
+Preview: manim -pql Seminar11_OOP_UML_SENIOR_V11.py Seminar11OOPUMLV11 --disable_caching
+Final:   manim -pqh Seminar11_OOP_UML_SENIOR_V11.py Seminar11OOPUMLV11 --fps 30 --disable_caching
+"""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from jp_classroom_style import *
+
+
+# =============================================================================
+# COMPONENT BUILDERS
+# =============================================================================
+
+class Seminar11OOPUMLV11(JPClassroomScene):
+    """UML-first, object-centered OOP introduction with strict safe-frame QA."""
+
+    def validate_lesson_data(self) -> None:
+        # Conceptual invariants displayed in the lesson.
+        assert 3 == len(["state", "behavior", "identity"])
+        assert 4 == len(["encapsulation", "inheritance", "polymorphism", "composition"])
+
+    # ------------------------------------------------------------------
+    # Generic UI primitives
+    # ------------------------------------------------------------------
+    def pill(self, label: str, width: float = 1.55, height: float = 0.48, size: int = 20) -> VGroup:
+        box = RoundedRectangle(
+            width=width,
+            height=height,
+            corner_radius=0.10,
+            stroke_color=BLACK_LINE,
+            stroke_width=1.5,
+            fill_color=WHITE,
+            fill_opacity=1,
+        )
+        text = self.text(label, size, MEDIUM)
+        self.fit(text, width - 0.20, height - 0.12)
+        text.move_to(box)
+        return VGroup(box, text)
+
+    def object_card(self, title: str, subtitle: str, width: float = 2.45, height: float = 1.55) -> VGroup:
+        box = RoundedRectangle(
+            width=width,
+            height=height,
+            corner_radius=0.12,
+            stroke_color=BLACK_LINE,
+            stroke_width=1.6,
+            fill_color=WHITE,
+            fill_opacity=1,
+        )
+        icon = Circle(radius=0.22, stroke_color=BLACK_LINE, stroke_width=1.7, fill_color=VERY_LIGHT_GRAY, fill_opacity=1)
+        initial = self.text(title[:1].upper(), 22, BOLD).move_to(icon)
+        heading = self.text(title, 22, BOLD)
+        note = self.text(subtitle, 16)
+        self.fit(heading, width - 0.28, 0.34)
+        self.fit(note, width - 0.28, 0.40)
+        content = VGroup(VGroup(icon, initial), heading, note).arrange(DOWN, buff=0.10)
+        content.move_to(box)
+        return VGroup(box, content)
+
+    def robot(self, scale: float = 1.0, label: str | None = None) -> VGroup:
+        head = RoundedRectangle(
+            width=1.25, height=0.70, corner_radius=0.12,
+            stroke_color=BLACK_LINE, stroke_width=2.0,
+            fill_color=WHITE, fill_opacity=1,
+        )
+        eye_l = Dot(radius=0.055, color=BLACK_LINE).move_to(head.get_center() + LEFT * 0.32)
+        eye_r = Dot(radius=0.055, color=BLACK_LINE).move_to(head.get_center() + RIGHT * 0.32)
+        mouth = Line(LEFT * 0.20, RIGHT * 0.20, color=BLACK_LINE, stroke_width=1.8).move_to(head.get_center() + DOWN * 0.18)
+        antenna = Line(head.get_top(), head.get_top() + UP * 0.26, color=BLACK_LINE, stroke_width=1.8)
+        antenna_dot = Dot(antenna.get_end(), radius=0.045, color=BLACK_LINE)
+
+        body = RoundedRectangle(
+            width=1.55, height=1.20, corner_radius=0.10,
+            stroke_color=BLACK_LINE, stroke_width=2.0,
+            fill_color=WHITE, fill_opacity=1,
+        ).next_to(head, DOWN, buff=0.15)
+        display = RoundedRectangle(
+            width=0.72, height=0.34, corner_radius=0.05,
+            stroke_color=BLACK_LINE, stroke_width=1.4,
+            fill_color=VERY_LIGHT_GRAY, fill_opacity=1,
+        ).move_to(body.get_center() + UP * 0.17)
+        bars = VGroup(*[
+            Rectangle(width=0.10, height=0.18, stroke_color=BLACK_LINE, stroke_width=1, fill_color=MID_GRAY, fill_opacity=1)
+            for _ in range(4)
+        ]).arrange(RIGHT, buff=0.055).move_to(display)
+        rmark = self.text("R", 19, BOLD).move_to(body.get_center() + DOWN * 0.30)
+
+        arm_l = Line(body.get_left() + UP * 0.18, body.get_left() + LEFT * 0.52 + DOWN * 0.20, color=BLACK_LINE, stroke_width=1.8)
+        arm_r = Line(body.get_right() + UP * 0.18, body.get_right() + RIGHT * 0.52 + DOWN * 0.20, color=BLACK_LINE, stroke_width=1.8)
+        wheel_l = Circle(radius=0.18, stroke_color=BLACK_LINE, stroke_width=1.7, fill_color=WHITE, fill_opacity=1).move_to(body.get_bottom() + LEFT * 0.53 + DOWN * 0.12)
+        wheel_r = wheel_l.copy().move_to(body.get_bottom() + RIGHT * 0.53 + DOWN * 0.12)
+        hub_l = Dot(wheel_l.get_center(), radius=0.035, color=BLACK_LINE)
+        hub_r = Dot(wheel_r.get_center(), radius=0.035, color=BLACK_LINE)
+
+        parts = VGroup(head, eye_l, eye_r, mouth, antenna, antenna_dot, body, display, bars, rmark, arm_l, arm_r, wheel_l, wheel_r, hub_l, hub_r)
+        if label:
+            label_mob = self.text(label, 18, BOLD).next_to(parts, DOWN, buff=0.16)
+            parts = VGroup(parts, label_mob)
+        parts.scale(scale)
+        return parts
+
+    def drone(self, scale: float = 1.0, label: str | None = None) -> VGroup:
+        body = Ellipse(width=1.10, height=0.46, stroke_color=BLACK_LINE, stroke_width=2.0, fill_color=WHITE, fill_opacity=1)
+        eye = Dot(radius=0.045, color=BLACK_LINE).move_to(body.get_center() + DOWN * 0.03)
+        mast_l = Line(body.get_left() + UP * 0.05, body.get_left() + LEFT * 0.42 + UP * 0.38, color=BLACK_LINE, stroke_width=1.5)
+        mast_r = Line(body.get_right() + UP * 0.05, body.get_right() + RIGHT * 0.42 + UP * 0.38, color=BLACK_LINE, stroke_width=1.5)
+        prop_l = Ellipse(width=0.62, height=0.16, stroke_color=BLACK_LINE, stroke_width=1.4).move_to(mast_l.get_end())
+        prop_r = Ellipse(width=0.62, height=0.16, stroke_color=BLACK_LINE, stroke_width=1.4).move_to(mast_r.get_end())
+        legs = VGroup(
+            Line(body.get_bottom()+LEFT*0.30, body.get_bottom()+LEFT*0.42+DOWN*0.30, color=BLACK_LINE, stroke_width=1.4),
+            Line(body.get_bottom()+RIGHT*0.30, body.get_bottom()+RIGHT*0.42+DOWN*0.30, color=BLACK_LINE, stroke_width=1.4),
+        )
+        parts = VGroup(body, eye, mast_l, mast_r, prop_l, prop_r, legs)

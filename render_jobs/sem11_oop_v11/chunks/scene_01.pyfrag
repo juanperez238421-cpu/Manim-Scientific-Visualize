@@ -1,0 +1,130 @@
+        if label:
+            parts = VGroup(parts, self.text(label, 18, BOLD).next_to(parts, DOWN, buff=0.15))
+        return parts.scale(scale)
+
+    def boat(self, scale: float = 1.0, label: str | None = None) -> VGroup:
+        hull = Polygon(LEFT*0.90, RIGHT*0.90, RIGHT*0.62+DOWN*0.32, LEFT*0.62+DOWN*0.32,
+                       stroke_color=BLACK_LINE, stroke_width=2.0, fill_color=WHITE, fill_opacity=1)
+        mast = Line(ORIGIN+UP*0.05, ORIGIN+UP*1.15, color=BLACK_LINE, stroke_width=1.7)
+        sail = Polygon(ORIGIN+UP*1.10, ORIGIN+UP*0.25, RIGHT*0.70+UP*0.25,
+                       stroke_color=BLACK_LINE, stroke_width=1.7, fill_color=VERY_LIGHT_GRAY, fill_opacity=1)
+        waves = VGroup(*[
+            Arc(radius=0.27, start_angle=0, angle=PI, stroke_color=MID_GRAY, stroke_width=1.4)
+            for _ in range(4)
+        ]).arrange(RIGHT, buff=-0.08).next_to(hull, DOWN, buff=0.05)
+        parts = VGroup(hull, mast, sail, waves)
+        if label:
+            parts = VGroup(parts, self.text(label, 18, BOLD).next_to(parts, DOWN, buff=0.15))
+        return parts.scale(scale)
+
+    def arrow_with_label(self, start: np.ndarray, end: np.ndarray, label: str, label_shift=UP*0.18) -> VGroup:
+        arrow = Arrow(start, end, buff=0.12, color=BLACK_LINE, stroke_width=2.0, max_tip_length_to_length_ratio=0.14)
+        text = self.text(label, 16, MEDIUM).move_to((start + end)/2 + label_shift)
+        return VGroup(arrow, text)
+
+
+    def uml_class(
+        self,
+        name: str,
+        attributes: list[str],
+        methods: list[str],
+        width: float = 4.25,
+        height: float = 4.35,
+        stereotype: str | None = None,
+        title_size: int = 25,
+        body_size: int = 18,
+    ) -> VGroup:
+        """Classic three-compartment UML class box: name / attributes / methods."""
+        box = RoundedRectangle(
+            width=width,
+            height=height,
+            corner_radius=0.08,
+            stroke_color=BLACK_LINE,
+            stroke_width=2.0,
+            fill_color=WHITE,
+            fill_opacity=1,
+        )
+        header_h = 0.92 if stereotype is None else 1.12
+        remaining = height - header_h
+        attr_h = remaining * 0.48
+        y1 = box.get_top()[1] - header_h
+        y2 = y1 - attr_h
+        sep1 = Line([box.get_left()[0], y1, 0], [box.get_right()[0], y1, 0], color=BLACK_LINE, stroke_width=1.5)
+        sep2 = Line([box.get_left()[0], y2, 0], [box.get_right()[0], y2, 0], color=BLACK_LINE, stroke_width=1.5)
+
+        if stereotype:
+            st = self.text(f"<<{stereotype}>>", 15, MEDIUM)
+            title = self.text(name, title_size, BOLD)
+            header = VGroup(st, title).arrange(DOWN, buff=0.02)
+        else:
+            header = self.text(name, title_size, BOLD)
+        self.fit(header, width - 0.36, header_h - 0.16)
+        header.move_to([0, box.get_top()[1] - header_h/2, 0])
+
+        attr_group = VGroup(*[self.text(item, body_size) for item in attributes])
+        if len(attr_group):
+            attr_group.arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+            self.fit(attr_group, width - 0.52, attr_h - 0.22)
+            attr_group.move_to([0, (y1 + y2)/2, 0]).align_to(box, LEFT).shift(RIGHT*0.28)
+
+        meth_h = height - header_h - attr_h
+        method_group = VGroup(*[self.text(item, body_size) for item in methods])
+        if len(method_group):
+            method_group.arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+            self.fit(method_group, width - 0.52, meth_h - 0.22)
+            method_group.move_to([0, (y2 + box.get_bottom()[1])/2, 0]).align_to(box, LEFT).shift(RIGHT*0.28)
+
+        return VGroup(box, sep1, sep2, header, attr_group, method_group)
+
+    def uml_object(
+        self,
+        object_name: str,
+        class_name: str,
+        attributes: list[str],
+        width: float = 3.20,
+        height: float = 2.55,
+        title_size: int = 21,
+        body_size: int = 17,
+    ) -> VGroup:
+        """Compact UML object instance with underlined object : Class header."""
+        box = RoundedRectangle(
+            width=width, height=height, corner_radius=0.08,
+            stroke_color=BLACK_LINE, stroke_width=1.8, fill_color=WHITE, fill_opacity=1,
+        )
+        header = self.text(f"{object_name} : {class_name}", title_size, BOLD)
+        self.fit(header, width - 0.36, 0.42)
+        header.move_to(box.get_top() + DOWN*0.38)
+        underline = Line(header.get_left()+DOWN*0.07, header.get_right()+DOWN*0.07, color=BLACK_LINE, stroke_width=1.2)
+        sep = Line([box.get_left()[0], box.get_top()[1]-0.72, 0], [box.get_right()[0], box.get_top()[1]-0.72, 0], color=BLACK_LINE, stroke_width=1.4)
+        attrs = VGroup(*[self.text(item, body_size) for item in attributes]).arrange(DOWN, aligned_edge=LEFT, buff=0.11)
+        self.fit(attrs, width - 0.50, height - 1.02)
+        attrs.move_to(box.get_center()+DOWN*0.23).align_to(box, LEFT).shift(RIGHT*0.28)
+        return VGroup(box, sep, header, underline, attrs)
+
+    def uml_generalization(self, child: Mobject, parent: Mobject) -> VGroup:
+        """Hollow-triangle UML generalization from child to parent."""
+        start = child.get_top()
+        end = parent.get_bottom()
+        vec = end - start
+        unit = vec / np.linalg.norm(vec)
+        line_end = end - unit*0.19
+        line = Line(start, line_end, color=BLACK_LINE, stroke_width=2.0)
+        tip = Triangle(stroke_color=BLACK_LINE, stroke_width=1.8, fill_color=WHITE, fill_opacity=1).scale(0.13)
+        tip.rotate(np.arctan2(vec[1], vec[0]) - PI/2).move_to(end - unit*0.04)
+        return VGroup(line, tip)
+
+    def uml_realization(self, child: Mobject, interface: Mobject) -> VGroup:
+        """Dashed UML realization with a hollow triangular tip."""
+        start = child.get_top()
+        end = interface.get_bottom()
+        vec = end - start
+        unit = vec / np.linalg.norm(vec)
+        dashed = DashedLine(start, end-unit*0.20, color=BLACK_LINE, stroke_width=1.8, dash_length=0.12)
+        tip = Triangle(stroke_color=BLACK_LINE, stroke_width=1.7, fill_color=WHITE, fill_opacity=1).scale(0.13)
+        tip.rotate(np.arctan2(vec[1], vec[0]) - PI/2).move_to(end-unit*0.04)
+        return VGroup(dashed, tip)
+
+    def uml_composition(self, owner: Mobject, part: Mobject, label: str = "") -> VGroup:
+        """UML composition: filled diamond at owner side plus a non-crossing connector."""
+        start = owner.get_bottom()
+        end = part.get_top()

@@ -1,0 +1,130 @@
+            "Private attributes stay inside the class; public methods control how state changes.",
+        )
+
+        scattered_title = self.text("BEFORE: SCATTERED", 22, BOLD)
+        scattered = VGroup(
+            self.pill("robot_energy", 2.25, 0.56, 20),
+            self.pill("robot_position", 2.45, 0.56, 20),
+            self.pill("move_robot()", 2.35, 0.56, 20),
+            self.pill("charge_robot()", 2.55, 0.56, 20),
+        ).arrange(DOWN, buff=0.26)
+        before = VGroup(scattered_title, scattered).arrange(DOWN, buff=0.34).move_to(LEFT*4.55 + DOWN*0.45)
+
+        robot_class = self.uml_class(
+            "Robot",
+            ["- energy : int", "- position : int"],
+            ["+ move()", "+ recharge()"],
+            width=5.10, height=4.55, title_size=29, body_size=22,
+        ).move_to(RIGHT*3.55 + DOWN*0.42)
+        boundary = self.text("AFTER: ENCAPSULATED", 22, BOLD).next_to(robot_class, UP, buff=0.22)
+        bridge = Arrow(before.get_right()+RIGHT*0.18, robot_class.get_left()+LEFT*0.22, buff=0.12, color=BLACK_LINE, stroke_width=2.2)
+        rule = self.text("Only methods cross the boundary to change internal state.", 24, BOLD).to_edge(DOWN, buff=0.34)
+
+        layout = VGroup(before, robot_class, boundary, bridge)
+        self.assert_content_safe(layout, "scene_03 encapsulation")
+        self.assert_no_overlap([before, VGroup(robot_class, boundary)], "scene_03 major blocks")
+        self.assert_within_frame(rule, "scene_03 rule", margin=0.20)
+
+        self.play(FadeIn(before, shift=UP*0.08), run_time=RUN_NORMAL)
+        self.wait(PAUSE_EXPLAIN)
+        self.play(GrowArrow(bridge), FadeIn(boundary), Create(robot_class[0]), Create(robot_class[1]), Create(robot_class[2]), run_time=RUN_NORMAL)
+        self.play(FadeIn(robot_class[3]), run_time=RUN_QUICK)
+        self.play(TransformFromCopy(scattered[0], robot_class[4][0]), TransformFromCopy(scattered[1], robot_class[4][1]), run_time=RUN_NORMAL)
+        self.play(TransformFromCopy(scattered[2], robot_class[5][0]), TransformFromCopy(scattered[3], robot_class[5][1]), run_time=RUN_NORMAL)
+        self.wait(PAUSE_EXPLAIN)
+        self.play(FadeIn(rule, shift=UP*0.08), run_time=RUN_NORMAL)
+        self.wait(PAUSE_WORK)
+        self.clear_stage()
+
+    # ------------------------------------------------------------------
+    def scene_inheritance(self) -> None:
+        self.set_header(
+            4,
+            "INHERITANCE: GENERALIZE, THEN SPECIALIZE",
+            "Put shared attributes and methods in the parent; children add only what is different.",
+        )
+
+        parent = self.uml_class(
+            "Vehicle",
+            ["# speed : float", "# position : float"],
+            ["+ move()", "+ stop()"],
+            width=4.15, height=3.20, title_size=27, body_size=18,
+        ).move_to(UP*0.92)
+        robot = self.uml_class(
+            "Robot",
+            ["- energy : int"],
+            ["+ recharge()"],
+            width=4.25, height=2.70, title_size=25, body_size=18,
+        ).move_to(LEFT*3.65 + DOWN*2.15)
+        drone = self.uml_class(
+            "Drone",
+            ["- altitude : float"],
+            ["+ take_off()"],
+            width=4.25, height=2.70, title_size=25, body_size=18,
+        ).move_to(RIGHT*3.65 + DOWN*2.15)
+        relations = VGroup(self.uml_generalization(robot, parent), self.uml_generalization(drone, parent))
+        shared_tag = self.text("SHARED", 17, BOLD).next_to(parent, LEFT, buff=0.22)
+        special_l = self.text("SPECIALIZED", 16, BOLD).next_to(robot, LEFT, buff=0.16)
+        special_r = self.text("SPECIALIZED", 16, BOLD).next_to(drone, RIGHT, buff=0.16)
+        note = self.text("Hollow triangle = is-a relationship", 22, BOLD).to_edge(DOWN, buff=0.26)
+
+        layout = VGroup(parent, robot, drone, relations, shared_tag, special_l, special_r)
+        self.assert_content_safe(layout, "scene_04 inheritance")
+        self.assert_no_overlap([parent, robot, drone], "scene_04 class boxes")
+        self.assert_within_frame(note, "scene_04 note", margin=0.18)
+
+        self.play(FadeIn(parent, shift=DOWN*0.08), FadeIn(shared_tag), run_time=RUN_NORMAL)
+        self.wait(PAUSE_EXPLAIN)
+        self.play(FadeIn(robot, shift=UP*0.08), FadeIn(drone, shift=UP*0.08), run_time=RUN_NORMAL)
+        self.play(Create(relations[0][0]), FadeIn(relations[0][1]), Create(relations[1][0]), FadeIn(relations[1][1]), run_time=RUN_NORMAL)
+        self.play(FadeIn(special_l), FadeIn(special_r), run_time=RUN_QUICK)
+        self.wait(PAUSE_EXPLAIN)
+        self.play(FadeIn(note, shift=UP*0.08), run_time=RUN_NORMAL)
+        self.wait(PAUSE_WORK)
+        self.clear_stage()
+
+    # ------------------------------------------------------------------
+    def scene_polymorphism(self) -> None:
+        self.set_header(
+            5,
+            "POLYMORPHISM: SAME MESSAGE, DIFFERENT BEHAVIOR",
+            "Different classes implement the same interface while keeping the caller independent of details.",
+        )
+
+        interface = self.uml_class(
+            "Movable",
+            [],
+            ["+ move()"],
+            width=3.60, height=2.20, stereotype="interface", title_size=25, body_size=20,
+        ).move_to(UP*1.25)
+        robot = self.uml_class("Robot", ["- energy : int"], ["+ move()  -> roll"], width=4.0, height=2.55, body_size=17).move_to(LEFT*4.60 + DOWN*1.90)
+        drone = self.uml_class("Drone", ["- altitude : float"], ["+ move()  -> fly"], width=4.0, height=2.55, body_size=17).move_to(DOWN*1.90)
+        boat = self.uml_class("Boat", ["- heading : float"], ["+ move()  -> sail"], width=4.0, height=2.55, body_size=17).move_to(RIGHT*4.60 + DOWN*1.90)
+        classes = VGroup(robot, drone, boat)
+        relations = VGroup(*[self.uml_realization(c, interface) for c in classes])
+        call = self.pill("caller -> move()", 2.95, 0.58, 21).next_to(interface, RIGHT, buff=0.45)
+        note = self.text("One contract. Three implementations.", 24, BOLD).to_edge(DOWN, buff=0.26)
+
+        layout = VGroup(interface, classes, relations, call)
+        self.assert_content_safe(layout, "scene_05 polymorphism")
+        self.assert_no_overlap([interface, robot, drone, boat, call], "scene_05 blocks")
+        self.assert_within_frame(note, "scene_05 note", margin=0.18)
+
+        self.play(FadeIn(interface, shift=DOWN*0.08), FadeIn(call), run_time=RUN_NORMAL)
+        self.wait(PAUSE_EXPLAIN)
+        self.play(LaggedStart(*[FadeIn(c, shift=UP*0.08) for c in classes], lag_ratio=0.14), run_time=RUN_SLOW)
+        self.play(LaggedStart(*[Create(rel[0]) for rel in relations], lag_ratio=0.12), run_time=RUN_NORMAL)
+        self.play(*[FadeIn(rel[1]) for rel in relations], run_time=RUN_QUICK)
+        self.wait(PAUSE_EXPLAIN)
+        self.play(FadeIn(note, shift=UP*0.08), run_time=RUN_NORMAL)
+        self.wait(PAUSE_WORK)
+        self.clear_stage()
+
+    # ------------------------------------------------------------------
+    def scene_composition(self) -> None:
+        self.set_header(
+            6,
+            "COMPOSITION: BUILD A SYSTEM FROM OBJECTS",
+            "A whole owns cooperating parts; each class still keeps one clear responsibility.",
+        )
+

@@ -1,0 +1,130 @@
+        vec = end - start
+        unit = vec / np.linalg.norm(vec)
+        diamond = Square(side_length=0.22, stroke_color=BLACK_LINE, stroke_width=1.5, fill_color=BLACK_LINE, fill_opacity=1).rotate(PI/4)
+        diamond.move_to(start + unit*0.15)
+        line = Line(start + unit*0.30, end, color=BLACK_LINE, stroke_width=1.8)
+        group = VGroup(diamond, line)
+        if label:
+            txt = self.text(label, 15, MEDIUM).move_to((start+end)/2 + RIGHT*0.18)
+            group.add(txt)
+        return group
+
+    def assert_no_overlap(self, mobs: list[Mobject], label: str, padding: float = 0.08) -> None:
+        """Fail PQL/PQH if independent diagram blocks geometrically overlap."""
+        for i, a in enumerate(mobs):
+            for j, b in enumerate(mobs[i+1:], i+1):
+                x_overlap = min(a.get_right()[0], b.get_right()[0]) - max(a.get_left()[0], b.get_left()[0])
+                y_overlap = min(a.get_top()[1], b.get_top()[1]) - max(a.get_bottom()[1], b.get_bottom()[1])
+                if x_overlap > padding and y_overlap > padding:
+                    raise ValueError(f"{label}: blocks {i} and {j} overlap by ({x_overlap:.3f}, {y_overlap:.3f})")
+
+    # ------------------------------------------------------------------
+    # Lesson orchestration
+    # ------------------------------------------------------------------
+    def construct(self) -> None:
+        self.opening()
+        self.scene_real_object()
+        self.scene_blueprint_instances()
+        self.scene_encapsulation()
+        self.scene_inheritance()
+        self.scene_polymorphism()
+        self.scene_composition()
+        self.scene_project_thinking()
+        self.standard_closing("MODEL THE WORLD. GIVE EACH OBJECT A RESPONSIBILITY.")
+
+    def opening(self) -> None:
+        # Retain the V9 message, but make the hierarchy more readable.
+        self.standard_opening(
+            "SEMINAR - GRADE 11",
+            "OBJECT-ORIENTED PROGRAMMING",
+            "AS A LIVING SYSTEM",
+            "Do not memorize boxes. Watch objects own state, perform actions, and cooperate.",
+        )
+
+    # ------------------------------------------------------------------
+    # 01 — real object
+    # ------------------------------------------------------------------
+    def scene_real_object(self) -> None:
+        self.set_header(
+            1,
+            "START WITH A REAL OBJECT",
+            "An object has identity, state and behavior. Keep those three ideas together.",
+        )
+
+        bot = self.robot(scale=1.48, label="Atlas").move_to(LEFT*3.65 + DOWN*0.55)
+        object_box = self.uml_object(
+            "atlas", "Robot",
+            ['name = "Atlas"', 'energy = 90', 'position = 1'],
+            width=5.15, height=3.85, title_size=25, body_size=22,
+        ).move_to(RIGHT*3.00 + DOWN*0.35)
+
+        method_label = self.text("BEHAVIOR", 19, BOLD)
+        methods = VGroup(self.pill("move()", 1.80, 0.58, 22), self.pill("recharge()", 2.25, 0.58, 22)).arrange(RIGHT, buff=0.28)
+        method_block = VGroup(method_label, methods).arrange(DOWN, buff=0.16).next_to(object_box, DOWN, buff=0.28)
+        identity = self.text("IDENTITY", 20, BOLD).next_to(bot, UP, buff=0.22)
+        connector = Arrow(bot.get_right()+RIGHT*0.20, object_box.get_left()+LEFT*0.18, buff=0.10, color=LIGHT_GRAY, stroke_width=2.0)
+
+        layout = VGroup(bot, identity, object_box, method_block, connector)
+        self.assert_content_safe(layout, "scene_01 object")
+        self.assert_no_overlap([VGroup(bot, identity), VGroup(object_box, method_block)], "scene_01 major blocks")
+
+        self.play(FadeIn(bot, shift=UP*0.12), FadeIn(identity), run_time=RUN_NORMAL)
+        self.wait(PAUSE_READ)
+        self.play(GrowArrow(connector), Create(object_box[0]), Create(object_box[1]), run_time=RUN_NORMAL)
+        self.play(FadeIn(object_box[2]), FadeIn(object_box[3]), run_time=RUN_QUICK)
+        self.play(LaggedStart(*[FadeIn(line, shift=RIGHT*0.08) for line in object_box[4]], lag_ratio=0.14), run_time=RUN_SLOW)
+        self.play(FadeIn(method_label), LaggedStart(*[FadeIn(m, shift=UP*0.08) for m in methods], lag_ratio=0.20), run_time=RUN_NORMAL)
+        self.wait(PAUSE_EXPLAIN)
+        self.play(bot.animate.shift(RIGHT*0.38), methods[0].animate.scale(1.08), run_time=RUN_NORMAL)
+        self.wait(PAUSE_WORK)
+        self.clear_stage()
+
+    # ------------------------------------------------------------------
+    def scene_blueprint_instances(self) -> None:
+        self.set_header(
+            2,
+            "CLASS -> MANY OBJECTS",
+            "The class defines the structure; each object stores its own attribute values.",
+        )
+
+        robot_class = self.uml_class(
+            "Robot",
+            ["- name : str", "- energy : int", "- position : int"],
+            ["+ move()", "+ recharge()"],
+            width=4.35, height=4.65, title_size=28, body_size=20,
+        ).move_to(LEFT*4.75 + DOWN*0.45)
+
+        objects = VGroup(
+            self.uml_object("explorer", "Robot", ['name = "Explorer"', 'energy = 90', 'position = 0'], width=3.15, height=2.45),
+            self.uml_object("courier", "Robot", ['name = "Courier"', 'energy = 75', 'position = 5'], width=3.15, height=2.45),
+            self.uml_object("scout", "Robot", ['name = "Scout"', 'energy = 85', 'position = 2'], width=3.15, height=2.45),
+        ).arrange(RIGHT, buff=0.34).move_to(RIGHT*2.65 + DOWN*0.45)
+
+        label = self.text("INSTANTIATION", 18, BOLD).move_to(RIGHT*2.65 + UP*2.15)
+        arrows = VGroup(*[
+            Arrow(robot_class.get_right()+RIGHT*0.06, obj.get_left()+LEFT*0.08, buff=0.12, color=LIGHT_GRAY, stroke_width=1.7)
+            for obj in objects
+        ])
+        note = self.text("Same class. Different state.", 25, BOLD).to_edge(DOWN, buff=0.34)
+
+        layout = VGroup(robot_class, objects, label, arrows)
+        self.assert_content_safe(layout, "scene_02 class objects")
+        self.assert_no_overlap([robot_class, *objects], "scene_02 cards")
+        self.assert_within_frame(note, "scene_02 note", margin=0.20)
+
+        self.play(Create(robot_class[0]), Create(robot_class[1]), Create(robot_class[2]), FadeIn(robot_class[3]), run_time=RUN_NORMAL)
+        self.play(FadeIn(robot_class[4]), FadeIn(robot_class[5]), run_time=RUN_NORMAL)
+        self.wait(PAUSE_EXPLAIN)
+        self.play(FadeIn(label), run_time=RUN_QUICK)
+        for obj, arrow in zip(objects, arrows):
+            self.play(GrowArrow(arrow), FadeIn(obj, shift=UP*0.08), run_time=RUN_NORMAL)
+        self.wait(PAUSE_EXPLAIN)
+        self.play(FadeIn(note, shift=UP*0.08), run_time=RUN_NORMAL)
+        self.wait(PAUSE_WORK)
+        self.clear_stage()
+
+    # ------------------------------------------------------------------
+    def scene_encapsulation(self) -> None:
+        self.set_header(
+            3,
+            "ENCAPSULATION: ONE CLEAR BOUNDARY",
