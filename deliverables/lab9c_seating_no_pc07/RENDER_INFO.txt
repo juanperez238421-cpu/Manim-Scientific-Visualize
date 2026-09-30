@@ -1,0 +1,10 @@
+NOVENO C · Fundamentos de Física · 07/09/2026
+Official list order only; grades are not used.
+20 students.
+PC01 1-3; PC02 4-6; PC03 7-9; PC04 10-12; PC05 13-15; PC06 16-18.
+PC07 BLOCKED / NO USAR.
+PC08 students 19-20; seat C remains free.
+PC09 no assignment.
+ManimCE 0.20.1 · literal PQL QA then literal PQH.
+1920x1080 · 30 fps · H.264 · yuv420p.
+PDF generated only from real stable frames extracted from the final MP4.
