@@ -115,7 +115,7 @@ jobs:
           cp "$FINAL" "delivery_v2/final/$OUTPUT_NAME"
           cp "$SCENE_FILE" delivery_v2/source/
           cp thread_profile_coil_triangle_senior.py delivery_v2/source/
-          cp "$BASE_JOB/library/inventor_pro_ui.py" delivery_v2/source/
+          cp "$GITHUB_WORKSPACE/$BASE_JOB/library/inventor_pro_ui.py" delivery_v2/source/
 
       - name: Senior technical QA and dense visual frame audit
         shell: bash
