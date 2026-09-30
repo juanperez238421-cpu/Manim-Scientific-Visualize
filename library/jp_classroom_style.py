@@ -951,8 +951,8 @@ class JPClassroomScene(MovingCameraScene):
                 fill_color=VERY_LIGHT_GRAY,
                 fill_opacity=1,
             )
-            badge_text = self.text(number, 19, BOLD).move_to(badge)
-            body = self.text(text_value, 21, BOLD)
+            badge_text = self.text(number, 23, BOLD).move_to(badge)
+            body = self.text(text_value, 24, BOLD)
             content = VGroup(VGroup(badge, badge_text), body).arrange(RIGHT, buff=0.18)
             self.fit(content, card_width - 0.35, card_height - 0.20)
             box = RoundedRectangle(
