@@ -466,8 +466,8 @@ class JPClassroomScene(MovingCameraScene):
         subtitle_text.next_to(rule, DOWN, buff=0.08).align_to(title_row, LEFT)
 
         new_header = VGroup(title_row, rule)
-        self.assert_within_frame(new_header, "section header", margin=SAFE_TEXT_MARGIN_X)
-        self.assert_within_frame(subtitle_text, "section subtitle", margin=SAFE_TEXT_MARGIN_X)
+        self.assert_text_safe(new_header, "section header")
+        self.assert_text_safe(subtitle_text, "section subtitle")
         if subtitle_text.get_bottom()[1] < 2.62:
             raise ValueError(
                 "Section subtitle intrudes into content zone; shorten or split the wording."
