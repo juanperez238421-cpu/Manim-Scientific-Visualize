@@ -1,0 +1,198 @@
+name: Geometry 8 Circle Area TWO ROWS V4 POLISHED FINAL PQH 20260827
+
+on:
+  push:
+    branches: [render/geometry8-circle-area-decomposition-stepbystep-20260827]
+    paths:
+      - 'render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827.py'
+      - 'render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827_V2.py'
+      - 'render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Area_Decomposition_TWO_ROWS_20260827_V3.py'
+      - 'render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Area_Decomposition_TWO_ROWS_20260827_V4_POLISHED.py'
+      - '.github/workflows/geometry8_circle_area_two_rows_v4_polished_20260827.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-v4-polished:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile complete source stack and structural QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_circle_pedagogical_qa_20260819
+          SRC="$JOB/Geometry8_Circle_Area_Decomposition_TWO_ROWS_20260827_V4_POLISHED.py"
+          mkdir -p out qa_out media qa_media
+
+          python -Werror -m py_compile \
+            "$JOB/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827.py" \
+            "$JOB/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827_V2.py" \
+            "$JOB/Geometry8_Circle_Area_Decomposition_TWO_ROWS_20260827_V3.py" \
+            "$SRC"
+
+          grep -Fq 'class Geometry8CircleAreaTwoRows20260827V4Polished' "$SRC"
+          grep -Fq 'def step_2_cut_polished' "$SRC"
+          grep -Fq 'def step_5_interlock_pair_first' "$SRC"
+          grep -Fq 'def step_8_limit_and_formula_polished' "$SRC"
+          grep -Fq 'FILA 1' "$SRC"
+          grep -Fq 'FILA 2' "$SRC"
+          grep -Fq '\frac{P}{2}' "$SRC"
+
+          if grep -Eq '[A-Za-z]:\\|/Users/|/home/[^/]+/Desktop' "$SRC"; then
+            echo 'Absolute path detected' >&2
+            exit 1
+          fi
+
+      - name: Literal PQL full-timeline runtime gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Area_Decomposition_TWO_ROWS_20260827_V4_POLISHED.py
+          mkdir -p /tmp/manim-bin /tmp/manim-home qa_media qa_out
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=0.05
+
+          manim -pql "$SRC" Geometry8CircleAreaTwoRows20260827V4Polished \
+            --fps 15 --format=mp4 --media_dir qa_media --disable_caching \
+            2>&1 | tee qa_out/CIRCLE_AREA_TWO_ROWS_V4_POLISHED_pql.log
+
+          PQL="$(find qa_media -type f -name 'Geometry8CircleAreaTwoRows20260827V4Polished.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PQL" && test -s "$PQL"
+          cp "$PQL" qa_out/Geometry8_Circle_Area_TWO_ROWS_V4_POLISHED_20260827_pql.mp4
+
+          python - "$PQL" <<'PY'
+          import av, sys
+          p=sys.argv[1]
+          frames=0
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              for _ in c.decode(s): frames += 1
+          assert frames > 0
+          print(f'PQL full decode PASS: {frames} frames')
+          PY
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/geometry8_circle_pedagogical_qa_20260819/Geometry8_Circle_Area_Decomposition_TWO_ROWS_20260827_V4_POLISHED.py
+          mkdir -p /tmp/manim-bin /tmp/manim-home out media
+          printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+          chmod +x /tmp/manim-bin/xdg-open
+          export PATH=/tmp/manim-bin:$PATH
+          export HOME=/tmp/manim-home
+          export LESSON_TIME_SCALE=1.0
+
+          manim -pqh "$SRC" Geometry8CircleAreaTwoRows20260827V4Polished \
+            --fps 30 --format=mp4 --media_dir media --disable_caching \
+            2>&1 | tee out/CIRCLE_AREA_TWO_ROWS_V4_POLISHED_pqh.log
+
+          FINAL="$(find media -type f -name 'Geometry8CircleAreaTwoRows20260827V4Polished.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" out/Geometry8_Circle_Area_TWO_ROWS_V4_POLISHED_20260827_FINAL_pqh.mp4
+
+      - name: Mandatory final technical QA and full decode
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Geometry8_Circle_Area_TWO_ROWS_V4_POLISHED_20260827_FINAL_pqh.mp4
+          python - "$F" <<'PY' | tee out/VIDEO_TECHNICAL_QA_V4_POLISHED.txt
+          import av, os, sys
+          p=sys.argv[1]
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              codec=s.codec_context.name
+              width=s.codec_context.width
+              height=s.codec_context.height
+              fmt=s.codec_context.format.name if s.codec_context.format else ''
+              fps=float(s.average_rate) if s.average_rate else 0.0
+              duration=float(c.duration)/float(av.time_base) if c.duration else 0.0
+              frames=0
+              for _ in c.decode(s): frames += 1
+          print(f'codec_name={codec}')
+          print(f'width={width}')
+          print(f'height={height}')
+          print(f'pix_fmt={fmt}')
+          print(f'fps={fps:.6f}')
+          print(f'duration={duration:.6f}')
+          print(f'frames_decoded={frames}')
+          print(f'size={os.path.getsize(p)}')
+          assert codec == 'h264'
+          assert width == 1920 and height == 1080
+          assert abs(fps - 30.0) < 0.01
+          assert fmt == 'yuv420p'
+          assert duration > 20
+          assert frames > 0
+          PY
+          sha256sum "$F" | tee out/SHA256SUMS_V4_POLISHED.txt
+
+      - name: Dense visual QA contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Geometry8_Circle_Area_TWO_ROWS_V4_POLISHED_20260827_FINAL_pqh.mp4
+          mkdir -p out/frame_samples_v4
+          python - "$F" <<'PY'
+          import av, math, os, sys
+          from PIL import Image, ImageDraw
+          p=sys.argv[1]
+          saved=[]
+          with av.open(p) as c:
+              s=c.streams.video[0]
+              duration=float(c.duration)/float(av.time_base)
+              targets=[duration*i/37 for i in range(1,37)]
+              ti=0
+              for frame in c.decode(s):
+                  if ti >= len(targets): break
+                  t=float(frame.pts*frame.time_base) if frame.pts is not None else 0.0
+                  if t >= targets[ti]:
+                      fp=f'out/frame_samples_v4/frame_{ti+1:02d}_{targets[ti]:06.2f}.jpg'
+                      frame.to_image().convert('RGB').save(fp, quality=91)
+                      saved.append(fp)
+                      ti += 1
+          assert len(saved) >= 30, f'Expected dense audit, got {len(saved)} frames'
+          cards=[]
+          for fp in saved:
+              im=Image.open(fp).convert('RGB')
+              im.thumbnail((480,270))
+              card=Image.new('RGB',(500,300),'white')
+              card.paste(im,((500-im.width)//2,8))
+              ImageDraw.Draw(card).text((10,280),os.path.basename(fp),fill='black')
+              cards.append(card)
+          cols=3
+          rows=math.ceil(len(cards)/cols)
+          sheet=Image.new('RGB',(cols*500,rows*300),'white')
+          for i,im in enumerate(cards):
+              sheet.paste(im,((i%cols)*500,(i//cols)*300))
+          sheet.save('out/Geometry8_Circle_Area_TWO_ROWS_V4_POLISHED_contact_sheet.jpg', quality=91)
+          print(f'Visual QA frames: {len(saved)}')
+          PY
+
+          JOB=render_jobs/geometry8_circle_pedagogical_qa_20260819
+          cp "$JOB/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827.py" out/
+          cp "$JOB/Geometry8_Circle_Area_Decomposition_STEP_BY_STEP_20260827_V2.py" out/
+          cp "$JOB/Geometry8_Circle_Area_Decomposition_TWO_ROWS_20260827_V3.py" out/
+          cp "$JOB/Geometry8_Circle_Area_Decomposition_TWO_ROWS_20260827_V4_POLISHED.py" out/
+          cp qa_out/CIRCLE_AREA_TWO_ROWS_V4_POLISHED_pql.log out/
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Geometry8-Circle-Area-TWO-ROWS-V4-POLISHED-20260827-FINAL-PQH
+          path: |
+            out/
+            qa_out/
+          if-no-files-found: warn
+          retention-days: 7

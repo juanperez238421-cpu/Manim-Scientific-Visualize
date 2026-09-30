@@ -1,0 +1,43 @@
+name: Geometry 8 2D Areas FINAL TOTAL PQH 20260831
+
+on:
+  push:
+    branches: [render/geometry8-2d-areas-masterclass-20260831]
+    paths:
+      - 'render_jobs/geometry8_2d_areas_masterclass_20260831/**'
+      - '.github/workflows/geometry8_2d_areas_masterclass_full_total_20260831.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-full-total-package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    container:
+      image: manimcommunity/manim:v0.20.1
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bootstrap protocol and render full package
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/geometry8_2d_areas_masterclass_20260831
+          P="$JOB/payloads/run_geometry8_2d_areas_full_protocol.sh.gz.b64"
+          base64 -d "$P" | gzip -dc > "$JOB/run_geometry8_2d_areas_full_protocol.sh"
+          chmod +x "$JOB/run_geometry8_2d_areas_full_protocol.sh"
+          bash "$JOB/run_geometry8_2d_areas_full_protocol.sh"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Geometry8-2D-Areas-FINAL-TOTAL-20260831-PQH
+          path: |
+            out/
+            qa_out/
+          if-no-files-found: warn
+          retention-days: 14
