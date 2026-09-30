@@ -1,0 +1,43 @@
+name: OpenAI Asset Demo Debug
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  debug:
+    if: github.event.pull_request.head.ref == 'agent/openai-asset-manim-pqh-demo-20260815'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run pipeline and retain status
+        id: render
+        shell: bash
+        run: |
+          set +e
+          bash render_jobs/openai_asset_demo_20260815/run_short.sh
+          status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Upload debug evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenAIAssetDemo-debug
+          path: |
+            preview.log
+            final.log
+            decode.log
+            SOURCE_SHA256.txt
+            main.py
+            jp_classroom_style.py
+            assets/images/openai_inclined_plane.webp
+            media/
+            delivery/
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Fail if render pipeline failed
+        if: steps.render.outputs.status != '0'
+        shell: bash
+        run: exit 1

@@ -1,0 +1,35 @@
+name: OpenAI Asset Demo Safe
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'agent/openai-asset-manim-pqh-demo-20260815'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Render and verify
+        id: render
+        shell: bash
+        run: bash render_jobs/openai_asset_demo_20260815/run_safe.sh
+      - name: Upload verified delivery
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenAIAssetSafeDemo-PQH
+          path: delivery/
+          if-no-files-found: error
+          retention-days: 7
+      - name: Commit verified MP4 to render branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add render_outputs/openai_asset_demo_20260815/
+          git commit -m 'Add verified OpenAI asset Manim PQH render' || exit 0
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}

@@ -1,0 +1,90 @@
+
+            run_time=RUN_CAMERA,
+        )
+        self.wait(pause)
+        self.play(Restore(self.camera.frame), run_time=RUN_CAMERA)
+
+        if persistent:
+            self.play(*[FadeIn(item) for item in persistent], run_time=RUN_QUICK)
+
+    def focus_sequence(
+        self,
+        objects: Sequence[Mobject],
+        widths: Sequence[float] | None = None,
+        pause: float = PAUSE_READ,
+    ) -> None:
+        widths = widths or [8.0] * len(objects)
+        for mob, width in zip(objects, widths):
+            self.focus_on(mob, width=width, pause=pause)
+
+    # ---------------------------------------------------------------------
+    # Custom tables
+    # ---------------------------------------------------------------------
+    def build_table(
+        self,
+        headers: Sequence[str],
+        body_rows: Sequence[Sequence[str]],
+        column_widths: Sequence[float],
+        *,
+        math_columns: Iterable[int] = (),
+        row_height: float = 0.62,
+        header_height: float = 0.72,
+        body_font_size: int = 25,
+        header_font_size: int = 23,
+    ) -> TableDiagram:
+        if len(headers) != len(column_widths):
+            raise ValueError("headers and column_widths must have equal length")
+        if any(len(row) != len(headers) for row in body_rows):
+            raise ValueError("every body row must match the header length")
+
+        math_column_set = set(math_columns)
+        row_count = 1 + len(body_rows)
+        column_count = len(headers)
+        total_width = sum(column_widths)
+        total_height = header_height + len(body_rows) * row_height
+
+        rectangles: list[list[Rectangle]] = []
+        entries: list[list[Mobject]] = []
+        row_groups: list[VGroup] = []
+
+        left_edge = -total_width / 2
+        top_edge = total_height / 2
+
+        for row_index in range(row_count):
+            current_height = header_height if row_index == 0 else row_height
+            y_center = top_edge - current_height / 2
+            if row_index > 0:
+                y_center -= header_height + (row_index - 1) * row_height
+
+            row_rectangles: list[Rectangle] = []
+            row_entries: list[Mobject] = []
+            x_cursor = left_edge
+
+            for column_index, column_width in enumerate(column_widths):
+                x_center = x_cursor + column_width / 2
+                is_header = row_index == 0
+
+                rectangle = Rectangle(
+                    width=column_width,
+                    height=current_height,
+                    stroke_color=BLACK_LINE,
+                    stroke_width=1.25,
+                    fill_color=VERY_LIGHT_GRAY if is_header else WHITE_FILL,
+                    fill_opacity=1.0,
+                )
+                rectangle.move_to([x_center, y_center, 0])
+
+                content = headers[column_index] if is_header else body_rows[row_index - 1][column_index]
+                if is_header:
+                    is_math_header = any(marker in content for marker in ("_", "^", "\\", "="))
+                    entry = (
+                        self.math(content, header_font_size)
+                        if is_math_header
+                        else self.text(content, header_font_size, BOLD)
+                    )
+                elif column_index in math_column_set:
+                    entry = self.math(content, body_font_size)
+                else:
+                    entry = self.text(content, body_font_size)
+
+                self.fit(entry, column_width - 0.18, curren

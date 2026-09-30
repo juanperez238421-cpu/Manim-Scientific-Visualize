@@ -1,0 +1,106 @@
+ecks -> interpretation -> summary.
+    """
+
+    def setup(self) -> None:
+        super().setup()
+        self.validate_lesson_data()
+        self.camera.background_color = WHITE
+        self.camera.frame.set(width=FRAME_WIDTH).move_to(ORIGIN)
+        self.header_group: VGroup | None = None
+        self.subtitle_group: Mobject | None = None
+
+    # ---------------------------------------------------------------------
+    # Data validation hook
+    # ---------------------------------------------------------------------
+    def validate_lesson_data(self) -> None:
+        """Override in each lesson to assert every displayed numerical claim.
+
+        Example:
+            assert abs(sum(values) / len(values) - EXPECTED_MEAN) < 1e-12
+        """
+
+    # ---------------------------------------------------------------------
+    # Global timing wrappers
+    # ---------------------------------------------------------------------
+    def play(self, *animations, **kwargs):
+        if kwargs.get("run_time") is not None:
+            kwargs["run_time"] *= TIME_SCALE
+        return super().play(*animations, **kwargs)
+
+    def wait(self, duration: float = DEFAULT_WAIT_TIME, *args, **kwargs):
+        return super().wait(duration * TIME_SCALE, *args, **kwargs)
+
+    # ---------------------------------------------------------------------
+    # Typography
+    # ---------------------------------------------------------------------
+    def text(
+        self,
+        content: str,
+        size: int = 30,
+        weight=NORMAL,
+        **kwargs,
+    ) -> Text:
+        return Text(
+            content,
+            font_size=size,
+            color=BLACK_TEXT,
+            weight=weight,
+            line_spacing=0.92,
+            **kwargs,
+        )
+
+    def math(self, expression: str, size: int = 38, **kwargs) -> MathTex:
+        return MathTex(expression, font_size=size, color=BLACK_TEXT, **kwargs)
+
+    def fit(
+        self,
+        mob: Mobject,
+        max_width: float = SAFE_WIDTH,
+        max_height: float = SAFE_HEIGHT,
+    ) -> Mobject:
+        """Only scale down; never enlarge. This preserves typography hierarchy."""
+        if mob.width > max_width:
+            mob.scale_to_fit_width(max_width)
+        if mob.height > max_height:
+            mob.scale_to_fit_height(max_height)
+        return mob
+
+    def fit_content_zone(
+        self,
+        mob: Mobject,
+        max_width: float = 14.4,
+        max_height: float = 5.85,
+    ) -> Mobject:
+        return self.fit(mob, max_width=max_width, max_height=max_height)
+
+    # ---------------------------------------------------------------------
+    # Core panels
+    # ---------------------------------------------------------------------
+    def formula_panel(
+        self,
+        expression: str,
+        width: float = 8.4,
+        height: float = 1.25,
+        font_size: int = 42,
+        fill_opacity: float = 1.0,
+    ) -> VGroup:
+        panel = RoundedRectangle(
+            width=width,
+            height=height,
+            corner_radius=0.12,
+            stroke_color=BLACK_LINE,
+            stroke_width=2.0,
+            fill_color=PAPER_GRAY,
+            fill_opacity=fill_opacity,
+        )
+        equation = self.math(expression, font_size)
+        self.fit(equation, width - 0.55, height - 0.28)
+        equation.move_to(panel)
+        return VGroup(panel, equation)
+
+    def note_panel(
+        self,
+        title: str,
+        lines: Sequence[str],
+        width: float = 6.4,
+        title_size: int = 26,

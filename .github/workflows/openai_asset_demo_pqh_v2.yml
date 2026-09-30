@@ -1,0 +1,26 @@
+name: OpenAI Asset ManimCE PQH Demo V2
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'agent/openai-asset-manim-pqh-demo-20260815'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run audited PQH pipeline
+        shell: bash
+        run: bash render_jobs/openai_asset_demo_20260815/run_render_v2.sh
+      - name: Upload verified delivery
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenAIAssetInclinedPlaneLesson-PQH-V2
+          path: delivery/
+          if-no-files-found: error
+          retention-days: 7

@@ -1,0 +1,40 @@
+DOWN * 0.52)
+
+        chain = self.equation_stack(
+            [
+                r"W=mg=(10)(9.81)=98.1\,\mathrm{N}",
+                r"W_{\parallel}=98.1\sin 30^{\circ}=49.05\,\mathrm{N}",
+                r"W_{\perp}=98.1\cos 30^{\circ}\approx84.96\,\mathrm{N}",
+                r"N\approx84.96\,\mathrm{N}",
+            ],
+            sizes=[33, 32, 32, 35],
+            buff=0.34,
+            max_width=7.90,
+            max_height=4.20,
+        )
+        result_box = RoundedRectangle(
+            width=8.15,
+            height=4.72,
+            corner_radius=0.12,
+            stroke_color=BLACK_LINE,
+            stroke_width=1.8,
+            fill_color=WHITE,
+            fill_opacity=1.0,
+        )
+        chain.move_to(result_box)
+        result = VGroup(result_box, chain).move_to(RIGHT * 3.30 + DOWN * 0.52)
+
+        self.assert_content_safe(givens, "given data panel")
+        self.assert_content_safe(result, "numerical calculation panel")
+
+        self.play(FadeIn(givens, shift=RIGHT * 0.10), run_time=RUN_NORMAL)
+        self.wait(PAUSE_READ)
+        self.play(FadeIn(result_box), run_time=RUN_NORMAL)
+        for line in chain:
+            self.play(Write(line), run_time=RUN_NORMAL)
+            self.wait(PAUSE_READ)
+        self.wait(PAUSE_SUMMARY)
+
+        self.standard_closing(
+            "Generate the asset once — animate the science, mathematics and narrative in ManimCE."
+        )

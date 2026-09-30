@@ -1,0 +1,75 @@
+  if gap < best_gap:
+                    best = index
+                    best_gap = gap
+            subtitle_lines = [" ".join(words[:best]), " ".join(words[best:])]
+            subtitle_text = VGroup(*[self.text(line, 20) for line in subtitle_lines])
+            subtitle_text.arrange(DOWN, aligned_edge=LEFT, buff=0.04)
+        else:
+            subtitle_text = self.text(subtitle, 21)
+
+        self.fit(subtitle_text, 14.25, 0.70)
+        subtitle_text.next_to(rule, DOWN, buff=0.08).align_to(title_row, LEFT)
+
+        new_header = VGroup(title_row, rule)
+        if self.header_group is None:
+            self.header_group = new_header
+            self.add(new_header)
+        else:
+            old_header = self.header_group
+            self.header_group = new_header
+            self.play(ReplacementTransform(old_header, new_header), run_time=RUN_QUICK)
+
+        if self.subtitle_group is None:
+            self.subtitle_group = subtitle_text
+            self.add(subtitle_text)
+        else:
+            old_subtitle = self.subtitle_group
+            self.subtitle_group = subtitle_text
+            self.play(ReplacementTransform(old_subtitle, subtitle_text), run_time=RUN_QUICK)
+
+    def clear_stage(self, keep_header: bool = True) -> None:
+        keep_family_ids: set[int] = set()
+        if keep_header:
+            for persistent in (self.header_group, self.subtitle_group):
+                if persistent is not None:
+                    keep_family_ids.update(id(member) for member in persistent.get_family())
+
+        removable = [mob for mob in self.mobjects if id(mob) not in keep_family_ids]
+        if removable:
+            self.play(*[FadeOut(mob) for mob in removable], run_time=RUN_NORMAL)
+
+        self.camera.frame.set(width=FRAME_WIDTH).move_to(ORIGIN)
+
+    # ---------------------------------------------------------------------
+    # Camera and frame safety
+    # ---------------------------------------------------------------------
+    def assert_within_frame(self, mob: Mobject, label: str, margin: float = 0.03) -> None:
+        left, right = mob.get_left()[0], mob.get_right()[0]
+        bottom, top = mob.get_bottom()[1], mob.get_top()[1]
+        if left < -FRAME_WIDTH / 2 + margin or right > FRAME_WIDTH / 2 - margin:
+            raise ValueError(
+                f"{label} exceeds horizontal frame bounds: left={left:.3f}, right={right:.3f}"
+            )
+        if bottom < -FRAME_HEIGHT / 2 + margin or top > FRAME_HEIGHT / 2 - margin:
+            raise ValueError(
+                f"{label} exceeds vertical frame bounds: bottom={bottom:.3f}, top={top:.3f}"
+            )
+
+    def assert_content_safe(self, mob: Mobject, label: str) -> None:
+        self.assert_within_frame(mob, label, margin=0.15)
+        if mob.get_top()[1] > CONTENT_TOP_Y:
+            raise ValueError(f"{label} overlaps the persistent header zone")
+        if mob.get_bottom()[1] < CONTENT_BOTTOM_Y:
+            raise ValueError(f"{label} exceeds the safe lower content zone")
+
+    def focus_on(self, mob: Mobject, width: float = 8.0, pause: float = PAUSE_READ) -> None:
+        persistent = [
+            item for item in (self.header_group, self.subtitle_group) if item is not None
+        ]
+        if persistent:
+            self.play(*[FadeOut(item) for item in persistent], run_time=RUN_QUICK)
+
+        self.camera.frame.save_state()
+        target_width = max(width, mob.width + 0.8)
+        self.play(
+            self.camera.frame.animate.set(width=target_width).move_to(mob),

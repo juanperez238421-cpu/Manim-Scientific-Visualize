@@ -1,0 +1,93 @@
+ 0.60)
+        image_box = RoundedRectangle(
+            width=8.05,
+            height=5.20,
+            corner_radius=0.12,
+            stroke_color=LIGHT_GRAY,
+            stroke_width=1.5,
+            fill_color=WHITE,
+            fill_opacity=1.0,
+        ).move_to(asset2)
+
+        # Anchor chosen visually at the center of the generated block.
+        block_center = LEFT * 3.35 + UP * 0.17
+        downhill = np.array([1.0, -0.46, 0.0])
+        uphill_normal = np.array([0.46, 1.0, 0.0])
+
+        weight = self._force_arrow(
+            block_center,
+            DOWN,
+            1.72,
+            r"\vec{W}=m\vec{g}",
+            RIGHT,
+        )
+        normal = self._force_arrow(
+            block_center,
+            uphill_normal,
+            1.58,
+            r"\vec{N}",
+            UR,
+        )
+        parallel = self._force_arrow(
+            block_center,
+            downhill,
+            1.82,
+            r"\vec{W}_{\parallel}",
+            DR,
+        )
+        perp = self._force_arrow(
+            block_center,
+            -uphill_normal,
+            1.48,
+            r"\vec{W}_{\perp}",
+            LEFT,
+            dashed=True,
+            stroke_width=4.0,
+        )
+
+        angle_origin = LEFT * 6.02 + DOWN * 2.14
+        angle_base = Line(angle_origin, angle_origin + RIGHT * 1.20, color=MID_GRAY, stroke_width=2)
+        slope_dir = UP * 0.46 + RIGHT
+        slope_dir = slope_dir / np.linalg.norm(slope_dir)
+        angle_slope = Line(angle_origin, angle_origin + slope_dir * 1.20, color=BLACK_LINE, stroke_width=2)
+        angle_mark = Angle(angle_base, angle_slope, radius=0.42, color=BLACK_LINE, stroke_width=2)
+        theta = self.math(r"\theta", 30).next_to(angle_mark, UR, buff=0.04)
+        angle_group = VGroup(angle_base, angle_slope, angle_mark, theta)
+
+        legend = self.key_value_panel(
+            "EVERY OVERLAY IS EDITABLE",
+            [
+                ("Weight", r"\vec W"),
+                ("Normal", r"\vec N"),
+                ("Along plane", r"\vec W_{\parallel}"),
+                ("Into plane", r"\vec W_{\perp}"),
+            ],
+            width=5.10,
+            label_size=21,
+            value_size=27,
+        )
+        legend.move_to(RIGHT * 4.45 + DOWN * 0.50)
+
+        self.assert_content_safe(Group(image_box, asset2, weight, normal, parallel, perp, angle_group), "annotated generated asset")
+        self.assert_content_safe(legend, "force legend")
+
+        self.play(FadeIn(image_box), FadeIn(asset2), run_time=RUN_NORMAL)
+        self.wait(PAUSE_READ)
+        self.play(GrowArrow(weight[0]), FadeIn(weight[1]), run_time=RUN_NORMAL)
+        self.wait(PAUSE_READ)
+        self.play(GrowArrow(normal[0]), FadeIn(normal[1]), run_time=RUN_NORMAL)
+        self.wait(PAUSE_READ)
+        self.play(Create(angle_base), Create(angle_slope), Create(angle_mark), FadeIn(theta), run_time=RUN_NORMAL)
+        self.wait(PAUSE_SHORT)
+        self.play(GrowArrow(parallel[0]), FadeIn(parallel[1]), run_time=RUN_NORMAL)
+        self.play(GrowArrow(perp[0]), FadeIn(perp[1]), run_time=RUN_NORMAL)
+        self.wait(PAUSE_EXPLAIN)
+        self.play(FadeIn(legend, shift=LEFT * 0.10), run_time=RUN_NORMAL)
+        self.wait(PAUSE_EXPLAIN)
+
+        # Focus briefly on the force decomposition while preserving camera discipline.
+        force_focus = VGroup(weight, normal, parallel, perp)
+        self.focus_on(force_focus, width=5.6, pause=PAUSE_READ)
+
+        # ------------------------------------------------------------------
+        # 
