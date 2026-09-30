@@ -1,0 +1,174 @@
+name: Achilles Tortoise SENIOR V10 QA FULL PACKAGE PQH 20260824
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'agent/achilles-tortoise-pqh-20260823'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate V10 source, storyboard, and reconstruct classroom style
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/achilles_tortoise_20260823
+          SRC="$JOB/achilles_tortoise_senior_v10.py"
+          test -s "$SRC"
+          test -s "$JOB/STORYBOARD_V10_EN_SENIOR_QA.md"
+          test -s protocols/PROTOCOL_MANIMCE_PQH_PROJECT_PACKAGE_STANDARD.md
+          python - <<'PY'
+          from pathlib import Path
+          import base64, gzip
+          job = Path('render_jobs/achilles_tortoise_20260823')
+          encoded = (job / 's.gz.b64').read_text(encoding='utf-8').strip()
+          encoded += '=' * (-len(encoded) % 4)
+          (job / 'jp_classroom_style.py').write_bytes(
+              gzip.decompress(base64.b64decode(encoded, validate=False))
+          )
+          PY
+          python -m py_compile "$SRC" "$JOB/jp_classroom_style.py"
+          grep -q 'class AchillesTortoiseSeniorV10' "$SRC"
+          grep -q 'STEP 3  ·  WRITE A FINITE PARTIAL SUM' "$SRC"
+          grep -q 'STEP 4  ·  TAKE THE LIMIT' "$SRC"
+          grep -q 'MEETING POINT' "$SRC"
+          grep -q 'config.pixel_width = 1920' "$JOB/jp_classroom_style.py"
+          grep -q 'config.pixel_height = 1080' "$JOB/jp_classroom_style.py"
+          grep -q 'config.frame_rate = 30' "$JOB/jp_classroom_style.py"
+          mkdir -p qa_out
+          sha256sum "$SRC" "$JOB/jp_classroom_style.py" > qa_out/SOURCE_SHA256SUMS.txt
+          cat qa_out/SOURCE_SHA256SUMS.txt
+
+      - name: Install verification tools and ManimCE image
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg zip
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: Literal PQL runtime QA V10
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/achilles_tortoise_20260823
+          rm -rf media_pql && mkdir -p qa_out
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.12 \
+            -v "$PWD:/manim" -w "/manim/$JOB" --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql achilles_tortoise_senior_v10.py AchillesTortoiseSeniorV10 --fps 15 --format=mp4 --media_dir /manim/media_pql --disable_caching
+            ' 2>&1 | tee qa_out/render_pql.log
+          PREVIEW="$(find media_pql -type f -name 'AchillesTortoiseSeniorV10.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PREVIEW" && test -s "$PREVIEW"
+
+      - name: Literal PQH final render V10
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/achilles_tortoise_20260823
+          rm -rf media out package && mkdir -p out
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w "/manim/$JOB" --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh achilles_tortoise_senior_v10.py AchillesTortoiseSeniorV10 --fps 30 --format=mp4 --media_dir /manim/media --disable_caching
+            ' 2>&1 | tee out/render_pqh.log
+          FINAL="$(find media -type f -name 'AchillesTortoiseSeniorV10.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" out/Achilles_and_Tortoise_Zeno_SENIOR_V10_QA_FINAL_pqh.mp4
+
+      - name: Strict video QA V10
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Achilles_and_Tortoise_Zeno_SENIOR_V10_QA_FINAL_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\n%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" > out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          python - <<'PY'
+          dur=float(open('out/VIDEO_TECHNICAL.tsv').read().splitlines()[1].split('\t')[-1])
+          assert 90 <= dur <= 260, dur
+          PY
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
+          test ! -s out/full_decode.log
+          sha256sum "$F" > out/SHA256SUMS.txt
+          cat out/VIDEO_TECHNICAL.tsv
+          cat out/SHA256SUMS.txt
+
+      - name: Export dense audit frames V10
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Achilles_and_Tortoise_Zeno_SENIOR_V10_QA_FINAL_pqh.mp4
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          mkdir -p out/audit_frames
+          for P in 0.02 0.05 0.08 0.11 0.14 0.17 0.20 0.23 0.26 0.29 0.32 0.35 0.38 0.41 0.44 0.47 0.50 0.53 0.56 0.59 0.62 0.65 0.68 0.71 0.74 0.77 0.80 0.83 0.86 0.89 0.92 0.95 0.98; do
+            T="$(python -c "print(float('$DUR')*float('$P'))")"
+            TAG="$(printf '%04d' "$(python -c "print(int(float('$P')*1000))")")"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_${TAG}.png"
+          done
+
+      - name: Build V10 full project package
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/achilles_tortoise_20260823
+          ROOT=package/Achilles_Tortoise_Zeno_V10_SENIOR_QA_FINAL_PQH_PROJECT
+          mkdir -p "$ROOT/src" "$ROOT/storyboard" "$ROOT/render" "$ROOT/qa/audit_frames" "$ROOT/protocol" "$ROOT/workflow"
+          cp "$JOB/achilles_tortoise_senior_v10.py" "$ROOT/src/"
+          cp "$JOB/jp_classroom_style.py" "$ROOT/src/"
+          cp "$JOB/STORYBOARD_V10_EN_SENIOR_QA.md" "$ROOT/storyboard/STORYBOARD.md"
+          cp out/Achilles_and_Tortoise_Zeno_SENIOR_V10_QA_FINAL_pqh.mp4 "$ROOT/render/"
+          cp out/VIDEO_TECHNICAL.tsv out/SHA256SUMS.txt out/full_decode.log out/render_pqh.log "$ROOT/qa/"
+          cp qa_out/render_pql.log qa_out/SOURCE_SHA256SUMS.txt "$ROOT/qa/"
+          cp out/audit_frames/*.png "$ROOT/qa/audit_frames/"
+          cp protocols/PROTOCOL_MANIMCE_PQH_PROJECT_PACKAGE_STANDARD.md "$ROOT/protocol/"
+          cp .github/workflows/achilles_tortoise_v10_package_20260824.yml "$ROOT/workflow/"
+          python - <<'PY'
+          from pathlib import Path
+          root=Path('package/Achilles_Tortoise_Zeno_V10_SENIOR_QA_FINAL_PQH_PROJECT')
+          tech=Path('out/VIDEO_TECHNICAL.tsv').read_text().strip()
+          sha=Path('out/SHA256SUMS.txt').read_text().strip()
+          root.joinpath('README.md').write_text(f'''# Achilles and the Tortoise — V10 Senior QA\n\nEnglish ManimCE project package.\n\n## Pedagogical upgrade\nThe series section is now taught as: common ratio -> partial sums -> finite geometric sum -> known limit -> 10/9 s.\n\n## Layout QA upgrade\nMeeting callouts are offset from the racers, master racers use separate vertical lanes, TARGET is offset from Achilles, convergence formulas use dedicated zones, and closing statements replace rather than stack.\n\n## Render\n- ManimCE 0.20.1\n- Scene: AchillesTortoiseSeniorV10\n- Literal PQL PASS required before PQH\n\n## Technical QA\n```text\n{tech}\n```\n\n## SHA-256\n```text\n{sha}\n```\n\n`qa/full_decode.log` must be empty. Audit frames are under `qa/audit_frames/`.\n''',encoding='utf-8')
+          PY
+          (cd package && zip -qr Achilles_Tortoise_Zeno_V10_SENIOR_QA_FINAL_PQH_PROJECT.zip Achilles_Tortoise_Zeno_V10_SENIOR_QA_FINAL_PQH_PROJECT)
+          test -s package/Achilles_Tortoise_Zeno_V10_SENIOR_QA_FINAL_PQH_PROJECT.zip
+          sha256sum package/Achilles_Tortoise_Zeno_V10_SENIOR_QA_FINAL_PQH_PROJECT.zip > package/PACKAGE_SHA256.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Achilles-Tortoise-Zeno-V10-SENIOR-QA-FULL-PROJECT-PQH
+          path: |
+            package/Achilles_Tortoise_Zeno_V10_SENIOR_QA_FINAL_PQH_PROJECT.zip
+            package/PACKAGE_SHA256.txt
+            out/Achilles_and_Tortoise_Zeno_SENIOR_V10_QA_FINAL_pqh.mp4
+            out/VIDEO_TECHNICAL.tsv
+            out/SHA256SUMS.txt
+            out/audit_frames/
+          if-no-files-found: error
+          retention-days: 7
