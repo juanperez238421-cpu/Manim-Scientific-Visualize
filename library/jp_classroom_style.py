@@ -57,10 +57,35 @@ WHITE_FILL = WHITE
 
 FRAME_WIDTH = 16.0
 FRAME_HEIGHT = 9.0
-SAFE_WIDTH = 14.75
-SAFE_HEIGHT = 7.65
-CONTENT_TOP_Y = 2.60
-CONTENT_BOTTOM_Y = -4.05
+SAFE_WIDTH = 14.60
+SAFE_HEIGHT = 7.55
+SAFE_LEFT_X = -7.30
+SAFE_RIGHT_X = 7.30
+SAFE_TOP_Y = 4.10
+SAFE_BOTTOM_Y = -4.10
+CONTENT_TOP_Y = 2.55
+CONTENT_BOTTOM_Y = -4.00
+
+# Projector-safe typography contract. These are floors, not suggestions.
+# A layout that only fits by shrinking below these values must be redesigned.
+SECTION_TITLE_SIZE = 34
+SECTION_TITLE_MIN_SIZE = 30
+SUBTITLE_SIZE = 22
+SUBTITLE_MIN_SIZE = 21
+BODY_SIZE = 26
+BODY_MIN_SIZE = 23
+PANEL_TITLE_SIZE = 27
+PANEL_TITLE_MIN_SIZE = 25
+PANEL_BODY_SIZE = 24
+PANEL_BODY_MIN_SIZE = 23
+AXIS_LABEL_MIN_SIZE = 22
+TICK_LABEL_MIN_SIZE = 18
+FORMULA_MAIN_SIZE = 42
+FORMULA_SUPPORT_MIN_SIZE = 29
+OPENING_TITLE_SIZE = 50
+OPENING_TITLE_MIN_SIZE = 44
+SAFE_TEXT_MARGIN_X = 0.55
+SAFE_TEXT_MARGIN_Y = 0.38
 
 TIME_SCALE = float(os.getenv("LESSON_TIME_SCALE", "1.0"))
 
@@ -179,6 +204,85 @@ class JPClassroomScene(MovingCameraScene):
     def math(self, expression: str, size: int = 38, **kwargs) -> MathTex:
         return MathTex(expression, font_size=size, color=BLACK_TEXT, **kwargs)
 
+    def text_block(
+        self,
+        content: str,
+        size: int = BODY_SIZE,
+        weight=NORMAL,
+        *,
+        max_width: float = 6.0,
+        max_lines: int = 3,
+        min_size: int = BODY_MIN_SIZE,
+        line_buff: float = 0.06,
+    ) -> VGroup:
+        """Create projector-safe wrapped text without silently shrinking to illegibility.
+
+        Wrapping is preferred to scaling. If text cannot fit inside max_lines at
+        min_size, the scene must be redesigned rather than shrinking further.
+        """
+        content = " ".join(str(content).split())
+        if not content:
+            return VGroup(self.text("", max(size, min_size), weight))
+
+        def wrap_at(font_size: int) -> list[str]:
+            words = content.split()
+            lines: list[str] = []
+            current = ""
+            for word in words:
+                candidate = word if not current else f"{current} {word}"
+                probe = self.text(candidate, font_size, weight)
+                if probe.width <= max_width or not current:
+                    current = candidate
+                else:
+                    lines.append(current)
+                    current = word
+            if current:
+                lines.append(current)
+            return lines
+
+        chosen = max(size, min_size)
+        lines = wrap_at(chosen)
+        while len(lines) > max_lines and chosen > min_size:
+            chosen -= 1
+            lines = wrap_at(chosen)
+
+        if len(lines) > max_lines:
+            raise ValueError(
+                f"Text requires {len(lines)} lines at minimum size {min_size}: {content!r}"
+            )
+
+        mobs = VGroup(*[self.text(line, chosen, weight) for line in lines])
+        mobs.arrange(DOWN, aligned_edge=LEFT, buff=line_buff)
+        if mobs.width > max_width + 1e-6:
+            raise ValueError(
+                f"Wrapped text exceeds safe width {max_width:.2f}: {content!r}"
+            )
+        return mobs
+
+    def fit_or_fail(
+        self,
+        mob: Mobject,
+        max_width: float,
+        max_height: float,
+        *,
+        min_scale: float = 0.82,
+        label: str = "content",
+    ) -> Mobject:
+        """Scale only within a controlled range; fail instead of producing tiny text."""
+        scale_factor = min(
+            1.0,
+            max_width / max(mob.width, 1e-9),
+            max_height / max(mob.height, 1e-9),
+        )
+        if scale_factor < min_scale:
+            raise ValueError(
+                f"{label} would require scale={scale_factor:.3f} < {min_scale:.3f}; "
+                "wrap/split/reflow the content instead."
+            )
+        if scale_factor < 1.0:
+            mob.scale(scale_factor)
+        return mob
+
     def fit(
         self,
         mob: Mobject,
@@ -220,8 +324,15 @@ class JPClassroomScene(MovingCameraScene):
             fill_color=PAPER_GRAY,
             fill_opacity=fill_opacity,
         )
+        font_size = max(font_size, FORMULA_SUPPORT_MIN_SIZE)
         equation = self.math(expression, font_size)
-        self.fit(equation, width - 0.55, height - 0.28)
+        self.fit_or_fail(
+            equation,
+            width - 0.55,
+            height - 0.28,
+            min_scale=max(FORMULA_SUPPORT_MIN_SIZE / font_size, 0.72),
+            label="formula_panel equation",
+        )
         equation.move_to(panel)
         return VGroup(panel, equation)
 
@@ -234,11 +345,35 @@ class JPClassroomScene(MovingCameraScene):
         body_size: int = 23,
         max_text_height: float = 2.55,
     ) -> VGroup:
-        title_mob = self.text(title, title_size, BOLD)
-        body = VGroup(*[self.text(line, body_size) for line in lines])
-        body.arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        title_size = max(title_size, PANEL_TITLE_MIN_SIZE)
+        body_size = max(body_size, PANEL_BODY_MIN_SIZE)
+        title_mob = self.text_block(
+            title,
+            title_size,
+            BOLD,
+            max_width=width - 0.62,
+            max_lines=1,
+            min_size=PANEL_TITLE_MIN_SIZE,
+        )
+        body = VGroup(*[
+            self.text_block(
+                line,
+                body_size,
+                max_width=width - 0.62,
+                max_lines=2,
+                min_size=PANEL_BODY_MIN_SIZE,
+            )
+            for line in lines
+        ])
+        body.arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         content = VGroup(title_mob, body).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
-        self.fit(content, width - 0.62, max_text_height)
+        self.fit_or_fail(
+            content,
+            width - 0.62,
+            max_text_height,
+            min_scale=0.90,
+            label=f"note_panel[{title}]",
+        )
 
         box_height = max(1.10, content.height + 0.64)
         box = RoundedRectangle(
@@ -300,36 +435,44 @@ class JPClassroomScene(MovingCameraScene):
         )
         number_text = self.text(f"{number:02d}", 23, BOLD).move_to(number_box)
 
-        title_text = self.text(title, 34, BOLD)
-        available_title_width = SAFE_WIDTH - number_box.width - 0.38
-        self.fit(title_text, available_title_width, 0.56)
+        available_title_width = SAFE_WIDTH - number_box.width - 0.42
+        title_text = self.text_block(
+            title,
+            SECTION_TITLE_SIZE,
+            BOLD,
+            max_width=available_title_width,
+            max_lines=1,
+            min_size=SECTION_TITLE_MIN_SIZE,
+        )
         title_row = VGroup(VGroup(number_box, number_text), title_text)
         title_row.arrange(RIGHT, buff=0.25)
-        title_row.to_edge(UP, buff=0.16).to_edge(LEFT, buff=0.48)
+        title_row.move_to([SAFE_LEFT_X + title_row.width / 2, 4.02, 0])
 
-        rule = Line(LEFT * 7.48, RIGHT * 7.48, color=LIGHT_GRAY, stroke_width=2)
-        rule.next_to(title_row, DOWN, buff=0.07)
+        rule = Line(
+            [SAFE_LEFT_X, 3.58, 0],
+            [SAFE_RIGHT_X, 3.58, 0],
+            color=LIGHT_GRAY,
+            stroke_width=2,
+        )
 
-        words = subtitle.split()
-        if len(subtitle) > 96:
-            midpoint = len(words) // 2
-            best = midpoint
-            best_gap = 10**9
-            for index in range(max(1, midpoint - 5), min(len(words), midpoint + 6)):
-                gap = abs(len(" ".join(words[:index])) - len(" ".join(words[index:])))
-                if gap < best_gap:
-                    best = index
-                    best_gap = gap
-            subtitle_lines = [" ".join(words[:best]), " ".join(words[best:])]
-            subtitle_text = VGroup(*[self.text(line, 20) for line in subtitle_lines])
-            subtitle_text.arrange(DOWN, aligned_edge=LEFT, buff=0.04)
-        else:
-            subtitle_text = self.text(subtitle, 21)
-
-        self.fit(subtitle_text, 14.25, 0.70)
+        subtitle_text = self.text_block(
+            subtitle,
+            SUBTITLE_SIZE,
+            max_width=SAFE_WIDTH,
+            max_lines=2,
+            min_size=SUBTITLE_MIN_SIZE,
+            line_buff=0.035,
+        )
         subtitle_text.next_to(rule, DOWN, buff=0.08).align_to(title_row, LEFT)
 
         new_header = VGroup(title_row, rule)
+        self.assert_within_frame(new_header, "section header", margin=SAFE_TEXT_MARGIN_X)
+        self.assert_within_frame(subtitle_text, "section subtitle", margin=SAFE_TEXT_MARGIN_X)
+        if subtitle_text.get_bottom()[1] < 2.62:
+            raise ValueError(
+                "Section subtitle intrudes into content zone; shorten or split the wording."
+            )
+
         if self.header_group is None:
             self.header_group = new_header
             self.add(new_header)
@@ -355,6 +498,10 @@ class JPClassroomScene(MovingCameraScene):
 
         removable = [mob for mob in self.mobjects if id(mob) not in keep_family_ids]
         if removable:
+            # Freeze dynamic families before FadeOut so always_redraw/updater
+            # objects cannot change submobject count during interpolation.
+            for mob in removable:
+                mob.clear_updaters(recursive=True)
             self.play(*[FadeOut(mob) for mob in removable], run_time=RUN_NORMAL)
 
         self.camera.frame.set(width=FRAME_WIDTH).move_to(ORIGIN)
@@ -375,11 +522,24 @@ class JPClassroomScene(MovingCameraScene):
             )
 
     def assert_content_safe(self, mob: Mobject, label: str) -> None:
-        self.assert_within_frame(mob, label, margin=0.15)
+        self.assert_within_frame(mob, label, margin=SAFE_TEXT_MARGIN_X)
         if mob.get_top()[1] > CONTENT_TOP_Y:
             raise ValueError(f"{label} overlaps the persistent header zone")
         if mob.get_bottom()[1] < CONTENT_BOTTOM_Y:
             raise ValueError(f"{label} exceeds the safe lower content zone")
+
+    def assert_text_safe(self, mob: Mobject, label: str) -> None:
+        """Hard margin gate for teaching-critical text/formula groups."""
+        left, right = mob.get_left()[0], mob.get_right()[0]
+        bottom, top = mob.get_bottom()[1], mob.get_top()[1]
+        if left < SAFE_LEFT_X or right > SAFE_RIGHT_X:
+            raise ValueError(
+                f"{label} violates horizontal safe margins: {left:.3f}, {right:.3f}"
+            )
+        if bottom < SAFE_BOTTOM_Y or top > SAFE_TOP_Y:
+            raise ValueError(
+                f"{label} violates vertical safe margins: {bottom:.3f}, {top:.3f}"
+            )
 
     def focus_on(self, mob: Mobject, width: float = 8.0, pause: float = PAUSE_READ) -> None:
         persistent = [
@@ -788,14 +948,29 @@ class JPClassroomScene(MovingCameraScene):
         subtitle: str,
         promise: str,
     ) -> None:
-        label = self.text(course_label, 28, BOLD)
-        title_mob = self.text(title, 50, BOLD)
+        label = self.text_block(
+            course_label, 28, BOLD, max_width=12.8, max_lines=1, min_size=26
+        )
+        title_mob = self.text_block(
+            title,
+            OPENING_TITLE_SIZE,
+            BOLD,
+            max_width=13.6,
+            max_lines=2,
+            min_size=OPENING_TITLE_MIN_SIZE,
+            line_buff=0.10,
+        )
         rule = Line(LEFT * 5.5, RIGHT * 5.5, color=BLACK_LINE, stroke_width=2.2)
-        subtitle_mob = self.text(subtitle, 27)
-        promise_mob = self.text(promise, 25, MEDIUM)
+        subtitle_mob = self.text_block(
+            subtitle, 28, max_width=13.2, max_lines=2, min_size=25
+        )
+        promise_mob = self.text_block(
+            promise, 25, MEDIUM, max_width=13.0, max_lines=2, min_size=23
+        )
         group = VGroup(label, title_mob, rule, subtitle_mob, promise_mob)
-        group.arrange(DOWN, buff=0.30)
-        self.fit(group, 14.4, 6.6)
+        group.arrange(DOWN, buff=0.28)
+        self.fit_or_fail(group, 14.0, 7.25, min_scale=0.94, label="standard_opening")
+        self.assert_text_safe(group, "standard_opening")
 
         self.play(FadeIn(label, shift=UP * 0.18), run_time=RUN_NORMAL)
         self.play(Write(title_mob), run_time=RUN_SLOW)
@@ -806,9 +981,17 @@ class JPClassroomScene(MovingCameraScene):
         self.play(FadeOut(group), run_time=RUN_NORMAL)
 
     def standard_closing(self, sentence: str) -> None:
-        closing = self.text(sentence, 34, BOLD)
-        self.fit(closing, 13.8, 1.2)
+        closing = self.text_block(
+            sentence,
+            34,
+            BOLD,
+            max_width=13.6,
+            max_lines=2,
+            min_size=30,
+            line_buff=0.10,
+        )
         closing.move_to(ORIGIN)
+        self.assert_text_safe(closing, "standard_closing")
         self.play(*[FadeOut(mob) for mob in list(self.mobjects)], run_time=RUN_NORMAL)
         self.play(FadeIn(closing), run_time=RUN_SLOW)
         self.wait(PAUSE_FINAL)
