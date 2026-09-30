@@ -1,0 +1,105 @@
+
+    def cad_panel(self):
+        title = VGroup(self.text("REVOLVE", 25, BOLD), self.text("Inventor mental model", 18)).arrange(DOWN, buff=0.04)
+        rows = VGroup(
+            self.cad_parameter_row("Profile", "Closed sketch region"),
+            self.cad_parameter_row("Axis", "Centerline"),
+            self.cad_parameter_row("Extent", "Full"),
+            self.cad_parameter_row("Angle", "360 deg"),
+            self.cad_parameter_row("Operation", "New Solid"),
+        ).arrange(DOWN, buff=0.16, aligned_edge=LEFT)
+        ok = self.pill("OK", 20, width=1.05)
+        cancel = self.pill("Cancel", 18, width=1.35)
+        buttons = VGroup(ok, cancel).arrange(RIGHT, buff=0.18)
+        content = VGroup(title, rows, buttons).arrange(DOWN, aligned_edge=LEFT, buff=0.26)
+        box = RoundedRectangle(
+            width=6.35, height=4.55, corner_radius=0.12,
+            stroke_color=BLACK_LINE, stroke_width=1.8,
+            fill_color="#FAFAFA", fill_opacity=1,
+        )
+        content.move_to(box).align_to(box, LEFT).shift(RIGHT * 0.32)
+        return VGroup(box, content)
+
+    def clear_scene(self):
+        mobs = list(self.mobjects)
+        if mobs:
+            self.play(*[FadeOut(m) for m in mobs], run_time=0.65)
+        for m in mobs:
+            self.remove(m)
+
+    def profile_panel_2d(self, profile, title, caption, scale=0.85, x=-4.6, y=-0.30, ring_inner=None):
+        if ring_inner is None:
+            region = closed_profile_polygon(profile, 0.52)
+        else:
+            region = closed_ring_profile(profile, ring_inner, 0.50)
+        ax = axis_line(min(y for _, y in profile) - 0.35, max(y for _, y in profile) + 0.35)
+        g = VGroup(ax, region).scale(scale).move_to(np.array([x, y, 0]))
+        lab = VGroup(self.text(title, 22, BOLD), self.text(caption, 18)).arrange(DOWN, buff=0.05)
+        lab.move_to(np.array([x, -3.00, 0]))
+        self.fixed(lab)
+        return g, lab
+
+    # ------------------------------------------------------------------
+    # Lesson
+    # ------------------------------------------------------------------
+    def construct(self):
+        self.sweep = RevolveSweepEngine(self)
+        self.opening()
+        self.core_idea()
+        self.angle_logic()
+        self.profile_to_solid_library()
+        self.inventor_workflow()
+        self.stepped_shaft_example()
+        self.revolved_cut_example()
+        self.no_calculus_check()
+        self.final_design_challenge()
+        self.closing()
+
+    def opening(self):
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1)
+        title = self.text("SOLIDS OF REVOLUTION", 52, BOLD)
+        line = Line(LEFT * 5.7, RIGHT * 5.7, color=BLACK_LINE, stroke_width=2)
+        sub = self.text("Inventor Professional · from a 2D profile to an axisymmetric 3D part", 26)
+        promise = self.text("No integral calculus: learn the geometry and the CAD decision process first.", 25, MEDIUM)
+        route = VGroup(
+            self.pill("PROFILE", 22), self.pill("AXIS", 22), self.pill("ANGLE", 22),
+            self.pill("OPERATION", 22), self.pill("SOLID", 22),
+        ).arrange(RIGHT, buff=0.20)
+        arrows = VGroup(*[
+            arrow_between(route[i].get_right(), route[i+1].get_left()) for i in range(len(route)-1)
+        ])
+        path = VGroup(route, arrows)
+        group = VGroup(title, line, sub, promise, path).arrange(DOWN, buff=0.34)
+        self.fixed(group)
+        self.play(FadeIn(title, shift=UP * 0.12), Create(line), run_time=1.2)
+        self.play(FadeIn(sub), run_time=0.8)
+        self.wait(1.2)
+        self.play(FadeIn(promise), run_time=0.8)
+        self.wait(1.8)
+        self.play(LaggedStart(*[FadeIn(p, shift=UP * 0.08) for p in route], lag_ratio=0.12), Create(arrows), run_time=1.9)
+        self.wait(3.0)
+        self.clear_scene()
+
+    def core_idea(self):
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1)
+        h = self.section_header(
+            1,
+            "THE 2D AREA PHYSICALLY SWEEPS THE 3D SPACE",
+            "Watch the same profile rotate: its points draw circles, those circles form a skin, and the skin becomes the solid.",
+        )
+        self.fixed(h); self.play(FadeIn(h), run_time=0.7)
+
+        profile = [(1.55, -1.35), (1.55, 1.35)]
+        origin_shift = LEFT * 3.35
+        region = closed_profile_polygon(profile, 0.58).shift(origin_shift)
+        ax = axis_line(-1.85, 1.85).shift(origin_shift)
+        radius = Line(LEFT * 3.35, LEFT * 1.80, color=BLACK_LINE, stroke_width=2.4).shift(DOWN * 0.62)
+        rlab = MathTex("r", color=BLACK_TEXT, font_size=38).next_to(radius, UP, buff=0.05)
+        profile_lab = self.pill("GENERATING AREA", 20).move_to(LEFT * 3.35 + DOWN * 2.70)
+        axis_lab = self.pill("AXIS", 20).move_to(LEFT * 0.60 + DOWN * 2.70)
+        self.fixed(rlab, profile_lab, axis_lab)
+
+        self.play(Create(ax), FadeIn(region), run_time=1.1)
+        self.play(Create(radius), FadeIn(rlab), FadeIn(profile_lab), FadeIn(axis_lab), run_time=0.9)
+        self.wait(2.0)
+
