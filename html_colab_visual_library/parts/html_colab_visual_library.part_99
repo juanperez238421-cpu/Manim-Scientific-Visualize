@@ -1,0 +1,7 @@
+
+
+# Renderer-available typography override.
+# Noto Sans/Noto Mono are installed in the pinned ManimCE image and provide a
+# closer visual match to Google Colab than a platform-dependent fallback.
+FONT_UI = "Noto Sans"
+FONT_CODE = "Noto Mono"

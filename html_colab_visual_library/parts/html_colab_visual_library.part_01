@@ -1,0 +1,180 @@
+        menus = VGroup(
+            *[
+                ui_text(item, 15, COLAB_TEXT)
+                for item in ("File", "Edit", "View", "Insert", "Runtime", "Tools", "Help")
+            ]
+        ).arrange(RIGHT, buff=0.28)
+        menus.move_to([-3.55, 3.58, 0])
+
+        add_code = rounded_box(1.08, 0.34, fill=COLAB_SURFACE, stroke=COLAB_BORDER, radius=0.08)
+        add_code_text = ui_text("+ Code", 14, COLAB_TEXT, BOLD).move_to(add_code)
+        add_text = rounded_box(1.02, 0.34, fill=COLAB_SURFACE, stroke=COLAB_BORDER, radius=0.08)
+        add_text_text = ui_text("+ Text", 14, COLAB_TEXT, BOLD).move_to(add_text)
+        toolbar = VGroup(add_code, add_code_text, add_text, add_text_text)
+        add_code.move_to([-6.9, 3.18, 0])
+        add_code_text.move_to(add_code)
+        add_text.next_to(add_code, RIGHT, buff=0.12)
+        add_text_text.move_to(add_text)
+
+        runtime = rounded_box(1.20, 0.36, fill=COLAB_SURFACE, stroke=COLAB_BORDER, radius=0.16)
+        runtime_text = ui_text("Connect", 14, COLAB_BLUE, BOLD).move_to(runtime)
+        runtime.move_to([6.10, 4.13, 0])
+        runtime_text.move_to(runtime)
+
+        share = rounded_box(0.95, 0.36, fill=COLAB_BLUE, stroke=COLAB_BLUE, radius=0.16)
+        share_text = ui_text("Share", 14, WHITE, BOLD).move_to(share)
+        share.next_to(runtime, RIGHT, buff=0.16)
+        share_text.move_to(share)
+
+        avatar = Circle(radius=0.21, fill_color="#7E57C2", fill_opacity=1, stroke_width=0)
+        avatar_text = ui_text("J", 14, WHITE, BOLD).move_to(avatar)
+        avatar.next_to(share, RIGHT, buff=0.18)
+        avatar_text.move_to(avatar)
+
+        second_bar = Rectangle(
+            width=16,
+            height=0.55,
+            fill_color=COLAB_SURFACE,
+            fill_opacity=1,
+            stroke_color=COLAB_BORDER,
+            stroke_width=1,
+        ).move_to([0, 3.47, 0])
+
+        sidebar = Rectangle(
+            width=0.64,
+            height=7.73,
+            fill_color=COLAB_SURFACE,
+            fill_opacity=1,
+            stroke_color=COLAB_BORDER,
+            stroke_width=1,
+        ).to_edge(LEFT, buff=0).shift(DOWN * 0.64)
+
+        sidebar_icons = VGroup(
+            ui_text("≡", 24, COLAB_MUTED),
+            ui_text("⌕", 23, COLAB_MUTED),
+            ui_text("{ }", 15, COLAB_MUTED, BOLD),
+            ui_text("▱", 22, COLAB_MUTED),
+            ui_text("◈", 20, COLAB_MUTED),
+        ).arrange(DOWN, buff=0.38)
+        sidebar_icons.move_to([-7.68, 1.42, 0])
+
+        footer = Rectangle(
+            width=15.36,
+            height=0.34,
+            fill_color=COLAB_SURFACE,
+            fill_opacity=1,
+            stroke_color=COLAB_BORDER,
+            stroke_width=1,
+        ).to_edge(DOWN, buff=0).shift(RIGHT * 0.32)
+        footer_text = ui_text("Python 3  •  Hosted runtime  •  RAM 0.8 / 12.7 GB  •  Disk 24.1 / 107.7 GB", 12, COLAB_MUTED)
+        footer_text.move_to(footer)
+
+        self.notebook_viewport = rounded_box(
+            14.55,
+            6.85,
+            fill=COLAB_BG,
+            stroke=COLAB_BG,
+            radius=0.01,
+            stroke_width=0,
+        ).move_to([0.30, -0.09, 0])
+
+        return VGroup(
+            app,
+            topbar,
+            logo,
+            notebook,
+            save_state,
+            star,
+            second_bar,
+            menus,
+            toolbar,
+            runtime,
+            runtime_text,
+            share,
+            share_text,
+            avatar,
+            avatar_text,
+            sidebar,
+            sidebar_icons,
+            footer,
+            footer_text,
+        )
+
+    # ------------------------------------------------------------------
+    # Notebook cells
+    # ------------------------------------------------------------------
+    def markdown_cell(
+        self,
+        title: str,
+        lines: Iterable[str],
+        *,
+        width: float = 11.9,
+        min_height: float = 1.35,
+    ) -> VGroup:
+        lines = tuple(lines)
+        height = max(min_height, 0.88 + 0.34 * len(lines))
+        card = rounded_box(width, height, fill=COLAB_SURFACE, stroke=COLAB_BORDER, radius=0.07)
+        accent = Rectangle(width=0.05, height=height - 0.10, fill_color=COLAB_BLUE, fill_opacity=1, stroke_width=0)
+        accent.align_to(card, LEFT).shift(RIGHT * 0.03)
+        header = ui_text(title, 24, COLAB_TEXT, BOLD)
+        header.move_to(card.get_corner(UL) + [0.45 + header.width / 2, -0.35, 0])
+        body = VGroup(*[ui_text(line, 17, COLAB_MUTED) for line in lines]).arrange(
+            DOWN, buff=0.12, aligned_edge=LEFT
+        )
+        body.next_to(header, DOWN, aligned_edge=LEFT, buff=0.18)
+        body = fit_width(body, width - 0.85)
+        return VGroup(card, accent, header, body)
+
+    def code_cell(
+        self,
+        lines: tuple[str, ...],
+        *,
+        width: float = 11.9,
+        selected_line: int | None = None,
+        execution_count: str = "",
+        output: Mobject | None = None,
+    ) -> VGroup:
+        line_height = 0.28
+        code_height = max(1.25, 0.64 + len(lines) * line_height)
+        output_height = 0.0 if output is None else output.height + 0.42
+        card_height = code_height + output_height
+        card = rounded_box(width, card_height, fill=COLAB_SURFACE, stroke=COLAB_BORDER, radius=0.07)
+
+        gutter = Rectangle(
+            width=0.86,
+            height=code_height,
+            fill_color="#FAFAFA",
+            fill_opacity=1,
+            stroke_color=COLAB_BORDER,
+            stroke_width=1,
+        ).align_to(card, UL)
+        gutter.shift(RIGHT * 0.43 + DOWN * (code_height / 2))
+
+        run_circle = Circle(radius=0.17, fill_color=COLAB_SURFACE, fill_opacity=1, stroke_color=COLAB_MUTED, stroke_width=1.2)
+        run_triangle = Triangle(fill_color=COLAB_MUTED, fill_opacity=1, stroke_width=0).scale(0.085).rotate(-PI / 2)
+        run_icon = VGroup(run_circle, run_triangle)
+        run_icon.move_to(gutter.get_top() + DOWN * 0.36)
+        count = code_text(execution_count, 12, COLAB_CODE_MUTED)
+        count.next_to(run_icon, DOWN, buff=0.10)
+
+        rows = VGroup()
+        text_left = card.get_left()[0] + 1.02
+        first_y = card.get_top()[1] - 0.34
+        for index, line in enumerate(lines, start=1):
+            row_y = first_y - (index - 1) * line_height
+            highlight = Rectangle(
+                width=width - 1.06,
+                height=line_height,
+                fill_color=COLAB_SELECTION,
+                fill_opacity=1 if selected_line == index else 0,
+                stroke_width=0,
+            )
+            highlight.move_to([card.get_right()[0] - (width - 1.06) / 2, row_y, 0])
+            line_number = code_text(str(index), 12, COLAB_CODE_MUTED)
+            line_number.move_to([card.get_left()[0] + 0.92, row_y, 0])
+            line_text = code_text(line, 15.5, self.html_line_color(line))
+            line_text.align_to(card, LEFT).shift(RIGHT * 1.18)
+            line_text.set_y(row_y)
+            fit_width(line_text, width - 1.55)
+            rows.add(VGroup(highlight, line_number, line_text))
+

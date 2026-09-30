@@ -1,0 +1,180 @@
+"""HTML + Google Colab visual library — ManimCE 0.20.1.
+
+Five independent scenes recreate a Google Colab teaching workflow and connect
+real HTML fragments to a Robledo Market Lab inspired interface.
+
+Test example:
+    manim -pql html_colab_visual_library.py HTML01WhatIsHTML --format=mp4 --disable_caching
+Final example:
+    manim -pqh html_colab_visual_library.py HTML01WhatIsHTML --format=mp4 --disable_caching
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Callable, Iterable
+
+from manim import *
+
+
+# ---------------------------------------------------------------------------
+# Video configuration
+# ---------------------------------------------------------------------------
+config.pixel_width = 1920
+config.pixel_height = 1080
+config.frame_width = 16
+config.frame_height = 9
+config.frame_rate = 30
+config.background_color = "#F8F9FA"
+
+
+# ---------------------------------------------------------------------------
+# Google Colab-inspired palette
+# ---------------------------------------------------------------------------
+COLAB_BG = "#F8F9FA"
+COLAB_SURFACE = "#FFFFFF"
+COLAB_BORDER = "#DADCE0"
+COLAB_BORDER_DARK = "#BDC1C6"
+COLAB_TEXT = "#202124"
+COLAB_MUTED = "#5F6368"
+COLAB_BLUE = "#1A73E8"
+COLAB_BLUE_SOFT = "#E8F0FE"
+COLAB_ORANGE = "#F9AB00"
+COLAB_GREEN = "#188038"
+COLAB_RED = "#D93025"
+COLAB_CODE = "#3C4043"
+COLAB_CODE_MUTED = "#80868B"
+COLAB_SELECTION = "#E8F0FE"
+COLAB_OUTPUT = "#FDFDFD"
+
+# Robledo Market Lab palette, sourced from the real CSS repository.
+MARKET_BLUE = "#267CB9"
+MARKET_BLUE_DARK = "#295F98"
+MARKET_BLUE_SOFT = "#DDF4FF"
+MARKET_INK = "#24292F"
+MARKET_MUTED = "#667085"
+MARKET_BORDER = "#D8DEE4"
+MARKET_SOFT = "#F6F8FA"
+MARKET_SUCCESS = "#1A7F37"
+MARKET_DANGER = "#CF222E"
+
+FONT_UI = "DejaVu Sans"
+FONT_CODE = "DejaVu Sans Mono"
+
+
+@dataclass(frozen=True)
+class LessonSpec:
+    number: int
+    notebook_name: str
+    title: str
+    objective: str
+    markdown_lines: tuple[str, ...]
+    code_lines: tuple[str, ...]
+    line_notes: tuple[tuple[int, str], ...]
+    summary_lines: tuple[str, ...]
+
+
+# ---------------------------------------------------------------------------
+# Small drawing helpers
+# ---------------------------------------------------------------------------
+def rounded_box(
+    width: float,
+    height: float,
+    *,
+    fill: str = COLAB_SURFACE,
+    stroke: str = COLAB_BORDER,
+    radius: float = 0.12,
+    stroke_width: float = 1.0,
+    fill_opacity: float = 1.0,
+) -> RoundedRectangle:
+    return RoundedRectangle(
+        width=width,
+        height=height,
+        corner_radius=radius,
+        fill_color=fill,
+        fill_opacity=fill_opacity,
+        stroke_color=stroke,
+        stroke_width=stroke_width,
+    )
+
+
+def ui_text(text: str, size: float = 20, color: str = COLAB_TEXT, weight=NORMAL) -> Text:
+    return Text(text, font=FONT_UI, font_size=size, color=color, weight=weight)
+
+
+def code_text(text: str, size: float = 18, color: str = COLAB_CODE) -> Text:
+    return Text(text, font=FONT_CODE, font_size=size, color=color)
+
+
+def fit_width(mobject: Mobject, max_width: float) -> Mobject:
+    if mobject.width > max_width:
+        mobject.scale_to_fit_width(max_width)
+    return mobject
+
+
+def fit_height(mobject: Mobject, max_height: float) -> Mobject:
+    if mobject.height > max_height:
+        mobject.scale_to_fit_height(max_height)
+    return mobject
+
+
+# ---------------------------------------------------------------------------
+# Base scene
+# ---------------------------------------------------------------------------
+class ColabHTMLLesson(MovingCameraScene):
+    """Reusable Google Colab teaching layout for HTML lessons."""
+
+    spec: LessonSpec
+
+    def construct(self):
+        self.camera.background_color = COLAB_BG
+        self.shell = self.build_colab_shell()
+        self.play(FadeIn(self.shell, run_time=0.8))
+        self.wait(0.6)
+
+        self.show_interface_orientation()
+        self.show_markdown_concept()
+        self.show_code_and_execution()
+        self.show_result_relationships()
+        self.show_summary_cell()
+        self.finish_notebook()
+
+    # ------------------------------------------------------------------
+    # Colab shell
+    # ------------------------------------------------------------------
+    def build_colab_logo(self) -> VGroup:
+        left = Arc(radius=0.16, start_angle=PI / 2, angle=PI, color=COLAB_ORANGE, stroke_width=6)
+        right = Arc(radius=0.16, start_angle=-PI / 2, angle=PI, color=COLAB_ORANGE, stroke_width=6)
+        left.shift(LEFT * 0.15)
+        right.shift(RIGHT * 0.15)
+        connector_top = Line(left.get_top(), right.get_top(), color=COLAB_ORANGE, stroke_width=6)
+        connector_bottom = Line(left.get_bottom(), right.get_bottom(), color=COLAB_ORANGE, stroke_width=6)
+        return VGroup(left, right, connector_top, connector_bottom).scale(0.78)
+
+    def build_colab_shell(self) -> VGroup:
+        app = Rectangle(
+            width=16,
+            height=9,
+            fill_color=COLAB_BG,
+            fill_opacity=1,
+            stroke_width=0,
+        )
+
+        topbar = Rectangle(
+            width=16,
+            height=0.72,
+            fill_color=COLAB_SURFACE,
+            fill_opacity=1,
+            stroke_color=COLAB_BORDER,
+            stroke_width=1,
+        ).to_edge(UP, buff=0)
+
+        logo = self.build_colab_logo().move_to([-7.45, 4.14, 0])
+        notebook = ui_text(self.spec.notebook_name, 22, COLAB_TEXT, BOLD)
+        notebook.next_to(logo, RIGHT, buff=0.23)
+        notebook.align_to(topbar, UP).shift(DOWN * 0.16)
+
+        save_state = ui_text("Saved to Drive", 13, COLAB_MUTED)
+        save_state.next_to(notebook, DOWN, aligned_edge=LEFT, buff=0.02)
+
+        star = ui_text("☆", 25, COLAB_MUTED).next_to(notebook, RIGHT, buff=0.28)
+

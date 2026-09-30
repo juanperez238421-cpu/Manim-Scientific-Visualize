@@ -1,0 +1,180 @@
+            (6, "Nombre mostrado en la pestaña"),
+            (7, "Conecta la hoja de estilos"),
+            (10, "Encabezado visual de la página"),
+            (11, "Contenido principal único"),
+        ),
+        (
+            "Los metadatos no aparecen como contenido dentro de la página.",
+            "El viewport es esencial para una interfaz responsive.",
+            "header, main y footer comunican la arquitectura del sitio.",
+        ),
+    )
+
+    def build_output(self) -> VGroup:
+        frame = browser_frame(height=2.85)
+        tab = rounded_box(2.30, 0.32, fill="#ECEFF1", stroke=COLAB_BORDER, radius=0.06)
+        tab_text = ui_text("Robledo Market Lab", 10, COLAB_TEXT).move_to(tab)
+        tab.move_to(frame[1].get_center() + LEFT * 2.35)
+        tab_text.move_to(tab)
+
+        header = market_header(width=6.55, compact=True)
+        header.move_to(frame[0].get_center() + LEFT * 1.00 + UP * 0.20)
+
+        invisible = rounded_box(2.15, 1.48, fill=COLAB_BLUE_SOFT, stroke=COLAB_BLUE, radius=0.08)
+        invisible_title = ui_text("HEAD", 16, COLAB_BLUE, BOLD)
+        invisible_lines = VGroup(
+            ui_text("charset", 10.5, COLAB_MUTED),
+            ui_text("viewport", 10.5, COLAB_MUTED),
+            ui_text("title", 10.5, COLAB_MUTED),
+            ui_text("stylesheet", 10.5, COLAB_MUTED),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        invisible_title.move_to(invisible.get_top() + DOWN * 0.25)
+        invisible_lines.next_to(invisible_title, DOWN, buff=0.14)
+        invisible_group = VGroup(invisible, invisible_title, invisible_lines)
+        invisible_group.move_to(frame[0].get_corner(DR) + [-1.26, 0.91, 0])
+
+        visible_badge = rounded_box(1.05, 0.28, fill=MARKET_BLUE_SOFT, stroke=MARKET_BLUE, radius=0.12)
+        visible_text = ui_text("BODY", 11, MARKET_BLUE, BOLD).move_to(visible_badge)
+        visible_badge.move_to(header.get_corner(DL) + [0.75, -0.25, 0])
+        visible_text.move_to(visible_badge)
+        return VGroup(frame, tab, tab_text, header, invisible_group, visible_badge, visible_text)
+
+    def animate_output_relationships(self, output: VGroup):
+        self.play(Indicate(VGroup(output[1], output[2]), color=COLAB_BLUE), run_time=0.8)
+        self.play(Circumscribe(output[4], color=COLAB_BLUE), run_time=1.0)
+        self.play(Indicate(output[3], color=MARKET_BLUE), run_time=0.9)
+        self.play(Indicate(VGroup(output[5], output[6]), color=MARKET_BLUE), run_time=0.8)
+
+
+# ---------------------------------------------------------------------------
+# Lesson 03 — Semantic text
+# ---------------------------------------------------------------------------
+class HTML03SemanticText(ColabHTMLLesson):
+    spec = LessonSpec(
+        3,
+        "HTML_03_Semantic_Text.ipynb",
+        "Texto semántico: títulos, párrafos y énfasis",
+        "Usar etiquetas por significado y no por apariencia.",
+        (
+            "h1–h6 crean una jerarquía de secciones.",
+            "p representa una idea completa; strong y em añaden significado.",
+            "La jerarquía correcta mejora lectura, accesibilidad y mantenimiento.",
+        ),
+        (
+            '<header class="site-header">',
+            '  <p class="eyebrow">Seminario de Programación</p>',
+            "  <h1>Robledo Market Lab</h1>",
+            "  <p>",
+            "    Aplicación web local con <strong>HTML</strong>,",
+            "    <strong>CSS</strong> y <em>JavaScript</em>.",
+            "  </p>",
+            "</header>",
+        ),
+        (
+            (1, "Sección introductoria de la página"),
+            (2, "Contexto previo al título"),
+            (3, "Único título principal"),
+            (5, "strong indica importancia"),
+            (6, "em aporta énfasis semántico"),
+        ),
+        (
+            "h1 no significa ‘texto grande’; significa título principal.",
+            "strong y em transmiten información a lectores de pantalla.",
+            "Las clases CSS cambian el estilo sin alterar la semántica HTML.",
+        ),
+    )
+
+    def build_output(self) -> VGroup:
+        frame = browser_frame(height=2.85)
+        header = market_header(width=8.55, compact=False)
+        header.move_to(frame[0].get_center() + DOWN * 0.06)
+        primary = market_button("Seguimiento", 1.45, True)
+        secondary = market_button("Ver código", 1.20, False)
+        buttons = VGroup(primary, secondary).arrange(RIGHT, buff=0.12)
+        buttons.move_to(header[0].get_corner(DR) + [-1.55, 0.30, 0])
+        return VGroup(frame, header, buttons)
+
+    def animate_output_relationships(self, output: VGroup):
+        header = output[1]
+        self.play(Indicate(header[1], color=MARKET_BLUE), run_time=0.8)
+        self.play(Circumscribe(header[2], color=MARKET_BLUE_DARK), run_time=1.0)
+        self.play(Indicate(header[3], color=MARKET_BLUE), run_time=0.8)
+        self.play(Indicate(output[2], color=MARKET_BLUE), run_time=0.9)
+
+
+# ---------------------------------------------------------------------------
+# Lesson 04 — Links, lists and images
+# ---------------------------------------------------------------------------
+class HTML04LinksListsImages(ColabHTMLLesson):
+    spec = LessonSpec(
+        4,
+        "HTML_04_Links_Lists_Images.ipynb",
+        "Enlaces, listas, imágenes y atributos",
+        "Conectar recursos y describir su propósito con accesibilidad.",
+        (
+            "Los atributos modifican o completan el comportamiento de una etiqueta.",
+            "href define el destino; src carga el recurso; alt describe la imagen.",
+            "ul y li agrupan elementos relacionados sin inventar saltos de línea.",
+        ),
+        (
+            '<section aria-labelledby="catalogTitle">',
+            '  <h2 id="catalogTitle">Catálogo de productos</h2>',
+            "  <ul>",
+            "    <li>Calculadora científica</li>",
+            "    <li>Cuaderno cuadriculado</li>",
+            "  </ul>",
+            '  <img src="assets/cuaderno.svg"',
+            '       alt="Cuaderno azul cuadriculado">',
+            '  <a href="progress.html">Seguimiento</a>',
+            "</section>",
+        ),
+        (
+            (1, "aria-labelledby conecta sección y título"),
+            (2, "id crea un identificador único"),
+            (3, "ul representa una lista sin orden"),
+            (7, "src indica la ruta del recurso"),
+            (8, "alt comunica el contenido visual"),
+            (9, "href define la navegación"),
+        ),
+        (
+            "Una ruta relativa se resuelve desde la ubicación del archivo HTML.",
+            "alt debe describir la función de la imagen, no repetir ‘imagen de’.",
+            "Las listas son estructura semántica, no decoración con viñetas.",
+        ),
+    )
+
+    def build_output(self) -> VGroup:
+        frame = browser_frame(height=3.10)
+        section_title = ui_text("Catálogo de productos", 23, MARKET_INK, BOLD)
+        section_title.move_to(frame[0].get_corner(UL) + [1.48, -0.84, 0])
+
+        list_items = VGroup(
+            ui_text("• Calculadora científica", 12.5, MARKET_MUTED),
+            ui_text("• Cuaderno cuadriculado", 12.5, MARKET_MUTED),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.09)
+        list_items.next_to(section_title, DOWN, aligned_edge=LEFT, buff=0.17)
+
+        notebook = product_card("Cuaderno", "$12.500", "▤", 2.30)
+        calculator = product_card("Calculadora", "$48.000", "Σ", 2.30)
+        products = VGroup(notebook, calculator).arrange(RIGHT, buff=0.18)
+        products.move_to(frame[0].get_center() + RIGHT * 1.35 + DOWN * 0.25)
+
+        link = market_button("Seguimiento", 1.25, False)
+        link.next_to(list_items, DOWN, aligned_edge=LEFT, buff=0.20)
+        return VGroup(frame, section_title, list_items, products, link)
+
+    def animate_output_relationships(self, output: VGroup):
+        self.play(Circumscribe(output[1], color=MARKET_BLUE), run_time=0.9)
+        self.play(Indicate(output[2], color=MARKET_BLUE), run_time=0.8)
+        self.play(Indicate(output[3], color=MARKET_BLUE_DARK), run_time=1.0)
+        self.play(Indicate(output[4], color=COLAB_BLUE), run_time=0.8)
+
+
+# ---------------------------------------------------------------------------
+# Lesson 05 — Semantic layout and forms
+# ---------------------------------------------------------------------------
+class HTML05LayoutAndForms(ColabHTMLLesson):
+    spec = LessonSpec(
+        5,
+        "HTML_05_Layout_And_Forms.ipynb",
+        "Layout semántico y formularios funcionales",

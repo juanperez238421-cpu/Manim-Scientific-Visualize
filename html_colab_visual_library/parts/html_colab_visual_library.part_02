@@ -1,0 +1,180 @@
+        divider = Line(
+            [card.get_left()[0], card.get_top()[1] - code_height, 0],
+            [card.get_right()[0], card.get_top()[1] - code_height, 0],
+            color=COLAB_BORDER,
+            stroke_width=1,
+        )
+
+        group = VGroup(card, gutter, run_icon, count, rows)
+        if output is not None:
+            divider.set_opacity(1)
+            output.next_to(divider, DOWN, buff=0.20)
+            output.align_to(card, LEFT).shift(RIGHT * 1.02)
+            group.add(divider, output)
+        return group
+
+    def html_line_color(self, line: str) -> str:
+        stripped = line.strip()
+        if stripped.startswith("<!--"):
+            return COLAB_GREEN
+        if stripped.startswith("<!DOCTYPE"):
+            return "#A142F4"
+        if stripped.startswith("<"):
+            return COLAB_BLUE
+        return COLAB_CODE
+
+    def execution_chip(self, note: str) -> VGroup:
+        box = rounded_box(4.2, 0.60, fill=COLAB_BLUE_SOFT, stroke=COLAB_BLUE, radius=0.16)
+        dot = Circle(radius=0.08, fill_color=COLAB_BLUE, fill_opacity=1, stroke_width=0)
+        dot.move_to(box.get_left() + RIGHT * 0.30)
+        label = ui_text(note, 16, COLAB_TEXT, BOLD)
+        fit_width(label, 3.45)
+        label.next_to(dot, RIGHT, buff=0.18)
+        return VGroup(box, dot, label)
+
+    # ------------------------------------------------------------------
+    # Generic lesson animation
+    # ------------------------------------------------------------------
+    def show_interface_orientation(self):
+        title = ui_text("Google Colab como laboratorio de HTML", 34, COLAB_TEXT, BOLD)
+        subtitle = ui_text("Código, ejecución y resultado permanecen en el mismo flujo visual.", 20, COLAB_MUTED)
+        title.move_to([0.20, 1.25, 0])
+        subtitle.next_to(title, DOWN, buff=0.20)
+
+        areas = VGroup(
+            self.execution_chip("1. Menús y runtime"),
+            self.execution_chip("2. Celdas Markdown"),
+            self.execution_chip("3. Celdas de código"),
+            self.execution_chip("4. Salida del navegador"),
+        ).arrange_in_grid(rows=2, cols=2, buff=(0.35, 0.24))
+        areas.next_to(subtitle, DOWN, buff=0.50)
+
+        self.play(Write(title), FadeIn(subtitle, shift=UP * 0.10), run_time=1.0)
+        self.play(LaggedStart(*[FadeIn(item, shift=UP * 0.12) for item in areas], lag_ratio=0.18), run_time=1.4)
+        self.wait(1.0)
+
+        # Four restrained focus movements reproduce the camera logic used in
+        # the user's recent Colab-style lessons.
+        original = self.camera.frame.copy()
+        self.play(self.camera.frame.animate.scale(0.70).move_to([-3.2, 3.72, 0]), run_time=0.8)
+        self.wait(0.35)
+        self.play(self.camera.frame.animate.move_to([-6.85, 3.18, 0]), run_time=0.65)
+        self.wait(0.35)
+        self.play(self.camera.frame.animate.move_to([6.10, 4.12, 0]), run_time=0.65)
+        self.wait(0.35)
+        self.play(Transform(self.camera.frame, original), run_time=0.8)
+
+        self.play(FadeOut(VGroup(title, subtitle, areas)), run_time=0.6)
+
+    def show_markdown_concept(self):
+        self.markdown = self.markdown_cell(self.spec.title, self.spec.markdown_lines)
+        self.markdown.move_to([0.35, 1.50, 0])
+        self.play(FadeIn(self.markdown, shift=UP * 0.15), run_time=0.9)
+        self.play(self.camera.frame.animate.scale(0.82).move_to(self.markdown), run_time=0.8)
+        self.wait(1.8)
+        self.play(self.camera.frame.animate.scale(1 / 0.82).move_to(ORIGIN), run_time=0.8)
+
+    def show_code_and_execution(self):
+        self.output = self.build_output()
+        self.code = self.code_cell(self.spec.code_lines, output=None)
+        self.code.move_to([0.35, -1.30, 0])
+
+        # Keep the notebook readable as the code cell enters below the concept.
+        notebook_group = VGroup(self.markdown, self.code)
+        fit_height(notebook_group, 6.25)
+        notebook_group.move_to([0.35, -0.02, 0])
+
+        self.play(FadeIn(self.code, shift=UP * 0.18), run_time=0.9)
+        self.play(self.camera.frame.animate.scale(0.76).move_to(self.code), run_time=0.8)
+
+        for line_number, note in self.spec.line_notes:
+            selected = self.code_cell(
+                self.spec.code_lines,
+                selected_line=line_number,
+                output=None,
+            )
+            selected.replace(self.code, stretch=True)
+            chip = self.execution_chip(note)
+            chip.move_to(self.code.get_top() + DOWN * 0.34 + RIGHT * 3.30)
+            self.play(Transform(self.code, selected), FadeIn(chip, shift=LEFT * 0.10), run_time=0.55)
+            self.wait(0.65)
+            self.play(FadeOut(chip), run_time=0.25)
+
+        # Execute the cell: play button becomes a blue running indicator.
+        running = Circle(radius=0.17, fill_color=COLAB_BLUE, fill_opacity=1, stroke_width=0)
+        running.move_to(self.code[2])
+        spinner = Arc(radius=0.09, start_angle=0, angle=1.55 * PI, color=WHITE, stroke_width=2.5).move_to(running)
+        self.play(Transform(self.code[2], VGroup(running, spinner)), run_time=0.65)
+
+        executed = self.code_cell(self.spec.code_lines, execution_count="[1]", output=self.output)
+        executed.move_to(self.code.get_center() + DOWN * (self.output.height / 2 + 0.20))
+        fit_height(executed, 6.30)
+        self.play(ReplacementTransform(self.code, executed), run_time=0.9)
+        self.code = executed
+        self.wait(1.0)
+
+    def show_result_relationships(self):
+        output = self.code[-1]
+        self.play(self.camera.frame.animate.scale(0.72).move_to(output), run_time=0.9)
+        self.wait(0.6)
+        self.animate_output_relationships(output)
+        self.wait(1.0)
+        self.play(self.camera.frame.animate.scale(1 / 0.72).move_to(ORIGIN), run_time=0.9)
+
+    def show_summary_cell(self):
+        summary = self.markdown_cell("Comprobación de aprendizaje", self.spec.summary_lines, min_height=1.70)
+        summary.move_to([0.35, -1.48, 0])
+
+        self.play(
+            self.markdown.animate.shift(UP * 5.6),
+            self.code.animate.shift(UP * 5.6),
+            FadeIn(summary, shift=UP * 0.15),
+            run_time=0.9,
+        )
+        self.play(self.camera.frame.animate.scale(0.82).move_to(summary), run_time=0.8)
+
+        checks = VGroup()
+        for i in range(len(self.spec.summary_lines)):
+            circle = Circle(radius=0.10, stroke_color=COLAB_GREEN, stroke_width=2)
+            tick = VGroup(
+                Line(LEFT * 0.05, DOWN * 0.05, color=COLAB_GREEN, stroke_width=2),
+                Line(DOWN * 0.05, RIGHT * 0.08 + UP * 0.09, color=COLAB_GREEN, stroke_width=2),
+            ).move_to(circle)
+            marker = VGroup(circle, tick)
+            marker.move_to(summary[3][i].get_left() + LEFT * 0.22)
+            checks.add(marker)
+        self.play(LaggedStart(*[Create(check) for check in checks], lag_ratio=0.25), run_time=1.2)
+        self.wait(1.8)
+
+        self.summary = VGroup(summary, checks)
+        self.play(self.camera.frame.animate.scale(1 / 0.82).move_to(ORIGIN), run_time=0.8)
+
+    def finish_notebook(self):
+        banner = rounded_box(7.0, 0.76, fill=COLAB_BLUE_SOFT, stroke=COLAB_BLUE, radius=0.18)
+        label = ui_text(
+            f"HTML Library · Lesson {self.spec.number:02d} completed",
+            22,
+            COLAB_BLUE,
+            BOLD,
+        ).move_to(banner)
+        banner.move_to([0.35, 0.05, 0])
+        label.move_to(banner)
+
+        self.play(FadeOut(self.summary, run_time=0.5))
+        self.play(GrowFromCenter(banner), Write(label), run_time=0.8)
+        self.wait(1.4)
+        self.play(FadeOut(VGroup(banner, label, self.shell)), run_time=0.7)
+
+    # ------------------------------------------------------------------
+    # Hooks implemented by each lesson
+    # ------------------------------------------------------------------
+    def build_output(self) -> VGroup:
+        raise NotImplementedError
+
+    def animate_output_relationships(self, output: VGroup):
+        self.play(Indicate(output, color=COLAB_BLUE), run_time=1.0)
+
+
+# ---------------------------------------------------------------------------
+# Reusable Robledo Market Lab output components
+# ---------------------------------------------------------------------------
