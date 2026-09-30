@@ -186,7 +186,15 @@ class Physics9VerticalFreeFallTheoryV3JPFluid(JPMathClassroomScene):
         row.move_to(box).align_to(box, LEFT).shift(RIGHT * 0.16)
         return VGroup(box, row)
 
-    def live_state_panel(self, tracker: ValueTracker, state_fn, *, title: str, width=4.0):
+    def live_state_panel(
+        self,
+        tracker: ValueTracker,
+        state_fn,
+        *,
+        title: str,
+        width=4.0,
+        position=ORIGIN,
+    ):
         def build():
             s = state_fn(tracker.get_value())
             rows = VGroup(
@@ -208,7 +216,7 @@ class Physics9VerticalFreeFallTheoryV3JPFluid(JPMathClassroomScene):
             )
             self.fit(content, width - 0.45, 2.30)
             content.move_to(box).align_to(box, LEFT).shift(RIGHT * 0.24)
-            return VGroup(box, content)
+            return VGroup(box, content).move_to(position)
         return always_redraw(build)
 
     def checkpoint_pause(self, card: Mobject, *, explain: float = PAUSE_EXPLAIN) -> None:
@@ -627,7 +635,13 @@ class Physics9VerticalFreeFallTheoryV3JPFluid(JPMathClassroomScene):
                 label_side=LEFT,
             )
         )
-        hud = self.live_state_panel(t, state, title="LIVE STATE", width=4.0).move_to([4.35, 0.95, 0])
+        hud = self.live_state_panel(
+            t,
+            state,
+            title="LIVE STATE",
+            width=4.0,
+            position=[4.35, 0.95, 0],
+        )
 
         self.play(FadeIn(axis), FadeIn(ground), FadeIn(moving), FadeIn(live_v), FadeIn(live_a), FadeIn(hud), run_time=RUN_NORMAL)
 
@@ -738,7 +752,8 @@ class Physics9VerticalFreeFallTheoryV3JPFluid(JPMathClassroomScene):
             lambda q: MotionState(q, V0_UP * q - 0.5 * G * q**2, V0_UP - G * q, -G),
             title="SAME INSTANT",
             width=3.8,
-        ).move_to([5.05, -0.10, 0])
+            position=[5.05, -0.10, 0],
+        )
 
         self.play(FadeIn(track), FadeIn(moving), FadeIn(ax_y), FadeIn(ax_v), FadeIn(ax_a), FadeIn(labels), run_time=RUN_NORMAL)
         self.play(Create(curve_y), Create(curve_v), Create(curve_a), run_time=RUN_SLOW)
@@ -806,7 +821,13 @@ class Physics9VerticalFreeFallTheoryV3JPFluid(JPMathClassroomScene):
                 label_size=21,
             )
         )
-        hud = self.live_state_panel(t, state, title="20 m DROP", width=3.9).move_to([4.55, 1.15, 0])
+        hud = self.live_state_panel(
+            t,
+            state,
+            title="20 m DROP",
+            width=3.9,
+            position=[4.55, 1.15, 0],
+        )
 
         solution_box = RoundedRectangle(
             width=5.9,
@@ -1016,7 +1037,7 @@ class Physics9VerticalFreeFallTheoryV3JPFluid(JPMathClassroomScene):
             body_font_size=23,
             header_font_size=21,
         )
-        table.group.move_to([-4.25, -0.15, 0])
+        table.group.move_to([-3.90, -0.15, 0])
 
         self.play(FadeIn(table.header), run_time=RUN_NORMAL)
         for row in table.rows[1:]:
