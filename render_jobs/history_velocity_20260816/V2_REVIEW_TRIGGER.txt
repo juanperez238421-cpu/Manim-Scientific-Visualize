@@ -1,0 +1,1 @@
+Senior V1 audit: 8.8/10. Visual structure passed; duration 435.733333 s was below the requested ~8–12 minute range. V2 rerender uses LESSON_TIME_SCALE=1.20 and enforces 480–720 seconds before packaging.

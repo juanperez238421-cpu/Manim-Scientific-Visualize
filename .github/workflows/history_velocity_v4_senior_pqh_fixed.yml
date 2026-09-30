@@ -1,0 +1,127 @@
+name: History of Velocity V4 Senior PQH Fixed
+
+on:
+  push:
+    branches: [agent/history-of-velocity-pqh-20260816]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct V3 base and validate V4
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/history_velocity_20260816
+          cat "$JOB"/h_*.b64 | base64 -d | gzip -dc > "$JOB/history_of_velocity.py"
+          cat "$JOB"/s_*.b64 | base64 -d | gzip -dc > "$JOB/jp_classroom_style.py"
+          if [ -f "$JOB/apply_v3_final_layout_patch.py" ]; then
+            (cd "$JOB" && python apply_v3_final_layout_patch.py history_of_velocity.py)
+          fi
+          cp "$JOB/history_of_velocity.py" "$JOB/history_of_velocity_FINAL_V3.py"
+          python -m py_compile "$JOB/history_of_velocity_FINAL_V3.py" "$JOB/history_of_velocity_FINAL_V4.py" "$JOB/jp_classroom_style.py"
+
+      - name: Install render tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: PQL runtime QA at natural timing
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/history_velocity_20260816
+          rm -rf media_pql qa && mkdir -p qa
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w "/manim/$JOB" --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql history_of_velocity_FINAL_V4.py HistoryOfVelocityV4 --fps 15 --format=mp4 --media_dir /manim/media_pql --disable_caching
+            ' 2>&1 | tee qa/render_pql.log
+          P="$(find media_pql -type f -name 'HistoryOfVelocityV4.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$P" && test -s "$P"
+          BASE="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$P")"
+          SCALE="$(python - <<PY
+          b=float('$BASE')
+          print(max(0.90,min(1.45,500.0/b)))
+          PY
+          )"
+          printf 'base_duration=%s\nfinal_scale=%s\n' "$BASE" "$SCALE" | tee qa/timing.txt
+          echo "FINAL_SCALE=$SCALE" >> "$GITHUB_ENV"
+
+      - name: PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/history_velocity_20260816
+          rm -rf media out && mkdir -p out
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE="$FINAL_SCALE" \
+            -v "$PWD:/manim" -w "/manim/$JOB" --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh history_of_velocity_FINAL_V4.py HistoryOfVelocityV4 --fps 30 --format=mp4 --media_dir /manim/media --disable_caching
+            ' 2>&1 | tee out/render_pqh.log
+          F="$(find media -type f -name 'HistoryOfVelocityV4.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$F" && test -s "$F"
+          cp "$F" out/HistoryOfVelocity_Senior_FINAL_V4_pqh.mp4
+
+      - name: Verify and export audit frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/HistoryOfVelocity_Senior_FINAL_V4_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          C="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          P="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          D="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\n%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$C" "$P" "$D" > out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920; test "$H" = 1080; test "$FPS" = 30/1; test "$C" = h264; test "$P" = yuv420p
+          python - <<'PY'
+          d=float(open('out/VIDEO_TECHNICAL.tsv').read().splitlines()[1].split('\t')[-1])
+          assert 420 <= d <= 620, d
+          PY
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
+          ffmpeg -nostdin -hide_banner -i "$F" -vf 'freezedetect=n=0.002:d=1.2' -an -f null - 2> out/freezedetect.log || true
+          python - <<'PY'
+          import re
+          t=open('out/freezedetect.log',errors='ignore').read()
+          ds=[float(x) for x in re.findall(r'freeze_duration: ([0-9.]+)',t)]
+          d=float(open('out/VIDEO_TECHNICAL.tsv').read().splitlines()[1].split('\t')[-1])
+          f=sum(ds)
+          open('out/MOTION_AUDIT.tsv','w').write(f'duration\tfrozen_ge_1p2s\tfrozen_ratio\n{d:.3f}\t{f:.3f}\t{f/d:.4f}\n')
+          PY
+          mkdir -p out/audit_frames
+          ffmpeg -nostdin -hide_banner -loglevel error -i "$F" -vf 'fps=1/4,scale=960:-2' -q:v 4 out/audit_frames/%04d.jpg
+          sha256sum "$F" > out/SHA256SUMS.txt
+          cp qa/timing.txt out/
+          cp qa/render_pql.log out/
+
+      - name: Package
+        shell: bash
+        run: |
+          JOB=render_jobs/history_velocity_20260816
+          cp "$JOB/history_of_velocity_FINAL_V4.py" "$JOB/history_of_velocity_FINAL_V3.py" "$JOB/jp_classroom_style.py" out/
+          cd out
+          zip -9 -r HistoryOfVelocity_Senior_FINAL_V4_PQH_Package.zip HistoryOfVelocity_Senior_FINAL_V4_pqh.mp4 history_of_velocity_FINAL_V4.py history_of_velocity_FINAL_V3.py jp_classroom_style.py VIDEO_TECHNICAL.tsv MOTION_AUDIT.tsv SHA256SUMS.txt timing.txt render_pqh.log render_pql.log full_decode.log freezedetect.log audit_frames/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HistoryOfVelocity-Senior-FINAL-V4-PQH-Fixed
+          path: out/
+          if-no-files-found: error
+          retention-days: 7
