@@ -1,0 +1,8 @@
+Topic: Sistema diedrico / first-angle vs third-angle projection
+Classroom labels: ISO E (first-angle), ISO A (third-angle)
+Normative correction: NTC 1777 is a Colombian technical standard, not legislation by itself.
+NTC 1777:2001 text recognizes both first-angle and third-angle methods.
+2026 catalog cross-check: ICONTEC lists NTC 1915:1984 Building drawing - Projection methods as VIGENTE.
+ManimCE: 0.20.1
+Pipeline: literal -pql QA then literal -pqh final
+Output: 1920x1080, 30 fps, H.264, yuv420p
