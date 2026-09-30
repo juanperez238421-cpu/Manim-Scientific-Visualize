@@ -446,11 +446,11 @@ class JPClassroomScene(MovingCameraScene):
         )
         title_row = VGroup(VGroup(number_box, number_text), title_text)
         title_row.arrange(RIGHT, buff=0.25)
-        title_row.move_to([SAFE_LEFT_X + title_row.width / 2, 4.02, 0])
+        title_row.move_to([SAFE_LEFT_X + title_row.width / 2, 3.82, 0])
 
         rule = Line(
-            [SAFE_LEFT_X, 3.58, 0],
-            [SAFE_RIGHT_X, 3.58, 0],
+            [SAFE_LEFT_X, 3.43, 0],
+            [SAFE_RIGHT_X, 3.43, 0],
             color=LIGHT_GRAY,
             stroke_width=2,
         )
