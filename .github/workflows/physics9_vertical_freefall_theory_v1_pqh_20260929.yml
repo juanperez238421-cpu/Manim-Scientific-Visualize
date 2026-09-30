@@ -44,12 +44,15 @@ jobs:
           grep -q "verify_data" "$SRC"
           ! grep -Eq '[A-Za-z]:\\|/Users/|/home/[^/]+' "$SRC"
 
-      - name: Prepare ManimCE 0.20.1
+      - name: Prepare ManimCE 0.20.1 and FFmpeg
         shell: bash
         run: |
           set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
           docker pull manimcommunity/manim:v0.20.1 >/dev/null
           ffmpeg -version | head -1
+          ffprobe -version | head -1
 
       - name: Literal PQL full-timeline smoke render
         shell: bash
