@@ -480,7 +480,7 @@ class Physics9VerticalFreeFallTheoryV4TypographySafe(JPMathClassroomScene):
     def scene_04_derive_velocity_and_position(self) -> None:
         self.set_header(
             4,
-            "DERIVAMOS v(t) Y y(t) PASO A PASO",
+            "DE a(t) A v(t) Y y(t)",
             "Usamos aceleración constante y velocidad media; cada transformación conserva el significado físico.",
         )
 
@@ -546,7 +546,7 @@ class Physics9VerticalFreeFallTheoryV4TypographySafe(JPMathClassroomScene):
     def scene_05_three_initial_conditions(self) -> None:
         self.set_header(
             5,
-            "TRES CONDICIONES INICIALES, UNA MISMA ECUACIÓN",
+            "TRES CONDICIONES, UNA MISMA GRAVEDAD",
             "Soltar, lanzar hacia arriba o lanzar hacia abajo cambia v₀; no cambia a_y = −g.",
         )
 
@@ -613,7 +613,7 @@ class Physics9VerticalFreeFallTheoryV4TypographySafe(JPMathClassroomScene):
     def scene_06_upward_throw_worked_motion(self) -> None:
         self.set_header(
             6,
-            "EJEMPLO ANIMADO: LANZAMIENTO HACIA ARRIBA A 14 m/s",
+            "LANZAMIENTO VERTICAL: 14 m/s",
             "Detenemos el movimiento en los instantes físicamente importantes y resolvemos una pregunta por vez.",
         )
 
@@ -1129,7 +1129,7 @@ class Physics9VerticalFreeFallTheoryV4TypographySafe(JPMathClassroomScene):
     def scene_12_experimental_protocol_bridge(self) -> None:
         self.set_header(
             12,
-            "PROTOCOLO EXPERIMENTAL: CÓMO HACER QUE LOS DATOS SEAN DEFENDIBLES",
+            "PROTOCOLO EXPERIMENTAL",
             "La teoría termina cuando produce una predicción que puede medirse, repetirse, graficarse y contrastarse.",
         )
 
