@@ -1,0 +1,25 @@
+{
+  "id": "physics.inclined_plane_block.v1",
+  "kind": "generated_image_asset",
+  "purpose": "Reusable visual object for JP Manim Classroom scenes. No baked labels/equations.",
+  "canvas_px": [
+    1536,
+    1024
+  ],
+  "background": "transparent",
+  "palette": "JP Classroom neutral grayscale",
+  "recommended_manim_usage": {
+    "class": "ImageMobject",
+    "max_width_scene_units": 6.4,
+    "typical_position": "left side of split layout",
+    "annotations": "Create dynamically in ManimCE (Text/MathTex/Arrow/Angle)."
+  },
+  "asset_rules": [
+    "No embedded explanatory text.",
+    "No embedded equations.",
+    "Transparent background when possible.",
+    "High-resolution source; scale down in Manim.",
+    "Keep visual subject centered with safe transparent padding.",
+    "Prefer neutral palette so Manim highlighting remains controllable."
+  ]
+}

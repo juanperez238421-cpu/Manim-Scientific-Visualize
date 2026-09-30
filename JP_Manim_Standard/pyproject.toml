@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jp-manim-classroom-standard"
+version = "1.0.0"
+description = "Reusable ManimCE classroom visual system and audited render protocol."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "manim==0.20.1",
+  "numpy>=1.26",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+exclude = ["media", "delivery"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "PERF"]
+ignore = ["F403", "F405", "E501"]

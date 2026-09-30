@@ -1,0 +1,58 @@
+"""Equation chains, boxed values and final process maps."""
+from __future__ import annotations
+from collections.abc import Sequence
+import numpy as np
+from manim import *
+from .theme import *
+
+class EquationsMixin:
+    def equation_stack(self, equations: Sequence[str], *, sizes: Sequence[int] | None = None,
+                       buff: float = 0.26, max_width: float = 7.2, max_height: float = 4.8) -> VGroup:
+        sizes = list(sizes or [36] * len(equations))
+        mobs = VGroup(*[self.math(eq, size) for eq, size in zip(equations, sizes)])
+        mobs.arrange(DOWN, aligned_edge=LEFT, buff=buff)
+        return self.fit(mobs, max_width, max_height)
+
+    def animate_equation_stack(self, stack: VGroup, *, pause: float = PAUSE_READ, write: bool = True) -> None:
+        for line in stack:
+            self.play(Write(line) if write else FadeIn(line, shift=UP*0.08), run_time=RUN_NORMAL)
+            self.wait(pause)
+
+    def transform_equation_chain(self, expressions: Sequence[str], *, size: int = 42,
+                                 position: np.ndarray = ORIGIN, pause: float = PAUSE_EXPLAIN) -> Mobject:
+        if not expressions:
+            raise ValueError("expressions cannot be empty")
+        current = self.math(expressions[0], size).move_to(position)
+        self.fit(current, 13.8, 2.4)
+        self.play(Write(current), run_time=RUN_NORMAL); self.wait(pause)
+        for expr in expressions[1:]:
+            target = self.math(expr, size).move_to(position)
+            self.fit(target, 13.8, 2.4)
+            self.play(TransformMatchingTex(current, target), run_time=RUN_SLOW)
+            current.become(target); self.wait(pause)
+        return current
+
+    def boxed_values(self, values: Sequence[str | int | float], *, box_size: float = 0.78,
+                     font_size: int = 38, buff: float = 0.12) -> VGroup:
+        boxes = VGroup(*[Square(side_length=box_size, stroke_color=BLACK_LINE, stroke_width=1.7,
+            fill_color=WHITE_FILL, fill_opacity=1) for _ in values]).arrange(RIGHT, buff=buff)
+        texts = VGroup(*[self.math(str(v), font_size) for v in values])
+        for box, value in zip(boxes, texts):
+            self.fit(value, box_size - 0.12, box_size - 0.12).move_to(box)
+        return VGroup(boxes, texts)
+
+    def process_map(self, steps: Sequence[tuple[str, str]], *, card_width: float = 4.3,
+                    card_height: float = 1.10, columns: int = 3) -> VGroup:
+        cards = VGroup()
+        for number, text_value in steps:
+            badge = RoundedRectangle(width=0.66, height=0.50, corner_radius=0.08,
+                stroke_color=BLACK_LINE, stroke_width=1.5, fill_color=VERY_LIGHT_GRAY, fill_opacity=1)
+            badge_text = self.text(number, 19, BOLD).move_to(badge)
+            body = self.text(text_value, 21, BOLD)
+            content = VGroup(VGroup(badge, badge_text), body).arrange(RIGHT, buff=0.18)
+            self.fit(content, card_width - 0.35, card_height - 0.20)
+            box = RoundedRectangle(width=card_width, height=card_height, corner_radius=0.10,
+                stroke_color=BLACK_LINE, stroke_width=1.5, fill_color=WHITE_FILL, fill_opacity=1)
+            content.move_to(box); cards.add(VGroup(box, content))
+        cards.arrange_in_grid(cols=columns, buff=(0.25, 0.25))
+        return cards
