@@ -1,0 +1,148 @@
+name: Render House Extrusion PQH
+
+on:
+  push:
+    branches:
+      - render-house-extrusion-20260818
+    paths:
+      - 'render_jobs/house_extrusion/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Python source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd render_jobs/house_extrusion
+          python -m py_compile House_Extrusion_3D_ManimCE.py
+          test -s House_Extrusion_3D_ManimCE.py
+
+      - name: Pull official ManimCE image
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull manimcommunity/manim:v0.20.1
+
+      - name: Preview render pql
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd render_jobs/house_extrusion
+          mkdir -p media delivery
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/colab-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open
+              chmod +x /tmp/colab-bin/xdg-open
+              export PATH="/tmp/colab-bin:$PATH"
+              manim -pql House_Extrusion_3D_ManimCE.py HouseExtrusion3D \
+                --format=mp4 --disable_caching
+            ' 2>&1 | tee preview_render.log
+
+      - name: Final render literal pqh
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd render_jobs/house_extrusion
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c '
+              set -euo pipefail
+              mkdir -p /tmp/colab-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/colab-bin/xdg-open
+              chmod +x /tmp/colab-bin/xdg-open
+              export PATH="/tmp/colab-bin:$PATH"
+              manim -pqh House_Extrusion_3D_ManimCE.py HouseExtrusion3D \
+                --format=mp4 --disable_caching
+            ' 2>&1 | tee final_render.log
+
+      - name: Locate and verify final MP4
+        id: verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd render_jobs/house_extrusion
+          VIDEO="$(find media -type f -path '*1080p30*' -name 'HouseExtrusion3D.mp4' -print -quit)"
+          if [ -z "$VIDEO" ]; then
+            VIDEO="$(find media -type f -name 'HouseExtrusion3D.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          fi
+          test -n "$VIDEO"
+          test -s "$VIDEO"
+          echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
+          ffprobe -v error \
+            -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+            -show_entries format=duration,size \
+            -of default=noprint_wrappers=1 \
+            "$VIDEO" | tee ffprobe.txt
+          ffmpeg -v error -i "$VIDEO" -f null -
+
+      - name: Extract QA frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd render_jobs/house_extrusion
+          VIDEO="${{ steps.verify.outputs.video }}"
+          DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$VIDEO")"
+          MID="$(python - <<PY
+import math
+print(max(1.0, float('$DURATION')/2.0))
+PY
+)"
+          mkdir -p qa_frames
+          ffmpeg -y -loglevel error -ss 00:00:05 -i "$VIDEO" -frames:v 1 qa_frames/frame_start.png
+          ffmpeg -y -loglevel error -ss "$MID" -i "$VIDEO" -frames:v 1 qa_frames/frame_mid.png
+          ffmpeg -y -loglevel error -sseof -5 -i "$VIDEO" -frames:v 1 qa_frames/frame_end.png
+
+      - name: Stage delivery
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd render_jobs/house_extrusion
+          VIDEO="${{ steps.verify.outputs.video }}"
+          mkdir -p delivery
+          cp "$VIDEO" delivery/House_Extrusion_3D_PQH.mp4
+          cp House_Extrusion_3D_ManimCE.py delivery/
+          cp preview_render.log final_render.log ffprobe.txt delivery/
+          cp qa_frames/*.png delivery/
+          cat > delivery/RENDER_INFO.txt <<'EOF'
+Scene: HouseExtrusion3D
+Source: House_Extrusion_3D_ManimCE.py
+ManimCE: 0.20.1
+Preview command:
+manim -pql House_Extrusion_3D_ManimCE.py HouseExtrusion3D --format=mp4 --disable_caching
+Final command:
+manim -pqh House_Extrusion_3D_ManimCE.py HouseExtrusion3D --format=mp4 --disable_caching
+Target: 1920x1080, 30 fps, MP4 H.264
+EOF
+          sha256sum delivery/House_Extrusion_3D_PQH.mp4 delivery/House_Extrusion_3D_ManimCE.py > delivery/SHA256SUMS.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: House_Extrusion_3D_PQH_20260818
+          path: render_jobs/house_extrusion/delivery/
+          if-no-files-found: error
+          retention-days: 7
