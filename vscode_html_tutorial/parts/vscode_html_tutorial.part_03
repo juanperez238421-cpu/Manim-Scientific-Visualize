@@ -1,0 +1,220 @@
+        '<html lang="en">',
+        "  <head>",
+        '    <meta charset="UTF-8">',
+        '    <meta name="viewport" content="width=device-width, initial-scale=1.0">',
+        "    <title>Hello World</title>",
+        "  </head>",
+        "  <body>",
+        "",
+        "  </body>",
+        "</html>",
+    )
+
+    def construct(self):
+        self.camera.background_color = BG
+        self.setup_shell("HELLO_HTML", ("index.html",), "index.html", r"D:\Academia\HTML\hello_html")
+        banner = self.show_lesson_banner("Lesson 4 · Write the HTML document skeleton")
+
+        self.focus(self.shell.regions["editor"], scale=0.82)
+        code = self.type_code_lines(self.SKELETON, font_size=19.2, line_spacing=0.39, time_per_char=0.014)
+        self.reset_camera()
+        self.wait(0.5)
+
+        callouts = VGroup()
+        points = [
+            ("DOCTYPE", "Declares the HTML5 standard.", [4.50, 2.20, 0], code[0][1].get_center(), 2.55),
+            ("html", "The root element wraps the whole document.", [4.50, 1.05, 0], code[1][1].get_center(), 2.65),
+            ("head", "Configuration and metadata used by the browser.", [4.45, -0.18, 0], code[2][1].get_center(), 2.75),
+            ("body", "Everything here becomes visible page content.", [4.50, -1.55, 0], code[7][1].get_center(), 2.65),
+        ]
+        for title, body, center, target, width in points:
+            c = self.add_callout(title, body, center, target, width)
+            callouts.add(c)
+            self.wait(0.75)
+        self.wait(0.8)
+        self.play(FadeOut(callouts), run_time=0.50)
+
+        html_box = self.highlight_code_block(code, 1, 10, BLUE, 0.035)
+        head_box = self.highlight_code_block(code, 2, 6, GREEN, 0.055)
+        body_box = self.highlight_code_block(code, 7, 9, YELLOW, 0.055)
+        labels = VGroup(
+            callout_box("Document", "<html> ... </html>", 2.15, BLUE),
+            callout_box("Metadata", "<head> ... </head>", 2.15, GREEN),
+            callout_box("Visible page", "<body> ... </body>", 2.15, YELLOW),
+        ).arrange(DOWN, buff=0.16).move_to([4.75, 0.10, 0])
+        self.play(FadeIn(labels, shift=LEFT * 0.08), run_time=0.55)
+        self.wait(1.5)
+
+        save = self.keyboard_shortcut(["Ctrl", "S"], "Save the file", [4.45, -2.30, 0])
+        self.play(Indicate(self.shell.regions["editor_tab"], color=CYAN), run_time=0.75)
+        self.wait(0.9)
+        self.play(FadeOut(VGroup(html_box, head_box, body_box, labels, save)), run_time=0.55)
+        self.lesson_complete("The document is valid, structured and ready for visible content.")
+        self.play(FadeOut(VGroup(banner, code, self.shell.group)), run_time=0.75)
+
+
+class VSCode05_HelloWorldAndPreview(VSCodeTutorialBase):
+    FINAL_CODE = (
+        "<!DOCTYPE html>",
+        '<html lang="en">',
+        "  <head>",
+        '    <meta charset="UTF-8">',
+        '    <meta name="viewport" content="width=device-width, initial-scale=1.0">',
+        "    <title>Hello World</title>",
+        "  </head>",
+        "  <body>",
+        "    <h1>Hello, world!</h1>",
+        "    <p>My first HTML page.</p>",
+        "  </body>",
+        "</html>",
+    )
+
+    def construct(self):
+        self.camera.background_color = BG
+        self.setup_shell("HELLO_HTML", ("index.html",), "index.html", r"D:\Academia\HTML\hello_html")
+        banner = self.show_lesson_banner("Lesson 5 · Build and preview Hello World")
+
+        code = self.type_code_lines(self.FINAL_CODE, font_size=18.4, line_spacing=0.37, time_per_char=0.012)
+        h1_call = self.add_callout(
+            "h1 = main heading",
+            "Use one clear heading to identify the page.",
+            [4.60, 0.75, 0],
+            code[8][1].get_center(),
+            2.80,
+        )
+        p_call = self.add_callout(
+            "p = paragraph",
+            "Paragraphs hold normal blocks of readable text.",
+            [4.60, -0.55, 0],
+            code[9][1].get_center(),
+            2.80,
+        )
+        self.wait(1.3)
+        self.play(FadeOut(VGroup(h1_call, p_call)), run_time=0.45)
+
+        save = self.keyboard_shortcut(["Ctrl", "S"], "Save", [4.35, -2.00, 0])
+        self.wait(0.7)
+        self.play(FadeOut(save), run_time=0.30)
+
+        command = mono_text("start index.html", 13.5, TEXT)
+        prompt = self.shell.regions["terminal_prompt"]
+        command.next_to(prompt, RIGHT, buff=0.11)
+        cursor = make_cursor(0.20).next_to(prompt, RIGHT, buff=0.08)
+        self.add(cursor)
+        self.play(AddTextLetterByLetter(command, time_per_char=0.065), cursor.animate.next_to(command, RIGHT, buff=0.035), run_time=1.05)
+        self.play(FadeOut(cursor), run_time=0.20)
+        self.wait(0.5)
+
+        browser = rr(6.2, 3.80, "#FFFFFF", "#AAB2BD", radius=0.10, stroke_width=1.2)
+        browser.move_to([2.35, 0.40, 0])
+        chrome = Rectangle(width=6.2, height=0.45, fill_color="#EEF1F4", fill_opacity=1, stroke_color="#AAB2BD", stroke_width=1)
+        chrome.align_to(browser, UP)
+        dots = VGroup(Dot(radius=0.045, color=RED), Dot(radius=0.045, color=YELLOW), Dot(radius=0.045, color=GREEN)).arrange(RIGHT, buff=0.08)
+        dots.move_to(chrome.get_left() + RIGHT * 0.32)
+        address = rr(4.45, 0.25, WHITE, "#D0D5DA", radius=0.08).move_to(chrome)
+        address_text = ui_text(r"file:///D:/Academia/HTML/hello_html/index.html", 9.5, "#5D6670").move_to(address)
+        heading = ui_text("Hello, world!", 34, BROWSER_TEXT, BOLD)
+        paragraph = ui_text("My first HTML page.", 18, "#475569")
+        content = VGroup(heading, paragraph).arrange(DOWN, buff=0.28, aligned_edge=LEFT)
+        content.move_to(browser.get_center() + LEFT * 0.80)
+        browser_group = VGroup(browser, chrome, dots, address, address_text, content)
+
+        self.play(
+            code.animate.scale(0.62).move_to([-3.35, 0.30, 0]),
+            FadeIn(browser_group, shift=LEFT * 0.18),
+            run_time=0.95,
+        )
+        relation1 = pointer(code[8][1].get_right(), heading.get_left(), CYAN)
+        relation2 = pointer(code[9][1].get_right(), paragraph.get_left(), GREEN)
+        self.play(Create(relation1), Create(relation2), run_time=0.75)
+        self.wait(1.8)
+        self.play(FadeOut(VGroup(relation1, relation2, browser_group, command)), run_time=0.55)
+
+        self.lesson_complete("Your first HTML page now exists as code and as a browser result.")
+        self.play(FadeOut(VGroup(banner, code, self.shell.group)), run_time=0.75)
+
+
+class VSCode06_HTMLLogicAndPractice(VSCodeTutorialBase):
+    FINAL_CODE = VSCode05_HelloWorldAndPreview.FINAL_CODE
+
+    def construct(self):
+        self.camera.background_color = BG
+        self.setup_shell("HELLO_HTML", ("css", "img", "js", "index.html"), "index.html", r"D:\Academia\HTML\hello_html")
+        banner = self.show_lesson_banner("Lesson 6 · Understand HTML logic and avoid mistakes")
+        code = self.type_code_lines(self.FINAL_CODE, font_size=18.1, line_spacing=0.36, time_per_char=0.006, pause_between_lines=0.025)
+
+        html_box = self.highlight_code_block(code, 1, 11, BLUE, 0.025)
+        head_box = self.highlight_code_block(code, 2, 6, GREEN, 0.05)
+        body_box = self.highlight_code_block(code, 7, 10, YELLOW, 0.05)
+
+        panel = rr(3.80, 5.28, "#101C25", "#195170", radius=0.10, stroke_width=1.2)
+        panel.move_to([5.62, 0.12, 0])
+        items = VGroup(
+            self._logic_item(BLUE, "html = the whole document", "It is the root container for every element."),
+            self._logic_item(GREEN, "head = browser information", "Metadata configures the page but is not visible."),
+            self._logic_item(YELLOW, "body = visible content", "Headings, paragraphs, links and images belong here."),
+            self._logic_item(PURPLE, "Tags open and close", "Example: <p> content </p>. Nest inner tags correctly."),
+        ).arrange(DOWN, buff=0.18, aligned_edge=LEFT)
+        fit_height(items, 4.68)
+        items.move_to(panel)
+        logic_panel = VGroup(panel, items)
+        self.play(FadeIn(logic_panel, shift=LEFT * 0.08), run_time=0.70)
+        self.wait(1.7)
+
+        wrong = rr(5.70, 1.10, "#2A1719", RED, radius=0.08, stroke_width=1.4)
+        wrong.move_to([0.55, -1.05, 0])
+        wrong_title = ui_text("Common mistake", 14, RED, BOLD)
+        wrong_code = html_line("<h1>Hello, world!</p>", 20)
+        wrong_content = VGroup(wrong_title, wrong_code).arrange(DOWN, buff=0.12, aligned_edge=LEFT).move_to(wrong)
+        wrong_group = VGroup(wrong, wrong_content)
+        self.play(FadeOut(VGroup(html_box, head_box, body_box, logic_panel)), code.animate.shift(UP * 4.9), FadeIn(wrong_group, shift=UP * 0.08), run_time=0.85)
+        self.wait(0.8)
+
+        correct = rr(5.70, 1.10, "#13251E", GREEN, radius=0.08, stroke_width=1.4)
+        correct.move_to([0.55, 0.45, 0])
+        correct_title = ui_text("Correct nesting", 14, GREEN, BOLD)
+        correct_code = html_line("<h1>Hello, world!</h1>", 20)
+        correct_content = VGroup(correct_title, correct_code).arrange(DOWN, buff=0.12, aligned_edge=LEFT).move_to(correct)
+        correct_group = VGroup(correct, correct_content)
+        arrow = Arrow(wrong.get_top(), correct.get_bottom(), color=CYAN, stroke_width=3, max_tip_length_to_length_ratio=0.18)
+        self.play(Create(arrow), FadeIn(correct_group, shift=UP * 0.10), run_time=0.70)
+        self.wait(1.0)
+
+        checklist_box = rr(7.20, 2.60, "#101C25", CYAN, radius=0.12, stroke_width=1.2)
+        checklist_box.move_to([0.55, -1.55, 0])
+        checklist_title = ui_text("Final practice checklist", 20, WHITE, BOLD)
+        checks = VGroup(
+            self._check("Create one project folder."),
+            self._check("Create and save index.html."),
+            self._check("Keep head and body inside html."),
+            self._check("Match every opening tag with the correct closing tag."),
+            self._check("Preview the page after each small change."),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        fit_width(checks, 6.55)
+        content = VGroup(checklist_title, checks).arrange(DOWN, buff=0.20, aligned_edge=LEFT).move_to(checklist_box)
+        checklist = VGroup(checklist_box, content)
+        self.play(FadeOut(VGroup(wrong_group, correct_group, arrow)), FadeIn(checklist, shift=UP * 0.10), run_time=0.75)
+        self.wait(2.0)
+        self.play(FadeOut(checklist), run_time=0.45)
+
+        self.lesson_complete("You can now create, understand and preview a basic HTML page in VS Code.")
+        self.play(FadeOut(VGroup(banner, code, self.shell.group)), run_time=0.75)
+
+    def _logic_item(self, accent: str, title: str, body: str) -> VGroup:
+        dot = Dot(radius=0.055, color=accent)
+        title_mob = ui_text(title, 15, TEXT, BOLD)
+        body_mob = ui_text(body, 12.2, TEXT_SOFT)
+        fit_width(title_mob, 3.15)
+        fit_width(body_mob, 3.15)
+        text_group = VGroup(title_mob, body_mob).arrange(DOWN, aligned_edge=LEFT, buff=0.07)
+        dot.align_to(title_mob, UP).shift(DOWN * 0.10)
+        return VGroup(dot, text_group).arrange(RIGHT, buff=0.14, aligned_edge=UP)
+
+    def _check(self, text: str) -> VGroup:
+        circle = Circle(radius=0.10, stroke_color=CYAN, stroke_width=2)
+        tick = VGroup(
+            Line(LEFT * 0.04, DOWN * 0.01, color=CYAN, stroke_width=2),
+            Line(DOWN * 0.01, RIGHT * 0.08 + UP * 0.08, color=CYAN, stroke_width=2),
+        ).move_to(circle)
+        label = ui_text(text, 14, TEXT_SOFT)
+        return VGroup(circle, tick, label).arrange(RIGHT, buff=0.16)
