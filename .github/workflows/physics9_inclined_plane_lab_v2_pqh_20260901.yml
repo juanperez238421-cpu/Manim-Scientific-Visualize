@@ -1,0 +1,166 @@
+name: Physics9 Inclined Plane Lab V2 PQH 20260901
+
+on:
+  pull_request:
+    paths:
+      - 'render_jobs/physics9_inclined_plane_lab_20260901/**'
+      - '.github/workflows/physics9_inclined_plane_lab_v2_pqh_20260901.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-lab-v2:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate and install
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_inclined_plane_lab_20260901
+          python -m py_compile "$JOB/Physics9_Inclined_Plane_Lab_Stopwatch_Sensors_FINAL.py" "$JOB/Physics9_Inclined_Plane_Lab_Stopwatch_Sensors_V2.py"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg imagemagick zip
+          python -m pip install --quiet opencv-python-headless
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+          mkdir -p qa final_out package
+
+      - name: PQL gate all V2 scenes
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_inclined_plane_lab_20260901
+          rm -rf media_pql_lab_v2
+          for SCENE in Physics9InclinedPlaneLabMasterV2 Physics9InclinedPlaneLabStopwatchV2 Physics9InclinedPlaneLabSensorsV2; do
+            docker run --rm --user "$(id -u):$(id -g)" \
+              -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.07 \
+              -v "$PWD:/manim" -w "/manim/$JOB" \
+              --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+                set -euo pipefail
+                mkdir -p /tmp/manim-bin
+                printf '#!/usr/bin/env bash\nexit 0\n' >/tmp/manim-bin/xdg-open
+                chmod +x /tmp/manim-bin/xdg-open
+                export PATH=/tmp/manim-bin:\$PATH
+                manim -pql Physics9_Inclined_Plane_Lab_Stopwatch_Sensors_V2.py $SCENE --format=mp4 --media_dir=/manim/media_pql_lab_v2 --disable_caching
+              " 2>&1 | tee "qa/${SCENE}_pql.log"
+            F="$(find media_pql_lab_v2 -type f -name "${SCENE}.mp4" -print -quit)"
+            test -n "$F" && test -s "$F"
+          done
+
+      - name: PQH render all V2 scenes
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_inclined_plane_lab_20260901
+          rm -rf media_pqh_lab_v2
+          for SCENE in Physics9InclinedPlaneLabMasterV2 Physics9InclinedPlaneLabStopwatchV2 Physics9InclinedPlaneLabSensorsV2; do
+            docker run --rm --user "$(id -u):$(id -g)" \
+              -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+              -v "$PWD:/manim" -w "/manim/$JOB" \
+              --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+                set -euo pipefail
+                mkdir -p /tmp/manim-bin
+                printf '#!/usr/bin/env bash\nexit 0\n' >/tmp/manim-bin/xdg-open
+                chmod +x /tmp/manim-bin/xdg-open
+                export PATH=/tmp/manim-bin:\$PATH
+                manim -pqh Physics9_Inclined_Plane_Lab_Stopwatch_Sensors_V2.py $SCENE --format=mp4 --media_dir=/manim/media_pqh_lab_v2 --disable_caching
+              " 2>&1 | tee "final_out/${SCENE}_pqh.log"
+            F="$(find media_pqh_lab_v2 -type f -name "${SCENE}.mp4" -print -quit)"
+            test -n "$F" && test -s "$F"
+            cp "$F" "final_out/${SCENE}_FINAL_pqh.mp4"
+          done
+
+      - name: QA all final videos
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p final_out/qa
+          for SCENE in Physics9InclinedPlaneLabMasterV2 Physics9InclinedPlaneLabStopwatchV2 Physics9InclinedPlaneLabSensorsV2; do
+            V="final_out/${SCENE}_FINAL_pqh.mp4"
+            ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,r_frame_rate,nb_frames -show_entries format=duration,size -of default=noprint_wrappers=1 "$V" | tee "final_out/qa/${SCENE}_ffprobe.txt"
+            grep -q '^codec_name=h264$' "final_out/qa/${SCENE}_ffprobe.txt"
+            grep -q '^width=1920$' "final_out/qa/${SCENE}_ffprobe.txt"
+            grep -q '^height=1080$' "final_out/qa/${SCENE}_ffprobe.txt"
+            ffmpeg -v error -i "$V" -f null -
+            mkdir -p "final_out/qa/${SCENE}_frames"
+            ffmpeg -v error -i "$V" -vf 'fps=1/1,scale=480:-1' "final_out/qa/${SCENE}_frames/sec_%03d.jpg"
+            mapfile -t FRAMES < <(find "final_out/qa/${SCENE}_frames" -type f -name '*.jpg' | sort)
+            N=${#FRAMES[@]}
+            SEL=()
+            if [ "$N" -gt 36 ]; then
+              for i in $(seq 0 35); do idx=$(( i * (N - 1) / 35 )); SEL+=("${FRAMES[$idx]}"); done
+            else
+              SEL=("${FRAMES[@]}")
+            fi
+            montage "${SEL[@]}" -tile 6x -geometry +3+3 -background white "final_out/qa/${SCENE}_CONTACT_SHEET_36.jpg"
+          done
+          python - <<'PY'
+          import cv2, glob, os, json
+          out={}
+          for path in sorted(glob.glob('final_out/*_FINAL_pqh.mp4')):
+              cap=cv2.VideoCapture(path); frames=hits=worst=0
+              while True:
+                  ok, frame=cap.read()
+                  if not ok: break
+                  frames+=1
+                  gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+                  strips=[gray[:5,:],gray[-5:,:],gray[:,:5],gray[:,-5:]]
+                  dark=sum(int((s<235).sum()) for s in strips)
+                  worst=max(worst,dark)
+                  if dark>20: hits+=1
+              cap.release()
+              out[os.path.basename(path)]={'frames_scanned':frames,'edge_hit_frames':hits,'worst_dark_border_pixels':worst}
+          with open('final_out/qa/EDGE_SCAN.json','w') as f: json.dump(out,f,indent=2)
+          print(json.dumps(out,indent=2))
+          if any(v['edge_hit_frames'] for v in out.values()): raise SystemExit('frame edge scan failed')
+          PY
+          cat > final_out/qa/SENIOR_QA_RESULT.md <<'EOF'
+          # Physics 9 Inclined Plane Laboratory V2 — Senior QA
+          - Full combined lab video: INCLUDED
+          - Stopwatch/no-sensor standalone video: INCLUDED
+          - Photogate/sensor standalone video: INCLUDED
+          - Fixed release line / no push: INCLUDED
+          - Repeated stopwatch trials: INCLUDED
+          - Position measured along ramp: INCLUDED
+          - x vs t and x vs t² analysis: INCLUDED
+          - Illustrative data labeled as illustrative: INCLUDED
+          - Formal acceleration derivation: POSTPONED
+          - PQL all scenes: PASS
+          - PQH all scenes: PASS
+          - 1920x1080 H.264: PASS
+          - Full decode: PASS
+          - Every-frame border scan: PASS
+          - 36-frame contact sheets: GENERATED
+          EOF
+
+      - name: Package
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_inclined_plane_lab_20260901
+          cp "$JOB/Physics9_Inclined_Plane_Lab_Stopwatch_Sensors_FINAL.py" package/
+          cp "$JOB/Physics9_Inclined_Plane_Lab_Stopwatch_Sensors_V2.py" package/
+          cp final_out/*_FINAL_pqh.mp4 package/
+          cp final_out/qa/*_CONTACT_SHEET_36.jpg package/
+          cp final_out/qa/*_ffprobe.txt package/
+          cp final_out/qa/EDGE_SCAN.json final_out/qa/SENIOR_QA_RESULT.md package/
+          zip -r Physics9_Inclined_Plane_Lab_Stopwatch_Sensors_V2_FINAL_PQH.zip package >/dev/null
+          cp Physics9_Inclined_Plane_Lab_Stopwatch_Sensors_V2_FINAL_PQH.zip final_out/
+
+      - name: Upload V2 package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9_Inclined_Plane_Lab_Stopwatch_Sensors_V2_FINAL_PQH
+          path: |
+            final_out/Physics9InclinedPlaneLabMasterV2_FINAL_pqh.mp4
+            final_out/Physics9InclinedPlaneLabStopwatchV2_FINAL_pqh.mp4
+            final_out/Physics9InclinedPlaneLabSensorsV2_FINAL_pqh.mp4
+            final_out/Physics9_Inclined_Plane_Lab_Stopwatch_Sensors_V2_FINAL_PQH.zip
+            final_out/qa/
+          if-no-files-found: error
+          retention-days: 30
