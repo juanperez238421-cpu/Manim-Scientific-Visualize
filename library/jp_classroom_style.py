@@ -489,7 +489,38 @@ class JPClassroomScene(MovingCameraScene):
             self.subtitle_group = subtitle_text
             self.play(ReplacementTransform(old_subtitle, subtitle_text), run_time=RUN_QUICK)
 
+    def audit_visible_text_margins(self) -> None:
+        """Reject visible Text/Tex/MathTex that crosses the JP safe frame.
+
+        This gate runs at the end of every section, before exit animation. It
+        catches text that is technically inside the 16:9 frame but too close to
+        the projector/video edge for the classroom format.
+        """
+        checked: set[int] = set()
+        for root in self.mobjects:
+            for mob in root.get_family():
+                if id(mob) in checked:
+                    continue
+                if not isinstance(mob, (Text, MarkupText, Tex, MathTex)):
+                    continue
+                checked.add(id(mob))
+                if mob.width <= 1e-6 or mob.height <= 1e-6:
+                    continue
+                left, right = mob.get_left()[0], mob.get_right()[0]
+                bottom, top = mob.get_bottom()[1], mob.get_top()[1]
+                if left < SAFE_LEFT_X or right > SAFE_RIGHT_X:
+                    raise ValueError(
+                        f"Visible text violates horizontal safe margin: "
+                        f"{type(mob).__name__} left={left:.3f}, right={right:.3f}"
+                    )
+                if bottom < SAFE_BOTTOM_Y or top > SAFE_TOP_Y:
+                    raise ValueError(
+                        f"Visible text violates vertical safe margin: "
+                        f"{type(mob).__name__} bottom={bottom:.3f}, top={top:.3f}"
+                    )
+
     def clear_stage(self, keep_header: bool = True) -> None:
+        self.audit_visible_text_margins()
         keep_family_ids: set[int] = set()
         if keep_header:
             for persistent in (self.header_group, self.subtitle_group):
