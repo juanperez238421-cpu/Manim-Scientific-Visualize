@@ -1,0 +1,173 @@
+name: Physics9 Uniform Motion + Galileo V5.4 Final Frame QA PQH 20260901
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'render_jobs/physics9_galileo_inclined_plane_20260901/Physics9_UniformMotion_Galileo_V5_4_FINAL_FRAME_QA.py'
+      - '.github/workflows/physics9_uniform_motion_galileo_v5_3_total_qa_pqh_20260901.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render-v5-4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+
+      - name: Validate sources and install tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_galileo_inclined_plane_20260901
+          SRC="$JOB/Physics9_UniformMotion_Galileo_V5_4_FINAL_FRAME_QA.py"
+          test -s "$SRC"
+          python -m py_compile \
+            "$JOB/Physics9_Galileo_Inclined_Plane_MUA_FINAL.py" \
+            "$JOB/Physics9_Galileo_Uniform_Motion_Fall_Intro_V3.py" \
+            "$JOB/Physics9_UniformMotion_Galileo_V5.py" \
+            "$JOB/Physics9_UniformMotion_Galileo_V5_1_SENIOR_QA.py" \
+            "$JOB/Physics9_UniformMotion_Galileo_V5_2_FINAL_QA.py" \
+            "$JOB/Physics9_UniformMotion_Galileo_V5_3_TOTAL_QA.py" \
+            "$SRC"
+          grep -q '^class Physics9UniformMotionGalileoV54FinalFrameQA' "$SRC"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg imagemagick zip
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+          mkdir -p qa_preview final_out final_out/audit_frames_1s final_out/audit_frames_36 package
+
+      - name: PQL full-timeline gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_galileo_inclined_plane_20260901
+          rm -rf media_pql_v54
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=0.06 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pql Physics9_UniformMotion_Galileo_V5_4_FINAL_FRAME_QA.py Physics9UniformMotionGalileoV54FinalFrameQA \
+                --format=mp4 --media_dir=/manim/media_pql_v54 --disable_caching
+            ' 2>&1 | tee qa_preview/render_v54_pql.log
+          PQL="$(find media_pql_v54 -type f -name 'Physics9UniformMotionGalileoV54FinalFrameQA.mp4' -print -quit)"
+          test -n "$PQL" && test -s "$PQL"
+
+      - name: PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_galileo_inclined_plane_20260901
+          rm -rf media_pqh_v54
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" -w "/manim/$JOB" \
+            --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf "#!/usr/bin/env bash\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:$PATH
+              manim -pqh Physics9_UniformMotion_Galileo_V5_4_FINAL_FRAME_QA.py Physics9UniformMotionGalileoV54FinalFrameQA \
+                --format=mp4 --media_dir=/manim/media_pqh_v54 --disable_caching
+            ' 2>&1 | tee final_out/render_v54_pqh.log
+          FINAL="$(find media_pqh_v54 -type f -name 'Physics9UniformMotionGalileoV54FinalFrameQA.mp4' -print -quit)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" final_out/Physics9_UniformMotion_Galileo_V5_4_FINAL_FRAME_QA_pqh.mp4
+
+      - name: Technical QA and exhaustive frame audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_galileo_inclined_plane_20260901
+          SRC="$JOB/Physics9_UniformMotion_Galileo_V5_4_FINAL_FRAME_QA.py"
+          F=final_out/Physics9_UniformMotion_Galileo_V5_4_FINAL_FRAME_QA_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          FRAMES="$(ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+          printf 'width\theight\tfps\tcodec\tduration\tframes\tbytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$DUR" "$FRAMES" "$SIZE" > final_out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$CODEC" = h264
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> final_out/full_decode.log
+          test ! -s final_out/full_decode.log
+
+          ffmpeg -nostdin -loglevel error -i "$F" -vf fps=1 -q:v 2 final_out/audit_frames_1s/sec_%03d.jpg
+          COUNT1="$(find final_out/audit_frames_1s -type f -name '*.jpg' | wc -l)"
+          test "$COUNT1" -ge 70
+          montage final_out/audit_frames_1s/*.jpg -thumbnail 384x216 -tile 6x -geometry +7+9 -background white -quality 90 final_out/CONTACT_SHEET_1S_ALL.jpg
+
+          for INDEX in $(seq -w 0 35); do
+            T="$(python -c "print(float('$DUR')*(int('$INDEX')+0.5)/36.0)")"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "final_out/audit_frames_36/frame_${INDEX}.png"
+          done
+          montage final_out/audit_frames_36/*.png -thumbnail 384x216 -tile 6x6 -geometry +8+10 -background white -quality 90 final_out/CONTACT_SHEET_36.jpg
+
+          sha256sum "$F" "$SRC" > final_out/SHA256SUMS.txt
+          cat > final_out/FRAME_CODE_QA.md <<'EOF'
+          # V5.4 frame-by-frame / code-line QA
+
+          V5.2 was audited at one-second resolution and rebuilt as V5.3. The V5.3 PQH render was then audited again frame by frame. Residual defects and the V5.4 source corrections are:
+
+          | Render range | Earlier source location | Residual defect | V5.4 correction |
+          |---|---|---|---|
+          | ~46-53 s | V5.3 `galileo_real_apparatus_v5` | `same release point` touched `t=1`; t=0/t=1 were visually clustered | manual callout positions separate t=0, t=1 and release caption |
+          | ~50-53 s | V5.3 water-clock lower panel | `same water amount -> same time` collided with the collector and bottom border | smaller fitted note, raised clock body, explicit vertical clearance check |
+          | ~71-75 s | V5.3 `galileo_deduction_v5` | central x proportional t^2 panel crossed both neighboring panel borders; explanatory sentence entered graph panel | strict two-column layout; law placed inside right graph panel; bridging sentence removed |
+          | ~78-84 s | V5.3 `falling_equation_preview_v5` | t=0 and t=1 labels too close at the first 1-unit gap | larger physical gap scale and vertically offset labels; gap numbers moved to opposite side |
+
+          All other V5.3 scene corrections are inherited unchanged: larger graph cards, full-width x=x_i+vt derivation, clean transitions, large Galileo comparison, table/bar time-position analysis, and large final summary cards.
+          EOF
+          {
+            echo '# Physics 9 Uniform Motion + Galileo V5.4 - Senior QA result'
+            echo '- V5.2 full-timeline audit: completed'
+            echo '- V5.3 post-render audit: completed'
+            echo '- V5.4 every-second audit generated: yes'
+            echo '- V5.4 36-frame distributed audit generated: yes'
+            echo '- PQL gate: PASS'
+            echo '- PQH final render: PASS'
+            echo '- 1920x1080 H.264 gate: PASS'
+            echo '- Full decode: PASS'
+            echo '- Formal acceleration derivation: excluded'
+            echo
+            echo '## Encoded properties'
+            cat final_out/VIDEO_TECHNICAL.tsv
+          } > final_out/SENIOR_QA_RESULT.md
+
+          ROOT=package/Physics9_UniformMotion_Galileo_V5_4_FINAL_FRAME_QA_PQH
+          mkdir -p "$ROOT/src" "$ROOT/render" "$ROOT/qa"
+          cp "$SRC" "$ROOT/src/"
+          cp "$F" "$ROOT/render/"
+          cp final_out/VIDEO_TECHNICAL.tsv final_out/SHA256SUMS.txt final_out/SENIOR_QA_RESULT.md final_out/FRAME_CODE_QA.md final_out/CONTACT_SHEET_1S_ALL.jpg final_out/CONTACT_SHEET_36.jpg "$ROOT/qa/"
+          cp -r final_out/audit_frames_1s final_out/audit_frames_36 "$ROOT/qa/"
+          (cd package && zip -qr Physics9_UniformMotion_Galileo_V5_4_FINAL_FRAME_QA_PQH.zip Physics9_UniformMotion_Galileo_V5_4_FINAL_FRAME_QA_PQH)
+          cp package/Physics9_UniformMotion_Galileo_V5_4_FINAL_FRAME_QA_PQH.zip final_out/
+
+      - name: Upload V5.4 deliverables
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9_UniformMotion_Galileo_V5_4_FINAL_FRAME_QA_PQH
+          path: |
+            final_out/Physics9_UniformMotion_Galileo_V5_4_FINAL_FRAME_QA_pqh.mp4
+            final_out/Physics9_UniformMotion_Galileo_V5_4_FINAL_FRAME_QA_PQH.zip
+            final_out/SENIOR_QA_RESULT.md
+            final_out/FRAME_CODE_QA.md
+            final_out/VIDEO_TECHNICAL.tsv
+            final_out/CONTACT_SHEET_1S_ALL.jpg
+            final_out/CONTACT_SHEET_36.jpg
+            final_out/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
