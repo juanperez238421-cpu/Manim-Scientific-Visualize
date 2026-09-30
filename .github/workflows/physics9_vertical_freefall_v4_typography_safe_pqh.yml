@@ -48,18 +48,18 @@ jobs:
           grep -q "assert_text_safe" "$SRC"
           grep -q "Physics9VerticalFreeFallTheoryV4TypographySafe" "$SRC"
           python - <<'PY'
-from pathlib import Path
-import re
-src = Path("render_jobs/physics9_vertical_freefall_theory_v4_typography_safe_20260930/physics9_vertical_freefall_theory_v4_typography_safe.py").read_text(encoding="utf-8")
-bad = []
-for m in re.finditer(r'self\.text\([^\n]*?,\s*(\d+)\s*(?:,|\))', src):
-    size = int(m.group(1))
-    if size < 18:
-        bad.append((m.start(), size))
-if bad:
-    raise SystemExit(f"FAIL typography floor: {bad}")
-print("PASS: no explicit Text below 18; teaching prose governed by V4 role floors.")
-PY
+          from pathlib import Path
+          import re
+          src = Path("render_jobs/physics9_vertical_freefall_theory_v4_typography_safe_20260930/physics9_vertical_freefall_theory_v4_typography_safe.py").read_text(encoding="utf-8")
+          bad = []
+          for m in re.finditer(r'self\.text\([^\n]*?,\s*(\d+)\s*(?:,|\))', src):
+              size = int(m.group(1))
+              if size < 18:
+                  bad.append((m.start(), size))
+          if bad:
+              raise SystemExit(f"FAIL typography floor: {bad}")
+          print("PASS: no explicit Text below 18; teaching prose governed by V4 role floors.")
+          PY
 
       - name: Prepare ManimCE 0.20.1 + FFmpeg
         shell: bash
