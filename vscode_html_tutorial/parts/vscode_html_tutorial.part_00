@@ -1,0 +1,273 @@
+"""Visual Studio Code + HTML Basics tutorial series for ManimCE 0.20.1.
+
+The visual system recreates a VS Code dark HUD and teaches a first HTML
+workflow from opening a project folder through a working Hello World page.
+
+Scenes:
+    VSCode01_InterfaceTour
+    VSCode02_CreateProjectFolder
+    VSCode03_CreateIndexFile
+    VSCode04_HTMLSkeleton
+    VSCode05_HelloWorldAndPreview
+    VSCode06_HTMLLogicAndPractice
+
+Render example:
+    manim -pqh vscode_html_tutorial.py VSCode01_InterfaceTour \
+      --format=mp4 --disable_caching
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass
+import html
+import re
+import numpy as np
+from typing import Iterable, Sequence
+
+from manim import *
+
+
+# ---------------------------------------------------------------------------
+# Video configuration
+# ---------------------------------------------------------------------------
+config.pixel_width = 1920
+config.pixel_height = 1080
+config.frame_width = 16
+config.frame_height = 9
+config.frame_rate = 30
+config.background_color = "#0E1116"
+
+
+# ---------------------------------------------------------------------------
+# Visual Studio Code inspired palette
+# ---------------------------------------------------------------------------
+BG = "#0E1116"
+TITLE_BAR = "#181818"
+MENU_BAR = "#1F1F1F"
+ACTIVITY_BG = "#181818"
+SIDEBAR_BG = "#181818"
+EDITOR_BG = "#111315"
+PANEL_BG = "#161719"
+STATUS_BG = "#181818"
+LINE = "#2B2D30"
+LINE_SOFT = "#242629"
+TEXT = "#E7E7E7"
+TEXT_SOFT = "#B9BEC5"
+TEXT_MUTED = "#8D929A"
+CYAN = "#29B8F2"
+CYAN_SOFT = "#153043"
+BLUE = "#3794FF"
+BLUE_SOFT = "#173A55"
+ORANGE = "#CE9178"
+YELLOW = "#DCDCAA"
+GREEN = "#4EC9B0"
+PURPLE = "#C586C0"
+RED = "#F14C4C"
+HTML_ORANGE = "#F16529"
+BROWSER_BG = "#F5F7FA"
+BROWSER_TEXT = "#1F2937"
+FONT_UI = "Noto Sans"
+FONT_MONO = "Noto Sans Mono"
+
+
+# ---------------------------------------------------------------------------
+# Utility helpers
+# ---------------------------------------------------------------------------
+def ui_text(text: str, size: float = 20, color: str = TEXT, weight=NORMAL) -> Text:
+    return Text(text, font=FONT_UI, font_size=size, color=color, weight=weight)
+
+
+def mono_text(text: str, size: float = 19, color: str = TEXT) -> Text:
+    return Text(text, font=FONT_MONO, font_size=size, color=color)
+
+
+def fit_width(mob: Mobject, width: float) -> Mobject:
+    if mob.width > width:
+        mob.scale_to_fit_width(width)
+    return mob
+
+
+def fit_height(mob: Mobject, height: float) -> Mobject:
+    if mob.height > height:
+        mob.scale_to_fit_height(height)
+    return mob
+
+
+def rr(
+    width: float,
+    height: float,
+    fill: str,
+    stroke: str = LINE,
+    radius: float = 0.08,
+    stroke_width: float = 1.0,
+    fill_opacity: float = 1.0,
+) -> RoundedRectangle:
+    return RoundedRectangle(
+        width=width,
+        height=height,
+        corner_radius=radius,
+        fill_color=fill,
+        fill_opacity=fill_opacity,
+        stroke_color=stroke,
+        stroke_width=stroke_width,
+    )
+
+
+def keyboard_key(label: str, width: float | None = None) -> VGroup:
+    width = width or max(0.42, 0.18 + 0.12 * len(label))
+    box = rr(width, 0.28, "#2C2C2C", "#4A4A4A", radius=0.05)
+    txt = ui_text(label, 11, TEXT).move_to(box)
+    return VGroup(box, txt)
+
+
+def html_colors(line: str) -> dict[str, str]:
+    """Return a deterministic syntax-highlight map for a single HTML line."""
+    colors: dict[str, str] = {}
+    for token in ["DOCTYPE", "html", "head", "body", "meta", "title", "h1", "p"]:
+        if token in line:
+            colors[token] = BLUE
+    for token in ["lang", "charset", "name", "content", "class", "id"]:
+        if token in line:
+            colors[token] = GREEN
+    for quoted in re.findall(r'"[^"]*"', line):
+        colors[quoted] = ORANGE
+    for mark in ["<", ">", "/", "=", "!"]:
+        if mark in line:
+            colors[mark] = TEXT_MUTED
+    return colors
+
+
+def html_line(line: str, size: float = 22) -> Text:
+    return Text(
+        line,
+        font=FONT_MONO,
+        font_size=size,
+        color=TEXT,
+        t2c=html_colors(line),
+        disable_ligatures=True,
+    )
+
+
+def make_cursor(height: float = 0.27) -> Rectangle:
+    return Rectangle(
+        width=0.035,
+        height=height,
+        fill_color=TEXT,
+        fill_opacity=1,
+        stroke_width=0,
+    )
+
+
+def callout_box(
+    title: str,
+    body: str | None = None,
+    width: float = 2.7,
+    accent: str = CYAN,
+) -> VGroup:
+    lines = 1 + (0 if body is None else max(1, body.count("\n") + 1))
+    height = 0.62 if body is None else 0.55 + 0.32 * lines
+    box = rr(width, height, "#14202A", accent, radius=0.08, stroke_width=1.5, fill_opacity=0.98)
+    title_mob = ui_text(title, 18, TEXT, BOLD)
+    fit_width(title_mob, width - 0.35)
+    if body is None:
+        title_mob.move_to(box)
+        return VGroup(box, title_mob)
+    body_mob = ui_text(body, 13.2, TEXT_SOFT)
+    fit_width(body_mob, width - 0.35)
+    content = VGroup(title_mob, body_mob).arrange(DOWN, buff=0.10, aligned_edge=LEFT)
+    content.move_to(box)
+    return VGroup(box, content)
+
+
+def pointer(start: Sequence[float], end: Sequence[float], accent: str = CYAN) -> VGroup:
+    dot = Dot(start, radius=0.045, color=accent)
+    line = Line(start, end, color=accent, stroke_width=2.2)
+    tip = Triangle(fill_color=accent, fill_opacity=1, stroke_width=0).scale(0.06).rotate(-PI / 2)
+    direction = np.array(end) - np.array(start)
+    angle = angle_of_vector(direction)
+    tip.rotate(angle)
+    tip.move_to(end)
+    return VGroup(dot, line, tip)
+
+
+def title_banner(title: str, subtitle: str, width: float = 6.1) -> VGroup:
+    box = rr(width, 1.10, "#102A3A", "#14587D", radius=0.16, stroke_width=1.2)
+    icon_circle = Circle(radius=0.31, stroke_color="#6ED5FF", stroke_width=2.1)
+    cap = Polygon(
+        [-0.22, 0.04, 0],
+        [0.00, 0.16, 0],
+        [0.22, 0.04, 0],
+        [0.00, -0.08, 0],
+        fill_color=WHITE,
+        fill_opacity=1,
+        stroke_width=0,
+    )
+    cap_base = Line([-0.13, -0.04, 0], [0.13, -0.04, 0], color=WHITE, stroke_width=4)
+    cap_group = VGroup(cap, cap_base).scale(0.80)
+    icon = VGroup(icon_circle, cap_group)
+    icon.move_to(box.get_left() + RIGHT * 0.56)
+    title_mob = ui_text(title, 25, WHITE, BOLD)
+    subtitle_mob = ui_text(subtitle, 17, CYAN, BOLD)
+    fit_width(title_mob, width - 1.42)
+    fit_width(subtitle_mob, width - 1.42)
+    text_group = VGroup(title_mob, subtitle_mob).arrange(DOWN, buff=0.07, aligned_edge=LEFT)
+    text_group.next_to(icon, RIGHT, buff=0.28)
+    return VGroup(box, icon, text_group)
+
+
+# ---------------------------------------------------------------------------
+# VS Code shell
+# ---------------------------------------------------------------------------
+@dataclass
+class ShellGeometry:
+    top_h: float = 0.44
+    activity_w: float = 0.55
+    sidebar_w: float = 2.45
+    panel_h: float = 2.55
+    status_h: float = 0.28
+
+
+class VSCodeShell:
+    """Reusable vector recreation of a VS Code dark workspace."""
+
+    def __init__(
+        self,
+        project_name: str = "CODE_BOT_SECTION",
+        files: Sequence[str] = (),
+        open_file: str | None = None,
+        terminal_path: str = r"D:\Academia\HTML\code_bot_section",
+        terminal_open: bool = True,
+    ) -> None:
+        self.g = ShellGeometry()
+        self.project_name = project_name
+        self.files = tuple(files)
+        self.open_file = open_file
+        self.terminal_path = terminal_path
+        self.terminal_open = terminal_open
+        self.group = VGroup()
+        self.regions: dict[str, Mobject] = {}
+        self.file_rows: dict[str, VGroup] = {}
+        self._build()
+
+    def _build(self) -> None:
+        g = self.g
+        background = Rectangle(width=16, height=9, fill_color=BG, fill_opacity=1, stroke_width=0)
+        top = Rectangle(width=16, height=g.top_h, fill_color=TITLE_BAR, fill_opacity=1, stroke_color=LINE, stroke_width=1)
+        top.to_edge(UP, buff=0)
+        status = Rectangle(width=16, height=g.status_h, fill_color=STATUS_BG, fill_opacity=1, stroke_color=LINE, stroke_width=1)
+        status.to_edge(DOWN, buff=0)
+        activity = Rectangle(
+            width=g.activity_w,
+            height=9 - g.top_h - g.status_h,
+            fill_color=ACTIVITY_BG,
+            fill_opacity=1,
+            stroke_color=LINE,
+            stroke_width=1,
+        ).to_edge(LEFT, buff=0).shift(DOWN * (g.top_h - g.status_h) / 2)
+        sidebar = Rectangle(
+            width=g.sidebar_w,
+            height=9 - g.top_h - g.status_h,
+            fill_color=SIDEBAR_BG,
+            fill_opacity=1,
+            stroke_color=LINE,
+            stroke_width=1,
+        ).next_to(activity, RIGHT, buff=0).align_to(activity, UP)
