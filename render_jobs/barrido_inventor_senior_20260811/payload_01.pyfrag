@@ -1,0 +1,210 @@
+        )
+        num = self.ftext(f"{n:02d}", SMALL, BOLD).move_to(num_box)
+        ttl = self.ftext(title, H1, BOLD)
+        self.fit(ttl, 12.7, 0.62)
+        top = VGroup(VGroup(num_box, num), ttl).arrange(RIGHT, buff=0.25)
+        top.to_edge(UP, buff=0.16).to_edge(LEFT, buff=0.48)
+        rule = Line(LEFT*7.45, RIGHT*7.45, stroke_color=LIGHT_GRAY, stroke_width=2)
+        rule.next_to(top, DOWN, buff=0.08)
+        sub = self.ftext(subtitle, SMALL)
+        self.fit(sub, 14.2, 0.58)
+        sub.next_to(rule, DOWN, buff=0.09).align_to(top, LEFT)
+        g = VGroup(top, rule, sub)
+        self.fixed(g)
+        return g
+
+    def pill(self, text: str, width: float = 2.6, size: int = SMALL) -> VGroup:
+        box = RoundedRectangle(
+            width=width, height=0.74, corner_radius=0.14,
+            stroke_color=BLACK, stroke_width=1.8, fill_color=PAPER_GRAY, fill_opacity=1,
+        )
+        t = self.ftext(text, size, BOLD)
+        self.fit(t, width-0.3, 0.46)
+        t.move_to(box)
+        return VGroup(box, t)
+
+    def note(self, title: str, lines: list[str], width: float = 5.0) -> VGroup:
+        tt = self.ftext(title, 27, BOLD)
+        body = VGroup(*[self.ftext(line, 23) for line in lines]).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        content = VGroup(tt, body).arrange(DOWN, aligned_edge=LEFT, buff=0.26)
+        self.fit(content, width-0.55, 3.9)
+        box = RoundedRectangle(
+            width=width, height=max(1.25, content.height+0.62), corner_radius=0.12,
+            stroke_color=BLACK, stroke_width=1.8, fill_color=WHITE, fill_opacity=0.98,
+        )
+        content.move_to(box).align_to(box, LEFT).shift(RIGHT*0.28)
+        return VGroup(box, content)
+
+    def footer(self, text="Inventor Professional • Barrido / Sweep") -> Text:
+        f = self.ftext(text, 19, MEDIUM, MID_GRAY).to_edge(DOWN, buff=0.18).to_edge(RIGHT, buff=0.42)
+        self.fixed(f)
+        return f
+
+    def fade_all(self, run_time=0.8):
+        mobs = list(self.mobjects)
+        if mobs:
+            self.play(*[FadeOut(m) for m in mobs], run_time=run_time)
+        self.set_camera_orientation(phi=0*DEGREES, theta=-90*DEGREES, zoom=1.0)
+
+    # ------------------------------------------------------------------
+    # Main orchestration.
+    # ------------------------------------------------------------------
+    def construct(self):
+        self.opening()
+        self.simple_example()
+        self.inventor_workflow()
+        self.exercise_one()
+        self.exercise_two()
+        self.summary()
+
+    # ------------------------------------------------------------------
+    def opening(self):
+        label = self.ftext("AUTODESK INVENTOR PROFESSIONAL", 28, BOLD)
+        title = self.ftext("BARRIDO  •  SWEEP", TITLE, BOLD)
+        subtitle = self.ftext("From a 2D profile and a trajectory to a 3D solid", 30)
+        rule = Line(LEFT*5.6, RIGHT*5.6, color=BLACK, stroke_width=2.2)
+
+        flow = VGroup(
+            self.pill("PROFILE", 2.4, 24),
+            Arrow(LEFT, RIGHT, buff=0, color=BLACK, stroke_width=3).scale(0.42),
+            self.pill("PATH", 2.2, 24),
+            Arrow(LEFT, RIGHT, buff=0, color=BLACK, stroke_width=3).scale(0.42),
+            self.pill("SWEEP", 2.3, 24),
+            Arrow(LEFT, RIGHT, buff=0, color=BLACK, stroke_width=3).scale(0.42),
+            self.pill("3D SOLID", 2.6, 24),
+        ).arrange(RIGHT, buff=0.22)
+        group = VGroup(label, title, rule, subtitle, flow).arrange(DOWN, buff=0.34)
+        group.move_to(ORIGIN + UP*0.1)
+        self.fixed(group)
+
+        self.play(FadeIn(label, shift=UP*0.15), run_time=RUN)
+        self.play(Write(title), run_time=RUN_SLOW)
+        self.play(Create(rule), FadeIn(subtitle), run_time=RUN)
+        self.wait(READ)
+        self.play(LaggedStart(*[FadeIn(x, shift=UP*0.08) for x in flow], lag_ratio=0.08), run_time=1.8)
+        self.wait(EXPLAIN)
+        self.play(FadeOut(group), run_time=RUN)
+
+    # ------------------------------------------------------------------
+    def simple_example(self):
+        h = self.header(1, "CORE IDEA: THE PROFILE TRAVELS ALONG A PATH",
+                        "Extrude follows one direction. Sweep follows a selected trajectory.")
+        foot = self.footer()
+
+        # Left: 2D conceptual drafting diagram.
+        panel = RoundedRectangle(width=6.0, height=4.8, corner_radius=0.12,
+                                 stroke_color=BLACK, stroke_width=2, fill_color=WHITE, fill_opacity=1)
+        panel.move_to(LEFT*4.4 + DOWN*0.55)
+        ptitle = self.ftext("2D SKETCH LOGIC", 26, BOLD).next_to(panel.get_top(), DOWN, buff=0.24)
+        path2d = VMobject(color=BLACK, stroke_width=5)
+        pts = [np.array([-6.55 + i*0.15, -1.0 + 0.65*math.sin((i/40)*math.pi), 0]) for i in range(41)]
+        path2d.set_points_smoothly(pts)
+        profile2d = Circle(radius=0.43, color=BLACK, stroke_width=4).move_to(path2d.get_start())
+        prof_lab = self.ftext("PROFILE", 22, BOLD).next_to(profile2d, DOWN, buff=0.2)
+        path_lab = self.ftext("PATH", 22, BOLD).next_to(path2d, UP, buff=0.25)
+        diagram = VGroup(panel, ptitle, path2d, profile2d, prof_lab, path_lab)
+        self.fixed(diagram)
+
+        info = self.note("THE RULE", [
+            "1. Draw one closed profile.",
+            "2. Draw one continuous trajectory.",
+            "3. Sweep carries the profile along it.",
+            "4. The traveled section becomes volume.",
+        ], width=5.9)
+        info.move_to(RIGHT*4.25 + DOWN*0.48)
+        self.fixed(info)
+
+        self.play(FadeIn(panel), FadeIn(ptitle), run_time=RUN)
+        self.play(Create(path2d), run_time=RUN_SLOW)
+        self.play(FadeIn(profile2d, scale=0.7), FadeIn(prof_lab), FadeIn(path_lab), run_time=RUN)
+        self.wait(READ)
+        self.play(FadeIn(info, shift=LEFT*0.15), run_time=RUN)
+        self.wait(EXPLAIN)
+
+        # Demonstrate the profile physically traveling in the 2D diagram.
+        moving_profile = profile2d.copy()
+        self.fixed(moving_profile)
+        self.play(MoveAlongPath(moving_profile, path2d), run_time=4.2, rate_func=linear)
+        self.wait(PAUSE)
+        self.play(FadeOut(diagram), FadeOut(info), FadeOut(moving_profile), run_time=RUN)
+
+        # 3D reveal: same logic, now as actual swept surface.
+        label3 = self.ftext("THE SAME MOTION CREATES THE 3D SOLID", 29, BOLD)
+        label3.move_to(DOWN*3.55)
+        self.fixed(label3)
+        self.play(FadeIn(label3), run_time=RUN)
+        self.set_camera_orientation(phi=64*DEGREES, theta=-52*DEGREES, zoom=0.92)
+
+        p3 = path_curve(simple_curve, width=5)
+        prof = lambda u: circle_profile(u, 0.48)
+        sec0 = section_curve(simple_curve, prof, TAU, 0, width=4)
+        self.play(Create(p3), FadeIn(sec0), run_time=RUN_SLOW)
+        current = sweep_surface(simple_curve, prof, TAU, 0.08, resolution=(18, 30))
+        self.add(current)
+        for frac in [0.24, 0.43, 0.62, 0.80, 1.0]:
+            nxt = sweep_surface(simple_curve, prof, TAU, frac, resolution=(18, 30))
+            self.play(Transform(current, nxt), run_time=0.75, rate_func=linear)
+        sec1 = section_curve(simple_curve, prof, TAU, 1, width=4)
+        self.play(FadeIn(sec1), run_time=RUN)
+        self.wait(EXPLAIN)
+        self.play(FadeOut(p3), FadeOut(sec0), FadeOut(sec1), FadeOut(current), FadeOut(label3), run_time=RUN)
+        self.play(FadeOut(h), FadeOut(foot), run_time=0.5)
+
+    # ------------------------------------------------------------------
+    def inventor_workflow(self):
+        self.set_camera_orientation(phi=0*DEGREES, theta=-90*DEGREES, zoom=1.0)
+        h = self.header(2, "INVENTOR WORKFLOW: PROFILE + PATH + OPERATION",
+                        "The order of selection matters: a closed profile and a valid path are the two geometric inputs.")
+        foot = self.footer()
+
+        # Inventor-like ribbon and canvas, deliberately simplified for teaching.
+        frame = RoundedRectangle(width=14.6, height=5.55, corner_radius=0.12,
+                                 stroke_color=BLACK, stroke_width=2, fill_color=WHITE, fill_opacity=1)
+        frame.move_to(DOWN*0.64)
+        ribbon = Rectangle(width=14.2, height=0.72, stroke_color=LIGHT_GRAY, stroke_width=1.5,
+                           fill_color=PAPER_GRAY, fill_opacity=1).move_to(frame.get_top()+DOWN*0.52)
+        tools = VGroup(*[self.pill(x, w, 19) for x, w in [
+            ("Start 2D Sketch", 2.5), ("Work Plane", 2.0), ("Sweep", 1.65), ("Join", 1.35), ("Cut", 1.25)
+        ]]).arrange(RIGHT, buff=0.15).move_to(ribbon)
+
+        canvas = Rectangle(width=9.0, height=3.95, stroke_color=LIGHT_GRAY, stroke_width=1.3,
+                           fill_color=WHITE, fill_opacity=1).move_to(LEFT*2.45 + DOWN*0.92)
+        browser = Rectangle(width=4.3, height=3.95, stroke_color=LIGHT_GRAY, stroke_width=1.3,
+                            fill_color=VERY_LIGHT_GRAY, fill_opacity=1).move_to(RIGHT*4.45 + DOWN*0.92)
+        path = VMobject(color=BLACK, stroke_width=5)
+        path.set_points_smoothly([
+            np.array([-5.8,-1.9,0]), np.array([-4.0,-1.4,0]), np.array([-2.6,-0.4,0]),
+            np.array([-1.1,0.6,0]), np.array([0.0,0.8,0])
+        ])
+        profile = Circle(radius=0.48, color=BLACK, stroke_width=4).move_to(path.get_start())
+        browser_lines = VGroup(
+            self.ftext("SWEEP", 25, BOLD),
+            self.ftext("Profile  ✓", 24),
+            self.ftext("Path     ✓", 24),
+            self.ftext("Operation: New Solid", 22),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.34).move_to(browser)
+        ui = VGroup(frame, ribbon, tools, canvas, browser, path, profile, browser_lines)
+        self.fixed(ui)
+
+        stepbar = VGroup(
+            self.pill("1  PATH", 2.1, 21), self.pill("2  PLANE", 2.2, 21),
+            self.pill("3  PROFILE", 2.45, 21), self.pill("4  SWEEP", 2.25, 21),
+            self.pill("5  SOLID", 2.2, 21),
+        ).arrange(RIGHT, buff=0.22).move_to(DOWN*3.52)
+        self.fixed(stepbar)
+
+        self.play(FadeIn(frame), FadeIn(ribbon), FadeIn(canvas), FadeIn(browser), run_time=RUN)
+        self.play(LaggedStart(*[FadeIn(t) for t in tools], lag_ratio=0.10), run_time=1.4)
+        self.play(Create(path), run_time=RUN_SLOW)
+        self.play(FadeIn(profile, scale=0.75), run_time=RUN)
+        self.play(LaggedStart(*[FadeIn(x, shift=RIGHT*0.08) for x in browser_lines], lag_ratio=0.12), run_time=1.7)
+        self.play(LaggedStart(*[FadeIn(x, shift=UP*0.08) for x in stepbar], lag_ratio=0.11), run_time=1.6)
+        self.wait(EXPLAIN)
+
+        caution = self.note("COMMON FAILURE", [
+            "Open profile  → no solid.",
+            "Broken path   → sweep fails.",
+            "Wrong start plane → profile orientation is wrong.",
+        ], width=6.1)
+        caution.move_to(DOWN*0.65)
+        self.fixed(caution)
