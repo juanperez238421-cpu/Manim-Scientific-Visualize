@@ -1,0 +1,216 @@
+name: Physics9 FreeFall Cases Equation OPUS55 PQH
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/physics9_freefall_cases_equation_opus55_pqh_20261002.yml
+      - render_jobs/physics9_freefall_cases_equation_v1_opus55_20261002/**
+      - library/jp_classroom_style.py
+      - tools/check_manim_style.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: physics9-freefall-cases-equation-v1-opus55-20261002
+          fetch-depth: 0
+
+      - name: Materialize exact source
+        shell: bash
+        env:
+          SOURCE_GZ_B64: H4sICICwv2oCA3BoeXNpY3M5X2ZyZWVmYWxsX2Nhc2VzX2VxdWF0aW9uX3YxX29wdXM1NS5weQDUXEtzG8d23vNXdHA3gDQcDQC+HSSBwCENX4DgBUDZLkqZamIawEjzgOYBEnJc5ZvVzcKbJFXJXWThpReuSq4XqcomVcI/0S/JOd09TwwoypIWYZXIefTrvL5zTvcZ/e6vnkSB/+TGcp8wd0kWq3Duuc2d35HdR7tk4pmWOzshUTjdPcInO5VK5XK+CqxJQI7Jux/+lXRo4AXEZGRC17+YlNjWjc/IirBJRCfW+leXOJQFoU/VnZ2O5waebZnyBXSyaUCWzA8sz2UBoZMwojbbHO4xsde/zqwJJe3ReNh+MlhE0M8KoPXJzi6Zer5DQ498dUk6MGLge55D6scNbf1vde1IU6CBa3rkxqbuxIO1vWQ+9V9H618ocTzXm/ieQ7/AcZi7/tVhrkcWvuUw31MyZJgsWETrnwNsGLkU7idWwN9MaBRQmyw8nwClFGYSS8OWjre0HIu5sLrp+hfgmwdMdUPLjTwy826Y72J77PqM2hEb+3TyivnY02S+tZRzs7uFvf5lYoU4LVlWwxpQsYI/2HDiOQvqZ3gK8gh94GJgzVy4XniBdSO5utR4D5AZ3MGSI1yYs/4JeG/DVWDBXDZhvg8LgnVO2AIlQmiL92MvmbPA4eEVWdJUkm7krH/2UT4Lny0tzsxFBFQzcg7NbOadkAVw3yOWO7EtTvPu35A78u5P/0HCt3/Bm6zA+SItWAZD6nCFP4ce9PHZwvfMaIL0KMT15NvIR3JIyO5CD9RsTP0ZC09In7qWQzqe40SuFa6IblohKBrR1Iam3qmoyzs7UxA+MYxpFEY+MwxiOSCMkFDX9UKKzYOdHfkMdGwu2ps0pBPUNOCqfJk8SpoDUxYrAgruLkQvh69Hvn0kp0Z6qb9SXy6MSay7RhCubJZpCebY+pQ/MN5pezwYkbP1j6NuBy7QlMeD0zZpn3WH/Xanu/6XC3Jx1V//07DbaZORTp61e118fzHWR+RU75GhfnGqDz/50s5JixyrR3UkuiMUFWDCfUOlGQFchKBpNpmD8lFCfd+6oQQsEO0I7IBs6rW680wz2pf6NzB0fU/VdsbxXfz8CTnf+bLw8NGjBjyvNsgjcl6DLkN9fDW8gPf4RIzA11gwP256YCCmNRGoZrlwJWEt4MQQxwocikuLEBe/1YzOoH/ZHuo4uAbrgxUM9Z7eHuET+eB08DVOvrsvbq8u4Qavd3ZMNkVdAfQ0QoCt6ko7IVPbo6EC9p5czuQVdDuvocHxu5MdAj9gCUMwvzcSoyjHjBDgBwnSoMdKAwxeaiQku6T+pEFmaLUqGhB29xkQ4pLqEluhlajBaz+EW2ThY86vGfxbabUacHSWX/KS2R4g2+o3LBsf5gnHrtCnll0WrGqXzx/CxOMMY7NdUxkoJOV+bedZfGl04W1nnHZL1r2t6zgW2T3zYAucBP8+eAbRaSxU4J7Bry5x6KvLBw+MHRAawJcCaqFTta03YFeBMCxQXAB3k7lod/WTvZPjk/qBujNs9y8NHN1dqGCNdFW9rqsghQb+auIvMLkXNdmuAQ3FFSiHePbNZt89/HWMv2AG7Lyz83cpwvLfpO8hPI8ApZlUB6kq/GaVvVlmb2h8syMHkgHN8ZnP2Bm1bUAdFuivIw7/GGrs71e/uuyDXifRxWjCXFZLjKfHJsL+J3GEY8Isk9LQ6HFJaMQ9EY71CcFUjidgW+B5p6tfjNc/ngGif5bZ0KpFWBAyAwAv8FwDpVYNmD3lxnsBiCi4Jua/LAJ1/Ap9qx+CS/QCVo1RepecJ9CrIC4qoJM3zG5V6ILdkVitK7XyYZKn+BOPGY8Hg2vqPmJ98ggUVMn1ER4i/yy7gDmzZvOQvLJcBigIKlVJ225ZU+xWlIxXSaiSABasHIeFPtKVYd2Y+xmpYuhXGhpxTkgQBaEVRtIdWT6bQNDIXB4tQtCIsWPKZQicOWCGxtxC2MU/4K9InlXVFNUUMk4vi9hYUza6IVRhH/E3h3Mlra8usS3+zsBWpl3tJNdlu3DxJ+NVuet6JKjMyZk/2RAz/qBybTwUYplWZr4XuSYBIAhh5NZ3S+37Sr51bftCuTtKJpdMV5KxBUQnupyMX/sA0pdbycq6ZFxDxgFspRZdy+4UsBEcqs0xcSvRGfUcWaizmGIBUvozCOAhrjghb/9rnzhPIEGBYI7xZANjIYjqNMgCVmls5NMFeBoISCBZsLfAAr0JqgWVIuJZRnliW2KvMZGR3A0WjJmwlqWWt6kRQLNwbzOetlDI81I/SIvr4F7LtsVqhCtTpHNr1O5rC9emNZ3iX9+41mSnb17Acq/r4DQVsq+Qwxe1z+UUvtR7l/pwRJ51R1ftnj76bN7gBkjm6K9ASGm5oOc+Na0oSIM6Ta0fQYJu2XbrmT781uh1z78cG+fD9rfcYTw7B1tbpHZ/45kr6NWx/Ild0Hwxckv8yWsmOFnvFTMmnu35rae9duf3MM+FXtro1jLDeauh1vNvcYVyALwseemBaoHFtupZ6KipjrdkRuhVOf2pVszBVdjcXbTIqRfmSUmiIck0M1wtWIuzrAbWe9UD0xV0woWmNveU7ZzgLerNfAtByNdfdse6cdbt9cr8lPQ+QgJVZLySrlqqJsp4NveC0HiQpLV9LlQhvZPiTB8j1H73lCvNPSKtq439rTItY8WGZIGCvXtEm8ZA4HQ93wARercpOZw56V1I/TC9FZ4asDV9xIHrBGlInz0qvDYC6w07AZeNDG7sbb41WWuIFpWdOOVJKpymKr1FqdXxxWajdLH6nF5ukpLtkNJX3smaYlvcGrJnKkJu2qNG/prU2W4z7/wd6r9iPkyBbFUx6axympUMY1IJCQIeE84LbhEHWt6j5rVdjJ7BcBQlTNbOi7REkCm7HpcJlWNYNJ22tDKDfBA0ZW+UAk/uIBFcQOjtzsI50B1f+ei2WxxqSwwdGPY+PrrsLkQ+cj4oGe1SJDWqdrQNOdI+WdDgIZQEjFWS7d+lif9dXV6WaiRoCoNF9+BP9foOPCiAk/YC3OddPbne4GkR4jNOek7DyRz3fsSac2x9dL0RG/F5N57iz/UdzM+DTG2PL2NLK1APTW0048b14+2NBR2pYyxvVcC6+mar2sYTjP/vMODndkrdGasiL5GHmrp3kO/w4r0+AoWiCFZmRD31JlFgLKjL7G1gCBkL+IM81OFg4D1sKwiv4cWLUhBkMkvnfck/8PwSpIh/0kYOxHH8GOOeNgU43FczWCrSuixW1vfvAcsb7w73OFC/mTnE/MudFd2akFKJCYu5WuJPESJ8iKQN6RFBZRofG+TU1aOPc4j5UCcVZ2jHgIJ78lUuXshwDxXydNA7rRWjOak+j67TLkKVGhAvoI5yawc15TrxIt+fOxjUXJFjQqg+c5lpMHPGWj39bJwgVD2D+AuLTSB9bpFrWKvCx3mR9UWxXhELN8LCwr6F0LwcZsYdIHg/zpuNmEqliwUDwGOvcz5Pqub2afzITnAOqQHfVeXC46hxqOGGakNJ/FrZuyJ85JcnV2A43k1OZvK5glFFQWoZqqAlUnWNy1SyY2WEhOddjAcosZxF51pBcrGYjkqEWMsBhzq1wqocViEpyfuQNck9GLxtHm0sIgkIwEi3R7p3Stw+A2OLOQ3Auqgfey03cm6Yz4MvJYtg6P5D5kBveb+BLVo5blCg9oHIgfFLKXAgbN8PG9rRx8PGwVbYKORwH44dbk4LYd6q4DOkxugjuSamUkSWvR93mltwJzuPFBm0rpcom8h+Yk3jmYQwsdSBeL4ZpDqewErtwfikZfytiDblWLFeIrGgdsAJPlk6sojwEwM6KCGAh2CppTRxZ13VGrVP6rUg/qzWuQHDdKq0RB7n7NXe48u0j1fKvf3P4syQlCxqqFyC8k4hHJ3UYG5Nw2qaXWRlUIIuMGYGWSZzNnnFc0iJLAgyJ6Tv3bwEOUA+TaOApfhx2b4a6Yb+zWWv3b0o2VXnMl/YkHSdUZN13SoOB6iES2xdXfL1QbQOq4hcfm7UGl5dGH+46nZ+X1CcWwqaw2evbRl9EIV8+C2jJSTaFjCQG9l7AkFR/3CSq4bIJc0wwtQtjQXLgsgs9KZPxelmnJZxFkpmp1zku1eRZZvVwq4zGnm8jqpcrzpjobHEJVdreT+5DZIaZU4V1CLYkoMkrOejTCuoCN8FangCxjX9ngSVTHil3NtzJXquTh6Lrg7v+p5OS9FpmXR6EjykGxXdaKbb27+UdfwAlDyqFZCkEF1w5EVOPnzMeiHTeQgW3ouHGUxsqIcl+/Dvi+UfjIElOHi42SIDhZftS324JY3cDoeb6eN9cRggMWmAjymV1IeDaaN531ZNLlzLbMkJE89s78tu1L6lq8DwmenT2yo38c+2z95vj8b6kIy7fR1F99m22fHYOfSjSbjtpJVLC1DLNQGsQcQM4/S8QldELVCbHL/9T/L2v0kHFtxf/3EMjwrnPJVOezTAGiDSaa9/PG2TXvfpUCffEr1zJU+a+20dC/WKHa9cSgLPpsS03PVPDlaa3NCXHpn5dMlMan4BL4IQHCHdVkIzoc6NRV08KJpDU8+3KK9kS+vs1OKkl6KWjyyZ4wXkdbT+GUuHGJ49IehDD3Iqa/tgqJdUtOJ1OrnqvwkvNGJ3FPDA4bVtLGBbJi74ywDLBQytbtzOaWhYgYHHacYUt8zLWzYMegfNQF6GQ4MQoMLxgMwtrZsGLxZkaWFHebu9uF1sHQaWoBnUZ3RLj30jnONSQQAhCCCZAPKggAVbOh0Y0eIW9Qz6ercGHo1vaXloBMBKQ0ClnApi21eA0vdNcGSI4zkPANRZGAHk3j4zbDDn8vbHhsPCuYe8XGw0iY0CT+Y2jaLPTyNj/VTk6WSiFxBaWC95yRl7CW4di2NCa4p6vXz3jz9wXAqYv6S8KFPWY664lnEV44oLcsWCU2ZaM0oKqrxTOFv99BCl1Xnt36l+1r3oCuOVQPDZ0Ooea7gXviDGmjMIOv28jOob6JQBpYsBGXXPL7pY8wKE/nt/ABnqSCdfAlC1Sftp+6vBux/+vIlTZBIxf+FhQe/6J6yfyNXwgPhd01OSmmBeo2jdYFmx7eFWd6IxMADerv/HRaWYwqBvKJ6jsyVFBDETDcijR+YwBSuu/GSrG/K23YZ6sC93u0WZ1X52vzuTfBcjg/3cYXf3zevIYj5WKmWqlJPySqzxRbcKcMeLdV1kRo4N6XG4Ty07WeLuHu6P4jLr8TLlozruWjxkqUBTJjMFyHkFo4+4mRcOX4A58pADoqjDxscf+2qffGsjiUkSztT5TpWW2SNzAVkncaKQOz7ETgd7vFPzSDBP5nBHmGdXnmPHi0r2TKawY3Z7z9hN9eCIj92QguEli+noDh9+lqk+sXkGk8tpKmBU3T7Wlg0IMAkjhh4G+UfF7ZqYAbFmZEYNovz2Y2VOV7zMXpoMVtFJZazwfeGNQSHw1cSgGR0/ZT6bzEHDM5ZqZ8uJFYxH0gAEFT1Y/1LUdEIjF/EaVpkpAplFwGw8vqfBnJlC+Td1P1H9hnhgQutUZbWj+zZo8VA9Zgs/YL8uaJDCi9nTDkgHVg2VShsU6VAo0nFB2MeNcmH7JcLOwWv3VN8m622i9jdEvYiYyXlr+QipIRYMBfgNyYQyvyjtrcLmA8b1QSIdgOhiWiz7E0mDhFWFI5ciIEYRVqgIg1GkpitcNxUhbIVLRInZrEgGKZyoQkpbCeQpeJ1vF1iTcoBP91M6EIaFLF5aTSFy+0asI733C/c2nzt5K+5yuzEXg2G/3attnxO5kA7BuZHecq6kt7fy9oEz8MFU/PIBJpKpHQewBipuYZhRb/A1ygQ3VyJ30grnYL88Cr6hsKQULtg05FvxsSJlNufrCoT8Q/386mLcJp3BcKh3xpCIkMrb//0Dxv4CUHg0FoFf598cgTP/W9KjuP204iYDWUXiCMHx3UAMTsFDk331MIs8TfUYrbGJ+XtOyfmiMvt6yYKVwvbdPYrANS4jFdC89E5q4MPlkN/ggLHKZXK4X1BjOdEDW29IE5pt1t2kAk6u+Jc2KkMpelFogKs3t2ZTD6JHYlsTJn8QRdvbl9O090E0We5Wknye+2xRZlCrSmfYHevD7gB1eOyj5np2SH3iCT+GB06W8GI8kuT5a5qw8O+mwOeBajubERyMeaDWMyrd5Js3D9DodNnbVRqCfZ44esmhDn6pF9m0uAnM+VB5HkQO4T7orCV90fPXyLbnPc+d8Qm5JxMPRUvakk5LKTmpOFT3Ss8p6hgy58M3D72F9Ya19hqloZuIuw/LmJLdak8pfpBl8g12wb3RVb/fHn5bZLjNqI8b5zNW/XwpYIOngPpXusKTpcFIIf3Bqd4byH2cwedOBbdtd/yWdLCQA1T0niCKXLQ7Ov9wjRMKD0510muTvt4fDLsbW1W6zWYWmtLjVe5LM5XoEDa6E5HXJXEjxU/OKFgicyCVx4QxwK0AsD2XzcD7Lz1iRj7P+cAi+bc0BUMsCw6QK0nV2fXuPs+fQA8bSWIlHjXwAI0/kbVl7699ymx5L+woMFa5cga/8ngF2NDUMqVfsBbMPdKd+MN0CPCYM8uVpazJQrUkCk5Pnw8315YO8wb36XKxoYbxXyNdhZhI7BTnzgTuiZkBzXh6ox5pScy8l8mPmCzDLUuQGup+g3c9yIXMHP8zIXO2Wq7VyDBmemPmCTrttiHG77f59umVPrwciFAa6TzYTJiaqpbJ8TNkQlbDGV52WJSVIwfVM2PVcqiBIt07Kri3bONdZ/agdtCktYtU7x9kP88oL+iAkVKCGuoRPzpvFumJK2ESR1FSNCZ25HLIVDDb68pMfj4qzprQ4WEW6dAZwHJkJh82oucDGxd7crgx9O5P//zuhz8TCzedqajcFDu/PmSOqBOEAhSolUKNXlz304qZ0trF2Z9/8RxZ5TvfwTL+vlH8UkIS26oA/gAq9fRh/MXtgHTa/addrh4CtvQLAph1eYXZdX/9xxFp98aDUnd3oDZK3V1ar1Zwag0RvsbbMg9JpuKaTg4GAjgUEhvlG/7JvEiRhFUpaACKUFbwiElO1Kjc40Rx8DTSFZOk92Ky9B4nTe9guo2Q+YERMlB2K5BWrP1ae5HJesSj+osP9etDvX1aNtvXvgUxPmeMmOiTjArxoRtgkHXme07HW6ySGaQQSijAkPbTzVRPZmp84ExJ/HhPqYHUIykUaUb/n0KtptxtH3afSZMHQ38GgNbpnrZPP3ectXlQ9FsirMK3JBWgAA/6AUFnpI0hVXoOmCWuGGG1J8xm8Yfz/ASTh0eIyOIIBQsmLX7Qlr6FwAo/YcSPayF2Ctgswv/Zw6bygzkMxZLE3bQCx3KjFUscwtYwi9eCtuFPntI7g/uz1nX8JbOm7hccwCpusls/wK+VwXMWWtzFu32Hxc3lVfxmbyNF5vEwkD21Zq3vKjxiqpyQ5CsXQNJMOAdv8NifVPB/14hMhh8BwLMzagfs+/Kd6CbfQNwVZ/XZlCY0gOv4MQk02Ek/G4z/54Sy+ntknzppLKr883v8CC9+wAdTSOaTR7ivvTc63ctu/4Npf8BEtQ87W/CtYJOM/6vuWprbSJLzX+mAL4QEQo0nAchwBEhiaIxBgAGQY2uGEqJFtjjYBQEKaCCAYfAwPjhmD3tZ79UHnRw+eid89GV43/9g/RJnZlV317PRfGh3J2LEIYGu6npmfZmV+aVYWcquxBNjf9dloEDs80MfFHknQKBdiCEudFjC2aLf8uXKXMdKrQP6xb2CjfUQWl0kwUeGVgMyv4awNFYFYFDWIwYCtJfkbJWt/u9//tNe32akaRhSZcJ+Ba3rRgjWwOI5h3mM0+Cx3l9igNKKI/NFdju2oWoFkFJiL8oYjXT8CJKbwN70YPMrNj3FWSlZbJd4DoZ/QH/jU/EyEH5fbW3MZHbjj6azwLfYUrttUpNP2r1DvOJBRSUTS+aQjqjp/PmPq1d//iOucQ/mmZ8HZDItSOb7CjPfV5LNS3Gz7OalUAX6TrEjIRA//wAny+1qtNldjdy720BF4KDrXKV6KGjy77Xvzt/P1v4lFodHXHhSLB5HE1ws53PmoBbv2xiUleuS8W2Pq82uzc7EYSOr82moEQMr/PUN6DcLinSYhgix8Vb2eAyIT0kOd4jKYRcwkiFDo5GhMIbxVKwYtoTvVEpp+mmBmMcYUQRA79Rfh13P8Vbl0LDJnhqRbwY86S+ap/Pllh0lTw2rTG+HCZ7G8RuwAebQTcYTtV1z7cDuGZwM2qcMHGmqK7qMMHYwAGtkIWIuUIiPuAcUqa24sQLUbP0J84cC3fRiiXZVTiUWWqU0bVXUO487w2MRqg3bg286g/sfYbsNAMX1h87poD10yNfLqG5W1DCAyOOxbFY3+bTDobjNjCqP7K8J35cJ35/0h50QAA8BA4MCf/8j7D4H/U1IYH5ppJ/k6vUYzF/WrapKj5yDfm94Ojh7w46LcARU1N+bwSq8BiX+B7qowJuJ+/+aA06fMWKp4Jc/NRzvBhp64TtX/gyp35BZjnncAapfLK+9OZbD2Nr7T9Or5WQWbg/kHcSrjnH4OZHv0A7BgypUEZ6iBhSYGlC0qQH4CCzv4mOUgMJfQgmIkX6BgvJrCsp3BZS/wkdiyFt4KPwH/LAqPBTvw7RilMNssrmaTXeUAYlfpQJN6a2JX66s37qGLyUnIpv7jxqK8gxORG5+zxitDas7zfCsHjkE4Zw9PRzHOgYpu18tmrpPkHyUWn/B+5jZdiVGMlgXqwk6jGZmkCqfI2mkv3PSwdBLi4IjXV2UZBUnUcOZUzQQzH+o7IhjISv3VabcV1Qru/+xoCiQrdEt1nuHGBa1vbJwM+J/LOpPw/vvGHIuFHcA9WaD5i7/8yp4V8QqXLGKklljJdAcqCUrYsmyWpIB7k1zM3JfqqXvsPieWFxYHtDtHPYGf5TwR9l2V1GV8AofxnLtgeZxrklCG0SjdznJ6C3NtDixbLKzz2UhDt2EoE3p9VTd2MvWIozrQ9u1xcrbwZiq8VNaRvsD5vr5GwZr50tUWv414dsKY4pFzYC5CqCJFynkUJ3oO4N2t//1l8a2W4ISHgNvFeCViVWfnHPWaznDvmjW1n0FkPYQFK8QhpImhwTRiD/vf0bHm+ubsf+D4t//GpU8TzSDk1MaehGgVZsM6v40JnQmpdK3WbEpBk4Im9xxRVgFAup7Cip28/UY4C3gAPPp7h8D72ObBYLtOfEj7Jb5jS2xctYqbwW4SA/QN8hKi8A3776V4zHpkcyw7QzP2l3mhzdEBaH3bUv0wTd9Phh09luZuL7F8n1c5TwDB0ATvQPot7+PfvsHF4rErg04YsJBEI8HSvm58RvmAWD8yruAyRoZHpCMKmvGQstdQ8Nmo1Xkh/HNDh9bfGbBH1rETy2UaNOHhSKW8V7dFolIx9nTIxGTeGjUeIPESERbUHaKSMT4jF7TAV2s6HYkW+RtRXOyWJNBsmYwRS1lYqRwknJOqaKWL5X18iYH8TVduNfKIV0RaZSVh7uGx6s7711e7ojBkBQBGzstZ4XlGUrSDYnSnZU7AtHpTUKmpYY2ESEFKZcTL5yoDCqEYtyzTKwpffPiBYBhuREoBMnbQw7HNJBQXr+/9Jy126RdxV7dRH5owcGH+J/kHmVDTx81tjerNgP2Io0ga5FhrOB4GV3R6GqtMAzYakUqMx+jXX00tBLkefUM46sNHS0kRsJ2MQHJA017RTKaliAur4IWTi3Oue4OtXaJzgFdojZCLAp7ExPAG8UXqqCMKBeeNOTy3EfjrITQS0KXyplaRsOD8Q1u5B0XhTfsUXhD5LQkNs/VA2eEBn+/vBylJ8YgvuqIh6VezenCtZBOr94S0m0O504Xg+Qy715F2mFHaRyUwB4CdZ3e8LTFbn4iMiBJ28TaLJUiqE3e5WyHN3R2A2mNizwHhrgiFsBkaIPcGoW0aZ4x65J4mVqV/KQKFWPt2LsRVBxDAb5icvGI5qJxyPE2pFEkmWgXlMcKl/aZbGot1NYWaIFUMXyWpJmy9wpeNyQz47/5zow/kDZselUuVP/4mKYmKEnWd4PYzz9aTQwLm+6HyLUT8W7szo/atzdPoeKJXFMXk+VCuBMSrlQTQ1cxWrXfY+rVV/f/Pjg+67bUy5fMEOoldYB0Dp7XhSkc02DOErswUmUeWepEfo5xOLLk4sizPqiR83v5SoIIKSZe4qC31kNmUrj6jYcvvPr9ayq8VVJ4STHhIY6ieuK8UT0zv7Tyawquf4zGW1VZEuRuNBzEMTDTcLz0I/cudSl20UlrMkPHd3QFYBeXFIqyxCtL5rOVx8iqyFF+igt0wS94GniLeTPHTEr8gkdViDHqcjxdjUHG+ZKb16OU4M0oZLKlCM14pEDGEbFjrSJFrzCin50gEKlItbwTCm4SvoeSOSHTQKCwzxNHuyNnN8ASu0dyEA22m9Ct3BAhE4rShLCfL1nPXiAz7A4p6mGHsvkN0gP+I09jI/EvKRoLBiDr8dxVcuOoPUJzgWbPIuJezgPLKw8DB1BVlVR1k64gAQfu6c/aFQ2XxMsUaQT1rDK8kQEJaaqsfE9KddJD4w/EPL/Ir5CtGG0pjURYzeEH+o5QhENdN9/bOyG/WoP50AiYWb6qCOoX6N6yYGY8Noecu1uGcSvuLwljHCUzUKdQGnjFzOLPQ7eKtOBR6USFMGFSJ2IFoWpVEIoJkfUSuAxXtEZ1FvBdx409zUwb4PRhP8y9leHMSc0S7abwvh4dSvMVVzJvJNnMPTFkl7aYhNiYm3SE2NiwK5CNj3j8qeHstsM3E9Bi+UzsQMs1Aa14GcDZJgVG2l1r0gRJfEfHFQwvz6m3wLwza2gyOdV0RRdifnTdf4IWUcykP5+FTxnstSz4C022PFIMSY2SQkVo3/MwxnDVmR116BTGsJDO8UkXOUzwKHYt/jiViiX+o2IGcuV8mZwZCtv8caKZePT9RwJMtFau4ESWEJHLhG1hTy73yRvdwtFHd4OlhHgm/ljkEOje3V7d4R126fz1Ylvh8EJTreNd8e62CNXU8/X6+etrtRrbDWRRIzuwOQSaVL94kAQVryqMnaY/sk07Clcniq6L30r1EANkc/uEmiUAy29klQF1N1HZ4qmPtilSatDnoH0EOlSLhSOALDgbtFi4ZwTjNa1qTKFe40XAEsCgFuWBipRzVkt/sqIYBD09zUZUo2Y3S5/xBMhIO1+0uMPVGKyqbPOF5YOgecL+LV4Q7sUXhCeD/n63fdwaglKLZCGR0yGbkC+tKW0lF3uM2qRY4jJih3LcY7LfO+wcdPo9+J04tTDDjhb8cjNBp7bZQqaZ4wnhKBEro7qbw6q8mniLhrNBHb9Jab7QvI+sYZjXiw6IjRambFaPWHR1qmh8t1mULWM7GEWTDd4VeVA+nV4rkrP4TWA8lApaIq0UMfilus3uEGocCWcV6+LTDypaI5p3uX5DkWkhW6Jww6k9wT17cZ4Yb+oHOHBYJiqMdr6NUqo1IhvnB4AIwhNqprVGRMJqSBkRXY3qTW0fn3Ta37acYadnjctS87Lptexjh6XLW3uXP//0h4qt13juJXRZSOyVor+7FSnm9s7U/W63fcQz2D640wdCp9nNdEKvX1r7fHaS0OMobVmK/r5M0d+TQecYzTfDs/32a6d71j7C8OK2ve/CzXnsG4/SUaNOZlf/OYdwiXT7Pc454V0rpWtAZ5woNUCWYgOmy2vUNfwd2mM5li+nWVAUb5JKW6F/5GlgSGBHr9c+jnA4tEv7MgTeYfoDy0X7nik9oBFuG2ynrhb9wk0I4ZiPF4ZMEHbb/DZZR52eLBLrG/jwvwuiwI9cquJYi9SviVcNFUkMqPjn/uCfsNdjgABOgYWJpNcaLCEwis4wnq68+diLw28SVMg4EgKk42kHZKWmQRq2GCbG5RnY5xEsREO872DiXJbjGbN7OFNMejEO6NAHpDkDUDl3grxRUM3C1J7WfIkgaDADs8F1InNCiehnDuCH2YKnPPQoxDZq4Off/eTc6vkTI7mjVmxXZcMoqHfFJuk8u8Wrnc3uZuRmk0gPDjuD9gEbbQ6RQt4DUOPZ2L/mfUQ8dTpA/yv4b9A66Ry2v0VSBHTLCpF967BlQx8Fi0pctV+PuhG5XEKACl9XvybfvRpB86NWt9Nt9xsO7DG0K/QOup0e2qPeON32Gwd2weGA0T5/aYBup/F9DDJX0ppkeD/xzG47x+3DDugijsK3YXDkg1meYjzJBeaiu4RNNPHmjJeXgpLwzg0v3K59Hpml+/Axhmh4CKMkRYpXKHRx/2k6vpiBREWmG4T+jLcbZATW6plD4uHhaw/FB0ma+ey9935iowz6O+crOFSdFs21SDHUcFY+Wqk8J0Cf+DlRvM4Dgc8SGXhhE9xI6bg5A01BCxSnp9/PgmB2bSqwqzM/svr5DQPdLYRvzIm1bQ0XAcVZqTTpSiFSswuVBGLNuCUyoSZRExs8I0QWTIq9tlH3FIhjRRoGrDIduMl80+6dtnrEY6ipFmTP5DM8o+PQmd9/AvnOrtLIXnkGy3E+h7G5AZHt3/83qYwB/LXwnOvlxfcUL4geiUtvwkslENw0rWbKw85X978/6HSJ1WjQ7/WP26eD1gBlt3PaPuj1u/2j+98T9u4cnbUs9sv6w+hrIg6DQiWldYxbDeOFmBPWT8hcE095Tpgr0WWiRp9T0STHifg1gmU+ep2N2TF+vfJZKhAmEG+KnIjhmAnbTKyJu0iloTB8En/LU8bf1nNV8u2T5FPEeIPb7Sb3P18htcgFpmi//4QBPHgtgwKRZaFHaT8Tia3xYFKznxLBGRMqJZXdFgswBo34cXaDExI4yw+HojB+Uy6qJIUkrOv3qvzWtkp3eFETkSyc9A7hk62E4VWlY5rYjFsqi0363CA2FcxhkZxFfrtcLxoG94GSk26Duq3BkS4+j2PWczb39OvGmb0nJxl2xup3Ptr5jg4NmCCc1fVqPrv0kOsvSZSud9egw3PDmkc2NdhbO2S4ydqEbH//6/Zp5xuAbpizfdDfBwHrEZSn0FvmomcUrDWLYC3aBGv1cYIVJyjn8N0crZicsBxywiTKIhU/T5Km+L31hjN6l/KRIkeld6eUo1HVmjCNt6z9dqPylxCr9m6ZXK3S9Ipx21hTegni9oCJ2+UEtdVCo9yoNwpVsl9zTgLQcWHrz5zFDInUJx5NtIA66Y6DxXTAF3n6kwWrA9IFdIJjtVPIYxDyR/RfrmL6RDQ0fURb0qB1fDL6l7eCgXv+W2PoBpa4wRLsfQrDxTjGpJFTQKEcUe3jr1sZNRX3CqwzjAelnqH/AfMdxhzuPERULxJlMMpq+a6Z9zM+lWj/hge3HpaXXuA9wLW5YmHSLamuyV8iSe3ec+b1k+gozBRYNDYG5ntmlxg6iGDpSsfgihyOK8026BM019GSEjOS6tzBvKjA3hM1ZOt8cnPYiCWOlEy2kVEWk2qvQfVUjLAYlETb6DTHt1OOb5KszTTL3qJ7bAeNvPvhznE+/9sfHGf9av35X3/Ez9dr+pwcnbTTPpqGooEMBuWKr7zqdow1lTRP9BsYab5fyzUbp4xd7gmHC71VwceJ19Sy/ZYmIb0Nd667Iiti+6kG3BFl/0z3Hnkhwc9EG67sdW0+nbTRNJ0mC9RPpxe+4p8fHijNwrtiowj/SvCvzGLFi/oiKmge+qHRZmGOQl+fvz7HYyaYnb8uNEqNSmMP11bNVHVtm5dM2IfnDxKOevH0a01Ak4vlnNYJi7aJD8s06I1Ol1x0fOQEYZlzpOUWjkYunoMkDKO1K62+d0gABPO7+L8BsAEAA5BQAA33AMrD3FK4grN2Vgsn+OVPAJh9zK9BPh5o+Jh7k/wDGWAMHI+bLd9H9C+1BPqXSir6FxGBPJUFssjY/l3NBSU1vwZP5/k85Bo4iRMvVKSkip+LWAPBk8YeIqNEwpVIoQInTI2x+RSqWR0w8mriiLQoY/VHSlattBLJVT4SM408IO5eNvscdUOD8TuZGF2s28bZI1H2MBLT7SyaJYnZchYIo/niOySBF/uM7YoZ4OsGBngN0It8QIvlJMX93cngrL2PFtkepSRSdP3hGETA55/+A2VAjiLq0WdzhsEz7/0pvh5ZpZAqHJktIpfQmOhw7iOhHVrQHe9VMYVujylfdkjDd7ziOWWvyFJsmVm5J9Y10arcIFfPK7zqOm4d9TqnZ4cW7b5gc/ss29w+62bgu531O2a5zInrNMdnSdboGUoa/+BfJrN9+0LsGCezif4WXiKo8eHLnk6zaS/U9a6u/Msh4l9Y0iEin6E3NwbrIkERW7aXjPEQN8FbHJ2rEflRs7zCD2LA/mteDtbpGD1unZCj5GH7oDNkySA7vVb3S98ESgk6H3P5V1fd8u5/d9o/7DMuw0F72O9+0x7g3WYXgCf+1hr21QS2huAmcsYL/KsxoQbY+iF13dz5cP8zOc8toGF4+X/pIT8Huu6xPGbvvd9Qjh6WrKcBSIRloQXEEqYMJWfTa7r4E1KD8jx1C8yItgBgtdzYrvpgTwqsrfPZhb9Y0AhucVrYyRRQvH3V+bqFboNv8M69P+gctXsZQz7vnUyRciUMDwad/bZE7mp8uoRPdw7bvVOWdJPcFt/QZb65QJkuqoYtcmWkp1/S0wG+xPnlf5ES0FyyEpakmHssiSWuAvPTVWpYxMHJ0yu8cc566AUH+nw20ecBnY4jvjo1+xN9GXk2qgIZjrvl9XTRLNlcDlyzDzCm16ZJzhH5NnKQF1NIa14kksR1tlLMPMZGMcfSOlFirCZXqd0ak3YUj4G+0lilKu9cqyG0UnmIkhKepokIVPZeFcJ3QoSyJ0bjw/iKSZ5MIFStMGb2jSqFmX9ipdaI8/A0T2i1awwfkAm4izUta1Xq4IFo2KXFE32aSaSx4g+lTWZhLlx4SuHi20d748QKwHjqyXdWSpiASbqjdxfz1hZzQjXCz1AyURAsenQIAQah1IePeYArJmtbEDpl3l+ATJdTljx4ZsgTTJEPinUU1SVr5jwUKNRDECilfI3lRMrKnc8Hs5F/qYallNyki24s99CxJ2CRCHX+H+xCcCGbpgAA==
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_freefall_cases_equation_v1_opus55_20261002
+          mkdir -p "$JOB"
+          printf '%s' "$SOURCE_GZ_B64" | base64 -d | gzip -d > "$JOB/physics9_freefall_cases_equation_v1_opus55.py"
+          cat > "$JOB/README_RENDER.md" <<'MD'
+          # Physics 9 — Free Fall Cases + Master Equation OPUS55
+
+          Consolidated JP Classroom lesson: ideal free fall is defined by the force model, not by downward motion.
+          Sign convention: +y upward, therefore a_y=-g.
+          Master equations: v_y=v_0-gt and y=y_0+v_0t-(1/2)gt^2.
+          Three initial conditions are treated with one model: v_0=0, v_0<0, v_0>0.
+          Render protocol: static QA -> full PQL -> PQM -> literal PQH -> H.264/yuv420p -> full decode -> every-frame border scan -> 48-frame contact sheet -> SHA-256.
+          MD
+
+      - name: Static QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_freefall_cases_equation_v1_opus55_20261002/physics9_freefall_cases_equation_v1_opus55.py
+          mkdir -p qa_static
+          python -m py_compile library/jp_classroom_style.py "$SRC"
+          python tools/check_manim_style.py "$SRC" | tee qa_static/style_qa.log
+          grep -q "class Physics9FreeFallCasesEquationOpus55" "$SRC"
+          grep -q "validate_lesson_data" "$SRC"
+          grep -q "TransformMatchingTex" "$SRC"
+          grep -q "always_redraw" "$SRC"
+          grep -q "process_map" "$SRC"
+
+      - name: Prepare renderer
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: PQL gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_freefall_cases_equation_v1_opus55_20261002/physics9_freefall_cases_equation_v1_opus55.py
+          SCENE=Physics9FreeFallCasesEquationOpus55
+          rm -rf media_pql qa_pql && mkdir -p qa_pql
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e PYTHONPATH=/manim -e LESSON_TIME_SCALE=0.05 -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pql $SRC $SCENE --fps 15 --format=mp4 --media_dir media_pql --disable_caching" 2>&1 | tee qa_pql/pql.log
+          F="$(find media_pql -type f -name "$SCENE.mp4" | head -1)"
+          test -n "$F" && test -s "$F"
+
+      - name: PQM visual gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_freefall_cases_equation_v1_opus55_20261002/physics9_freefall_cases_equation_v1_opus55.py
+          SCENE=Physics9FreeFallCasesEquationOpus55
+          rm -rf media_pqm qa_pqm && mkdir -p qa_pqm
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e PYTHONPATH=/manim -e LESSON_TIME_SCALE=0.18 -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pqm $SRC $SCENE --fps 20 --format=mp4 --media_dir media_pqm --disable_caching" 2>&1 | tee qa_pqm/pqm.log
+          F="$(find media_pqm -type f -name "$SCENE.mp4" | head -1)"
+          test -n "$F" && test -s "$F"
+
+      - name: Literal PQH final
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_freefall_cases_equation_v1_opus55_20261002/physics9_freefall_cases_equation_v1_opus55.py
+          SCENE=Physics9FreeFallCasesEquationOpus55
+          OUT=deliveries/physics9/freefall_cases_equation_opus55_20261002
+          rm -rf media_final "$OUT" && mkdir -p "$OUT"
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e PYTHONPATH=/manim -e LESSON_TIME_SCALE=1.0 -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pqh $SRC $SCENE --fps 30 --format=mp4 --media_dir media_final --disable_caching" 2>&1 | tee "$OUT/pqh.log"
+          RAW="$(find media_final -type f -name "$SCENE.mp4" | head -1)"
+          test -n "$RAW" && test -s "$RAW"
+          ffmpeg -y -v error -i "$RAW" -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -r 30 -movflags +faststart -an "$OUT/Physics9_FreeFall_Cases_Equation_OPUS55_FINAL_pqh.mp4"
+          cp "$SRC" "$OUT/Physics9_FreeFall_Cases_Equation_OPUS55_source.py"
+          cp library/jp_classroom_style.py "$OUT/jp_classroom_style_used.py"
+          cp render_jobs/physics9_freefall_cases_equation_v1_opus55_20261002/README_RENDER.md "$OUT/README_RENDER.md"
+          cp qa_static/style_qa.log "$OUT/style_qa.log"
+          cp qa_pql/pql.log "$OUT/pql.log"
+          cp qa_pqm/pqm.log "$OUT/pqm.log"
+
+      - name: Decode and visual QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=deliveries/physics9/freefall_cases_equation_opus55_20261002
+          F="$OUT/Physics9_FreeFall_Cases_Equation_OPUS55_FINAL_pqh.mp4"
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+          NFRAMES="$(ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration_s\tframes\tsize_bytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$NFRAMES" "$SIZE" > "$OUT/VIDEO_TECHNICAL.tsv"
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          awk -v d="$DUR" 'BEGIN { exit !(d > 120) }'
+          test "$SIZE" -gt 1500000
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/full_decode.log"
+
+          cat > /tmp/border_scan.py <<'PY'
+          import sys
+          W,H,B,T = 320,180,2,170
+          S=W*H
+          total=bad=0
+          first=None
+          while True:
+              d=sys.stdin.buffer.read(S)
+              if not d: break
+              if len(d)!=S: sys.exit(3)
+              total+=1
+              hit=False
+              for y in list(range(B))+list(range(H-B,H)):
+                  if min(d[y*W:(y+1)*W]) < T:
+                      hit=True; break
+              if not hit:
+                  for y in range(B,H-B):
+                      row=d[y*W:(y+1)*W]
+                      if min(row[:B]) < T or min(row[W-B:]) < T:
+                          hit=True; break
+              if hit:
+                  bad+=1
+                  if first is None: first=total-1
+          print(f"frames_scanned={total}")
+          print(f"border_contact_frames={bad}")
+          print(f"first_bad_frame={first}")
+          sys.exit(0 if total and bad==0 else 2)
+          PY
+          set +e
+          ffmpeg -nostdin -v error -i "$F" -vf 'scale=320:180,format=gray' -f rawvideo - | python /tmp/border_scan.py > "$OUT/FULL_FRAME_BORDER_SCAN.txt"
+          STATUS=$?
+          set -e
+          cat "$OUT/FULL_FRAME_BORDER_SCAN.txt"
+          test "$STATUS" -eq 0
+
+          mkdir -p "$OUT/qa_frames"
+          i=0
+          for FRC in 0.01 0.03 0.05 0.07 0.09 0.11 0.13 0.15 0.17 0.19 0.21 0.23 0.25 0.27 0.29 0.31 0.33 0.35 0.37 0.39 0.41 0.43 0.45 0.47 0.49 0.51 0.53 0.55 0.57 0.59 0.61 0.63 0.65 0.67 0.69 0.71 0.73 0.75 0.77 0.79 0.81 0.83 0.85 0.87 0.89 0.91 0.94 0.975; do
+            T="$(awk -v d="$DUR" -v f="$FRC" 'BEGIN{printf "%.3f",d*f}')"
+            printf -v TAG "%02d" "$i"
+            ffmpeg -y -ss "$T" -i "$F" -frames:v 1 "$OUT/qa_frames/frame_$TAG.png" >/dev/null 2>&1
+            i=$((i+1))
+          done
+          test "$(find "$OUT/qa_frames" -type f -name 'frame_*.png' | wc -l)" -eq 48
+          ffmpeg -y -pattern_type glob -i "$OUT/qa_frames/frame_*.png" -vf 'scale=300:-1,tile=6x8:padding=5:margin=5:color=white' -frames:v 1 "$OUT/Physics9_FreeFall_Cases_Equation_OPUS55_QA_CONTACT_SHEET_48.png" >/dev/null 2>&1
+          sha256sum "$F" > "$OUT/SHA256SUMS.txt"
+          {
+            echo "# QA REPORT — Physics9 FreeFall OPUS55"
+            echo "- resolution: $W x $H"
+            echo "- fps: $FPS"
+            echo "- codec: $CODEC"
+            echo "- pixel format: $PIX"
+            echo "- duration: $DUR s"
+            echo "- decoded/read frames: $NFRAMES"
+            echo "- bytes: $SIZE"
+            echo "- py_compile: PASS"
+            echo "- JP style QA: PASS"
+            echo "- PQL: PASS"
+            echo "- PQM: PASS"
+            echo "- literal PQH: PASS"
+            echo "- full FFmpeg decode: PASS"
+            echo "- every-frame border scan: PASS"
+            echo "- visual samples: 48"
+          } > "$OUT/QA_REPORT.md"
+
+      - name: Persist exact source and delivery
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add render_jobs/physics9_freefall_cases_equation_v1_opus55_20261002 deliveries/physics9/freefall_cases_equation_opus55_20261002
+          if ! git diff --cached --quiet; then
+            git commit -m "render: publish Physics9 freefall OPUS55 PQH [skip ci]"
+            git pull --rebase origin physics9-freefall-cases-equation-v1-opus55-20261002
+            git push origin HEAD:physics9-freefall-cases-equation-v1-opus55-20261002
+          fi
+
+      - name: Upload delivery package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-FreeFall-Cases-Equation-OPUS55
+          path: deliveries/physics9/freefall_cases_equation_opus55_20261002
+          if-no-files-found: error
