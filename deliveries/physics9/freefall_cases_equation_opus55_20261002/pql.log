@@ -1,0 +1,1813 @@
+Manim Community v0.20.1
+
+[10/03/26 00:10:13] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 0: FadeIn(Text('FÍSICA 9° · CINEMÁTICA')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                              INFO     Animation 0 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00000.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 1: Write(Text('CASOS DE CAÍDA LIBRE Y ECUACIÓN MAESTRA')):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                                              INFO     Animation 1 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00001.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 2: Create(Line), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                          INFO     Animation 2 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00002.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 3 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00003.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 4: FadeIn(Text('Primero vemos qué hace el objeto. Después dejamos que la ecuación describa exactamente ese movimiento.')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                                                                                              INFO     Animation 4 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00004.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 5 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00005.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 6: FadeOut(VGroup of 5 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                    [10/03/26 00:10:14] INFO     Animation 6 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00006.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\vec                               
+                             N\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_pql/Tex/017f738c90e72                        
+                             10c.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}m\vec                              
+                             g\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_pql/Tex/208115234f580                        
+                             329.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 7: Create(Line), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                      [10/03/26 00:10:15] INFO     Animation 7 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00007.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 8: Create(Line), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                          INFO     Animation 8 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00008.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 9: _MethodAnimation(Square):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                INFO     Animation 9 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00009.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 10: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 10 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00010.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 11 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00011.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 12: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 12 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00012.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 13: Create(DashedLine), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                 INFO     Animation 13 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00013.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 14: _MethodAnimation(VGroup of 2 submobjects), etc.:   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                                        INFO     Animation 14 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00014.mp4'                              
+[10/03/26 00:10:16] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 15: _MethodAnimation(VGroup of 2 submobjects), etc.:   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                                        INFO     Animation 15 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00015.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 16: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 16 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00016.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 17 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00017.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 18: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 18 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00018.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\sum \vec                          
+                             F=m\vec                                            
+                             g\qquad\Longrightarrow\qqua                        
+                             d \vec a=\vec                                      
+                             g\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_pql/Tex/59de77999c4d6                        
+                             f90.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 19: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 19 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00019.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 20 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00020.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 21: FadeOut(Mobject), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                           [10/03/26 00:10:17] INFO     Animation 21 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00021.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 22: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 22 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00022.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 23: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 23 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00023.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}+y\special{                        
+                             dvisvgm:raw </g>} to                               
+                             media_pql/Tex/792b8357dd521                        
+                             e49.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\sum                               
+                             F_y=ma_y\special{dvisvgm:ra                        
+                             w </g>} to                                         
+                             media_pql/Tex/2f979d872dfdc                        
+                             5c0.tex                                            
+[10/03/26 00:10:18] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}-mg=ma_y\sp                        
+                             ecial{dvisvgm:raw </g>} to                         
+                             media_pql/Tex/59fd3d6be49cb                        
+                             9c1.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}a_y=-g\spec                        
+                             ial{dvisvgm:raw </g>} to                           
+                             media_pql/Tex/72048a16a83ac                        
+                             8dd.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}a_y=-g=-9.8                        
+                             1\;\mathrm{m/s^2}\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_pql/Tex/99ec592064389                        
+                             624.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 24: FadeIn(Arrow), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                            INFO     Animation 24 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00024.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 25: GrowArrow(Arrow), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                               INFO     Animation 25 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00025.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 26 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00026.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 27: Write(MathTex('\\sum F_y=ma_y')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                     [10/03/26 00:10:19] INFO     Animation 27 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00027.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 28 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00028.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 29: TransformFromCopy(MathTex('-mg=ma_y')):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                               INFO     Animation 29 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00029.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 30 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00030.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 31: TransformFromCopy(MathTex('a_y=-g')):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                             INFO     Animation 31 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00031.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 32 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00032.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 33: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                               INFO     Animation 33 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00033.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 34 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00034.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 35: FadeOut(Arrow), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                         [10/03/26 00:10:20] INFO     Animation 35 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00035.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 36: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 36 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00036.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 37: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 37 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00037.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\Delta                             
+                             t\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_pql/Tex/b5c1f781e649d                        
+                             210.tex                                            
+[10/03/26 00:10:21] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\Delta                             
+                             v\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_pql/Tex/4de9fddc4470f                        
+                             1a6.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 38: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 38 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00038.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 39: Create(Line):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                     INFO     Animation 39 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00039.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 40: Create(Line), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                           INFO     Animation 40 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00040.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 41: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 41 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00041.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 42 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00042.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 43: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 43 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00043.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}a_y=\frac{v                        
+                             _y-v_0}{t}\special{dvisvgm:                        
+                             raw </g>} to                                       
+                             media_pql/Tex/2f5d374a15e1f                        
+                             b5e.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 44: Write(MathTex('a_y=\\frac{v_y-v_0}{t}')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                 INFO     Animation 44 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00044.mp4'                              
+[10/03/26 00:10:22] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 45 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00045.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}-g=\frac{v_                        
+                             y-v_0}{t}\special{dvisvgm:r                        
+                             aw </g>} to                                        
+                             media_pql/Tex/c94d98677cfea                        
+                             f26.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 46: TransformMatchingTex(Group):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                    INFO     Animation 46 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00046.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 47 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00047.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}-gt=v_y-v_0                        
+                             \special{dvisvgm:raw </g>}                         
+                             to                                                 
+                             media_pql/Tex/4f4e49c1de8e6                        
+                             7a9.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 48: TransformMatchingTex(Group):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                    INFO     Animation 48 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00048.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 49 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00049.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\boxed{v_y=                        
+                             v_0-gt}\special{dvisvgm:raw                        
+                              </g>} to                                          
+                             media_pql/Tex/c9b80a441ae3c                        
+                             8c9.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 50: TransformMatchingTex(Group):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                    INFO     Animation 50 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00050.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 51 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00051.mp4'                              
+[10/03/26 00:10:23] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 52: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 52 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00052.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 53 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00053.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 54: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                               INFO     Animation 54 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00054.mp4'                              
+[10/03/26 00:10:24] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 55: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 55 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00055.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 56: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 56 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00056.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}A_{rect}=v_                        
+                             0t\special{dvisvgm:raw                             
+                             </g>} to                                           
+                             media_pql/Tex/c5e1fad26a42b                        
+                             0fb.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}A_{tri}=\fr                        
+                             ac12(-gt)t=-\frac12gt^2\spe                        
+                             cial{dvisvgm:raw </g>} to                          
+                             media_pql/Tex/073dc24d4be65                        
+                             5f3.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\Delta                             
+                             y=v_0t-\frac12gt^2\special{                        
+                             dvisvgm:raw </g>} to                               
+                             media_pql/Tex/206f51630b90e                        
+                             6ef.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\boxed{y=y_                        
+                             0+v_0t-\frac12gt^2}\special                        
+                             {dvisvgm:raw </g>} to                              
+                             media_pql/Tex/af84b8d3d5900                        
+                             379.tex                                            
+[10/03/26 00:10:25] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 57: FadeIn(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 57 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00057.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 58 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00058.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 59: FadeIn(Polygon):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                        INFO     Animation 59 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00059.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 60: TransformFromCopy(MathTex('A_{rect}=v_0t')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                    INFO     Animation 60 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00060.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 61 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00061.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 62: FadeIn(Polygon):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                        INFO     Animation 62 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00062.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 63: TransformFromCopy(MathTex('A_{tri}=\\frac12(-gt)t=-\\frac12gt^2')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                                           INFO     Animation 63 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00063.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 64 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00064.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 65: FadeIn(MathTex('\\Delta y=v_0t-\\frac12gt^2')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                       INFO     Animation 65 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00065.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 66 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00066.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 67: FadeIn(MathTex('\\boxed{y=y_0+v_0t-\\frac12gt^2}')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                            INFO     Animation 67 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00067.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 68 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00068.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 69: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                           [10/03/26 00:10:26] INFO     Animation 69 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00069.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 70: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 70 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00070.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 71: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 71 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00071.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_0=0\speci                        
+                             al{dvisvgm:raw </g>} to                            
+                             media_pql/Tex/080ba37e5e256                        
+                             143.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_y\special                        
+                             {dvisvgm:raw </g>} to                              
+                             media_pql/Tex/df0a3b52a49c0                        
+                             12c.tex                                            
+[10/03/26 00:10:27] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_0<0\speci                        
+                             al{dvisvgm:raw </g>} to                            
+                             media_pql/Tex/6bc68a2f9a132                        
+                             25b.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_0>0\speci                        
+                             al{dvisvgm:raw </g>} to                            
+                             media_pql/Tex/b5a9f2e2e45ac                        
+                             277.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}y=y_0+v_0t-                        
+                             \frac12gt^2\special{dvisvgm                        
+                             :raw </g>} to                                      
+                             media_pql/Tex/ffc73825e5417                        
+                             28f.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 72: FadeIn(VGroup of 3 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                              INFO     Animation 72 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00072.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 73: FadeIn(VGroup of 4 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                    [10/03/26 00:10:28] INFO     Animation 73 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00073.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 74 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00074.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 75: _MethodAnimation(ValueTracker):   0%|          | 0/4 [00:00<?, ?it/s]Animation 75: _MethodAnimation(ValueTracker):  75%|███████▌  | 3/4 [00:00<00:00, 29.60it/s]                                                                                                               INFO     Animation 75 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00075.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 76 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00076.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 77: FadeOut(VGroup of 4 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 77: FadeOut(VGroup of 4 submobjects): 100%|██████████| 2/2 [00:00<00:00, 17.44it/s]                                                                                                                 INFO     Animation 77 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00077.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 78: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                    [10/03/26 00:10:29] INFO     Animation 78 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00078.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 79 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00079.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 80: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 80 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00080.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 81: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 81: FadeOut(VGroup of 3 submobjects), etc.: 100%|██████████| 2/2 [00:00<00:00, 17.57it/s]                                                                                                                       INFO     Animation 81 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00081.mp4'                              
+[10/03/26 00:10:30] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 82: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 82 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00082.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 83: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 83 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00083.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 84: FadeIn(DashedLine), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 84: FadeIn(DashedLine), etc.:  50%|█████     | 1/2 [00:00<00:00,  5.87it/s]Animation 84: FadeIn(DashedLine), etc.: 100%|██████████| 2/2 [00:00<00:00,  5.86it/s]                                                                                     [10/03/26 00:10:31] INFO     Animation 84 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00084.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 85: _MethodAnimation(ValueTracker):   0%|          | 0/4 [00:00<?, ?it/s]Animation 85: _MethodAnimation(ValueTracker):  50%|█████     | 2/4 [00:00<00:00, 10.18it/s]Animation 85: _MethodAnimation(ValueTracker): 100%|██████████| 4/4 [00:00<00:00,  9.44it/s]                                                                                                               INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_y=0\speci                        
+                             al{dvisvgm:raw </g>} to                            
+                             media_pql/Tex/067108a882292                        
+                             14e.tex                                            
+                    INFO     Animation 85 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00085.mp4'                              
+[10/03/26 00:10:32] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_y=0\qquad                        
+                             a_y=-g\special{dvisvgm:raw                         
+                             </g>} to                                           
+                             media_pql/Tex/82542bd3297d5                        
+                             60b.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 86: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 86: FadeIn(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  8.72it/s]Animation 86: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  8.38it/s]                                                                                                                INFO     Animation 86 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00086.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 87 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00087.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 88: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 88: FadeOut(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  7.70it/s]Animation 88: FadeOut(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  7.63it/s]                                                                                             [10/03/26 00:10:33] INFO     Animation 88 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00088.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}0=v_0-gt_{m                        
+                             ax}\special{dvisvgm:raw                            
+                             </g>} to                                           
+                             media_pql/Tex/8b84205ad300a                        
+                             4bd.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}t_{max}=\fr                        
+                             ac{v_0}{g}=1.43\;s\special{                        
+                             dvisvgm:raw </g>} to                               
+                             media_pql/Tex/82b2224014a28                        
+                             50f.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\Delta                             
+                             y_{max}=\frac{v_0^2}{2g}=9.                        
+                             99\;m\special{dvisvgm:raw                          
+                             </g>} to                                           
+                             media_pql/Tex/dcda99c5a6b98                        
+                             755.tex                                            
+[10/03/26 00:10:34] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 89: Write(MathTex('0=v_0-gt_{max}')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 89: Write(MathTex('0=v_0-gt_{max}')):  50%|█████     | 1/2 [00:00<00:00,  9.29it/s]Animation 89: Write(MathTex('0=v_0-gt_{max}')): 100%|██████████| 2/2 [00:00<00:00,  9.15it/s]                                                                                                                 INFO     Animation 89 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00089.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 90 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00090.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 91: Write(MathTex('t_{max}=\\frac{v_0}{g}=1.43\\;s')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 91: Write(MathTex('t_{max}=\\frac{v_0}{g}=1.43\\;s')): 100%|██████████| 2/2 [00:00<00:00,  9.96it/s]                                                                                                                                  INFO     Animation 91 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00091.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 92 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00092.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 93: Write(MathTex('\\Delta y_{max}=\\frac{v_0^2}{2g}=9.99\\;m')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 93: Write(MathTex('\\Delta y_{max}=\\frac{v_0^2}{2g}=9.99\\;m')):  50%|█████     | 1/2 [00:00<00:00,  9.24it/s]Animation 93: Write(MathTex('\\Delta y_{max}=\\frac{v_0^2}{2g}=9.99\\;m')): 100%|██████████| 2/2 [00:00<00:00,  8.87it/s]                                                                                                                         [10/03/26 00:10:35] INFO     Animation 93 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00093.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 94 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00094.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 95: _MethodAnimation(ValueTracker):   0%|          | 0/4 [00:00<?, ?it/s]Animation 95: _MethodAnimation(ValueTracker):  25%|██▌       | 1/4 [00:00<00:00,  8.61it/s]Animation 95: _MethodAnimation(ValueTracker):  50%|█████     | 2/4 [00:00<00:00,  8.05it/s]Animation 95: _MethodAnimation(ValueTracker):  75%|███████▌  | 3/4 [00:00<00:00,  7.80it/s]Animation 95: _MethodAnimation(ValueTracker): 100%|██████████| 4/4 [00:00<00:00,  7.96it/s]                                                                                           [10/03/26 00:10:36] INFO     Animation 95 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00095.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 96: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 96: FadeIn(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  7.81it/s]Animation 96: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  7.72it/s]                                                                                                                INFO     Animation 96 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00096.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 97 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00097.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 98: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 98: FadeOut(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  7.67it/s]Animation 98: FadeOut(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  7.55it/s]                                                                                             [10/03/26 00:10:37] INFO     Animation 98 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00098.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 99 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00099.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 100: FadeOut(DashedLine), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 100: FadeOut(DashedLine), etc.:  50%|█████     | 1/2 [00:00<00:00,  3.52it/s]Animation 100: FadeOut(DashedLine), etc.: 100%|██████████| 2/2 [00:00<00:00,  3.35it/s]                                                                                       [10/03/26 00:10:38] INFO     Animation 100 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00100.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 101: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                       INFO     Animation 101 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00101.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 102: ReplacementTransform(VGroup of 75 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 102: ReplacementTransform(VGroup of 75 submobjects):  50%|█████     | 1/2 [00:00<00:00,  1.64it/s]Animation 102: ReplacementTransform(VGroup of 75 submobjects): 100%|██████████| 2/2 [00:01<00:00,  1.62it/s]                                                                                                            [10/03/26 00:10:49] INFO     Animation 102 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00102.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}0=20+v_0t-\                        
+                             frac12(9.81)t^2\qquad\quad                         
+                             v=v_0-9.81t\special{dvisvgm                        
+                             :raw </g>} to                                      
+                             media_pql/Tex/8384dad42c802                        
+                             c2b.tex                                            
+[10/03/26 00:10:50] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 103: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 103 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00103.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 104 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00104.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 105: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 105 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00105.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 106 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00106.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_0=-5\;\ma                        
+                             thrm{m/s}\special{dvisvgm:r                        
+                             aw </g>} to                                        
+                             media_pql/Tex/aa635300ca5f4                        
+                             e10.tex                                            
+[10/03/26 00:10:51] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 107: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                       INFO     Animation 107 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00107.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 108 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00108.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_0=+5\;\ma                        
+                             thrm{m/s}\special{dvisvgm:r                        
+                             aw </g>} to                                        
+                             media_pql/Tex/6945a8ea506a1                        
+                             efa.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 109: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                       INFO     Animation 109 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00109.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 110 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00110.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 111: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                      [10/03/26 00:10:52] INFO     Animation 111 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00111.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\boxed{v^2=                        
+                             v_0^2-2g(y-y_0)}\special{dv                        
+                             isvgm:raw </g>} to                                 
+                             media_pql/Tex/1014ce466fb22                        
+                             8ed.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 112: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 112 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00112.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:10:53] INFO     Animation 113 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00113.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 114: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                INFO     Animation 114 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00114.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 115: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                   [10/03/26 00:10:54] INFO     Animation 115 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00115.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 116: ReplacementTransform(Text('Aplicamos la ecuación maestra sin cambiar reglas: y₀ = 20 m, suelo en y = 0 y +y hacia arriba.')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 116: ReplacementTransform(Text('Aplicamos la ecuación maestra sin cambiar reglas: y₀ = 20 m, suelo en y = 0 y +y hacia arriba.')):  50%|█████     | 1/2 [00:00<00:00,  1.20it/s]Animation 116: ReplacementTransform(Text('Aplicamos la ecuación maestra sin cambiar reglas: y₀ = 20 m, suelo en y = 0 y +y hacia arriba.')): 100%|██████████| 2/2 [00:01<00:00,  1.20it/s]                                                                                                                                                                                          [10/03/26 00:11:09] INFO     Animation 116 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00116.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}a=g\special                        
+                             {dvisvgm:raw </g>} to                              
+                             media_pql/Tex/1ab7a29cb49f0                        
+                             35d.tex                                            
+[10/03/26 00:11:10] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 117: FadeIn(Line), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                            INFO     Animation 117 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00117.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 118: _MethodAnimation(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                   INFO     Animation 118 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00118.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 119 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00119.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 120: FadeOut(VGroup of 5 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                          INFO     Animation 120 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00120.mp4'                              
+[10/03/26 00:11:11] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}x-x_0=\frac                        
+                             12at^2\quad(v_0=0)\special{                        
+                             dvisvgm:raw </g>} to                               
+                             media_pql/Tex/0b3352f6b8c10                        
+                             459.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 121: FadeIn(Line), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                            INFO     Animation 121 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00121.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 122: _MethodAnimation(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                                   INFO     Animation 122 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00122.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 123 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00123.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 124: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                      [10/03/26 00:11:12] INFO     Animation 124 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00124.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 125: _MethodAnimation(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                   INFO     Animation 125 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00125.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 126: FadeIn(VGroup of 4 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 126 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00126.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 127: FadeIn(RoundedRectangle), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 127 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00127.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 128: _MethodAnimation(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                         INFO     Animation 128 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00128.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 129: FadeIn(Text('t = 1  →  x/x₁ = 1')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                            INFO     Animation 129 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00129.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 130 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00130.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 131: FadeOut(Text('1')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                            INFO     Animation 131 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00131.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 132: _MethodAnimation(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                         INFO     Animation 132 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00132.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 133: ReplacementTransform(Text('t = 1  →  x/x₁ = 1')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                          INFO     Animation 133 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00133.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 134 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00134.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 135: FadeOut(Text('2')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                        [10/03/26 00:11:13] INFO     Animation 135 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00135.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 136: _MethodAnimation(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                         INFO     Animation 136 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00136.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 137: ReplacementTransform(Text('t = 2  →  x/x₁ = 4')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                          INFO     Animation 137 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00137.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 138 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00138.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 139: FadeOut(Text('3')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                            INFO     Animation 139 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00139.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 140: _MethodAnimation(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                         INFO     Animation 140 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00140.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 141: ReplacementTransform(Text('t = 3  →  x/x₁ = 9')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                          INFO     Animation 141 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00141.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 142 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00142.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 143: FadeOut(Text('4')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                            INFO     Animation 143 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00143.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}1:4:9:16=1^                        
+                             2:2^2:3^2:4^2\special{dvisv                        
+                             gm:raw </g>} to                                    
+                             media_pql/Tex/ed66c6bfe6524                        
+                             fe2.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\Delta                             
+                             x\;\propto\;1:3:5:7\special                        
+                             {dvisvgm:raw </g>} to                              
+                             media_pql/Tex/270ea4b67e7fc                        
+                             517.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 144: FadeIn(MathTex('1:4:9:16=1^2:2^2:3^2:4^2')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                 [10/03/26 00:11:14] INFO     Animation 144 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00144.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 145 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00145.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 146: FadeIn(MathTex('\\Delta x\\;\\propto\\;1:3:5:7')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                           INFO     Animation 146 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00146.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 147 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00147.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 148: FadeOut(VGroup of 10 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                           INFO     Animation 148 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00148.mp4'                              
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}x-x_0=\left                        
+                             (\frac                                             
+                             a2\right)t^2\special{dvisvg                        
+                             m:raw </g>} to                                     
+                             media_pql/Tex/089db0d9ac595                        
+                             161.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 149: FadeIn(Axes of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                         [10/03/26 00:11:15] INFO     Animation 149 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00149.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 150: Create(Line):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                      INFO     Animation 150 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00150.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 151: LaggedStart(Group):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                            INFO     Animation 151 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00151.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 152 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00152.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 153: FadeOut(Mobject), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                INFO     Animation 153 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00153.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 154: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                   [10/03/26 00:11:16] INFO     Animation 154 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00154.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 155: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                       INFO     Animation 155 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00155.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 156: LaggedStart(Group):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                            INFO     Animation 156 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00156.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 157 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00157.mp4'                              
+[10/03/26 00:11:17] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_y=v_0-gt\                        
+                             special{dvisvgm:raw </g>}                          
+                             to                                                 
+                             media_pql/Tex/a449e6cba633d                        
+                             7c5.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 158: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 158 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00158.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 159: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 159 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00159.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 160: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 160 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00160.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 161 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00161.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 162: FadeIn(Text('Subir, bajar o soltar no cambia la gravedad: cambia v₀. La consistencia de signos convierte todos los casos en un único modelo.')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                                                                                                                         INFO     Animation 162 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00162.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 163 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00163.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 164: FadeOut(Group), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                          [10/03/26 00:11:18] INFO     Animation 164 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00164.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 165: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                INFO     Animation 165 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00165.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 166: FadeIn(Text('Misma gravedad, misma ecuación: fija el eje, identifica v₀, conserva los signos y deja que el modelo prediga el movimiento.')):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                                                                                                                 [10/03/26 00:11:19] INFO     Animation 166 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00166.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 167 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00167.mp4'                              
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 168: FadeOut(Text('Misma gravedad, misma ecuación: fija el eje, identifica v₀, conserva los signos y deja que el modelo prediga el movimiento.')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                                                                                                                      INFO     Animation 168 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/pa                         
+                             rtial_movie_files/Physics9                         
+                             FreeFallCasesEquationOpus5                         
+                             5/uncached_00168.mp4'                              
+                    INFO     Combining to Movie file.   scene_file_writer.py:753
+[10/03/26 00:11:20] INFO                                scene_file_writer.py:904
+                             File ready at                                      
+                             '/manim/media_pql/videos/p                         
+                             hysics9_freefall_cases_equ                         
+                             ation_v1_opus55/1080p30/Ph                         
+                             ysics9FreeFallCasesEquatio                         
+                             nOpus55.mp4'                                       
+                                                                                
+                    INFO     The partial movie          scene_file_writer.py:874
+                             directory is full (> 100                           
+                             files). Therefore, manim                           
+                             has removed the 70 oldest                          
+                             file(s). You can change                            
+                             this behaviour by changing                         
+                             max_files_cached in                                
+                             config.                                            
+                    INFO     Rendered                               scene.py:278
+                             Physics9FreeFallCasesEquationOpus55                
+                             Played 169 animations                              
+                    INFO     Previewed File at:                  file_ops.py:236
+                             '/manim/media_pql/videos/physics9_f                
+                             reefall_cases_equation_v1_opus55/10                
+                             80p30/Physics9FreeFallCasesEquation                
+                             Opus55.mp4'                                        
+You are using manim version v0.20.1, but version v0.21.0 is available.
+You should consider upgrading via pip install -U manim
