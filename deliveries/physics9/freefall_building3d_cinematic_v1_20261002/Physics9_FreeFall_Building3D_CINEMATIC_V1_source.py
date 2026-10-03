@@ -128,11 +128,13 @@ class Physics9FreeFallBuilding3DCinematic(ThreeDScene):
         rule.to_edge(UP, buff=1.07)
 
         phase_box = RoundedRectangle(
-            width=5.10, height=0.54, corner_radius=0.10,
+            width=6.20, height=0.54, corner_radius=0.10,
             stroke_color=BLACK_LINE, stroke_width=1.2,
-            fill_color=WHITE_FILL, fill_opacity=0.96,
+            fill_color=WHITE_FILL, fill_opacity=0.98,
         ).to_corner(UR, buff=0.39)
         phase = self.txt("01 · CONTEXTO 3D", 19, BOLD).move_to(phase_box)
+        if phase.width > phase_box.width - 0.34:
+            phase.scale_to_fit_width(phase_box.width - 0.34)
 
         header = VGroup(title, subtitle, rule, phase_box, phase)
         self.add_fixed_in_frame_mobjects(*header)
@@ -141,6 +143,8 @@ class Physics9FreeFallBuilding3DCinematic(ThreeDScene):
     def set_phase(self, header, number: int, label: str, color=BLACK_TEXT):
         old = header["phase"]
         new = self.txt(f"{number:02d} · {label}", 19, BOLD, color).move_to(header["phase_box"])
+        if new.width > header["phase_box"].width - 0.34:
+            new.scale_to_fit_width(header["phase_box"].width - 0.34)
         self.add_fixed_in_frame_mobjects(new)
         self.play(FadeOut(old), FadeIn(new), run_time=RUN_QUICK * 0.55)
         self.remove_fixed_in_frame_mobjects(old)
@@ -406,38 +410,57 @@ class Physics9FreeFallBuilding3DCinematic(ThreeDScene):
             stroke_color=ACCENT, stroke_width=3.0, dissipating_time=1.3,
         )
 
-        # Live fixed HUD.
-        panel = RoundedRectangle(
-            width=4.25, height=2.15, corner_radius=0.12,
-            stroke_color=BLACK_LINE, stroke_width=1.4,
-            fill_color=WHITE_FILL, fill_opacity=0.95,
-        ).move_to([4.85, 1.45, 0])
-        ttl = self.txt("ESTADO FÍSICO", 21, BOLD).move_to(panel.get_top() + DOWN * 0.30)
-        lab_t = self.txt("t", 21, BOLD).move_to([3.65, 1.55, 0])
-        lab_y = self.txt("y", 21, BOLD).move_to([3.65, 0.98, 0])
-        lab_v = self.txt("vᵧ", 21, BOLD).move_to([3.65, 0.41, 0])
-        val_t = DecimalNumber(0, num_decimal_places=2, font_size=28, color=BLACK_TEXT, unit=" s").move_to([5.05, 1.55, 0])
-        val_y = DecimalNumber(HEIGHT_M, num_decimal_places=2, font_size=28, color=BLACK_TEXT, unit=" m").move_to([5.05, 0.98, 0])
-        val_v = DecimalNumber(0, num_decimal_places=2, include_sign=True, font_size=28, color=BLACK_TEXT, unit=" m/s").move_to([5.05, 0.41, 0])
-        val_t.add_updater(lambda m: m.set_value(t.get_value()))
-        val_y.add_updater(lambda m: m.set_value(self.y_phys(t.get_value())))
-        val_v.add_updater(lambda m: m.set_value(self.v_phys(t.get_value())))
-        hud = VGroup(panel, ttl, lab_t, lab_y, lab_v, val_t, val_y, val_v)
-        self.add_fixed_in_frame_mobjects(hud)
+        # Fixed checkpoint HUDs.  In a ThreeDScene, continuously replacing
+        # DecimalNumber glyphs can make new glyphs inherit the 3D transform.
+        # We therefore keep the physical motion continuous and update the
+        # numerical evidence at explicit pedagogical checkpoints.
+        def state_hud(tt: float, tag: str):
+            yy = self.y_phys(tt)
+            vv = self.v_phys(tt)
+            panel = RoundedRectangle(
+                width=4.55, height=2.42, corner_radius=0.12,
+                stroke_color=BLACK_LINE, stroke_width=1.4,
+                fill_color=WHITE_FILL, fill_opacity=0.98,
+            ).move_to([4.70, 1.15, 0])
+            title = self.txt(tag, 20, BOLD, RED)
+            values = VGroup(
+                self.txt(f"t = {tt:0.2f} s", 24, BOLD),
+                self.txt(f"y = {yy:0.2f} m", 24),
+                self.txt(f"vᵧ = {vv:+0.2f} m/s", 24),
+                self.txt("aᵧ = −9.81 m/s²", 24),
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+            content = VGroup(title, values).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+            content.move_to(panel).align_to(panel, LEFT).shift(RIGHT * 0.28)
+            return VGroup(panel, content)
+
+        hud0 = state_hud(0.0, "INICIO · SE SUELTA")
+        self.add_fixed_in_frame_mobjects(hud0)
 
         self.add(trail, moving_ball, velocity_line)
-        self.play(FadeIn(hud), run_time=RUN_NORMAL)
-        self.play(t.animate.set_value(T_HIT), run_time=4.8, rate_func=linear)
-        self.wait(PAUSE_SHORT)
+        self.play(FadeIn(hud0), run_time=RUN_NORMAL)
+        self.play(t.animate.set_value(1.0), run_time=2.25, rate_func=linear)
 
-        val_t.clear_updaters(); val_y.clear_updaters(); val_v.clear_updaters()
+        hud1 = state_hud(1.0, "1.00 s · YA ACELERÓ")
+        self.add_fixed_in_frame_mobjects(hud1)
+        self.play(FadeOut(hud0), FadeIn(hud1), run_time=RUN_QUICK)
+        self.remove_fixed_in_frame_mobjects(hud0)
+        self.remove(hud0)
+        self.wait(PAUSE_READ)
+
+        self.play(t.animate.set_value(T_HIT), run_time=2.35, rate_func=linear)
+        hud2 = state_hud(T_HIT, "IMPACTO · ESTADO FINAL")
+        self.add_fixed_in_frame_mobjects(hud2)
+        self.play(FadeOut(hud1), FadeIn(hud2), run_time=RUN_QUICK)
+        self.remove_fixed_in_frame_mobjects(hud1)
+        self.remove(hud1)
+
         impact = self.fixed_note(
-            "IMPACTO",
-            f"Desde 20 m:  t = {T_HIT:.2f} s   ·   v = {V_HIT:.2f} m/s.  La rapidez aumentó durante toda la caída.",
-            color=RED, width=10.6,
+            "LECTURA FÍSICA",
+            f"En {T_HIT:.2f} s recorre 20 m y llega con vᵧ = {V_HIT:.2f} m/s. La aceleración nunca dejó de ser −g.",
+            color=RED, width=10.8,
         )
         self.wait(PAUSE_EXPLAIN)
-        self.remove_fixed(impact, hud, run_time=RUN_QUICK)
+        self.remove_fixed(impact, hud2, run_time=RUN_QUICK)
         self.play(FadeOut(moving_ball), FadeOut(velocity_line), run_time=RUN_QUICK)
         self.remove(trail)
 
@@ -448,7 +471,7 @@ class Physics9FreeFallBuilding3DCinematic(ThreeDScene):
         self.set_phase(header, 4, "FOTOGRAFÍAS A TIEMPOS IGUALES", ACCENT)
 
         # Croquis protocol: deliberate 3D -> stable facade transition.
-        self.move_camera(phi=90 * DEGREES, theta=-90 * DEGREES, zoom=0.92, run_time=RUN_CAMERA * 1.35)
+        self.move_camera(phi=90 * DEGREES, theta=-90 * DEGREES, zoom=0.80, run_time=RUN_CAMERA * 1.35)
         self.wait(0.70)
 
         ghosts = VGroup()
@@ -495,10 +518,13 @@ class Physics9FreeFallBuilding3DCinematic(ThreeDScene):
     def scene_05_extract_model(self, header):
         self.set_phase(header, 5, "DEL FENÓMENO AL MODELO", BLACK_TEXT)
 
-        # Fade the 3D context and replace it with a technical facade diagram.
-        self.play(self.city_group.animate.set_opacity(0.16),
-                  self.building_group.animate.set_opacity(0.20),
-                  run_time=RUN_NORMAL)
+        # Croquis protocol: once the physical evidence is established, remove
+        # the perspective scene completely and extract a clean technical view.
+        self.play(
+            FadeOut(self.city_group),
+            FadeOut(self.building_group),
+            run_time=RUN_NORMAL,
+        )
 
         facade = Rectangle(
             width=3.0, height=5.0,
@@ -575,8 +601,6 @@ class Physics9FreeFallBuilding3DCinematic(ThreeDScene):
         self.wait(PAUSE_READ)
         self.remove_fixed(check, release, diagram, run_time=RUN_QUICK)
 
-        self.play(FadeOut(self.building_group), FadeOut(self.city_group), run_time=RUN_NORMAL)
-
     # -------------------------------------------------------------------------
     # 06 — Re-run the fall as a synchronized elevation + v(t) graph.
     # -------------------------------------------------------------------------
@@ -650,6 +674,11 @@ class Physics9FreeFallBuilding3DCinematic(ThreeDScene):
         self.play(t.animate.set_value(T_HIT), run_time=4.8, rate_func=linear)
         self.wait(PAUSE_READ)
         time_display.clear_updaters()
+        self.play(
+            FadeOut(time_display), FadeOut(time_label),
+            FadeOut(moving), FadeOut(vel_arrow),
+            run_time=RUN_QUICK,
+        )
 
         slope = self.fixed_note(
             "LECTURA DEL GRÁFICO",
@@ -679,12 +708,16 @@ class Physics9FreeFallBuilding3DCinematic(ThreeDScene):
         ramp.shift(UP * 0.0 + OUT * 0.78)
         self.play(FadeIn(ramp), run_time=RUN_NORMAL)
 
-        # Approximate endpoints along the board's centre line.
-        x0, x1 = -3.05, 3.05
-        z0 = 0.78 + 3.05 * math.sin(RAMP_THETA)
-        z1 = 0.78 - 3.05 * math.sin(RAMP_THETA)
-        start = np.array([x0, -0.10, z0 + 0.18])
-        end = np.array([x1, -0.10, z1 + 0.18])
+        # Exact centre-line endpoints after rotating the board by -theta
+        # around the y axis.  The ball starts at the high end and every
+        # stroboscopic marker therefore lies on the physical ramp surface.
+        half_run = 3.05
+        x_high = half_run * math.cos(RAMP_THETA)
+        z_high = 0.78 + half_run * math.sin(RAMP_THETA)
+        x_low = -half_run * math.cos(RAMP_THETA)
+        z_low = 0.78 - half_run * math.sin(RAMP_THETA)
+        start = np.array([x_high, -0.10, z_high + 0.16])
+        end = np.array([x_low, -0.10, z_low + 0.16])
 
         ball = Sphere(radius=0.18, resolution=(10, 20), fill_color=GREEN,
                       fill_opacity=1.0, stroke_color=BLACK_LINE, stroke_width=0.7).move_to(start)

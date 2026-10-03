@@ -3,9 +3,9 @@
 - fps: 30/1
 - codec: h264
 - pixel format: yuv420p
-- duration: 143.433333 s
-- decoded/read frames: 4303
-- bytes: 7290213
+- duration: 145.300000 s
+- decoded/read frames: 4359
+- bytes: 7214020
 - py_compile: PASS
 - PQL: PASS
 - PQM: PASS
