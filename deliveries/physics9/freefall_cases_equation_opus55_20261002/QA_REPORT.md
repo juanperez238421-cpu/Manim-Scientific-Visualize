@@ -5,7 +5,7 @@
 - pixel format: yuv420p
 - duration: 268.900000 s
 - decoded/read frames: 8067
-- bytes: 10132358
+- bytes: 10122622
 - py_compile: PASS
 - JP style QA: PASS
 - PQL: PASS

@@ -1,7 +1,7 @@
 Manim Community v0.20.1
 
-[10/02/26 13:34:44] INFO     Caching disabled.              cairo_renderer.py:83
-Animation 0: FadeIn(Text('FÍSICA 9° · CINEMÁTICA')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                          [10/02/26 13:34:45] INFO     Animation 0 : Partial      scene_file_writer.py:601
+[10/03/26 00:10:13] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 0: FadeIn(Text('FÍSICA 9° · CINEMÁTICA')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                              INFO     Animation 0 : Partial      scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -46,7 +46,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00004.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-[10/02/26 13:34:46] INFO     Animation 5 : Partial      scene_file_writer.py:601
+                    INFO     Animation 5 : Partial      scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -55,7 +55,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00005.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 6: FadeOut(VGroup of 5 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 6: FadeOut(VGroup of 5 submobjects): 100%|██████████| 2/2 [00:00<00:00, 16.29it/s]                                                                                                                INFO     Animation 6 : Partial      scene_file_writer.py:601
+Animation 6: FadeOut(VGroup of 5 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                    [10/03/26 00:10:14] INFO     Animation 6 : Partial      scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -63,7 +63,7 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00006.mp4'                              
-[10/02/26 13:34:47] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}\vec                               
                              N\special{dvisvgm:raw </g>}                        
@@ -78,7 +78,7 @@ Manim Community v0.20.1
                              media_pql/Tex/208115234f580                        
                              329.tex                                            
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 7: Create(Line), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                      [10/02/26 13:34:48] INFO     Animation 7 : Partial      scene_file_writer.py:601
+Animation 7: Create(Line), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                      [10/03/26 00:10:15] INFO     Animation 7 : Partial      scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -123,7 +123,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00011.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 12: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                     [10/02/26 13:34:49] INFO     Animation 12 : Partial     scene_file_writer.py:601
+Animation 12: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 12 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -149,7 +149,7 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00014.mp4'                              
-                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:10:16] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 15: _MethodAnimation(VGroup of 2 submobjects), etc.:   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                                        INFO     Animation 15 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -159,7 +159,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00015.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 16: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                    [10/02/26 13:34:50] INFO     Animation 16 : Partial     scene_file_writer.py:601
+Animation 16: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 16 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -205,7 +205,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00019.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-[10/02/26 13:34:51] INFO     Animation 20 : Partial     scene_file_writer.py:601
+                    INFO     Animation 20 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -214,7 +214,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00020.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 21: FadeOut(Mobject), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 21: FadeOut(Mobject), etc.: 100%|██████████| 2/2 [00:00<00:00, 15.47it/s]                                                                                                       INFO     Animation 21 : Partial     scene_file_writer.py:601
+Animation 21: FadeOut(Mobject), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                           [10/03/26 00:10:17] INFO     Animation 21 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -223,7 +223,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00021.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 22: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                  [10/02/26 13:34:52] INFO     Animation 22 : Partial     scene_file_writer.py:601
+Animation 22: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 22 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -253,7 +253,7 @@ Manim Community v0.20.1
                              w </g>} to                                         
                              media_pql/Tex/2f979d872dfdc                        
                              5c0.tex                                            
-[10/02/26 13:34:53] INFO     Writing                     tex_file_writing.py:110
+[10/03/26 00:10:18] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}-mg=ma_y\sp                        
                              ecial{dvisvgm:raw </g>} to                         
@@ -272,7 +272,7 @@ Manim Community v0.20.1
                              visvgm:raw </g>} to                                
                              media_pql/Tex/99ec592064389                        
                              624.tex                                            
-[10/02/26 13:34:54] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Caching disabled.              cairo_renderer.py:83
 Animation 24: FadeIn(Arrow), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                            INFO     Animation 24 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -300,7 +300,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00026.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 27: Write(MathTex('\\sum F_y=ma_y')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 27 : Partial     scene_file_writer.py:601
+Animation 27: Write(MathTex('\\sum F_y=ma_y')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                     [10/03/26 00:10:19] INFO     Animation 27 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -345,7 +345,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00031.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-[10/02/26 13:34:55] INFO     Animation 32 : Partial     scene_file_writer.py:601
+                    INFO     Animation 32 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -372,7 +372,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00034.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 35: FadeOut(Arrow), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                         [10/02/26 13:34:56] INFO     Animation 35 : Partial     scene_file_writer.py:601
+Animation 35: FadeOut(Arrow), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                         [10/03/26 00:10:20] INFO     Animation 35 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -390,7 +390,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00036.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 37: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                  [10/02/26 13:34:57] INFO     Animation 37 : Partial     scene_file_writer.py:601
+Animation 37: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 37 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -405,7 +405,7 @@ Manim Community v0.20.1
                              to                                                 
                              media_pql/Tex/b5c1f781e649d                        
                              210.tex                                            
-                    INFO     Writing                     tex_file_writing.py:110
+[10/03/26 00:10:21] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}\Delta                             
                              v\special{dvisvgm:raw </g>}                        
@@ -422,7 +422,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00038.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 39: Create(Line):   0%|          | 0/3 [00:00<?, ?it/s]                                                                 [10/02/26 13:34:58] INFO     Animation 39 : Partial     scene_file_writer.py:601
+Animation 39: Create(Line):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                     INFO     Animation 39 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -474,7 +474,7 @@ Manim Community v0.20.1
                              media_pql/Tex/2f5d374a15e1f                        
                              b5e.tex                                            
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 44: Write(MathTex('a_y=\\frac{v_y-v_0}{t}')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                             [10/02/26 13:34:59] INFO     Animation 44 : Partial     scene_file_writer.py:601
+Animation 44: Write(MathTex('a_y=\\frac{v_y-v_0}{t}')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                 INFO     Animation 44 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -482,7 +482,7 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00044.mp4'                              
-                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:10:22] INFO     Caching disabled.              cairo_renderer.py:83
                     INFO     Animation 45 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -533,7 +533,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00048.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-[10/02/26 13:35:00] INFO     Animation 49 : Partial     scene_file_writer.py:601
+                    INFO     Animation 49 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -566,8 +566,8 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00051.mp4'                              
-                    INFO     Caching disabled.              cairo_renderer.py:83
-Animation 52: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                    [10/02/26 13:35:01] INFO     Animation 52 : Partial     scene_file_writer.py:601
+[10/03/26 00:10:23] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 52: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 52 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -593,7 +593,7 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00054.mp4'                              
-[10/02/26 13:35:02] INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:10:24] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 55: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 55 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -611,7 +611,7 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00056.mp4'                              
-[10/02/26 13:35:03] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}A_{rect}=v_                        
                              0t\special{dvisvgm:raw                             
@@ -639,7 +639,7 @@ Manim Community v0.20.1
                              {dvisvgm:raw </g>} to                              
                              media_pql/Tex/af84b8d3d5900                        
                              379.tex                                            
-[10/02/26 13:35:04] INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:10:25] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 57: FadeIn(VGroup of 3 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 57 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -712,7 +712,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00064.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 65: FadeIn(MathTex('\\Delta y=v_0t-\\frac12gt^2')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                   [10/02/26 13:35:05] INFO     Animation 65 : Partial     scene_file_writer.py:601
+Animation 65: FadeIn(MathTex('\\Delta y=v_0t-\\frac12gt^2')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                       INFO     Animation 65 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -748,7 +748,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00068.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 69: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                               INFO     Animation 69 : Partial     scene_file_writer.py:601
+Animation 69: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                           [10/03/26 00:10:26] INFO     Animation 69 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -756,7 +756,7 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00069.mp4'                              
-[10/02/26 13:35:06] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Caching disabled.              cairo_renderer.py:83
 Animation 70: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 70 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -780,13 +780,13 @@ Manim Community v0.20.1
                              al{dvisvgm:raw </g>} to                            
                              media_pql/Tex/080ba37e5e256                        
                              143.tex                                            
-[10/02/26 13:35:07] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}v_y\special                        
                              {dvisvgm:raw </g>} to                              
                              media_pql/Tex/df0a3b52a49c0                        
                              12c.tex                                            
-                    INFO     Writing                     tex_file_writing.py:110
+[10/03/26 00:10:27] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}v_0<0\speci                        
                              al{dvisvgm:raw </g>} to                            
@@ -805,8 +805,8 @@ Manim Community v0.20.1
                              :raw </g>} to                                      
                              media_pql/Tex/ffc73825e5417                        
                              28f.tex                                            
-[10/02/26 13:35:08] INFO     Caching disabled.              cairo_renderer.py:83
-Animation 72: FadeIn(VGroup of 3 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 72: FadeIn(VGroup of 3 submobjects), etc.: 100%|██████████| 2/2 [00:00<00:00, 15.01it/s]                                                                                                                      INFO     Animation 72 : Partial     scene_file_writer.py:601
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 72: FadeIn(VGroup of 3 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                              INFO     Animation 72 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -815,7 +815,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00072.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 73: FadeIn(VGroup of 4 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 73: FadeIn(VGroup of 4 submobjects): 100%|██████████| 2/2 [00:00<00:00, 14.40it/s]                                                                                                                INFO     Animation 73 : Partial     scene_file_writer.py:601
+Animation 73: FadeIn(VGroup of 4 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                    [10/03/26 00:10:28] INFO     Animation 73 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -833,7 +833,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00074.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 75: _MethodAnimation(ValueTracker):   0%|          | 0/4 [00:00<?, ?it/s]Animation 75: _MethodAnimation(ValueTracker):  50%|█████     | 2/4 [00:00<00:00, 16.37it/s]Animation 75: _MethodAnimation(ValueTracker): 100%|██████████| 4/4 [00:00<00:00, 15.72it/s]                                                                                           [10/02/26 13:35:09] INFO     Animation 75 : Partial     scene_file_writer.py:601
+Animation 75: _MethodAnimation(ValueTracker):   0%|          | 0/4 [00:00<?, ?it/s]Animation 75: _MethodAnimation(ValueTracker):  75%|███████▌  | 3/4 [00:00<00:00, 29.60it/s]                                                                                                               INFO     Animation 75 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -851,7 +851,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00076.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 77: FadeOut(VGroup of 4 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 77: FadeOut(VGroup of 4 submobjects):  50%|█████     | 1/2 [00:00<00:00,  9.51it/s]Animation 77: FadeOut(VGroup of 4 submobjects): 100%|██████████| 2/2 [00:00<00:00,  9.06it/s]                                                                                             [10/02/26 13:35:10] INFO     Animation 77 : Partial     scene_file_writer.py:601
+Animation 77: FadeOut(VGroup of 4 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 77: FadeOut(VGroup of 4 submobjects): 100%|██████████| 2/2 [00:00<00:00, 17.44it/s]                                                                                                                 INFO     Animation 77 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -860,7 +860,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00077.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 78: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 78: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00, 16.57it/s]                                                                                                                INFO     Animation 78 : Partial     scene_file_writer.py:601
+Animation 78: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                    [10/03/26 00:10:29] INFO     Animation 78 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -878,7 +878,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00079.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 80: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 80: FadeOut(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00, 17.26it/s]                                                                                             [10/02/26 13:35:11] INFO     Animation 80 : Partial     scene_file_writer.py:601
+Animation 80: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 80 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -887,7 +887,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00080.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 81: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 81: FadeOut(VGroup of 3 submobjects), etc.:  50%|█████     | 1/2 [00:00<00:00,  9.78it/s]Animation 81: FadeOut(VGroup of 3 submobjects), etc.: 100%|██████████| 2/2 [00:00<00:00,  9.42it/s]                                                                                                                       INFO     Animation 81 : Partial     scene_file_writer.py:601
+Animation 81: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 81: FadeOut(VGroup of 3 submobjects), etc.: 100%|██████████| 2/2 [00:00<00:00, 17.57it/s]                                                                                                                       INFO     Animation 81 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -895,7 +895,7 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00081.mp4'                              
-[10/02/26 13:35:12] INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:10:30] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 82: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                      INFO     Animation 82 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -913,8 +913,8 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00083.mp4'                              
-[10/02/26 13:35:13] INFO     Caching disabled.              cairo_renderer.py:83
-Animation 84: FadeIn(DashedLine), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 84: FadeIn(DashedLine), etc.:  50%|█████     | 1/2 [00:00<00:00,  3.15it/s]Animation 84: FadeIn(DashedLine), etc.: 100%|██████████| 2/2 [00:00<00:00,  3.08it/s]                                                                                     [10/02/26 13:35:14] INFO     Animation 84 : Partial     scene_file_writer.py:601
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 84: FadeIn(DashedLine), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 84: FadeIn(DashedLine), etc.:  50%|█████     | 1/2 [00:00<00:00,  5.87it/s]Animation 84: FadeIn(DashedLine), etc.: 100%|██████████| 2/2 [00:00<00:00,  5.86it/s]                                                                                     [10/03/26 00:10:31] INFO     Animation 84 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -923,13 +923,13 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00084.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 85: _MethodAnimation(ValueTracker):   0%|          | 0/4 [00:00<?, ?it/s]Animation 85: _MethodAnimation(ValueTracker):  25%|██▌       | 1/4 [00:00<00:00,  6.03it/s]Animation 85: _MethodAnimation(ValueTracker):  50%|█████     | 2/4 [00:00<00:00,  5.45it/s]Animation 85: _MethodAnimation(ValueTracker):  75%|███████▌  | 3/4 [00:00<00:00,  5.30it/s]Animation 85: _MethodAnimation(ValueTracker): 100%|██████████| 4/4 [00:00<00:00,  5.24it/s]                                                                                                               INFO     Writing                     tex_file_writing.py:110
+Animation 85: _MethodAnimation(ValueTracker):   0%|          | 0/4 [00:00<?, ?it/s]Animation 85: _MethodAnimation(ValueTracker):  50%|█████     | 2/4 [00:00<00:00, 10.18it/s]Animation 85: _MethodAnimation(ValueTracker): 100%|██████████| 4/4 [00:00<00:00,  9.44it/s]                                                                                                               INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}v_y=0\speci                        
                              al{dvisvgm:raw </g>} to                            
                              media_pql/Tex/067108a882292                        
                              14e.tex                                            
-[10/02/26 13:35:15] INFO     Animation 85 : Partial     scene_file_writer.py:601
+                    INFO     Animation 85 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -937,7 +937,7 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00085.mp4'                              
-                    INFO     Writing                     tex_file_writing.py:110
+[10/03/26 00:10:32] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}v_y=0\qquad                        
                              a_y=-g\special{dvisvgm:raw                         
@@ -945,7 +945,7 @@ Manim Community v0.20.1
                              media_pql/Tex/82542bd3297d5                        
                              60b.tex                                            
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 86: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 86: FadeIn(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  4.25it/s]Animation 86: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  4.13it/s]                                                                                            [10/02/26 13:35:16] INFO     Animation 86 : Partial     scene_file_writer.py:601
+Animation 86: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 86: FadeIn(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  8.72it/s]Animation 86: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  8.38it/s]                                                                                                                INFO     Animation 86 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -954,7 +954,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00086.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-[10/02/26 13:35:17] INFO     Animation 87 : Partial     scene_file_writer.py:601
+                    INFO     Animation 87 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -963,7 +963,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00087.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 88: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 88: FadeOut(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  4.16it/s]Animation 88: FadeOut(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  4.12it/s]                                                                                             [10/02/26 13:35:18] INFO     Animation 88 : Partial     scene_file_writer.py:601
+Animation 88: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 88: FadeOut(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  7.70it/s]Animation 88: FadeOut(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  7.63it/s]                                                                                             [10/03/26 00:10:33] INFO     Animation 88 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -993,8 +993,8 @@ Manim Community v0.20.1
                              </g>} to                                           
                              media_pql/Tex/dcda99c5a6b98                        
                              755.tex                                            
-[10/02/26 13:35:19] INFO     Caching disabled.              cairo_renderer.py:83
-Animation 89: Write(MathTex('0=v_0-gt_{max}')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 89: Write(MathTex('0=v_0-gt_{max}')):  50%|█████     | 1/2 [00:00<00:00,  4.89it/s]Animation 89: Write(MathTex('0=v_0-gt_{max}')): 100%|██████████| 2/2 [00:00<00:00,  4.82it/s]                                                                                                                 INFO     Animation 89 : Partial     scene_file_writer.py:601
+[10/03/26 00:10:34] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 89: Write(MathTex('0=v_0-gt_{max}')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 89: Write(MathTex('0=v_0-gt_{max}')):  50%|█████     | 1/2 [00:00<00:00,  9.29it/s]Animation 89: Write(MathTex('0=v_0-gt_{max}')): 100%|██████████| 2/2 [00:00<00:00,  9.15it/s]                                                                                                                 INFO     Animation 89 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1012,7 +1012,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00090.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 91: Write(MathTex('t_{max}=\\frac{v_0}{g}=1.43\\;s')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 91: Write(MathTex('t_{max}=\\frac{v_0}{g}=1.43\\;s')):  50%|█████     | 1/2 [00:00<00:00,  4.86it/s]Animation 91: Write(MathTex('t_{max}=\\frac{v_0}{g}=1.43\\;s')): 100%|██████████| 2/2 [00:00<00:00,  4.74it/s]                                                                                                              [10/02/26 13:35:20] INFO     Animation 91 : Partial     scene_file_writer.py:601
+Animation 91: Write(MathTex('t_{max}=\\frac{v_0}{g}=1.43\\;s')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 91: Write(MathTex('t_{max}=\\frac{v_0}{g}=1.43\\;s')): 100%|██████████| 2/2 [00:00<00:00,  9.96it/s]                                                                                                                                  INFO     Animation 91 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1030,7 +1030,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00092.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 93: Write(MathTex('\\Delta y_{max}=\\frac{v_0^2}{2g}=9.99\\;m')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 93: Write(MathTex('\\Delta y_{max}=\\frac{v_0^2}{2g}=9.99\\;m')):  50%|█████     | 1/2 [00:00<00:00,  4.75it/s]Animation 93: Write(MathTex('\\Delta y_{max}=\\frac{v_0^2}{2g}=9.99\\;m')): 100%|██████████| 2/2 [00:00<00:00,  4.67it/s]                                                                                                                         [10/02/26 13:35:21] INFO     Animation 93 : Partial     scene_file_writer.py:601
+Animation 93: Write(MathTex('\\Delta y_{max}=\\frac{v_0^2}{2g}=9.99\\;m')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 93: Write(MathTex('\\Delta y_{max}=\\frac{v_0^2}{2g}=9.99\\;m')):  50%|█████     | 1/2 [00:00<00:00,  9.24it/s]Animation 93: Write(MathTex('\\Delta y_{max}=\\frac{v_0^2}{2g}=9.99\\;m')): 100%|██████████| 2/2 [00:00<00:00,  8.87it/s]                                                                                                                         [10/03/26 00:10:35] INFO     Animation 93 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1048,7 +1048,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00094.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 95: _MethodAnimation(ValueTracker):   0%|          | 0/4 [00:00<?, ?it/s]Animation 95: _MethodAnimation(ValueTracker):  25%|██▌       | 1/4 [00:00<00:00,  4.72it/s]Animation 95: _MethodAnimation(ValueTracker):  50%|█████     | 2/4 [00:00<00:00,  4.56it/s]Animation 95: _MethodAnimation(ValueTracker):  75%|███████▌  | 3/4 [00:00<00:00,  4.52it/s]Animation 95: _MethodAnimation(ValueTracker): 100%|██████████| 4/4 [00:00<00:00,  4.53it/s]                                                                                           [10/02/26 13:35:22] INFO     Animation 95 : Partial     scene_file_writer.py:601
+Animation 95: _MethodAnimation(ValueTracker):   0%|          | 0/4 [00:00<?, ?it/s]Animation 95: _MethodAnimation(ValueTracker):  25%|██▌       | 1/4 [00:00<00:00,  8.61it/s]Animation 95: _MethodAnimation(ValueTracker):  50%|█████     | 2/4 [00:00<00:00,  8.05it/s]Animation 95: _MethodAnimation(ValueTracker):  75%|███████▌  | 3/4 [00:00<00:00,  7.80it/s]Animation 95: _MethodAnimation(ValueTracker): 100%|██████████| 4/4 [00:00<00:00,  7.96it/s]                                                                                           [10/03/26 00:10:36] INFO     Animation 95 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1057,7 +1057,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00095.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 96: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 96: FadeIn(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  4.30it/s]Animation 96: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  4.22it/s]                                                                                            [10/02/26 13:35:23] INFO     Animation 96 : Partial     scene_file_writer.py:601
+Animation 96: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 96: FadeIn(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  7.81it/s]Animation 96: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  7.72it/s]                                                                                                                INFO     Animation 96 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1066,7 +1066,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00096.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-[10/02/26 13:35:24] INFO     Animation 97 : Partial     scene_file_writer.py:601
+                    INFO     Animation 97 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1075,7 +1075,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00097.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 98: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 98: FadeOut(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  4.13it/s]Animation 98: FadeOut(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  4.11it/s]                                                                                             [10/02/26 13:35:25] INFO     Animation 98 : Partial     scene_file_writer.py:601
+Animation 98: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 98: FadeOut(VGroup of 2 submobjects):  50%|█████     | 1/2 [00:00<00:00,  7.67it/s]Animation 98: FadeOut(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00,  7.55it/s]                                                                                             [10/03/26 00:10:37] INFO     Animation 98 : Partial     scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1093,7 +1093,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00099.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 100: FadeOut(DashedLine), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 100: FadeOut(DashedLine), etc.:  50%|█████     | 1/2 [00:00<00:00,  1.72it/s]Animation 100: FadeOut(DashedLine), etc.: 100%|██████████| 2/2 [00:01<00:00,  1.72it/s]                                                                                       [10/02/26 13:35:26] INFO     Animation 100 : Partial    scene_file_writer.py:601
+Animation 100: FadeOut(DashedLine), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 100: FadeOut(DashedLine), etc.:  50%|█████     | 1/2 [00:00<00:00,  3.52it/s]Animation 100: FadeOut(DashedLine), etc.: 100%|██████████| 2/2 [00:00<00:00,  3.35it/s]                                                                                       [10/03/26 00:10:38] INFO     Animation 100 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1101,7 +1101,7 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00100.mp4'                              
-[10/02/26 13:35:27] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Caching disabled.              cairo_renderer.py:83
 Animation 101: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                       INFO     Animation 101 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -1111,7 +1111,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00101.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 102: ReplacementTransform(VGroup of 75 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 102: ReplacementTransform(VGroup of 75 submobjects):  50%|█████     | 1/2 [00:01<00:01,  1.06s/it]Animation 102: ReplacementTransform(VGroup of 75 submobjects): 100%|██████████| 2/2 [00:02<00:00,  1.07s/it]                                                                                                            [10/02/26 13:35:46] INFO     Animation 102 : Partial    scene_file_writer.py:601
+Animation 102: ReplacementTransform(VGroup of 75 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 102: ReplacementTransform(VGroup of 75 submobjects):  50%|█████     | 1/2 [00:00<00:00,  1.64it/s]Animation 102: ReplacementTransform(VGroup of 75 submobjects): 100%|██████████| 2/2 [00:01<00:00,  1.62it/s]                                                                                                            [10/03/26 00:10:49] INFO     Animation 102 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1127,7 +1127,7 @@ Manim Community v0.20.1
                              :raw </g>} to                                      
                              media_pql/Tex/8384dad42c802                        
                              c2b.tex                                            
-[10/02/26 13:35:47] INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:10:50] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 103: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 103 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -1155,7 +1155,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00105.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-[10/02/26 13:35:48] INFO     Animation 106 : Partial    scene_file_writer.py:601
+                    INFO     Animation 106 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1170,7 +1170,7 @@ Manim Community v0.20.1
                              aw </g>} to                                        
                              media_pql/Tex/aa635300ca5f4                        
                              e10.tex                                            
-                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:10:51] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 107: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                       INFO     Animation 107 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -1188,7 +1188,7 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00108.mp4'                              
-[10/02/26 13:35:49] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}v_0=+5\;\ma                        
                              thrm{m/s}\special{dvisvgm:r                        
@@ -1214,7 +1214,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00110.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 111: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                      [10/02/26 13:35:50] INFO     Animation 111 : Partial    scene_file_writer.py:601
+Animation 111: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                      [10/03/26 00:10:52] INFO     Animation 111 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1230,7 +1230,7 @@ Manim Community v0.20.1
                              media_pql/Tex/1014ce466fb22                        
                              8ed.tex                                            
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 112: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]Animation 112: FadeIn(VGroup of 2 submobjects): 100%|██████████| 2/2 [00:00<00:00, 17.66it/s]                                                                                             [10/02/26 13:35:51] INFO     Animation 112 : Partial    scene_file_writer.py:601
+Animation 112: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                         INFO     Animation 112 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1239,7 +1239,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00112.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-                    INFO     Animation 113 : Partial    scene_file_writer.py:601
+[10/03/26 00:10:53] INFO     Animation 113 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1248,7 +1248,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00113.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 114: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 114: FadeOut(VGroup of 2 submobjects), etc.: 100%|██████████| 2/2 [00:00<00:00, 15.19it/s]                                                                                                    [10/02/26 13:35:52] INFO     Animation 114 : Partial    scene_file_writer.py:601
+Animation 114: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                INFO     Animation 114 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1257,7 +1257,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00114.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 115: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                   [10/02/26 13:35:53] INFO     Animation 115 : Partial    scene_file_writer.py:601
+Animation 115: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                   [10/03/26 00:10:54] INFO     Animation 115 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1266,7 +1266,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00115.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 116: ReplacementTransform(Text('Aplicamos la ecuación maestra sin cambiar reglas: y₀ = 20 m, suelo en y = 0 y +y hacia arriba.')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 116: ReplacementTransform(Text('Aplicamos la ecuación maestra sin cambiar reglas: y₀ = 20 m, suelo en y = 0 y +y hacia arriba.')):  50%|█████     | 1/2 [00:01<00:01,  1.49s/it]Animation 116: ReplacementTransform(Text('Aplicamos la ecuación maestra sin cambiar reglas: y₀ = 20 m, suelo en y = 0 y +y hacia arriba.')): 100%|██████████| 2/2 [00:03<00:00,  1.51s/it]                                                                                                                                                                                          [10/02/26 13:36:20] INFO     Animation 116 : Partial    scene_file_writer.py:601
+Animation 116: ReplacementTransform(Text('Aplicamos la ecuación maestra sin cambiar reglas: y₀ = 20 m, suelo en y = 0 y +y hacia arriba.')):   0%|          | 0/2 [00:00<?, ?it/s]Animation 116: ReplacementTransform(Text('Aplicamos la ecuación maestra sin cambiar reglas: y₀ = 20 m, suelo en y = 0 y +y hacia arriba.')):  50%|█████     | 1/2 [00:00<00:00,  1.20it/s]Animation 116: ReplacementTransform(Text('Aplicamos la ecuación maestra sin cambiar reglas: y₀ = 20 m, suelo en y = 0 y +y hacia arriba.')): 100%|██████████| 2/2 [00:01<00:00,  1.20it/s]                                                                                                                                                                                          [10/03/26 00:11:09] INFO     Animation 116 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1280,7 +1280,7 @@ Manim Community v0.20.1
                              {dvisvgm:raw </g>} to                              
                              media_pql/Tex/1ab7a29cb49f0                        
                              35d.tex                                            
-[10/02/26 13:36:21] INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:11:10] INFO     Caching disabled.              cairo_renderer.py:83
 Animation 117: FadeIn(Line), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                            INFO     Animation 117 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -1299,7 +1299,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00118.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-[10/02/26 13:36:22] INFO     Animation 119 : Partial    scene_file_writer.py:601
+                    INFO     Animation 119 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1316,14 +1316,14 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00120.mp4'                              
-                    INFO     Writing                     tex_file_writing.py:110
+[10/03/26 00:11:11] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}x-x_0=\frac                        
                              12at^2\quad(v_0=0)\special{                        
                              dvisvgm:raw </g>} to                               
                              media_pql/Tex/0b3352f6b8c10                        
                              459.tex                                            
-[10/02/26 13:36:23] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Caching disabled.              cairo_renderer.py:83
 Animation 121: FadeIn(Line), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                            INFO     Animation 121 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -1333,7 +1333,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00121.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 122: _MethodAnimation(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]Animation 122: _MethodAnimation(VGroup of 2 submobjects):  75%|███████▌  | 3/4 [00:00<00:00, 26.41it/s]                                                                                                                           INFO     Animation 122 : Partial    scene_file_writer.py:601
+Animation 122: _MethodAnimation(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                                   INFO     Animation 122 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1351,7 +1351,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00123.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 124: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                      [10/02/26 13:36:24] INFO     Animation 124 : Partial    scene_file_writer.py:601
+Animation 124: FadeOut(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                      [10/03/26 00:11:12] INFO     Animation 124 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1396,7 +1396,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00128.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 129: FadeIn(Text('t = 1  →  x/x₁ = 1')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                        [10/02/26 13:36:25] INFO     Animation 129 : Partial    scene_file_writer.py:601
+Animation 129: FadeIn(Text('t = 1  →  x/x₁ = 1')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                            INFO     Animation 129 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1450,7 +1450,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00134.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 135: FadeOut(Text('2')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                            INFO     Animation 135 : Partial    scene_file_writer.py:601
+Animation 135: FadeOut(Text('2')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                        [10/03/26 00:11:13] INFO     Animation 135 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1477,7 +1477,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00137.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-[10/02/26 13:36:26] INFO     Animation 138 : Partial    scene_file_writer.py:601
+                    INFO     Animation 138 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1544,8 +1544,8 @@ Manim Community v0.20.1
                              {dvisvgm:raw </g>} to                              
                              media_pql/Tex/270ea4b67e7fc                        
                              517.tex                                            
-[10/02/26 13:36:27] INFO     Caching disabled.              cairo_renderer.py:83
-Animation 144: FadeIn(MathTex('1:4:9:16=1^2:2^2:3^2:4^2')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                     INFO     Animation 144 : Partial    scene_file_writer.py:601
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 144: FadeIn(MathTex('1:4:9:16=1^2:2^2:3^2:4^2')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                 [10/03/26 00:11:14] INFO     Animation 144 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1589,7 +1589,7 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00148.mp4'                              
-[10/02/26 13:36:28] INFO     Writing                     tex_file_writing.py:110
+                    INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}x-x_0=\left                        
                              (\frac                                             
@@ -1598,7 +1598,7 @@ Manim Community v0.20.1
                              media_pql/Tex/089db0d9ac595                        
                              161.tex                                            
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 149: FadeIn(Axes of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                             INFO     Animation 149 : Partial    scene_file_writer.py:601
+Animation 149: FadeIn(Axes of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                         [10/03/26 00:11:15] INFO     Animation 149 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1616,7 +1616,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00150.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 151: LaggedStart(Group):   0%|          | 0/3 [00:00<?, ?it/s]                                                                        [10/02/26 13:36:29] INFO     Animation 151 : Partial    scene_file_writer.py:601
+Animation 151: LaggedStart(Group):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                            INFO     Animation 151 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1642,8 +1642,8 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00153.mp4'                              
-[10/02/26 13:36:30] INFO     Caching disabled.              cairo_renderer.py:83
-Animation 154: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                       INFO     Animation 154 : Partial    scene_file_writer.py:601
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 154: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                   [10/03/26 00:11:16] INFO     Animation 154 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1652,7 +1652,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00154.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 155: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                   [10/02/26 13:36:31] INFO     Animation 155 : Partial    scene_file_writer.py:601
+Animation 155: ReplacementTransform(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                       INFO     Animation 155 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1661,7 +1661,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00155.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 156: LaggedStart(Group):   0%|          | 0/4 [00:00<?, ?it/s]Animation 156: LaggedStart(Group): 100%|██████████| 4/4 [00:00<00:00, 33.42it/s]                                                                                                    INFO     Animation 156 : Partial    scene_file_writer.py:601
+Animation 156: LaggedStart(Group):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                            INFO     Animation 156 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1670,7 +1670,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00156.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-[10/02/26 13:36:32] INFO     Animation 157 : Partial    scene_file_writer.py:601
+                    INFO     Animation 157 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1678,7 +1678,7 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00157.mp4'                              
-                    INFO     Writing                     tex_file_writing.py:110
+[10/03/26 00:11:17] INFO     Writing                     tex_file_writing.py:110
                              \special{dvisvgm:raw <g                            
                              id='unique000'>}v_y=v_0-gt\                        
                              special{dvisvgm:raw </g>}                          
@@ -1721,7 +1721,7 @@ Manim Community v0.20.1
                              rtial_movie_files/Physics9                         
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00161.mp4'                              
-[10/02/26 13:36:33] INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Caching disabled.              cairo_renderer.py:83
 Animation 162: FadeIn(Text('Subir, bajar o soltar no cambia la gravedad: cambia v₀. La consistencia de signos convierte todos los casos en un único modelo.')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                                                                                                                         INFO     Animation 162 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
@@ -1740,7 +1740,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00163.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 164: FadeOut(Group), etc.:   0%|          | 0/2 [00:00<?, ?it/s]Animation 164: FadeOut(Group), etc.: 100%|██████████| 2/2 [00:00<00:00, 15.83it/s]                                                                                  [10/02/26 13:36:34] INFO     Animation 164 : Partial    scene_file_writer.py:601
+Animation 164: FadeOut(Group), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                          [10/03/26 00:11:18] INFO     Animation 164 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1749,7 +1749,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00164.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 165: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                            [10/02/26 13:36:35] INFO     Animation 165 : Partial    scene_file_writer.py:601
+Animation 165: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                INFO     Animation 165 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1758,7 +1758,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00165.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 166: FadeIn(Text('Misma gravedad, misma ecuación: fija el eje, identifica v₀, conserva los signos y deja que el modelo prediga el movimiento.')):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                                                                                                                                     INFO     Animation 166 : Partial    scene_file_writer.py:601
+Animation 166: FadeIn(Text('Misma gravedad, misma ecuación: fija el eje, identifica v₀, conserva los signos y deja que el modelo prediga el movimiento.')):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                                                                                                                 [10/03/26 00:11:19] INFO     Animation 166 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1776,7 +1776,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00167.mp4'                              
                     INFO     Caching disabled.              cairo_renderer.py:83
-Animation 168: FadeOut(Text('Misma gravedad, misma ecuación: fija el eje, identifica v₀, conserva los signos y deja que el modelo prediga el movimiento.')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                                                                                                  [10/02/26 13:36:36] INFO     Animation 168 : Partial    scene_file_writer.py:601
+Animation 168: FadeOut(Text('Misma gravedad, misma ecuación: fija el eje, identifica v₀, conserva los signos y deja que el modelo prediga el movimiento.')):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                                                                                                                                      INFO     Animation 168 : Partial    scene_file_writer.py:601
                              movie file written in                              
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
@@ -1785,7 +1785,7 @@ Manim Community v0.20.1
                              FreeFallCasesEquationOpus5                         
                              5/uncached_00168.mp4'                              
                     INFO     Combining to Movie file.   scene_file_writer.py:753
-                    INFO                                scene_file_writer.py:904
+[10/03/26 00:11:20] INFO                                scene_file_writer.py:904
                              File ready at                                      
                              '/manim/media_pql/videos/p                         
                              hysics9_freefall_cases_equ                         
