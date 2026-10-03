@@ -275,7 +275,7 @@ class Physics9FreeFallBuilding3DCinematic(ThreeDScene):
         self.scene_07_galileo_ramp(header)
         self.scene_08_synthesis(header)
 
-        self.remove_fixed(*header["group"], run_time=RUN_NORMAL)
+        self.remove_fixed(\n            header["group"][0], header["group"][1], header["group"][2],\n            header["group"][3], header["phase"], run_time=RUN_NORMAL\n        )
 
     # -------------------------------------------------------------------------
     # 01 — Build the physical context before equations.
