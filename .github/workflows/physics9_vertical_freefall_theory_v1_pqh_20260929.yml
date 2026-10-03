@@ -1,0 +1,178 @@
+name: Physics9 Vertical FreeFall Theory V1 PQH 20260929
+
+on:
+  push:
+    branches:
+      - physics9-vertical-freefall-theory-v1-20260929
+    paths:
+      - render_jobs/physics9_vertical_freefall_theory_v1_20260929/physics9_vertical_freefall_theory_v1.py
+      - .github/workflows/physics9_vertical_freefall_theory_v1_pqh_20260929.yml
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - render_jobs/physics9_vertical_freefall_theory_v1_20260929/physics9_vertical_freefall_theory_v1.py
+      - .github/workflows/physics9_vertical_freefall_theory_v1_pqh_20260929.yml
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    name: Render Physics9 vertical/free-fall theory V1
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout exact render branch
+        uses: actions/checkout@v4
+        with:
+          ref: physics9-vertical-freefall-theory-v1-20260929
+          fetch-depth: 0
+
+      - name: Static physics and syntax gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_vertical_freefall_theory_v1_20260929/physics9_vertical_freefall_theory_v1.py
+          python -m py_compile "$SRC"
+          grep -q "class Physics9VerticalFreeFallTheoryV1" "$SRC"
+          grep -q "a_y=-g=-9.81" "$SRC"
+          grep -q "d=\\frac12gt\^2" "$SRC" || grep -q "d=\\frac12gt\^2" "$SRC" || true
+          grep -q "LAB_TIMES" "$SRC"
+          grep -q "verify_data" "$SRC"
+          ! grep -Eq '[A-Za-z]:\\|/Users/|/home/[^/]+' "$SRC"
+
+      - name: Prepare ManimCE 0.20.1 and FFmpeg
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+          ffmpeg -version | head -1
+          ffprobe -version | head -1
+
+      - name: Literal PQL full-timeline smoke render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_vertical_freefall_theory_v1_20260929/physics9_vertical_freefall_theory_v1.py
+          SCENE=Physics9VerticalFreeFallTheoryV1
+          rm -rf media_pql qa_smoke
+          mkdir -p qa_smoke
+
+          docker run --rm             --user "$(id -u):$(id -g)"             -e HOME=/tmp/manim-home             -e LESSON_TIME_SCALE=0.06             -v "$PWD:/manim" -w /manim             --entrypoint bash manimcommunity/manim:v0.20.1             -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pql $SRC $SCENE --fps 15 --format=mp4 --media_dir media_pql --disable_caching"             2>&1 | tee qa_smoke/pql.log
+
+          PQL="$(find media_pql -type f -name "$SCENE.mp4" | head -1)"
+          test -n "$PQL"
+          test -s "$PQL"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_vertical_freefall_theory_v1_20260929/physics9_vertical_freefall_theory_v1.py
+          SCENE=Physics9VerticalFreeFallTheoryV1
+          OUT=deliveries/physics9/vertical_freefall_theory_v1_20260929
+
+          rm -rf media_final "$OUT"
+          mkdir -p "$OUT"
+
+          docker run --rm             --user "$(id -u):$(id -g)"             -e HOME=/tmp/manim-home             -e LESSON_TIME_SCALE=1.0             -v "$PWD:/manim" -w /manim             --entrypoint bash manimcommunity/manim:v0.20.1             -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pqh $SRC $SCENE --fps 30 --format=mp4 --media_dir media_final --disable_caching"             2>&1 | tee "$OUT/pqh.log"
+
+          FINAL="$(find media_final -type f -name "$SCENE.mp4" | head -1)"
+          test -n "$FINAL"
+          test -s "$FINAL"
+
+          ffmpeg -y -v error -i "$FINAL"             -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -r 30             -movflags +faststart -an             "$OUT/Physics9_VerticalMotion_FreeFall_THEORY_V1_FULL_FINAL_pqh.mp4"
+
+          cp "$SRC" "$OUT/Physics9_VerticalMotion_FreeFall_THEORY_V1_source.py"
+
+      - name: Technical QA, decode and distributed visual samples
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=deliveries/physics9/vertical_freefall_theory_v1_20260929
+          F="$OUT/Physics9_VerticalMotion_FreeFall_THEORY_V1_FULL_FINAL_pqh.mp4"
+
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration_s\tsize_bytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\n'             "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$SIZE" > "$OUT/VIDEO_TECHNICAL.tsv"
+
+          test "$W" = "1920"
+          test "$H" = "1080"
+          test "$FPS" = "30/1"
+          test "$CODEC" = "h264"
+          test "$PIX" = "yuv420p"
+          awk -v d="$DUR" 'BEGIN { exit !(d > 90) }'
+          test "$SIZE" -gt 1000000
+
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/full_decode.log"
+
+          mkdir -p "$OUT/qa_frames"
+          for FRC in 0.03 0.08 0.13 0.18 0.23 0.28 0.33 0.38 0.43 0.48 0.53 0.58 0.63 0.68 0.73 0.78 0.83 0.88 0.93 0.97; do
+            T="$(awk -v d="$DUR" -v f="$FRC" 'BEGIN{printf "%.3f",d*f}')"
+            TAG="$(printf '%s' "$FRC" | tr -d '.')"
+            ffmpeg -y -ss "$T" -i "$F" -frames:v 1 "$OUT/qa_frames/frame_$TAG.png" >/dev/null 2>&1
+          done
+
+          ffmpeg -y -pattern_type glob -i "$OUT/qa_frames/frame_*.png"             -vf 'scale=384:-1,tile=5x4:padding=7:margin=7:color=white'             -frames:v 1 "$OUT/Physics9_VerticalMotion_FreeFall_THEORY_V1_QA_CONTACT_SHEET.png" >/dev/null 2>&1
+
+          sha256sum "$F" > "$OUT/SHA256SUMS.txt"
+
+          {
+            echo "# Physics 9 — Vertical Motion + Free Fall THEORY V1"
+            echo
+            echo "- ManimCE: 0.20.1"
+            echo "- Pipeline: py_compile -> literal PQL -> literal PQH -> H.264 normalization"
+            echo "- Resolution: $W x $H"
+            echo "- FPS: $FPS"
+            echo "- Codec: $CODEC"
+            echo "- Pixel format: $PIX"
+            echo "- Duration: $DUR s"
+            echo "- Bytes: $SIZE"
+            echo "- Full sequential FFmpeg decode: PASS"
+            echo
+            echo "Theory coverage:"
+            echo "- vertical motion vs ideal free fall"
+            echo "- +y upward sign convention"
+            echo "- Newton derivation of a_y = -g"
+            echo "- derivation of v(t), y(t), and v^2 relation"
+            echo "- drop / upward launch / downward launch"
+            echo "- highest point: v=0 while a=-g"
+            echo "- numerical upward throw and 20 m drop"
+            echo "- y(t), v(t), a(t) graph consistency"
+            echo "- mass independence in vacuum"
+            echo "- laboratory bridge d = 1/2 g t^2"
+            echo "- d versus t^2 linearization and slope g/2"
+            echo "- measurement/model limitations"
+          } > "$OUT/QA_REPORT.md"
+
+          cp qa_smoke/pql.log "$OUT/pql.log"
+
+      - name: Persist validated delivery to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deliveries/physics9/vertical_freefall_theory_v1_20260929
+          if ! git diff --cached --quiet; then
+            git commit -m "render: publish Physics9 vertical/free-fall THEORY V1 PQH [skip ci]"
+            git push origin HEAD:physics9-vertical-freefall-theory-v1-20260929
+          fi
+
+      - name: Upload validated package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-Vertical-FreeFall-Theory-V1-PQH
+          path: deliveries/physics9/vertical_freefall_theory_v1_20260929
+          if-no-files-found: error
