@@ -1,0 +1,202 @@
+name: Physics9 FreeFall Building3D Cinematic V1 PQH
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/physics9_freefall_building3d_cinematic_v1_20261002.yml
+      - render_jobs/physics9_freefall_building3d_cinematic_v1_20261002/**
+      - library/jp_classroom_style.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout exact render branch
+        uses: actions/checkout@v4
+        with:
+          ref: physics9-freefall-building3d-cinematic-v1-20261002
+          fetch-depth: 0
+
+      - name: Static scientific and syntax QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_freefall_building3d_cinematic_v1_20261002/physics9_freefall_building3d_cinematic_v1.py
+          python -m py_compile library/jp_classroom_style.py "$SRC"
+          grep -q "class Physics9FreeFallBuilding3DCinematic" "$SRC"
+          grep -q "validate_lesson_data" "$SRC"
+          grep -q "ThreeDScene" "$SRC"
+          grep -q "ValueTracker" "$SRC"
+          grep -q "always_redraw" "$SRC"
+          grep -q "1.0, 4.0, 9.0, 16.0" "$SRC"
+          grep -q "RAMP_A" "$SRC"
+
+      - name: Prepare renderer
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+
+      - name: PQL full-timeline gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_freefall_building3d_cinematic_v1_20261002/physics9_freefall_building3d_cinematic_v1.py
+          SCENE=Physics9FreeFallBuilding3DCinematic
+          rm -rf media_pql qa_pql
+          mkdir -p qa_pql
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e PYTHONPATH=/manim \
+            -e LESSON_TIME_SCALE=0.05 \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pql $SRC $SCENE --fps 15 --format=mp4 --media_dir media_pql --disable_caching" \
+            2>&1 | tee qa_pql/pql.log
+          F="$(find media_pql -type f -name "$SCENE.mp4" | head -1)"
+          test -n "$F" && test -s "$F"
+
+      - name: PQM visual gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_freefall_building3d_cinematic_v1_20261002/physics9_freefall_building3d_cinematic_v1.py
+          SCENE=Physics9FreeFallBuilding3DCinematic
+          rm -rf media_pqm qa_pqm
+          mkdir -p qa_pqm
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e PYTHONPATH=/manim \
+            -e LESSON_TIME_SCALE=0.18 \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pqm $SRC $SCENE --fps 20 --format=mp4 --media_dir media_pqm --disable_caching" \
+            2>&1 | tee qa_pqm/pqm.log
+          F="$(find media_pqm -type f -name "$SCENE.mp4" | head -1)"
+          test -n "$F" && test -s "$F"
+
+      - name: Literal PQH final render
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/physics9_freefall_building3d_cinematic_v1_20261002/physics9_freefall_building3d_cinematic_v1.py
+          SCENE=Physics9FreeFallBuilding3DCinematic
+          OUT=deliveries/physics9/freefall_building3d_cinematic_v1_20261002
+          rm -rf media_final "$OUT"
+          mkdir -p "$OUT"
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -e PYTHONPATH=/manim \
+            -e LESSON_TIME_SCALE=1.0 \
+            -v "$PWD:/manim" \
+            -w /manim \
+            --entrypoint bash \
+            manimcommunity/manim:v0.20.1 \
+            -c "mkdir -p /tmp/manim-bin; printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open; chmod +x /tmp/manim-bin/xdg-open; export PATH=/tmp/manim-bin:\$PATH; manim -pqh $SRC $SCENE --fps 30 --format=mp4 --media_dir media_final --disable_caching" \
+            2>&1 | tee "$OUT/pqh.log"
+          RAW="$(find media_final -type f -name "$SCENE.mp4" | head -1)"
+          test -n "$RAW" && test -s "$RAW"
+          ffmpeg -y -v error -i "$RAW" \
+            -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p \
+            -r 30 -movflags +faststart -an \
+            "$OUT/Physics9_FreeFall_Building3D_CINEMATIC_V1_FINAL_pqh.mp4"
+          cp "$SRC" "$OUT/Physics9_FreeFall_Building3D_CINEMATIC_V1_source.py"
+          cp render_jobs/physics9_freefall_building3d_cinematic_v1_20261002/README_RENDER.md "$OUT/README_RENDER.md"
+          cp qa_pql/pql.log "$OUT/pql.log"
+          cp qa_pqm/pqm.log "$OUT/pqm.log"
+
+      - name: Technical and visual QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=deliveries/physics9/freefall_building3d_cinematic_v1_20261002
+          F="$OUT/Physics9_FreeFall_Building3D_CINEMATIC_V1_FINAL_pqh.mp4"
+
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          NFRAMES="$(ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "$F")"
+          SIZE="$(stat -c%s "$F")"
+
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration_s\tframes\tsize_bytes\n%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+            "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" "$NFRAMES" "$SIZE" > "$OUT/VIDEO_TECHNICAL.tsv"
+
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+          test "$SIZE" -gt 1500000
+
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> "$OUT/full_decode.log"
+
+          mkdir -p "$OUT/qa_frames"
+          i=0
+          for FRC in 0.01 0.03 0.05 0.07 0.09 0.11 0.13 0.15 0.17 0.19 0.21 0.23 0.25 0.27 0.29 0.31 0.33 0.35 0.37 0.39 0.41 0.43 0.45 0.47 0.49 0.51 0.53 0.55 0.57 0.59 0.61 0.63 0.65 0.67 0.69 0.71 0.73 0.75 0.77 0.79 0.81 0.83 0.85 0.87 0.89 0.91 0.94 0.975; do
+            T="$(awk -v d="$DUR" -v f="$FRC" 'BEGIN{printf "%.3f",d*f}')"
+            printf -v TAG "%02d" "$i"
+            ffmpeg -y -ss "$T" -i "$F" -frames:v 1 "$OUT/qa_frames/frame_$TAG.png" >/dev/null 2>&1
+            i=$((i+1))
+          done
+          test "$(find "$OUT/qa_frames" -type f -name 'frame_*.png' | wc -l)" -eq 48
+          ffmpeg -y -pattern_type glob -i "$OUT/qa_frames/frame_*.png" \
+            -vf 'scale=300:-1,tile=6x8:padding=5:margin=5:color=white' \
+            -frames:v 1 "$OUT/Physics9_FreeFall_Building3D_CINEMATIC_V1_QA_CONTACT_SHEET_48.png" >/dev/null 2>&1
+
+          sha256sum "$F" > "$OUT/SHA256SUMS.txt"
+          {
+            echo "# QA REPORT — Physics9 FreeFall Building3D Cinematic V1"
+            echo "- resolution: $W x $H"
+            echo "- fps: $FPS"
+            echo "- codec: $CODEC"
+            echo "- pixel format: $PIX"
+            echo "- duration: $DUR s"
+            echo "- decoded/read frames: $NFRAMES"
+            echo "- bytes: $SIZE"
+            echo "- py_compile: PASS"
+            echo "- PQL: PASS"
+            echo "- PQM: PASS"
+            echo "- literal PQH: PASS"
+            echo "- full FFmpeg decode: PASS"
+            echo "- distributed visual samples: 48"
+          } > "$OUT/QA_REPORT.md"
+
+      - name: Persist delivery to render branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add render_jobs/physics9_freefall_building3d_cinematic_v1_20261002 \
+                  deliveries/physics9/freefall_building3d_cinematic_v1_20261002
+          if ! git diff --cached --quiet; then
+            git commit -m "render: publish Physics9 Building3D cinematic V1 PQH [skip ci]"
+            git pull --rebase origin physics9-freefall-building3d-cinematic-v1-20261002
+            git push origin HEAD:physics9-freefall-building3d-cinematic-v1-20261002
+          fi
+
+      - name: Upload delivery package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-FreeFall-Building3D-Cinematic-V1
+          path: deliveries/physics9/freefall_building3d_cinematic_v1_20261002
+          if-no-files-found: error
