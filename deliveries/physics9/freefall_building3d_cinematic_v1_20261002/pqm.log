@@ -1,0 +1,1329 @@
+Manim Community v0.20.1
+
+[10/03/26 00:29:42] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 0: FadeOut(Text('01 · CONTEXTO 3D')), etc.:   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                               INFO     Animation 0 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00000.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 1: FadeIn(Cube of 6 submobjects), etc.:   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                           INFO     Animation 1 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00001.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 2: LaggedStart(Group):   0%|          | 0/6 [00:00<?, ?it/s]                                                                                          INFO     Animation 2 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00002.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 3: Create(VGroup of 4 submobjects):   0%|          | 0/8 [00:00<?, ?it/s]                                                                                                       INFO     Animation 3 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00003.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 4: FadeIn(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                       INFO     Animation 4 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00004.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 5 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00005.mp4'                               
+[10/03/26 00:29:43] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 6: Transform(Cube of 6 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                        INFO     Animation 6 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00006.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 7: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                       INFO     Animation 7 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00007.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 8: Transform(Cube of 6 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                        INFO     Animation 8 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00008.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 9: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                       INFO     Animation 9 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00009.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 10: Transform(Cube of 6 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                         INFO     Animation 10 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00010.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 11: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 11 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00011.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 12: Transform(Cube of 6 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                         INFO     Animation 12 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00012.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 13: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 13 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00013.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 14: Transform(Cube of 6 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                     [10/03/26 00:29:44] INFO     Animation 14 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00014.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 15: FadeIn(VGroup of 2 submobjects):   0%|          | 0/2 [00:00<?, ?it/s]                                                                                                        INFO     Animation 15 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00015.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 16: FadeIn(Cube of 6 submobjects), etc.:   0%|          | 0/6 [00:00<?, ?it/s]Animation 16: FadeIn(Cube of 6 submobjects), etc.:  33%|███▎      | 2/6 [00:00<00:00, 14.96it/s]Animation 16: FadeIn(Cube of 6 submobjects), etc.:  67%|██████▋   | 4/6 [00:00<00:00, 15.01it/s]Animation 16: FadeIn(Cube of 6 submobjects), etc.: 100%|██████████| 6/6 [00:00<00:00, 14.88it/s]                                                                                                                    INFO     Animation 16 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00016.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 17: FadeOut(VGroup of 1 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                         INFO     Animation 17 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00017.mp4'                               
+[10/03/26 00:29:45] INFO     Caching disabled.              cairo_renderer.py:83
+Waiting 18:   0%|          | 0/12 [00:00<?, ?it/s]Waiting 18:  17%|█▋        | 2/12 [00:00<00:00, 11.82it/s]Waiting 18:  33%|███▎      | 4/12 [00:00<00:00, 11.56it/s]Waiting 18:  50%|█████     | 6/12 [00:00<00:00, 11.60it/s]Waiting 18:  67%|██████▋   | 8/12 [00:00<00:00, 11.59it/s]Waiting 18:  83%|████████▎ | 10/12 [00:00<00:00, 11.67it/s]Waiting 18: 100%|██████████| 12/12 [00:01<00:00, 11.70it/s]                                                           [10/03/26 00:29:46] INFO     Animation 18 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00018.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 19: FadeIn(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                        INFO     Animation 19 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00019.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 20 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00020.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 21: FadeOut(VGroup of 1 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                     [10/03/26 00:29:47] INFO     Animation 21 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00021.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 22: FadeOut(Text('01 · CONSTRUIR CONTEXTO 3D')), etc.:   0%|          | 0/3 [00:00<?, ?it/s]Animation 22: FadeOut(Text('01 · CONSTRUIR CONTEXTO 3D')), etc.:  67%|██████▋   | 2/3 [00:00<00:00, 12.30it/s]                                                                                                                                  INFO     Animation 22 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00022.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 23: _MethodAnimation(ValueTracker), etc.:   0%|          | 0/7 [00:00<?, ?it/s]Animation 23: _MethodAnimation(ValueTracker), etc.:  29%|██▊       | 2/7 [00:00<00:00, 11.99it/s]Animation 23: _MethodAnimation(ValueTracker), etc.:  57%|█████▋    | 4/7 [00:00<00:00, 11.76it/s]Animation 23: _MethodAnimation(ValueTracker), etc.:  86%|████████▌ | 6/7 [00:00<00:00, 11.52it/s]                                                                                                 [10/03/26 00:29:48] INFO     Animation 23 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00023.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 24: FadeIn(Sphere of 288 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]Animation 24: FadeIn(Sphere of 288 submobjects):  33%|███▎      | 2/6 [00:00<00:00, 19.03it/s]Animation 24: FadeIn(Sphere of 288 submobjects):  67%|██████▋   | 4/6 [00:00<00:00, 18.47it/s]Animation 24: FadeIn(Sphere of 288 submobjects): 100%|██████████| 6/6 [00:00<00:00, 18.32it/s]                                                                                                                  INFO     Animation 24 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00024.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 25: Create(Line), etc.:   0%|          | 0/6 [00:00<?, ?it/s]                                                                       [10/03/26 00:29:49] INFO     Animation 25 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00025.mp4'                               
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\sum                               
+                             F_y=-mg\quad\Longrightarrow                        
+                             \quad                                              
+                             a_y=-g\special{dvisvgm:raw                         
+                             </g>} to                                           
+                             media_pqm/Tex/f6807470ef7a9                        
+                             0ca.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 26: FadeIn(VGroup of 2 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                        INFO     Animation 26 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00026.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 27: FadeIn(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                        INFO     Animation 27 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00027.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:29:50] INFO     Animation 28 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00028.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 29: FadeOut(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                         INFO     Animation 29 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00029.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 30: FadeOut(Line), etc.:   0%|          | 0/4 [00:00<?, ?it/s]                                                                                            INFO     Animation 30 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00030.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 31: FadeOut(Text('02 · ANTES DE SOLTAR')), etc.:   0%|          | 0/3 [00:00<?, ?it/s]Animation 31: FadeOut(Text('02 · ANTES DE SOLTAR')), etc.:  33%|███▎      | 1/3 [00:00<00:00,  7.56it/s]Animation 31: FadeOut(Text('02 · ANTES DE SOLTAR')), etc.:  67%|██████▋   | 2/3 [00:00<00:00,  7.44it/s]Animation 31: FadeOut(Text('02 · ANTES DE SOLTAR')), etc.: 100%|██████████| 3/3 [00:00<00:00,  7.36it/s]                                                                                                        [10/03/26 00:29:51] INFO     Animation 31 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00031.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 32: FadeOut(Sphere of 288 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]Animation 32: FadeOut(Sphere of 288 submobjects):  50%|█████     | 2/4 [00:00<00:00, 18.16it/s]Animation 32: FadeOut(Sphere of 288 submobjects): 100%|██████████| 4/4 [00:00<00:00, 17.73it/s]                                                                                                                   INFO     Animation 32 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00032.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 33: FadeIn(VGroup of 2 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]Animation 33: FadeIn(VGroup of 2 submobjects):  33%|███▎      | 2/6 [00:00<00:00, 14.15it/s]Animation 33: FadeIn(VGroup of 2 submobjects):  67%|██████▋   | 4/6 [00:00<00:00, 13.99it/s]Animation 33: FadeIn(VGroup of 2 submobjects): 100%|██████████| 6/6 [00:00<00:00, 13.38it/s]                                                                                            [10/03/26 00:29:52] INFO     Animation 33 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00033.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 34: _MethodAnimation(ValueTracker):   0%|          | 0/13 [00:00<?, ?it/s]Animation 34: _MethodAnimation(ValueTracker):  15%|█▌        | 2/13 [00:00<00:00, 15.04it/s]Animation 34: _MethodAnimation(ValueTracker):  31%|███       | 4/13 [00:00<00:00, 14.57it/s]Animation 34: _MethodAnimation(ValueTracker):  46%|████▌     | 6/13 [00:00<00:00, 14.38it/s]Animation 34: _MethodAnimation(ValueTracker):  62%|██████▏   | 8/13 [00:00<00:00, 14.23it/s]Animation 34: _MethodAnimation(ValueTracker):  77%|███████▋  | 10/13 [00:00<00:00, 14.47it/s]Animation 34: _MethodAnimation(ValueTracker):  92%|█████████▏| 12/13 [00:00<00:00, 14.68it/s]                                                                                             [10/03/26 00:29:53] INFO     Animation 34 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00034.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 35: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/4 [00:00<?, ?it/s]Animation 35: FadeOut(VGroup of 2 submobjects), etc.:  50%|█████     | 2/4 [00:00<00:00, 11.00it/s]Animation 35: FadeOut(VGroup of 2 submobjects), etc.: 100%|██████████| 4/4 [00:00<00:00, 11.45it/s]                                                                                                   [10/03/26 00:29:54] INFO     Animation 35 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00035.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Waiting 36:   0%|          | 0/10 [00:00<?, ?it/s]Waiting 36:  20%|██        | 2/10 [00:00<00:00, 13.85it/s]Waiting 36:  40%|████      | 4/10 [00:00<00:00, 13.75it/s]Waiting 36:  60%|██████    | 6/10 [00:00<00:00, 13.76it/s]Waiting 36:  80%|████████  | 8/10 [00:00<00:00, 13.60it/s]Waiting 36: 100%|██████████| 10/10 [00:00<00:00, 13.63it/s]                                                           [10/03/26 00:29:55] INFO     Animation 36 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00036.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 37: _MethodAnimation(ValueTracker):   0%|          | 0/13 [00:00<?, ?it/s]Animation 37: _MethodAnimation(ValueTracker):  15%|█▌        | 2/13 [00:00<00:00, 13.85it/s]Animation 37: _MethodAnimation(ValueTracker):  31%|███       | 4/13 [00:00<00:00, 13.71it/s]Animation 37: _MethodAnimation(ValueTracker):  46%|████▌     | 6/13 [00:00<00:00, 13.27it/s]Animation 37: _MethodAnimation(ValueTracker):  62%|██████▏   | 8/13 [00:00<00:00, 12.71it/s]Animation 37: _MethodAnimation(ValueTracker):  77%|███████▋  | 10/13 [00:00<00:00, 12.89it/s]Animation 37: _MethodAnimation(ValueTracker):  92%|█████████▏| 12/13 [00:00<00:00, 12.97it/s]                                                                                             [10/03/26 00:29:56] INFO     Animation 37 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00037.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 38: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/4 [00:00<?, ?it/s]Animation 38: FadeOut(VGroup of 2 submobjects), etc.:  50%|█████     | 2/4 [00:00<00:00, 12.61it/s]Animation 38: FadeOut(VGroup of 2 submobjects), etc.: 100%|██████████| 4/4 [00:00<00:00, 12.52it/s]                                                                                                   [10/03/26 00:29:57] INFO     Animation 38 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00038.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 39: FadeIn(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]Animation 39: FadeIn(VGroup of 2 submobjects):  50%|█████     | 2/4 [00:00<00:00, 10.47it/s]Animation 39: FadeIn(VGroup of 2 submobjects): 100%|██████████| 4/4 [00:00<00:00, 11.03it/s]                                                                                                                INFO     Animation 39 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00039.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Waiting 40:   0%|          | 0/16 [00:00<?, ?it/s]Waiting 40:  12%|█▎        | 2/16 [00:00<00:01, 12.30it/s]Waiting 40:  25%|██▌       | 4/16 [00:00<00:00, 12.18it/s]Waiting 40:  38%|███▊      | 6/16 [00:00<00:00, 12.20it/s]Waiting 40:  50%|█████     | 8/16 [00:00<00:00, 12.03it/s]Waiting 40:  62%|██████▎   | 10/16 [00:00<00:00, 12.07it/s]Waiting 40:  75%|███████▌  | 12/16 [00:00<00:00, 12.10it/s]Waiting 40:  88%|████████▊ | 14/16 [00:01<00:00, 12.12it/s]Waiting 40: 100%|██████████| 16/16 [00:01<00:00, 12.11it/s]                                                           [10/03/26 00:29:59] INFO     Animation 40 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00040.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 41: FadeOut(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]Animation 41: FadeOut(VGroup of 2 submobjects):  50%|█████     | 2/4 [00:00<00:00, 11.99it/s]Animation 41: FadeOut(VGroup of 2 submobjects): 100%|██████████| 4/4 [00:00<00:00, 11.96it/s]                                                                                             [10/03/26 00:30:00] INFO     Animation 41 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00041.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 42: FadeOut(Sphere of 200 submobjects), etc.:   0%|          | 0/4 [00:00<?, ?it/s]Animation 42: FadeOut(Sphere of 200 submobjects), etc.:  25%|██▌       | 1/4 [00:00<00:00,  8.04it/s]Animation 42: FadeOut(Sphere of 200 submobjects), etc.:  50%|█████     | 2/4 [00:00<00:00,  8.05it/s]Animation 42: FadeOut(Sphere of 200 submobjects), etc.:  75%|███████▌  | 3/4 [00:00<00:00,  8.10it/s]Animation 42: FadeOut(Sphere of 200 submobjects), etc.: 100%|██████████| 4/4 [00:00<00:00,  7.98it/s]                                                                                                                         INFO     Animation 42 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00042.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 43: FadeOut(Text('03 · CAÍDA · ESTADO EN VIVO')), etc.:   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                                           INFO     Animation 43 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00043.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 44: _MethodAnimation(ValueTracker), etc.:   0%|          | 0/10 [00:00<?, ?it/s]Animation 44: _MethodAnimation(ValueTracker), etc.:  20%|██        | 2/10 [00:00<00:00, 12.13it/s]Animation 44: _MethodAnimation(ValueTracker), etc.:  40%|████      | 4/10 [00:00<00:00, 12.01it/s]Animation 44: _MethodAnimation(ValueTracker), etc.:  60%|██████    | 6/10 [00:00<00:00, 12.69it/s]Animation 44: _MethodAnimation(ValueTracker), etc.:  80%|████████  | 8/10 [00:00<00:00, 13.40it/s]Animation 44: _MethodAnimation(ValueTracker), etc.: 100%|██████████| 10/10 [00:00<00:00, 13.74it/s]                                                                                                   [10/03/26 00:30:01] INFO     Animation 44 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00044.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 45 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00045.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 46: LaggedStart(Group):   0%|          | 0/8 [00:00<?, ?it/s]Animation 46: LaggedStart(Group):  12%|█▎        | 1/8 [00:00<00:00,  9.99it/s]Animation 46: LaggedStart(Group):  25%|██▌       | 2/8 [00:00<00:00,  9.55it/s]Animation 46: LaggedStart(Group):  38%|███▊      | 3/8 [00:00<00:00,  9.34it/s]Animation 46: LaggedStart(Group):  50%|█████     | 4/8 [00:00<00:00,  9.09it/s]Animation 46: LaggedStart(Group):  62%|██████▎   | 5/8 [00:00<00:00,  8.77it/s]Animation 46: LaggedStart(Group):  75%|███████▌  | 6/8 [00:00<00:00,  8.60it/s]Animation 46: LaggedStart(Group):  88%|████████▊ | 7/8 [00:00<00:00,  8.59it/s]Animation 46: LaggedStart(Group): 100%|██████████| 8/8 [00:00<00:00,  8.74it/s]                                                                               [10/03/26 00:30:03] INFO     Animation 46 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00046.mp4'                               
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}d=\frac12gt                        
+                             ^2\special{dvisvgm:raw                             
+                             </g>} to                                           
+                             media_pqm/Tex/6121b7ffea3a5                        
+                             f76.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 47: FadeIn(VGroup of 3 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                        INFO     Animation 47 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00047.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 48 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00048.mp4'                               
+[10/03/26 00:30:04] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 49: FadeIn(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                        INFO     Animation 49 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00049.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 50 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00050.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 51: FadeOut(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                     [10/03/26 00:30:05] INFO     Animation 51 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00051.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 52: FadeOut(VGroup of 5 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]Animation 52: FadeOut(VGroup of 5 submobjects):  17%|█▋        | 1/6 [00:00<00:00,  8.65it/s]Animation 52: FadeOut(VGroup of 5 submobjects):  33%|███▎      | 2/6 [00:00<00:00,  8.21it/s]Animation 52: FadeOut(VGroup of 5 submobjects):  50%|█████     | 3/6 [00:00<00:00,  8.12it/s]Animation 52: FadeOut(VGroup of 5 submobjects):  67%|██████▋   | 4/6 [00:00<00:00,  8.23it/s]Animation 52: FadeOut(VGroup of 5 submobjects):  83%|████████▎ | 5/6 [00:00<00:00,  8.30it/s]Animation 52: FadeOut(VGroup of 5 submobjects): 100%|██████████| 6/6 [00:00<00:00,  8.38it/s]                                                                                             [10/03/26 00:30:06] INFO     Animation 52 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00052.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 53: FadeOut(Text('04 · FOTOGRAFÍAS A TIEMPOS IGUALES')), etc.:   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                                                  INFO     Animation 53 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00053.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 54: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/6 [00:00<?, ?it/s]Animation 54: FadeOut(VGroup of 3 submobjects), etc.:  33%|███▎      | 2/6 [00:00<00:00, 17.21it/s]Animation 54: FadeOut(VGroup of 3 submobjects), etc.:  67%|██████▋   | 4/6 [00:00<00:00, 15.55it/s]Animation 54: FadeOut(VGroup of 3 submobjects), etc.: 100%|██████████| 6/6 [00:00<00:00, 15.71it/s]                                                                                                                       INFO     Animation 54 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00054.mp4'                               
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}+y\special{                        
+                             dvisvgm:raw </g>} to                               
+                             media_pqm/Tex/792b8357dd521                        
+                             e49.tex                                            
+[10/03/26 00:30:07] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 55: FadeIn(VGroup of 8 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                        INFO     Animation 55 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00055.mp4'                               
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\sum                               
+                             F_y=-mg\special{dvisvgm:raw                        
+                             </g>} to                                           
+                             media_pqm/Tex/98d7fcb2b8e83                        
+                             556.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 56: FadeIn(VGroup of 3 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                        INFO     Animation 56 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00056.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 57 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00057.mp4'                               
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}ma_y=-mg\sp                        
+                             ecial{dvisvgm:raw </g>} to                         
+                             media_pqm/Tex/3ec596659ad8b                        
+                             a40.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 58: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                               INFO     Animation 58 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00058.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:30:08] INFO     Animation 59 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00059.mp4'                               
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}a_y=-g\spec                        
+                             ial{dvisvgm:raw </g>} to                           
+                             media_pqm/Tex/72048a16a83ac                        
+                             8dd.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 60: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                               INFO     Animation 60 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00060.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 61 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00061.mp4'                               
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_y=v_0-gt\                        
+                             special{dvisvgm:raw </g>}                          
+                             to                                                 
+                             media_pqm/Tex/a449e6cba633d                        
+                             7c5.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 62: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                               INFO     Animation 62 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00062.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 63 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00063.mp4'                               
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}y=y_0+v_0t-                        
+                             \frac12gt^2\special{dvisvgm                        
+                             :raw </g>} to                                      
+                             media_pqm/Tex/ffc73825e5417                        
+                             28f.tex                                            
+[10/03/26 00:30:09] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 64: FadeOut(VGroup of 3 submobjects), etc.:   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                               INFO     Animation 64 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00064.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 65 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00065.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 66: FadeOut(VGroup of 1 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                         INFO     Animation 66 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00066.mp4'                               
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}y_0=20\,m,\                        
+                             qquad v_0=0,\qquad                                 
+                             y=0\special{dvisvgm:raw                            
+                             </g>} to                                           
+                             media_pqm/Tex/06edcf27509a1                        
+                             0b5.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}0=20-\frac1                        
+                             2(9.81)t^2\special{dvisvgm:                        
+                             raw </g>} to                                       
+                             media_pqm/Tex/86487dc4aeef1                        
+                             6aa.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}t=\sqrt{\fr                        
+                             ac{2(20)}{9.81}}=2.02\,s\sp                        
+                             ecial{dvisvgm:raw </g>} to                         
+                             media_pqm/Tex/b1f753f34417f                        
+                             18a.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 67: LaggedStart(Group):   0%|          | 0/8 [00:00<?, ?it/s]                                                                       [10/03/26 00:30:10] INFO     Animation 67 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00067.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 68 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00068.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 69: FadeIn(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                        INFO     Animation 69 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00069.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 70 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00070.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 71: FadeOut(VGroup of 3 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                         INFO     Animation 71 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00071.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 72: FadeOut(Text('05 · DEL FENÓMENO AL MODELO')), etc.:   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                                           INFO     Animation 72 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00072.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 73: _MethodAnimation(ValueTracker), etc.:   0%|          | 0/7 [00:00<?, ?it/s]                                                                                         [10/03/26 00:30:11] INFO     Animation 73 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00073.mp4'                               
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}0\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_pqm/Tex/ab0de9a363d86                        
+                             c5f.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}.\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_pqm/Tex/85b8d98e778e7                        
+                             c96.tex                                            
+                    INFO     Writing s to                tex_file_writing.py:110
+                             media_pqm/Tex/339b78c095e81                        
+                             d73.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 74: FadeIn(Rectangle), etc.:   0%|          | 0/6 [00:00<?, ?it/s]Animation 74: FadeIn(Rectangle), etc.: 100%|██████████| 6/6 [00:00<00:00, 59.52it/s]                                                                                                        INFO     Animation 74 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00074.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 75: _MethodAnimation(ValueTracker):   0%|          | 0/26 [00:00<?, ?it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}8\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_pqm/Tex/2f8240ddc5f27                        
+                             b7f.tex                                            
+Animation 75: _MethodAnimation(ValueTracker):   8%|▊         | 2/26 [00:00<00:01, 12.59it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}1\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_pqm/Tex/e6a566ad7d876                        
+                             b8c.tex                                            
+[10/03/26 00:30:12] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}6\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_pqm/Tex/5353eb619e928                        
+                             8a9.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}2\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_pqm/Tex/92c26d21f4d40                        
+                             0ae.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}3\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_pqm/Tex/9ca767606662f                        
+                             643.tex                                            
+Animation 75: _MethodAnimation(ValueTracker):  15%|█▌        | 4/26 [00:00<00:04,  4.97it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}9\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_pqm/Tex/f7c8a5ee0f168                        
+                             adf.tex                                            
+Animation 75: _MethodAnimation(ValueTracker):  23%|██▎       | 6/26 [00:00<00:02,  6.85it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}4\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_pqm/Tex/b6e1e0d35a22c                        
+                             f8a.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}7\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_pqm/Tex/9babf744f1d8b                        
+                             adf.tex                                            
+Animation 75: _MethodAnimation(ValueTracker):  27%|██▋       | 7/26 [00:01<00:03,  5.56it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}5\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_pqm/Tex/80535c2a91306                        
+                             081.tex                                            
+Animation 75: _MethodAnimation(ValueTracker):  31%|███       | 8/26 [00:01<00:03,  5.82it/s]Animation 75: _MethodAnimation(ValueTracker):  62%|██████▏   | 16/26 [00:01<00:00, 18.82it/s]Animation 75: _MethodAnimation(ValueTracker):  96%|█████████▌| 25/26 [00:01<00:00, 32.74it/s]                                                                                             [10/03/26 00:30:13] INFO     Animation 75 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00075.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 76 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00076.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 77: FadeOut(DecimalNumber), etc.:   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                     INFO     Animation 77 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00077.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 78: FadeIn(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                        INFO     Animation 78 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00078.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:30:14] INFO     Animation 79 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00079.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 80: FadeOut(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]Animation 80: FadeOut(VGroup of 2 submobjects): 100%|██████████| 4/4 [00:00<00:00, 39.62it/s]                                                                                                                 INFO     Animation 80 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00080.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 81: FadeOut(Text('06 · MISMO ESTADO · DOS REPRESENTACIONES')), etc.:   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                                                        INFO     Animation 81 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00081.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 82: FadeIn(Cube of 6 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                      INFO     Animation 82 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00082.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 83: FadeIn(Cube of 6 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                      INFO     Animation 83 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00083.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 84: FadeIn(Sphere of 200 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]Animation 84: FadeIn(Sphere of 200 submobjects):  50%|█████     | 3/6 [00:00<00:00, 27.70it/s]Animation 84: FadeIn(Sphere of 200 submobjects): 100%|██████████| 6/6 [00:00<00:00, 27.20it/s]                                                                                              [10/03/26 00:30:15] INFO     Animation 84 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00084.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 85: FadeIn(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                        INFO     Animation 85 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00085.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 86 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00086.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 87: FadeOut(VGroup of 1 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                         INFO     Animation 87 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00087.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 88: _MethodAnimation(Sphere of 200 submobjects), etc.:   0%|          | 0/5 [00:00<?, ?it/s]Animation 88: _MethodAnimation(Sphere of 200 submobjects), etc.:  60%|██████    | 3/5 [00:00<00:00, 20.23it/s]                                                                                                              [10/03/26 00:30:16] INFO     Animation 88 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00088.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 89: FadeIn(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                        INFO     Animation 89 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00089.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 90 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00090.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 91: FadeOut(VGroup of 1 submobjects):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                         INFO     Animation 91 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00091.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 92: _MethodAnimation(Sphere of 200 submobjects), etc.:   0%|          | 0/5 [00:00<?, ?it/s]Animation 92: _MethodAnimation(Sphere of 200 submobjects), etc.:  40%|████      | 2/5 [00:00<00:00, 16.27it/s]Animation 92: _MethodAnimation(Sphere of 200 submobjects), etc.:  80%|████████  | 4/5 [00:00<00:00, 16.27it/s]                                                                                                              [10/03/26 00:30:17] INFO     Animation 92 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00092.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 93: FadeIn(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                        INFO     Animation 93 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00093.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 94 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00094.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 95: FadeOut(VGroup of 1 submobjects):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                         INFO     Animation 95 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00095.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 96: _MethodAnimation(Sphere of 200 submobjects), etc.:   0%|          | 0/5 [00:00<?, ?it/s]Animation 96: _MethodAnimation(Sphere of 200 submobjects), etc.:  40%|████      | 2/5 [00:00<00:00, 14.63it/s]Animation 96: _MethodAnimation(Sphere of 200 submobjects), etc.:  80%|████████  | 4/5 [00:00<00:00, 14.37it/s]                                                                                                              [10/03/26 00:30:18] INFO     Animation 96 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00096.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 97: FadeIn(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                        INFO     Animation 97 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00097.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 98 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00098.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 99: FadeOut(VGroup of 1 submobjects):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                         INFO     Animation 99 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00099.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 100: _MethodAnimation(Sphere of 200 submobjects), etc.:   0%|          | 0/5 [00:00<?, ?it/s]Animation 100: _MethodAnimation(Sphere of 200 submobjects), etc.:  40%|████      | 2/5 [00:00<00:00, 12.11it/s]Animation 100: _MethodAnimation(Sphere of 200 submobjects), etc.:  80%|████████  | 4/5 [00:00<00:00, 11.90it/s]                                                                                                               [10/03/26 00:30:19] INFO     Animation 100 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00100.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 101: FadeIn(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                         INFO     Animation 101 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00101.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 102 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00102.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 103: FadeOut(VGroup of 1 submobjects):   0%|          | 0/3 [00:00<?, ?it/s]                                                                                      [10/03/26 00:30:20] INFO     Animation 103 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00103.mp4'                               
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}s=\frac12a_                        
+                             {\rm                                               
+                             rampa}t^2\special{dvisvgm:r                        
+                             aw </g>} to                                        
+                             media_pqm/Tex/2a26152576620                        
+                             1bf.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 104: FadeIn(VGroup of 2 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                         INFO     Animation 104 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00104.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 105: FadeIn(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                         INFO     Animation 105 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00105.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:30:21] INFO     Animation 106 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00106.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 107: FadeOut(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                          INFO     Animation 107 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00107.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 108: FadeOut(VGroup of 4 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]Animation 108: FadeOut(VGroup of 4 submobjects):  33%|███▎      | 2/6 [00:00<00:00, 10.67it/s]Animation 108: FadeOut(VGroup of 4 submobjects):  67%|██████▋   | 4/6 [00:00<00:00, 10.56it/s]Animation 108: FadeOut(VGroup of 4 submobjects): 100%|██████████| 6/6 [00:00<00:00, 10.49it/s]                                                                                              [10/03/26 00:30:22] INFO     Animation 108 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00108.mp4'                               
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\mathrm{pen                        
+                             diente}=\frac                                      
+                             a2\special{dvisvgm:raw                             
+                             </g>} to                                           
+                             media_pqm/Tex/c9feb23d2cfa0                        
+                             a2f.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 109: FadeIn(Axes of 2 submobjects), etc.:   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                             INFO     Animation 109 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00109.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 110: Create(Line), etc.:   0%|          | 0/8 [00:00<?, ?it/s]                                                                                            INFO     Animation 110 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00110.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 111 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00111.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 112: FadeOut(VGroup of 1 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]                                                                                      [10/03/26 00:30:23] INFO     Animation 112 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00112.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 113: FadeOut(Text('07 · GALILEO · HACER MEDIBLE LA ACELERACIÓN')), etc.:   0%|          | 0/3 [00:00<?, ?it/s]                                                                                                                                            INFO     Animation 113 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00113.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 114: _MethodAnimation(ValueTracker), etc.:   0%|          | 0/7 [00:00<?, ?it/s]                                                                                                              INFO     Animation 114 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00114.mp4'                               
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\boxed{\Del                        
+                             ta                                                 
+                             x=v_0t+\frac12at^2}\special                        
+                             {dvisvgm:raw </g>} to                              
+                             media_pqm/Tex/eda3d206542bf                        
+                             695.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_0=0,\quad                        
+                             a=-g\special{dvisvgm:raw                           
+                             </g>} to                                           
+                             media_pqm/Tex/b2dd7d9b3ce2a                        
+                             d5b.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_0=0,\quad                        
+                             |a|<g\special{dvisvgm:raw                          
+                             </g>} to                                           
+                             media_pqm/Tex/d7062aa2c834a                        
+                             3f9.tex                                            
+[10/03/26 00:30:24] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 115: FadeIn(Text('UNA MISMA ESTRUCTURA CINEMÁTICA')):   0%|          | 0/6 [00:00<?, ?it/s]Animation 115: FadeIn(Text('UNA MISMA ESTRUCTURA CINEMÁTICA')): 100%|██████████| 6/6 [00:00<00:00, 52.96it/s]                                                                                                                                 INFO     Animation 115 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00115.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 116: Write(MathTex('\\boxed{\\Delta x=v_0t+\\frac12at^2}')):   0%|          | 0/8 [00:00<?, ?it/s]Animation 116: Write(MathTex('\\boxed{\\Delta x=v_0t+\\frac12at^2}')):  88%|████████▊ | 7/8 [00:00<00:00, 65.16it/s]                                                                                                                                        INFO     Animation 116 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00116.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 117: FadeIn(RoundedRectangle), etc.:   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                        INFO     Animation 117 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00117.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 118: FadeIn(RoundedRectangle), etc.:   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                        INFO     Animation 118 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00118.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 119 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00119.mp4'                               
+[10/03/26 00:30:25] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 120: FadeIn(VGroup of 2 submobjects):   0%|          | 0/4 [00:00<?, ?it/s]                                                                                                         INFO     Animation 120 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00120.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 121 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00121.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 122: FadeOut(VGroup of 2 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]Animation 122: FadeOut(VGroup of 2 submobjects):  67%|██████▋   | 4/6 [00:00<00:00, 30.09it/s]                                                                                              [10/03/26 00:30:26] INFO     Animation 122 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00122.mp4'                               
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 123: FadeOut(VGroup of 5 submobjects):   0%|          | 0/6 [00:00<?, ?it/s]                                                                                                          INFO     Animation 123 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/par                         
+                             tial_movie_files/Physics9F                         
+                             reeFallBuilding3DCinematic                         
+                             /uncached_00123.mp4'                               
+                    INFO     Combining to Movie file.   scene_file_writer.py:753
+                    INFO                                scene_file_writer.py:904
+                             File ready at                                      
+                             '/manim/media_pqm/videos/p                         
+                             hysics9_freefall_building3                         
+                             d_cinematic_v1/1080p30/Phy                         
+                             sics9FreeFallBuilding3DCin                         
+                             ematic.mp4'                                        
+                                                                                
+                    INFO     The partial movie          scene_file_writer.py:874
+                             directory is full (> 100                           
+                             files). Therefore, manim                           
+                             has removed the 25 oldest                          
+                             file(s). You can change                            
+                             this behaviour by changing                         
+                             max_files_cached in                                
+                             config.                                            
+                    INFO     Rendered                               scene.py:278
+                             Physics9FreeFallBuilding3DCinematic                
+                             Played 124 animations                              
+                    INFO     Previewed File at:                  file_ops.py:236
+                             '/manim/media_pqm/videos/physics9_f                
+                             reefall_building3d_cinematic_v1/108                
+                             0p30/Physics9FreeFallBuilding3DCine                
+                             matic.mp4'                                         
+You are using manim version v0.20.1, but version v0.21.0 is available.
+You should consider upgrading via pip install -U manim
