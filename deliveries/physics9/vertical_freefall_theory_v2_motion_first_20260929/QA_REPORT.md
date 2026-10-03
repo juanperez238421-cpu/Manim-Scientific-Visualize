@@ -6,7 +6,7 @@
 - Codec: h264
 - Pixel format: yuv420p
 - Duration: 125.566667 s
-- Bytes: 5429250
+- Bytes: 5433864
 - Full sequential decode: PASS
 - PQL runtime gate: PASS
 - PQH final render: PASS
