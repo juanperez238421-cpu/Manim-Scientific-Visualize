@@ -7,7 +7,7 @@
 - Codec: h264
 - Pixel format: yuv420p
 - Duration: 124.766667 s
-- Bytes: 4512143
+- Bytes: 4513088
 - Full sequential FFmpeg decode: PASS
 
 Theory coverage:
