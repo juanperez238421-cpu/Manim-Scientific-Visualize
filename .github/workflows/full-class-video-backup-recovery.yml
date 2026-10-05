@@ -1,0 +1,133 @@
+name: Full Class Video Backup Recovery
+
+on:
+  push:
+    branches:
+      - ops/full-class-video-backup-2026-10-04
+    paths:
+      - '.github/workflows/full-class-video-backup-recovery.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Recover committed class videos from preserved refs
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p backup/{Physics9,Statistics10,Statistics11,DibujoTecnico}
+          manifest="backup/MANIFEST.tsv"
+          printf "subject\trepo\tref\tpath\tfilename\tbytes\tsha256\n" > "$manifest"
+
+          get_file() {
+            subject="$1"; repo="$2"; ref="$3"; path="$4"
+            outdir="backup/$subject"
+            name="$(basename "$path")"
+            url="https://raw.githubusercontent.com/$repo/$ref/$path"
+            echo "Downloading $subject :: $name"
+            curl -L --fail --retry 3 --retry-delay 2 "$url" -o "$outdir/$name"
+            test -s "$outdir/$name"
+            bytes="$(wc -c < "$outdir/$name" | tr -d ' ')"
+            sha="$(sha256sum "$outdir/$name" | awk '{print $1}')"
+            printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "$subject" "$repo" "$ref" "$path" "$name" "$bytes" "$sha" >> "$manifest"
+          }
+
+          R="juanperez238421-cpu/Manim-Scientific-Visualize"
+          get_file Physics9 "$R" 9296c307a76557fbdf1c8d9ce4e2c6b138ef4187 deliveries/physics9_position_to_velocity_graph_class4_2_20260904/Physics9_Position_to_Velocity_Graph_Class4_2_FINAL_pqh.mp4
+          get_file Physics9 "$R" 01fe759a5383a4f47faae7617d3b8a2a3883e89f deliverables/lab9a_seating_no_pc07/Lab9A_Fixed_Seating_NO_PC07_SENIOR_FINAL_pqh.mp4
+          get_file Physics9 "$R" 5453a484d6bc88e4731cb34d3588b4e7ed62cf17 deliveries/physics9_bus_relativity_v5_20260907/Physics9_Bus_Relativity_V5_SANTAOLALLA_SIMPLE_FINAL_pqh.mp4
+          get_file Physics9 "$R" 559a108ba01550c00e743de1f4c07c1d0164a363 deliveries/physics9_galileo_bus_relativity_v6_20260907/Physics9_Galileo_Bus_Relativity_V6_DYNAMIC_FINAL_pqh.mp4
+          get_file Physics9 "$R" 04b69597df315c36b100f6f66349a98d0df7e058 deliveries/physics9_bus_light_clock_v1_20260907/Physics9_Bus_Light_Clock_Time_Dilation_V1_FINAL_pqh.mp4
+          get_file Physics9 "$R" 04b69597df315c36b100f6f66349a98d0df7e058 deliveries/physics9_bus_light_clock_v2_20260907/Physics9_Bus_Light_Clock_Time_Dilation_V2_SENIOR_FINAL_pqh.mp4
+          get_file Physics9 "$R" e0d71920e610d1c2856c053ba7c8717a713fdc4a deliverables/lab9b_seating_no_pc07/Lab9B_Fixed_Seating_NO_PC07_SENIOR_FINAL_pqh.mp4
+          get_file Physics9 "$R" fdf287de1ca9513c5c9e20c78169930c93c58f69 deliveries/physics9_simple_relative_time_v2_20260907/Physics9_Simple_Relative_Time_V2_SENIOR_FINAL_pqh.mp4
+          get_file Physics9 "$R" 05d53535c33c3c5243daca103d7225f01ce0dea6 deliveries/physics9_relative_time_problem_only_v3_20260907/Physics9_Relative_Time_Problem_Only_V3_SENIOR_FINAL_pqh.mp4
+          get_file Physics9 "$R" 6062f526ee6b42de4befd794501310cf391e5538 deliverables/lab9c_seating_no_pc07/Lab9C_Fixed_Seating_NO_PC07_SENIOR_FINAL_pqh.mp4
+          get_file Physics9 "$R" d0b2480a1af72af9cbfa7b128621ffbd35a362cf published_renders/Physics9_Motion_Evaluation_Review_V1_SENIOR_FINAL_pqh.mp4
+          get_file Physics9 "$R" 5318b4dc1dc0c6ce51cafeb1c01f9815ce90bd63 published_renders/Physics9_City_Cars_Position_Velocity_V1_SENIOR_FINAL_pqh.mp4
+          get_file Physics9 "$R" 5318b4dc1dc0c6ce51cafeb1c01f9815ce90bd63 published_renders/Physics9_City_Cars_Position_Velocity_V2_SENIOR_FINAL_pqh.mp4
+          get_file Physics9 "$R" 5318b4dc1dc0c6ce51cafeb1c01f9815ce90bd63 published_renders/Physics9_City_Cars_Position_Velocity_V3_SENIOR_FINAL_pqh.mp4
+          get_file Physics9 "$R" a8b2813420a179ff3bb729fda084a6b840a1506c published_renders/Physics9_City_Cars_Position_Velocity_V4_JPSTYLE_SENIOR_FINAL_pqh.mp4
+          get_file Physics9 "$R" b41ac9afe0a367af9c72bd09526d8953eb7085c9 deliveries/physics9/Physics9_VariableVelocity_RealisticMotion_FULL_FINAL_pqh.mp4
+          get_file Physics9 "$R" b41ac9afe0a367af9c72bd09526d8953eb7085c9 deliveries/physics9/Physics9_VariableVelocity_SENIOR_V2_FULL_FINAL_pqh.mp4
+          get_file Physics9 "$R" b41ac9afe0a367af9c72bd09526d8953eb7085c9 deliveries/physics9/Physics9_VariableVelocity_SENIOR_V3_ENGLISH_FULL_FINAL_pqh.mp4
+          get_file Physics9 "$R" b41ac9afe0a367af9c72bd09526d8953eb7085c9 deliveries/physics9/Physics9_VariableVelocity_SENIOR_V4_FORENSIC_QA_FULL_FINAL_pqh.mp4
+          get_file Physics9 "$R" b41ac9afe0a367af9c72bd09526d8953eb7085c9 deliveries/physics9/Physics9_VariableVelocity_SENIOR_V5_DATA_STORY_FULL_FINAL_pqh.mp4
+          get_file Physics9 "$R" b41ac9afe0a367af9c72bd09526d8953eb7085c9 deliveries/physics9/Physics9_AccelerationGraph_Galileo_V1_FULL_FINAL_pqh.mp4
+          get_file Physics9 "$R" b41ac9afe0a367af9c72bd09526d8953eb7085c9 deliveries/physics9/Physics9_AccelerationGraph_Galileo_V2_STEP_BY_STEP_FULL_FINAL_pqh.mp4
+          get_file Physics9 "$R" b41ac9afe0a367af9c72bd09526d8953eb7085c9 deliveries/physics9/Physics9_AccelerationGraph_Galileo_V3_OPUS_VISUAL_FULL_FINAL_pqh.mp4
+          get_file Physics9 "$R" b41ac9afe0a367af9c72bd09526d8953eb7085c9 deliveries/physics9/Physics9_Acceleration_Galileo_V4_ASTRA_SENIOR_FULL_FINAL_pqh.mp4
+          get_file Physics9 "$R" b2ece361af3a99b867768c026eeef8180923b338 deliveries/physics9/freefall_seniorqa_20260928/Physics9_FreeFall_Weightlessness_SENIOR_QA_FINAL_pqh.mp4
+          get_file Physics9 "$R" 28f53884d07bb5d84fb70668a043a7a27048a450 deliveries/physics9/vertical_freefall_theory_v1_20260929/Physics9_VerticalMotion_FreeFall_THEORY_V1_FULL_FINAL_pqh.mp4
+          get_file Physics9 "$R" 28f53884d07bb5d84fb70668a043a7a27048a450 deliveries/physics9/vertical_freefall_theory_v2_motion_first_20260929/Physics9_VerticalMotion_FreeFall_THEORY_V2_MOTION_FIRST_FULL_FINAL_pqh.mp4
+          get_file Physics9 "$R" e372d787a9b419acfa27c7b3b6cab5172876160a deliveries/physics9/freefall_cases_equation_opus55_20261002/Physics9_FreeFall_Cases_Equation_OPUS55_FINAL_pqh.mp4
+          get_file Physics9 "$R" b2a9b3b0dc6adf23689d515acf848b67fcfee4fe deliveries/physics9/freefall_building3d_cinematic_v1_20261002/Physics9_FreeFall_Building3D_CINEMATIC_V1_FINAL_pqh.mp4
+
+          S10="juanperez238421-cpu/ijr-estadistica-10-2026"
+          get_file Statistics10 "$S10" 69f9f936ed3a8a83384ea663381995ddec8903da deliveries/statistics10_class4_percentile_rank_v3_final/Statistics10_Class4_Percentile_Rank_V3_SENIOR_FINAL_pqh.mp4
+          get_file Statistics10 "$S10" 5d98c40a7a44d18832bf4e3796d51a436420ea74 deliveries/statistics10_class4_iqr_boxplot_fixed_final/Statistics10_Class4_IQR_BoxPlot_FIXED_FINAL_pqh.mp4
+
+          S11="juanperez238421-cpu/ijr-estadistica-11-2026"
+          get_file Statistics11 "$S11" 24c5eb16524142c0ded295b95d05755228c593d9 manim/stat11_class4_csv_stats/delivery/Stat11_Class4_From_CSV_to_Statistical_Information_SENIOR_FINAL_PQH.mp4
+          get_file Statistics11 "$S11" 24c5eb16524142c0ded295b95d05755228c593d9 manim/stat11_class4_csv_stats_v2/delivery/Stat11_Class4_V2_SMALL_TO_BIG_DATA_SENIOR_FINAL_PQH.mp4
+
+          get_file DibujoTecnico "$R" c3538652a77ffaf7cd523d1bb2e8765a41fdb0a2 published_renders/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V6_FULL_TOTAL_FINAL_pqh.mp4
+          get_file DibujoTecnico "$R" 0022c710d183652551551c04235d7a987823f099 published_renders/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V7_SENIOR_QA_FINAL_pqh.mp4
+          get_file DibujoTecnico "$R" ad0283109c8fc0934440564620e96601f0f40fed published_renders/Dibujo_Tecnico_7_Reglas_Vistas_Ortogonales_V1_WRITE_FINAL_pqh.mp4
+          get_file DibujoTecnico "$R" e01b8648afba6a37d529de058dad9ea421ee15ec published_renders/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V8_FULL_TOTAL_DOWNLOAD_SAFE_FINAL_pqh.mp4
+          get_file DibujoTecnico "$R" e01b8648afba6a37d529de058dad9ea421ee15ec published_renders/Diedrico_3D_to_2D_V8.mp4
+          get_file DibujoTecnico "$R" 25011f39888d5d6161adcb99e0b5e8ecc3e0dc72 deliverables/technical_drawing_diedric_iso_20260908/TechnicalDrawing_Diedric_ISO_A_E_NTC1777_SENIOR_FINAL_pqh.mp4
+          get_file DibujoTecnico "$R" 25011f39888d5d6161adcb99e0b5e8ecc3e0dc72 deliverables/technical_drawing_diedric_iso_20260908_v2/TechnicalDrawing_Diedric_ISO_A_E_COLOMBIA_2026_SENIOR_FINAL_pqh.mp4
+          get_file DibujoTecnico "$R" da892695012106fb661f495da20da3514a5d426c published_renders/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V12_FIXED_FULL_TOTAL_FINAL_pqh.mp4
+          get_file DibujoTecnico "$R" da892695012106fb661f495da20da3514a5d426c published_renders/Diedrico_3D_to_2D_V12.mp4
+          get_file DibujoTecnico "$R" 51c60b20496fa0f05cf2a81246a51422c6ca1b0c published_renders/Dibujo_Tecnico_3D_to_2D_Orthographic_Projection_V13_FLUID_STEPWISE_FINAL_pqh.mp4
+          get_file DibujoTecnico "$R" 51c60b20496fa0f05cf2a81246a51422c6ca1b0c published_renders/Diedrico_3D_to_2D_V13_FLUID_STEPWISE.mp4
+
+          echo "Recovered videos: $(find backup -name '*.mp4' | wc -l)"
+          sha256sum backup/*/*.mp4 > backup/ALL_VIDEO_SHA256SUMS.txt
+
+      - name: Upload Physics 9 backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: FULL_BACKUP_Physics9_2026-09-04_to_2026-10-04
+          path: |
+            backup/Physics9
+            backup/MANIFEST.tsv
+            backup/ALL_VIDEO_SHA256SUMS.txt
+          retention-days: 2
+
+      - name: Upload Statistics 10 backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: FULL_BACKUP_Statistics10_2026-09-04_to_2026-10-04
+          path: |
+            backup/Statistics10
+            backup/MANIFEST.tsv
+            backup/ALL_VIDEO_SHA256SUMS.txt
+          retention-days: 2
+
+      - name: Upload Statistics 11 backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: FULL_BACKUP_Statistics11_2026-09-04_to_2026-10-04
+          path: |
+            backup/Statistics11
+            backup/MANIFEST.tsv
+            backup/ALL_VIDEO_SHA256SUMS.txt
+          retention-days: 2
+
+      - name: Upload Technical Drawing backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: FULL_BACKUP_DibujoTecnico_2026-09-04_to_2026-10-04
+          path: |
+            backup/DibujoTecnico
+            backup/MANIFEST.tsv
+            backup/ALL_VIDEO_SHA256SUMS.txt
+          retention-days: 2
