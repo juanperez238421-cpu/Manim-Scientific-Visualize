@@ -92,12 +92,60 @@ jobs:
           echo "Recovered videos: $(find backup -name '*.mp4' | wc -l)"
           sha256sum backup/*/*.mp4 > backup/ALL_VIDEO_SHA256SUMS.txt
 
-      - name: Upload Physics 9 backup
+      - name: Split Physics 9 into connector-safe packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p backup/Physics9_A_Foundations_Relativity backup/Physics9_B_VariableVelocity backup/Physics9_C_Acceleration_Galileo backup/Physics9_D_FreeFall
+          cp backup/Physics9/Physics9_Position_to_Velocity_Graph_Class4_2_FINAL_pqh.mp4 backup/Physics9_A_Foundations_Relativity/
+          cp backup/Physics9/Lab9*_pqh.mp4 backup/Physics9_A_Foundations_Relativity/
+          cp backup/Physics9/Physics9_Bus_*.mp4 backup/Physics9_A_Foundations_Relativity/
+          cp backup/Physics9/Physics9_Galileo_Bus_*.mp4 backup/Physics9_A_Foundations_Relativity/
+          cp backup/Physics9/Physics9_Simple_Relative_*.mp4 backup/Physics9_A_Foundations_Relativity/
+          cp backup/Physics9/Physics9_Relative_Time_*.mp4 backup/Physics9_A_Foundations_Relativity/
+          cp backup/Physics9/Physics9_Motion_Evaluation_*.mp4 backup/Physics9_A_Foundations_Relativity/
+          cp backup/Physics9/Physics9_City_Cars_*.mp4 backup/Physics9_A_Foundations_Relativity/
+          cp backup/Physics9/Physics9_VariableVelocity_*.mp4 backup/Physics9_B_VariableVelocity/
+          cp backup/Physics9/Physics9_Acceleration*.mp4 backup/Physics9_C_Acceleration_Galileo/
+          cp backup/Physics9/Physics9_FreeFall*.mp4 backup/Physics9_D_FreeFall/
+          cp backup/Physics9/Physics9_VerticalMotion*.mp4 backup/Physics9_D_FreeFall/
+
+      - name: Upload Physics 9 package A
         uses: actions/upload-artifact@v4
         with:
-          name: FULL_BACKUP_Physics9_2026-09-04_to_2026-10-04
+          name: FULL_BACKUP_Physics9_A_Foundations_Relativity_2026-09-04_to_2026-10-04
           path: |
-            backup/Physics9
+            backup/Physics9_A_Foundations_Relativity
+            backup/MANIFEST.tsv
+            backup/ALL_VIDEO_SHA256SUMS.txt
+          retention-days: 2
+
+      - name: Upload Physics 9 package B
+        uses: actions/upload-artifact@v4
+        with:
+          name: FULL_BACKUP_Physics9_B_VariableVelocity_2026-09-04_to_2026-10-04
+          path: |
+            backup/Physics9_B_VariableVelocity
+            backup/MANIFEST.tsv
+            backup/ALL_VIDEO_SHA256SUMS.txt
+          retention-days: 2
+
+      - name: Upload Physics 9 package C
+        uses: actions/upload-artifact@v4
+        with:
+          name: FULL_BACKUP_Physics9_C_Acceleration_Galileo_2026-09-04_to_2026-10-04
+          path: |
+            backup/Physics9_C_Acceleration_Galileo
+            backup/MANIFEST.tsv
+            backup/ALL_VIDEO_SHA256SUMS.txt
+          retention-days: 2
+
+      - name: Upload Physics 9 package D
+        uses: actions/upload-artifact@v4
+        with:
+          name: FULL_BACKUP_Physics9_D_FreeFall_2026-09-04_to_2026-10-04
+          path: |
+            backup/Physics9_D_FreeFall
             backup/MANIFEST.tsv
             backup/ALL_VIDEO_SHA256SUMS.txt
           retention-days: 2
