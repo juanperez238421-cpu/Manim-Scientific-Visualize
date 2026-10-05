@@ -3,7 +3,7 @@ name: Geometry 8 2D Areas V11 EXPLICIT POLYGON QA PQH
 on:
   push:
     branches:
-      - render/geometry8-2d-areas-v11-explicit-regular-polygon-20260904
+      - backup/recover-geometry8-v11-20261004
     paths:
       - 'render_jobs/geometry8_2d_areas_masterclass_20260831/**'
       - '.github/workflows/geometry8_2d_areas_v11_explicit_polygon_qa_pqh_20260904.yml'
@@ -222,4 +222,4 @@ jobs:
             out/
             qa_out/
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 2
