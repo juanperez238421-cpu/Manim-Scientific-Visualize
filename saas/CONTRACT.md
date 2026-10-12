@@ -1,7 +1,25 @@
-# Contrato HTTP y decisiones (v0.2) — para validar antes de escribir routers
+# Contrato HTTP y decisiones (v0.3)
 
-Estado: **propuesta**. Nada de esto está implementado en FastAPI todavía; `/openapi.json` real
-solo existirá cuando existan los endpoints. El borrador del frontend no es fuente de verdad.
+Estado: **implementado en FastAPI** (`apps/api`) y verificado con tests (ver `apps/api/QA_REPORT.md`).
+La fuente de verdad es el OpenAPI generado: `apps/api/openapi.json` (regenerable con
+`python apps/api/scripts/export_openapi.py`; un test falla si queda desactualizado). El borrador del
+frontend no es fuente de verdad. NO hay cobros reales, pasarela, Celery ni pipeline todavía.
+
+## Cambios de v0.3 (auditoría)
+* **Se reserva siempre el máximo autorizado** (`max_authorized_credits`); la liquidación solo LIBERA. Ya no
+  existe `consume` en el flujo: ninguna liquidación puede dejar el saldo negativo. Trigger de defensa en el ledger.
+* Orden de bloqueo único job → usuario; bloqueo de usuario `FOR NO KEY UPDATE` (ver nota en `schema.sql`:
+  los tests encontraron dos deadlocks reales con `FOR UPDATE` y se corrigieron).
+* `credit_holds` excluye jobs liquidados (`final_credits IS NULL`).
+* `Idempotency-Key` + hash canónico del cuerpo (`idempotency_keys`); misma clave y otro cuerpo ⇒ 409.
+* Pertenencia por FKs compuestas (job/estimación/PDF del mismo usuario) y estimación de un solo uso.
+* Transactional outbox (`outbox`) para publicar a Celery; relay con `SKIP LOCKED` y backoff.
+* Cancelación (`POST /v1/jobs/{id}/cancel`): `queued` ⇒ inmediata y reembolso total; `running` ⇒ solo se solicita
+  (`cancel_requested`) y los créditos siguen retenidos hasta que el worker llama `confirm_cancel(consumed)`,
+  que cobra solo lo consumido (acotado a la reserva).
+* Transiciones de estado validadas en la BD; un job terminal sin liquidar no puede confirmarse (`COMMIT` falla).
+* Estimaciones: `estimate_hash` obligatorio al crear; vencimiento, `pricing_version` y ajenas se rechazan.
+* Límite de jobs simultáneos por plan aplicado dentro de la transacción (409 `concurrency_limit`).
 
 ## Decisiones adoptadas (de tu handoff)
 | Tema | Decisión | Estado |
@@ -19,7 +37,7 @@ solo existirá cuando existan los endpoints. El borrador del frontend no es fuen
    verifica tamaño, magic `%PDF-`, recalcula SHA-256 (si difiere de `declared_sha256` → `rejected`), cuenta páginas,
    detecta capa de texto/`ocr_required`, aplica límites del plan → `analyzed` o `rejected` (422). `/pdfs` queda descartado.
 2. **Estados de job**: exactamente el enum SQL `draft|queued|running|succeeded|failed|cancelled` (UI los traduce).
-3. **Etapas**: `GET /v1/jobs/{id}` devuelve `stages[]` (una por `stage_name`, con `status` incl. `skipped`) y
+3. **Etapas** (siempre las 7, incluidas `skipped`): `GET /v1/jobs/{id}` devuelve `stages[]` (una por `stage_name`, con `status` incl. `skipped`) y
    `scenes: {total, by_status, items[label,engine,status]}`; `current_stage` es solo un atajo y no describe paralelismo.
 4. **Tipos**: solo `solution_video` y `hybrid_lesson`. `explain/summarize` son UX y no se mapean solos.
 5. **Prólogo**: columna `jobs.include_prologue`. `solution_video` ⇒ siempre `false` (CHECK en BD; su flujo es página→solución→página).
