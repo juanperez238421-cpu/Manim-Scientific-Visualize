@@ -1,5 +1,5 @@
 -- =====================================================================
--- PDF -> animated educational video SaaS  |  PostgreSQL 15+ schema (v0.1)
+-- PDF -> animated educational video SaaS  |  PostgreSQL 15+ schema (v0.2)
 -- Propuesta para validación. Convenciones:
 --   * PK uuid (gen_random_uuid, built-in desde PG13)
 --   * timestamptz siempre en UTC
@@ -61,15 +61,16 @@ CREATE TABLE users (
   id             uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   email          citext NOT NULL UNIQUE,
   email_verified boolean NOT NULL DEFAULT false,
-  password_hash  text,                       -- NULL si solo OAuth
+  auth_provider  text NOT NULL DEFAULT 'clerk',
+  provider_subject text NOT NULL,            -- 'sub' del JWT verificado (Clerk). Identidad = (provider, sub), NO el email
   display_name   text,
   locale         text NOT NULL DEFAULT 'es',
   role           text NOT NULL DEFAULT 'user' CHECK (role IN ('user','admin','support')),
   status         text NOT NULL DEFAULT 'active' CHECK (status IN ('active','suspended','deleted')),
-  stripe_customer_id text UNIQUE,
   created_at     timestamptz NOT NULL DEFAULT now(),
   updated_at     timestamptz NOT NULL DEFAULT now(),
-  deleted_at     timestamptz
+  deleted_at     timestamptz,
+  UNIQUE (auth_provider, provider_subject)
 );
 CREATE TRIGGER trg_users_updated BEFORE UPDATE ON users
   FOR EACH ROW EXECUTE FUNCTION set_updated_at();
@@ -101,7 +102,10 @@ CREATE TABLE subscriptions (
   current_period_start    timestamptz NOT NULL,
   current_period_end      timestamptz NOT NULL,
   cancel_at_period_end    boolean NOT NULL DEFAULT false,
-  stripe_subscription_id  text UNIQUE,
+  payment_provider        text,                    -- 'mercadopago' | 'wompi' | ... (sin decidir)
+  external_subscription_id text,
+  UNIQUE (payment_provider, external_subscription_id),
+  CHECK ((payment_provider IS NULL) = (external_subscription_id IS NULL)),
   created_at              timestamptz NOT NULL DEFAULT now(),
   updated_at              timestamptz NOT NULL DEFAULT now(),
   CHECK (current_period_end > current_period_start)
@@ -112,25 +116,57 @@ CREATE UNIQUE INDEX uq_subscriptions_one_live ON subscriptions(user_id)
 CREATE TRIGGER trg_subs_updated BEFORE UPDATE ON subscriptions
   FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
+CREATE TABLE payment_customers (
+  user_id     uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  provider    text NOT NULL,
+  external_id text NOT NULL,
+  PRIMARY KEY (user_id, provider),
+  UNIQUE (provider, external_id)
+);
+
 -- ---------- PDFs subidos ----------------------------------------------
 CREATE TABLE pdf_files (
   id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id       uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   original_name text NOT NULL,
   storage_key   text NOT NULL UNIQUE,                 -- clave S3
+  content_type  text NOT NULL DEFAULT 'application/pdf' CHECK (content_type = 'application/pdf'),
   size_bytes    bigint NOT NULL CHECK (size_bytes > 0),
-  sha256        char(64) NOT NULL CHECK (sha256 ~ '^[0-9a-f]{64}$'),
+  declared_sha256 char(64) NOT NULL CHECK (declared_sha256 ~ '^[0-9a-f]{64}$'),  -- lo declara el cliente en init
+  sha256        char(64) CHECK (sha256 ~ '^[0-9a-f]{64}$'),                      -- lo CALCULA el servidor en complete
+  upload_expires_at timestamptz,
   page_count    integer CHECK (page_count > 0),       -- NULL hasta analizar
   has_text_layer boolean,                              -- false => requiere OCR (más caro)
+  ocr_required  boolean NOT NULL DEFAULT false,
   analysis      jsonb NOT NULL DEFAULT '{}'::jsonb,    -- n problemas, ecuaciones, figuras, complejidad
-  status        text NOT NULL DEFAULT 'uploaded'
-                CHECK (status IN ('uploaded','analyzed','rejected','deleted')),
+  status        text NOT NULL DEFAULT 'pending'
+                CHECK (status IN ('pending','uploaded','analyzed','rejected','deleted')),
+                -- pending: init hecho; uploaded: bytes verificados; analyzed: listo para estimar
   reject_reason text,
   created_at    timestamptz NOT NULL DEFAULT now(),
-  deleted_at    timestamptz
+  deleted_at    timestamptz,
+  CHECK (status IN ('pending','rejected','deleted') OR sha256 IS NOT NULL),
+  CHECK (status <> 'analyzed' OR page_count IS NOT NULL)
 );
 CREATE INDEX idx_pdf_files_user ON pdf_files(user_id, created_at DESC);
 CREATE INDEX idx_pdf_files_sha  ON pdf_files(user_id, sha256);   -- dedupe / caché
+
+-- ---------- estimaciones (contrato de precio mostrado al usuario) -----
+CREATE TABLE job_estimates (
+  id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id           uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  pdf_file_id       uuid NOT NULL REFERENCES pdf_files(id),
+  kind              job_kind NOT NULL,
+  config            jsonb NOT NULL,
+  estimated_seconds integer NOT NULL CHECK (estimated_seconds > 0),
+  estimated_credits integer NOT NULL CHECK (estimated_credits >= 0),
+  max_credits       integer NOT NULL CHECK (max_credits >= estimated_credits),  -- tope que el usuario puede autorizar
+  breakdown         jsonb NOT NULL,                  -- por motor/escena/OCR, para mostrar y auditar
+  pricing_version   text NOT NULL,                   -- tarifas usadas (tarifas aún NO aprobadas)
+  created_at        timestamptz NOT NULL DEFAULT now(),
+  expires_at        timestamptz NOT NULL
+);
+CREATE INDEX idx_job_estimates_user ON job_estimates(user_id, created_at DESC);
 
 -- ---------- jobs -------------------------------------------------------
 CREATE TABLE jobs (
@@ -138,6 +174,9 @@ CREATE TABLE jobs (
   user_id            uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   pdf_file_id        uuid NOT NULL REFERENCES pdf_files(id),
   kind               job_kind NOT NULL,
+  include_prologue   boolean NOT NULL DEFAULT false,
+  estimate_id        uuid REFERENCES job_estimates(id),
+  max_authorized_credits integer CHECK (max_authorized_credits >= 0),  -- tope aceptado explícitamente
   status             job_status NOT NULL DEFAULT 'draft',
   current_stage      stage_name,
   progress_pct       smallint NOT NULL DEFAULT 0 CHECK (progress_pct BETWEEN 0 AND 100),
@@ -172,7 +211,12 @@ CREATE TABLE jobs (
   CHECK (status <> 'queued'    OR queued_at IS NOT NULL),
   CHECK (status <> 'running'   OR started_at IS NOT NULL),
   CHECK (status NOT IN ('succeeded','failed','cancelled') OR finished_at IS NOT NULL),
-  CHECK (status <> 'failed' OR error_code IS NOT NULL)
+  CHECK (status <> 'failed' OR error_code IS NOT NULL),
+  -- el prólogo pop-up (H1..) solo existe en hybrid_lesson; solution_video nunca lo lleva
+  CHECK (kind = 'hybrid_lesson' OR include_prologue = false),
+  -- un job fuera de 'draft' debe tener estimación y tope autorizado
+  CHECK (status = 'draft' OR (estimate_id IS NOT NULL AND max_authorized_credits IS NOT NULL
+                              AND reserved_credits <= max_authorized_credits))
 );
 CREATE UNIQUE INDEX uq_jobs_idempotency ON jobs(user_id, idempotency_key)
   WHERE idempotency_key IS NOT NULL;
@@ -268,9 +312,68 @@ END $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_ledger_immutable BEFORE UPDATE OR DELETE ON credit_ledger
   FOR EACH ROW EXECUTE FUNCTION forbid_ledger_mutation();
 
+-- Semántica (UNA sola, para no restar dos veces en la UI):
+--   available = SUM(delta)          -> ya descuenta lo reservado (lo que puede gastar ahora)
+--   held      = reservas netas de jobs queued/running
+--   total     = available + held
 CREATE VIEW credit_balances AS
-  SELECT user_id, COALESCE(SUM(delta), 0)::integer AS balance
-  FROM credit_ledger GROUP BY user_id;
+  SELECT u.id AS user_id, COALESCE(SUM(l.delta), 0)::integer AS available
+  FROM users u LEFT JOIN credit_ledger l ON l.user_id = u.id GROUP BY u.id;
+
+CREATE VIEW credit_holds AS
+  SELECT j.user_id, COALESCE(-SUM(l.delta), 0)::integer AS held
+  FROM jobs j JOIN credit_ledger l ON l.job_id = j.id
+  WHERE j.status IN ('queued','running') GROUP BY j.user_id;
+
+-- Reserva atómica: bloquea la fila del usuario => jobs concurrentes se serializan.
+-- Idempotente por job: un reintento devuelve true sin volver a cobrar.
+CREATE OR REPLACE FUNCTION reserve_credits(p_job uuid, p_amount integer) RETURNS boolean AS $$
+DECLARE v_user uuid; v_max integer; v_bal integer;
+BEGIN
+  SELECT user_id, max_authorized_credits INTO v_user, v_max FROM jobs WHERE id = p_job;
+  IF v_user IS NULL THEN RAISE EXCEPTION 'job % not found', p_job; END IF;
+  IF p_amount <= 0 OR p_amount > COALESCE(v_max, 0) THEN
+    RAISE EXCEPTION 'reserve % exceeds authorized max %', p_amount, v_max;
+  END IF;
+  PERFORM 1 FROM users WHERE id = v_user FOR UPDATE;
+  IF EXISTS (SELECT 1 FROM credit_ledger WHERE idempotency_key = 'reserve:' || p_job) THEN
+    RETURN true;
+  END IF;
+  SELECT COALESCE(SUM(delta),0) INTO v_bal FROM credit_ledger WHERE user_id = v_user;
+  IF v_bal < p_amount THEN RETURN false; END IF;               -- API responde 402
+  INSERT INTO credit_ledger(user_id, job_id, entry_type, delta, reason, idempotency_key)
+    VALUES (v_user, p_job, 'reserve', -p_amount, 'job reserve', 'reserve:' || p_job);
+  UPDATE jobs SET reserved_credits = p_amount WHERE id = p_job;
+  RETURN true;
+END $$ LANGUAGE plpgsql;
+
+-- Liquidación. p_actual = costo real; NUNCA se cobra por encima del tope autorizado.
+--   actual < reservado  -> release de la diferencia
+--   actual > reservado  -> consume solo hasta max_authorized_credits
+--   fallo técnico (p_actual = 0) -> release total
+-- Idempotente (callbacks duplicados no hacen nada).
+CREATE OR REPLACE FUNCTION settle_job_credits(p_job uuid, p_actual integer) RETURNS integer AS $$
+DECLARE v_user uuid; v_max integer; v_res integer; v_charge integer; v_diff integer;
+BEGIN
+  SELECT user_id, max_authorized_credits, reserved_credits INTO v_user, v_max, v_res
+    FROM jobs WHERE id = p_job FOR UPDATE;
+  IF v_user IS NULL THEN RAISE EXCEPTION 'job % not found', p_job; END IF;
+  IF EXISTS (SELECT 1 FROM jobs WHERE id = p_job AND final_credits IS NOT NULL) THEN
+    RETURN (SELECT final_credits FROM jobs WHERE id = p_job);   -- ya liquidado
+  END IF;
+  PERFORM 1 FROM users WHERE id = v_user FOR UPDATE;
+  v_charge := LEAST(GREATEST(p_actual,0), v_max);
+  v_diff := v_res - v_charge;
+  IF v_diff > 0 THEN
+    INSERT INTO credit_ledger(user_id, job_id, entry_type, delta, reason, idempotency_key)
+      VALUES (v_user, p_job, 'release', v_diff, 'settle: unused reserve', 'settle:' || p_job);
+  ELSIF v_diff < 0 THEN
+    INSERT INTO credit_ledger(user_id, job_id, entry_type, delta, reason, idempotency_key)
+      VALUES (v_user, p_job, 'consume', v_diff, 'settle: overrun within authorized max', 'settle:' || p_job);
+  END IF;  -- diff = 0: sin movimiento; jobs.final_credits marca la liquidación
+  UPDATE jobs SET final_credits = v_charge WHERE id = p_job;
+  RETURN v_charge;
+END $$ LANGUAGE plpgsql;
 
 -- ---------- logs de renderizado ---------------------------------------
 CREATE TABLE render_logs (
@@ -324,11 +427,4 @@ CREATE TABLE chat_messages (
   created_at timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX idx_chat_messages_session ON chat_messages(session_id, id);
-
--- ---------- datos semilla de planes (ajustables) ----------------------
-INSERT INTO plans (code, name, price_cents, monthly_credits, max_pdf_pages, max_pdf_bytes,
-                   max_video_seconds, max_concurrent_jobs, max_resolution, queue_priority, video_retention_days)
-VALUES
-  ('free',    'Free',    0,     30,  5,  10485760,  120, 1, '720p',  2,  7),
-  ('starter', 'Starter', 1900,  300, 20, 31457280,  480, 1, '1080p', 5, 30),
-  ('pro',     'Pro',     5900, 1200, 60, 104857600, 900, 3, '1080p', 8, 90);
+-- NOTA: los planes semilla viven en db/seed_plans_DRAFT.sql (tarifas NO aprobadas).

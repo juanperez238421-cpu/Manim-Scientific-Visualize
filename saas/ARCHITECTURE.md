@@ -37,8 +37,8 @@ nunca importa de `apps/api`.
 ## 2. Pipeline por job
 
 ```
-POST /pdfs ─▶ S3 + fila pdf_files ─▶ análisis rápido (páginas, texto/OCR, nº problemas) ─▶ estimación de créditos
-POST /jobs ─▶ reserva créditos (ledger) ─▶ Celery chain:
+POST /v1/uploads/init → PUT presignado a R2/MinIO → POST /v1/uploads/{id}/complete ─▶ fila pdf_files verificada ─▶ análisis rápido (páginas, texto/OCR, nº problemas) ─▶ estimación de créditos
+POST /v1/jobs (estimate_id + Idempotency-Key) ─▶ reserve_credits() atómico ─▶ Celery chain:
 
  extract ─▶ script ─▶ ┌ render_manim    (cola "manim",   CPU-heavy)  ┐ ─▶ compose ─▶ upload
                       ├ render_prologue (cola "web",     Chromium)   ┤    (ffmpeg)
@@ -114,3 +114,5 @@ peso: svg 0.5 · manim 1.0 · threejs 2.5        (calibrar con usage_events real
 2. Proveedor de pagos (¿Stripe?) y S3 (¿MinIO local/R2/AWS?).
 3. ¿Autenticación propia (JWT) o delegada (Clerk/Auth0/Supabase)? El schema soporta ambas.
 4. Idioma(s) en pantalla del video (el protocolo pide fijarlo por proyecto).
+
+> v0.2: ver `CONTRACT.md` (protocolo de upload, estados, créditos, auth, pagos) y `db/schema.sql` v0.2.
