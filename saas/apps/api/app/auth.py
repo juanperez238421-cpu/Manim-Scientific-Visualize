@@ -6,6 +6,7 @@ from typing import Callable
 
 import jwt
 from fastapi import Depends, Request
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from .errors import ApiError
 
@@ -43,12 +44,17 @@ class JwtVerifier:
         return Identity("clerk", claims["sub"], claims.get("email"), claims.get("name"))
 
 
-def get_identity(request: Request) -> Identity:
-    header = request.headers.get("authorization", "")
-    scheme, _, token = header.partition(" ")
-    if scheme.lower() != "bearer" or not token:
+# auto_error=False: los fallos se devuelven con nuestro formato {code, message, request_id}.
+# Su única función aquí es declarar el esquema Bearer en el OpenAPI generado.
+bearer_scheme = HTTPBearer(auto_error=False, scheme_name="bearerAuth", bearerFormat="JWT",
+                           description="JWT de sesión de Clerk (RS256).")
+
+
+def get_identity(request: Request,
+                 creds: HTTPAuthorizationCredentials | None = Depends(bearer_scheme)) -> Identity:
+    if creds is None or not creds.credentials:
         raise ApiError(401, "unauthorized", "Falta el token Bearer.")
-    return request.app.state.verifier.verify(token.strip())
+    return request.app.state.verifier.verify(creds.credentials.strip())
 
 
 @dataclass(frozen=True)

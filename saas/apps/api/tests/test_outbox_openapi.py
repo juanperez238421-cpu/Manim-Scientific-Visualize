@@ -125,3 +125,12 @@ def test_enums_match_sql(pool):
         assert labels("job_status") == list(get_args(JobStatus))
         assert labels("job_kind") == list(get_args(JobKind))
         assert labels("stage_name") == list(get_args(StageName))
+
+
+def test_openapi_declares_bearer_security_on_every_v1_operation(client):
+    spec = client.get("/openapi.json").json()
+    scheme = spec["components"]["securitySchemes"]["bearerAuth"]
+    assert scheme["type"] == "http" and scheme["scheme"] == "bearer" and scheme["bearerFormat"] == "JWT"
+    for path, item in spec["paths"].items():
+        for method, op in item.items():
+            assert {"bearerAuth": []} in op.get("security", []), f"{method.upper()} {path} sin security"

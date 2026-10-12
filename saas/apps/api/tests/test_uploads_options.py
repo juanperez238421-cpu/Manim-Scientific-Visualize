@@ -98,3 +98,14 @@ def test_free_plan_can_afford_one_useful_video(alice, pdf_for, estimate_for):
     un solution_video de 40 s a 720p cabe dentro del presupuesto Free (30 créditos)."""
     e = estimate_for(alice, pdf_for(alice), target_seconds=40, resolution="720p")
     assert e["estimated_credits"] <= 30
+
+
+import pytest  # noqa: E402
+
+
+@pytest.mark.xfail(strict=True, reason="HALLAZGO DE NEGOCIO (tarifas borrador): 40 s a 720p estima 26 créditos pero "
+                   "la RESERVA MÁXIMA es 33 (>30 del Free), así que el Free no puede crear ese job. Decisión de "
+                   "tarifas pendiente: headroom menor, menos segundos o más créditos. strict: pasará a fallo al arreglarse.")
+def test_free_plan_can_reserve_max_for_40s_video(alice, pdf_for, estimate_for):
+    e = estimate_for(alice, pdf_for(alice), target_seconds=40, resolution="720p")
+    assert e["max_credits"] <= 30, (e["estimated_credits"], e["max_credits"])

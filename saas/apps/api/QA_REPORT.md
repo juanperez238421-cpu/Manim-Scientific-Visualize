@@ -1,6 +1,6 @@
 # QA Report — AniMotionPDF API (etapa 1)
 
-Resultado: **64 PASS / 0 FAIL**, repetido 5 veces consecutivas sin intermitencias (~10 s por corrida).
+Resultado (actualizado tras la revisión del frontend): **65 PASS / 0 FAIL / 1 XFAIL documentado** (antes 64 PASS), repetido 5 veces consecutivas sin intermitencias (~10 s por corrida).
 Entorno: Python 3.13, PostgreSQL 16 real (cluster temporal), FastAPI 0.143, psycopg 3.3, pytest 9. Sin Celery, sin Redis, sin pagos,
 sin S3 real (FakeStore), sin Supabase. Clerk simulado con un par RSA de prueba (misma lógica de verificación que producción).
 
@@ -125,3 +125,10 @@ Reproducir: `cd saas/apps/api && pip install -e '.[dev]' pytest-timeout && pytes
 - Tarifas: son BORRADOR; el Free solo está validado contra los pesos draft (`test_free_plan_can_afford_one_useful_video`).
 - Con pesos draft, 60 s de `solution_video` a 720p cuestan 39 créditos > 30: el límite vinculante del Free son los créditos (~47 s), no `max_video_seconds=60`.
 
+
+## Actualización: hallazgos tras revisar la Fase 2 del frontend
+| Hallazgo | Estado |
+|---|---|
+| El OpenAPI no declaraba `securitySchemes`/Bearer | **Corregido**: esquema `bearerAuth` (http/bearer/JWT) generado por FastAPI y `security` en las 12 operaciones; test `test_openapi_declares_bearer_security_on_every_v1_operation`. `openapi.json` regenerado: el frontend puede ejecutar `npm run api:generate`. |
+| QA frontend #8: Free de 40 s con **reserva máxima** | **Falla por tarifas borrador**: 40 s a 720p estima 26 créditos pero `max_credits` = 33 > 30. Registrado como `xfail(strict)` (`test_free_plan_can_reserve_max_for_40s_video`). Requiere decisión de tarifas (headroom ≤ 1,15, menos segundos o más créditos). No toqué las tarifas. |
+| Subida firmada desde el navegador (CORS en MinIO/R2) | No probado aquí (FakeStore). Requiere `PUT` con `Content-Type` exacto y CORS del bucket para el origen del frontend. |

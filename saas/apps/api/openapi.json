@@ -34,7 +34,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/v1/render-options": {
@@ -65,7 +70,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/v1/uploads/init": {
@@ -136,7 +146,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/v1/uploads/{file_id}/complete": {
@@ -146,6 +161,11 @@
         ],
         "summary": "Complete",
         "operationId": "completeUpload",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "file_id",
@@ -279,7 +299,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/v1/jobs": {
@@ -289,6 +314,11 @@
         ],
         "summary": "Create",
         "operationId": "createJob",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "Idempotency-Key",
@@ -383,6 +413,11 @@
         ],
         "summary": "List ",
         "operationId": "listJobs",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "limit",
@@ -474,6 +509,11 @@
         ],
         "summary": "Get",
         "operationId": "getJob",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "job_id",
@@ -546,6 +586,11 @@
         ],
         "summary": "Cancel",
         "operationId": "cancelJob",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "job_id",
@@ -631,6 +676,11 @@
         ],
         "summary": "Assets",
         "operationId": "getJobAssets",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "job_id",
@@ -734,7 +784,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/v1/credits/ledger": {
@@ -744,6 +799,11 @@
         ],
         "summary": "Ledger",
         "operationId": "getCreditsLedger",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "limit",
@@ -1746,6 +1806,14 @@
           "size_bytes"
         ],
         "title": "VideoInfo"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "description": "JWT de sesión de Clerk (RS256).",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
