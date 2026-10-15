@@ -1,0 +1,63 @@
+P1: 3 figures (3–5) ✓
+  A1 rectangle: drawn 60.0000 vs formula 60.0000 (err 0.0000 %) ✓
+  A2 triangle: drawn 12.0000 vs formula 12.0000 (err 0.0000 %) ✓
+  A3 square hole: drawn 9.0000 vs formula 9.0000 (err 0.0000 %) ✓
+  positive parts disjoint (no region added twice) ✓
+  every gap inside the silhouette (clearance ≥ 0.25 cm) ✓
+  gaps pairwise separated (no region subtracted twice) ✓
+  tags sit on their own region ✓
+  shaded region measured 63.0000 vs answer 63.0000 ✓
+  answer = 63 ≈ 63.00 cm² ✓
+P2: 4 figures (3–5) ✓
+  A1 rectangle: drawn 200.0000 vs formula 200.0000 (err 0.0000 %) ✓
+  A2 two semicircles: drawn 78.5396 vs formula 78.5398 (err 0.0003 %) ✓
+  A3 centre circle: drawn 28.2742 vs formula 28.2743 (err 0.0006 %) ✓
+  positive parts disjoint (no region added twice) ✓
+  every gap inside the silhouette (clearance ≥ 0.25 cm) ✓
+  gaps pairwise separated (no region subtracted twice) ✓
+  tags sit on their own region ✓
+  shaded region measured 250.2654 vs answer 250.2655 ✓
+  answer = 200+16\pi ≈ 250.27 cm² ✓
+P3: 5 figures (3–5) ✓
+  A1 rectangle: drawn 112.0000 vs formula 112.0000 (err 0.0000 %) ✓
+  A2 triangle: drawn 42.0000 vs formula 42.0000 (err 0.0000 %) ✓
+  A3 square window: drawn 9.0000 vs formula 9.0000 (err 0.0000 %) ✓
+  A4 rhombus window: drawn 6.0000 vs formula 6.0000 (err 0.0000 %) ✓
+  A5 round window: drawn 12.5663 vs formula 12.5664 (err 0.0006 %) ✓
+  positive parts disjoint (no region added twice) ✓
+  every gap inside the silhouette (clearance ≥ 0.25 cm) ✓
+  gaps pairwise separated (no region subtracted twice) ✓
+  tags sit on their own region ✓
+  shaded region measured 126.4337 vs answer 126.4336 ✓
+  answer = 139-4\pi ≈ 126.43 cm² ✓
+
+P1 TRAIL SIGN: 63 cm²
+    A1 ['A_{1}=b\\times h', 'A_{1}=10\\times 6', 'A_{1}=60\\ \\text{cm}^2']
+    A2 ['A_{2}=\\frac{b\\times h}{2}', 'A_{2}=\\frac{6\\times 4}{2}=\\frac{24}{2}', 'A_{2}=12\\ \\text{cm}^2']
+    A3 ['A_{3}=s^2', 'A_{3}=3^2=3\\times 3', 'A_{3}=9\\ \\text{cm}^2']
+    A_s=(A_{1}+A_{2})-(A_{3})
+    A_s=(60+12)-(9)
+    A_s=72-9
+    A_s=\boxed{63\ \text{cm}^2}
+P2 HOCKEY RINK: 200 + 16π ≈ 250.27 cm²
+    A1 ['A_{1}=b\\times h', 'A_{1}=20\\times 10', 'A_{1}=200\\ \\text{cm}^2']
+    A2 ['r=10\\div 2=5\\ \\text{cm}', 'A_{2}=2\\times\\frac{\\pi r^2}{2}=\\pi r^2', 'A_{2}=\\pi(5)^2', 'A_{2}=25\\pi\\ \\text{cm}^2']
+    A3 ['A_{3}=\\pi r^2', 'A_{3}=\\pi(3)^2=\\pi\\times 9', 'A_{3}=9\\pi\\ \\text{cm}^2']
+    A_s=(A_{1}+A_{2})-(A_{3})
+    A_s=(200+25\pi)-(9\pi)
+    A_s=200+25\pi-9\pi
+    A_s=200+16\pi\ \text{cm}^2
+    A_s\approx\boxed{250.27\ \text{cm}^2}
+P3 MOUNTAIN LODGE: 139 − 4π ≈ 126.43 cm²
+    A1 ['A_{1}=b\\times h', 'A_{1}=14\\times 8', 'A_{1}=112\\ \\text{cm}^2']
+    A2 ['A_{2}=\\frac{b\\times h}{2}', 'A_{2}=\\frac{14\\times 6}{2}=\\frac{84}{2}', 'A_{2}=42\\ \\text{cm}^2']
+    A3 ['A_{3}=s^2', 'A_{3}=3^2=3\\times 3', 'A_{3}=9\\ \\text{cm}^2']
+    A4 ['A_{4}=\\frac{D\\times d}{2}', 'A_{4}=\\frac{4\\times 3}{2}=\\frac{12}{2}', 'A_{4}=6\\ \\text{cm}^2']
+    A5 ['A_{5}=\\pi r^2', 'A_{5}=\\pi(2)^2=\\pi\\times 4', 'A_{5}=4\\pi\\ \\text{cm}^2']
+    A_s=(A_{1}+A_{2})-(A_{3}+A_{4}+A_{5})
+    A_s=(112+42)-(9+6+4\pi)
+    A_s=154-(15+4\pi)
+    A_s=139-4\pi\ \text{cm}^2
+    A_s\approx\boxed{126.43\ \text{cm}^2}
+
+ALL INTEGRITY CHECKS PASSED

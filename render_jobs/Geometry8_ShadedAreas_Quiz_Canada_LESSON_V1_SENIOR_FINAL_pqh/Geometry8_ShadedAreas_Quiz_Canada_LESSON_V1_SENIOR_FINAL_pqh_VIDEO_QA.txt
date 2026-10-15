@@ -1,0 +1,21 @@
+VIDEO QA — Geometry8_ShadedAreas_Quiz_Canada_LESSON_V1_SENIOR_FINAL_pqh.mp4
+protocols: HYBRID-SCIANIM-v1 (LESSON style) + MANIMCE-PQH-DIRECT-GITHUB-v1 gates D/E
+date: 2026-10-15T14:53:55Z
+
+== ffprobe ==
+codec_name=h264
+width=1920
+height=1080
+pix_fmt=yuv420p
+r_frame_rate=30/1
+nb_frames=17226
+duration=574.190169
+size=20943995
+full decode errors: 0
+share copy: crf 23, 11604870 bytes
+contact sheet: one frame / 5 s
+event stills: 41
+
+== SHA-256 ==
+f4a52c5104df8409a16754a37299b8b481421af4588a8eeb4e36616ebd6f14fc  Geometry8_ShadedAreas_Quiz_Canada_LESSON_V1_SENIOR_FINAL_pqh.mp4
+1a039379578bbbc8c3552c47d575db042547c9ab61d84f0ca546dd12d1d449f8  Geometry8_ShadedAreas_Quiz_Canada_LESSON_V1_SENIOR_FINAL_pqh_share.mp4
