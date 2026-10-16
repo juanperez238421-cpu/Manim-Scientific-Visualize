@@ -72,7 +72,7 @@ def fm(s,width=11.8):
 def pizza():
     sectors=VGroup()
     for k in range(8):
-        sectors.add(Sector(outer_radius=.96,start_angle=k*TAU/8,
+        sectors.add(Sector(radius=.96,start_angle=k*TAU/8,
             angle=TAU/8-.018,fill_color=GOLD if k%2 else "#FFA95B",
             fill_opacity=1,stroke_color=BG,stroke_width=2))
     sectors.add(Circle(radius=.96,color="#EF8F4C",stroke_width=7))
