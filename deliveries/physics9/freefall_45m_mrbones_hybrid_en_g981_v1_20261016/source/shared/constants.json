@@ -1,0 +1,25 @@
+{
+ "_doc": "Single source of truth for BOTH engines (cartoon JS + ManimCE). ENGLISH edition, g = 9.81 m/s^2. Units SI. Axis +y up, origin at ground level below the release point.",
+ "H": 45.0,
+ "g": 9.81,
+ "g_real": 9.81,
+ "v0": {
+  "1": 0.0,
+  "2": -10.0,
+  "3": 10.0
+ },
+ "release_x": 0.25,
+ "rig_u_per_m": 200,
+ "sling": {
+  "R_u": 115,
+  "note": "grip on the humerus 8 u above the elbow + forearm 55 u + wrist->skull centre 52 u"
+ },
+ "air": {
+  "rho": 1.2,
+  "Cd": 0.5,
+  "mass_kg": 1.0,
+  "diameter_m": 0.18,
+  "note": "estimate for a real human skull (not Mr. Bones' cartoon skull)"
+ },
+ "g_rounded": 10.0
+}

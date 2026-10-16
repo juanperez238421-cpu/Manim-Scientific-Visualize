@@ -1,0 +1,221 @@
+{
+ "order": [
+  "B1_prologo",
+  "A1Pregunta",
+  "B2_caso1",
+  "A2NumerosPrimero",
+  "A3Ecuacion",
+  "B3_caso2",
+  "A4Honda",
+  "B4_caso3",
+  "A5TresCasos",
+  "A6PuntoAlto",
+  "A7Excepciones",
+  "B5_final",
+  "A8Sintesis"
+ ],
+ "clips": [
+  {
+   "clip": "B1_prologo",
+   "engine": "B (cartoon)",
+   "offset_s": 0.0,
+   "frames": 480,
+   "duration_s": 16.0,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "cartoon_start": 0.0
+  },
+  {
+   "clip": "A1Pregunta",
+   "engine": "A (ManimCE)",
+   "offset_s": 16.0,
+   "frames": 859,
+   "duration_s": 28.633333333333333,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  },
+  {
+   "clip": "B2_caso1",
+   "engine": "B (cartoon)",
+   "offset_s": 44.633333,
+   "frames": 326,
+   "duration_s": 10.866666666666667,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "cartoon_start": 16.0
+  },
+  {
+   "clip": "A2NumerosPrimero",
+   "engine": "A (ManimCE)",
+   "offset_s": 55.5,
+   "frames": 987,
+   "duration_s": 32.9,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  },
+  {
+   "clip": "A3Ecuacion",
+   "engine": "A (ManimCE)",
+   "offset_s": 88.4,
+   "frames": 1219,
+   "duration_s": 40.63333333333333,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  },
+  {
+   "clip": "B3_caso2",
+   "engine": "B (cartoon)",
+   "offset_s": 129.033333,
+   "frames": 378,
+   "duration_s": 12.6,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "cartoon_start": 26.866666666666667
+  },
+  {
+   "clip": "A4Honda",
+   "engine": "A (ManimCE)",
+   "offset_s": 141.633333,
+   "frames": 804,
+   "duration_s": 26.8,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  },
+  {
+   "clip": "B4_caso3",
+   "engine": "B (cartoon)",
+   "offset_s": 168.433333,
+   "frames": 446,
+   "duration_s": 14.866666666666667,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "cartoon_start": 39.46666666666667
+  },
+  {
+   "clip": "A5TresCasos",
+   "engine": "A (ManimCE)",
+   "offset_s": 183.3,
+   "frames": 1133,
+   "duration_s": 37.766666666666666,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  },
+  {
+   "clip": "A6PuntoAlto",
+   "engine": "A (ManimCE)",
+   "offset_s": 221.066667,
+   "frames": 901,
+   "duration_s": 30.033333333333335,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  },
+  {
+   "clip": "A7Excepciones",
+   "engine": "A (ManimCE)",
+   "offset_s": 251.1,
+   "frames": 799,
+   "duration_s": 26.633333333333333,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  },
+  {
+   "clip": "B5_final",
+   "engine": "B (cartoon)",
+   "offset_s": 277.733333,
+   "frames": 186,
+   "duration_s": 6.2,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "cartoon_start": 54.333333333333336
+  },
+  {
+   "clip": "A8Sintesis",
+   "engine": "A (ManimCE)",
+   "offset_s": 283.933333,
+   "frames": 748,
+   "duration_s": 24.933333333333334,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  }
+ ],
+ "total_s": 308.8666666666667,
+ "final": "output/final/Physics9_FreeFall45m_MrBones_HYBRID_EN_g981_V1_SENIOR_FINAL_pqh.mp4"
+}

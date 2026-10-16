@@ -1,0 +1,176 @@
+{
+ "cases": [
+  {
+   "id": 1,
+   "v0": 0,
+   "T": 3.0289126640769135,
+   "vImpact": -29.71363323459452,
+   "closedForm": {
+    "yT": -7.105427357601002e-15,
+    "vT_minus": 0,
+    "energy": 0
+   },
+   "drawn": {
+    "drawings": 46,
+    "maxYErr_m": 7.105427357601002e-15,
+    "maxXErr_m": 0,
+    "maxVErr_mps": 5.719869022868806e-13,
+    "maxAErr_mps2": 1.7198686919073225e-11
+   },
+   "release": {
+    "pos": [
+     0.25,
+     45,
+     0.375
+    ],
+    "vBefore": 0,
+    "vxBefore": 0,
+    "vAfter": -0.0004905000139387994
+   },
+   "crossCheck": {
+    "T": 0,
+    "v": 0
+   },
+   "impact": {
+    "t": 22.266666666666666,
+    "frame": 668,
+    "drawing": 334,
+    "release": 19.237754002589753,
+    "T_check": -8.881784197001252e-16
+   },
+   "rewindMaxErr_m": 3.552713678800501e-15,
+   "pass": true
+  },
+  {
+   "id": 2,
+   "v0": -10,
+   "T": 2.1764766585413997,
+   "vImpact": -31.351236020291132,
+   "closedForm": {
+    "yT": -7.105427357601002e-15,
+    "vT_minus": 0,
+    "energy": 1.1368683772161603e-13
+   },
+   "drawn": {
+    "drawings": 33,
+    "maxYErr_m": 3.552713678800501e-15,
+    "maxXErr_m": 0,
+    "maxVErr_mps": 1.5845103007450234e-12,
+    "maxAErr_mps2": 5.212363873852155e-11
+   },
+   "release": {
+    "pos": [
+     0.25,
+     45,
+     0.375
+    ],
+    "vBefore": -9.999994959244418,
+    "vxBefore": 0.008695649982293219,
+    "vAfter": -10.000490500345904
+   },
+   "crossCheck": {
+    "T": 0,
+    "v": 0
+   },
+   "sling": {
+    "omega": 17.391304347826086,
+    "R": 0.575,
+    "vRelease": 9.999999999999998,
+    "thetaAtRelease_mod2pi": 6.283185307179565,
+    "thetaDotRelease": -17.391304347826086,
+    "stopsAt": 32.74608965178426,
+    "derivedOmega": 17.39130434782609
+   },
+   "impact": {
+    "t": 34.2,
+    "frame": 1026,
+    "drawing": 513,
+    "release": 32.023523341458606,
+    "T_check": -3.1086244689504383e-15
+   },
+   "rewindMaxErr_m": 3.552713678800501e-15,
+   "pass": true
+  },
+  {
+   "id": 3,
+   "v0": 10,
+   "T": 4.215212642231512,
+   "vImpact": -31.351236020291132,
+   "closedForm": {
+    "yT": 0,
+    "vT_minus": 0,
+    "energy": 1.1368683772161603e-13,
+    "vApex": 0,
+    "yApex": 50.09683995922528,
+    "yBack": 44.99999999999999,
+    "vBack": -10
+   },
+   "drawn": {
+    "drawings": 64,
+    "maxYErr_m": 0,
+    "maxXErr_m": 0,
+    "maxVErr_mps": 1.5418777365994174e-12,
+    "maxAErr_mps2": 4.650324569865916e-11
+   },
+   "release": {
+    "pos": [
+     0.25,
+     45,
+     0.375
+    ],
+    "vBefore": 9.999994959457581,
+    "vxBefore": 0.008695649982293219,
+    "vAfter": 9.999509500318027
+   },
+   "crossCheck": {
+    "T": 0,
+    "v": 0
+   },
+   "sling": {
+    "omega": 17.391304347826086,
+    "R": 0.575,
+    "vRelease": 9.999999999999998,
+    "thetaAtRelease_mod2pi": 6.28318530717957,
+    "thetaDotRelease": 17.391304347826086,
+    "stopsAt": 45.174020334760804,
+    "derivedOmega": 17.39130434782609
+   },
+   "impact": {
+    "t": 48.666666666666664,
+    "frame": 1460,
+    "drawing": 730,
+    "release": 44.45145402443515,
+    "T_check": 1.7763568394002505e-15
+   },
+   "rewindMaxErr_m": 0,
+   "pass": true
+  }
+ ],
+ "rig": {
+  "drawings": 909,
+  "maxOrthoErr": 2.169375790117556e-13,
+  "maxBoneLenErr_u": 1.7053025658242404e-13,
+  "ikClamps": 0,
+  "firstClamps": [],
+  "uPerMetre": 200
+ },
+ "checks": {
+  "physics": true,
+  "rig": true
+ },
+ "pass": true,
+ "solveCheck": [
+  {
+   "id": 1,
+   "T": 3.0289126640769135
+  },
+  {
+   "id": 2,
+   "T": 2.1764766585413997
+  },
+  {
+   "id": 3,
+   "T": 4.215212642231512
+  }
+ ]
+}

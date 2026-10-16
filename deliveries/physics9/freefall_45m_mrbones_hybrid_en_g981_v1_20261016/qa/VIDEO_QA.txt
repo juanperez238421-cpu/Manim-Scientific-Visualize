@@ -1,0 +1,8 @@
+VIDEO QA — Physics9_FreeFall45m_MrBones_HYBRID_EN_g981_V1_SENIOR_FINAL_pqh
+technical: {'codec': 'h264', 'size': [1920, 1080], 'fps': '30/1', 'pix_fmt': 'yuv420p', 'frames': 9266, 'expected_frames': 9266, 'duration_s': 308.866667, 'audio': [('aac', 48000, 2)], 'bytes': 113241512}
+white cuts: PASS
+audio: I=-16.2 LUFS, TP=-1.8 dBTP, clipped=0
+sync (ms): pop-cabeza -0.391, caso1-suelta 0.38, caso1-impacto -0.239, caso2-clac 0.138, caso2-suelta -0.399, caso2-impacto -0.22, caso2-clic -0.285, caso3-clac -0.062, caso3-suelta 0.142, caso3-impacto -0.608, caso3-clic -0.322, cabeza-en-su-sitio -0.38
+physics (cartoon): PASS
+sizes: {'final_MiB': 107.99552154541016, 'github_MiB': 41.24264144897461, 'share_MB': 29.758396}
+OVERALL: PASS
