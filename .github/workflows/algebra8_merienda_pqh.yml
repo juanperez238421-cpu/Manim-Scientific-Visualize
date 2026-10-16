@@ -1,0 +1,100 @@
+name: Algebra8 ManimCE Merienda 1080p
+on:
+  push:
+    branches: [manim/algebra8-merienda-render-20261016]
+    paths: ['lessons/algebra8/merienda/**', '.github/workflows/algebra8_merienda_pqh.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  render:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 100
+    env:
+      ROOT: lessons/algebra8/merienda
+      FINAL_NAME: Algebra8_Merienda_ManimCE_V1_pqh.mp4
+    outputs:
+      sha256: ${{ steps.qa.outputs.sha256 }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install ManimCE 0.20.1 with offline voice engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            pkg-config libcairo2-dev libpango1.0-dev ffmpeg espeak-ng \
+            texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-science dvisvgm
+          python -m pip install 'manim==0.20.1' 'sympy>=1.12,<2' 'Pillow>=10,<12'
+          manim --version
+      - name: Source QA and offline Spanish narration
+        run: |
+          set -euo pipefail
+          cd "$ROOT"
+          python -m py_compile merienda_manimce.py
+          python merienda_manimce.py --make-audio
+          test "$(find audio -name 'voice_*.wav' | wc -l)" -eq 15
+      - name: Full timeline smoke render
+        run: |
+          set -euo pipefail
+          cd "$ROOT"
+          manim -ql -r 854,480 --fps 12 --disable_caching merienda_manimce.py MeriendaFraccionesAlgebra8 -o Merienda_smoke.mp4
+      - name: Full 1080p30 PQH rendering
+        run: |
+          set -euo pipefail
+          cd "$ROOT"
+          manim -qh -r 1920,1080 --fps 30 --disable_caching merienda_manimce.py MeriendaFraccionesAlgebra8 -o "raw_$FINAL_NAME"
+          SOURCE="$(find media -type f -name "raw_$FINAL_NAME" -print -quit)"
+          test -s "$SOURCE"
+          mkdir -p delivery
+          ffmpeg -hide_banner -loglevel error -y -i "$SOURCE" -map 0:v:0 -map 0:a:0 \
+            -c:v libx264 -preset veryfast -crf 24 -pix_fmt yuv420p -r 30 \
+            -c:a aac -b:a 112k -movflags +faststart "delivery/$FINAL_NAME"
+      - name: Validate MP4 frame stream and contact sheet
+        id: qa
+        run: |
+          set -euo pipefail
+          cd "$ROOT"
+          test -s "delivery/$FINAL_NAME"
+          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate -show_entries format=duration,size -of default=noprint_wrappers=1 "delivery/$FINAL_NAME" | tee delivery/VIDEO_QA.txt
+          ffmpeg -v error -xerror -i "delivery/$FINAL_NAME" -map 0:v:0 -f null -
+          SHA=$(sha256sum "delivery/$FINAL_NAME" | awk '{print $1}')
+          echo "$SHA" > delivery/SHA256.txt
+          echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
+          python - <<'PY'
+          import subprocess,json,io,os
+          from PIL import Image
+          video='delivery/'+os.environ['FINAL_NAME']
+          meta=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','json',video]))
+          duration=float(meta['format']['duration'])
+          assert 240<=duration<=420, f'Unexpected duration: {duration}'
+          sheet=Image.new('RGB',(1536,1500),'#091225')
+          for i in range(15):
+              t=(i+.5)*duration/15
+              raw=subprocess.check_output(['ffmpeg','-v','error','-ss',str(t),'-i',video,'-frames:v','1','-f','image2pipe','-vcodec','mjpeg','-'])
+              im=Image.open(io.BytesIO(raw)).convert('RGB')
+              im.thumbnail((512,288))
+              sheet.paste(im,((i%3)*512,(i//3)*300))
+          sheet.save('delivery/contact_sheet.jpg',quality=90)
+          PY
+          test "$(stat -c%s "delivery/$FINAL_NAME")" -lt $((95*1024*1024))
+      - uses: actions/upload-artifact@v4
+        with:
+          name: manim-algebra8-merienda-qa
+          path: lessons/algebra8/merienda/delivery/
+          retention-days: 2
+  publish:
+    needs: render
+    if: success()
+    uses: ./.github/workflows/reusable_manimce_pqh_direct_publish.yml
+    with:
+      artifact_name: manim-algebra8-merienda-qa
+      video_filename: Algebra8_Merienda_ManimCE_V1_pqh.mp4
+      expected_sha256: ${{ needs.render.outputs.sha256 }}
+      target_path: published_renders/Algebra8_Merienda_ManimCE_V1_pqh.mp4
+      target_branch: manim/algebra8-merienda-render-20261016
+    secrets: inherit
