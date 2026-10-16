@@ -1,0 +1,75 @@
+name: Publish QA-validated Algebra8 ManimCE MP4
+on:
+  push:
+    branches: [manim/algebra8-merienda-render-20261016]
+    paths: ['.github/workflows/algebra8_publish_existing.yml']
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PUBLISHED_BRANCH: manim/algebra8-merienda-render-20261016
+      TARGET_PATH: published_renders/Algebra8_Merienda_ManimCE_V1_pqh.mp4
+      EXPECTED_SHA256: c586d04399566a15b3ce41816fcb199a27840d03c727b983fa6f4d79cd6e39ee
+      SOURCE_RUN: '38926083145'
+    steps:
+      - name: Retrieve already QA validated binary from original render
+        run: |
+          set -euo pipefail
+          gh run download "$SOURCE_RUN" -R "$GITHUB_REPOSITORY" --name manim-algebra8-merienda-qa --dir validated
+          find validated -maxdepth 2 -type f -printf '%p %s bytes\n'
+      - name: Install ffprobe on publish runner
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Verify and publish exact SHA matched MP4 binary
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os, json, hashlib, base64, urllib.request, urllib.parse, subprocess
+          from pathlib import Path
+          video=next(Path('validated').rglob('Algebra8_Merienda_ManimCE_V1_pqh.mp4'))
+          data=video.read_bytes()
+          digest=hashlib.sha256(data).hexdigest()
+          assert digest == os.environ['EXPECTED_SHA256'],f'MISMATCH: {digest}'
+          assert 1_000_000<len(data)<95*1024*1024, f'Unexpected size: {len(data)}'
+          metadata=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_streams','-show_format','-of','json',str(video)]))
+          stream=next(s for s in metadata['streams'] if s['codec_type']=='video')
+          assert stream['codec_name']=='h264'
+          assert (stream['width'],stream['height'])==(1920,1080)
+          assert stream['pix_fmt']=='yuv420p'
+          print('SOURCE SHA256:',digest,'BYTES:',len(data),'DURATION:',metadata['format']['duration'])
+          token=os.environ['GH_TOKEN'];repo=os.environ['GITHUB_REPOSITORY'];branch=os.environ['PUBLISHED_BRANCH'];target=os.environ['TARGET_PATH']
+          api='https://api.github.com/repos/'+repo
+          def request(method,url,payload=None):
+              req=urllib.request.Request(url,method=method)
+              req.add_header('Authorization','Bearer '+token)
+              req.add_header('Accept','application/vnd.github+json')
+              req.add_header('X-GitHub-Api-Version','2022-11-28')
+              if payload is not None:
+                  req.data=json.dumps(payload).encode()
+                  req.add_header('Content-Type','application/json')
+              with urllib.request.urlopen(req,timeout=180) as response:
+                  return json.loads(response.read())
+          branch_enc=urllib.parse.quote(branch,safe='/')
+          ref=request('GET',api+'/git/ref/heads/'+branch_enc)
+          parent=ref['object']['sha']
+          head=request('GET',api+'/git/commits/'+parent)
+          blob=request('POST',api+'/git/blobs',{'content':base64.b64encode(data).decode(),'encoding':'base64'})
+          tree=request('POST',api+'/git/trees',{'base_tree':head['tree']['sha'],'tree':[{'path':target,'mode':'100644','type':'blob','sha':blob['sha']}]})
+          commit=request('POST',api+'/git/commits',{'message':'Publish validated ManimCE Algebra8 MP4 [skip ci]','tree':tree['sha'],'parents':[parent]})
+          request('PATCH',api+'/git/refs/heads/'+branch_enc,{'sha':commit['sha'],'force':False})
+          uri=api+'/contents/'+urllib.parse.quote(target,safe='/')+'?ref='+urllib.parse.quote(branch,safe='')
+          got=request('GET',uri)
+          assert got['type']=='file' and got['size']==len(data)
+          assert got['download_url'].startswith('https://raw.githubusercontent.com/')
+          print('PUBLISHED:',got['download_url'])
+          print('COMMIT:',commit['sha'])
+          print('SHA256:',digest)
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+              out.write(f"## Verified ManimCE MP4\n\n[Direct MP4 download]({got['download_url']})\n\nSHA256: {digest}\n\nSize: {len(data)} bytes\n")
+          PY
