@@ -1,0 +1,8 @@
+VIDEO QA — Physics9_CaidaLibre45m_MrBones_HYBRID_V1_SENIOR_FINAL_pqh
+technical: {'codec': 'h264', 'size': [1920, 1080], 'fps': '30/1', 'pix_fmt': 'yuv420p', 'frames': 9249, 'expected_frames': 9249, 'duration_s': 308.3, 'audio': [('aac', 48000, 2)], 'bytes': 113159860}
+white cuts: PASS
+audio: I=-16.1 LUFS, TP=-1.7 dBTP, clipped=0
+sync (ms): pop-cabeza -0.391, caso1-suelta 0.475, caso1-impacto -0.32, caso2-clac 0.267, caso2-suelta -0.36, caso2-impacto -0.462, caso2-clic 0.034, caso3-clac -0.502, caso3-suelta 0.421, caso3-impacto 0.19, caso3-clic 0.24, cabeza-en-su-sitio 0.459
+physics (cartoon): PASS
+sizes: {'final_MiB': 107.91765213012695, 'github_MiB': 41.31191158294678, 'share_MB': 29.72017}
+OVERALL: PASS

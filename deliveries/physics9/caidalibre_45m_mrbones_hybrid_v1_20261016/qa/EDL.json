@@ -1,0 +1,221 @@
+{
+ "order": [
+  "B1_prologo",
+  "A1Pregunta",
+  "B2_caso1",
+  "A2NumerosPrimero",
+  "A3Ecuacion",
+  "B3_caso2",
+  "A4Honda",
+  "B4_caso3",
+  "A5TresCasos",
+  "A6PuntoAlto",
+  "A7Excepciones",
+  "B5_final",
+  "A8Sintesis"
+ ],
+ "clips": [
+  {
+   "clip": "B1_prologo",
+   "engine": "B (cartoon)",
+   "offset_s": 0.0,
+   "frames": 480,
+   "duration_s": 16.0,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "cartoon_start": 0.0
+  },
+  {
+   "clip": "A1Pregunta",
+   "engine": "A (ManimCE)",
+   "offset_s": 16.0,
+   "frames": 859,
+   "duration_s": 28.633333333333333,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  },
+  {
+   "clip": "B2_caso1",
+   "engine": "B (cartoon)",
+   "offset_s": 44.633333,
+   "frames": 324,
+   "duration_s": 10.8,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "cartoon_start": 16.0
+  },
+  {
+   "clip": "A2NumerosPrimero",
+   "engine": "A (ManimCE)",
+   "offset_s": 55.433333,
+   "frames": 987,
+   "duration_s": 32.9,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  },
+  {
+   "clip": "A3Ecuacion",
+   "engine": "A (ManimCE)",
+   "offset_s": 88.333333,
+   "frames": 1208,
+   "duration_s": 40.266666666666666,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  },
+  {
+   "clip": "B3_caso2",
+   "engine": "B (cartoon)",
+   "offset_s": 128.6,
+   "frames": 378,
+   "duration_s": 12.6,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "cartoon_start": 26.8
+  },
+  {
+   "clip": "A4Honda",
+   "engine": "A (ManimCE)",
+   "offset_s": 141.2,
+   "frames": 804,
+   "duration_s": 26.8,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  },
+  {
+   "clip": "B4_caso3",
+   "engine": "B (cartoon)",
+   "offset_s": 168.0,
+   "frames": 444,
+   "duration_s": 14.8,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "cartoon_start": 39.4
+  },
+  {
+   "clip": "A5TresCasos",
+   "engine": "A (ManimCE)",
+   "offset_s": 182.8,
+   "frames": 1131,
+   "duration_s": 37.7,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  },
+  {
+   "clip": "A6PuntoAlto",
+   "engine": "A (ManimCE)",
+   "offset_s": 220.5,
+   "frames": 901,
+   "duration_s": 30.033333333333335,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  },
+  {
+   "clip": "A7Excepciones",
+   "engine": "A (ManimCE)",
+   "offset_s": 250.533333,
+   "frames": 799,
+   "duration_s": 26.633333333333333,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  },
+  {
+   "clip": "B5_final",
+   "engine": "B (cartoon)",
+   "offset_s": 277.166667,
+   "frames": 186,
+   "duration_s": 6.2,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "cartoon_start": 54.2
+  },
+  {
+   "clip": "A8Sintesis",
+   "engine": "A (ManimCE)",
+   "offset_s": 283.366667,
+   "frames": 748,
+   "duration_s": 24.933333333333334,
+   "first_white": true,
+   "last_white": true,
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p"
+  }
+ ],
+ "total_s": 308.30000000000007,
+ "final": "output/final/Physics9_CaidaLibre45m_MrBones_HYBRID_V1_SENIOR_FINAL_pqh.mp4"
+}

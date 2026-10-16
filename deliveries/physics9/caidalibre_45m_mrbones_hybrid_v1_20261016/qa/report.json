@@ -1,0 +1,209 @@
+{
+ "file": "output/final/Physics9_CaidaLibre45m_MrBones_HYBRID_V1_SENIOR_FINAL_pqh.mp4",
+ "checks": {
+  "technical": {
+   "codec": "h264",
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "frames": 9249,
+   "expected_frames": 9249,
+   "duration_s": 308.3,
+   "audio": [
+    [
+     "aac",
+     48000,
+     2
+    ]
+   ],
+   "bytes": 113159860,
+   "decode_errors": "",
+   "pass": true
+  },
+  "white_cuts": {
+   "clips": [
+    [
+     "B1_prologo",
+     true,
+     true
+    ],
+    [
+     "A1Pregunta",
+     true,
+     true
+    ],
+    [
+     "B2_caso1",
+     true,
+     true
+    ],
+    [
+     "A2NumerosPrimero",
+     true,
+     true
+    ],
+    [
+     "A3Ecuacion",
+     true,
+     true
+    ],
+    [
+     "B3_caso2",
+     true,
+     true
+    ],
+    [
+     "A4Honda",
+     true,
+     true
+    ],
+    [
+     "B4_caso3",
+     true,
+     true
+    ],
+    [
+     "A5TresCasos",
+     true,
+     true
+    ],
+    [
+     "A6PuntoAlto",
+     true,
+     true
+    ],
+    [
+     "A7Excepciones",
+     true,
+     true
+    ],
+    [
+     "B5_final",
+     true,
+     true
+    ],
+    [
+     "A8Sintesis",
+     true,
+     true
+    ]
+   ],
+   "pass": true
+  },
+  "audio": {
+   "integrated_lufs": -16.1,
+   "true_peak_dbtp": -1.7,
+   "clipped": 0,
+   "sync": [
+    {
+     "cue": "pop-cabeza",
+     "expected_s": 6.8,
+     "measured_s": 6.799609,
+     "offset_ms": -0.391
+    },
+    {
+     "cue": "caso1-suelta",
+     "expected_s": 47.833333,
+     "measured_s": 47.833808,
+     "offset_ms": 0.475
+    },
+    {
+     "cue": "caso1-impacto",
+     "expected_s": 50.833333,
+     "measured_s": 50.833013,
+     "offset_ms": -0.32
+    },
+    {
+     "cue": "caso2-clac",
+     "expected_s": 131.1,
+     "measured_s": 131.100267,
+     "offset_ms": 0.267
+    },
+    {
+     "cue": "caso2-suelta",
+     "expected_s": 133.771056,
+     "measured_s": 133.770696,
+     "offset_ms": -0.36
+    },
+    {
+     "cue": "caso2-impacto",
+     "expected_s": 135.933333,
+     "measured_s": 135.932871,
+     "offset_ms": -0.462
+    },
+    {
+     "cue": "caso2-clic",
+     "expected_s": 139.015789,
+     "measured_s": 139.015823,
+     "offset_ms": 0.034
+    },
+    {
+     "cue": "caso3-clac",
+     "expected_s": 170.5,
+     "measured_s": 170.499498,
+     "offset_ms": -0.502
+    },
+    {
+     "cue": "caso3-suelta",
+     "expected_s": 172.971056,
+     "measured_s": 172.971477,
+     "offset_ms": 0.421
+    },
+    {
+     "cue": "caso3-impacto",
+     "expected_s": 177.133333,
+     "measured_s": 177.133523,
+     "offset_ms": 0.19
+    },
+    {
+     "cue": "caso3-clic",
+     "expected_s": 180.615789,
+     "measured_s": 180.616029,
+     "offset_ms": 0.24
+    },
+    {
+     "cue": "cabeza-en-su-sitio",
+     "expected_s": 278.766667,
+     "measured_s": 278.767126,
+     "offset_ms": 0.459
+    }
+   ],
+   "pass": true
+  },
+  "physics_cartoon": {
+   "pass": true,
+   "checks": {
+    "physics": true,
+    "rig": true
+   }
+  },
+  "sizes": {
+   "final_MiB": 107.91765213012695,
+   "github_MiB": 41.31191158294678,
+   "share_MB": 29.72017,
+   "pass": true
+  }
+ },
+ "sha256": {
+  "Physics9_CaidaLibre45m_MrBones_HYBRID_V1_SENIOR_FINAL_pqh.mp4": "a7cf38c4c2464d517509a7ab5f9584834100cceb72ba5b424120e7ba4165796b",
+  "Physics9_CaidaLibre45m_MrBones_HYBRID_V1_SENIOR_FINAL_pqh_github.mp4": "6feabaddf615ad67033bc9c8ec2209552c44b7a0108809b05e92a9c935ed6e86",
+  "Physics9_CaidaLibre45m_MrBones_HYBRID_V1_SENIOR_FINAL_pqh_share.mp4": "f2a46d27a66e4222558d8ecfef292ae66cd96019fcc3c5d8be598400777e13b2",
+  "clips/B1_prologo.mp4": "f1794993832acea581efd096e3cb0aad4c26ca58b8f65e5f141d63970726c2f8",
+  "clips/A1Pregunta.mp4": "4ba4f65d5e5569ded231a938e912b7b35089fb1c839fc2bf5853fd732306dba9",
+  "clips/B2_caso1.mp4": "761eeeb58c9e2559095b415b96434e0bccfe683fc4d22013f07f7ffc44b72b9d",
+  "clips/A2NumerosPrimero.mp4": "c8884bf7c7e1dc8c32c3153a8e057f7bcdf248b933ea75a573ec4a1a066ac712",
+  "clips/A3Ecuacion.mp4": "90ac10ab62d1127ce0a450a8b7a6f2c3da1cfe91577ec8fe4355059b341a5307",
+  "clips/B3_caso2.mp4": "8511d723dc0cc1f8631dfb404c281ae4b85a66111ab05d9e830e413ba3519a29",
+  "clips/A4Honda.mp4": "3bcecfa29929ef310b521eb0f7003c78b4f85ec2f69e13d05e964ae3a569ba67",
+  "clips/B4_caso3.mp4": "f7b7762cf2c055dea09e8dd6391b274ccfa800e71af7a56cd4f3fb0b6e9f2fcc",
+  "clips/A5TresCasos.mp4": "820319812666f87964edc39dc3a683b16f570709fbd41fdde026f5c6b5cfd518",
+  "clips/A6PuntoAlto.mp4": "e96d3859616ef228eb77b1b85b95ee28b639a960c57478c0523d606f52e349c6",
+  "clips/A7Excepciones.mp4": "9c6f6b7a4ae131cfb506d82cf88a9220d6274fdd217c297b0ff5b751fe4c9c6a",
+  "clips/B5_final.mp4": "20f088eea7d8592a4a3c2b9049b731dda48355b504e2cb129152b5d33c8c9fb9",
+  "clips/A8Sintesis.mp4": "c800c3c4fe6eac5d6c7b92bd15a93614bbaf7aa64424458ca96d5c20691b8d56"
+ },
+ "pass": true
+}
