@@ -1,0 +1,8 @@
+VIDEO QA — bonemotion_demo_reel_1080p60
+technical: {'codec': 'h264', 'size': [1920, 1080], 'fps': '60/1', 'pix_fmt': 'yuv420p', 'frames': 6051, 'expected_frames': 6051, 'duration_s': 100.85, 'audio': [('aac', 48000, 2)], 'bytes': 222624590}
+audio: I=-16.2 LUFS, TP=-1.9 dBTP, clipped=0
+sync (ms): asm-first -0.266, asm-last -0.214, eyes -2.773, stomp -1.952, hatland@assemble 0.012, release@hatflip -0.249, hatland@hatflip -0.064, hatland@bow 0.307, takeoff@jump -0.336, takeoff@jump -0.336, land@jump -0.446, pop@drop -0.438, release@drop -0.415, catch@drop -0.266, release@toss 0.3, catch@toss -0.548, release@slam -0.555, bounce@slam -0.253, catch@slam -0.038, bounce@slam 0.186, bounce@slam -0.241, bounce@slam -0.546, click@slam -0.154, pop@sling -0.13, clack@sling -0.531, release@sling 0.176, catch@sling -0.341, click@sling -0.316, click@sling 0.074
+motion QA: PASS (15 clips)  neural QA: PASS
+clips: 14 cut, frame counts exact
+sizes: {'final_MiB': 212.31135368347168, 'github_MiB': 43.54696464538574, 'share_MB': 29.703386}
+OVERALL: PASS

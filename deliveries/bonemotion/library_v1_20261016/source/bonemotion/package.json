@@ -1,0 +1,15 @@
+{
+  "name": "bonemotion",
+  "version": "1.0.0",
+  "description": "Character animation library: principles of animation as code, exact physics, procedural locomotion, retargeting and a learned in-betweener. Skeletons first; any biped.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": { ".": "./src/index.js", "./clips": "./src/clips/index.js", "./characters/*": "./src/characters/*/index.js" },
+  "scripts": {
+    "qa": "node tools/qa_motion.mjs && node tools/qa_neural.mjs",
+    "dataset": "node tools/make_dataset.mjs --n 900",
+    "train": "../../.venv/bin/python train/train_inbetween.py --epochs 60"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}

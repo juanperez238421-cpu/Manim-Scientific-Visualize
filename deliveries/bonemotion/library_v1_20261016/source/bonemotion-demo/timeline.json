@@ -1,0 +1,32 @@
+{
+ "project": {
+  "name": "bonemotion · demo reel",
+  "slug": "bonemotion-demo",
+  "duration": 100.842267,
+  "fps": 60,
+  "boilPerSecond": 12,
+  "width": 1920,
+  "height": 1080,
+  "seed": 2611
+ },
+ "music": {
+  "bpm": 120,
+  "drawingsPerSecond": 60
+ },
+ "render": {
+  "master": {
+   "crf": 18,
+   "preset": "slow",
+   "tune": "grain"
+  },
+  "draft": {
+   "scale": 0.5,
+   "fps": 30,
+   "crf": 24,
+   "preset": "veryfast"
+  }
+ },
+ "demo": {
+  "only": null
+ }
+}

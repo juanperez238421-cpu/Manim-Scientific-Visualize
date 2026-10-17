@@ -1,0 +1,365 @@
+{
+ "file": "output/final/bonemotion/bonemotion_demo_reel_1080p60.mp4",
+ "checks": {
+  "technical": {
+   "codec": "h264",
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "60/1",
+   "pix_fmt": "yuv420p",
+   "frames": 6051,
+   "expected_frames": 6051,
+   "duration_s": 100.85,
+   "audio": [
+    [
+     "aac",
+     48000,
+     2
+    ]
+   ],
+   "bytes": 222624590,
+   "decode_errors": "",
+   "pass": true
+  },
+  "audio": {
+   "integrated_lufs": -16.2,
+   "true_peak_dbtp": -1.9,
+   "clipped": 0,
+   "sync": [
+    {
+     "cue": "asm-first",
+     "expected_s": 1.361948,
+     "measured_s": 1.361682,
+     "offset_ms": -0.266
+    },
+    {
+     "cue": "asm-last",
+     "expected_s": 6.398627,
+     "measured_s": 6.398413,
+     "offset_ms": -0.214
+    },
+    {
+     "cue": "eyes",
+     "expected_s": 6.548627,
+     "measured_s": 6.545854,
+     "offset_ms": -2.773
+    },
+    {
+     "cue": "stomp",
+     "expected_s": 10.038627,
+     "measured_s": 10.036675,
+     "offset_ms": -1.952
+    },
+    {
+     "cue": "hatland@assemble",
+     "expected_s": 10.968627,
+     "measured_s": 10.968639,
+     "offset_ms": 0.012
+    },
+    {
+     "cue": "release@hatflip",
+     "expected_s": 21.108627,
+     "measured_s": 21.108378,
+     "offset_ms": -0.249
+    },
+    {
+     "cue": "hatland@hatflip",
+     "expected_s": 21.888627,
+     "measured_s": 21.888563,
+     "offset_ms": -0.064
+    },
+    {
+     "cue": "hatland@bow",
+     "expected_s": 42.028627,
+     "measured_s": 42.028934,
+     "offset_ms": 0.307
+    },
+    {
+     "cue": "takeoff@jump",
+     "expected_s": 44.588627,
+     "measured_s": 44.588291,
+     "offset_ms": -0.336
+    },
+    {
+     "cue": "takeoff@jump",
+     "expected_s": 44.588627,
+     "measured_s": 44.588291,
+     "offset_ms": -0.336
+    },
+    {
+     "cue": "land@jump",
+     "expected_s": 45.149468,
+     "measured_s": 45.149022,
+     "offset_ms": -0.446
+    },
+    {
+     "cue": "pop@drop",
+     "expected_s": 48.312299,
+     "measured_s": 48.311861,
+     "offset_ms": -0.438
+    },
+    {
+     "cue": "release@drop",
+     "expected_s": 50.622299,
+     "measured_s": 50.621884,
+     "offset_ms": -0.415
+    },
+    {
+     "cue": "catch@drop",
+     "expected_s": 50.836198,
+     "measured_s": 50.835932,
+     "offset_ms": -0.266
+    },
+    {
+     "cue": "release@toss",
+     "expected_s": 55.019344,
+     "measured_s": 55.019644,
+     "offset_ms": 0.3
+    },
+    {
+     "cue": "catch@toss",
+     "expected_s": 55.746646,
+     "measured_s": 55.746098,
+     "offset_ms": -0.548
+    },
+    {
+     "cue": "release@slam",
+     "expected_s": 59.607518,
+     "measured_s": 59.606963,
+     "offset_ms": -0.555
+    },
+    {
+     "cue": "bounce@slam",
+     "expected_s": 59.768699,
+     "measured_s": 59.768446,
+     "offset_ms": -0.253
+    },
+    {
+     "cue": "catch@slam",
+     "expected_s": 60.137675,
+     "measured_s": 60.137637,
+     "offset_ms": -0.038
+    },
+    {
+     "cue": "bounce@slam",
+     "expected_s": 60.50665,
+     "measured_s": 60.506836,
+     "offset_ms": 0.186
+    },
+    {
+     "cue": "bounce@slam",
+     "expected_s": 60.912523,
+     "measured_s": 60.912282,
+     "offset_ms": -0.241
+    },
+    {
+     "cue": "bounce@slam",
+     "expected_s": 61.135753,
+     "measured_s": 61.135207,
+     "offset_ms": -0.546
+    },
+    {
+     "cue": "click@slam",
+     "expected_s": 61.837675,
+     "measured_s": 61.837521,
+     "offset_ms": -0.154
+    },
+    {
+     "cue": "pop@sling",
+     "expected_s": 64.437675,
+     "measured_s": 64.437545,
+     "offset_ms": -0.13
+    },
+    {
+     "cue": "clack@sling",
+     "expected_s": 66.727675,
+     "measured_s": 66.727144,
+     "offset_ms": -0.531
+    },
+    {
+     "cue": "release@sling",
+     "expected_s": 71.507971,
+     "measured_s": 71.508147,
+     "offset_ms": 0.176
+    },
+    {
+     "cue": "catch@sling",
+     "expected_s": 72.323465,
+     "measured_s": 72.323124,
+     "offset_ms": -0.341
+    },
+    {
+     "cue": "click@sling",
+     "expected_s": 73.748465,
+     "measured_s": 73.748149,
+     "offset_ms": -0.316
+    },
+    {
+     "cue": "click@sling",
+     "expected_s": 74.748465,
+     "measured_s": 74.748539,
+     "offset_ms": 0.074
+    }
+   ],
+   "pass": true
+  },
+  "motion_qa": {
+   "clips": 15,
+   "pass": true
+  },
+  "neural_qa": {
+   "checks": {
+    "forward": true,
+    "parity": true,
+    "keys": true,
+    "benefit": true
+   },
+   "pass": true
+  },
+  "clips": {
+   "clips": [
+    {
+     "file": "01_assemble.mp4",
+     "title": "Armado desde el piso",
+     "frames": 907,
+     "expected": 907,
+     "MB": 10.35,
+     "pass": true
+    },
+    {
+     "file": "02_hattip.mp4",
+     "title": "Saludo con el sombrero",
+     "frames": 236,
+     "expected": 236,
+     "MB": 2.63,
+     "pass": true
+    },
+    {
+     "file": "03_hatflip.mp4",
+     "title": "Sombrero al aire",
+     "frames": 248,
+     "expected": 248,
+     "MB": 2.7,
+     "pass": true
+    },
+    {
+     "file": "04_walk.mp4",
+     "title": "Caminata a lo Chaplin",
+     "frames": 393,
+     "expected": 393,
+     "MB": 4.49,
+     "pass": true
+    },
+    {
+     "file": "05_hop.mp4",
+     "title": "Giro en un pie",
+     "frames": 517,
+     "expected": 517,
+     "MB": 5.77,
+     "pass": true
+    },
+    {
+     "file": "06_bow.mp4",
+     "title": "Reverencia",
+     "frames": 283,
+     "expected": 283,
+     "MB": 3.07,
+     "pass": true
+    },
+    {
+     "file": "07_jump.mp4",
+     "title": "Salto vertical",
+     "frames": 234,
+     "expected": 234,
+     "MB": 2.57,
+     "pass": true
+    },
+    {
+     "file": "08_drop.mp4",
+     "title": "Soltar desde el reposo",
+     "frames": 346,
+     "expected": 346,
+     "MB": 3.63,
+     "pass": true
+    },
+    {
+     "file": "09_toss.mp4",
+     "title": "Lanzamiento hacia arriba",
+     "frames": 293,
+     "expected": 293,
+     "MB": 3.15,
+     "pass": true
+    },
+    {
+     "file": "10_slam.mp4",
+     "title": "Lanzamiento hacia abajo",
+     "frames": 334,
+     "expected": 334,
+     "MB": 3.73,
+     "pass": true
+    },
+    {
+     "file": "11_sling.mp4",
+     "title": "Honda con su propio brazo",
+     "frames": 781,
+     "expected": 781,
+     "MB": 8.4,
+     "pass": true
+    },
+    {
+     "file": "12_spin.mp4",
+     "title": "Giro: momento angular",
+     "frames": 448,
+     "expected": 448,
+     "MB": 5.68,
+     "pass": true
+    },
+    {
+     "file": "13_retarget.mp4",
+     "title": "Otro personaje, mismo c\u00f3digo",
+     "frames": 525,
+     "expected": 525,
+     "MB": 5.6,
+     "pass": true
+    },
+    {
+     "file": "14_neural.mp4",
+     "title": "Transiciones aprendidas",
+     "frames": 506,
+     "expected": 506,
+     "MB": 5.79,
+     "pass": true
+    }
+   ],
+   "pass": true
+  },
+  "sizes": {
+   "final_MiB": 212.31135368347168,
+   "github_MiB": 43.54696464538574,
+   "share_MB": 29.703386,
+   "pass": true
+  }
+ },
+ "sha256": {
+  "bonemotion_demo_reel_1080p60.mp4": "07311db02a142ce2e31b74955ea0412be2790592772dc896a5c6c5c7c33c8bea",
+  "bonemotion_demo_reel_1080p60_github.mp4": "deefbecfdf1a5850d8caf5037fbdd42c71e79b82ac607f5dafa6ee8db051e279",
+  "bonemotion_demo_reel_1080p60_share.mp4": "4e81ca02dca15eb13ebb5e8a5f43d1293d0750152f205c6f0d701a6f97639e1d",
+  "01_assemble.mp4": "974ce6721e0854125b01a75ad5036f822e3392c4d3a6461029f824b6808060f9",
+  "02_hattip.mp4": "75f422501f3dd1109fda88b40862d768ad8e23d6e4b6e790e8efb479467c9ef3",
+  "03_hatflip.mp4": "f9ca3d153a7fe9fa0b210e9c1c7b02549525c7131bd3cddbaba19e49d7bc06dc",
+  "04_walk.mp4": "85b0ee2261b9b767cfb2362d20866ee52531816c774d46a02edabc3ec9755b11",
+  "05_hop.mp4": "1e99d83977fc76c5327f2736c3e051130059ad920b1c94e066b93566c29e9460",
+  "06_bow.mp4": "b24c1757dbbf255a96b73936f08cba20281cf596b47b4bcf04d5b0b71473e8df",
+  "07_jump.mp4": "d72a24c64df2af6fcd3e638ded10e700d80fc6e6e63eca28451bb67ec3e63f8d",
+  "08_drop.mp4": "3bb0fe5606871c70ed1df0851e32b697dbd5acfe3ed9874211a7436460c28d48",
+  "09_toss.mp4": "6313f7f725052405f49a77abb63743b92d3ee787302906c6dd978afc2b43ac9c",
+  "10_slam.mp4": "5ffb8d8c6feac6df50e3284bc5661a6033f1739c4b87a57eba2ff34a3dcc0312",
+  "11_sling.mp4": "195ba8db19711aea4b677f943fc06e3e19b8b051f5263eeddf19e79976bbadec",
+  "12_spin.mp4": "f78c3785fff35597f0f8d2bf6d090270d7fa885a9002321a2dd440049c8c80d8",
+  "13_retarget.mp4": "001bd4e7a4a837da37253f055ee410140fe0b4d55a0354cf024aa30e0f64ffb0",
+  "14_neural.mp4": "0350f93d2ebf57d2ace6384737ec8f13bafc32da2c93993a17bdac8eac3bbcb1"
+ },
+ "pass": true
+}
