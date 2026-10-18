@@ -119,6 +119,18 @@ class VideoInfo(BaseModel):
     size_bytes: int
 
 
+class Verification(BaseModel):
+    """Veredictos SEPARADOS (nunca un único booleano). Solo existe cuando el worker ya reportó un resultado."""
+    status: Literal["verified", "partially_verified", "requires_review", "unsupported"] | None
+    problems_total: int | None
+    problems_verified: int | None
+    render: str | None
+    qa: str | None
+    profile: str | None
+    delivery_ready: bool
+    simulated: bool                    # True = resultado obtenido con un proveedor de IA simulado (pruebas)
+
+
 class Job(BaseModel):
     id: UUID
     kind: JobKind
@@ -141,6 +153,7 @@ class Job(BaseModel):
     stages: list[Stage]
     scenes: Scenes
     video: VideoInfo | None
+    verification: Verification | None = None
 
 
 class JobPage(BaseModel):

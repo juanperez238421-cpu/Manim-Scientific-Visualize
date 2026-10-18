@@ -23,6 +23,13 @@ class Settings:
     upload_url_ttl_seconds: int = 900
     estimate_ttl_seconds: int = 900
     pipeline_version: str = "sciviz-adapter-0.1"
+    # Almacenamiento local de desarrollo (si no hay S3): directorio + secreto de firma + URL pública de la API
+    local_storage_dir: str | None = None
+    storage_secret: str = ""
+    public_base_url: str = "http://127.0.0.1:8000"
+    # Canal worker -> API (token largo y aleatorio; vacío = endpoints internos deshabilitados)
+    worker_token: str = ""
+    lease_seconds: int = 120
     cors_origins: tuple[str, ...] = field(default_factory=tuple)
 
     @staticmethod
@@ -39,5 +46,10 @@ class Settings:
             s3_region=e("S3_REGION", "auto"),
             s3_access_key=e("S3_ACCESS_KEY"),
             s3_secret_key=e("S3_SECRET_KEY"),
+            local_storage_dir=e("LOCAL_STORAGE_DIR") or None,
+            storage_secret=e("STORAGE_SIGNING_SECRET", ""),
+            public_base_url=e("PUBLIC_BASE_URL", "http://127.0.0.1:8000"),
+            worker_token=e("WORKER_TOKEN", ""),
+            lease_seconds=int(e("WORKER_LEASE_SECONDS", "120")),
             cors_origins=tuple(x for x in e("CORS_ORIGINS", "").split(",") if x),
         )

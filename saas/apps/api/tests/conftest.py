@@ -26,6 +26,7 @@ from app.main import create_app
 ROOT = Path(__file__).resolve().parents[2].parent          # saas/
 PG_BIN = next(Path("/usr/lib/postgresql").glob("*/bin"), None)
 ISSUER = "https://clerk.test.example"
+WORKER_TOKEN = "w" * 40
 
 
 @pytest.fixture(scope="session")
@@ -42,6 +43,8 @@ def pg_url():
     url = f"host={d} port={port} user=postgres dbname=postgres"
     with psycopg.connect(url, autocommit=True) as c:
         c.execute((ROOT / "db" / "schema.sql").read_text())
+        for m in sorted((ROOT / "db" / "migrations").glob("*.sql")):
+            c.execute(m.read_text(encoding="utf-8"))
     yield url
     run(f"{PG_BIN}/pg_ctl -D {d}/data -m immediate stop")
     shutil.rmtree(d, ignore_errors=True)
@@ -112,7 +115,7 @@ def store():
 @pytest.fixture
 def client(pool, store, rsa_key):
     verifier = JwtVerifier(lambda tok: rsa_key.public_key(), ISSUER, None, ("https://app.test",))
-    app = create_app(Settings(), pool=pool, store=store, verifier=verifier)
+    app = create_app(Settings(worker_token=WORKER_TOKEN), pool=pool, store=store, verifier=verifier)
     with TestClient(app, raise_server_exceptions=False) as c:
         yield c
 

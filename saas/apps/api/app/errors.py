@@ -39,6 +39,9 @@ DB_ERRORS: dict[str, tuple[int, str]] = {
     "pdf_not_ready": (409, "El PDF no está analizado o fue eliminado."),
     "concurrency_limit": (409, "Alcanzaste el máximo de jobs simultáneos de tu plan."),
     "job_not_found": (404, "Job no encontrado."),
+    "lease_lost": (409, "El worker perdió el lease de este job."),
+    "cancel_requested": (409, "El usuario solicitó cancelar este job."),
+    "cancel_not_requested": (409, "No hay cancelación solicitada."),
     "job_not_cancellable": (409, "El job ya terminó y no se puede cancelar."),
 }
 

@@ -52,3 +52,78 @@ class S3Store:
 
     def delete(self, key):
         self.client.delete_object(Bucket=self.bucket, Key=key)
+
+
+# ---------------------------------------------------------------- almacenamiento local (desarrollo en localhost)
+import hashlib as _hashlib
+import hmac as _hmac
+import re as _re
+import time as _time
+from pathlib import Path as _Path
+from urllib.parse import quote as _quote
+
+_KEY_OK = _re.compile(r"^[A-Za-z0-9][A-Za-z0-9/_.\-]{0,300}$")
+
+
+class BadKey(ValueError):
+    pass
+
+
+class LocalFsStore:
+    """Equivalente local de S3/R2: archivos bajo `root` y URLs firmadas con HMAC-SHA256 servidas por la propia API
+    (`/blob/...`). Solo para desarrollo: en nube se usa S3Store (R2). Misma interfaz => la API pública no cambia."""
+
+    def __init__(self, root, secret: str, public_base_url: str, max_object_bytes: int = 500 * 1024 * 1024):
+        if len(secret) < 16:
+            raise ValueError("storage secret demasiado corto (>=16 caracteres)")
+        self.root = _Path(root).resolve()
+        self.root.mkdir(parents=True, exist_ok=True)
+        self.secret = secret.encode()
+        self.base = public_base_url.rstrip("/")
+        self.max_object_bytes = max_object_bytes
+
+    # -- rutas seguras
+    def path(self, key: str) -> _Path:
+        if not _KEY_OK.match(key) or ".." in key.split("/") or "//" in key:
+            raise BadKey(key)
+        p = (self.root / key).resolve()
+        if self.root not in p.parents:
+            raise BadKey(key)
+        return p
+
+    # -- firmas
+    def sign(self, method: str, key: str, exp: int, extra: str = "") -> str:
+        msg = f"{method}\n{key}\n{exp}\n{extra}".encode()
+        return _hmac.new(self.secret, msg, _hashlib.sha256).hexdigest()
+
+    def verify(self, method: str, key: str, exp: int, sig: str, extra: str = "") -> bool:
+        return exp >= int(_time.time()) and _hmac.compare_digest(self.sign(method, key, exp, extra), sig or "")
+
+    def _url(self, method, key, ttl, filename=None):
+        self.path(key)
+        exp = int(_time.time()) + int(ttl)
+        extra = filename or ""
+        q = f"exp={exp}&sig={self.sign(method, key, exp, extra)}"
+        if filename:
+            q += f"&fn={_quote(filename)}"
+        return f"{self.base}/blob/{_quote(key)}?{q}"
+
+    def presign_put(self, key, content_type, ttl):
+        return self._url("PUT", key, ttl), {"Content-Type": content_type}
+
+    def presign_get(self, key, ttl, filename=None):
+        return self._url("GET", key, ttl, filename)
+
+    def head(self, key):
+        p = self.path(key)
+        return p.stat().st_size if p.is_file() else None
+
+    def get_bytes(self, key, max_bytes):
+        with self.path(key).open("rb") as f:
+            return f.read(max_bytes + 1)
+
+    def delete(self, key):
+        try:
+            self.path(key).unlink()
+        except FileNotFoundError:
+            pass

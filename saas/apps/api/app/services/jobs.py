@@ -112,6 +112,24 @@ def cancel_job(conn, user: CurrentUser, job_id) -> dict:
 
 
 # ---------------------------------------------------------------- lectura
+def _verification(delivery) -> dict | None:
+    if not isinstance(delivery, dict):
+        return None
+    probs = delivery.get("problems") if isinstance(delivery.get("problems"), list) else None
+    st = delivery.get("stages") if isinstance(delivery.get("stages"), dict) else {}
+    ver = delivery.get("verification")
+    return {
+        "status": ver if ver in ("verified", "partially_verified", "requires_review", "unsupported") else None,
+        "problems_total": len(probs) if probs is not None else None,
+        "problems_verified": sum(1 for p in probs if p.get("pass")) if probs is not None else None,
+        "render": str(st["render"]).lower() if st.get("render") else None,
+        "qa": str(st["qa"]).lower() if st.get("qa") else None,
+        "profile": delivery.get("profile") if isinstance(delivery.get("profile"), str) else None,
+        "delivery_ready": delivery.get("delivery_ready") is True,
+        "simulated": delivery.get("mock") is True,
+    }
+
+
 def _hydrate(conn, rows: list[dict]) -> list[dict]:
     if not rows:
         return []
@@ -147,6 +165,7 @@ def _hydrate(conn, rows: list[dict]) -> list[dict]:
                        "items": [{k: x[k] for k in ("label", "engine", "status", "planned_seconds")} for x in sc]},
             "video": ({k: vid[k] for k in ("duration_seconds", "width", "height", "fps", "size_bytes")}
                       if vid and r["status"] == "succeeded" else None),
+            "verification": _verification(r.get("delivery")),
         })
     return out
 

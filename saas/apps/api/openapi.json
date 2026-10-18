@@ -1167,6 +1167,16 @@
                 "type": "null"
               }
             ]
+          },
+          "verification": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Verification"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -1773,6 +1783,103 @@
           "limits"
         ],
         "title": "User"
+      },
+      "Verification": {
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "verified",
+                  "partially_verified",
+                  "requires_review",
+                  "unsupported"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "problems_total": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Problems Total"
+          },
+          "problems_verified": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Problems Verified"
+          },
+          "render": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Render"
+          },
+          "qa": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Qa"
+          },
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile"
+          },
+          "delivery_ready": {
+            "type": "boolean",
+            "title": "Delivery Ready"
+          },
+          "simulated": {
+            "type": "boolean",
+            "title": "Simulated"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "problems_total",
+          "problems_verified",
+          "render",
+          "qa",
+          "profile",
+          "delivery_ready",
+          "simulated"
+        ],
+        "title": "Verification",
+        "description": "Veredictos SEPARADOS (nunca un único booleano). Solo existe cuando el worker ya reportó un resultado."
       },
       "VideoInfo": {
         "properties": {
