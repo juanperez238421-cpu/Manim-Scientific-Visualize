@@ -1,0 +1,13 @@
+diff --git a/pdf2video/requirements.txt b/pdf2video/requirements.txt
+index 6ce4376..b41bf1d 100644
+--- a/pdf2video/requirements.txt
++++ b/pdf2video/requirements.txt
+@@ -4,7 +4,7 @@ pymupdf>=1.24
+ pytesseract>=0.3.10
+ sympy>=1.12
+ numpy
+-pillow
++pillow>=12.2,<13   # Pillow 13 removed Image.fromarray(mode=...) used by ManimCE 0.22; pdfplumber needs >=12.2
+ reportlab>=4.0   # only to regenerate the example worksheets
+ pytest
+ # system packages: ffmpeg, a LaTeX distribution with dvisvgm (amsmath, amssymb, mathpazo), tesseract-ocr (+ language data), Noto Serif font
