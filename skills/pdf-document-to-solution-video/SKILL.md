@@ -68,7 +68,7 @@ clave está mal, repórtalo al cliente en vez de copiarla.
   y hoja de contacto `python tools/sheet.py <mp4> out.png t1,t2,…` Revisa cuadros: textos encimados, recortes
   en bordes, etiquetas de figura sobre ejes, filas del panel bajo el título, chips de más de una fila.
 - Final: `python -m pdf2video run <spec> --name <id>` (valida → 1080p30 → QA). Un documento de 3 problemas dura
-  ~3–4 min y tarda ~30–45 min con 2 CPU: lánzalo en segundo plano (`nohup … &` o `run_in_background`) y espera
+  ~3–4 min y tarda 15–45 min con 2 CPU: lánzalo en segundo plano (`nohup … &` o `run_in_background`) y espera
   con un bucle `until`; con 2 CPU corre 2 trabajos en paralelo como máximo.
 - `P2V_TIME_SCALE` (<1 acorta pausas) si el cliente pide videos más cortos.
 
@@ -99,4 +99,9 @@ render `ql` de los cinco ejemplos antes de un render final.
 - `DecimalNumber` cambia de ancho: inicialízalo con el valor más ancho y ancla la unidad con un updater `next_to`.
 - Imágenes: usa versiones LOD (LANCZOS) al tamaño en pantalla; el zoom usa la página reducida y luego se levanta
   un recorte nítido a 300 dpi.
-- `pkill -f` con un patrón que coincide con tu propio comando te mata; usa PIDs. Comandos largos en segundo plano.
+- `SurroundingRectangle` sobre una fila con cabecera: separa la fórmula de la cabecera para que el marco no la tape.
+- `Scene.remove` sobre el hijo de un Group de primer nivel disuelve el grupo: quita primero el grupo de primer nivel y luego añade el hijo al grupo nuevo.
+- Rectas numéricas: extiende el rango un paso más allá del último valor y excluye ese número, para que la punta de flecha no tape la última marca.
+- `Text` se crea al doble de tamaño y se escala ×0.5; limita el ancho con `fit`.
+- `pkill -f` con un patrón que coincide con tu propio comando te mata a ti: usa PIDs. Lanza los comandos largos en segundo plano.
+- Los módulos se cargan al arrancar cada proceso de render: si cambias código, reinicia los renders en curso.
