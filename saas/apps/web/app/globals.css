@@ -1,0 +1,40 @@
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/fraunces";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/600.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+html { scroll-behavior: smooth; }
+body { @apply bg-canvas text-ink font-sans antialiased; font-feature-settings: "cv11", "ss01"; }
+::selection { background: rgba(88,196,221,.35); }
+
+/* Retícula tipo ejes de Manim */
+.bg-axes {
+  background-image:
+    linear-gradient(to right, rgba(88,196,221,.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(88,196,221,.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+}
+.focus-ring { @apply outline-none focus-visible:ring-2 focus-visible:ring-mb-blue focus-visible:ring-offset-2 focus-visible:ring-offset-canvas; }
+.btn { @apply focus-ring inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50; min-height: 44px; }
+.btn-primary { @apply btn bg-mb-blue text-canvas hover:bg-[#7bd3e8]; }
+.btn-ghost { @apply btn border border-canvas-line bg-canvas-2 text-ink hover:border-mb-blue/50 hover:bg-canvas-3; }
+.card { @apply rounded-2xl border border-canvas-line bg-canvas-2/80; }
+.h-display { @apply font-display tracking-tight; font-variation-settings: "opsz" 144, "SOFT" 30; }
+.chip { @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium; }
+
+/* Animación de trazo (gráfica v–t) */
+.draw { stroke-dasharray: var(--len, 400); stroke-dashoffset: var(--len, 400); animation: draw 2.4s .4s ease-out forwards; }
+.draw-late { animation-delay: 1.6s; }
+.pop { opacity: 0; animation: fadeUp .6s ease-out forwards; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .draw { animation: none; stroke-dashoffset: 0; }
+  .pop, .animate-fadeUp, .animate-floaty { animation: none !important; opacity: 1 !important; transform: none !important; }
+}
+details > summary { list-style: none; }
+details > summary::-webkit-details-marker { display: none; }

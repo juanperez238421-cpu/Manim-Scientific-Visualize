@@ -1,0 +1,9 @@
+node_modules
+.next
+.cache
+next-env.d.ts
+.env.local
+*.tsbuildinfo
+test-results
+qa/screenshots/
+qa/e2e-results.json
