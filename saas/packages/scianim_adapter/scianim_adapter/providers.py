@@ -15,6 +15,7 @@ import json
 import os
 import re
 import time
+import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -107,7 +108,7 @@ class AnthropicProvider(ModelProvider):
                  budget_usd: float | None = None, price_in_per_mtok: float | None = None,
                  price_out_per_mtok: float | None = None, timeout_s: float = 120.0, max_retries: int = 1,
                  min_interval_s: float = 0.0, prompt_path: str | Path | None = None,
-                 api_key_env: str = "ANTHROPIC_API_KEY", client=None):
+                 api_key_env: str = "ANTHROPIC_API_KEY", client=None, guard=None):
         if not model:
             raise ProviderError("model must be configured explicitly")
         if budget_usd is not None and (price_in_per_mtok is None or price_out_per_mtok is None):
@@ -116,6 +117,7 @@ class AnthropicProvider(ModelProvider):
         self.budget, self.p_in, self.p_out = budget_usd, price_in_per_mtok, price_out_per_mtok
         self.timeout, self.max_retries, self.min_interval = timeout_s, max_retries, min_interval_s
         self.usage = Usage()
+        self.guard = guard  # AIBudgetGuard opcional: reserva/concilia cada llamada (fail-closed)
         self._last_call = 0.0
         if prompt_path is None:
             raise ProviderError("prompt_path (engine prompts/spec_author.md) is required")
@@ -156,10 +158,30 @@ class AnthropicProvider(ModelProvider):
             if wait > 0:
                 time.sleep(wait)
             self._last_call = time.monotonic()
-            resp = self.client.messages.create(model=self.model, max_tokens=self.max_out, system=self.system,
-                                               messages=messages, timeout=self.timeout)
+            rid = None
+            if self.guard is not None:
+                chars = len(self.system) + sum(len(m["content"]) for m in messages)
+                rid = uuid.uuid4().hex
+                self.guard.reserve(rid, self.model, self.guard.estimate_input_tokens(chars), self.max_out)
+            try:
+                resp = self.client.messages.create(model=self.model, max_tokens=self.max_out, system=self.system,
+                                                   messages=messages, timeout=self.timeout)
+            except Exception as e:  # noqa: BLE001
+                if rid is not None:
+                    sc = getattr(e, "status_code", None)
+                    if isinstance(sc, int) and 400 <= sc < 500 and sc not in (408, 409):
+                        self.guard.release(rid, f"{type(e).__name__} {sc}")   # rechazada antes de ejecutar: sin cargo
+                    else:
+                        self.guard.mark_unknown(rid, type(e).__name__)        # incierto: se mantiene la reserva
+                raise
             u = getattr(resp, "usage", None)
-            self.usage.add(getattr(u, "input_tokens", 0) or 0, getattr(u, "output_tokens", 0) or 0, self.p_in, self.p_out)
+            i_tok = getattr(u, "input_tokens", 0) or 0
+            o_tok = getattr(u, "output_tokens", 0) or 0
+            if rid is not None:
+                self.guard.settle(rid, i_tok, o_tok,
+                                  cache_write_tokens=getattr(u, "cache_creation_input_tokens", 0) or 0,
+                                  cache_read_tokens=getattr(u, "cache_read_input_tokens", 0) or 0)
+            self.usage.add(i_tok, o_tok, self.p_in, self.p_out)
             text = "".join(getattr(b, "text", "") for b in resp.content if getattr(b, "type", "text") == "text")
             try:
                 spec = extract_json_object(text)

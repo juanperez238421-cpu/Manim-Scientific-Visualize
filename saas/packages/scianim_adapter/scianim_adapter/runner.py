@@ -10,8 +10,10 @@ deliverables into <job_dir>/out and leaves the engine build folder for the calle
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import time
@@ -38,6 +40,9 @@ class JobConfig:
     analyze_timeout_s: int = 180
     validate_timeout_s: int = 180
     render_timeout_s: int = 3 * 3600
+    profile: str = "delivery1080"          # preview480 | dev720 | delivery1080 -> P2V_PROFILE (QA tecnico diferenciado)
+    cancel: object | None = None           # threading.Event: si se activa, el hijo (y sus nietos) se terminan
+    on_stage: object | None = None         # callable(stage_name, status_value): progreso para el worker (nunca debe lanzar)
 
 
 @dataclass
@@ -59,10 +64,70 @@ class JobResult:
         return asdict(self)
 
 
+class JobCancelled(RuntimeError):
+    """El usuario pidio cancelar: el proceso del motor fue terminado."""
+
+
+PROFILES = {
+    # perfil: (calidad manim, fps)  -- 480p/15 fps = borrador; 720p/30 = desarrollo; 1080p/30 = entrega
+    "preview480": ("ql", 15),
+    "dev720": ("qm", 30),
+    "delivery1080": ("qh", 30),
+}
+RESOLUTION_PROFILE = {"480p": "preview480", "720p": "dev720", "1080p": "delivery1080"}
+
+
+def profile_for(resolution: str) -> str:
+    try:
+        return RESOLUTION_PROFILE[resolution]
+    except KeyError:
+        raise ValueError(f"unsupported resolution {resolution!r}") from None
+
+
+def _kill_tree(p: subprocess.Popen) -> None:
+    """Termina el proceso y todos sus descendientes (manim lanza ffmpeg/latex/dvisvgm)."""
+    try:
+        if os.name == "nt":
+            subprocess.run(["taskkill", "/F", "/T", "/PID", str(p.pid)], capture_output=True, timeout=30)
+        else:
+            os.killpg(p.pid, signal.SIGKILL)
+    except (ProcessLookupError, PermissionError, subprocess.SubprocessError, OSError):
+        pass
+    finally:
+        try:
+            p.kill()
+        except OSError:
+            pass
+
+
 def _run(cfg: JobConfig, args: list[str], timeout: int, home: Path):
     cmd = [cfg.python, "-m", "pdf2video", *args]
-    env = clean_env(extra={"HOME": str(home), "PYTHONDONTWRITEBYTECODE": "1", "PYTHONIOENCODING": "utf-8"})
-    return subprocess.run(cmd, cwd=cfg.engine_root, env=env, capture_output=True, text=True, timeout=timeout)
+    # UTF-8 explicito de extremo a extremo: PYTHONUTF8 hace que open()/Path.write_text() del hijo usen UTF-8 en vez de la
+    # pagina de codigos ANSI de Windows (cp1252); PYTHONIOENCODING cubre stdio. No se oculta ningun error de decodificacion.
+    env = clean_env(extra={"HOME": str(home), "PYTHONDONTWRITEBYTECODE": "1", "PYTHONIOENCODING": "utf-8",
+                           "PYTHONUTF8": "1", "P2V_PROFILE": cfg.profile})
+    if cfg.cancel is None:
+        return subprocess.run(cmd, cwd=cfg.engine_root, env=env, capture_output=True, text=True, encoding="utf-8",
+                              errors="strict", timeout=timeout)
+    if cfg.cancel.is_set():
+        raise JobCancelled("cancelled before start")
+    kw = {"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP} if os.name == "nt" else {"start_new_session": True}
+    p = subprocess.Popen(cmd, cwd=cfg.engine_root, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                         encoding="utf-8", errors="strict", **kw)
+    deadline = time.monotonic() + timeout
+    while True:
+        try:
+            out, err = p.communicate(timeout=0.5)
+            return subprocess.CompletedProcess(cmd, p.returncode, out, err)
+        except subprocess.TimeoutExpired:
+            if cfg.cancel.is_set():
+                _kill_tree(p)
+                p.communicate()
+                raise JobCancelled("cancelled while running") from None
+            if time.monotonic() > deadline:
+                _kill_tree(p)
+                p.communicate()
+                raise subprocess.TimeoutExpired(cmd, timeout) from None
 
 
 def _tail(s: str, n: int = 600) -> str:
@@ -81,6 +146,11 @@ def run_job(pdf_path: str | Path, job_dir: str | Path, provider: ModelProvider, 
 
     def stage(name, status):
         res.stages[name] = status.value if hasattr(status, "value") else status
+        if cfg.on_stage is not None:
+            try:
+                cfg.on_stage(name, res.stages[name])
+            except Exception:  # noqa: BLE001 - el reporte de progreso jamas debe romper el trabajo
+                pass
 
     def clock(name, t0):
         res.timings_s[name] = round(time.time() - t0, 2)

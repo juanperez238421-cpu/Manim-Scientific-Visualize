@@ -49,7 +49,7 @@ def test_sanitize_forces_document_and_drops_unknown_keys(physics):
 
 def test_all_engine_examples_pass_sanitizer_without_false_positives(engine_root):
     for sp in (engine_root / "examples").glob("*/spec.json"):
-        spec = json.loads(sp.read_text())
+        spec = json.loads(sp.read_text(encoding="utf-8"))
         clean, _ = sanitize_spec(spec, document_name="document.pdf", sha256="0" * 64)
         assert clean["problems"], sp
 

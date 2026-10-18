@@ -27,7 +27,7 @@ def engine_root():
 @pytest.fixture(scope="session")
 def physics(engine_root):
     d = engine_root / "examples" / "physics"
-    return d / "physics_worksheet.pdf", json.loads((d / "spec.json").read_text())
+    return d / "physics_worksheet.pdf", json.loads((d / "spec.json").read_text(encoding="utf-8"))
 
 
 @pytest.fixture()

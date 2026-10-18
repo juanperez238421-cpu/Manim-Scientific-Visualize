@@ -1,0 +1,9 @@
+import { clerkSetup } from "@clerk/testing/playwright";
+import { test as setup } from "@playwright/test";
+
+setup("clerk testing token", async () => {
+  if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.startsWith("pk_test_") || !process.env.CLERK_SECRET_KEY?.startsWith("sk_test_")) {
+    throw new Error("BLOCKED: faltan las claves de Clerk DEVELOPMENT en frontend/.env.local (pk_test_ / sk_test_).");
+  }
+  await clerkSetup();
+});

@@ -21,7 +21,7 @@ class FakeClient:
 @pytest.fixture()
 def prompt(tmp_path):
     p = tmp_path / "spec_author.md"
-    p.write_text("SYSTEM PROMPT v1")
+    p.write_text("SYSTEM PROMPT v1", encoding="utf-8")
     return p
 
 
