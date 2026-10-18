@@ -1,0 +1,56 @@
+{
+ "video": "physics_scanned_ocr_problem1.mp4",
+ "checks": {
+  "technical": {
+   "codec": "h264",
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "duration_s": 93.77,
+   "MB": 10.18,
+   "decode_errors": "",
+   "pass": true
+  },
+  "bookends": {
+   "first_mean": 255.0,
+   "last_mean": 255.0,
+   "pass": true
+  },
+  "content": {
+   "validation_pass": true,
+   "givens_extracted": 3,
+   "answers_shown": 2,
+   "answers_value_in_box": 2,
+   "annotations": 2,
+   "annotations_in_work_area": 2,
+   "answers": [
+    {
+     "problem": "1",
+     "name": "t",
+     "value": 8,
+     "shown": "8"
+    },
+    {
+     "problem": "1",
+     "name": "d",
+     "value": 80,
+     "shown": "80"
+    }
+   ],
+   "pass": true
+  },
+  "package": {
+   "share_MB": 6.58,
+   "share_crf": 23,
+   "pass": true
+  }
+ },
+ "sha256": {
+  "physics_scanned_ocr_problem1.mp4": "60088f9349ca7ecf83d3e49b2d280238ef107271f7f34c66c1a81358f11fe1a0",
+  "physics_scanned_ocr_problem1_share.mp4": "0a1eb996a7c85ae3b9e3b80d5945394123c761f48638649eda8bc9caa23c12a5"
+ },
+ "pass": true
+}

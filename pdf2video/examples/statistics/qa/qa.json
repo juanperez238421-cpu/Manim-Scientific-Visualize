@@ -1,0 +1,104 @@
+{
+ "video": "statistics_describing_data_worked_solutions.mp4",
+ "checks": {
+  "technical": {
+   "codec": "h264",
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "duration_s": 229.67,
+   "MB": 18.98,
+   "decode_errors": "",
+   "pass": true
+  },
+  "bookends": {
+   "first_mean": 255.0,
+   "last_mean": 255.0,
+   "pass": true
+  },
+  "content": {
+   "validation_pass": true,
+   "givens_extracted": 3,
+   "answers_shown": 10,
+   "answers_value_in_box": 10,
+   "annotations": 10,
+   "annotations_in_work_area": 10,
+   "answers": [
+    {
+     "problem": "1",
+     "name": "xbar",
+     "value": 7.56,
+     "shown": "7.56"
+    },
+    {
+     "problem": "1",
+     "name": "med",
+     "value": 7,
+     "shown": "7"
+    },
+    {
+     "problem": "1",
+     "name": "mo",
+     "value": 7,
+     "shown": "7"
+    },
+    {
+     "problem": "1",
+     "name": "rng",
+     "value": 5,
+     "shown": "5"
+    },
+    {
+     "problem": "2",
+     "name": "m",
+     "value": 22,
+     "shown": "22"
+    },
+    {
+     "problem": "2",
+     "name": "sd",
+     "value": 2.83,
+     "shown": "2.83"
+    },
+    {
+     "problem": "3",
+     "name": "Q1",
+     "value": 6,
+     "shown": "6"
+    },
+    {
+     "problem": "3",
+     "name": "med",
+     "value": 8.5,
+     "shown": "8.5"
+    },
+    {
+     "problem": "3",
+     "name": "Q3",
+     "value": 12,
+     "shown": "12"
+    },
+    {
+     "problem": "3",
+     "name": "iqr",
+     "value": 6,
+     "shown": "6"
+    }
+   ],
+   "pass": true
+  },
+  "package": {
+   "share_MB": 11.54,
+   "share_crf": 23,
+   "pass": true
+  }
+ },
+ "sha256": {
+  "statistics_describing_data_worked_solutions.mp4": "896c54260cc8997e644f2692b09afb2a0de3f25e3a73ef341ffbb7a81eacbf8f",
+  "statistics_describing_data_worked_solutions_share.mp4": "60cb68fbd5101aae0a577728cda4cb6cc4da3f62d775be2d142bae09f8471a46"
+ },
+ "pass": true
+}

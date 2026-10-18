@@ -1,0 +1,6 @@
+VIDEO QA — chem_geometry_worked_solutions.mp4
+technical: h264 1920x1080 30/1 yuv420p, 188.8 s, 14.77 MB, decode errors: none
+bookends: first frame mean 255.0, last frame mean 255.0 (white)
+content: validation PASS; 7 givens extracted at their page boxes; 3/3 answers shown with the recomputed value; 3/3 annotations inside the work area
+share copy: 9.24 MB (crf 23)
+OVERALL: PASS

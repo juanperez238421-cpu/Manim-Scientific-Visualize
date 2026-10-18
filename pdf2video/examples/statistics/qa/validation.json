@@ -1,0 +1,318 @@
+{
+ "spec": "spec.json",
+ "document": "statistics_worksheet.pdf",
+ "sha256": "f950ba0ae11c84dba2d83cce9a16bd570b2ebc1f46cf607285ecce0e2812ab00",
+ "pages": 1,
+ "source": [
+  "text"
+ ],
+ "problems": [
+  {
+   "id": "1",
+   "checks": [
+    {
+     "kind": "data",
+     "name": "S",
+     "quote": "7 9 6 8 10 7 5 9 7",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      161.22,
+      242.07000000000005,
+      486.78000000000003,
+      252.07000000000005
+     ],
+     "boxes": [
+      [
+       161.22,
+       242.07000000000005,
+       486.78000000000003,
+       252.07000000000005
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "table",
+     "name": "S",
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "xbar",
+     "expr": "mean(S)",
+     "computed": 7.555555555555555,
+     "stated": 7.56,
+     "shown": "7.56",
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "med",
+     "expr": "median(S)",
+     "computed": 7.0,
+     "stated": 7,
+     "shown": "7",
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "mo",
+     "expr": "mode(S)",
+     "computed": 7.0,
+     "stated": 7,
+     "shown": "7",
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "rng",
+     "expr": "max(S) - min(S)",
+     "computed": 5.0,
+     "stated": 5,
+     "shown": "5",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 1,
+     "check": "sum(S) == 68",
+     "pass": true
+    },
+    {
+     "kind": "verify",
+     "index": 0,
+     "check": "xbar*len(S) == sum(S)",
+     "pass": true
+    },
+    {
+     "kind": "visual",
+     "type": "stats",
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "region": [
+    48.0,
+    156.6,
+    564.0,
+    356.6
+   ],
+   "statement": [
+    54.0,
+    160.6,
+    558.0,
+    187.6
+   ],
+   "work": [
+    [
+     68.0,
+     252.1,
+     544.0,
+     356.6
+    ]
+   ],
+   "page": 1
+  },
+  {
+   "id": "2",
+   "checks": [
+    {
+     "kind": "data",
+     "name": "T",
+     "quote": [
+      "18, 20, 22, 24 and",
+      "26 °C"
+     ],
+     "found": true,
+     "score": 1.0,
+     "box": [
+      395.30315200000007,
+      362.6425784,
+      496.0000008000003,
+      373.6425784
+     ],
+     "boxes": [
+      [
+       395.30315200000007,
+       362.6425784,
+       496.0000008000003,
+       373.6425784
+      ],
+      [
+       74.0,
+       378.6425784,
+       108.9067389,
+       389.6425784
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "m",
+     "expr": "mean(T)",
+     "computed": 22.0,
+     "stated": 22,
+     "shown": "22",
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "sd",
+     "expr": "pstdev(T)",
+     "computed": 2.8284271247461903,
+     "stated": 2.83,
+     "shown": "2.83",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 0,
+     "check": "sum(T) == 110",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 3,
+     "check": "pvariance(T) == 8",
+     "pass": true
+    },
+    {
+     "kind": "verify",
+     "index": 0,
+     "check": "(18**2 + 20**2 + 22**2 + 24**2 + 26**2)/5 - m**2 == sd**2",
+     "pass": true
+    },
+    {
+     "kind": "visual",
+     "type": "stats",
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "region": [
+    48.0,
+    358.6,
+    564.0,
+    518.6
+   ],
+   "statement": [
+    54.0,
+    362.6,
+    558.0,
+    389.6
+   ],
+   "work": [
+    [
+     68.0,
+     393.6,
+     544.0,
+     518.6
+    ]
+   ],
+   "page": 1
+  },
+  {
+   "id": "3",
+   "checks": [
+    {
+     "kind": "data",
+     "name": "D",
+     "quote": "3, 5, 7, 8, 9, 11, 13, 15",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      166.6674826,
+      524.6425784,
+      292.60352250000017,
+      535.6425784
+     ],
+     "boxes": [
+      [
+       166.6674826,
+       524.6425784,
+       292.60352250000017,
+       535.6425784
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "Q1",
+     "expr": "q1(D)",
+     "computed": 6.0,
+     "stated": 6,
+     "shown": "6",
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "med",
+     "expr": "median(D)",
+     "computed": 8.5,
+     "stated": 8.5,
+     "shown": "8.5",
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "Q3",
+     "expr": "q3(D)",
+     "computed": 12.0,
+     "stated": 12,
+     "shown": "12",
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "iqr",
+     "expr": "Q3 - Q1",
+     "computed": 6.0,
+     "stated": 6,
+     "shown": "6",
+     "pass": true
+    },
+    {
+     "kind": "verify",
+     "index": 0,
+     "check": "Q1 < med < Q3",
+     "pass": true
+    },
+    {
+     "kind": "visual",
+     "type": "stats",
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "region": [
+    48.0,
+    520.6,
+    564.0,
+    749.3
+   ],
+   "statement": [
+    54.0,
+    524.6,
+    558.0,
+    551.6
+   ],
+   "work": [
+    [
+     68.0,
+     555.6,
+     544.0,
+     749.3
+    ]
+   ],
+   "page": 1
+  }
+ ],
+ "pass": true,
+ "constants": []
+}

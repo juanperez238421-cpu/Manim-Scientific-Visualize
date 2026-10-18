@@ -1,0 +1,262 @@
+{
+ "spec": "Describing Data — Worked Solutions",
+ "log": [
+  {
+   "problem": "1",
+   "kind": "given",
+   "name": "S",
+   "chip": "\\text{scores: } 7,\\,9,\\,6,\\,8,\\,10,\\,7,\\,5,\\,9,\\,7",
+   "quote": "7 9 6 8 10 7 5 9 7",
+   "boxes": [
+    [
+     161.22,
+     242.07000000000005,
+     486.78000000000003,
+     252.07000000000005
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "1",
+   "kind": "answer",
+   "name": "xbar",
+   "tex": "\\bar{x} \\approx 7.56",
+   "value": 7.56,
+   "shown": "7.56",
+   "in_tex": true
+  },
+  {
+   "problem": "1",
+   "kind": "answer",
+   "name": "med",
+   "tex": "\\text{median} = 7",
+   "value": 7,
+   "shown": "7",
+   "in_tex": true
+  },
+  {
+   "problem": "1",
+   "kind": "answer",
+   "name": "mo",
+   "tex": "\\text{mode} = 7",
+   "value": 7,
+   "shown": "7",
+   "in_tex": true
+  },
+  {
+   "problem": "1",
+   "kind": "answer",
+   "name": "rng",
+   "tex": "\\text{range} = 5",
+   "value": 5,
+   "shown": "5",
+   "in_tex": true
+  },
+  {
+   "problem": "1",
+   "kind": "annotation",
+   "name": "xbar",
+   "text": "mean ≈ 7.56",
+   "at_pt": [
+    80.0,
+    268.1
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "1",
+   "kind": "annotation",
+   "name": "med",
+   "text": "median = 7",
+   "at_pt": [
+    80.0,
+    287.1
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "1",
+   "kind": "annotation",
+   "name": "mo",
+   "text": "mode = 7",
+   "at_pt": [
+    80.0,
+    306.1
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "1",
+   "kind": "annotation",
+   "name": "rng",
+   "text": "range = 5",
+   "at_pt": [
+    80.0,
+    325.1
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "2",
+   "kind": "given",
+   "name": "T",
+   "chip": "18,\\ 20,\\ 22,\\ 24,\\ 26\\ ^{\\circ}\\mathrm{C}",
+   "quote": [
+    "18, 20, 22, 24 and",
+    "26 °C"
+   ],
+   "boxes": [
+    [
+     395.30315200000007,
+     362.6425784,
+     496.0000008000003,
+     373.6425784
+    ],
+    [
+     74.0,
+     378.6425784,
+     108.9067389,
+     389.6425784
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "2",
+   "kind": "answer",
+   "name": "m",
+   "tex": "\\bar{x} = 22\\ ^{\\circ}\\mathrm{C}",
+   "value": 22,
+   "shown": "22",
+   "in_tex": true
+  },
+  {
+   "problem": "2",
+   "kind": "answer",
+   "name": "sd",
+   "tex": "\\sigma \\approx 2.83\\ ^{\\circ}\\mathrm{C}",
+   "value": 2.83,
+   "shown": "2.83",
+   "in_tex": true
+  },
+  {
+   "problem": "2",
+   "kind": "annotation",
+   "name": "m",
+   "text": "mean = 22 °C",
+   "at_pt": [
+    80.0,
+    409.6
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "2",
+   "kind": "annotation",
+   "name": "sd",
+   "text": "σ ≈ 2.83 °C",
+   "at_pt": [
+    80.0,
+    428.6
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "3",
+   "kind": "given",
+   "name": "D",
+   "chip": "3,\\ 5,\\ 7,\\ 8,\\ 9,\\ 11,\\ 13,\\ 15",
+   "quote": "3, 5, 7, 8, 9, 11, 13, 15",
+   "boxes": [
+    [
+     166.6674826,
+     524.6425784,
+     292.60352250000017,
+     535.6425784
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "3",
+   "kind": "answer",
+   "name": "Q1",
+   "tex": "Q_1 = 6",
+   "value": 6,
+   "shown": "6",
+   "in_tex": true
+  },
+  {
+   "problem": "3",
+   "kind": "answer",
+   "name": "med",
+   "tex": "\\text{median} = 8.5",
+   "value": 8.5,
+   "shown": "8.5",
+   "in_tex": true
+  },
+  {
+   "problem": "3",
+   "kind": "answer",
+   "name": "Q3",
+   "tex": "Q_3 = 12",
+   "value": 12,
+   "shown": "12",
+   "in_tex": true
+  },
+  {
+   "problem": "3",
+   "kind": "answer",
+   "name": "iqr",
+   "tex": "\\text{IQR} = 6",
+   "value": 6,
+   "shown": "6",
+   "in_tex": true
+  },
+  {
+   "problem": "3",
+   "kind": "annotation",
+   "name": "Q1",
+   "text": "Q1 = 6",
+   "at_pt": [
+    80.0,
+    571.6
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "3",
+   "kind": "annotation",
+   "name": "med",
+   "text": "median = 8.5",
+   "at_pt": [
+    80.0,
+    590.6
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "3",
+   "kind": "annotation",
+   "name": "Q3",
+   "text": "Q3 = 12",
+   "at_pt": [
+    80.0,
+    609.6
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "3",
+   "kind": "annotation",
+   "name": "iqr",
+   "text": "IQR = 6",
+   "at_pt": [
+    80.0,
+    628.6
+   ],
+   "in_work_area": true
+  }
+ ]
+}

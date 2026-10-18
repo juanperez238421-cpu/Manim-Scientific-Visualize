@@ -1,0 +1,83 @@
+{
+ "document": "chem_geometry_worksheet.pdf",
+ "title": "Stoichiometry and Geometry — Worked Solutions",
+ "subject": "Science & Math Review · Stoichiometry and Geometry",
+ "language": "en",
+ "constants": [
+  {"name": "MH", "value": 1.0, "unit": "g/mol", "quote": "H = 1.0 g/mol", "page": 1, "chip": "M_\\mathrm{H} = 1.0\\ \\mathrm{g/mol}"},
+  {"name": "MO", "value": 16.0, "unit": "g/mol", "quote": "O = 16.0 g/mol", "page": 1, "chip": "M_\\mathrm{O} = 16.0\\ \\mathrm{g/mol}"}
+ ],
+ "problems": [
+  {
+   "id": "1",
+   "title": "Mass of water from hydrogen",
+   "uses": ["MH", "MO"],
+   "given": [
+    {"name": "c1", "value": 2, "quote": "2H", "nth": 0, "chip": "2\\,\\mathrm{H_2}"},
+    {"name": "c2", "value": 2, "quote": "2H", "nth": 1, "chip": "2\\,\\mathrm{H_2O}"},
+    {"name": "mH2", "value": 8.0, "unit": "g", "quote": "8.0 g of H", "chip": "m_{\\mathrm{H_2}} = 8.0\\ \\mathrm{g}"}
+   ],
+   "find": "\\text{mass of } \\mathrm{H_2O} \\text{ produced (oxygen in excess)}",
+   "model": "Hydrogen is the limiting reactant. Grams of H₂ → moles of H₂ → moles of H₂O (mole ratio from the balanced equation) → grams of H₂O.",
+   "steps": [
+    {"stage": "Equation", "note": "molar masses from the given atomic masses", "tex": "M_{\\mathrm{H_2}} = 2(1.0) = 2.0 \\qquad M_{\\mathrm{H_2O}} = 2(1.0) + 16.0 = 18.0\\ \\mathrm{g/mol}", "check": "2*MH + MO == 18"},
+    {"stage": "Substitute", "note": "grams → moles", "tex": "n_{\\mathrm{H_2}} = \\dfrac{8.0\\ \\mathrm{g}}{2.0\\ \\mathrm{g/mol}} = 4.0\\ \\mathrm{mol}", "check": "mH2/(2*MH) == 4"},
+    {"stage": "Model", "note": "mole ratio 2 H₂ : 2 H₂O", "tex": "n_{\\mathrm{H_2O}} = 4.0 \\times \\dfrac{2}{2} = 4.0\\ \\mathrm{mol}", "check": "c2/c1 == 1"},
+    {"stage": "Solve", "note": "moles → grams", "tex": "m_{\\mathrm{H_2O}} = 4.0\\ \\mathrm{mol} \\times 18.0\\ \\mathrm{g/mol} = 72\\ \\mathrm{g}"}
+   ],
+   "answers": [
+    {"name": "mw", "tex": "m_{\\mathrm{H_2O}} = 72\\ \\mathrm{g}", "expr": "mH2/(2*MH) * (c2/c1) * (2*MH + MO)", "value": 72, "unit": "g", "annotation": "72 g of water"}
+   ],
+   "verify": [
+    {"note": "conservation of mass: 4.0 mol H₂ uses 2.0 mol O₂ (64 g)", "tex": "8.0\\ \\mathrm{g} + 64\\ \\mathrm{g} = 72\\ \\mathrm{g}", "check": "mH2 + (mH2/(2*MH))/2*(2*MO) == mw"}
+   ],
+   "visual": {"type": "chain", "caption": "Conversion chain", "nodes": ["8.0\\ \\mathrm{g\\ H_2}", "4.0\\ \\mathrm{mol\\ H_2}", "4.0\\ \\mathrm{mol\\ H_2O}", "72\\ \\mathrm{g\\ H_2O}"],
+              "edges": ["\\div 2.0\\ \\mathrm{g/mol}", "\\times \\tfrac{2\\ \\mathrm{H_2O}}{2\\ \\mathrm{H_2}}", "\\times 18.0\\ \\mathrm{g/mol}"]}
+  },
+  {
+   "id": "2",
+   "title": "Area of a composite figure",
+   "given": [
+    {"name": "L", "value": 10, "unit": "cm", "quote": "10 cm long", "chip": "L = 10\\ \\mathrm{cm}"},
+    {"name": "W", "value": 6, "unit": "cm", "quote": "6 cm wide", "chip": "W = 6\\ \\mathrm{cm}"}
+   ],
+   "find": "\\text{total area } A \\text{ (exact, then decimal)}",
+   "model": "Split the figure: a 10 × 6 rectangle plus a semicircle whose diameter is the 6 cm side, so its radius is 3 cm.",
+   "steps": [
+    {"stage": "Equation", "note": "rectangle", "tex": "A_{\\text{rect}} = L \\cdot W = 10 \\cdot 6 = 60\\ \\mathrm{cm^2}", "check": "L*W == 60"},
+    {"stage": "Model", "note": "diameter = width", "tex": "r = \\dfrac{W}{2} = 3\\ \\mathrm{cm}"},
+    {"stage": "Equation", "note": "half of a circle", "tex": "A_{\\text{semi}} = \\tfrac{1}{2}\\pi r^2 = \\tfrac{1}{2}\\pi (3)^2 = 4.5\\pi", "check": "pi*(W/2)**2/2 == 9*pi/2"},
+    {"stage": "Solve", "note": "add the parts", "tex": "A = 60 + 4.5\\pi \\approx 74.14\\ \\mathrm{cm^2}"}
+   ],
+   "answers": [
+    {"name": "A", "tex": "A = 60 + 4.5\\pi \\approx 74.14\\ \\mathrm{cm^2}", "expr": "L*W + pi*(W/2)**2/2", "value": 74.14, "decimals": 2, "unit": "cm^2", "annotation": "A = 60 + 4.5π ≈ 74.14 cm²"}
+   ],
+   "verify": [
+    {"note": "bounds: more than the rectangle, less than rectangle + full circle", "tex": "60 < 74.14 < 60 + 9\\pi \\approx 88.27", "check": "L*W < A < L*W + pi*(W/2)**2"}
+   ],
+   "visual": {"type": "geometry", "figure": "rect_semicircle", "caption": "Rectangle + semicircle", "params": {"w": "L", "h": "W"}, "label_a": "60", "label_b": "4.5\\pi"}
+  },
+  {
+   "id": "3",
+   "title": "Hypotenuse of a right triangle",
+   "given": [
+    {"name": "a", "value": 6, "unit": "cm", "quote": "6 cm", "chip": "a = 6\\ \\mathrm{cm}"},
+    {"name": "b", "value": 8, "unit": "cm", "quote": "8 cm", "chip": "b = 8\\ \\mathrm{cm}"}
+   ],
+   "find": "\\text{hypotenuse } c",
+   "model": "In a right triangle the square on the hypotenuse equals the sum of the squares on the legs (Pythagorean theorem).",
+   "steps": [
+    {"stage": "Equation", "note": "Pythagorean theorem", "tex": "c^2 = a^2 + b^2"},
+    {"stage": "Substitute", "note": "legs 6 and 8", "tex": "c^2 = 6^2 + 8^2 = 36 + 64 = 100", "check": "a**2 + b**2 == 100"},
+    {"stage": "Solve", "note": "positive square root", "tex": "c = \\sqrt{100} = 10\\ \\mathrm{cm}"}
+   ],
+   "answers": [
+    {"name": "c", "tex": "c = 10\\ \\mathrm{cm}", "expr": "sqrt(a**2 + b**2)", "value": 10, "unit": "cm", "annotation": "c = 10 cm"}
+   ],
+   "verify": [
+    {"note": "6-8-10 is the 3-4-5 triangle scaled by 2", "tex": "\\dfrac{6}{3} = \\dfrac{8}{4} = \\dfrac{10}{5} = 2", "check": "a/3 == b/4 == c/5"}
+   ],
+   "visual": {"type": "geometry", "figure": "right_triangle", "caption": "Squares on the sides: 36 + 64 = 100", "params": {"a": "a", "b": "b"}}
+  }
+ ]
+}

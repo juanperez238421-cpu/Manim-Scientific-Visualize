@@ -1,0 +1,265 @@
+{
+ "spec": "Motion in One Dimension — Worked Solutions",
+ "log": [
+  {
+   "problem": "1",
+   "kind": "given",
+   "name": "v0",
+   "chip": "v_0 = 0",
+   "quote": "from rest",
+   "boxes": [
+    [
+     142.3579105,
+     160.64257840000005,
+     194.0708014,
+     171.64257840000005
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "1",
+   "kind": "given",
+   "name": "a",
+   "chip": "a = 2.5\\ \\mathrm{m/s^2}",
+   "quote": "2.5 m/s²",
+   "boxes": [
+    [
+     360.8271505,
+     160.64257840000005,
+     410.46142309999993,
+     171.64257840000005
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "1",
+   "kind": "given",
+   "name": "v",
+   "chip": "v = 20\\ \\mathrm{m/s}",
+   "quote": "20 m/s",
+   "boxes": [
+    [
+     407.94238460000014,
+     176.64257840000005,
+     454.82665720000006,
+     187.64257840000005
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "1",
+   "kind": "answer",
+   "name": "t",
+   "tex": "t = 8\\ \\mathrm{s}",
+   "value": 8,
+   "shown": "8",
+   "in_tex": true
+  },
+  {
+   "problem": "1",
+   "kind": "answer",
+   "name": "d",
+   "tex": "d = 80\\ \\mathrm{m}",
+   "value": 80,
+   "shown": "80",
+   "in_tex": true
+  },
+  {
+   "problem": "1",
+   "kind": "annotation",
+   "name": "t",
+   "text": "(a) t = 8 s",
+   "at_pt": [
+    80.0,
+    223.6
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "1",
+   "kind": "annotation",
+   "name": "d",
+   "text": "(b) d = 80 m",
+   "at_pt": [
+    80.0,
+    242.6
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "2",
+   "kind": "constant",
+   "name": "g",
+   "chip": "g = 9.8\\ \\mathrm{m/s^2}",
+   "box": [
+    187.44433515,
+    118.52246119999995,
+    252.76684589999996,
+    129.02246119999995
+   ]
+  },
+  {
+   "problem": "2",
+   "kind": "given",
+   "name": "h",
+   "chip": "h = 45\\ \\mathrm{m}",
+   "quote": "45 m",
+   "boxes": [
+    [
+     328.4931664,
+     348.6425784,
+     359.2695285,
+     359.6425784
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "2",
+   "kind": "given",
+   "name": "v0",
+   "chip": "v_0 = 0",
+   "quote": "dropped",
+   "boxes": [
+    [
+     131.8789079,
+     348.6425784,
+     178.4355477,
+     359.6425784
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "2",
+   "kind": "answer",
+   "name": "t",
+   "tex": "t \\approx 3.03\\ \\mathrm{s}",
+   "value": 3.03,
+   "shown": "3.03",
+   "in_tex": true
+  },
+  {
+   "problem": "2",
+   "kind": "answer",
+   "name": "v",
+   "tex": "v \\approx 29.70\\ \\mathrm{m/s}",
+   "value": 29.7,
+   "shown": "29.70",
+   "in_tex": true
+  },
+  {
+   "problem": "2",
+   "kind": "annotation",
+   "name": "t",
+   "text": "(a) t ≈ 3.03 s",
+   "at_pt": [
+    80.0,
+    395.6
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "2",
+   "kind": "annotation",
+   "name": "v",
+   "text": "(b) v ≈ 29.70 m/s",
+   "at_pt": [
+    80.0,
+    414.6
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "3",
+   "kind": "given",
+   "name": "D",
+   "chip": "D = 600\\ \\mathrm{m}",
+   "quote": "600 m apart",
+   "boxes": [
+    [
+     175.4492193,
+     520.6425784,
+     247.2123976,
+     531.6425784
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "3",
+   "kind": "given",
+   "name": "vA",
+   "chip": "v_A = 5\\ \\mathrm{m/s}",
+   "quote": "5 m/s",
+   "boxes": [
+    [
+     204.46374600000001,
+     536.6425784,
+     237.71508400000002,
+     547.6425784
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "3",
+   "kind": "given",
+   "name": "vB",
+   "chip": "v_B = 7\\ \\mathrm{m/s}",
+   "quote": "7 m/s",
+   "boxes": [
+    [
+     361.56054370000015,
+     536.6425784,
+     398.30846380000014,
+     547.6425784
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "3",
+   "kind": "answer",
+   "name": "t",
+   "tex": "t = 50\\ \\mathrm{s}",
+   "value": 50,
+   "shown": "50",
+   "in_tex": true
+  },
+  {
+   "problem": "3",
+   "kind": "answer",
+   "name": "x",
+   "tex": "x = 250\\ \\mathrm{m \\ from\\ A}",
+   "value": 250,
+   "shown": "250",
+   "in_tex": true
+  },
+  {
+   "problem": "3",
+   "kind": "annotation",
+   "name": "t",
+   "text": "t = 50 s",
+   "at_pt": [
+    80.0,
+    583.6
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "3",
+   "kind": "annotation",
+   "name": "x",
+   "text": "x = 250 m from A",
+   "at_pt": [
+    80.0,
+    602.6
+   ],
+   "in_work_area": true
+  }
+ ]
+}

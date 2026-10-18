@@ -1,0 +1,6 @@
+VIDEO QA — algebra_equations_worked_solutions.mp4
+technical: h264 1920x1080 30/1 yuv420p, 228.9 s, 14.77 MB, decode errors: none
+bookends: first frame mean 255.0, last frame mean 255.0 (white)
+content: validation PASS; 5 givens extracted at their page boxes; 6/6 answers shown with the recomputed value; 6/6 annotations inside the work area
+share copy: 8.74 MB (crf 23)
+OVERALL: PASS

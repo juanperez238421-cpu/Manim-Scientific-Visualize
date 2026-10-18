@@ -1,0 +1,101 @@
+{
+ "document": "physics_worksheet.pdf",
+ "title": "Motion in One Dimension — Worked Solutions",
+ "subject": "Physics 9 · Kinematics · Worksheet 2.3",
+ "language": "en",
+ "constants": [
+  {"name": "g", "value": 9.8, "unit": "m/s^2", "quote": "g = 9.8 m/s²", "page": 1, "chip": "g = 9.8\\ \\mathrm{m/s^2}"}
+ ],
+ "problems": [
+  {
+   "id": "1",
+   "title": "Uniform acceleration from rest",
+   "given": [
+    {"name": "v0", "value": 0, "quote": "from rest", "implied": true, "chip": "v_0 = 0"},
+    {"name": "a", "value": 2.5, "unit": "m/s^2", "quote": "2.5 m/s²", "chip": "a = 2.5\\ \\mathrm{m/s^2}"},
+    {"name": "v", "value": 20, "unit": "m/s", "quote": "20 m/s", "chip": "v = 20\\ \\mathrm{m/s}"}
+   ],
+   "find": "\\text{(a) } t \\text{ to reach } v = 20\\ \\mathrm{m/s} \\qquad \\text{(b) distance } d",
+   "model": "Constant acceleration along a straight line, starting from rest. Velocity grows linearly with time; distance grows with the square of time.",
+   "steps": [
+    {"stage": "Equation", "note": "velocity under constant acceleration", "tex": "v = v_0 + a\\,t"},
+    {"stage": "Solve", "note": "isolate t", "tex": "t = \\dfrac{v - v_0}{a}"},
+    {"stage": "Substitute", "note": "values with units", "tex": "t = \\dfrac{20\\ \\mathrm{m/s} - 0}{2.5\\ \\mathrm{m/s^2}}", "check": "(v - v0)/a == 8"},
+    {"stage": "Solve", "note": "divide", "tex": "t = 8\\ \\mathrm{s}"},
+    {"stage": "Equation", "note": "distance under constant acceleration", "tex": "d = v_0\\,t + \\tfrac{1}{2}\\,a\\,t^2"},
+    {"stage": "Substitute", "note": "v0 = 0, a = 2.5, t = 8", "tex": "d = 0 + \\tfrac{1}{2}(2.5)(8)^2", "check": "a*t**2/2 == 80"},
+    {"stage": "Solve", "note": "1.25 × 64", "tex": "d = 80\\ \\mathrm{m}"}
+   ],
+   "answers": [
+    {"name": "t", "label": "(a)", "tex": "t = 8\\ \\mathrm{s}", "expr": "(v - v0)/a", "value": 8, "unit": "s", "annotation": "(a) t = 8 s"},
+    {"name": "d", "label": "(b)", "tex": "d = 80\\ \\mathrm{m}", "expr": "v0*t + a*t**2/2", "value": 80, "unit": "m", "annotation": "(b) d = 80 m"}
+   ],
+   "verify": [
+    {"note": "independent: average velocity × time", "tex": "d = \\dfrac{v_0 + v}{2}\\,t = \\dfrac{0 + 20}{2}\\cdot 8 = 80\\ \\mathrm{m}", "check": "(v0 + v)/2*t == d"}
+   ],
+   "visual": {"type": "motion_1d", "caption": "Position along the road", "axis": {"min": 0, "max": 80, "step": 10, "unit": "m", "label": "x"},
+              "agents": [{"label": "car", "short": "x", "x0": 0, "v0": "v0", "a": "a"}], "t_end": "t",
+              "event": {"t": "t", "label": "v = 20 m/s at x = 80 m"}, "time_note": "8 s of motion shown in 5 s", "run_time": 5}
+  },
+  {
+   "id": "2",
+   "title": "Free fall from a building",
+   "uses": ["g"],
+   "given": [
+    {"name": "h", "value": 45, "unit": "m", "quote": "45 m", "chip": "h = 45\\ \\mathrm{m}"},
+    {"name": "v0", "value": 0, "quote": "dropped", "implied": true, "chip": "v_0 = 0"}
+   ],
+   "find": "\\text{(a) fall time } t \\qquad \\text{(b) impact speed } v",
+   "model": "Dropped means it starts at rest. Ignoring air resistance, the stone falls with constant acceleration g. Take downward as positive.",
+   "steps": [
+    {"stage": "Equation", "note": "distance fallen from rest", "tex": "h = \\tfrac{1}{2}\\,g\\,t^2"},
+    {"stage": "Solve", "note": "isolate t (t > 0)", "tex": "t = \\sqrt{\\dfrac{2h}{g}}"},
+    {"stage": "Substitute", "note": "h = 45 m, g = 9.8 m/s²", "tex": "t = \\sqrt{\\dfrac{2(45)}{9.8}} = \\sqrt{9.184\\ldots}", "check": "approx(2*h/g, 9.1837, 0.0001)"},
+    {"stage": "Solve", "note": "round to two decimals", "tex": "t \\approx 3.03\\ \\mathrm{s}"},
+    {"stage": "Equation", "note": "speed from rest after time t", "tex": "v = g\\,t"},
+    {"stage": "Substitute", "note": "use the unrounded t", "tex": "v = 9.8 \\times 3.0305\\ldots", "check": "approx(t, 3.0305, 0.0001)"},
+    {"stage": "Solve", "note": "round to two decimals", "tex": "v \\approx 29.70\\ \\mathrm{m/s}"}
+   ],
+   "answers": [
+    {"name": "t", "label": "(a)", "tex": "t \\approx 3.03\\ \\mathrm{s}", "expr": "sqrt(2*h/g)", "value": 3.03, "decimals": 2, "unit": "s", "annotation": "(a) t ≈ 3.03 s"},
+    {"name": "v", "label": "(b)", "tex": "v \\approx 29.70\\ \\mathrm{m/s}", "expr": "g*t", "value": 29.70, "decimals": 2, "unit": "m/s", "annotation": "(b) v ≈ 29.70 m/s"}
+   ],
+   "verify": [
+    {"note": "independent: v² = 2gh", "tex": "v = \\sqrt{2gh} = \\sqrt{2(9.8)(45)} = \\sqrt{882} \\approx 29.70", "check": "v**2 == 2*g*h"}
+   ],
+   "visual": {"type": "motion_1d", "orientation": "vertical", "caption": "Height above the ground", "axis": {"min": 0, "max": 45, "step": 5, "unit": "m", "label": "height"},
+              "agents": [{"label": "stone", "short": "y", "x0": "h", "v0": 0, "a": "-g"}], "t_end": "t", "speed": true,
+              "event": {"t": "t", "label": "impact: 29.70 m/s"}, "time_note": "3.03 s shown in 4 s", "run_time": 4}
+  },
+  {
+   "id": "3",
+   "title": "Two cyclists riding toward each other",
+   "given": [
+    {"name": "D", "value": 600, "unit": "m", "quote": "600 m apart", "chip": "D = 600\\ \\mathrm{m}"},
+    {"name": "vA", "value": 5, "unit": "m/s", "quote": "5 m/s", "chip": "v_A = 5\\ \\mathrm{m/s}"},
+    {"name": "vB", "value": 7, "unit": "m/s", "quote": "7 m/s", "chip": "v_B = 7\\ \\mathrm{m/s}"}
+   ],
+   "find": "\\text{meeting time } t \\text{ and position } x \\text{ (from A)}",
+   "model": "Put A's start at x = 0 and B's start at x = 600 m, with +x pointing from A to B. B rides toward A, so its velocity is negative: −7 m/s.",
+   "steps": [
+    {"stage": "Equation", "note": "position of each cyclist", "tex": "x_A = 5\\,t \\qquad x_B = 600 - 7\\,t"},
+    {"stage": "Model", "note": "meet = same time and same position", "tex": "x_A = x_B"},
+    {"stage": "Substitute", "note": "set the positions equal", "tex": "5\\,t = 600 - 7\\,t"},
+    {"stage": "Solve", "note": "add 7t to both sides", "tex": "12\\,t = 600"},
+    {"stage": "Solve", "note": "divide by 12", "tex": "t = 50\\ \\mathrm{s}", "check": "D/(vA + vB) == 50"},
+    {"stage": "Substitute", "note": "position of A at t = 50 s", "tex": "x = 5(50) = 250\\ \\mathrm{m}"}
+   ],
+   "answers": [
+    {"name": "t", "tex": "t = 50\\ \\mathrm{s}", "expr": "D/(vA + vB)", "value": 50, "unit": "s", "annotation": "t = 50 s"},
+    {"name": "x", "tex": "x = 250\\ \\mathrm{m \\ from\\ A}", "expr": "vA*t", "value": 250, "unit": "m", "annotation": "x = 250 m from A"}
+   ],
+   "verify": [
+    {"note": "independent: B's equation gives the same point", "tex": "x_B = 600 - 7(50) = 250\\ \\mathrm{m}", "check": "D - vB*t == x"}
+   ],
+   "interpretation": "B's velocity is negative because it moves in the −x direction; its speed is still 7 m/s. Together they close the 600 m gap at 12 m/s.",
+   "visual": {"type": "motion_1d", "caption": "Positions measured from A's start", "axis": {"min": 0, "max": 600, "step": 100, "unit": "m", "label": "x"},
+              "agents": [{"label": "A", "short": "x_A", "x0": 0, "v0": "vA", "a": 0, "color": "pos"}, {"label": "B", "short": "x_B", "x0": "D", "v0": "-vB", "a": 0, "color": "acc"}],
+              "t_end": "t", "show_v": false, "event": {"t": "t", "label": "meet: t = 50 s, x = 250 m"}, "time_note": "50 s shown in 5 s", "run_time": 5}
+  }
+ ]
+}

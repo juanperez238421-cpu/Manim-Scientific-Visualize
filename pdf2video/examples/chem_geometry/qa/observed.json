@@ -1,0 +1,201 @@
+{
+ "spec": "Stoichiometry and Geometry — Worked Solutions",
+ "log": [
+  {
+   "problem": "1",
+   "kind": "constant",
+   "name": "MH",
+   "chip": "M_\\mathrm{H} = 1.0\\ \\mathrm{g/mol}",
+   "box": [
+    253.97681025,
+    118.52246119999995,
+    331.8757369499999,
+    129.02246119999995
+   ]
+  },
+  {
+   "problem": "1",
+   "kind": "constant",
+   "name": "MO",
+   "chip": "M_\\mathrm{O} = 16.0\\ \\mathrm{g/mol}",
+   "box": [
+    335.2133834999999,
+    118.52246119999995,
+    419.24414639999975,
+    129.02246119999995
+   ]
+  },
+  {
+   "problem": "1",
+   "kind": "given",
+   "name": "c1",
+   "chip": "2\\,\\mathrm{H_2}",
+   "quote": "2H",
+   "boxes": [
+    [
+     299.2260747,
+     146.64257840000005,
+     315.8173835,
+     157.64257840000005
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "1",
+   "kind": "given",
+   "name": "c2",
+   "chip": "2\\,\\mathrm{H_2O}",
+   "quote": "2H",
+   "boxes": [
+    [
+     368.7075203000001,
+     146.64257840000005,
+     385.2988291000001,
+     157.64257840000005
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "1",
+   "kind": "given",
+   "name": "mH2",
+   "chip": "m_{\\mathrm{H_2}} = 8.0\\ \\mathrm{g}",
+   "quote": "8.0 g of H",
+   "boxes": [
+    [
+     270.2382807,
+     162.64257840000005,
+     328.17626960000007,
+     173.64257840000005
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "1",
+   "kind": "answer",
+   "name": "mw",
+   "tex": "m_{\\mathrm{H_2O}} = 72\\ \\mathrm{g}",
+   "value": 72,
+   "shown": "72",
+   "in_tex": true
+  },
+  {
+   "problem": "1",
+   "kind": "annotation",
+   "name": "mw",
+   "text": "72 g of water",
+   "at_pt": [
+    80.0,
+    198.7
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "2",
+   "kind": "given",
+   "name": "L",
+   "chip": "L = 10\\ \\mathrm{cm}",
+   "quote": "10 cm long",
+   "boxes": [
+    [
+     239.9292008,
+     308.6425784,
+     301.7773465,
+     319.6425784
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "2",
+   "kind": "given",
+   "name": "W",
+   "chip": "W = 6\\ \\mathrm{cm}",
+   "quote": "6 cm wide",
+   "boxes": [
+    [
+     329.4545928,
+     308.6425784,
+     386.5224641000001,
+     319.6425784
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "2",
+   "kind": "answer",
+   "name": "A",
+   "tex": "A = 60 + 4.5\\pi \\approx 74.14\\ \\mathrm{cm^2}",
+   "value": 74.14,
+   "shown": "74.14",
+   "in_tex": true
+  },
+  {
+   "problem": "2",
+   "kind": "annotation",
+   "name": "A",
+   "text": "A = 60 + 4.5π ≈ 74.14 cm²",
+   "at_pt": [
+    80.0,
+    355.6
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "3",
+   "kind": "given",
+   "name": "a",
+   "chip": "a = 6\\ \\mathrm{cm}",
+   "quote": "6 cm",
+   "boxes": [
+    [
+     266.00586130000005,
+     490.6425784,
+     293.0922877000001,
+     501.6425784
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "3",
+   "kind": "given",
+   "name": "b",
+   "chip": "b = 8\\ \\mathrm{cm}",
+   "quote": "8 cm",
+   "boxes": [
+    [
+     320.7695340000001,
+     490.6425784,
+     351.35254250000014,
+     501.6425784
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "3",
+   "kind": "answer",
+   "name": "c",
+   "tex": "c = 10\\ \\mathrm{cm}",
+   "value": 10,
+   "shown": "10",
+   "in_tex": true
+  },
+  {
+   "problem": "3",
+   "kind": "annotation",
+   "name": "c",
+   "text": "c = 10 cm",
+   "at_pt": [
+    80.0,
+    537.6
+   ],
+   "in_work_area": true
+  }
+ ]
+}

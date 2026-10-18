@@ -1,0 +1,93 @@
+{
+ "spec": "Motion in One Dimension — Worked Solutions (scanned copy)",
+ "log": [
+  {
+   "problem": "1",
+   "kind": "given",
+   "name": "v0",
+   "chip": "v_0 = 0",
+   "quote": "from rest",
+   "boxes": [
+    [
+     140.4,
+     162.0,
+     191.76,
+     170.64
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "1",
+   "kind": "given",
+   "name": "a",
+   "chip": "a = 2.5\\ \\mathrm{m/s^2}",
+   "quote": "2.5 m/s²",
+   "boxes": [
+    [
+     359.28,
+     159.6,
+     407.52,
+     168.95999999999998
+    ]
+   ],
+   "score": 0.923
+  },
+  {
+   "problem": "1",
+   "kind": "given",
+   "name": "v",
+   "chip": "v = 20\\ \\mathrm{m/s}",
+   "quote": "20 m/s",
+   "boxes": [
+    [
+     406.32,
+     175.2,
+     452.15999999999997,
+     184.79999999999998
+    ]
+   ],
+   "score": 1.0
+  },
+  {
+   "problem": "1",
+   "kind": "answer",
+   "name": "t",
+   "tex": "t = 8\\ \\mathrm{s}",
+   "value": 8,
+   "shown": "8",
+   "in_tex": true
+  },
+  {
+   "problem": "1",
+   "kind": "answer",
+   "name": "d",
+   "tex": "d = 80\\ \\mathrm{m}",
+   "value": 80,
+   "shown": "80",
+   "in_tex": true
+  },
+  {
+   "problem": "1",
+   "kind": "annotation",
+   "name": "t",
+   "text": "(a) t = 8 s",
+   "at_pt": [
+    76.9,
+    223.5
+   ],
+   "in_work_area": true
+  },
+  {
+   "problem": "1",
+   "kind": "annotation",
+   "name": "d",
+   "text": "(b) d = 80 m",
+   "at_pt": [
+    76.9,
+    242.5
+   ],
+   "in_work_area": true
+  }
+ ]
+}

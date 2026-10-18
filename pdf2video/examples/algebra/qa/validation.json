@@ -1,0 +1,390 @@
+{
+ "spec": "spec.json",
+ "document": "algebra_worksheet.pdf",
+ "sha256": "673cfc1862e50ac87ae4f9d5717b1a1a00324b64cb22028e257566bff517b05d",
+ "pages": 1,
+ "source": [
+  "text"
+ ],
+ "problems": [
+  {
+   "id": "1",
+   "checks": [
+    {
+     "kind": "data",
+     "name": "E1",
+     "quote": "2x + 3y = 12",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      87.9863284,
+      162.64257840000005,
+      160.8183602,
+      173.64257840000005
+     ],
+     "boxes": [
+      [
+       87.9863284,
+       162.64257840000005,
+       160.8183602,
+       173.64257840000005
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "data",
+     "name": "E2",
+     "quote": "x − y = 1",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      87.9863284,
+      178.64257840000005,
+      139.8227537,
+      189.64257840000005
+     ],
+     "boxes": [
+      [
+       87.9863284,
+       178.64257840000005,
+       139.8227537,
+       189.64257840000005
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "xs",
+     "expr": "solve([E1, E2], x)",
+     "computed": 3.0,
+     "stated": 3,
+     "shown": "3",
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "ys",
+     "expr": "solve([E1, E2], y)",
+     "computed": 2.0,
+     "stated": 2,
+     "shown": "2",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 4,
+     "check": "ys == 2",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 5,
+     "check": "xs == ys + 1",
+     "pass": true
+    },
+    {
+     "kind": "verify",
+     "index": 0,
+     "check": "at(E1, x, xs, y, ys) == 0",
+     "pass": true
+    },
+    {
+     "kind": "verify",
+     "index": 1,
+     "check": "at(E2, x, xs, y, ys) == 0",
+     "pass": true
+    },
+    {
+     "kind": "visual",
+     "type": "function_plot",
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "region": [
+    48.0,
+    142.6,
+    564.0,
+    323.6
+   ],
+   "statement": [
+    54.0,
+    146.6,
+    558.0,
+    189.6
+   ],
+   "work": [
+    [
+     68.0,
+     193.6,
+     544.0,
+     323.6
+    ]
+   ],
+   "page": 1
+  },
+  {
+   "id": "2",
+   "checks": [
+    {
+     "kind": "data",
+     "name": "E",
+     "quote": "x² − 5x + 6 = 0",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      238.88183800000004,
+      329.6425784,
+      325.3242204000002,
+      340.6425784
+     ],
+     "boxes": [
+      [
+       238.88183800000004,
+       329.6425784,
+       325.3242204000002,
+       340.6425784
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "r1",
+     "expr": "solve(E, x, 0)",
+     "computed": 2.0,
+     "stated": 2,
+     "shown": "2",
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "r2",
+     "expr": "solve(E, x, 1)",
+     "computed": 3.0,
+     "stated": 3,
+     "shown": "3",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 0,
+     "check": "(-2)*(-3) == 6",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 1,
+     "check": "expand((x - 2)*(x - 3)) == E",
+     "pass": true
+    },
+    {
+     "kind": "verify",
+     "index": 0,
+     "check": "at(E, x, r1) == 0",
+     "pass": true
+    },
+    {
+     "kind": "verify",
+     "index": 1,
+     "check": "at(E, x, r2) == 0",
+     "pass": true
+    },
+    {
+     "kind": "visual",
+     "type": "function_plot",
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "region": [
+    48.0,
+    325.6,
+    564.0,
+    474.6
+   ],
+   "statement": [
+    54.0,
+    329.6,
+    558.0,
+    342.6
+   ],
+   "work": [
+    [
+     68.0,
+     346.6,
+     544.0,
+     474.6
+    ]
+   ],
+   "page": 1
+  },
+  {
+   "id": "3",
+   "checks": [
+    {
+     "kind": "data",
+     "name": "x1",
+     "quote": "(1, 3)",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      257.54101920000005,
+      480.6425784,
+      287.11426180000007,
+      491.6425784
+     ],
+     "boxes": [
+      [
+       257.54101920000005,
+       480.6425784,
+       287.11426180000007,
+       491.6425784
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "data",
+     "name": "y1",
+     "quote": "(1, 3)",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      257.54101920000005,
+      480.6425784,
+      287.11426180000007,
+      491.6425784
+     ],
+     "boxes": [
+      [
+       257.54101920000005,
+       480.6425784,
+       287.11426180000007,
+       491.6425784
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "data",
+     "name": "x2",
+     "quote": "(4, 9)",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      314.79150810000004,
+      480.6425784,
+      347.86133280000007,
+      491.6425784
+     ],
+     "boxes": [
+      [
+       314.79150810000004,
+       480.6425784,
+       347.86133280000007,
+       491.6425784
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "data",
+     "name": "y2",
+     "quote": "(4, 9)",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      314.79150810000004,
+      480.6425784,
+      347.86133280000007,
+      491.6425784
+     ],
+     "boxes": [
+      [
+       314.79150810000004,
+       480.6425784,
+       347.86133280000007,
+       491.6425784
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "m",
+     "expr": "(y2 - y1)/(x2 - x1)",
+     "computed": 2.0,
+     "stated": 2,
+     "shown": "2",
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "b",
+     "expr": "y1 - m*x1",
+     "computed": 1.0,
+     "stated": 1,
+     "shown": "1",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 2,
+     "check": "m == 2",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 5,
+     "check": "b == 1",
+     "pass": true
+    },
+    {
+     "kind": "verify",
+     "index": 0,
+     "check": "m*x2 + b == y2",
+     "pass": true
+    },
+    {
+     "kind": "visual",
+     "type": "function_plot",
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "region": [
+    48.0,
+    476.6,
+    564.0,
+    749.3
+   ],
+   "statement": [
+    54.0,
+    480.6,
+    558.0,
+    507.6
+   ],
+   "work": [
+    [
+     68.0,
+     511.6,
+     544.0,
+     749.3
+    ]
+   ],
+   "page": 1
+  }
+ ],
+ "pass": true,
+ "constants": []
+}

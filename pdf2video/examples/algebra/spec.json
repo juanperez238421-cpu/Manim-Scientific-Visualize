@@ -1,0 +1,98 @@
+{
+ "document": "algebra_worksheet.pdf",
+ "title": "Equations and Linear Functions — Worked Solutions",
+ "subject": "Algebra I · Chapter 5 · Practice Set 5B",
+ "language": "en",
+ "problems": [
+  {
+   "id": "1",
+   "title": "A system of two linear equations",
+   "symbols": ["x", "y"],
+   "given": [
+    {"name": "E1", "equation": "2*x + 3*y - 12", "quote": "2x + 3y = 12", "chip": "2x + 3y = 12"},
+    {"name": "E2", "equation": "x - y - 1", "quote": "x − y = 1", "chip": "x - y = 1"}
+   ],
+   "find": "\\text{the pair } (x,\\ y) \\text{ that satisfies both equations}",
+   "model": "Substitution: the second equation gives x in terms of y; put that into the first equation to get one equation in one unknown.",
+   "steps": [
+    {"stage": "Model", "note": "solve the second equation for x", "tex": "x - y = 1 \\;\\Rightarrow\\; x = y + 1"},
+    {"stage": "Substitute", "note": "replace x in the first equation", "tex": "2(y + 1) + 3y = 12"},
+    {"stage": "Solve", "note": "distribute and collect y terms", "tex": "5y + 2 = 12"},
+    {"stage": "Solve", "note": "subtract 2", "tex": "5y = 10"},
+    {"stage": "Solve", "note": "divide by 5", "tex": "y = 2", "check": "ys == 2"},
+    {"stage": "Substitute", "note": "back into x = y + 1", "tex": "x = 2 + 1 = 3", "check": "xs == ys + 1"}
+   ],
+   "answers": [
+    {"name": "xs", "tex": "x = 3", "expr": "solve([E1, E2], x)", "value": 3, "annotation": "x = 3"},
+    {"name": "ys", "tex": "y = 2", "expr": "solve([E1, E2], y)", "value": 2, "annotation": "y = 2"}
+   ],
+   "verify": [
+    {"note": "substitute into equation 1", "tex": "2(3) + 3(2) = 6 + 6 = 12", "check": "at(E1, x, xs, y, ys) == 0"},
+    {"note": "substitute into equation 2", "tex": "3 - 2 = 1", "check": "at(E2, x, xs, y, ys) == 0"}
+   ],
+   "interpretation": "Each equation is a line; the solution of the system is the single point where the two lines cross.",
+   "visual": {"type": "function_plot", "caption": "Both equations as lines", "x_range": [-1, 7, 1], "y_range": [-2, 6, 1],
+              "curves": [{"expr": "(12 - 2*x)/3", "label": "2x + 3y = 12", "color": "pos", "label_x": 1.7}, {"expr": "x - 1", "label": "x - y = 1", "color": "acc", "label_x": 5.6, "label_side": "down"}],
+              "points": [{"x": "xs", "y": "ys", "label": "(3,\\ 2)", "on": [0, 1], "side": "ur"}]}
+  },
+  {
+   "id": "2",
+   "title": "A quadratic equation by factoring",
+   "symbols": ["x"],
+   "given": [
+    {"name": "E", "equation": "x**2 - 5*x + 6", "quote": "x² − 5x + 6 = 0", "chip": "x^2 - 5x + 6 = 0"}
+   ],
+   "find": "\\text{the values of } x \\text{ with } x^2 - 5x + 6 = 0",
+   "model": "Factor the trinomial: look for two numbers whose product is 6 and whose sum is −5. Then use the zero-product property.",
+   "steps": [
+    {"stage": "Model", "note": "product 6, sum −5", "tex": "(-2)(-3) = 6 \\qquad (-2) + (-3) = -5", "check": "(-2)*(-3) == 6"},
+    {"stage": "Equation", "note": "factored form", "tex": "(x - 2)(x - 3) = 0", "check": "expand((x - 2)*(x - 3)) == E"},
+    {"stage": "Model", "note": "zero-product property", "tex": "x - 2 = 0 \\quad \\text{or} \\quad x - 3 = 0"},
+    {"stage": "Solve", "note": "solve each factor", "tex": "x = 2 \\quad \\text{or} \\quad x = 3"}
+   ],
+   "answers": [
+    {"name": "r1", "tex": "x = 2", "expr": "solve(E, x, 0)", "value": 2, "annotation": "x = 2"},
+    {"name": "r2", "tex": "x = 3", "expr": "solve(E, x, 1)", "value": 3, "annotation": "x = 3"}
+   ],
+   "verify": [
+    {"note": "substitute x = 2", "tex": "2^2 - 5(2) + 6 = 4 - 10 + 6 = 0", "check": "at(E, x, r1) == 0"},
+    {"note": "substitute x = 3", "tex": "3^2 - 5(3) + 6 = 9 - 15 + 6 = 0", "check": "at(E, x, r2) == 0"}
+   ],
+   "interpretation": "The solutions are the x-intercepts of the parabola y = x² − 5x + 6: it crosses the x-axis at 2 and at 3.",
+   "visual": {"type": "function_plot", "caption": "y = x² − 5x + 6 crosses the x-axis at the roots", "x_range": [0, 5, 1], "y_range": [-1, 7, 1],
+              "curves": [{"expr": "x**2 - 5*x + 6", "color": "pos"}],
+              "points": [{"x": "r1", "y": 0, "label": "x = 2", "on": [0], "side": "dl"}, {"x": "r2", "y": 0, "label": "x = 3", "on": [0], "side": "dr"}]}
+  },
+  {
+   "id": "3",
+   "title": "The line through two points",
+   "given": [
+    {"name": "x1", "value": 1, "quote": "(1, 3)", "chip": "(x_1,\\ y_1) = (1,\\ 3)"},
+    {"name": "y1", "value": 3, "quote": "(1, 3)"},
+    {"name": "x2", "value": 4, "quote": "(4, 9)", "chip": "(x_2,\\ y_2) = (4,\\ 9)"},
+    {"name": "y2", "value": 9, "quote": "(4, 9)"}
+   ],
+   "find": "\\text{slope } m \\text{ and the equation } y = mx + b",
+   "model": "The slope is rise over run between the two points. Then either point fixes the intercept b.",
+   "steps": [
+    {"stage": "Equation", "note": "slope between two points", "tex": "m = \\dfrac{y_2 - y_1}{x_2 - x_1}"},
+    {"stage": "Substitute", "note": "(1, 3) and (4, 9)", "tex": "m = \\dfrac{9 - 3}{4 - 1} = \\dfrac{6}{3}"},
+    {"stage": "Solve", "note": "divide", "tex": "m = 2", "check": "m == 2"},
+    {"stage": "Equation", "note": "slope–intercept form", "tex": "y = mx + b"},
+    {"stage": "Substitute", "note": "point (1, 3) and m = 2", "tex": "3 = 2(1) + b"},
+    {"stage": "Solve", "note": "subtract 2", "tex": "b = 1", "check": "b == 1"}
+   ],
+   "answers": [
+    {"name": "m", "tex": "m = 2", "expr": "(y2 - y1)/(x2 - x1)", "value": 2, "annotation": "m = 2"},
+    {"name": "b", "tex": "y = 2x + 1", "expr": "y1 - m*x1", "value": 1, "annotation": "y = 2x + 1"}
+   ],
+   "verify": [
+    {"note": "the other point must satisfy the equation", "tex": "2(4) + 1 = 9", "check": "m*x2 + b == y2"}
+   ],
+   "visual": {"type": "function_plot", "caption": "Rise over run between the two points", "x_range": [0, 6, 1], "y_range": [0, 12, 2],
+              "curves": [{"expr": "m*x + b", "label": "y = 2x + 1", "color": "pos", "label_x": 2.0}],
+              "points": [{"x": "x1", "y": "y1", "label": "(1,\\ 3)", "on": [0], "side": "ul", "guides": false}, {"x": "x2", "y": "y2", "label": "(4,\\ 9)", "on": [0], "side": "ul", "guides": false}],
+              "slope_triangles": [{"points": [["x1", "y1"], ["x2", "y2"]]}]}
+  }
+ ]
+}

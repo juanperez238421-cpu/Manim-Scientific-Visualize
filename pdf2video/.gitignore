@@ -1,0 +1,6 @@
+build/
+**/.p2v_work/
+__pycache__/
+*.pyc
+.pytest_cache/
+media/

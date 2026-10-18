@@ -1,0 +1,80 @@
+{
+ "video": "physics_kinematics_worked_solutions_v2.mp4",
+ "checks": {
+  "technical": {
+   "codec": "h264",
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "duration_s": 247.2,
+   "MB": 20.6,
+   "decode_errors": "",
+   "pass": true
+  },
+  "bookends": {
+   "first_mean": 255.0,
+   "last_mean": 255.0,
+   "pass": true
+  },
+  "content": {
+   "validation_pass": true,
+   "givens_extracted": 8,
+   "answers_shown": 6,
+   "answers_value_in_box": 6,
+   "annotations": 6,
+   "annotations_in_work_area": 6,
+   "answers": [
+    {
+     "problem": "1",
+     "name": "t",
+     "value": 8,
+     "shown": "8"
+    },
+    {
+     "problem": "1",
+     "name": "d",
+     "value": 80,
+     "shown": "80"
+    },
+    {
+     "problem": "2",
+     "name": "t",
+     "value": 3.03,
+     "shown": "3.03"
+    },
+    {
+     "problem": "2",
+     "name": "v",
+     "value": 29.7,
+     "shown": "29.70"
+    },
+    {
+     "problem": "3",
+     "name": "t",
+     "value": 50,
+     "shown": "50"
+    },
+    {
+     "problem": "3",
+     "name": "x",
+     "value": 250,
+     "shown": "250"
+    }
+   ],
+   "pass": true
+  },
+  "package": {
+   "share_MB": 12.67,
+   "share_crf": 23,
+   "pass": true
+  }
+ },
+ "sha256": {
+  "physics_kinematics_worked_solutions_v2.mp4": "1a6e9a3ce7a2637c81d0262ec12580d7262082be8c70d7adf324df36e88f5eed",
+  "physics_kinematics_worked_solutions_v2_share.mp4": "d83f48596639f23884b3b553ae3363b0cfd316f79fd35fbe3ab7acbad4f0dba0"
+ },
+ "pass": true
+}

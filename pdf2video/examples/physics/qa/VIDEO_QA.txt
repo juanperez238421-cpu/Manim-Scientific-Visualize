@@ -1,0 +1,6 @@
+VIDEO QA — physics_kinematics_worked_solutions_v2.mp4
+technical: h264 1920x1080 30/1 yuv420p, 247.2 s, 20.6 MB, decode errors: none
+bookends: first frame mean 255.0, last frame mean 255.0 (white)
+content: validation PASS; 8 givens extracted at their page boxes; 6/6 answers shown with the recomputed value; 6/6 annotations inside the work area
+share copy: 12.67 MB (crf 23)
+OVERALL: PASS

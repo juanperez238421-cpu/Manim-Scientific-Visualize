@@ -1,0 +1,88 @@
+{
+ "document": "statistics_worksheet.pdf",
+ "title": "Describing Data — Worked Solutions",
+ "subject": "Statistics 10 · Unit 1 · Worksheet 1.4",
+ "language": "en",
+ "problems": [
+  {
+   "id": "1",
+   "title": "Mean, median, mode and range",
+   "given": [
+    {"name": "S", "list": [7, 9, 6, 8, 10, 7, 5, 9, 7], "quote": "7 9 6 8 10 7 5 9 7", "chip": "\\text{scores: } 7,\\,9,\\,6,\\,8,\\,10,\\,7,\\,5,\\,9,\\,7"}
+   ],
+   "table": [{"name": "S", "values": [7, 9, 6, 8, 10, 7, 5, 9, 7]}],
+   "find": "\\text{mean, median, mode and range of the nine scores}",
+   "model": "n = 9 values. The mean uses every value; the median and mode need the values in order; the range is largest minus smallest.",
+   "steps": [
+    {"stage": "Equation", "note": "mean = sum / count", "tex": "\\bar{x} = \\dfrac{\\sum x}{n}"},
+    {"stage": "Substitute", "note": "add the nine scores", "tex": "\\bar{x} = \\dfrac{7+9+6+8+10+7+5+9+7}{9} = \\dfrac{68}{9}", "check": "sum(S) == 68"},
+    {"stage": "Solve", "note": "divide, two decimals", "tex": "\\bar{x} \\approx 7.56"},
+    {"stage": "Model", "note": "order the data", "tex": "5,\\ 6,\\ 7,\\ 7,\\ \\mathbf{7},\\ 8,\\ 9,\\ 9,\\ 10"},
+    {"stage": "Solve", "note": "middle (5th) value", "tex": "\\text{median} = 7"},
+    {"stage": "Solve", "note": "7 appears three times", "tex": "\\text{mode} = 7"},
+    {"stage": "Solve", "note": "largest − smallest", "tex": "\\text{range} = 10 - 5 = 5"}
+   ],
+   "answers": [
+    {"name": "xbar", "tex": "\\bar{x} \\approx 7.56", "expr": "mean(S)", "value": 7.56, "decimals": 2, "annotation": "mean ≈ 7.56"},
+    {"name": "med", "tex": "\\text{median} = 7", "expr": "median(S)", "value": 7, "annotation": "median = 7"},
+    {"name": "mo", "tex": "\\text{mode} = 7", "expr": "mode(S)", "value": 7, "annotation": "mode = 7"},
+    {"name": "rng", "tex": "\\text{range} = 5", "expr": "max(S) - min(S)", "value": 5, "annotation": "range = 5"}
+   ],
+   "verify": [
+    {"note": "mean × count gives back the total", "tex": "\\tfrac{68}{9} \\times 9 = 68 = \\textstyle\\sum x", "check": "xbar*len(S) == sum(S)"},
+    {"note": "four scores below the median, four above", "tex": "5,6,7,7 \\;\\big|\\; 7 \\;\\big|\\; 8,9,9,10"}
+   ],
+   "visual": {"type": "stats", "kind": "dot", "caption": "Dot plot of the scores", "data": "S", "axis": [4, 11, 1], "show": ["mean", "median"]}
+  },
+  {
+   "id": "2",
+   "title": "Mean and standard deviation",
+   "given": [
+    {"name": "T", "list": [18, 20, 22, 24, 26], "quote": ["18, 20, 22, 24 and", "26 °C"], "chip": "18,\\ 20,\\ 22,\\ 24,\\ 26\\ ^{\\circ}\\mathrm{C}"}
+   ],
+   "find": "\\text{mean } \\bar{x} \\text{ and population standard deviation } \\sigma",
+   "model": "Population standard deviation: the square root of the average squared distance from the mean (divide by n = 5).",
+   "steps": [
+    {"stage": "Substitute", "note": "mean", "tex": "\\bar{x} = \\dfrac{18+20+22+24+26}{5} = \\dfrac{110}{5} = 22", "check": "sum(T) == 110"},
+    {"stage": "Solve", "note": "deviations x − 22", "tex": "-4,\\ -2,\\ 0,\\ 2,\\ 4"},
+    {"stage": "Solve", "note": "squared deviations", "tex": "16,\\ 4,\\ 0,\\ 4,\\ 16 \\quad (\\text{sum } 40)"},
+    {"stage": "Equation", "note": "population variance", "tex": "\\sigma^2 = \\dfrac{\\sum (x - \\bar{x})^2}{n} = \\dfrac{40}{5} = 8", "check": "pvariance(T) == 8"},
+    {"stage": "Solve", "note": "square root, two decimals", "tex": "\\sigma = \\sqrt{8} \\approx 2.83"}
+   ],
+   "answers": [
+    {"name": "m", "tex": "\\bar{x} = 22\\ ^{\\circ}\\mathrm{C}", "expr": "mean(T)", "value": 22, "annotation": "mean = 22 °C"},
+    {"name": "sd", "tex": "\\sigma \\approx 2.83\\ ^{\\circ}\\mathrm{C}", "expr": "pstdev(T)", "value": 2.83, "decimals": 2, "annotation": "σ ≈ 2.83 °C"}
+   ],
+   "verify": [
+    {"note": "shortcut: mean of squares − square of mean", "tex": "\\tfrac{18^2+20^2+22^2+24^2+26^2}{5} - 22^2 = 492 - 484 = 8", "check": "(18**2 + 20**2 + 22**2 + 24**2 + 26**2)/5 - m**2 == sd**2"}
+   ],
+   "visual": {"type": "stats", "kind": "dot", "caption": "Temperatures with the band mean ± σ", "data": "T", "axis": [16, 28, 2], "unit": "°C", "show": ["mean", "sd"]}
+  },
+  {
+   "id": "3",
+   "title": "Quartiles and interquartile range",
+   "given": [
+    {"name": "D", "list": [3, 5, 7, 8, 9, 11, 13, 15], "quote": "3, 5, 7, 8, 9, 11, 13, 15", "chip": "3,\\ 5,\\ 7,\\ 8,\\ 9,\\ 11,\\ 13,\\ 15"}
+   ],
+   "find": "Q_1,\\ \\text{median},\\ Q_3 \\text{ and IQR}",
+   "model": "The data are already in order (n = 8). The median splits them into two halves of four; Q1 and Q3 are the medians of the halves (the method the sheet asks for).",
+   "steps": [
+    {"stage": "Solve", "note": "median of all eight: mean of 4th and 5th", "tex": "\\text{median} = \\dfrac{8 + 9}{2} = 8.5"},
+    {"stage": "Model", "note": "lower half / upper half", "tex": "3,\\ 5,\\ 7,\\ 8 \\;\\big|\\; 9,\\ 11,\\ 13,\\ 15"},
+    {"stage": "Solve", "note": "median of the lower half", "tex": "Q_1 = \\dfrac{5 + 7}{2} = 6"},
+    {"stage": "Solve", "note": "median of the upper half", "tex": "Q_3 = \\dfrac{11 + 13}{2} = 12"},
+    {"stage": "Solve", "note": "spread of the middle half", "tex": "\\text{IQR} = Q_3 - Q_1 = 12 - 6 = 6"}
+   ],
+   "answers": [
+    {"name": "Q1", "tex": "Q_1 = 6", "expr": "q1(D)", "value": 6, "annotation": "Q1 = 6"},
+    {"name": "med", "tex": "\\text{median} = 8.5", "expr": "median(D)", "value": 8.5, "annotation": "median = 8.5"},
+    {"name": "Q3", "tex": "Q_3 = 12", "expr": "q3(D)", "value": 12, "annotation": "Q3 = 12"},
+    {"name": "iqr", "tex": "\\text{IQR} = 6", "expr": "Q3 - Q1", "value": 6, "annotation": "IQR = 6"}
+   ],
+   "verify": [
+    {"note": "each quarter holds two of the eight values", "tex": "3,5 \\;|\\; 7,8 \\;|\\; 9,11 \\;|\\; 13,15", "check": "Q1 < med < Q3"}
+   ],
+   "visual": {"type": "stats", "kind": "box", "caption": "Box plot: Q1, median, Q3", "data": "D", "axis": [2, 16, 2]}
+  }
+ ]
+}

@@ -1,0 +1,409 @@
+{
+ "spec": "spec.json",
+ "document": "physics_scanned.pdf",
+ "sha256": "8265852c7ff6b4705d50d00af4abf7c8aa5cae28e996d2b4076f17ea69209865",
+ "pages": 1,
+ "source": [
+  "ocr"
+ ],
+ "problems": [
+  {
+   "id": "1",
+   "checks": [
+    {
+     "kind": "data",
+     "name": "v0",
+     "quote": "from rest",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      140.4,
+      162.0,
+      191.76,
+      170.64
+     ],
+     "boxes": [
+      [
+       140.4,
+       162.0,
+       191.76,
+       170.64
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "data",
+     "name": "a",
+     "quote": "2.5 m/s²",
+     "found": true,
+     "score": 0.923,
+     "box": [
+      359.28,
+      159.6,
+      407.52,
+      168.95999999999998
+     ],
+     "boxes": [
+      [
+       359.28,
+       159.6,
+       407.52,
+       168.95999999999998
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "data",
+     "name": "v",
+     "quote": "20 m/s",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      406.32,
+      175.2,
+      452.15999999999997,
+      184.79999999999998
+     ],
+     "boxes": [
+      [
+       406.32,
+       175.2,
+       452.15999999999997,
+       184.79999999999998
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "t",
+     "expr": "(v - v0)/a",
+     "computed": 8.0,
+     "stated": 8,
+     "shown": "8",
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "d",
+     "expr": "v0*t + a*t**2/2",
+     "computed": 80.0,
+     "stated": 80,
+     "shown": "80",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 2,
+     "check": "(v - v0)/a == 8",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 5,
+     "check": "a*t**2/2 == 80",
+     "pass": true
+    },
+    {
+     "kind": "verify",
+     "index": 0,
+     "check": "(v0 + v)/2*t == d",
+     "pass": true
+    },
+    {
+     "kind": "visual",
+     "type": "motion_1d",
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "region": [
+    44.9,
+    155.1,
+    567.1,
+    340.8
+   ],
+   "statement": [
+    52.8,
+    159.1,
+    554.9,
+    203.5
+   ],
+   "work": [
+    [
+     64.9,
+     207.5,
+     547.1,
+     340.8
+    ]
+   ],
+   "page": 1
+  },
+  {
+   "id": "2",
+   "checks": [
+    {
+     "kind": "data",
+     "name": "h",
+     "quote": "45 m",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      328.56,
+      346.8,
+      353.03999999999996,
+      362.64
+     ],
+     "boxes": [
+      [
+       328.56,
+       346.8,
+       353.03999999999996,
+       362.64
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "data",
+     "name": "v0",
+     "quote": "dropped",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      132.0,
+      349.91999999999996,
+      177.6,
+      361.2
+     ],
+     "boxes": [
+      [
+       132.0,
+       349.91999999999996,
+       177.6,
+       361.2
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "t",
+     "expr": "sqrt(2*h/g)",
+     "computed": 3.0304576336566322,
+     "stated": 3.03,
+     "shown": "3.03",
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "v",
+     "expr": "g*t",
+     "computed": 29.698484809834994,
+     "stated": 29.7,
+     "shown": "29.70",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 2,
+     "check": "approx(2*h/g, 9.1837, 0.0001)",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 5,
+     "check": "approx(t, 3.0305, 0.0001)",
+     "pass": true
+    },
+    {
+     "kind": "verify",
+     "index": 0,
+     "check": "v**2 == 2*g*h",
+     "pass": true
+    },
+    {
+     "kind": "visual",
+     "type": "motion_1d",
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "region": [
+    44.9,
+    342.8,
+    567.1,
+    511.4
+   ],
+   "statement": [
+    54.2,
+    346.8,
+    557.0,
+    377.0
+   ],
+   "work": [
+    [
+     64.9,
+     381.0,
+     547.1,
+     511.4
+    ]
+   ],
+   "page": 1
+  },
+  {
+   "id": "3",
+   "checks": [
+    {
+     "kind": "data",
+     "name": "D",
+     "quote": "600 m apart",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      177.35999999999999,
+      521.76,
+      248.64,
+      532.0799999999999
+     ],
+     "boxes": [
+      [
+       177.35999999999999,
+       521.76,
+       248.64,
+       532.0799999999999
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "data",
+     "name": "vA",
+     "quote": "5 m/s",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      206.88,
+      537.84,
+      238.79999999999998,
+      546.96
+     ],
+     "boxes": [
+      [
+       206.88,
+       537.84,
+       238.79999999999998,
+       546.96
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "data",
+     "name": "vB",
+     "quote": "7 m/s",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      363.84,
+      536.16,
+      398.88,
+      545.28
+     ],
+     "boxes": [
+      [
+       363.84,
+       536.16,
+       398.88,
+       545.28
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "t",
+     "expr": "D/(vA + vB)",
+     "computed": 50.0,
+     "stated": 50,
+     "shown": "50",
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "x",
+     "expr": "vA*t",
+     "computed": 250.0,
+     "stated": 250,
+     "shown": "250",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 4,
+     "check": "D/(vA + vB) == 50",
+     "pass": true
+    },
+    {
+     "kind": "verify",
+     "index": 0,
+     "check": "D - vB*t == x",
+     "pass": true
+    },
+    {
+     "kind": "visual",
+     "type": "motion_1d",
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "region": [
+    44.9,
+    513.4,
+    567.1,
+    748.2
+   ],
+   "statement": [
+    56.2,
+    517.4,
+    558.7,
+    565.4
+   ],
+   "work": [
+    [
+     64.9,
+     569.4,
+     547.1,
+     748.2
+    ]
+   ],
+   "page": 1
+  }
+ ],
+ "pass": true,
+ "constants": [
+  {
+   "name": "g",
+   "quote": "g = 9.8 m/s²",
+   "found": true,
+   "box": [
+    185.04,
+    119.03999999999999,
+    249.6,
+    130.07999999999998
+   ],
+   "score": 0.941,
+   "number_in_quote": true
+  }
+ ]
+}

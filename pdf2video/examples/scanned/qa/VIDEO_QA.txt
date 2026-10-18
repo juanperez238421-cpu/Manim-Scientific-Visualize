@@ -1,0 +1,6 @@
+VIDEO QA — physics_scanned_ocr_problem1.mp4
+technical: h264 1920x1080 30/1 yuv420p, 93.77 s, 10.18 MB, decode errors: none
+bookends: first frame mean 255.0, last frame mean 255.0 (white)
+content: validation PASS; 3 givens extracted at their page boxes; 2/2 answers shown with the recomputed value; 2/2 annotations inside the work area
+share copy: 6.58 MB (crf 23)
+OVERALL: PASS

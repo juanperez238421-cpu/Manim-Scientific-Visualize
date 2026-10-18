@@ -1,0 +1,1199 @@
+{
+ "sampledAt_Hz": 240,
+ "clips": {
+  "assemble": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0.5,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": 0,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 0.0112,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 0.69,
+      "t": 11.15
+     },
+     "head": {
+      "g": 13.16,
+      "t": 6.65
+     },
+     "wristR": {
+      "g": 10.07,
+      "t": 6.65
+     },
+     "wristL": {
+      "g": 9.36,
+      "t": 6.65
+     },
+     "ankleR": {
+      "g": 3.48,
+      "t": 10.137
+     },
+     "ankleL": {
+      "g": 0,
+      "t": 14.3
+     }
+    },
+    "worst_g": 13.16,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.704,
+     1.52
+    ],
+    "elbow_rad": [
+     0.365,
+     2.59
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 18,
+    "names": [
+     "prep",
+     "antic",
+     "exec",
+     "follow",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "physics": {
+    "bonesChecked": 216,
+    "gravityRelErrMax": 9.11e-11,
+    "pass": true
+   },
+   "seconds": 3.3,
+   "pass": true
+  },
+  "hatTip": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": 0,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 0,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 0,
+      "t": 3.933
+     },
+     "head": {
+      "g": 0.69,
+      "t": 2.567
+     },
+     "wristR": {
+      "g": 9.85,
+      "t": 2.521
+     },
+     "wristL": {
+      "g": 0.2,
+      "t": 2.567
+     },
+     "ankleR": {
+      "g": 0,
+      "t": 3.933
+     },
+     "ankleL": {
+      "g": 0,
+      "t": 3.933
+     }
+    },
+    "worst_g": 9.85,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.643,
+     0.759
+    ],
+    "elbow_rad": [
+     0.492,
+     2.097
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 8,
+    "names": [
+     "prep",
+     "antic",
+     "exec",
+     "follow",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "seconds": 0.8,
+   "pass": true
+  },
+  "hatFlip": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": 0,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 0,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 0.84,
+      "t": 3.025
+     },
+     "head": {
+      "g": 0.85,
+      "t": 3.025
+     },
+     "wristR": {
+      "g": 5.47,
+      "t": 0.396
+     },
+     "wristL": {
+      "g": 0.84,
+      "t": 3.025
+     },
+     "ankleR": {
+      "g": 0,
+      "t": 4.133
+     },
+     "ankleL": {
+      "g": 0,
+      "t": 4.133
+     }
+    },
+    "worst_g": 5.47,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.501,
+     0.774
+    ],
+    "elbow_rad": [
+     0.501,
+     2.502
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 5,
+    "names": [
+     "prep",
+     "antic",
+     "exec",
+     "follow",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "physics": {
+    "hatFlightErr_u": 0.000902,
+    "pass": true
+   },
+   "seconds": 1,
+   "pass": true
+  },
+  "chaplinWalk": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": 0,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 0.0318,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 1.37,
+      "t": 5.433
+     },
+     "head": {
+      "g": 2.13,
+      "t": 5.433
+     },
+     "wristR": {
+      "g": 14.81,
+      "t": 1.542
+     },
+     "wristL": {
+      "g": 4.16,
+      "t": 4.942
+     },
+     "ankleR": {
+      "g": 16.08,
+      "t": 3.7
+     },
+     "ankleL": {
+      "g": 14.91,
+      "t": 4.854
+     }
+    },
+    "worst_g": 16.08,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.273,
+     1.372
+    ],
+    "elbow_rad": [
+     0.894,
+     2.234
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 46,
+    "names": [
+     "prep",
+     "contact",
+     "down",
+     "passing",
+     "up",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "seconds": 0.9,
+   "pass": true
+  },
+  "cornerHop": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0.08,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": -0.009,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 0.0318,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 1.98,
+      "t": 3.538
+     },
+     "head": {
+      "g": 2.03,
+      "t": 3.538
+     },
+     "wristR": {
+      "g": 13.45,
+      "t": 3.337
+     },
+     "wristL": {
+      "g": 4.17,
+      "t": 5.971
+     },
+     "ankleR": {
+      "g": 13.98,
+      "t": 7.037
+     },
+     "ankleL": {
+      "g": 22.35,
+      "t": 4.271
+     }
+    },
+    "worst_g": 22.35,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.273,
+     1.372
+    ],
+    "elbow_rad": [
+     0.438,
+     2.402
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 48,
+    "names": [
+     "prep",
+     "contact",
+     "down",
+     "passing",
+     "up",
+     "antic",
+     "exec",
+     "follow",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "physics": {
+    "hopGravityRelErr": 3.31e-11,
+    "pass": true
+   },
+   "seconds": 1.5,
+   "pass": true
+  },
+  "doffBow": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": 0,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 0.000554,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 11.52,
+      "t": 3.429
+     },
+     "head": {
+      "g": 6.79,
+      "t": 3.429
+     },
+     "wristR": {
+      "g": 11.24,
+      "t": 3.429
+     },
+     "wristL": {
+      "g": 10.41,
+      "t": 3.429
+     },
+     "ankleR": {
+      "g": 8.97,
+      "t": 3.604
+     },
+     "ankleL": {
+      "g": 0,
+      "t": 4.112
+     }
+    },
+    "worst_g": 11.52,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.704,
+     1.385
+    ],
+    "elbow_rad": [
+     0.515,
+     2.478
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 8,
+    "names": [
+     "prep",
+     "antic",
+     "exec",
+     "follow",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "seconds": 0.7,
+   "pass": true
+  },
+  "jump": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": 0,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 2.68e-8,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 1.58,
+      "t": 2.154
+     },
+     "head": {
+      "g": 1.86,
+      "t": 2.25
+     },
+     "wristR": {
+      "g": 20.92,
+      "t": 1.417
+     },
+     "wristL": {
+      "g": 20.92,
+      "t": 1.417
+     },
+     "ankleR": {
+      "g": 6.54,
+      "t": 2.163
+     },
+     "ankleL": {
+      "g": 6.54,
+      "t": 2.163
+     }
+    },
+    "worst_g": 20.92,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.631,
+     1.913
+    ],
+    "elbow_rad": [
+     0.592,
+     0.922
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 5,
+    "names": [
+     "prep",
+     "antic",
+     "exec",
+     "follow",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "physics": {
+    "flightErr_u": 2.84e-14,
+    "takeoffVel_ms": 2.5049,
+    "expected_ms": 2.5057,
+    "pass": true
+   },
+   "anticipation": {
+    "crouch_u": 44.5,
+    "pass": true
+   },
+   "seconds": 0.4,
+   "pass": true
+  },
+  "skullDrop": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0.55,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": 0,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 1.59e-14,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 19.18,
+      "t": 3.725
+     },
+     "head": {
+      "g": 7.14,
+      "t": 1.508
+     },
+     "wristR": {
+      "g": 8.77,
+      "t": 3.725
+     },
+     "wristL": {
+      "g": 26.57,
+      "t": 3.725
+     },
+     "ankleR": {
+      "g": 0,
+      "t": 4.967
+     },
+     "ankleL": {
+      "g": 0,
+      "t": 4.971
+     }
+    },
+    "worst_g": 26.57,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.459,
+     1.414
+    ],
+    "elbow_rad": [
+     0.359,
+     2.627
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 10,
+    "names": [
+     "prep",
+     "antic",
+     "exec",
+     "follow",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "physics": {
+    "releaseVel_left_ms": [
+     0,
+     0,
+     0
+    ],
+    "releaseVel_right_ms": [
+     0,
+     0,
+     0
+    ],
+    "expected_ms": [
+     0,
+     0,
+     0
+    ],
+    "flightErrMax_u": 0,
+    "pass": true
+   },
+   "anticipation": {
+    "note": "v0 = 0: no throw, no counter-move",
+    "pass": true
+   },
+   "seconds": 1,
+   "pass": true
+  },
+  "skullToss": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0.54,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": 0,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 0.0014,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 0.54,
+      "t": 1.746
+     },
+     "head": {
+      "g": 3.67,
+      "t": 1.35
+     },
+     "wristR": {
+      "g": 5.56,
+      "t": 0.929
+     },
+     "wristL": {
+      "g": 10.19,
+      "t": 3.467
+     },
+     "ankleR": {
+      "g": 0,
+      "t": 4.121
+     },
+     "ankleL": {
+      "g": 0.33,
+      "t": 2.212
+     }
+    },
+    "worst_g": 10.19,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.133,
+     1.38
+    ],
+    "elbow_rad": [
+     1.161,
+     2.359
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 5,
+    "names": [
+     "prep",
+     "antic",
+     "exec",
+     "follow",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "physics": {
+    "releaseVel_left_ms": [
+     0.0001,
+     3.5,
+     0.0001
+    ],
+    "releaseVel_right_ms": [
+     0,
+     3.5,
+     0
+    ],
+    "expected_ms": [
+     0,
+     3.5,
+     0
+    ],
+    "flightErrMax_u": 0,
+    "pass": true
+   },
+   "anticipation": {
+    "counterMove_u": 62.7,
+    "pass": true
+   },
+   "seconds": 1.5,
+   "pass": true
+  },
+  "skullSlam": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0.08,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": 0,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 2.01e-14,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 0.75,
+      "t": 2.342
+     },
+     "head": {
+      "g": 3.58,
+      "t": 1.35
+     },
+     "wristR": {
+      "g": 6.13,
+      "t": 0.929
+     },
+     "wristL": {
+      "g": 18.19,
+      "t": 0.929
+     },
+     "ankleR": {
+      "g": 0,
+      "t": 3.629
+     },
+     "ankleL": {
+      "g": 0,
+      "t": 3.629
+     }
+    },
+    "worst_g": 18.19,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.276,
+     1.623
+    ],
+    "elbow_rad": [
+     0.438,
+     2.659
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 5,
+    "names": [
+     "prep",
+     "antic",
+     "exec",
+     "follow",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "physics": {
+    "releaseVel_left_ms": [
+     0.0002,
+     -5,
+     0.0001
+    ],
+    "releaseVel_right_ms": [
+     0,
+     -5,
+     0
+    ],
+    "expected_ms": [
+     0,
+     -5,
+     0
+    ],
+    "flightErrMax_u": 0,
+    "pass": true
+   },
+   "anticipation": {
+    "counterMove_u": 71.9,
+    "pass": true
+   },
+   "seconds": 1,
+   "pass": true
+  },
+  "sling": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0.82,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": 0,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 7.11e-15,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 0.12,
+      "t": 6.546
+     },
+     "head": {
+      "g": 7.14,
+      "t": 1.408
+     },
+     "wristR": {
+      "g": 8.36,
+      "t": 0.458
+     },
+     "wristL": {
+      "g": 8.36,
+      "t": 0.458
+     },
+     "ankleR": {
+      "g": 0,
+      "t": 9.075
+     },
+     "ankleL": {
+      "g": 0,
+      "t": 9.075
+     }
+    },
+    "worst_g": 8.36,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.668,
+     0.92
+    ],
+    "elbow_rad": [
+     0.333,
+     2.627
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 14,
+    "names": [
+     "prep",
+     "antic",
+     "exec",
+     "follow",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "physics": {
+    "circleRadiusErr_u": 7.11e-14,
+    "releaseVel_ms": [
+     0,
+     4,
+     0
+    ],
+    "beforeRelease_ms": [
+     0.0001,
+     4,
+     0
+    ],
+    "expected_ms": [
+     0,
+     4,
+     0
+    ],
+    "flightErr_u": 5.68e-14,
+    "pass": true
+   },
+   "seconds": 2.8,
+   "pass": true
+  },
+  "pirouette": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": 0,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 0.00391,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 1.08,
+      "t": 2.979
+     },
+     "head": {
+      "g": 4.34,
+      "t": 6.162
+     },
+     "wristR": {
+      "g": 10.13,
+      "t": 2.825
+     },
+     "wristL": {
+      "g": 10.12,
+      "t": 4.275
+     },
+     "ankleR": {
+      "g": 1.45,
+      "t": 4.138
+     },
+     "ankleL": {
+      "g": 1.58,
+      "t": 2.971
+     }
+    },
+    "worst_g": 10.13,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.645,
+     2.03
+    ],
+    "elbow_rad": [
+     0.783,
+     2.543
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 5,
+    "names": [
+     "prep",
+     "antic",
+     "exec",
+     "follow",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "physics": {
+    "L": 3.1998,
+    "L_relErrMax": 1.39e-16,
+    "drawnOmegaRelErr": 0.000264,
+    "I_open": 0.5547,
+    "I_closed": 0.2297,
+    "turns": 6,
+    "pass": true
+   },
+   "seconds": 1,
+   "pass": true
+  },
+  "retarget/jump@Pino": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": 0,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 2.18e-8,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 1.97,
+      "t": 2.154
+     },
+     "head": {
+      "g": 2.04,
+      "t": 2.296
+     },
+     "wristR": {
+      "g": 19.29,
+      "t": 1.417
+     },
+     "wristL": {
+      "g": 19.29,
+      "t": 1.417
+     },
+     "ankleR": {
+      "g": 5.33,
+      "t": 2.163
+     },
+     "ankleL": {
+      "g": 5.33,
+      "t": 2.163
+     }
+    },
+    "worst_g": 19.29,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.633,
+     1.92
+    ],
+    "elbow_rad": [
+     0.686,
+     0.925
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 5,
+    "names": [
+     "prep",
+     "antic",
+     "exec",
+     "follow",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "seconds": 0.1,
+   "pass": true
+  },
+  "retarget/walk@Pino": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0.17,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": 0,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 0.00387,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 0.49,
+      "t": 1.142
+     },
+     "head": {
+      "g": 0.48,
+      "t": 1.142
+     },
+     "wristR": {
+      "g": 4.11,
+      "t": 2.733
+     },
+     "wristL": {
+      "g": 4.28,
+      "t": 1.154
+     },
+     "ankleR": {
+      "g": 2.22,
+      "t": 2.508
+     },
+     "ankleL": {
+      "g": 2.25,
+      "t": 0.929
+     }
+    },
+    "worst_g": 4.28,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.633,
+     1.531
+    ],
+    "elbow_rad": [
+     0.412,
+     0.912
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 30,
+    "names": [
+     "prep",
+     "contact",
+     "down",
+     "passing",
+     "up",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "seconds": 0.2,
+   "pass": true
+  },
+  "retarget/chaplin@Pino": {
+   "ik": {
+    "hardClamps": 0,
+    "softResidualMax_u": 0,
+    "pass": true
+   },
+   "ground": {
+    "minFootY_u": 0,
+    "pass": true
+   },
+   "skate": {
+    "maxSlidePerSample_u": 0.0289,
+    "pass": true
+   },
+   "continuity": {
+    "maxAccel_g": {
+     "pelvis": {
+      "g": 1.39,
+      "t": 3.396
+     },
+     "head": {
+      "g": 1.44,
+      "t": 3.396
+     },
+     "wristR": {
+      "g": 3.8,
+      "t": 2.133
+     },
+     "wristL": {
+      "g": 3.53,
+      "t": 1.75
+     },
+     "ankleR": {
+      "g": 11.77,
+      "t": 2.046
+     },
+     "ankleL": {
+      "g": 12.81,
+      "t": 3.2
+     }
+    },
+    "worst_g": 12.81,
+    "pass": true
+   },
+   "limits": {
+    "knee_rad": [
+     0.257,
+     1.387
+    ],
+    "elbow_rad": [
+     0.507,
+     0.842
+    ],
+    "pass": true
+   },
+   "phases": {
+    "count": 30,
+    "names": [
+     "prep",
+     "contact",
+     "down",
+     "passing",
+     "up",
+     "settle"
+    ],
+    "ordered": true,
+    "complete": true,
+    "pass": true
+   },
+   "seconds": 0.1,
+   "pass": true
+  }
+ },
+ "pass": true
+}

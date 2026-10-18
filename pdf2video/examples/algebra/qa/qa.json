@@ -1,0 +1,80 @@
+{
+ "video": "algebra_equations_worked_solutions.mp4",
+ "checks": {
+  "technical": {
+   "codec": "h264",
+   "size": [
+    1920,
+    1080
+   ],
+   "fps": "30/1",
+   "pix_fmt": "yuv420p",
+   "duration_s": 228.9,
+   "MB": 14.77,
+   "decode_errors": "",
+   "pass": true
+  },
+  "bookends": {
+   "first_mean": 255.0,
+   "last_mean": 255.0,
+   "pass": true
+  },
+  "content": {
+   "validation_pass": true,
+   "givens_extracted": 5,
+   "answers_shown": 6,
+   "answers_value_in_box": 6,
+   "annotations": 6,
+   "annotations_in_work_area": 6,
+   "answers": [
+    {
+     "problem": "1",
+     "name": "xs",
+     "value": 3,
+     "shown": "3"
+    },
+    {
+     "problem": "1",
+     "name": "ys",
+     "value": 2,
+     "shown": "2"
+    },
+    {
+     "problem": "2",
+     "name": "r1",
+     "value": 2,
+     "shown": "2"
+    },
+    {
+     "problem": "2",
+     "name": "r2",
+     "value": 3,
+     "shown": "3"
+    },
+    {
+     "problem": "3",
+     "name": "m",
+     "value": 2,
+     "shown": "2"
+    },
+    {
+     "problem": "3",
+     "name": "b",
+     "value": 1,
+     "shown": "1"
+    }
+   ],
+   "pass": true
+  },
+  "package": {
+   "share_MB": 8.74,
+   "share_crf": 23,
+   "pass": true
+  }
+ },
+ "sha256": {
+  "algebra_equations_worked_solutions.mp4": "01d3b2de0e958efb458986aca43b18393eb72fdc56d447adf3d0feadb320ad35",
+  "algebra_equations_worked_solutions_share.mp4": "3e2a9807e1a5c2ebe248e3cefbbb913c834c5bf1e6c72c3f3fd05036b6f4ca69"
+ },
+ "pass": true
+}

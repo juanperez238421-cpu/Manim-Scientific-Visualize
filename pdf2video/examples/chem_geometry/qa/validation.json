@@ -1,0 +1,378 @@
+{
+ "spec": "spec.json",
+ "document": "chem_geometry_worksheet.pdf",
+ "sha256": "3f23637b1200f930946fb3b29e62522573e5937aa751f403bd06710048084972",
+ "pages": 1,
+ "source": [
+  "text"
+ ],
+ "problems": [
+  {
+   "id": "1",
+   "checks": [
+    {
+     "kind": "data",
+     "name": "c1",
+     "quote": "2H",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      299.2260747,
+      146.64257840000005,
+      315.8173835,
+      157.64257840000005
+     ],
+     "boxes": [
+      [
+       299.2260747,
+       146.64257840000005,
+       315.8173835,
+       157.64257840000005
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "data",
+     "name": "c2",
+     "quote": "2H",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      368.7075203000001,
+      146.64257840000005,
+      385.2988291000001,
+      157.64257840000005
+     ],
+     "boxes": [
+      [
+       368.7075203000001,
+       146.64257840000005,
+       385.2988291000001,
+       157.64257840000005
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "data",
+     "name": "mH2",
+     "quote": "8.0 g of H",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      270.2382807,
+      162.64257840000005,
+      328.17626960000007,
+      173.64257840000005
+     ],
+     "boxes": [
+      [
+       270.2382807,
+       162.64257840000005,
+       328.17626960000007,
+       173.64257840000005
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "mw",
+     "expr": "mH2/(2*MH) * (c2/c1) * (2*MH + MO)",
+     "computed": 72.0,
+     "stated": 72,
+     "shown": "72",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 0,
+     "check": "2*MH + MO == 18",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 1,
+     "check": "mH2/(2*MH) == 4",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 2,
+     "check": "c2/c1 == 1",
+     "pass": true
+    },
+    {
+     "kind": "verify",
+     "index": 0,
+     "check": "mH2 + (mH2/(2*MH))/2*(2*MO) == mw",
+     "pass": true
+    },
+    {
+     "kind": "visual",
+     "type": "chain",
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "region": [
+    48.0,
+    142.6,
+    564.0,
+    302.6
+   ],
+   "statement": [
+    54.0,
+    146.6,
+    558.0,
+    178.7
+   ],
+   "work": [
+    [
+     68.0,
+     182.7,
+     544.0,
+     302.6
+    ]
+   ],
+   "page": 1
+  },
+  {
+   "id": "2",
+   "checks": [
+    {
+     "kind": "data",
+     "name": "L",
+     "quote": "10 cm long",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      239.9292008,
+      308.6425784,
+      301.7773465,
+      319.6425784
+     ],
+     "boxes": [
+      [
+       239.9292008,
+       308.6425784,
+       301.7773465,
+       319.6425784
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "data",
+     "name": "W",
+     "quote": "6 cm wide",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      329.4545928,
+      308.6425784,
+      386.5224641000001,
+      319.6425784
+     ],
+     "boxes": [
+      [
+       329.4545928,
+       308.6425784,
+       386.5224641000001,
+       319.6425784
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "A",
+     "expr": "L*W + pi*(W/2)**2/2",
+     "computed": 74.13716694115406,
+     "stated": 74.14,
+     "shown": "74.14",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 0,
+     "check": "L*W == 60",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 2,
+     "check": "pi*(W/2)**2/2 == 9*pi/2",
+     "pass": true
+    },
+    {
+     "kind": "verify",
+     "index": 0,
+     "check": "L*W < A < L*W + pi*(W/2)**2",
+     "pass": true
+    },
+    {
+     "kind": "visual",
+     "type": "geometry",
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "region": [
+    48.0,
+    304.6,
+    564.0,
+    484.6
+   ],
+   "statement": [
+    54.0,
+    308.6,
+    558.0,
+    335.6
+   ],
+   "work": [
+    [
+     68.0,
+     339.6,
+     544.0,
+     413.9
+    ]
+   ],
+   "page": 1
+  },
+  {
+   "id": "3",
+   "checks": [
+    {
+     "kind": "data",
+     "name": "a",
+     "quote": "6 cm",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      266.00586130000005,
+      490.6425784,
+      293.0922877000001,
+      501.6425784
+     ],
+     "boxes": [
+      [
+       266.00586130000005,
+       490.6425784,
+       293.0922877000001,
+       501.6425784
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "data",
+     "name": "b",
+     "quote": "8 cm",
+     "found": true,
+     "score": 1.0,
+     "box": [
+      320.7695340000001,
+      490.6425784,
+      351.35254250000014,
+      501.6425784
+     ],
+     "boxes": [
+      [
+       320.7695340000001,
+       490.6425784,
+       351.35254250000014,
+       501.6425784
+      ]
+     ],
+     "number_in_quote": true,
+     "pass": true
+    },
+    {
+     "kind": "answer",
+     "name": "c",
+     "expr": "sqrt(a**2 + b**2)",
+     "computed": 10.0,
+     "stated": 10,
+     "shown": "10",
+     "pass": true
+    },
+    {
+     "kind": "step",
+     "index": 1,
+     "check": "a**2 + b**2 == 100",
+     "pass": true
+    },
+    {
+     "kind": "verify",
+     "index": 0,
+     "check": "a/3 == b/4 == c/5",
+     "pass": true
+    },
+    {
+     "kind": "visual",
+     "type": "geometry",
+     "pass": true
+    }
+   ],
+   "pass": true,
+   "region": [
+    48.0,
+    486.6,
+    564.0,
+    749.3
+   ],
+   "statement": [
+    54.0,
+    490.6,
+    558.0,
+    517.6
+   ],
+   "work": [
+    [
+     68.0,
+     521.6,
+     544.0,
+     749.3
+    ]
+   ],
+   "page": 1
+  }
+ ],
+ "pass": true,
+ "constants": [
+  {
+   "name": "MH",
+   "quote": "H = 1.0 g/mol",
+   "found": true,
+   "box": [
+    253.97681025,
+    118.52246119999995,
+    331.8757369499999,
+    129.02246119999995
+   ],
+   "score": 1.0,
+   "number_in_quote": true
+  },
+  {
+   "name": "MO",
+   "quote": "O = 16.0 g/mol",
+   "found": true,
+   "box": [
+    335.2133834999999,
+    118.52246119999995,
+    419.24414639999975,
+    129.02246119999995
+   ],
+   "score": 1.0,
+   "number_in_quote": true
+  }
+ ]
+}

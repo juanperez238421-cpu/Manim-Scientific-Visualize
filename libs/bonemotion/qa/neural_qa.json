@@ -1,0 +1,62 @@
+{
+ "windowsPerGap": 400,
+ "gaps": {
+  "N10": {
+   "linear": 1.1171239124977475,
+   "hermite": 0.33887657930663256,
+   "neural": 0.31733729644986314,
+   "python": {
+    "linear": 1.0746838831999665,
+    "hermite": 0.3004187381760275,
+    "neural": 0.3044024314380623
+   },
+   "parity": true
+  },
+  "N20": {
+   "linear": 2.8597157561381703,
+   "hermite": 1.272347905098911,
+   "neural": 0.5970362655835135,
+   "python": {
+    "linear": 3.0548386425824687,
+    "hermite": 1.4344122486249535,
+    "neural": 0.6513929818223149
+   },
+   "parity": true
+  },
+  "N30": {
+   "linear": 4.307514658242556,
+   "hermite": 2.69323671232131,
+   "neural": 0.8890754857542967,
+   "python": {
+    "linear": 4.964955253958161,
+    "hermite": 2.9884460374257142,
+    "neural": 0.9587356452370419
+   },
+   "parity": true
+  },
+  "N40": {
+   "linear": 6.433860752717561,
+   "hermite": 4.582307816886825,
+   "neural": 1.5978739027619695,
+   "python": {
+    "linear": 6.8863760028371965,
+    "hermite": 4.748461000699668,
+    "neural": 1.6745377800712065
+   },
+   "parity": true
+  }
+ },
+ "forwardParity": {
+  "vectors": 8,
+  "maxAbsDiff": 0.000018457156414797282,
+  "maxAbsOutput": 110.42595255795774,
+  "relative": 1.6714509576098002e-7
+ },
+ "checks": {
+  "forward": true,
+  "parity": true,
+  "keys": true,
+  "benefit": true
+ },
+ "pass": true
+}
