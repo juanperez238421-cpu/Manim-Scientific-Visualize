@@ -2,8 +2,8 @@
 
     python scripts/migrate.py                       # usa DATABASE_URL
     python scripts/migrate.py --seed-dev-plans      # además carga db/seed_plans_DRAFT.sql (planes BORRADOR, solo desarrollo)
-    python scripts/migrate.py --grant-credits EMAIL N   # crédito de desarrollo (entry 'grant') a un usuario ya registrado
-    python scripts/migrate.py --set-plan EMAIL CODE     # plan de DESARROLLO (suscripción de 30 días) para pruebas de resolución
+    python scripts/migrate.py --grant-credits EMAIL|SUBJECT N   # crédito de desarrollo (entry 'grant') a un usuario ya registrado
+    python scripts/migrate.py --set-plan EMAIL|SUBJECT CODE     # plan de DESARROLLO (suscripción de 30 días) para pruebas de resolución
 
 Nunca borra datos. Es seguro re-ejecutarlo.
 """
@@ -56,7 +56,7 @@ def main() -> int:
                 print(f"planes ya existentes ({n}): no se tocan")
         if a.grant_credits:
             email, n = a.grant_credits[0], int(a.grant_credits[1])
-            row = c.execute("SELECT id FROM users WHERE email=%s", (email,)).fetchone()
+            row = c.execute("SELECT id FROM users WHERE email=%s OR provider_subject=%s", (email, email)).fetchone()
             if not row:
                 print(f"usuario {email} no existe todavía: inicia sesión una vez en la app y repite", file=sys.stderr)
                 return 3
@@ -65,7 +65,7 @@ def main() -> int:
             print(f"+{n} créditos de desarrollo para {email}")
         if a.set_plan:
             email, code = a.set_plan
-            row = c.execute("SELECT id FROM users WHERE email=%s", (email,)).fetchone()
+            row = c.execute("SELECT id FROM users WHERE email=%s OR provider_subject=%s", (email, email)).fetchone()
             plan = c.execute("SELECT id FROM plans WHERE code=%s", (code,)).fetchone()
             if not row or not plan:
                 print("usuario o plan inexistente", file=sys.stderr)

@@ -24,30 +24,60 @@ from app.config import Settings
 from app.main import create_app
 
 ROOT = Path(__file__).resolve().parents[2].parent          # saas/
-PG_BIN = next(Path("/usr/lib/postgresql").glob("*/bin"), None)
+def _find_pg_bin():
+    env = os.environ.get("PG_BIN")
+    cands = [Path(env)] if env else []
+    cands += sorted(Path("/usr/lib/postgresql").glob("*/bin"), reverse=True)
+    for base in (r"C:\Program Files\PostgreSQL", r"C:\Program Files (x86)\PostgreSQL"):
+        cands += sorted(Path(base).glob("*/bin"), reverse=True) if Path(base).exists() else []
+    exe = "pg_ctl.exe" if os.name == "nt" else "pg_ctl"
+    return next((c for c in cands if (c / exe).exists()), None)
+
+
+PG_BIN = _find_pg_bin()
 ISSUER = "https://clerk.test.example"
 WORKER_TOKEN = "w" * 40
+
+
+def _free_port():
+    import socket
+    with socket.socket() as k:
+        k.bind(("127.0.0.1", 0))
+        return k.getsockname()[1]
 
 
 @pytest.fixture(scope="session")
 def pg_url():
     if PG_BIN is None:
-        pytest.skip("PostgreSQL no instalado")
+        pytest.skip("PostgreSQL no instalado (define PG_BIN)")
+    ext = ".exe" if os.name == "nt" else ""
     d = Path(tempfile.mkdtemp(prefix="pgtest_"))
-    shutil.chown(d, "postgres", "postgres") if os.geteuid() == 0 else None
-    run = (lambda cmd: subprocess.run(["su", "postgres", "-c", cmd], check=True, capture_output=True)
-           if os.geteuid() == 0 else subprocess.run(cmd, shell=True, check=True, capture_output=True))
-    run(f"{PG_BIN}/initdb -D {d}/data -A trust")
-    port = 54000 + os.getpid() % 900
-    run(f"{PG_BIN}/pg_ctl -D {d}/data -o '-p {port} -k {d} -c fsync=off -c max_connections=200' -l {d}/log -w start")
-    url = f"host={d} port={port} user=postgres dbname=postgres"
+    root = os.name != "nt" and os.geteuid() == 0
+    if root:
+        shutil.chown(d, "postgres", "postgres")
+
+    def run(args):
+        cmd = [str(PG_BIN / (args[0] + ext)), *args[1:]]
+        if root:
+            import shlex
+            cmd = ["su", "postgres", "-c", " ".join(shlex.quote(c) for c in cmd)]
+        return subprocess.run(cmd, check=True, capture_output=True)
+    run(["initdb", "-D", str(d / "data"), "-A", "trust", "-U", "postgres", "-E", "UTF8"])
+    port = _free_port()
+    opts = f"-p {port} -c fsync=off -c max_connections=200 -c listen_addresses=127.0.0.1"
+    if os.name != "nt":
+        opts += f" -k {d}"
+    run(["pg_ctl", "-D", str(d / "data"), "-o", opts, "-l", str(d / "log"), "-w", "start"])
+    url = f"host=127.0.0.1 port={port} user=postgres dbname=postgres"
     with psycopg.connect(url, autocommit=True) as c:
-        c.execute((ROOT / "db" / "schema.sql").read_text())
+        c.execute((ROOT / "db" / "schema.sql").read_text(encoding="utf-8"))
         for m in sorted((ROOT / "db" / "migrations").glob("*.sql")):
             c.execute(m.read_text(encoding="utf-8"))
     yield url
-    run(f"{PG_BIN}/pg_ctl -D {d}/data -m immediate stop")
-    shutil.rmtree(d, ignore_errors=True)
+    try:
+        run(["pg_ctl", "-D", str(d / "data"), "-m", "immediate", "stop"])
+    finally:
+        shutil.rmtree(d, ignore_errors=True)
 
 
 @pytest.fixture(scope="session")
@@ -63,7 +93,7 @@ def clean_db(pool):
     with pool.connection() as c:
         c.execute("""TRUNCATE outbox, idempotency_keys, credit_ledger, videos, job_scenes, job_stages, jobs,
                      job_estimates, pdf_files, subscriptions, payment_customers, users, plans CASCADE""")
-        c.execute((ROOT / "db" / "seed_plans_DRAFT.sql").read_text())
+        c.execute((ROOT / "db" / "seed_plans_DRAFT.sql").read_text(encoding="utf-8"))
     yield
 
 
