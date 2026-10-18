@@ -11,7 +11,7 @@ junto a una figura del tema, se verifica de forma independiente y las respuestas
 en el espacio de trabajo de la página. Nada se retipea ni se calcula a mano: los datos se citan del PDF y
 se localizan; las respuestas se recalculan con aritmética exacta ANTES de renderizar.
 
-El motor es `pdf2video/` en el repo privado `juanperez238421-cpu/Manim-Scientific-Visualize` (rama `main`).
+El motor es `pdf2video/` en el repo `juanperez238421-cpu/Manim-Scientific-Visualize` (rama `main`).
 Úsalo siempre; no reescribas escenas a mano por documento. Lee su `README.md` y
 `pdf2video/prompts/spec_author.md` (esquema y reglas del spec) antes del primer trabajo de la sesión.
 
@@ -91,6 +91,24 @@ Nuevo tipo de figura: función `_tipo(scene, V, env, zone)` en `render/visuals.p
 + registro en `TYPES`/`build` + documentación en `prompts/spec_author.md` + spec de ejemplo y test. Funciones
 nuevas para expresiones: solo en `FUNCS` de `validate.py` (puras, sin E/S). Cambios en la escena: prueba con
 render `ql` de los cinco ejemplos antes de un render final.
+
+## 8b. Reglas visuales (HYBRID-SCIANIM-v1, ya en `render/theme.py`)
+- **Tokens**: fondo blanco, INK, MUTED, C_ACC (condición/signo), C_VEL (datos de la página, velocidad/Δ), C_POS (resultado/posición, anotación del profesor), C_GAL (verificado, ✓), fuente Noto Serif. Un color nunca cambia de significado, y solo hay un color ámbar activo por transformación algebraica.
+- **Frame**: 14.22 × 8 unidades con márgenes ≥ 0.35; nada por debajo de y ≈ −3.65.
+- **Movimiento**: sin iconos decorativos, rebotes ni zooms gratuitos. Los movimientos de página duran 1.4–2.0 s y son suaves.
+- **Pausas**: P_BEAT 0.8, P_SHORT 1.5, P_MED 2.5, P_LONG 4.0, P_READ 6.0.
+- **Cuadros**: los de interpretación van en el panel derecho, nunca en la zona inferior izquierda.
+- **Fuente de verdad**: el PDF de enunciado es la autoridad visual. Las claves del profesor (PDF/CSV) sirven solo para QA. Si el texto extraído y la página renderizada discrepan, detén ese problema y repórtalo; no adivines.
+
+## 8c. Plantillas avanzadas (aún no son tipos del motor; si un pedido las necesita, impleméntalas como tipo nuevo)
+- **Persecución o encuentro**: x₁ = x₂ solo después de decir "mismo tiempo + misma posición" y se verifica con la otra ecuación. Si se pide la paradoja de Zenón (barras geométricas, serie, suma = tiempo directo), va DESPUÉS de la solución directa.
+- **Velocidad negativa**: el signo de v indica la dirección (flecha a la izquierda si v < 0). Si el PDF imprime la rapidez sin signo, conviértela y muestra la conversión.
+- **Tabla → gráfica x–t → pendientes → v–t**:
+  - los puntos vuelan de la celda de la tabla a la gráfica impresa, y solo se unen segmentos consecutivos;
+  - bandas de intervalo con "moving in +x / at rest / moving in −x";
+  - triángulos de pendiente Δx/Δt y una mini-tabla Intervalo/Δx/Δt/v;
+  - TransformFromCopy hacia los niveles de v–t, comprobando en código que las pendientes coinciden con los niveles.
+- **Versiones A/B/C de un mismo examen**: un spec por versión; valida todas antes de renderizar y renderiza primero la más distinta.
 
 ## 9. Trampas de ManimCE conocidas (ya resueltas en el motor; tenlas en cuenta al extenderlo)
 - Un mobject animado con `Write`/`Create` queda como hijo de primer nivel de la escena: si luego lo metes en un
