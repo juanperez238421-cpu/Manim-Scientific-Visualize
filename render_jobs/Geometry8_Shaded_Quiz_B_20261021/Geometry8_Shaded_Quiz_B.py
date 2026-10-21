@@ -46,7 +46,7 @@ class Geometry8ShadedQuizB(Scene):
     polygon([v(*p) for p in [(0,6),(3,6),(3,10),(0,10)]]),
     polygon([v(*p) for p in [(3,6),(6,6),(5,9),(4,9)]]),
     polygon([v(*p) for p in [(6,1),(10,1),(6,6)]]),
-    Sector(outer_radius=3*s,start_angle=PI/2,angle=PI,
+    Sector(radius=3*s,start_angle=PI/2,angle=PI,
       arc_center=v(0,3),stroke_width=2.2,stroke_color=INK,fill_color=GREY,fill_opacity=1),
     polygon([v(*p) for p in [(3,-2),(6,-2),(6,0),(3,0)]]),
     polygon([v(*p) for p in [(0,-3),(0,0),(3,0)]])
@@ -63,7 +63,7 @@ class Geometry8ShadedQuizB(Scene):
   for pts in [[(7,6),(12,6),(11,9),(8,9)],[(14,6),(17,6),(17,9)],
               [(2,1),(5,1),(5,4),(2,4)],[(13,2.5),(15,4),(17,2.5),(15,1)]]:
    parts.append(polygon([v(*p) for p in pts],WHITE))
-  parts.append(Sector(outer_radius=2*s,start_angle=0,angle=PI,
+  parts.append(Sector(radius=2*s,start_angle=0,angle=PI,
    arc_center=v(9,2),stroke_width=2.2,stroke_color=INK,fill_color=WHITE,fill_opacity=1))
   labels=[("R",(1,3.5)),("A",(3,7.5)),("B",(9.5,7.3)),
           ("C",(16,7)),("D",(3.5,2.5)),("E",(9,2.8)),("F",(15,2.5))]
@@ -74,7 +74,7 @@ class Geometry8ShadedQuizB(Scene):
   right=frame(6.05,5.85,4.45,-.50)
   fig=self.shape1() if n==1 else self.shape2()
   # Geometry area within left panel; on-screen dimensions remain explicit in data.
-  title=tx(q["stem"],22).move_to([-3.48,2.54,0])
+  title=tx(q["stem"],20).move_to([-2.11,2.54,0])
   heading=tx("DATOS DE LAS REGIONES",24,True,ACC).move_to([4.36,2.15,0])
   units=tx("Todas las medidas se dan en cm.",19,False,MUTED).move_to([4.36,1.77,0])
   rows=VGroup()
