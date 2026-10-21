@@ -52,6 +52,11 @@ jobs:
           name: ${{ inputs.artifact_name }}
           path: downloaded_artifact
 
+      - name: Install FFmpeg for publication verification
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+
       - name: Re-verify exact validated MP4
         id: verify
         shell: bash
