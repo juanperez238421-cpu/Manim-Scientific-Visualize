@@ -51,9 +51,7 @@ class Geometry8ShadedQuizB(Scene):
     polygon([v(*p) for p in [(3,-2),(6,-2),(6,0),(3,0)]]),
     polygon([v(*p) for p in [(0,-3),(0,0),(3,0)]])
   ]
-  labels=[("A",(3,3)),("B",(1.5,8)),("C",(4.5,7.2)),
-          ("D",(7,2.6)),("E",(-1.5,3)),("F",(4.5,-1)),("G",(.85,-.85))]
-  return VGroup(*parts,*[tx(l,25,True).move_to(v(*xy)) for l,xy in labels])
+  return VGroup(*parts)
  def shape2(self):
   s=.378;o=np.array([-4.1,-.89,0])
   def v(x,y):return o+np.array([(x-9)*s,(y-5)*s,0])
@@ -65,33 +63,29 @@ class Geometry8ShadedQuizB(Scene):
    parts.append(polygon([v(*p) for p in pts],WHITE))
   parts.append(Sector(radius=2*s,start_angle=0,angle=PI,
    arc_center=v(9,2),stroke_width=2.2,stroke_color=INK,fill_color=WHITE,fill_opacity=1))
-  labels=[("R",(1,3.5)),("A",(3,7.5)),("B",(9.5,7.3)),
-          ("C",(16,7)),("D",(3.5,2.5)),("E",(9,2.8)),("F",(15,2.5))]
-  return VGroup(*parts,*[tx(l,24,True).move_to(v(*xy)) for l,xy in labels])
+  return VGroup(*parts)
  def content(self,n):
   q=P[n-1]
-  left=frame(8.55,5.85,-3.83,-.50)
-  right=frame(6.05,5.85,4.45,-.50)
+  left=frame(8.55,7.02,-3.83,-.73)
+  right=frame(6.05,7.02,4.45,-.73)
   fig=self.shape1() if n==1 else self.shape2()
-  # Geometry area within left panel; on-screen dimensions remain explicit in data.
-  title=tx(q["stem"],20).move_to([-2.11,2.54,0])
-  heading=tx("DATOS DE LAS REGIONES",24,True,ACC).move_to([4.36,2.15,0])
-  units=tx("Todas las medidas se dan en cm.",19,False,MUTED).move_to([4.36,1.77,0])
+  heading=tx("DATOS DE LAS REGIONES",30,True,ACC).move_to([4.45,2.55,0])
+  units=tx("Todas las medidas se dan en cm.",23,False,MUTED).move_to([4.41,2.08,0])
   rows=VGroup()
   for i,(letter,meaning) in enumerate(q["data"]):
-   y=1.16-i*.67
-   a=tx(letter,25,True).move_to([1.93,y,0])
-   b=tx(meaning,20).move_to([2.37,y,0],aligned_edge=LEFT)
-   b.align_to([2.4,y,0],LEFT)
+   y=1.50-i*.77
+   a=tx(letter,32,True).move_to([2.07,y,0])
+   b=tx(meaning,27)
+   b.move_to([2.62,y,0],aligned_edge=LEFT)
+   b.align_to([2.67,y,0],LEFT)
    rows.add(a,b)
-  return VGroup(left,right,fig,title,heading,units,rows)
+  return VGroup(left,right,fig,heading,units,rows)
  def header(self,n):
   return VGroup(
-   tx("INSTITUTO JORGE ROBLEDO",24,True).move_to([-5.15,4.10,0]),
-   tx("GEOMETRÍA 8.º  /  ÁREAS SOMBREADAS  /  VERSIÓN B",24,True).move_to([-2.13,3.53,0]),
-   Line([-7.55,3.19,0],[7.55,3.19,0],color="#B7B7B7",stroke_width=2),
-   tx(f"PROBLEMA {n} DE 2",26,True,ACC).move_to([-6.02,2.95,0]),
-   tx("5 puntos",23,True,MUTED).move_to([-3.85,2.95,0])
+   tx("INSTITUTO JORGE ROBLEDO",24,True).move_to([-5.15,4.12,0]),
+   tx("GEOMETRÍA 8.º  /  ÁREAS SOMBREADAS",28,True).move_to([-3.53,3.53,0]),
+   tx("VERSIÓN B",26,True,ACC).move_to([3.83,3.53,0]),
+   Line([-7.55,3.19,0],[7.55,3.19,0],color="#B7B7B7",stroke_width=2)
   )
  def construct(self):
   opening=VGroup(tx("QUIZ DE ÁREAS SOMBREADAS",48,True),
@@ -104,9 +98,7 @@ class Geometry8ShadedQuizB(Scene):
    h=self.header(n)
    box=frame(1.82,.65,6.53,3.76)
    digits=always_redraw(lambda:tx(time_string(progress.get_value()),37,True,ACC).move_to([6.53,3.76,0]))
-   foot=tx("Calcula solo el área sombreada  ·  π = 3,14  ·  No deduzcas medidas del dibujo",20,c=MUTED)
-   foot.move_to([0,-4.13,0])
-   self.add(board,h,box,digits,foot)
+   self.add(board,h,box,digits)
    self.play(progress.animate.set_value(0),run_time=1200*SPEED,rate_func=linear)
-   self.remove(board,h,box,digits,foot,progress)
+   self.remove(board,h,box,digits,progress)
   self.add(tx("QUIZ FINALIZADO",45,True));self.wait(max(3*SPEED,1/config.frame_rate))
