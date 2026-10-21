@@ -1,0 +1,100 @@
+name: Geometry 8 Shaded Areas Quiz B - ManimCE PQH
+on:
+  push:
+    branches:
+      - render/geometry8-shaded-quiz-b-only-problems-20261021
+    paths:
+      - 'render_jobs/Geometry8_Shaded_Quiz_B_20261021/**'
+      - '.github/workflows/render_geometry8_shaded_quiz_b_20261021.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    outputs:
+      sha: ${{ steps.qa.outputs.hash }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install ManimCE 0.20.1
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg pkg-config python3-dev libcairo2-dev libpango1.0-dev
+          pip install manim==0.20.1
+          manim --version
+      - name: Source and content gate
+        working-directory: render_jobs/Geometry8_Shaded_Quiz_B_20261021
+        run: |
+          python -m py_compile Geometry8_Shaded_Quiz_B.py
+          grep -q 'ValueTracker(1200)' Geometry8_Shaded_Quiz_B.py
+          grep -q 'Triángulo rectángulo: catetos 4 y 5' Geometry8_Shaded_Quiz_B.py
+          grep -q 'Rombo: diagonales 4 y 3' Geometry8_Shaded_Quiz_B.py
+      - name: Full smoke timeline in preview speed
+        working-directory: render_jobs/Geometry8_Shaded_Quiz_B_20261021
+        env:
+          EXAM_PREVIEW_SCALE: '0.006'
+        run: manim -ql --fps 10 Geometry8_Shaded_Quiz_B.py Geometry8ShadedQuizB
+      - name: Render actual 40 minute ManimCE PQH timeline
+        working-directory: render_jobs/Geometry8_Shaded_Quiz_B_20261021
+        run: manim -qh --fps 1 Geometry8_Shaded_Quiz_B.py Geometry8ShadedQuizB
+      - name: Encode 30 fps H264 (preserve duration)
+        working-directory: render_jobs/Geometry8_Shaded_Quiz_B_20261021
+        run: |
+          set -euo pipefail
+          INPUT="$(find media/videos -type f -path '*/1080p1/*.mp4' -name 'Geometry8ShadedQuizB.mp4' -print -quit)"
+          test -s "$INPUT"
+          ffmpeg -y -i "$INPUT" -vf fps=30 -r 30 -c:v libx264 -preset fast -crf 23 -pix_fmt yuv420p -movflags +faststart Geometry8_Shaded_Quiz_B_20261021_SENIOR_FINAL_pqh.mp4
+      - name: Full video decode, FFprobe, visual contact sheet and hash
+        id: qa
+        working-directory: render_jobs/Geometry8_Shaded_Quiz_B_20261021
+        run: |
+          set -euo pipefail
+          VID=Geometry8_Shaded_Quiz_B_20261021_SENIOR_FINAL_pqh.mp4
+          mkdir -p qa
+          ffprobe -v error -show_entries stream=codec_name,width,height,pix_fmt -show_entries format=duration,size -of default=noprint_wrappers=1 "$VID" | tee qa/ffprobe.txt
+          ffmpeg -v error -i "$VID" -f null - 2>qa/decode.txt
+          python - <<'PY'
+          import json, subprocess
+          x=json.loads(subprocess.check_output(["ffprobe","-v","error","-show_format","-show_streams","-of","json","Geometry8_Shaded_Quiz_B_20261021_SENIOR_FINAL_pqh.mp4"]))
+          d=float(x["format"]["duration"]); v=x["streams"][0]
+          assert 2400<=d<=2420 and v["codec_name"]=="h264" and v["width"]==1920 and v["height"]==1080 and v["pix_fmt"]=="yuv420p"
+          print("GATE_D_PASS",d)
+          PY
+          for T in 1 5 600 1201 1205 1800 2404; do
+            ffmpeg -y -loglevel error -ss "$T" -i "$VID" -frames:v 1 "qa/frame_$T.png"
+          done
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          imgs=[Image.open(p).convert("RGB").resize((640,360)) for p in sorted(Path("qa").glob("frame_*.png"))]
+          sh=Image.new("RGB",(1920,1080),"white")
+          for i,im in enumerate(imgs):sh.paste(im,(i%3*640,i//3*360))
+          sh.save("qa/contact_sheet.png")
+          PY
+          sha256sum "$VID" > qa/SHA256SUMS.txt
+          SHA="$(sha256sum "$VID" | cut -d' ' -f1)"
+          echo "hash=$SHA" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8-ShadedQuizB-Verified
+          path: |
+            render_jobs/Geometry8_Shaded_Quiz_B_20261021/Geometry8_Shaded_Quiz_B_20261021_SENIOR_FINAL_pqh.mp4
+            render_jobs/Geometry8_Shaded_Quiz_B_20261021/qa/
+          retention-days: 7
+  publish:
+    needs: render
+    uses: ./.github/workflows/reusable_manimce_pqh_direct_publish.yml
+    with:
+      artifact_name: Geometry8-ShadedQuizB-Verified
+      video_filename: Geometry8_Shaded_Quiz_B_20261021_SENIOR_FINAL_pqh.mp4
+      expected_sha256: ${{ needs.render.outputs.sha }}
+      target_path: published_renders/Geometry8_Shaded_Quiz_B_20261021_SENIOR_FINAL_pqh.mp4
+      target_branch: render/geometry8-shaded-quiz-b-only-problems-20261021
+    permissions:
+      contents: write
+      actions: read
