@@ -50,14 +50,14 @@ class CanonicalCADPhysics(ThreeDScene):
     TITLE = "PHYSICS 9 -- QUARTER 1 -- WEEK 01"
     COVER_TITLE = "PHYSICAL PHENOMENA AND MEASUREMENT"
     LESSON_LABEL = "CLASS 01"
-    LOGO = Path(__file__).resolve().parent / "assets" / "ijr_crest.svg"
+    LOGO = Path(__file__).resolve().parent / "assets" / "ijr_original.png"
 
-    CAMERA_SETTLE_PAUSE = 1.00
-    MICRO_PAUSE = 0.65
-    CONSTRUCTION_PAUSE = 1.10
-    READING_PAUSE = 1.75
-    EXPLANATION_PAUSE = 2.35
-    FINAL_OBSERVATION_PAUSE = 2.80
+    CAMERA_SETTLE_PAUSE = 1.50
+    MICRO_PAUSE = 1.20
+    CONSTRUCTION_PAUSE = 2.20
+    READING_PAUSE = 3.40
+    EXPLANATION_PAUSE = 4.20
+    FINAL_OBSERVATION_PAUSE = 5.00
 
     def setup(self):
         super().setup()
@@ -96,7 +96,8 @@ class CanonicalCADPhysics(ThreeDScene):
     def institutional_cover(self):
         if not self.LOGO.exists():
             raise FileNotFoundError(f"Missing exact local crest: {self.LOGO}")
-        crest = SVGMobject(str(self.LOGO)).scale_to_fit_height(2.02)
+        # Original raster crest, not a reillustrated vector: aspect ratio preserved.
+        crest = ImageMobject(str(self.LOGO)).scale_to_fit_height(2.25)
         crest.to_edge(UP, buff=0.34)
         uni = self.text(self.INSTITUTION, 27, BOLD, DARK)
         course = self.text("PHYSICS 9", 52, BOLD, DARK)
@@ -129,7 +130,7 @@ class CanonicalCADPhysics(ThreeDScene):
         self.play(Write(lesson), run_time=0.8)
         self.play(Create(rule_bottom), Write(teacher), run_time=0.9)
         self.play(Create(motifs), run_time=0.75)
-        self.wait(self.EXPLANATION_PAUSE)
+        self.wait(self.EXPLANATION_PAUSE + 1.5)
         self.play(*[FadeOut(obj) for obj in covers], run_time=0.85)
         for obj in covers:
             self.remove_fixed_in_frame_mobjects(obj)
@@ -219,7 +220,7 @@ class CanonicalCADPhysics(ThreeDScene):
             sub.scale_to_fit_width(13.4)
         self.play(Write(title), Write(sub), run_time=1.7)
         self.caption("Observe, select a quantity, measure, and check the evidence.", POSITIVE)
-        self.wait(5.2)
+        self.wait(8.0)
         self.stage_clear()
 
     def footer_cleanup(self):
@@ -381,9 +382,10 @@ class Physics9CAD_Induction(CanonicalCADPhysics):
         wait = self.label("THINK -- DISCUSS -- JUSTIFY", (0, -1.35), 24, SKETCH, True)
         self.play(Write(title), Write(a), Write(b), run_time=1.6)
         self.play(Write(wait), run_time=0.65)
-        self.wait(4.2)
+        self.wait(8.0)
         result = self.label("B is a numerical measurement of length.", (0, -2.16), 28, POSITIVE, True)
-        self.play(Write(result), run_time=1.0)
+        self.play(Write(result), run_time=1.35)
+        self.wait(self.READING_PAUSE)
         self.caption("What instrument and unit would you record?")
         self.wait(self.FINAL_OBSERVATION_PAUSE)
         self.stage_clear()
@@ -443,11 +445,14 @@ class Physics9CAD_Measurement(CanonicalCADPhysics):
                           fill_opacity=1).move_to([(x0+x1)/2, y, 0])
         self.play(Create(scale), run_time=1.0)
         self.register(scale)
-        for i in range(11):
-            x = x0 + (x1-x0)*(i/10.0)
-            tick = self.rule((x, y + 0.22), (x, y - 0.16 if i % 2 else y-0.22), DARK, 1.5)
-            self.play(Create(tick), run_time=0.12)
-            self.register(tick)
+        # Fifty 1-cm subdivisions justify reading 46 cm, unlike V2's 5-cm marks.
+        ticks = VGroup()
+        for i in range(51):
+            x = x0 + (x1-x0)*(i/50.0)
+            depth = 0.22 if i % 10 == 0 else (0.15 if i % 5 == 0 else 0.09)
+            ticks.add(self.rule((x, y + 0.22), (x, y + 0.22-depth), DARK, 1.7))
+        self.play(Create(ticks), run_time=2.10)
+        self.register(ticks)
         l0 = self.label("0 cm", (x0, -1.34), 25, MID)
         l50 = self.label("50 cm", (x1, -1.34), 25, MID)
         self.play(Write(l0), Write(l50), run_time=0.65)
@@ -455,11 +460,13 @@ class Physics9CAD_Measurement(CanonicalCADPhysics):
         indicator = self.rule((x0, 0.52), (x_meas, 0.52), SKETCH, 5.2)
         lseg = self.rule((x0, 0.20), (x0, 0.85), SKETCH, 2.2)
         rseg = self.rule((x_meas, 0.20), (x_meas, 0.85), SKETCH, 2.2)
-        self.play(Create(indicator), Create(lseg), Create(rseg), run_time=1.9)
+        self.play(Create(indicator), Create(lseg), Create(rseg), run_time=2.3)
+        self.wait(self.READING_PAUSE)
         self.register(indicator, lseg, rseg)
         value = self.math(r"d=46\,\mathrm{cm}=0.46\,\mathrm{m}",
                           42, POSITIVE).move_to([-1.15, 1.58, 0])
         self.play(Write(value), run_time=1.6)
+        self.wait(self.READING_PAUSE)
         self.register(value)
         self.caption("Illustrative measurement: length, 0.46 m, ruler.")
         self.wait(self.FINAL_OBSERVATION_PAUSE)
@@ -480,14 +487,16 @@ class Physics9CAD_Measurement(CanonicalCADPhysics):
         hand = Line(ctr, ctr + UP*1.08, color=SKETCH, stroke_width=5)
         self.play(Create(marks), Create(hand), run_time=1.3)
         self.register(marks, hand)
-        self.play(Rotate(hand, angle=-1.20*PI, about_point=ctr),
+        self.play(Rotate(hand, angle=-TAU*(3.2/10.0), about_point=ctr),
                   run_time=3.2, rate_func=linear)
-        elapsed = self.math(r"t=3.2\,\mathrm{s}", 46, POSITIVE).move_to([2.45, 0.8, 0])
+        elapsed = self.math(r"t=3.2\,\mathrm{s}", 46, POSITIVE).move_to([2.45, 0.94, 0])
+        ten_second_scale = self.label("Dial scale: 10 s / revolution", (2.45, -1.72), 24, SKETCH)
         unit = self.label("Quantity: time", (2.45, -0.12), 29, DARK, True)
         instrument = self.label("Instrument: stopwatch", (2.45, -0.95), 28)
-        self.play(Write(elapsed), Write(unit), Write(instrument), run_time=1.8)
+        self.play(Write(elapsed), Write(unit), Write(instrument), Write(ten_second_scale), run_time=2.2)
+        self.wait(self.READING_PAUSE)
         self.register(elapsed)
-        self.caption("Illustrative example. Start and stop events define the elapsed time.")
+        self.caption("Example: 3.2 s corresponds to 32% of a 10 s stopwatch revolution.")
         self.wait(self.FINAL_OBSERVATION_PAUSE)
         self.stage_clear()
 
@@ -516,10 +525,10 @@ class Physics9CAD_Measurement(CanonicalCADPhysics):
                               DARK if row_n else SKETCH).move_to(center)
                 if t.width > widths[c]-0.28:
                     t.scale_to_fit_width(widths[c]-0.28)
-                self.play(Create(box), Write(t), run_time=0.20)
+                self.play(Create(box), Write(t), run_time=0.56)
                 self.register(box,t)
                 x += widths[c]
-            self.wait(self.MICRO_PAUSE)
+            self.wait(self.READING_PAUSE)
         self.caption("Illustrative values only: record the quantity, number, unit, and instrument.")
         self.wait(self.FINAL_OBSERVATION_PAUSE)
         self.stage_clear()
@@ -538,6 +547,7 @@ class Physics9CAD_Measurement(CanonicalCADPhysics):
         eq = self.math(r"|0.50-0.46|=0.04\,\mathrm{m}", 43, NEGATIVE)
         eq.move_to([1.8, -2.0, 0])
         self.play(Write(eq), run_time=1.6)
+        self.wait(self.READING_PAUSE)
         self.register(estimate, real, eq)
         self.caption("Difference between estimate and measured value: 0.04 m.")
         self.wait(self.FINAL_OBSERVATION_PAUSE)
@@ -564,5 +574,5 @@ class Physics9CAD_Measurement(CanonicalCADPhysics):
             self.wait(self.MICRO_PAUSE)
         self.register(group)
         self.caption("Exit ticket: what distinguishes an estimate from a measurement?")
-        self.wait(4.5)
+        self.wait(8.0)
         self.stage_clear()
