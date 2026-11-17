@@ -836,3 +836,207 @@ class Physics9CAD_SchoolRoadmap(CanonicalCADPhysics):
             self.wait(0.65)
         self.caption("The Physics 9 measurement course is the foundation for this journey.")
         self.wait(7.0)
+
+
+# ---------------------------------------------------------------------------
+# V4: Grade 9 Class 2 enlarged, with fixed CAD HUD and reserved safe zones.
+# Content deliberately remains Week 1's measurement sequence. No new topics
+# are added here; this class is a magnified iteration on the accepted V3.
+# ---------------------------------------------------------------------------
+
+class Physics9CAD_MeasurementLarge(Physics9CAD_Measurement):
+    """Bigger geometry and lettering with explicit margins in each frame."""
+    LESSON_LABEL = "CLASS 02 -- FROM OBSERVATION TO MEASUREMENT"
+    COVER_TITLE = "MEASUREMENT: ESTIMATE AND VERIFY"
+    HUD_TITLE_SIZE = 33
+    HUD_SUB_SIZE = 22
+    # Diagram stage safe area: x in [-6.55,6.55], y in [-2.40,2.40].
+    # Fixed HUD y>2.75; fixed captions y around -3.10; legend y<-3.90.
+    SAFE_X = 6.55
+    SAFE_Y = 2.40
+
+    def large_text(self, content, xy, size=35, color=DARK, bold=False, width=11.9):
+        t = self.label(content, xy, size, color, bold)
+        if t.width > width: t.scale_to_fit_width(width)
+        if (t.get_left()[0] < -self.SAFE_X - 0.05 or
+            t.get_right()[0] > self.SAFE_X + 0.05 or
+            t.get_top()[1] > self.SAFE_Y + 0.05 or
+            t.get_bottom()[1] < -self.SAFE_Y - 0.05):
+            raise ValueError(f"V4 text outside teaching safe area: {content!r}")
+        return t
+
+    def caption(self, line, color=DARK):
+        # Keep a physical gap between diagrams, explanation caption and legend.
+        if self.note is not None:
+            self.play(FadeOut(self.note), run_time=0.35)
+            self.note = None
+        back = RoundedRectangle(
+            width=13.52, height=0.78, corner_radius=0.11,
+            fill_color=WHITE, fill_opacity=0.97,
+            stroke_color=LIGHT, stroke_width=1.2,
+        ).move_to([0,-3.16,0])
+        t = self.text(line, 30, NORMAL, color).move_to(back)
+        if t.width > 12.90: t.scale_to_fit_width(12.90)
+        self.note=VGroup(back,t)
+        self.add_fixed_in_frame_mobjects(self.note)
+        self.play(FadeIn(back),Write(t),run_time=1.15)
+        return self.note
+
+    def workflow(self):
+        self.set_phase(1, "FIVE MEASUREMENT STEPS", SKETCH)
+        names=["OBSERVE","ESTIMATE","MEASURE","RECORD","COMPARE"]
+        x_positions=[-5.23,-2.61,0.01,2.63,5.25]
+        for i,name in enumerate(names):
+            x=x_positions[i]
+            circ=Circle(radius=0.50,stroke_color=SKETCH,stroke_width=3.0)
+            circ.move_to([x,0.65,0])
+            n=self.large_text(str(i+1),(x,0.65),39,SKETCH,True,0.65)
+            label=self.large_text(name,(x,-0.43),30,DARK,True,2.30)
+            self.play(Create(circ),Write(n),Write(label),run_time=0.94)
+            self.register(circ)
+            if i<4:
+                arr=Arrow([x+0.58,0.65,0],[x_positions[i+1]-0.60,0.65,0],
+                          stroke_width=3.2,color=POSITIVE,buff=0,
+                          max_tip_length_to_length_ratio=0.22)
+                self.play(Create(arr),run_time=0.42)
+                self.register(arr)
+            self.wait(self.MICRO_PAUSE)
+        self.caption("Estimate first. Measure using an instrument. Report value AND unit.")
+        self.wait(self.FINAL_OBSERVATION_PAUSE)
+        self.stage_clear()
+
+    def ruler(self):
+        self.set_phase(2, "LENGTH -- LARGE RULER", SKETCH)
+        x0,x1,y=-5.85,5.85,-0.64
+        ruler=Rectangle(width=x1-x0,height=0.66,color=DARK,
+                        stroke_width=2.5,fill_color=MODEL,fill_opacity=1)
+        ruler.move_to([(x0+x1)/2,y,0])
+        ticks=VGroup()
+        for i in range(51):
+            x=x0+(x1-x0)*i/50.0
+            depth=0.42 if i%10==0 else (0.32 if i%5==0 else 0.20)
+            ticks.add(self.rule((x,y+0.32),(x,y+0.32-depth),DARK,1.65))
+        self.play(Create(ruler),Create(ticks),run_time=2.45)
+        self.register(ruler,ticks)
+        start=self.large_text("0 cm",(x0,-1.63),32,MID,False,1.15)
+        end=self.large_text("50 cm",(x1,-1.63),32,MID,False,1.40)
+        measured_x=x0+(x1-x0)*(46/50.0)
+        measure=self.rule((x0,0.58),(measured_x,0.58),SKETCH,7.0)
+        bracket_l=self.rule((x0,0.21),(x0,0.90),SKETCH,3.1)
+        bracket_r=self.rule((measured_x,0.21),(measured_x,0.90),SKETCH,3.1)
+        self.play(Write(start),Write(end),run_time=0.85)
+        self.play(Create(measure),Create(bracket_l),Create(bracket_r),
+                  run_time=2.25)
+        self.register(measure,bracket_l,bracket_r)
+        value=self.math(r"d=46\,\mathrm{cm}=0.46\,\mathrm{m}",
+                        56,POSITIVE).move_to([0,1.70,0])
+        if value.width > 11.9:value.scale_to_fit_width(11.9)
+        self.play(Write(value),run_time=1.80)
+        self.register(value)
+        self.wait(self.READING_PAUSE)
+        self.caption("The 46 cm endpoint is marked with 1 cm subdivisions.")
+        self.wait(self.FINAL_OBSERVATION_PAUSE)
+        self.stage_clear()
+
+    def stopwatch(self):
+        self.set_phase(3, "TIME -- LARGE STOPWATCH", SKETCH)
+        centre=np.array([-3.33,-0.28,0])
+        radius=1.79
+        dial=Circle(radius=radius,color=DARK,stroke_width=4.5).move_to(centre)
+        markers=VGroup()
+        for angle in np.linspace(0,TAU,13)[:-1]:
+            p=centre+radius*0.77*np.array([np.sin(angle),np.cos(angle),0])
+            q=centre+radius*0.94*np.array([np.sin(angle),np.cos(angle),0])
+            markers.add(Line(p,q,color=DARK,stroke_width=3.0))
+        hand=Line(centre,centre+1.45*UP,color=SKETCH,stroke_width=5.2)
+        knob=RoundedRectangle(width=0.70,height=0.24,corner_radius=0.09,
+                              color=DARK,fill_color=SLAB,fill_opacity=1)
+        knob.move_to(centre+UP*1.98)
+        self.play(Create(dial),Create(markers),FadeIn(knob),Create(hand),
+                  run_time=1.70)
+        self.play(Rotate(hand,angle=-TAU*0.32,about_point=centre),
+                  run_time=3.20,rate_func=linear)
+        self.register(dial,markers,knob,hand)
+        t=self.math(r"t=3.2\,\mathrm{s}",62,POSITIVE).move_to([3.12,1.16,0])
+        self.play(Write(t),run_time=1.15);self.register(t)
+        self.large_text("Quantity: time",(3.20,0.05),35,DARK,True,5.25)
+        self.large_text("Tool: stopwatch",(3.20,-0.83),35,DARK,False,5.35)
+        self.large_text("10 s / revolution",(3.20,-1.67),31,SKETCH,False,5.45)
+        self.wait(self.READING_PAUSE)
+        self.caption("This example represents 3.2 seconds of elapsed time.")
+        self.wait(self.FINAL_OBSERVATION_PAUSE)
+        self.stage_clear()
+
+    def record(self):
+        self.set_phase(4, "WRITE THE DATA -- CLEARLY", POSITIVE)
+        headers=["QUANTITY","VALUE","UNIT","INSTRUMENT"]
+        examples=[
+            ["Length","0.46","m","Ruler"],
+            ["Time","3.2","s","Stopwatch"],
+            ["Mass","0.80","kg","Balance"],
+        ]
+        widths=[3.10,2.12,1.75,4.28]
+        startx=-sum(widths)/2
+        for row_id,words in enumerate([headers]+examples):
+            x=startx
+            for col_id,word in enumerate(words):
+                wid=widths[col_id]
+                center=[x+wid/2,1.65-row_id*1.02,0]
+                box=Rectangle(width=wid,height=1.02,stroke_color=LIGHT,
+                              stroke_width=1.8,
+                              fill_color=TERRAIN if row_id==0 else WHITE,
+                              fill_opacity=1).move_to(center)
+                t=self.text(word,33 if row_id==0 else 37,
+                            BOLD if row_id==0 else NORMAL,
+                            SKETCH if row_id==0 else DARK).move_to(center)
+                if t.width>wid-0.28:t.scale_to_fit_width(wid-0.28)
+                self.play(Create(box),Write(t),run_time=0.58)
+                self.register(box,t)
+                x+=wid
+            self.wait(1.85)
+        self.caption("These numbers are illustrative: record your own measurements.")
+        self.wait(self.FINAL_OBSERVATION_PAUSE)
+        self.stage_clear()
+
+    def compare(self):
+        self.set_phase(5, "ESTIMATE VS MEASUREMENT", NEGATIVE)
+        est=self.rule((-5.5,0.75),(5.2,0.75),SKETCH,8)
+        mes=self.rule((-5.5,-0.72),(4.33,-0.72),POSITIVE,8)
+        label1=self.large_text("ESTIMATE: 0.50 m",(0,1.53),39,SKETCH,True,12)
+        self.play(Write(label1),Create(est),run_time=1.55)
+        self.register(est)
+        self.wait(self.READING_PAUSE)
+        label2=self.large_text("MEASURED: 0.46 m",(0,-0.20),39,POSITIVE,True,12)
+        self.play(Write(label2),Create(mes),run_time=1.55)
+        self.register(mes)
+        equation=self.math(r"|0.50-0.46|=0.04\,\mathrm{m}",
+                           54,NEGATIVE).move_to([0,-1.95,0])
+        if equation.width>11.85:equation.scale_to_fit_width(11.85)
+        self.play(Write(equation),run_time=1.60)
+        self.register(equation)
+        self.caption("The difference is 0.04 m. Discuss what caused it.")
+        self.wait(self.FINAL_OBSERVATION_PAUSE)
+        self.stage_clear()
+
+    def activity(self):
+        self.set_phase(6, "PAIRED MEASUREMENT TASK", POSITIVE)
+        steps=[
+            "1. Estimate the desk length.",
+            "2. Use a ruler or measuring tape.",
+            "3. Estimate the duration of a short walk.",
+            "4. Measure it with a stopwatch.",
+            "5. Record quantity, value, unit and tool.",
+            "6. Compare your prediction and result.",
+        ]
+        lines=VGroup(*[self.text(line,36,NORMAL,DARK) for line in steps])
+        lines.arrange(DOWN,aligned_edge=LEFT,buff=0.28).move_to([0,-0.10,0])
+        if lines.width>12.65:lines.scale_to_fit_width(12.65)
+        if lines.get_top()[1] > self.SAFE_Y or lines.get_bottom()[1]<-self.SAFE_Y:
+            raise ValueError("V4 workshop text would intrude into HUD/caption")
+        for row in lines:
+            self.play(Write(row),run_time=1.08)
+            self.wait(1.05)
+        self.register(lines)
+        self.caption("Exit ticket: What makes a measurement scientifically useful?")
+        self.wait(8.0)
+        self.stage_clear()
