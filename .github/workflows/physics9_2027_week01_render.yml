@@ -1,0 +1,143 @@
+name: Physics 9 2027 Week 01 - ManimCE PQH
+
+on:
+  push:
+    branches: [physics9-2027-week1-render]
+    paths:
+      - '.github/workflows/physics9_2027_week01_render.yml'
+      - 'lessons/physics9_2027/week01/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render-week01:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    env:
+      SOURCE: lessons/physics9_2027/week01/physics9_2027_week01.py
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Verify Python source
+        run: |
+          set -euo pipefail
+          python -m py_compile "$SOURCE"
+          grep -q '^class Physics9Week1Class1(PhysicsBoard):' "$SOURCE"
+          grep -q '^class Physics9Week1Class2(PhysicsBoard):' "$SOURCE"
+          mkdir -p delivery/frames
+          sha256sum "$SOURCE" > delivery/SOURCE_SHA256SUMS.txt
+
+      - name: Install render environment
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1
+
+      - name: Mandatory PQL low-quality renders
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin /tmp/manim-home
+              printf "#!/bin/sh\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH="/tmp/manim-bin:$PATH"
+              manim -pql lessons/physics9_2027/week01/physics9_2027_week01.py Physics9Week1Class1 --media_dir media_pql --format mp4 --disable_caching
+              manim -pql lessons/physics9_2027/week01/physics9_2027_week01.py Physics9Week1Class2 --media_dir media_pql --format mp4 --disable_caching
+            ' 2>&1 | tee delivery/PQL_RENDER_LOG.txt
+          test -s "$(find media_pql -type f -name Physics9Week1Class1.mp4 -print -quit)"
+          test -s "$(find media_pql -type f -name Physics9Week1Class2.mp4 -print -quit)"
+
+      - name: Final PQH 1080p renders
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin /tmp/manim-home
+              printf "#!/bin/sh\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH="/tmp/manim-bin:$PATH"
+              manim -pqh lessons/physics9_2027/week01/physics9_2027_week01.py Physics9Week1Class1 --fps 30 --media_dir media_pqh --format mp4 --disable_caching
+              manim -pqh lessons/physics9_2027/week01/physics9_2027_week01.py Physics9Week1Class2 --fps 30 --media_dir media_pqh --format mp4 --disable_caching
+            ' 2>&1 | tee delivery/PQH_RENDER_LOG.txt
+          A="$(find media_pqh -type f -name Physics9Week1Class1.mp4 -print -quit)"
+          B="$(find media_pqh -type f -name Physics9Week1Class2.mp4 -print -quit)"
+          test -s "$A"
+          test -s "$B"
+          cp "$A" delivery/Physics9_2027_W01_Class01_FINAL_pqh.mp4
+          cp "$B" delivery/Physics9_2027_W01_Class02_FINAL_pqh.mp4
+
+      - name: Inspect MP4 dimensions, codecs, checksum, and frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'file\tcodec\twidth\theight\tfps\tpixel_format\tduration_sec\tbytes\n' > delivery/VIDEO_QA.tsv
+          for f in delivery/*.mp4; do
+            CODEC=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$f")
+            WIDTH=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$f")
+            HEIGHT=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$f")
+            FPS=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$f")
+            PIX=$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$f")
+            DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$f")
+            SIZE=$(stat -c%s "$f")
+            test "$CODEC" = h264
+            test "$WIDTH" = 1920
+            test "$HEIGHT" = 1080
+            test "$FPS" = 30/1
+            test "$PIX" = yuv420p
+            python -c "import sys; assert float(sys.argv[1]) > 55.0" "$DUR"
+            ffmpeg -nostdin -v error -i "$f" -f null -
+            printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$f" "$CODEC" "$WIDTH" "$HEIGHT" "$FPS" "$PIX" "$DUR" "$SIZE" >> delivery/VIDEO_QA.tsv
+            stem="$(basename "$f" .mp4)"
+            for fraction in 0.15 0.35 0.55 0.75 0.93; do
+              t=$(python -c "print(float('$DUR')*float('$fraction'))")
+              ffmpeg -nostdin -v error -ss "$t" -i "$f" -frames:v 1 \
+                "delivery/frames/$stem-$fraction.png"
+            done
+          done
+          sha256sum delivery/*.mp4 > delivery/VIDEO_SHA256SUMS.txt
+          echo 'PASS: PQL, PQH, FFprobe and full video decode' > delivery/STATUS.txt
+
+      - name: Save verified MP4s with supporting evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-2027-Week01-Two-Classes-PQH
+          path: |
+            delivery/*.mp4
+            delivery/*.tsv
+            delivery/*SHA256SUMS.txt
+            delivery/STATUS.txt
+            delivery/frames/*.png
+            lessons/physics9_2027/week01/physics9_2027_week01.py
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Commit verified binary MP4 files for direct download
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p published_renders
+          cp delivery/Physics9_2027_W01_Class01_FINAL_pqh.mp4 published_renders/
+          cp delivery/Physics9_2027_W01_Class02_FINAL_pqh.mp4 published_renders/
+          cp delivery/VIDEO_SHA256SUMS.txt published_renders/Physics9_2027_W01_SHA256SUMS.txt
+          cp delivery/VIDEO_QA.tsv published_renders/Physics9_2027_W01_VIDEO_QA.tsv
+          cp delivery/STATUS.txt published_renders/Physics9_2027_W01_STATUS.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/Physics9_2027_W01_*
+          git diff --cached --quiet || git commit -m "Publish both Physics 9 Week 1 PQH videos [skip ci]"
+          git push origin HEAD:physics9-2027-week1-render
+          echo "## Direct MP4 Downloads" >> "$GITHUB_STEP_SUMMARY"
+          echo "https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/physics9-2027-week1-render/published_renders/Physics9_2027_W01_Class01_FINAL_pqh.mp4" >> "$GITHUB_STEP_SUMMARY"
+          echo "https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/physics9-2027-week1-render/published_renders/Physics9_2027_W01_Class02_FINAL_pqh.mp4" >> "$GITHUB_STEP_SUMMARY"
