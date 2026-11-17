@@ -26,7 +26,7 @@ jobs:
         run: |
           set -euo pipefail
           python -m py_compile "$SOURCE"
-          test -s lessons/physics9_2027/week01/cad_canonical/assets/ijr_crest.png
+          test -s lessons/physics9_2027/week01/cad_canonical/assets/ijr_crest.svg
           grep -q 'class Physics9CAD_Induction' "$SOURCE"
           grep -q 'class Physics9CAD_Measurement' "$SOURCE"
           mkdir -p cad_delivery/audit_frames
@@ -42,7 +42,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e PHYSICS_CAD_PREVIEW=1 \
             -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
             set -euo pipefail
             mkdir -p /tmp/manim-home /tmp/manim-bin
@@ -112,7 +112,7 @@ jobs:
             cad_delivery/STATUS.txt
             cad_delivery/audit_frames/*.png
             lessons/physics9_2027/week01/cad_canonical/physics9_week01_cad.py
-            lessons/physics9_2027/week01/cad_canonical/assets/ijr_crest.png
+            lessons/physics9_2027/week01/cad_canonical/assets/ijr_crest.svg
           retention-days: 30
           if-no-files-found: error
       - name: Commit verified MP4 binaries for direct GitHub download

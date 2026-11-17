@@ -21,12 +21,14 @@ from pathlib import Path
 from manim import *
 import numpy as np
 import math
+import os
 
-config.pixel_width = 1920
-config.pixel_height = 1080
+PHYSICS_CAD_PREVIEW = os.getenv("PHYSICS_CAD_PREVIEW", "0") == "1"
+config.pixel_width = 854 if PHYSICS_CAD_PREVIEW else 1920
+config.pixel_height = 480 if PHYSICS_CAD_PREVIEW else 1080
 config.frame_width = 16
 config.frame_height = 9
-config.frame_rate = 30
+config.frame_rate = 15 if PHYSICS_CAD_PREVIEW else 30
 config.background_color = WHITE
 
 BLACK_TEXT = BLACK
@@ -505,7 +507,7 @@ class Physics9CAD_Measurement(CanonicalCADPhysics):
             x = start_x
             for c, word in enumerate(line):
                 center = [x + widths[c]/2, top_y-0.91*row_n, 0]
-                box = Rectangle(widths[c], 0.91, color=LIGHT,
+                box = Rectangle(width=widths[c], height=0.91, color=LIGHT,
                                 stroke_width=1.4,
                                 fill_color=TERRAIN if row_n == 0 else WHITE,
                                 fill_opacity=1).move_to(center)
