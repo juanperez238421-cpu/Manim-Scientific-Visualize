@@ -48,7 +48,7 @@ class CanonicalCADPhysics(ThreeDScene):
     TITLE = "PHYSICS 9 -- QUARTER 1 -- WEEK 01"
     COVER_TITLE = "PHYSICAL PHENOMENA AND MEASUREMENT"
     LESSON_LABEL = "CLASS 01"
-    LOGO = Path(__file__).resolve().parent / "assets" / "ijr_crest.png"
+    LOGO = Path(__file__).resolve().parent / "assets" / "ijr_crest.svg"
 
     CAMERA_SETTLE_PAUSE = 1.00
     MICRO_PAUSE = 0.65
@@ -94,7 +94,7 @@ class CanonicalCADPhysics(ThreeDScene):
     def institutional_cover(self):
         if not self.LOGO.exists():
             raise FileNotFoundError(f"Missing exact local crest: {self.LOGO}")
-        crest = ImageMobject(str(self.LOGO)).scale_to_fit_height(2.02)
+        crest = SVGMobject(str(self.LOGO)).scale_to_fit_height(2.02)
         crest.to_edge(UP, buff=0.34)
         uni = self.text(self.INSTITUTION, 27, BOLD, DARK)
         course = self.text("PHYSICS 9", 52, BOLD, DARK)
