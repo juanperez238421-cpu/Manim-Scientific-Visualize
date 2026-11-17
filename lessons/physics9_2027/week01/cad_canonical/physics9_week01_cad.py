@@ -100,7 +100,7 @@ class CanonicalCADPhysics(ThreeDScene):
         crest = ImageMobject(str(self.LOGO)).scale_to_fit_height(2.25)
         crest.to_edge(UP, buff=0.34)
         uni = self.text(self.INSTITUTION, 27, BOLD, DARK)
-        course = self.text("PHYSICS 9", 52, BOLD, DARK)
+        course = self.text(getattr(self, "COURSE_TITLE", "PHYSICS 9"), 52, BOLD, DARK)
         group = self.text("2027 -- QUARTER 1 -- WEEK 01", 26, BOLD, SKETCH)
         main = self.text(self.COVER_TITLE, 31, BOLD, DARK)
         lesson = self.text(self.LESSON_LABEL, 27, BOLD, POSITIVE)
@@ -138,11 +138,8 @@ class CanonicalCADPhysics(ThreeDScene):
 
     def fixed_hud(self):
         # Near-literal replication of HouseExtrusion3D.fixed_hud().
-        title = self.text("PHYSICS 9 -- 2027 -- QUARTER 1", 29, BOLD)
-        subtitle = self.text(
-            "Physical phenomena and measurement -- evidence first",
-            19, NORMAL, MID,
-        )
+        title = self.text(getattr(self, "HUD_TITLE", "PHYSICS 9 -- 2027 -- QUARTER 1"), getattr(self, "HUD_TITLE_SIZE", 29), BOLD)
+        subtitle = self.text(getattr(self, "HUD_SUBTITLE", "Physical phenomena and measurement -- evidence first"), getattr(self, "HUD_SUB_SIZE", 19), NORMAL, MID)
         title.to_corner(UL, buff=0.38)
         subtitle.next_to(title, DOWN, aligned_edge=LEFT, buff=0.08)
         rule = Line(LEFT * 7.55, RIGHT * 7.55,
@@ -576,3 +573,266 @@ class Physics9CAD_Measurement(CanonicalCADPhysics):
         self.caption("Exit ticket: what distinguishes an estimate from a measurement?")
         self.wait(8.0)
         self.stage_clear()
+
+
+# ---------------------------------------------------------------------------
+# V4: Introductory video that genuinely covers school PHYSICS, not a P3 recap.
+# Evidence: 9th-grade 2027 Quarter 1 class plan (intro/measurement), and the
+# IJR Physics 10/11 area plans + three-period 2026 curriculum map supplied by
+# the user. Grade 10/11 topics are grouped by the exact PERIOD I/II/III maps.
+# This is an orientation, not a claim that 2027 Grade 10/11 plans are finalized.
+# ---------------------------------------------------------------------------
+
+class Physics9CAD_SchoolRoadmap(CanonicalCADPhysics):
+    """Class 1 — visually animated physics journey through Grades 9–11."""
+    COURSE_TITLE = "PHYSICS -- GRADES 9 TO 11"
+    COVER_TITLE = "THE PHYSICS JOURNEY"
+    LESSON_LABEL = "CLASS 01 -- THE WHOLE SCHOOL ROADMAP"
+    HUD_TITLE = "PHYSICS -- GRADES 9 TO 11"
+    HUD_SUBTITLE = "What physics will teach us -- based on the school's curriculum"
+    MICRO_PAUSE = 1.20
+    READING_PAUSE = 3.20
+    EXPLANATION_PAUSE = 3.90
+    FINAL_OBSERVATION_PAUSE = 4.30
+
+    def big(self, text, xy, size=34, color=DARK, weight=NORMAL, width=12.6):
+        t = self.label(text, xy, size, color, weight == BOLD)
+        if t.width > width:
+            t.scale_to_fit_width(width)
+        return t
+
+    def start_topic(self, number, phase, title, subtitle):
+        self.stage_clear()
+        self.set_phase(number, phase, SKETCH if number % 2 else POSITIVE)
+        title_obj = self.big(title, (0, 2.03), 39, DARK, BOLD, 13.1)
+        sub_obj = self.big(subtitle, (0, 1.34), 27, MID, NORMAL, 13.0)
+        self.play(Write(title_obj), run_time=1.05)
+        self.play(Write(sub_obj), run_time=0.95)
+        self.wait(self.READING_PAUSE)
+        return title_obj, sub_obj
+
+    def construct(self):
+        self.institutional_cover()
+        self.ph = self.fixed_hud()
+        self.foundations()
+        self.kinematics_dynamics()
+        self.energy_circular()
+        self.torque_gravity()
+        self.oscillations_waves()
+        self.electricity_optics()
+        self.fluids_thermodynamics()
+        self.period_map()
+        self.exit_summary(
+            "PHYSICS CONNECTS THE ENTIRE NATURAL WORLD",
+            "Motion, forces, energy, waves, fields, fluids, heat and space.")
+        self.footer_cleanup()
+
+    def foundations(self):
+        self.start_topic(1, "GR 9 / FOUNDATIONS", "GRADE 9 -- LEARN TO THINK LIKE A PHYSICIST",
+                         "Observation, measurement, units, models and experiments")
+        x0, x1 = -5.9, 0.2
+        baseline = self.rule((x0, -0.28), (x1, -0.28), DARK, 3.1)
+        ticks = VGroup(*[
+            self.rule((x0+i*(x1-x0)/12, -0.10),
+                      (x0+i*(x1-x0)/12, -0.46 if i % 3 == 0 else -0.30),
+                      SKETCH, 2.0)
+            for i in range(13)])
+        book = Rectangle(width=2.7, height=1.35, color=DARK, stroke_width=2.3,
+                         fill_color=MODEL, fill_opacity=0.45).move_to([3.15, -0.15, 0])
+        evidence = self.big("MEASURE  -  RECORD  -  COMPARE", (0, -1.73),
+                            34, POSITIVE, BOLD)
+        self.play(Create(baseline), Create(ticks), run_time=1.5)
+        self.play(Create(book), run_time=0.9)
+        label = self.big("A scientific model", (3.15, -0.15), 29, SKETCH, BOLD, 2.4)
+        self.play(Write(label), Write(evidence), run_time=1.4)
+        self.register(baseline, ticks, book)
+        self.caption("First learn to collect evidence. Then learn how to explain it.")
+        self.wait(self.FINAL_OBSERVATION_PAUSE)
+
+    def kinematics_dynamics(self):
+        self.start_topic(2, "GR 10 / PERIOD I", "MOTION AND FORCES",
+                         "Kinematics: displacement, velocity, acceleration and projectiles")
+        ground = self.rule((-6.2, -0.6), (0.2, -0.6), DARK, 3.3)
+        cart = VGroup(
+            RoundedRectangle(width=1.05, height=0.50, corner_radius=0.10,
+                             color=DARK, stroke_width=2.2, fill_color=MODEL, fill_opacity=1),
+            Dot([-0.30,-0.35,0],radius=0.11,color=DARK),
+            Dot([0.30,-0.35,0],radius=0.11,color=DARK))
+        cart.move_to([-5.35, -0.28, 0])
+        self.play(Create(ground), FadeIn(cart), run_time=1.2)
+        self.play(cart.animate.shift(RIGHT*4.2), run_time=2.65, rate_func=linear)
+        self.register(ground,cart)
+        ramp = Polygon([1.2,-1.45,0],[5.95,-1.45,0],[5.95,0.20,0],
+                       stroke_color=DARK,stroke_width=3,fill_color=MODEL,fill_opacity=0.55)
+        mass = Square(side_length=0.56, color=SKETCH, stroke_width=2.3,
+                      fill_color=SKETCH,fill_opacity=0.65).move_to([4.9,-0.77,0])
+        force = Arrow([4.9,-0.74,0],[3.55,-0.74,0],
+                      color=POSITIVE,buff=0,stroke_width=4)
+        self.play(Create(ramp), FadeIn(mass), run_time=1.15)
+        self.play(Create(force), run_time=0.90)
+        self.register(ramp,mass,force)
+        self.big("Newton's laws / friction / inclined planes",
+                 (0,-2.27),29,DARK,NORMAL,12.7)
+        self.caption("Grade 10 / Period I: How objects move -- and why their motion changes.")
+        self.wait(self.FINAL_OBSERVATION_PAUSE)
+
+    def energy_circular(self):
+        self.start_topic(3,"GR 10 / PERIOD II","WORK, ENERGY AND CIRCULAR MOTION",
+                         "Conservation, momentum, collisions and centripetal motion")
+        ramp = ArcBetweenPoints([-6.1,-1.45,0],[-0.45,-1.45,0],angle=-0.66,
+                                color=DARK,stroke_width=3.3)
+        ball = Dot([-6.1,-1.45,0],radius=0.22,color=SKETCH)
+        self.play(Create(ramp),FadeIn(ball),run_time=1.35)
+        self.play(MoveAlongPath(ball,ramp),run_time=2.5,rate_func=linear)
+        self.register(ramp,ball)
+        loop = Circle(radius=1.10,color=DARK,stroke_width=2.8).move_to([3.85,-0.44,0])
+        orb = Dot(loop.point_at_angle(PI/2),radius=0.19,color=POSITIVE)
+        centripetal = Arrow([3.85,-0.44,0],[4.3,-0.44,0],color=POSITIVE,
+                            stroke_width=4,buff=0)
+        self.play(Create(loop),FadeIn(orb),run_time=1.2)
+        self.play(MoveAlongPath(orb,loop),run_time=2.6,rate_func=linear)
+        self.register(loop,orb,centripetal)
+        self.big("Energy transforms -- total energy is conserved",
+                 (0,-2.30),30,POSITIVE,BOLD,12.5)
+        self.caption("Grade 10 / Period II: work, energy, circular motion and momentum.")
+        self.wait(self.FINAL_OBSERVATION_PAUSE)
+
+    def torque_gravity(self):
+        self.start_topic(4,"GR 10 / PERIOD III","TORQUE, EQUILIBRIUM AND GRAVITY",
+                         "Levers, centre of mass, Newtonian gravity and planetary motion")
+        fulcrum = Polygon([-3.9,-1.60,0],[-3.15,-0.40,0],[-2.4,-1.60,0],
+                          fill_color=SLAB,fill_opacity=0.85,stroke_color=DARK,
+                          stroke_width=2.7)
+        lever = Rectangle(width=5.2,height=0.16,color=DARK,
+                          fill_color=SLAB,fill_opacity=1).move_to([-3.15,-0.42,0])
+        mass1 = Square(side_length=0.63,color=SKETCH,fill_color=SKETCH,
+                       fill_opacity=0.80).move_to([-5.20,-0.00,0])
+        mass2 = Square(side_length=0.63,color=POSITIVE,fill_color=POSITIVE,
+                       fill_opacity=0.80).move_to([-1.10,-0.00,0])
+        levergroup=VGroup(lever,mass1,mass2)
+        self.play(Create(fulcrum),Create(lever),FadeIn(mass1),FadeIn(mass2),
+                  run_time=1.7)
+        self.play(Rotate(levergroup,angle=0.12,about_point=[-3.15,-0.42,0]),
+                  run_time=1.55)
+        self.register(fulcrum,levergroup)
+        star=Circle(radius=0.40,color="#C58D32",fill_color="#E6B354",
+                    fill_opacity=1).move_to([3.72,-0.33,0])
+        orbit=Ellipse(width=4.65,height=2.25,color=SKETCH,stroke_width=2.8)
+        orbit.move_to([3.72,-0.33,0])
+        earth=Dot([6.04,-0.33,0],radius=0.25,color=SKETCH)
+        self.play(Create(orbit),FadeIn(star),FadeIn(earth),run_time=1.20)
+        self.play(MoveAlongPath(earth,orbit),run_time=2.65,rate_func=linear)
+        self.register(orbit,star,earth)
+        self.big("Balanced forces  /  planetary attraction",
+                 (0,-2.33),30,POSITIVE,BOLD,12.5)
+        self.caption("Grade 10 / Period III: machines in equilibrium and the solar system.")
+        self.wait(self.FINAL_OBSERVATION_PAUSE)
+
+    def oscillations_waves(self):
+        self.start_topic(5,"GR 11 / PERIOD I","OSCILLATIONS, WAVES AND SOUND",
+                         "Springs, pendulums, wavelength, frequency and the Doppler effect")
+        left_x=-6.0
+        spring_points=[]
+        for i in range(28):
+            x=left_x + (3.5*i/27)
+            y= -0.50 + (0.29*(-1)**i if 0<i<27 else 0)
+            spring_points.append([x,y,0])
+        spring=VMobject(stroke_color=SKETCH,stroke_width=3.4)
+        spring.set_points_as_corners(spring_points)
+        mass=Square(side_length=0.75,color=DARK,stroke_width=2.2,
+                    fill_color=MODEL,fill_opacity=1).move_to([-2.13,-0.50,0])
+        wall=self.rule((-6.1,-1.25),(-6.1,0.25),DARK,4)
+        self.play(Create(wall),Create(spring),FadeIn(mass),run_time=1.7)
+        self.play(mass.animate.shift(RIGHT*0.7),run_time=1.0)
+        self.play(mass.animate.shift(LEFT*1.4),run_time=1.9,rate_func=there_and_back)
+        self.register(wall,spring,mass)
+        wave=FunctionGraph(lambda x: 0.60*np.sin(2.6*x),
+                           x_range=[0.0,4.7,0.05],color=POSITIVE,
+                           stroke_width=3.7).shift(RIGHT*0.58+DOWN*0.56)
+        axis=self.rule((0.3,-0.56),(5.63,-0.56),MID,1.4)
+        self.play(Create(axis),Create(wave),run_time=2.1)
+        self.register(wave,axis)
+        self.big("Oscillation generates waves; waves carry energy",
+                 (0,-2.31),29,POSITIVE,BOLD,12.8)
+        self.caption("Grade 11 / Period I: oscillators, mechanical waves, sound and Doppler.")
+        self.wait(self.FINAL_OBSERVATION_PAUSE)
+
+    def electricity_optics(self):
+        self.start_topic(6,"GR 11 / PERIOD II","ELECTRICITY, MAGNETISM AND LIGHT",
+                         "Charge, circuits, Coulomb / Ohm, electromagnetic light and lenses")
+        # Left: circuit with a battery, resistor and two connecting conductors.
+        wire=VGroup(
+            self.rule((-5.55,-1.32),(-5.55,0.10),DARK,2.8),
+            self.rule((-5.55,0.10),(-1.35,0.10),DARK,2.8),
+            self.rule((-1.35,0.10),(-1.35,-1.32),DARK,2.8),
+            self.rule((-5.55,-1.32),(-4.60,-1.32),DARK,2.8),
+            self.rule((-3.90,-1.32),(-1.35,-1.32),DARK,2.8))
+        battery=VGroup(self.rule((-4.55,-1.06),(-4.55,-1.57),SKETCH,3.0),
+                       self.rule((-3.94,-1.18),(-3.94,-1.45),SKETCH,3.0))
+        resistor=Rectangle(width=1.25,height=0.36,stroke_color=POSITIVE,
+                           stroke_width=2.2,fill_color=MODEL,fill_opacity=1)
+        resistor.move_to([-3.60,0.10,0])
+        label=self.big("CIRCUITS",(-3.5,-2.06),31,DARK,BOLD,5.0)
+        self.play(Create(wire),Create(battery),Create(resistor),run_time=2.1)
+        self.register(wire,battery,resistor)
+        # Right: optical refraction ray with a horizontal interface.
+        surface=self.rule((0.58,-0.65),(6.30,-0.65),DARK,2.6)
+        normal=DashedLine([3.35,0.91,0],[3.35,-2.10,0],color=MID,
+                          dash_length=0.16)
+        incident=Arrow([1.45,0.83,0],[3.35,-0.65,0],color=SKETCH,
+                       buff=0,stroke_width=3.7)
+        refracted=Arrow([3.35,-0.65,0],[4.10,-1.88,0],
+                        color=POSITIVE,buff=0,stroke_width=3.7)
+        self.play(Create(surface),Create(normal),run_time=1.1)
+        self.play(Create(incident),Create(refracted),run_time=1.65)
+        self.register(surface,normal,incident,refracted)
+        self.caption("Grade 11 / Period II: electricity and magnetism; reflection and refraction.")
+        self.wait(self.FINAL_OBSERVATION_PAUSE)
+
+    def fluids_thermodynamics(self):
+        self.start_topic(7,"GR 11 / PERIOD III","FLUIDS AND THERMODYNAMICS",
+                         "Pressure, buoyancy, Bernoulli, heat transfer and engines")
+        tank=Rectangle(width=3.7,height=2.3,stroke_color=DARK,stroke_width=2.6,
+                       fill_color=WHITE,fill_opacity=1).move_to([-3.95,-0.37,0])
+        water=Rectangle(width=3.59,height=1.45,stroke_width=0,
+                        fill_color=GLASS,fill_opacity=0.84).move_to([-3.95,-0.79,0])
+        p1=Arrow([-3.95,0.02,0],[-3.95,-0.40,0],color=SKETCH,
+                 buff=0,stroke_width=3.8)
+        p2=Arrow([-3.95,-0.63,0],[-3.95,-1.28,0],color=SKETCH,
+                 buff=0,stroke_width=3.8)
+        self.play(Create(tank),FadeIn(water),run_time=1.3)
+        self.play(Create(p1),Create(p2),run_time=1.15)
+        self.register(tank,water,p1,p2)
+        chamber=Rectangle(width=2.6,height=2.05,stroke_color=DARK,stroke_width=3,
+                          fill_color=MODEL,fill_opacity=0.65).move_to([3.68,-0.28,0])
+        piston=self.rule((2.41,0.17),(4.95,0.17),DARK,7)
+        heat=Arrow([3.68,-2.1,0],[3.68,-1.08,0],
+                   color=NEGATIVE,stroke_width=5,buff=0)
+        self.play(Create(chamber),Create(piston),run_time=1.25)
+        self.play(Create(heat),run_time=0.75)
+        self.register(chamber,piston,heat)
+        self.big("Fluid forces",(-3.95,-2.10),30,SKETCH,BOLD,4.5)
+        self.big("Heat and work",(3.68,-2.35),30,NEGATIVE,BOLD,4.3)
+        self.caption("Grade 11 / Period III: fluid motion, temperature and heat engines.")
+        self.wait(self.FINAL_OBSERVATION_PAUSE)
+
+    def period_map(self):
+        self.start_topic(8,"VERIFY / THREE PERIODS","THE SCHOOL PHYSICS ROADMAP",
+                         "An orientation using the 2026 Grade 10 and Grade 11 maps")
+        left=self.big("GRADE 10",(-3.37,0.65),40,SKETCH,BOLD,5.2)
+        right=self.big("GRADE 11",(3.37,0.65),40,POSITIVE,BOLD,5.2)
+        centre=self.rule((0.0,-2.28),(0.0,0.93),LIGHT,2.2)
+        self.play(Write(left),Write(right),Create(centre),run_time=1.2)
+        self.register(centre)
+        grade10=["P1   Motion and forces","P2   Energy and circular motion",
+                 "P3   Torque and gravitation"]
+        grade11=["P1   Oscillations and waves","P2   Electricity, magnetism, light",
+                 "P3   Fluids and thermodynamics"]
+        for i in range(3):
+            y=-0.32-i*0.82
+            l=self.big(grade10[i],(-3.43,y),30,DARK,NORMAL,6.25)
+            rr=self.big(grade11[i],(3.38,y),30,DARK,NORMAL,6.25)
+            self.play(Write(l),Write(rr),run_time=1.07)
+            self.wait(0.65)
+        self.caption("The Physics 9 measurement course is the foundation for this journey.")
+        self.wait(7.0)
