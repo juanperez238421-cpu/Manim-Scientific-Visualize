@@ -132,8 +132,10 @@ class Physics9W03_Conversions(Week03Base):
         endpoint=always_redraw(lambda: Dot([x0+(x1-x0)*progress.get_value(),.50,0],
                                           radius=.16,color=POSITIVE))
         self.draw(ruler,tick_group,time=1.6)
+        self.put("0 m",(-5.50,-1.06),25,MID,False,1.0)
+        self.put("2 m",(5.60,-1.06),25,MID,False,1.0)
         self.add(bar,endpoint);self.register(bar,endpoint)
-        self.play(progress.animate.set_value(.75),run_time=3.4,rate_func=smooth)
+        self.play(progress.animate.set_value(.625),run_time=3.4,rate_func=smooth)
         e1=self.eq(r"1.25\,\mathrm{m}=125\,\mathrm{cm}",(0,-1.65),60,POSITIVE)
         self.appearance(e1,time=1.7)
         self.caption("The object does not change size: only its unit and numerical value change.")
