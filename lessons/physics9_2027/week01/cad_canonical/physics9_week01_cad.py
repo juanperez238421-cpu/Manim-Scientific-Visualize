@@ -1040,3 +1040,508 @@ class Physics9CAD_MeasurementLarge(Physics9CAD_Measurement):
         self.caption("Exit ticket: What makes a measurement scientifically useful?")
         self.wait(8.0)
         self.stage_clear()
+
+
+# ============================================================================
+# V5 -- PHYSICS LOGIC + LARGE FLUID MOTION (Class 1 ONLY).
+#
+# The V4 Physics9CAD_MeasurementLarge code is deliberately unchanged.
+# Physics source: the previously reviewed IJR three-period Grade 10/11 map.
+# Each diagram shares a single tracker across the object, velocity, force,
+# spring or wavefront, so a visible indicator cannot contradict the motion.
+# No external media except the authentic IJR PNG inherited from V4.
+# ============================================================================
+class Physics9CAD_SchoolRoadmapV5(Physics9CAD_SchoolRoadmap):
+    """Physically consistent moving diagrams for the whole-school overview."""
+
+    COVER_TITLE = "THE PHYSICS JOURNEY -- MOTION AND EVIDENCE"
+    LESSON_LABEL = "CLASS 01 -- OUR JOURNEY THROUGH PHYSICS"
+    READING_PAUSE = 2.2
+    FINAL_OBSERVATION_PAUSE = 2.0
+
+    def _dim(self, text, xy, width=10.5, size=31, color=DARK, bold=False):
+        obj = self.big(text, xy, size, color, BOLD if bold else NORMAL, width)
+        return obj
+
+    def _subscene_end(self, *mobjects):
+        """Cleanly retire a shot, but keep current topic, HUD and footer."""
+        items = [m for m in mobjects if m in self.mobjects]
+        for m in mobjects:
+            if hasattr(m, "clear_updaters"):
+                m.clear_updaters()
+        if items:
+            self.play(*[FadeOut(m) for m in items], run_time=0.65)
+
+    def _grid_axis(self, x0, x1, y, divisions=14):
+        baseline = self.rule((x0, y), (x1, y), DARK, 3.0)
+        ticks = VGroup(*[
+            self.rule((x0+(x1-x0)*i/divisions, y+0.12),
+                      (x0+(x1-x0)*i/divisions, y-0.12), LIGHT, 1.3)
+            for i in range(divisions+1)
+        ])
+        return VGroup(baseline, ticks)
+
+    def foundations(self):
+        self.start_topic(1, "GR 9 / FOUNDATIONS",
+                         "GRADE 9 -- EXPERIMENTAL PHYSICS",
+                         "Observe, estimate, measure, record and compare")
+        x0,x1=-5.55,2.10
+        ruler = self._grid_axis(x0,x1,-0.51,20)
+        measured = ValueTracker(0)
+        moving = always_redraw(lambda: Dot(
+            [x0+measured.get_value()*(x1-x0),-0.51,0],
+            radius=0.22,color=SKETCH))
+        selected = always_redraw(lambda: Line(
+            [x0,0.12,0], [x0+0.001+measured.get_value()*(x1-x0),0.12,0],
+            color=SKETCH,stroke_width=7))
+        clock_c = np.array([4.48,-0.47,0])
+        clock = Circle(radius=1.17,color=DARK,stroke_width=3).move_to(clock_c)
+        clock_ticks = VGroup(*[
+            Line(clock_c+0.94*np.array([np.sin(a),np.cos(a),0]),
+                 clock_c+1.12*np.array([np.sin(a),np.cos(a),0]),
+                 color=MID,stroke_width=2)
+            for a in np.linspace(0,TAU,13)[:-1]])
+        hand = always_redraw(lambda: Line(
+            clock_c,
+            clock_c+0.88*np.array([np.sin(-TAU*.32*measured.get_value()),
+                                   np.cos(-TAU*.32*measured.get_value()),0]),
+            color=SKETCH,stroke_width=5))
+        self.play(Create(ruler),Create(clock),Create(clock_ticks),run_time=1.5)
+        self.add(moving,selected,hand)
+        self.register(ruler,clock,clock_ticks,moving,selected,hand)
+        self.play(measured.animate.set_value(1),run_time=4.4,rate_func=smooth)
+        observation = self._dim("OBSERVE  --  MEASURE  --  RECORD",
+                                (0,-2.13),width=12.5,size=35,color=POSITIVE,bold=True)
+        self.play(Write(observation),run_time=1.3)
+        self.caption("We turn everyday phenomena into evidence that can be checked.")
+        self.wait(2.5)
+
+    def kinematics_dynamics(self):
+        self.start_topic(2, "GR 10 / PERIOD I", "MOTION AND FORCES",
+                         "Changing position, changing velocity, forces and projectiles")
+        t=ValueTracker(0)
+        rail=self._grid_axis(-6.0,5.25,-1.06,18)
+        def xcart():
+            u=t.get_value()/3.0
+            return -5.25+9.0*u*u
+        car=always_redraw(lambda: VGroup(
+            RoundedRectangle(width=1.54,height=0.57,corner_radius=0.13,
+                             stroke_color=DARK,stroke_width=2.6,
+                             fill_color=SLAB,fill_opacity=1)
+                 .move_to([xcart(),-0.57,0]),
+            Circle(radius=0.16,color=DARK,fill_color=DARK,fill_opacity=1)
+                 .move_to([xcart()-0.44,-0.93,0]),
+            Circle(radius=0.16,color=DARK,fill_color=DARK,fill_opacity=1)
+                 .move_to([xcart()+0.44,-0.93,0])))
+        velocity=always_redraw(lambda: Arrow(
+            [xcart(),0.08,0], [xcart()+0.40+1.02*t.get_value()/3.0,0.08,0],
+            color=SKETCH,buff=0,stroke_width=5,
+            max_tip_length_to_length_ratio=0.19))
+        self.play(Create(rail),run_time=0.7)
+        self.add(car,velocity)
+        self.register(rail,car,velocity)
+        self.play(t.animate.set_value(3),run_time=4.9,rate_func=linear)
+        self._dim("Accelerating cart: the velocity arrow grows.",
+                  (0,-2.1),width=12.4,size=31,color=SKETCH)
+        self.caption("A nonzero resultant force can change velocity.")
+        self.wait(2.2)
+        self._subscene_end(rail,car,velocity)
+
+        # Physically consistent downhill plane: gravity is vertical,
+        # normal perpendicular to the plane, friction uphill.
+        base=self.rule((-5.55,-1.81),(3.94,-1.81),DARK,2.3)
+        left=np.array([-4.75,-1.78,0]); right=np.array([3.42,0.83,0])
+        uphill=(right-left)/np.linalg.norm(right-left)
+        normal=np.array([-uphill[1],uphill[0],0])
+        triangle=Polygon(left,right,[right[0],left[1],0],
+                         fill_color=MODEL,fill_opacity=0.67,
+                         stroke_color=DARK,stroke_width=2.8)
+        p0=right-uphill*.85; p1=left+uphill*1.35
+        slide=ValueTracker(0)
+        def blockpos():
+            s=slide.get_value()/3.0
+            return p0+(p1-p0)*s*s+normal*0.35
+        block=always_redraw(lambda:
+            Square(side_length=0.75,color=SKETCH,stroke_width=2.6,
+                   fill_color=GLASS,fill_opacity=1)
+            .rotate(np.arctan2(uphill[1],uphill[0]))
+            .move_to(blockpos()))
+        gravity=always_redraw(lambda: Arrow(blockpos(),
+            blockpos()+DOWN*0.93,color=NEGATIVE,buff=0,stroke_width=4))
+        reaction=always_redraw(lambda: Arrow(blockpos(),
+            blockpos()+normal*.74,color=POSITIVE,buff=0,stroke_width=4))
+        friction=always_redraw(lambda: Arrow(blockpos()+normal*.04,
+            blockpos()+normal*.04+uphill*.60,color=SKETCH,buff=0,stroke_width=3))
+        self.play(Create(triangle),Create(base),run_time=1.2)
+        self.add(block,gravity,reaction,friction)
+        self.register(triangle,base,block,gravity,reaction,friction)
+        self.play(slide.animate.set_value(3),run_time=3.8,rate_func=linear)
+        self.caption("Inclined plane: weight down, normal outward, friction uphill.")
+        self.wait(2.0)
+        self._subscene_end(triangle,base,block,gravity,reaction,friction)
+
+        # A projectile's path follows x(t)=v_x t and y(t)=v_y t-g t^2/2.
+        launch=np.array([-5.25,-1.72,0]); endx=5.05
+        def shot(u):
+            return np.array([launch[0]+(endx-launch[0])*u,
+                             launch[1]+9.15*u*(1-u),0])
+        path=ParametricFunction(lambda q:shot(q),t_range=[0,1,.014],
+                                stroke_color=LIGHT,stroke_width=3)
+        flight=ValueTracker(0)
+        projectile=always_redraw(lambda: Dot(
+            shot(flight.get_value()),radius=.24,color=SKETCH))
+        trace=always_redraw(lambda: ParametricFunction(
+            lambda q:shot(q),
+            t_range=[0,max(.004,flight.get_value()),.024],
+            color=POSITIVE,stroke_width=4.5))
+        self.play(Create(path),run_time=0.95)
+        self.add(trace,projectile);self.register(path,trace,projectile)
+        self.play(flight.animate.set_value(1),run_time=4.2,rate_func=linear)
+        self.caption("Projectile: horizontal motion and downward acceleration act together.")
+        self.wait(2.1)
+
+    def energy_circular(self):
+        self.start_topic(3,"GR 10 / PERIOD II","ENERGY AND CIRCULAR MOTION",
+                         "A transforming energy balance; an inward centripetal force")
+        u=ValueTracker(0)
+        A=4.40;floor=-1.50;scale=.126
+        def xball(): return -A*np.cos(u.get_value())
+        def yball(): return floor+scale*xball()**2
+        track=FunctionGraph(lambda x:floor+scale*x*x,
+                            x_range=[-4.55,4.55,.06],
+                            color=DARK,stroke_width=4)
+        ball=always_redraw(lambda: Dot([xball(),yball()+.20,0],
+                                      radius=.25,color=SKETCH))
+        # For a quadratic potential, x=A cos(phase) gives the exact
+        # qualitative exchange E_p ∝ x² and E_k ∝ A²-x².
+        Ep=always_redraw(lambda: Rectangle(
+            width=.10+3.70*(xball()/A)**2,height=.20,
+            stroke_width=0,fill_color=SKETCH,fill_opacity=1
+            ).move_to([-2.25,-2.22,0]))
+        Ek=always_redraw(lambda: Rectangle(
+            width=.10+3.70*(1-(xball()/A)**2),height=.20,
+            stroke_width=0,fill_color=POSITIVE,fill_opacity=1
+            ).move_to([2.25,-2.22,0]))
+        self.play(Create(track),run_time=1.2)
+        self.add(ball,Ep,Ek)
+        self.register(track,ball,Ep,Ek)
+        self.play(u.animate.set_value(PI),run_time=4.8,rate_func=linear)
+        self.caption("Frictionless model: potential and kinetic energy exchange.")
+        self.wait(2.2)
+        self._subscene_end(track,ball,Ep,Ek)
+
+        phase=ValueTracker(0)
+        c=np.array([0,-.47,0]); r=1.61
+        ring=Circle(radius=r,color=DARK,stroke_width=3.5).move_to(c)
+        def pos():
+            a=phase.get_value()
+            return c+r*np.array([np.cos(a),np.sin(a),0])
+        orbitball=always_redraw(lambda: Dot(pos(),radius=.25,color=SKETCH))
+        inward=always_redraw(lambda: Arrow(pos(),
+                    pos()+.88*(c-pos())/r,
+                    color=POSITIVE,stroke_width=4,buff=0))
+        tangent=always_redraw(lambda: Arrow(pos(),
+                    pos()+.84*np.array([-np.sin(phase.get_value()),
+                                         np.cos(phase.get_value()),0]),
+                    color=SKETCH,stroke_width=3.6,buff=0))
+        self.play(Create(ring),run_time=1.0)
+        self.add(orbitball,inward,tangent)
+        self.register(ring,orbitball,inward,tangent)
+        self.play(phase.animate.set_value(TAU*1.6),run_time=7.0,
+                  rate_func=linear)
+        self.caption("Velocity is tangent; centripetal acceleration points to the centre.")
+        self.wait(2.8)
+
+    def torque_gravity(self):
+        self.start_topic(4,"GR 10 / PERIOD III","TORQUE AND UNIVERSAL GRAVITY",
+                         "Balanced turning effects and gravity-directed planetary motion")
+        pivot=np.array([0,-.56,0])
+        angle=ValueTracker(.18)
+        fulcrum=Polygon([-0.65,-1.82,0],[0,-.67,0],[0.65,-1.82,0],
+                         color=DARK,stroke_width=2.5,
+                         fill_color=SLAB,fill_opacity=0.85)
+        # F_L = 2 N at 2.4 m; F_R = 3 N at 1.6 m.
+        def endpoints():
+            a=angle.get_value()
+            axis=np.array([np.cos(a),np.sin(a),0])
+            return pivot-2.4*axis,pivot+1.6*axis,axis
+        lever=always_redraw(lambda: Line(
+            pivot-3.10*np.array([np.cos(angle.get_value()),
+                                 np.sin(angle.get_value()),0]),
+            pivot+2.52*np.array([np.cos(angle.get_value()),
+                                 np.sin(angle.get_value()),0]),
+            stroke_width=15,color=SLAB))
+        masses=always_redraw(lambda: VGroup(
+            Square(.60,color=SKETCH,fill_color=GLASS,fill_opacity=1)
+                .move_to(endpoints()[0]+UP*.40),
+            Square(.73,color=POSITIVE,fill_color=TERRAIN,fill_opacity=1)
+                .move_to(endpoints()[1]+UP*.40)))
+        weights=always_redraw(lambda: VGroup(
+            Arrow(endpoints()[0]+UP*.08,endpoints()[0]+DOWN*.55,
+                  color=SKETCH,stroke_width=4,buff=0),
+            Arrow(endpoints()[1]+UP*.08,endpoints()[1]+DOWN*.78,
+                  color=POSITIVE,stroke_width=4,buff=0)))
+        self.play(Create(fulcrum),run_time=.7)
+        self.add(lever,masses,weights)
+        self.register(fulcrum,lever,masses,weights)
+        self.play(angle.animate.set_value(-.095),run_time=2.25,
+                  rate_func=smooth)
+        self.play(angle.animate.set_value(.035),run_time=1.55)
+        self.play(angle.animate.set_value(0),run_time=1.50)
+        self._dim("2 N x 2.4 m  =  3 N x 1.6 m",
+                  (0,-2.31),width=11.8,size=34,color=POSITIVE,bold=True)
+        self.caption("At equilibrium, clockwise torque equals counterclockwise torque.")
+        self.wait(2.4)
+        self._subscene_end(fulcrum,lever,masses,weights)
+
+        # Elliptic two-body idealization: primary at focus, never ellipse centre.
+        a=3.65;b=1.68; focus=np.sqrt(a*a-b*b)
+        center=np.array([0,-.44,0])
+        sunpos=center+LEFT*focus
+        orbit=Ellipse(width=2*a,height=2*b,color=SKETCH,
+                      stroke_width=3.0).move_to(center)
+        sun=Circle(radius=.30,color="#B98027",
+                   fill_color="#E7B652",fill_opacity=1).move_to(sunpos)
+        M=ValueTracker(0)
+        ecc=focus/a
+        def posplanet():
+            mean=M.get_value()
+            E=mean
+            for _ in range(7):
+                E-=(E-ecc*np.sin(E)-mean)/(1-ecc*np.cos(E))
+            return center+np.array([a*np.cos(E),b*np.sin(E),0])
+        planet=always_redraw(lambda: Dot(posplanet(),radius=.23,color=SKETCH))
+        attraction=always_redraw(lambda: Arrow(
+            posplanet(),
+            posplanet()+.90*(sunpos-posplanet())/max(.1,np.linalg.norm(sunpos-posplanet())),
+            color=POSITIVE,stroke_width=3.5,buff=0))
+        self.play(Create(orbit),FadeIn(sun),run_time=1.35)
+        self.add(planet,attraction)
+        self.register(orbit,sun,planet,attraction)
+        self.play(M.animate.set_value(TAU*1.65),run_time=8.0,rate_func=linear)
+        self.caption("The Sun sits at one focus. Gravity always points toward it.")
+        self.wait(2.4)
+
+    def oscillations_waves(self):
+        self.start_topic(5,"GR 11 / PERIOD I","OSCILLATIONS, WAVES AND SOUND",
+                         "A coupled spring, a travelling wave and moving-source sound")
+        phase=ValueTracker(0)
+        spring_start=-5.65; equilibrium=-.30
+        def xmass(): return equilibrium+1.22*np.cos(phase.get_value())
+        def spring_obj():
+            end=xmass()-.47
+            xs=np.linspace(spring_start,end,34)
+            points=[]
+            for i,x in enumerate(xs):
+                y=-.62 if i in (0,len(xs)-1) else -.62+(.30 if i%2 else -.30)
+                points.append([x,y,0])
+            m=VMobject(color=SKETCH,stroke_width=3.3)
+            m.set_points_as_corners(points)
+            return m
+        spring=always_redraw(spring_obj)
+        mass=always_redraw(lambda:
+            RoundedRectangle(width=.94,height=.94,corner_radius=.10,
+                             stroke_color=DARK,stroke_width=2.9,
+                             fill_color=MODEL,fill_opacity=1)
+            .move_to([xmass(),-.62,0]))
+        wall=self.rule((spring_start,-1.35),(spring_start,.18),DARK,5)
+        equilibrium_line=DashedLine([equilibrium,-1.58,0],
+                                    [equilibrium,.40,0],
+                                    color=LIGHT,dash_length=.14)
+        self.play(Create(wall),Create(equilibrium_line),run_time=.9)
+        self.add(spring,mass)
+        self.register(wall,equilibrium_line,spring,mass)
+        self.play(phase.animate.set_value(TAU*2.1),run_time=7.2,
+                  rate_func=linear)
+        self.caption("The mass and the attached spring move together: periodic motion.")
+        self.wait(1.8)
+        self._subscene_end(wall,equilibrium_line,spring,mass)
+
+        time=ValueTracker(0)
+        left=-5.55;right=5.55
+        axis=self.rule((left,-.40),(right,-.40),MID,1.5)
+        def wave_shape():
+            obj=VMobject(stroke_color=SKETCH,stroke_width=4.6)
+            pts=[np.array([x,-.40+.76*np.sin(2.25*(x-left)-2.9*time.get_value()),0])
+                  for x in np.linspace(left,right,170)]
+            obj.set_points_as_corners(pts)
+            return obj
+        wave=always_redraw(wave_shape)
+        probe=always_redraw(lambda: Dot(
+            [0,-.40+.76*np.sin(2.25*(0-left)-2.9*time.get_value()),0],
+            radius=.20,color=POSITIVE))
+        self.play(Create(axis),run_time=.75)
+        self.add(wave,probe)
+        self.register(axis,wave,probe)
+        self.play(time.animate.set_value(2.0*PI),run_time=7.2,
+                  rate_func=linear)
+        self.caption("The wave pattern travels; a marked point oscillates in place.")
+        self.wait(2.3)
+
+    def electricity_optics(self):
+        self.start_topic(6,"GR 11 / PERIOD II","ELECTRICITY AND LIGHT",
+                         "Conventional current around a closed loop; Snell's law of refraction")
+        # Closed external loop. Positive terminal is the upper battery plate:
+        # conventional current leaves + upwards, goes right over the top,
+        # then down the load and returns left to the negative terminal.
+        lx,rx,yt,yb=-4.60,4.60,.55,-1.38
+        wire=VGroup(
+            self.rule((lx,-.50),(lx,yt),DARK,3.2),
+            self.rule((lx,yt),(-.85,yt),DARK,3.2),
+            self.rule((.75,yt),(rx,yt),DARK,3.2),
+            self.rule((rx,yt),(rx,-.13),DARK,3.2),
+            self.rule((rx,-.87),(rx,yb),DARK,3.2),
+            self.rule((rx,yb),(lx,yb),DARK,3.2),
+            self.rule((lx,yb),(lx,-1.04),DARK,3.2),
+        )
+        plate_plus=self.rule((lx-.45,-.50),(lx+.45,-.50),SKETCH,3.4)
+        plate_minus=self.rule((lx-.25,-1.04),(lx+.25,-1.04),SKETCH,3.4)
+        resistor=Rectangle(width=1.6,height=.46,stroke_color=POSITIVE,
+                            stroke_width=2.7,fill_color=TERRAIN,
+                            fill_opacity=1).move_to([-.05,yt,0])
+        bulb=Circle(radius=.37,color=DARK,stroke_width=2.5)
+        bulb.move_to([rx,-.50,0])
+        filament=VGroup(self.rule((rx-.19,-.68),(rx+.19,-.30),DARK,2.1),
+                         self.rule((rx-.19,-.30),(rx+.19,-.68),DARK,2.1))
+        self.play(Create(wire),Create(plate_plus),Create(plate_minus),
+                  Create(resistor),Create(bulb),Create(filament),
+                  run_time=2.35)
+        self.register(wire,plate_plus,plate_minus,resistor,bulb,filament)
+        # Charge-flow visualized as conventional-current markers.
+        pathpts=[np.array([lx,-.50,0]),np.array([lx,yt,0]),
+                 np.array([rx,yt,0]),np.array([rx,yb,0]),
+                 np.array([lx,yb,0]),np.array([lx,-.50,0])]
+        seglengths=[np.linalg.norm(pathpts[i+1]-pathpts[i])
+                    for i in range(5)]
+        total=sum(seglengths)
+        def wirepos(s):
+            rem=(s%1)*total
+            for i,L in enumerate(seglengths):
+                if rem<=L:
+                    return pathpts[i]+(pathpts[i+1]-pathpts[i])*(rem/L)
+                rem-=L
+            return pathpts[0]
+        clock=ValueTracker(0)
+        markers=always_redraw(lambda: VGroup(*[
+            Dot(wirepos(clock.get_value()+k/11),radius=.105,color=SKETCH)
+            for k in range(11)]))
+        self.add(markers);self.register(markers)
+        self.play(clock.animate.set_value(1.55),run_time=6.1,rate_func=linear)
+        self.caption("Illustration: conventional current circulates through a closed circuit.")
+        self.wait(1.8)
+        self._subscene_end(wire,plate_plus,plate_minus,resistor,
+                           bulb,filament,markers)
+
+        # Light passes from air n=1.00 into water n=1.33: theta2<theta1.
+        interface=self.rule((-5.90,-.55),(5.90,-.55),DARK,3.1)
+        normal=DashedLine([0,1.08,0],[0,-2.05,0],
+                          dash_length=.17,color=MID)
+        theta1=np.radians(45)
+        theta2=np.arcsin(np.sin(theta1)/1.33)
+        incident_start=np.array([-1.75,1.20,0])
+        contact=np.array([0,-.55,0])
+        exit_pt=contact+2.05*np.array([np.sin(theta2),-np.cos(theta2),0])
+        incoming=Line(incident_start,contact,color=SKETCH,stroke_width=4.1)
+        refracted=Line(contact,exit_pt,color=POSITIVE,stroke_width=4.1)
+        light=Dot(incident_start,radius=.20,color="#D39B38")
+        self.play(Create(interface),Create(normal),run_time=.9)
+        self.play(Create(incoming),MoveAlongPath(light,incoming),
+                  run_time=2.45,rate_func=linear)
+        self.play(Create(refracted),MoveAlongPath(light,refracted),
+                  run_time=2.10,rate_func=linear)
+        self.register(interface,normal,incoming,refracted,light)
+        self._dim("Air 45 deg  --  water 32 deg",
+                  (0,-2.34),width=11.9,size=32,color=POSITIVE,bold=True)
+        self.caption("Light bends toward the normal when entering a denser optical medium.")
+        self.wait(2.6)
+
+    def fluids_thermodynamics(self):
+        self.start_topic(7,"GR 11 / PERIOD III","FLUIDS AND THERMODYNAMICS",
+                         "Floating equilibrium and a heat-driven piston expansion")
+        # A block with rho_block=0.65 rho_water rests with 65% submerged.
+        waterline=-.20
+        tank=Rectangle(width=7.30,height=3.02,
+                       stroke_color=DARK,stroke_width=3,
+                       fill_color=WHITE,fill_opacity=1)
+        tank.move_to([0,-.56,0])
+        water=Rectangle(width=7.17,height=1.83,
+                        stroke_width=0,fill_color=GLASS,fill_opacity=.78)
+        water.move_to([0,waterline-1.83/2,0])
+        drop=ValueTracker(-.67)
+        floatblock=always_redraw(lambda:
+            RoundedRectangle(width=1.42,height=1.20,corner_radius=.09,
+                             stroke_color=SKETCH,stroke_width=3.1,
+                             fill_color=MODEL,fill_opacity=.98)
+            .move_to([0,drop.get_value(),0]))
+        g_force=always_redraw(lambda: Arrow([0,drop.get_value(),0],
+                            [0,drop.get_value()-.95,0],
+                            color=NEGATIVE,stroke_width=4.0,buff=0))
+        buoyant=always_redraw(lambda: Arrow([.20,drop.get_value()-.45,0],
+                              [.20,drop.get_value()+.50,0],
+                              color=POSITIVE,stroke_width=4.0,buff=0))
+        self.play(Create(tank),FadeIn(water),run_time=1.3)
+        self.add(floatblock,g_force,buoyant)
+        self.register(tank,water,floatblock,g_force,buoyant)
+        # At y = -0.38, block bottom -0.98 and top 0.22:
+        # submerged depth waterline-(-0.98)=0.78=65% of 1.20.
+        self.play(drop.animate.set_value(-.21),run_time=1.45,rate_func=smooth)
+        self.play(drop.animate.set_value(-.43),run_time=1.25,rate_func=smooth)
+        self.play(drop.animate.set_value(-.38),run_time=1.35,rate_func=smooth)
+        self.caption("At rest: buoyant force balances weight; 65% of the block is submerged.")
+        self.wait(2.2)
+        self._subscene_end(tank,water,floatblock,g_force,buoyant)
+
+        # A sealed, freely moving piston under a fixed external load:
+        # adding heat expands the gas and pushes the piston upwards.
+        chamber=Rectangle(width=4.25,height=3.04,stroke_color=DARK,
+                          stroke_width=3.2,fill_opacity=0).move_to([0,-.53,0])
+        heat=Arrow([0,-2.42,0],[0,-1.50,0],color=NEGATIVE,
+                   stroke_width=5.2,buff=0)
+        lift=ValueTracker(-.38)
+        gas=always_redraw(lambda: Rectangle(
+             width=4.10,height=max(.06,lift.get_value()+2.00),
+             stroke_width=0,fill_color=TERRAIN,fill_opacity=.91)
+            .move_to([0,(-2.0+lift.get_value())/2,0]))
+        piston=always_redraw(lambda: Line(
+            [-2.05,lift.get_value(),0],[2.05,lift.get_value(),0],
+            stroke_width=13,color=DARK))
+        shaft=always_redraw(lambda: Line(
+            [0,lift.get_value(),0],[0,lift.get_value()+.48,0],
+            stroke_width=5,color=SLAB))
+        self.play(Create(chamber),Create(heat),run_time=1.05)
+        self.add(gas,piston,shaft)
+        self.register(chamber,heat,gas,piston,shaft)
+        self.play(lift.animate.set_value(.50),run_time=4.0,rate_func=smooth)
+        self.caption("Heat added to gas can produce expansion and mechanical work.")
+        self.wait(2.5)
+
+    def period_map(self):
+        self.start_topic(8, "VERIFY / THREE PERIODS",
+                         "THE SCHOOL PHYSICS ROADMAP",
+                         "2026 Grade 10 and 11 curriculum -- a preview for Grade 9")
+        grades=[("GRADE 10",SKETCH,-3.42,
+                 ("P1  Motion and forces","P2  Energy and orbits",
+                  "P3  Torque and gravity")),
+                ("GRADE 11",POSITIVE,3.42,
+                 ("P1  Waves and sound","P2  Circuits and optics",
+                  "P3  Fluids and heat"))]
+        separator=self.rule((0,-2.30),(0,.96),LIGHT,2.4)
+        self.play(Create(separator),run_time=.65)
+        self.register(separator)
+        highlights=[]
+        for heading,col,x,topics in grades:
+            self._dim(heading,(x,.63),width=5.7,size=43,
+                      color=col,bold=True)
+            for i,item in enumerate(topics):
+                y=-.18-.80*i
+                self._dim(item,(x,y),width=5.85,size=32,color=DARK)
+                underline=self.rule((x-2.54,y-.24),(x+2.54,y-.24),col,1.2)
+                highlights.append((underline,i))
+        self.wait(1.0)
+        for idx in range(3):
+            current=[line for line,i in highlights if i==idx]
+            self.play(*[Create(line) for line in current],run_time=.85)
+            self.wait(1.3)
+        self.register(*[line for line,i in highlights])
+        self.caption("One scientific method connects every topic: question, model, test.")
+        self.wait(5.2)
