@@ -70,7 +70,7 @@ class CanonicalCADPhysics(ThreeDScene):
 
     def text(self, content, size=28, weight=NORMAL, color=BLACK_TEXT):
         # Matching house V6: all technical lettering uses TeX and Write.
-        safe = content.replace("·", "--").replace("−", "-").replace(
+        safe = content.replace("%", r"\%").replace("·", "--").replace("−", "-").replace(
             "→", r"$\rightarrow$"
         )
         if weight == BOLD and "$" not in safe:
