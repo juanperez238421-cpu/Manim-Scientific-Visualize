@@ -41,6 +41,42 @@ class Week03Base(CanonicalCADPhysics):
     MICRO_PAUSE = 1.05
     FINAL_OBSERVATION_PAUSE = 3.7
 
+    def institutional_cover(self):
+        """The actual 2027 Week 03 cover; do not inherit Week 01 literal."""
+        if not self.LOGO.exists():
+            raise FileNotFoundError(f"Missing institutional PNG: {self.LOGO}")
+        crest=ImageMobject(str(self.LOGO)).scale_to_fit_height(2.25)
+        crest.to_edge(UP,buff=.34)
+        institution=self.text(self.INSTITUTION,27,BOLD,DARK)
+        course=self.text("PHYSICS 9",52,BOLD,DARK)
+        period=self.text("2027 -- QUARTER 1 -- WEEK 03",26,BOLD,SKETCH)
+        dates=self.text("FEBRUARY 1--5, 2027",25,BOLD,POSITIVE)
+        main=self.text(self.COVER_TITLE,29,BOLD,DARK)
+        lesson=self.text(self.LESSON_LABEL,24,BOLD,POSITIVE)
+        teacher=self.text(f"Teacher: {self.TEACHER}",23,NORMAL,MID)
+        top_line=Line(LEFT*5.5,RIGHT*5.5,color=SKETCH,stroke_width=2.4)
+        bottom_line=Line(LEFT*4.2,RIGHT*4.2,color=LIGHT,stroke_width=1.4)
+        stack=VGroup(institution,course,period,dates,top_line,main,
+                     lesson,bottom_line,teacher)
+        stack.arrange(DOWN,buff=.13)
+        stack.next_to(crest,DOWN,buff=.08)
+        if stack.get_bottom()[1] < -3.6:
+            stack.scale_to_fit_height(5.2)
+            stack.next_to(crest,DOWN,buff=.08)
+        all_items=[crest,*stack]
+        for o in all_items:
+            self.add_fixed_in_frame_mobjects(o)
+        self.play(FadeIn(crest),Write(institution),run_time=1.1)
+        self.play(Write(course),Write(period),run_time=1.4)
+        self.play(Write(dates),Create(top_line),run_time=.85)
+        self.play(Write(main),Write(lesson),run_time=1.5)
+        self.play(Create(bottom_line),Write(teacher),run_time=.9)
+        self.wait(4.5)
+        self.play(*[FadeOut(o) for o in all_items],run_time=.85)
+        for o in all_items:
+            self.remove_fixed_in_frame_mobjects(o)
+            self.remove(o)
+
     def put(self, text, pos, size=36, color=DARK, bold=False, max_width=12.7):
         m = self.label(text, pos, size, color, bold)
         if m.width > max_width:
