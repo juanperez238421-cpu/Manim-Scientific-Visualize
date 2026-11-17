@@ -1036,7 +1036,7 @@ class Physics9CAD_MeasurementLarge(Physics9CAD_Measurement):
         for row in lines:
             self.play(Write(row),run_time=1.08)
             self.wait(1.05)
-        self.register(lines)
+        self.register(*lines)  # Each Write creates a separate top-level mobject.
         self.caption("Exit ticket: What makes a measurement scientifically useful?")
         self.wait(8.0)
         self.stage_clear()
