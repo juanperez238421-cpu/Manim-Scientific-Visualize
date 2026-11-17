@@ -18,12 +18,12 @@ from __future__ import annotations
 from pathlib import Path
 import sys
 import numpy as np
+from manim import *
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "week01" / "cad_canonical"))
 from physics9_week01_cad import (
     CanonicalCADPhysics, DARK, MID, LIGHT, MODEL, SKETCH, POSITIVE, NEGATIVE,
     TERRAIN, SLAB
 )
-from manim import *
 
 
 class Week03Base(CanonicalCADPhysics):
