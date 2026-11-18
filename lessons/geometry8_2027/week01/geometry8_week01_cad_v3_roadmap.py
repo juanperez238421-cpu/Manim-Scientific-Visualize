@@ -129,10 +129,10 @@ class Geometry8W01_YearRoadmapV3(Geometry8W01_FoundationsV2):
         self.heading(2,"PERIOD I / PREVIEW","LINES, SETS AND CONSTRUCTIONS",
                      "The preview illustrates ideas; formal construction comes later.")
         # Two non-identical sets; intersection is physically located in lens.
-        ca=Circle(radius=1.30,color=SKETCH,stroke_width=4.5).move_to([-2.48,-.58,0])
-        cb=Circle(radius=1.30,color=POSITIVE,stroke_width=4.5).move_to([-.46,-.58,0])
+        ca=Circle(radius=1.52,color=SKETCH,stroke_width=4.5).move_to([-2.48,-.58,0])
+        cb=Circle(radius=1.52,color=POSITIVE,stroke_width=4.5).move_to([-.46,-.58,0])
         self.draw_stage(ca,cb,runtime=1.25)
-        p=Triangle().scale(.41).set_stroke(SKETCH,width=4.5)
+        p=Triangle().scale(.35).set_stroke(SKETCH,width=4.5)
         p.set_fill(SKETCH,opacity=.30).move_to([-5.35,-.64,0])
         self.play(FadeIn(p),run_time=.55)
         self.register(p)
@@ -284,8 +284,10 @@ class Geometry8W01_YearRoadmapV3(Geometry8W01_FoundationsV2):
                       color=LIGHT,stroke_width=1.7)
             self.play(FadeIn(dot),Create(line),run_time=.56)
             self.register(dot,line)
-            a=self.big_text(date,-3.60,y+.20,28,color,3.1,True)
-            b=self.big_text(topic,1.12,y+.20,31,DARK,8.0,True)
+            # Reserve separate horizontal zones for dates and topic names:
+            # 2.8 Manim units clear gap prevents any printed-text collision.
+            a=self.big_text(date,-3.73,y+.20,27,color,2.65,True)
+            b=self.big_text(topic,1.82,y+.20,29,DARK,7.35,True)
             self.appearance(a,b,time=.92)
             self.watch(.63)
         self.caption("Later 2027 lesson dates are not specified in the provided planner.")
