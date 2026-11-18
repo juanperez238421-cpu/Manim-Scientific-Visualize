@@ -63,6 +63,20 @@ class CadIntroBase(Week03Base):
             self.remove_fixed_in_frame_mobjects(m)
             self.remove(m)
 
+    def close_week(self, heading, first, second):
+        """Keep closing screen text inside the same verified CAD safe zone."""
+        self.stage_clear()
+        self.set_phase(99, "VERIFY / SUMMARY", POSITIVE)
+        a=self.put(heading,(0,1.37),39,POSITIVE,True,12.4)
+        b=self.put(first,(0,0.18),30,DARK,False,12.2)
+        c=self.put(second,(0,-.91),30,SKETCH,False,12.2)
+        self.play(Write(a),run_time=1.0)
+        self.play(Write(b),Write(c),run_time=1.6)
+        self.caption("Explain your method, not just your numerical result.")
+        self.wait(5.0)
+        self.stage_clear()
+        self.footer_cleanup()
+
     def start(self):
         self.institutional_cover()
         self.ph=self.fixed_hud()
@@ -402,7 +416,7 @@ class Physics9W04_Instruments(CadIntroBase):
             self.line((1.2+i*.15,-.95),(1.2+i*.15,-.65),DARK,1.6)
             for i in range(16)])
         self.draw(sleeve,body,spindle,thimble_line,time=2.3)
-        points=[(-3.7,-1.49,"SLEEVE"),(2.3,-1.49,"THIMBLE"),(-5.1,.80,"ANVIL / SPINDLE")]
+        points=[(-3.7,-1.49,"SLEEVE"),(2.3,-1.49,"THIMBLE"),(-4.45,.80,"ANVIL / SPINDLE")]
         for x,y,word in points:
             self.textline(word,y,SKETCH,26,False,5.6,x)
         self.caption("A real micrometer must be checked at zero before taking a measurement.")
@@ -600,8 +614,8 @@ class Physics9W04_UncertaintyLab(CadIntroBase):
         ]
         for i,(title,explanation,col) in enumerate(words):
             y=.90-i*1.10
-            self.textline(title,y,col,33,True,5.20,-3.90)
-            self.textline(explanation,y,DARK,25,False,7.70,2.05)
+            self.textline(title,y,col,29,True,3.40,-4.50)
+            self.textline(explanation,y,DARK,25,False,7.20,2.12)
             self.wait(.77)
         self.caption("Do not equate range, resolution and total measurement uncertainty.")
         self.wait(4.6)
