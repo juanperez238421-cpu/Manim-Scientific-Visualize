@@ -1,0 +1,1 @@
+engine=ManimCE 0.20.1; format=1920x1080, H264, 30fps; 4 original lessons

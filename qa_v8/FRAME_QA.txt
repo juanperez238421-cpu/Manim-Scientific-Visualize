@@ -1,0 +1,24 @@
+qa_v8/sampled_frames/Week1_P15.jpg: nonwhite=236
+qa_v8/sampled_frames/Week1_P32.jpg: nonwhite=317
+qa_v8/sampled_frames/Week1_P49.jpg: nonwhite=388
+qa_v8/sampled_frames/Week1_P68.jpg: nonwhite=420
+qa_v8/sampled_frames/Week1_P87.jpg: nonwhite=256
+Week 1: PASS 5/5 nonblank samples; transitions allowed
+qa_v8/sampled_frames/Week2_P15.jpg: nonwhite=118
+qa_v8/sampled_frames/Week2_P32.jpg: nonwhite=330
+qa_v8/sampled_frames/Week2_P49.jpg: nonwhite=209
+qa_v8/sampled_frames/Week2_P68.jpg: nonwhite=275
+qa_v8/sampled_frames/Week2_P87.jpg: nonwhite=0
+Week 2: PASS 4/5 nonblank samples; transitions allowed
+qa_v8/sampled_frames/Week3_P15.jpg: nonwhite=253
+qa_v8/sampled_frames/Week3_P32.jpg: nonwhite=472
+qa_v8/sampled_frames/Week3_P49.jpg: nonwhite=323
+qa_v8/sampled_frames/Week3_P68.jpg: nonwhite=284
+qa_v8/sampled_frames/Week3_P87.jpg: nonwhite=267
+Week 3: PASS 5/5 nonblank samples; transitions allowed
+qa_v8/sampled_frames/Week4_P15.jpg: nonwhite=173
+qa_v8/sampled_frames/Week4_P32.jpg: nonwhite=284
+qa_v8/sampled_frames/Week4_P49.jpg: nonwhite=379
+qa_v8/sampled_frames/Week4_P68.jpg: nonwhite=408
+qa_v8/sampled_frames/Week4_P87.jpg: nonwhite=0
+Week 4: PASS 4/5 nonblank samples; transitions allowed
