@@ -4,6 +4,9 @@ Statistical question, precise populations, nested sets, samples and justified
 conclusions. Based on IJR Statistics 10 Week 1 (19-22 Jan 2027).
 Run: manim -qh stat10_week1_guided_v8.py Stat10Week1GuidedV8
 """
+import sys
+from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parent))
 from stat10_guided_v8_common import *
 from collections import Counter
 
