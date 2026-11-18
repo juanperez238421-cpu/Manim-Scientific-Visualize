@@ -36,6 +36,23 @@ class Geometry8V2Base(Geometry8Base):
     def heading(self,n,phase,title,subtitle):
         self.chapter(n,phase,title,subtitle)
 
+    def caption(self,line,color=DARK):
+        """Wider, 29pt CAD study captions; still below the safe drawing area."""
+        if self.note is not None:
+            self.play(FadeOut(self.note),run_time=.30)
+            self.note=None
+        frame=RoundedRectangle(
+            width=13.45,height=.84,corner_radius=.12,
+            fill_color=WHITE,fill_opacity=.97,
+            stroke_color=LIGHT,stroke_width=1.15).move_to([0,-3.07,0])
+        content=self.text(line,29,NORMAL,color).move_to(frame)
+        if content.width>12.85:
+            content.scale_to_fit_width(12.85)
+        self.note=VGroup(frame,content)
+        self.add_fixed_in_frame_mobjects(self.note)
+        self.play(FadeIn(frame),Write(content),run_time=1.0)
+        return self.note
+
     def fit_to_safe_area(self,obj,max_width):
         """Preserve largest readable size while preventing clipped labels."""
         left=self.SAFE_LEFT+.16;right=self.SAFE_RIGHT-.16
@@ -418,7 +435,10 @@ class Geometry8W01_LogicalSetsV2(Geometry8V2Base):
         # Emphasize the two-set member by a genuine pulse.
         target=objs[1]
         self.play(Indicate(target,scale_factor=1.35,color=POSITIVE),run_time=2.1)
-        formula=self.big_math(r"T_{\mathrm{blue}}\in A\cap B",0,-2.12,44,POSITIVE,10.0)
+        # Place annotation to the right and below the circles:
+        # zero collision with lens boundary, gray square, or caption.
+        formula=self.big_math(r"T_{\mathrm{blue}}\in A\cap B",
+                              4.20,-1.92,45,POSITIVE,4.05)
         self.appearance(formula,time=1.3)
         self.caption("Membership means the figure satisfies the set's stated property.")
         self.watch(5.4)
