@@ -1,1 +1,1 @@
-PASS: Intro PQL and PQH, FFprobe, complete decode, 32 frames
+PASS: all 9080 H264/1080p/30fps/yuv420p video frames decoded with pinned ManimCE 0.20.1 PyAV/FFmpeg; 32 full-resolution samples
