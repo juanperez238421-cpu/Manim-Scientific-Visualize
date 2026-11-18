@@ -75,8 +75,8 @@ class Geometry8W01_YearRoadmapV3(Geometry8W01_FoundationsV2):
                      "From geometric language to shapes, measurement and solids.")
         tracks=[
             ("I","FOUNDATIONS","Objects, construction, angles",SKETCH,.69),
-            ("II","SHAPES & RELATIONSHIPS","Triangles, circles, similarity",POSITIVE,-.42),
-            ("III","MEASURE & MODEL","Areas, shaded regions, solids",DARK,-1.53),
+            ("II","SHAPES AND RELATIONSHIPS","Triangles, circles, similarity",POSITIVE,-.42),
+            ("III","MEASURE AND MODEL","Areas, shaded regions, solids",DARK,-1.53),
         ]
         for idx,(num,title,desc,color,y) in enumerate(tracks):
             start=np.array([-5.28,y-.23,0]);end=np.array([5.25,y-.23,0])
