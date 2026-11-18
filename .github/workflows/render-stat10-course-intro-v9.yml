@@ -1,0 +1,138 @@
+name: Statistics10 2027 Native ManimCE Annual Course Introduction V9
+on:
+  push:
+    branches: [manim/stat10-2027-course-intro-v9]
+    paths:
+      - .github/workflows/render-stat10-course-intro-v9.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  render-intro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate native LaTeX source and install the renderer
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa_course_intro_v9 published_renders/stat10_2027_course_intro_v9 deliverables
+          SRC=render_jobs/stat10_course_intro_2027_v9/stat10_course_intro_v9.py
+          python -m py_compile "$SRC"
+          grep -q 'class Statistics10CourseIntroV9' "$SRC"
+          grep -q 'def normal_distribution' "$SRC"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg zip unzip python3-pil
+          docker pull manimcommunity/manim:v0.20.1
+          printf '%s\n' 'ManimCE 0.20.1 | 2027 Intro | Annual 2026 Curriculum Reference | Native LaTeX | 16:9' > qa_course_intro_v9/BUILD_INFO.txt
+      - name: Render full original scene using ManimCE low-quality QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/stat10_course_intro_2027_v9/stat10_course_intro_v9.py
+          SCENE=Statistics10CourseIntroV9
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$PWD:/manim" -w /manim --entrypoint manim manimcommunity/manim:v0.20.1 \
+            -ql "$SRC" "$SCENE" --fps 15 --format=mp4 \
+            --media_dir media_intro_low --disable_caching 2>&1 | tee qa_course_intro_v9/low_full.log
+          FILE="$(find media_intro_low -type f -name "$SCENE.mp4" -print -quit)"
+          test -n "$FILE" && test -s "$FILE"
+          ffmpeg -hide_banner -loglevel error -i "$FILE" -f null - 2> qa_course_intro_v9/low_decode.log
+      - name: Render complete true native ManimCE FullHD PQH video
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/stat10_course_intro_2027_v9/stat10_course_intro_v9.py
+          SCENE=Statistics10CourseIntroV9
+          OUT=published_renders/stat10_2027_course_intro_v9/Statistics10_2027_Course_Introduction_V9_NATIVE_PQH.mp4
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$PWD:/manim" -w /manim --entrypoint manim manimcommunity/manim:v0.20.1 \
+            -qh "$SRC" "$SCENE" --fps 30 --format=mp4 \
+            --media_dir media_intro_high --disable_caching 2>&1 | tee qa_course_intro_v9/pqh_full.log
+          RAW="$(find media_intro_high -type f -name "$SCENE.mp4" -print -quit)"
+          test -n "$RAW" && test -s "$RAW"
+          ffmpeg -y -hide_banner -loglevel error -i "$RAW" -c:v libx264 -crf 18 \
+            -pix_fmt yuv420p -movflags +faststart -an "$OUT"
+          ffmpeg -hide_banner -loglevel error -i "$OUT" -f null - 2> qa_course_intro_v9/decoding_full.log
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$OUT")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$OUT")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$OUT")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$OUT")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$OUT")"
+          D="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT")"
+          test "$W" = 1920 && test "$H" = 1080 && test "$FPS" = 30/1 && test "$CODEC" = h264 && test "$PIX" = yuv420p
+          printf 'codec=%s resolution=%sx%s fps=%s pixel_format=%s duration=%s\n' \
+            "$CODEC" "$W" "$H" "$FPS" "$PIX" "$D" | tee qa_course_intro_v9/VIDEO_TECHNICAL.txt
+          sha256sum "$OUT" | tee qa_course_intro_v9/SHA256SUMS.txt
+      - name: Extract 16 encoded frames and compose visual QA contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa_course_intro_v9/frames
+          F=published_renders/stat10_2027_course_intro_v9/Statistics10_2027_Course_Introduction_V9_NATIVE_PQH.mp4
+          D="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          for P in 5 11 17 23 29 35 41 47 53 59 65 71 77 83 89 95; do
+            T="$(awk -v d="$D" -v p="$P" 'BEGIN{printf "%.3f",d*p/100}')"
+            ffmpeg -y -hide_banner -loglevel error -ss "$T" -i "$F" -frames:v 1 \
+              -vf 'scale=480:270' "qa_course_intro_v9/frames/scene_P$P.jpg"
+          done
+          python3 - <<'PY'
+          from glob import glob
+          from PIL import Image
+          files=sorted(glob('qa_course_intro_v9/frames/*.jpg'))
+          assert len(files)==16
+          seen=0
+          report=[]
+          for f in files:
+              img=Image.open(f).convert("L").resize((120,68))
+              nonwhite=sum(c<215 for c in img.getdata())
+              seen+=nonwhite>80
+              report.append(f'{f}: nonwhite={nonwhite}')
+          assert seen>=12, f'Only {seen} nonblank frames out of 16'
+          report.append(f'PASS {seen} of 16 nonblank scene samples; intentional white transitions permitted')
+          open('qa_course_intro_v9/FRAME_QA.txt','w').write('\n'.join(report)+'\n')
+          print('\n'.join(report))
+          PY
+          ffmpeg -y -hide_banner -loglevel error -pattern_type glob \
+            -i 'qa_course_intro_v9/frames/*.jpg' \
+            -vf 'tile=4x4:padding=6:margin=6:color=white' -frames:v 1 -q:v 4 \
+            qa_course_intro_v9/ENCODED_CONTACT_SHEET.jpg
+          test -s qa_course_intro_v9/ENCODED_CONTACT_SHEET.jpg
+      - name: Create self-contained sources and video ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=deliverables/Statistics10_2027_Course_Introduction_V9_Native_ManimCE_Project.zip
+          zip -9 -j "$OUT" \
+            published_renders/stat10_2027_course_intro_v9/Statistics10_2027_Course_Introduction_V9_NATIVE_PQH.mp4 \
+            render_jobs/stat10_course_intro_2027_v9/stat10_course_intro_v9.py \
+            render_jobs/stat10_2027_v8/stat10_guided_v8_common.py \
+            render_jobs/stat10_2027_native_v6/statistics10_latex_v6.py \
+            qa_course_intro_v9/VIDEO_TECHNICAL.txt
+          unzip -t "$OUT"
+          sha256sum "$OUT" > deliverables/Statistics10_2027_Course_Introduction_V9_Native_ManimCE_Project.zip.sha256
+      - name: Persist real native video and evidence to GitHub
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/stat10_2027_course_intro_v9 qa_course_intro_v9 \
+            deliverables/Statistics10_2027_Course_Introduction_V9_Native_ManimCE_Project.zip*
+          git commit -m "deliver: original Statistics10 2027 full-year introduction native LaTeX PQH video [skip ci]"
+          git fetch origin manim/stat10-2027-course-intro-v9
+          git rebase origin/manim/stat10-2027-course-intro-v9
+          git push origin HEAD:manim/stat10-2027-course-intro-v9
+      - name: Upload standalone delivered files
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Statistics10-2027-Course-Intro-V9-Native-FullHD
+          path: |
+            published_renders/stat10_2027_course_intro_v9/
+            deliverables/Statistics10_2027_Course_Introduction_V9_Native_ManimCE_Project.zip
+            qa_course_intro_v9/
+          retention-days: 30
+          if-no-files-found: warn
