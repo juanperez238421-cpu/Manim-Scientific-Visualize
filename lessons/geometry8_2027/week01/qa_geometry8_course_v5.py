@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Geometry8 2027 W01 V2: 24 real final-PQH image samples + metrics.
+"""Geometry8 2027 cinematic V5: 24 real final-PQH image samples + metrics.
 
 Checks: exists, complete PNG parse, exact 1920x1080, non-empty cover,
 no overall blank chapter distribution, inspectable 4x6 contact sheets.
@@ -14,7 +14,7 @@ def main():
     try: font=ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",19)
     except OSError: font=ImageFont.load_default()
     metrics=[]
-    for cls in ("Class01",):
+    for cls in ("Intro",):
         images=sorted(src.glob(cls+"-*.png"))
         if len(images)!=24:
             raise RuntimeError(f"{cls}: 24 sampled video frames required, got {len(images)}")
