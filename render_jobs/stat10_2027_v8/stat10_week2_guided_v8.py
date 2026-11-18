@@ -4,6 +4,9 @@ Built on IJR Statistics 10 Week 2 (25-29 Jan 2027).
 This is a fictional instructional thought experiment, not a real survey.
 Run: manim -qh stat10_week2_guided_v8.py Stat10Week2GuidedV8
 """
+import sys
+from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parent))
 from stat10_guided_v8_common import *
 from fractions import Fraction
 
