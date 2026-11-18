@@ -63,14 +63,14 @@ jobs:
           PY
           mkdir -p cad_delivery/audit_frames
           sha256sum "$SOURCE" > cad_delivery/SOURCE_SHA256SUMS.txt
-      - name: Verify preinstalled runner tools (no slow apt update)
+      - name: Install FFmpeg directly from runner cached package index
         shell: bash
         run: |
           set -euo pipefail
+          timeout 200 sudo apt-get install -y -qq ffmpeg
           command -v ffmpeg
           command -v ffprobe
           docker --version
-          ffmpeg -version | head -n 2
       - name: Literal PQH 1920x1080 final renders
         shell: bash
         run: |
