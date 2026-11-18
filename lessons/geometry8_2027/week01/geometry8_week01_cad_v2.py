@@ -51,14 +51,6 @@ class Geometry8V2Base(Geometry8Base):
         effects=[FadeIn(m) if mode=="fade" else Create(m) for m in items]
         self.play(*effects,run_time=duration)
 
-    def dot_label(self,at,letter,color=SKETCH,offset=(.18,.28),size=29):
-        p=Dot(at,radius=.13,color=color)
-        text=self.big_text(letter,at[0]+offset[0],at[1]+offset[1],
-                           size,color,True if False else 1.2,True)
-        self.play(FadeIn(p),Write(text),run_time=.83)
-        self.register(p)
-        return p,text
-
     def exit_review(self,first,second):
         self.stage_clear()
         self.set_phase(98,"EXPLAIN / VERIFY",POSITIVE)
@@ -136,7 +128,8 @@ class Geometry8W01_FoundationsV2(Geometry8V2Base):
         moving=always_redraw(lambda: Dot(
             interpolate(start,end,progress.get_value()),
             radius=.19,color=SKETCH))
-        text=always_redraw(lambda:self.text("A",36,BOLD,SKETCH).move_to(
+        text=self.text("A",36,BOLD,SKETCH)
+        text.add_updater(lambda m: m.move_to(
             interpolate(start,end,progress.get_value())+np.array([.30,.46,0])))
         self.add(moving,text);self.register(moving,text)
         self.play(progress.animate.set_value(.74),
