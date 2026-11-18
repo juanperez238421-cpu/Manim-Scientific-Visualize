@@ -6,7 +6,9 @@ Four separate classroom scenes import this module.
 from __future__ import annotations
 import sys
 from pathlib import Path
-sys.path.insert(0,str(Path(__file__).resolve().parent))
+THIS_DIR=Path(__file__).resolve().parent
+sys.path.insert(0,str(THIS_DIR))
+sys.path.insert(0,str(THIS_DIR.parent / "stat10_2027_native_v6"))
 from manim import *
 import numpy as np
 from statistics10_latex_v6 import (
