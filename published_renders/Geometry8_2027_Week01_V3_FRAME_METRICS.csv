@@ -1,0 +1,17 @@
+class,frame,sample_ink_pixels,mean_rgb
+Class01,Class01-0.05.png,730,252.72
+Class01,Class01-0.12.png,986,251.9
+Class01,Class01-0.18.png,1039,251.78
+Class01,Class01-0.24.png,1409,250.8
+Class01,Class01-0.30.png,1269,251.0
+Class01,Class01-0.36.png,1660,250.06
+Class01,Class01-0.42.png,2334,247.9
+Class01,Class01-0.48.png,2195,247.76
+Class01,Class01-0.54.png,1525,250.43
+Class01,Class01-0.60.png,985,251.86
+Class01,Class01-0.66.png,1440,250.58
+Class01,Class01-0.72.png,1080,251.6
+Class01,Class01-0.78.png,1076,251.59
+Class01,Class01-0.86.png,1836,247.65
+Class01,Class01-0.94.png,777,252.64
+Class01,Class01-03s.png,1613,249.05
