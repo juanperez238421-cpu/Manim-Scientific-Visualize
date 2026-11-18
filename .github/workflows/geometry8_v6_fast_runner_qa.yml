@@ -68,9 +68,28 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          command -v ffmpeg
-          command -v ffprobe
           timeout 480 docker pull manimcommunity/manim:v0.20.1
+          # The pinned ManimCE Docker image already includes FFmpeg and FFprobe.
+          # Run both tools INSIDE it: no apt-get, no host package dependency.
+          mkdir -p "$RUNNER_TEMP/manim-ff"
+          cat > "$RUNNER_TEMP/manim-ff/ffmpeg" <<'SH'
+          #!/usr/bin/env bash
+          set -euo pipefail
+          exec docker run --rm --user "$(id -u):$(id -g)" \
+             -v "$PWD:/manim" -w /manim --entrypoint ffmpeg \
+             manimcommunity/manim:v0.20.1 "$@"
+          SH
+          cat > "$RUNNER_TEMP/manim-ff/ffprobe" <<'SH'
+          #!/usr/bin/env bash
+          set -euo pipefail
+          exec docker run --rm --user "$(id -u):$(id -g)" \
+             -v "$PWD:/manim" -w /manim --entrypoint ffprobe \
+             manimcommunity/manim:v0.20.1 "$@"
+          SH
+          chmod +x "$RUNNER_TEMP/manim-ff/"*
+          echo "$RUNNER_TEMP/manim-ff" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/manim-ff/ffmpeg" -version | head -2
+          "$RUNNER_TEMP/manim-ff/ffprobe" -version | head -2
       - name: Full structural smoke traverse, including real 3D
         shell: bash
         run: |
