@@ -71,6 +71,8 @@ jobs:
           git add published_renders/stat10_2027_native_v6 qa_native
           if ! git diff --cached --quiet; then
             git commit -m "render: real ManimCE 0.20.1 W1-W4 native LaTeX PQH videos [skip ci]"
+            git fetch origin manim/stat10-w1-w4-latex-native-v6-2027
+            git rebase origin/manim/stat10-w1-w4-latex-native-v6-2027
             git push origin HEAD:manim/stat10-w1-w4-latex-native-v6-2027
           fi
       - name: Upload verified MP4 artifacts
