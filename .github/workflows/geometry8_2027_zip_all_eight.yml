@@ -1,0 +1,217 @@
+name: Geometry8 2027 - ZIP Eight Classes Weeks 01-04
+on:
+  push:
+    branches: [geometry8-2027-w01-w04-eight-class-cad-release]
+    paths:
+      - '.github/workflows/geometry8_2027_zip_all_eight.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+
+jobs:
+  package-8:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout all published MP4 binaries and lesson sources
+        uses: actions/checkout@v4
+        with:
+          ref: geometry8-2027-w01-w04-eight-class-cad-release
+          fetch-depth: 0
+
+      - name: Install tools and validate original lesson release
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v ffprobe || { sudo apt-get update -qq; sudo apt-get install -y -qq ffmpeg; }
+          python --version
+          test -s lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png
+          python -m py_compile lessons/geometry8_2027/week01/*.py lessons/geometry8_2027/week02_04/*.py
+
+      - name: Assemble eight verified MP4 videos, editable ManimCE, QA evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p published_packages
+          python - <<'PY'
+          import hashlib, json, os, pathlib, shutil, subprocess, zipfile
+          root=pathlib.Path(".")
+          package="Geometry8_2027_Q1_Weeks01-04_COMPLETE_CAD_8_CLASSES"
+          target=root/"published_packages"/(package+".zip")
+          videos={
+            "Week_01": [
+              "Geometry8_2027_Week01_V4_Class01_PERIOD_I_FULL_CURRICULUM_FINAL_pqh.mp4",
+              "Geometry8_2027_Week01_V2_Class02_Sets_MOTION_FINAL_pqh.mp4"],
+            "Week_02": [
+              "Geometry8_2027_Week02_Class01_LinePlane_V2_QA_FINAL_pqh.mp4",
+              "Geometry8_2027_Week02_Class02_SpatialReasoning_V2_QA_FINAL_pqh.mp4"],
+            "Week_03": [
+              "Geometry8_2027_Week03_Class01_Instruments_V2_QA_FINAL_pqh.mp4",
+              "Geometry8_2027_Week03_Class02_Constructions_V2_QA_FINAL_pqh.mp4"],
+            "Week_04": [
+              "Geometry8_2027_Week04_Class01_Angles_V2_QA_FINAL_pqh.mp4",
+              "Geometry8_2027_Week04_Class02_Protractor_V2_QA_FINAL_pqh.mp4"],
+          }
+          assert sum(map(len,videos.values()))==8
+          ledgers=[
+            root/"published_renders/Geometry8_2027_Week01_V4_SHA256SUMS.txt",
+            root/"published_renders/Geometry8_2027_Week01_V2_SHA256SUMS.txt",
+            root/"published_renders/Geometry8_2027_W02_W04_SIX_V2_QA_SHA256SUMS.txt",
+          ]
+          expected={}
+          for file in ledgers:
+              assert file.is_file(),file
+              for line in file.read_text().splitlines():
+                  words=line.strip().split()
+                  if len(words)>=2:
+                      expected[pathlib.Path(words[-1]).name]=words[0].lower()
+          meta=[]
+          for week,names in videos.items():
+              assert len(names)==2
+              for i,name in enumerate(names,start=1):
+                  file=root/"published_renders"/name
+                  assert file.is_file() and file.stat().st_size>100_000,file
+                  sha=hashlib.sha256(file.read_bytes()).hexdigest()
+                  assert expected.get(name)==sha,(name,expected.get(name),sha)
+                  check=subprocess.run(["ffprobe","-v","error","-select_streams","v:0",
+                     "-show_entries","stream=codec_name,width,height,r_frame_rate,pix_fmt",
+                     "-of","json",str(file)],capture_output=True,text=True,check=True)
+                  stream=json.loads(check.stdout)["streams"][0]
+                  assert stream["codec_name"]=="h264",(name,stream)
+                  assert (stream["width"],stream["height"])==(1920,1080),(name,stream)
+                  assert stream["r_frame_rate"]=="30/1",(name,stream)
+                  assert stream["pix_fmt"]=="yuv420p",(name,stream)
+                  meta.append(dict(week=week,lesson=i,filename=name,size_bytes=file.stat().st_size,
+                                   sha256=sha,codec=stream["codec_name"],resolution="1920x1080",
+                                   fps=30))
+          sources=[]
+          for source_folder in ["lessons/geometry8_2027/week01","lessons/geometry8_2027/week02_04",
+                                "lessons/physics9_2027/week01/cad_canonical"]:
+              source_dir=root/source_folder
+              assert source_dir.is_dir(),source_folder
+              sources += [p for p in source_dir.rglob("*") if p.is_file()
+                          and (p.suffix.lower() in {".py",".png",".md"} and "__pycache__" not in str(p))]
+          assert any(p.name=="ijr_original.png" for p in sources)
+          assert any(p.name=="geometry8_six_classes_cad.py" for p in sources)
+          evidence=[]
+          for name in [
+              "Geometry8_2027_Week01_V2_Class02_contact.jpg",
+              "Geometry8_2027_Week01_V4_Class01_contact.jpg",
+              "Geometry8_2027_Week01_V2_QA.tsv",
+              "Geometry8_2027_Week01_V2_SHA256SUMS.txt",
+              "Geometry8_2027_Week01_V2_FRAME_METRICS.csv",
+              "Geometry8_2027_Week01_V2_STATUS.txt",
+              "Geometry8_2027_Week01_V4_QA.tsv",
+              "Geometry8_2027_Week01_V4_SHA256SUMS.txt",
+              "Geometry8_2027_Week01_V4_FRAME_METRICS.csv",
+              "Geometry8_2027_Week01_V4_STATUS.txt",
+              "Geometry8_2027_W02_W04_SIX_V2_QA_SHA256SUMS.txt",
+          ]:
+              item=root/"published_renders"/name
+              assert item.is_file(),item
+              evidence.append(item)
+          for slug in ("W02C01","W02C02","W03C01","W03C02","W04C01","W04C02"):
+              for postfix in ("_V2_QA_contact.jpg","-V2_QA.tsv","_V2_QA_FRAME_METRICS.csv"):
+                  item=root/"published_renders"/(slug+postfix)
+                  assert item.is_file(),item
+                  evidence.append(item)
+          notes=[
+              root/"release_notes/Geometry8_2027_W01_W04_EIGHT_CLASS_CURRICULUM_RENDER.md",
+              root/"release_notes/Geometry8_2027_Week01_V4_PERIOD_I_SOURCE_QA.md",
+              root/"release_notes/Geometry8_2027_W01_V2_DEEP_QA_OFFICIAL_2027.md",
+          ]
+          assert all(x.is_file() for x in notes)
+          description="""# GEOMETRY 8 · 2027 · QUARTER 1 · WEEKS 1–4
+          
+          Eight verified ManimCE videos (two per week), authentic IJR crest,
+          Python lesson scenes, the full CAD base dependencies and QA evidence.
+
+          VIDEO DIRECTORY
+          Week 01 · 19–22 Jan 2027: course and point/line/ray/plane induction; sets.
+          Week 02 · 25–29 Jan 2027: line/plane relationships; spatial reasoning.
+          Week 03 · 01–05 Feb 2027: straightedge and compass; perpendicular/parallel constructions.
+          Week 04 · 08–12 Feb 2027: angle elements/classification; protractor practice.
+
+          All video files are full HD 1920 x 1080, H.264/yuv420p, 30 fps.
+          Week 01 Class 01 uses updated V4 intro; Week 01 Class 02 uses V2.
+          Weeks 02–04 use individually QA-reviewed V2 final versions.
+
+          Package structure:
+            01_Videos/Week_01 ... Week_04: 8 completed MP4s.
+            02_ManimCE_Source/: source paths, class scripts and original PNG crest.
+            03_QA_Evidence/: source contact sheets, metrics, QA ledgers.
+            04_Curriculum_Notes/: source-linked curriculum review and QA report.
+            SHA256SUMS.txt, manifest.json: verified MP4 integrity and inventory.
+
+          Source repository:
+          https://github.com/juanperez238421-cpu/Manim-Scientific-Visualize
+          Branch: geometry8-2027-w01-w04-eight-class-cad-release
+
+          Technical reproduction:
+          ManimCE 0.20.1, Docker recommended.
+          Render a source scene first with manim -pql and then manim -pqh.
+          Main classes in geometry8_six_classes_cad.py:
+          Geometry8W02_Class01_LinePlane
+          Geometry8W02_Class02_SpatialReasoning
+          Geometry8W03_Class01_Instruments
+          Geometry8W03_Class02_Constructions
+          Geometry8W04_Class01_Angles
+          Geometry8W04_Class02_Protractor
+
+          Notes: Original DOCX planner is not packaged here; the supplied
+          2027 dates and lesson scope are included in the curriculum notes.
+          """
+          desc="\n".join(s.strip() for s in description.splitlines()).strip()+"\n"
+          with zipfile.ZipFile(target,"w",allowZip64=True) as z:
+              def add_file(file,destination,compress=zipfile.ZIP_DEFLATED):
+                  z.write(file,arcname=f"{package}/{destination}",compress_type=compress)
+              for week,names in videos.items():
+                  for name in names:
+                      add_file(root/"published_renders"/name,
+                               f"01_Videos/{week}/{name}",zipfile.ZIP_STORED)
+              for file in sorted(set(sources)):
+                  add_file(file,f"02_ManimCE_Source/{file.as_posix()}")
+              for file in sorted(set(evidence)):
+                  add_file(file,f"03_QA_Evidence/{file.name}")
+              for file in notes:
+                  add_file(file,f"04_Curriculum_Notes/{file.name}")
+              checksum="\n".join(
+                  m["sha256"]+"  01_Videos/"+m["week"]+"/"+m["filename"] for m in meta
+              )+"\n"
+              z.writestr(f"{package}/SHA256SUMS.txt",checksum,
+                         compress_type=zipfile.ZIP_DEFLATED)
+              z.writestr(f"{package}/manifest.json",
+                         json.dumps({"project":"Geometry 8, 2027 Q1 W01–W04",
+                                     "video_count":8,"videos":meta},indent=2,ensure_ascii=False)+"\n")
+              z.writestr(f"{package}/README_FIRST.txt",desc)
+          with zipfile.ZipFile(target) as z:
+              bad=z.testzip()
+              assert bad is None,bad
+              actual=[n for n in z.namelist() if n.lower().endswith(".mp4")]
+              assert len(actual)==8,actual
+              assert len(z.namelist())>=45,len(z.namelist())
+              assert any(x.endswith("ijr_original.png") for x in z.namelist())
+              assert any(x.endswith("geometry8_six_classes_cad.py") for x in z.namelist())
+          assert target.stat().st_size<95_000_000,target.stat().st_size
+          zipsha=hashlib.sha256(target.read_bytes()).hexdigest()
+          (target.parent/(package+"_SHA256.txt")).write_text(zipsha+"  "+target.name+"\n")
+          print("PASS: all 8 MP4 SHA hashes from original release ledgers")
+          print("PASS: all 8 MP4 streams H264 1920x1080 30fps yuv420p")
+          print("PASS: ZIP integrity, authentic PNG and reproducible sources")
+          print("ZIP size: ",target.stat().st_size)
+          print("ZIP SHA256:",zipsha)
+          PY
+
+      - name: Publish real complete ZIP file and checksum to GitHub
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_packages/Geometry8_2027_Q1_Weeks01-04_COMPLETE_CAD_8_CLASSES*
+          git diff --cached --quiet || git commit -m "archive verified Geometry 8 Q1 Weeks 01-04 all eight CAD videos with source and QA [skip ci]"
+          git fetch origin geometry8-2027-w01-w04-eight-class-cad-release
+          git merge --no-edit -X ours origin/geometry8-2027-w01-w04-eight-class-cad-release
+          git push origin HEAD:geometry8-2027-w01-w04-eight-class-cad-release
+          echo "All eight verified videos + sources + QA packaged and published." >> "$GITHUB_STEP_SUMMARY"
+          echo "https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/geometry8-2027-w01-w04-eight-class-cad-release/published_packages/Geometry8_2027_Q1_Weeks01-04_COMPLETE_CAD_8_CLASSES.zip" >> "$GITHUB_STEP_SUMMARY"
