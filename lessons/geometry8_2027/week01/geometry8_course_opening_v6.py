@@ -304,10 +304,11 @@ class Geometry8_YearOpeningV6(Geometry8_YearOpeningV5):
         tetra.set_fill(SLAB,opacity=.76)
         tetra.set_stroke(SKETCH,width=3.5)
         tetra.move_to(center)
-        self.play(FadeOut(solid),FadeIn(tetra,scale=.72),run_time=1.85)
-        # Explicit removal prevents any previous wireframe from lingering
-        # through the tetrahedron rotation and camera movement.
+        # Stage transitions are consecutive, never blended: no mid-frame
+        # overlay of the cube wireframe on top of the tetrahedron.
+        self.play(FadeOut(solid),run_time=.85)
         self.remove(cube,wire,solid)
+        self.play(FadeIn(tetra,scale=.75),run_time=1.35)
         self.register(tetra)
         self.play(Rotate(tetra,angle=PI*.91,axis=UP+RIGHT,
                          about_point=center),run_time=4.2,
@@ -320,6 +321,7 @@ class Geometry8_YearOpeningV6(Geometry8_YearOpeningV5):
         # not every solid has only planar polygonal faces.
         cylinder=Cylinder(radius=1.04,height=2.34,
                           direction=OUT,resolution=(16,32),
+                          checkerboard_colors=[SLAB,SLAB],
                           fill_color=SLAB,fill_opacity=.90)
         # Suppress hundreds of mesh edge strokes that create checkerboard
         # aliasing and moire patterns at classroom projection resolution.
