@@ -36,11 +36,33 @@ class Geometry8V2Base(Geometry8Base):
     def heading(self,n,phase,title,subtitle):
         self.chapter(n,phase,title,subtitle)
 
+    def fit_to_safe_area(self,obj,max_width):
+        """Preserve largest readable size while preventing clipped labels."""
+        left=self.SAFE_LEFT+.16;right=self.SAFE_RIGHT-.16
+        low=self.CONTENT_BOTTOM+.11;high=self.CONTENT_TOP-.11
+        obj.scale_to_fit_width(min(max_width,right-left)) if obj.width>min(max_width,right-left) else None
+        if obj.get_right()[0] > right:
+            obj.shift(LEFT*(obj.get_right()[0]-right))
+        if obj.get_left()[0] < left:
+            obj.shift(RIGHT*(left-obj.get_left()[0]))
+        if obj.get_bottom()[1] < low:
+            obj.shift(UP*(low-obj.get_bottom()[1]))
+        if obj.get_top()[1] > high:
+            obj.shift(DOWN*(obj.get_top()[1]-high))
+        if not (obj.get_left()[0]>=left-.001 and obj.get_right()[0]<=right+.001
+                and obj.get_bottom()[1]>=low-.001 and obj.get_top()[1]<=high+.001):
+            raise ValueError("V2 safety bounds exceeded even after fitting")
+        return obj
+
     def big_text(self,s,x,y,size=35,color=DARK,width=12.8,bold=False):
-        return self.put(s,(x,y),size,color,bold,width)
+        item=self.label(s,(x,y),size,color,bold)
+        return self.fit_to_safe_area(item,width)
 
     def big_math(self,s,x,y,size=52,color=DARK,width=12.6):
-        return self.eq(s,(x,y),size,color,width)
+        item=self.math(s,size,color)
+        item.move_to([x,y,0])
+        self.register(item)
+        return self.fit_to_safe_area(item,width)
 
     def watch(self,seconds=4.2):
         """Real reading/observation pause; never claim the source dictates seconds."""
