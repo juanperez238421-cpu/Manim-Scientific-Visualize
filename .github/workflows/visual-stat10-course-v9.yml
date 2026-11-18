@@ -1,0 +1,22 @@
+name: Statistics10 V9 Final Encoded Video Visual Inspection
+on:
+  push:
+    branches: [manim/stat10-2027-course-intro-v9]
+    paths: [.github/workflows/visual-stat10-course-v9.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  visual-qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Expose actual encoded MP4 frame contact sheet for expert review
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s qa_course_intro_v9/ENCODED_CONTACT_SHEET.jpg
+          echo "START_STAT10_V9_CONTACT_B64"
+          base64 -w0 qa_course_intro_v9/ENCODED_CONTACT_SHEET.jpg
+          echo
+          echo "END_STAT10_V9_CONTACT_B64"
