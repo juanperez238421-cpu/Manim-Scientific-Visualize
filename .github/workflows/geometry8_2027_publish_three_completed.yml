@@ -24,23 +24,30 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: verified
           merge-multiple: true
+      - name: Flatten validated files inside nested Actions ZIP paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p flat
+          find verified -type f \( -name '*.mp4' -o -name '*_contact.jpg' -o -name '*-STATUS.txt' -o -name '*-QA.tsv' -o -name '*-SHA256SUMS.txt' -o -name '*_FRAME_METRICS.csv' \) -exec cp -n {} flat/ \;
+          test "$(find flat -maxdepth 1 -type f -name '*.mp4' | wc -l)" -eq 3
       - name: Publish actual completed MP4s, contact sheets and checksums
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p published_renders
           for slug in W02C02 W03C01 W04C01; do
-            test -s "verified/$slug-STATUS.txt"
-            grep -q '^PASS:' "verified/$slug-STATUS.txt"
-            f=$(awk 'NR==1 {print $2}' "verified/$slug-SHA256SUMS.txt" | xargs basename)
-            sha=$(awk 'NR==1 {print $1}' "verified/$slug-SHA256SUMS.txt")
-            test -s "verified/$f"
-            got=$(sha256sum "verified/$f" | awk '{print $1}')
+            test -s "flat/$slug-STATUS.txt"
+            grep -q '^PASS:' "flat/$slug-STATUS.txt"
+            f=$(awk 'NR==1 {print $2}' "flat/$slug-SHA256SUMS.txt" | xargs basename)
+            sha=$(awk 'NR==1 {print $1}' "flat/$slug-SHA256SUMS.txt")
+            test -s "flat/$f"
+            got=$(sha256sum "flat/$f" | awk '{print $1}')
             test "$got" = "$sha"
-            cp "verified/$f" published_renders/
-            cp "verified/$slug""_contact.jpg" "published_renders/$slug""_contact.jpg"
-            cp "verified/$slug-QA.tsv" "published_renders/$slug-QA.tsv"
-            cp "verified/$slug""_FRAME_METRICS.csv" "published_renders/$slug""_FRAME_METRICS.csv"
+            cp "flat/$f" published_renders/
+            cp "flat/$slug""_contact.jpg" "published_renders/$slug""_contact.jpg"
+            cp "flat/$slug-QA.tsv" "published_renders/$slug-QA.tsv"
+            cp "flat/$slug""_FRAME_METRICS.csv" "published_renders/$slug""_FRAME_METRICS.csv"
             echo "VERIFIED $f $sha"
           done
           git config user.name "github-actions[bot]"
