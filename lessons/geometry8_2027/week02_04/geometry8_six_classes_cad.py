@@ -309,9 +309,9 @@ class Geometry8W02_Class02_SpatialReasoning(Geometry8WeekCAD):
         self.show(base,pivot,seconds=1.5)
         self.play(Rotate(pivot,angle=20*DEGREES,about_point=c),
                   run_time=2.1,rate_func=smooth)
-        self.phrase("THE LINES STILL INTERSECT",3.04,.42,32,SKETCH,5.65,True)
-        self.phrase("ONLY 90 DEGREES IS PERPENDICULAR",3.04,-.47,
-                    29,POSITIVE,5.7,True)
+        self.phrase("THE LINES STILL INTERSECT",3.62,.66,28,SKETCH,4.72,True)
+        self.phrase("ONLY 90 DEGREES IS PERPENDICULAR",3.62,-.89,
+                    25,POSITIVE,4.78,True)
         self.callout("One meeting point is insufficient evidence of perpendicularity.",5.3)
 
     def coincidence_check(self):
@@ -323,6 +323,7 @@ class Geometry8W02_Class02_SpatialReasoning(Geometry8WeekCAD):
         label=self.phrase("SEPARATE PARALLEL LINES",0,-1.90,32,MID,10,True)
         self.watch(1.4)
         self.play(line2.animate.shift(UP*1.2),run_time=2.5,rate_func=smooth)
+        self.play(FadeOut(label),run_time=.48)
         same=self.phrase("NOW THEY ARE COINCIDENT",0,-1.90,
                          33,POSITIVE,10.3,True)
         self.callout("A single infinitely long set of points may have two labels.",5.4)
@@ -340,8 +341,9 @@ class Geometry8W02_Class02_SpatialReasoning(Geometry8WeekCAD):
         pierce=Line(point(3.12,-1.58),point(3.12,.95),
                     color=SKETCH,stroke_width=5)
         self.show(contained,pierce,seconds=1.68)
-        self.play(FadeIn(Dot(point(3.12,-.20),radius=.17,color=NEGATIVE)),
-                  run_time=.60)
+        cross_dot=Dot(point(3.12,-.20),radius=.17,color=NEGATIVE)
+        self.play(FadeIn(cross_dot),run_time=.60)
+        self.register(cross_dot)
         self.phrase("CONTAINED IN PLANE", -3.15,-2.04,28,POSITIVE,5.9,True)
         self.phrase("INTERSECTS AT A POINT",3.10,-2.04,27,SKETCH,5.6,True)
         self.callout("These are schematic 2D views of distinct spatial relationships.",4.7)
@@ -510,9 +512,10 @@ class Geometry8W03_Class02_Constructions(Geometry8WeekCAD):
             self.show(arc,seconds=.72)
         top=point(M[0],M[1]+1.5)
         bot=point(M[0],M[1]-1.5)
-        self.play(FadeIn(Dot(top,radius=.15,color=POSITIVE)),
-                  FadeIn(Dot(bot,radius=.15,color=POSITIVE)),
-                  run_time=.62)
+        top_dot=Dot(top,radius=.15,color=POSITIVE)
+        bot_dot=Dot(bot,radius=.15,color=POSITIVE)
+        self.play(FadeIn(top_dot),FadeIn(bot_dot),run_time=.62)
+        self.register(top_dot,bot_dot)
         bis=Line(top,bot,color=POSITIVE,stroke_width=5)
         self.show(bis,seconds=1.7)
         mark=Square(side_length=.30,color=POSITIVE,
@@ -594,7 +597,9 @@ class Geometry8W04_Class01_Angles(Geometry8WeekCAD):
         one=Arrow(B,A,buff=0,stroke_width=4.7,color=DARK)
         two=Arrow(B,C,buff=0,stroke_width=4.7,color=SKETCH)
         self.show(one,two,seconds=1.85)
-        self.play(FadeIn(Dot(B,radius=.16,color=POSITIVE)),run_time=.47)
+        vertex_dot=Dot(B,radius=.16,color=POSITIVE)
+        self.play(FadeIn(vertex_dot),run_time=.47)
+        self.register(vertex_dot)
         for pt,label,dx,dy in ((B,"B",-.30,-.29),
                                (A,"A",.26,-.13),(C,"C",.18,.30)):
             self.phrase(label,pt[0]+dx,pt[1]+dy,28,SKETCH,1,True)
