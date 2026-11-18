@@ -1,0 +1,66 @@
+name: Package Statistics10 V7 Four Native MP4s into ZIP
+on:
+  push:
+    branches: [manim/stat10-2027-advanced-examples-v7]
+    paths:
+      - .github/workflows/package-stat10-v7-four-mp4.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify exact four published videos
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum -c qa_v7/SHA256SUMS.txt
+          SOURCE=published_renders/stat10_2027_advanced_v7
+          for WEEK in 1 2 3 4; do
+            F="$SOURCE/Statistics10_2027_Week$WEEK""_Advanced_Example_V7_NATIVE_PQH.mp4"
+            test -s "$F"
+            printf 'Week %s: %s bytes\n' "$WEEK" "$(stat -c%s "$F")"
+          done
+      - name: Build one ZIP containing only four MP4s
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v zip
+          command -v unzip
+          mkdir -p deliverables
+          OUT=deliverables/Statistics10_2027_Weeks1-4_Advanced_V7_Four_ManimCE_Videos.zip
+          rm -f "$OUT"
+          SOURCE=published_renders/stat10_2027_advanced_v7
+          zip -0 -j "$OUT" \
+            "$SOURCE/Statistics10_2027_Week1_Advanced_Example_V7_NATIVE_PQH.mp4" \
+            "$SOURCE/Statistics10_2027_Week2_Advanced_Example_V7_NATIVE_PQH.mp4" \
+            "$SOURCE/Statistics10_2027_Week3_Advanced_Example_V7_NATIVE_PQH.mp4" \
+            "$SOURCE/Statistics10_2027_Week4_Advanced_Example_V7_NATIVE_PQH.mp4"
+          unzip -t "$OUT"
+          test "$(unzip -Z1 "$OUT" | wc -l)" -eq 4
+          test "$(unzip -Z1 "$OUT" | grep -cE '\.mp4$')" -eq 4
+          test "$(stat -c%s "$OUT")" -gt 12000000
+          sha256sum "$OUT" | tee deliverables/Statistics10_2027_Weeks1-4_Advanced_V7_Four_ManimCE_Videos.zip.sha256
+          ls -lh "$OUT"
+      - name: Publish ZIP on GitHub branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deliverables/Statistics10_2027_Weeks1-4_Advanced_V7_Four_ManimCE_Videos.zip*
+          git commit -m "deliver: one ZIP with four verified native Statistics10 V7 MP4s [skip ci]"
+          git fetch origin manim/stat10-2027-advanced-examples-v7
+          git rebase origin/manim/stat10-2027-advanced-examples-v7
+          git push origin HEAD:manim/stat10-2027-advanced-examples-v7
+      - name: Upload ZIP as GitHub Actions artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Statistics10_2027_V7_Four_Videos_ZIP
+          path: deliverables/Statistics10_2027_Weeks1-4_Advanced_V7_Four_ManimCE_Videos.zip
+          retention-days: 30
