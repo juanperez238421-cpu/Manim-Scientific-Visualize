@@ -4,6 +4,9 @@ IJR Statistics 10 Week 4, 8-12 February 2027.
 NO frequency tables, histograms or statistical frequency plots are introduced.
 Run: manim -qh stat10_week4_guided_v8.py Stat10Week4GuidedV8
 """
+import sys
+from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parent))
 from stat10_guided_v8_common import *
 
 DEVICE_COUNTS=(2,0,1,3,1,2)
