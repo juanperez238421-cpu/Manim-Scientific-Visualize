@@ -1,0 +1,82 @@
+name: Native Statistics 10 Q1 W01-W04 ManimCE V6
+on:
+  push:
+    branches: [manim/stat10-w1-w4-latex-native-v6-2027]
+    paths:
+      - render_jobs/stat10_2027_native_v6/statistics10_latex_v6.py
+      - .github/workflows/stat10_2027_v6_native.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  native-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Python source
+        run: |
+          python -m py_compile render_jobs/stat10_2027_native_v6/statistics10_latex_v6.py
+          grep -q 'class Statistics10Week4V6' render_jobs/stat10_2027_native_v6/statistics10_latex_v6.py
+      - name: Pull native ManimCE 0.20.1 Docker image
+        run: docker pull manimcommunity/manim:v0.20.1
+      - name: Real native PQL smoke tests for all four weeks
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/stat10_2027_native_v6/statistics10_latex_v6.py
+          mkdir -p qa_native
+          for WEEK in 1 2 3 4; do
+            SCENE="Statistics10Week$WEEK""V6"
+            docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/manim" -w /manim --entrypoint manim \
+              manimcommunity/manim:v0.20.1 \
+              -ql "$SRC" "$SCENE" --fps 15 -n 0,1 --media_dir media_low --disable_caching \
+              2>&1 | tee "qa_native/pql_week$WEEK.log"
+            test -s "$(find media_low -type f -name "$SCENE.mp4" | head -1)"
+          done
+      - name: Native high-quality ManimCE render for all four weeks
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/stat10_2027_native_v6/statistics10_latex_v6.py
+          mkdir -p qa_native published_renders/stat10_2027_native_v6
+          for WEEK in 1 2 3 4; do
+            SCENE="Statistics10Week$WEEK""V6"
+            docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/manim" -w /manim --entrypoint manim \
+              manimcommunity/manim:v0.20.1 \
+              -qh "$SRC" "$SCENE" --fps 30 --media_dir media_high --disable_caching \
+              2>&1 | tee "qa_native/pqh_week$WEEK.log"
+            FILE="$(find media_high -type f -name "$SCENE.mp4" | head -1)"
+            test -n "$FILE" && test -s "$FILE"
+            OUT="published_renders/stat10_2027_native_v6/Stat10_2027_Week$WEEK""_Native_ManimCE_PQH_V6.mp4"
+            ffmpeg -y -v error -i "$FILE" -c:v libx264 -pix_fmt yuv420p -crf 18 -an "$OUT"
+            ffmpeg -v error -i "$OUT" -f null - 2> "qa_native/decode_week$WEEK.log"
+            WIDTH="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$OUT")"
+            HEIGHT="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$OUT")"
+            test "$WIDTH" = 1920 && test "$HEIGHT" = 1080
+            sha256sum "$OUT" >> qa_native/SHA256SUMS.txt
+          done
+      - name: Persist validated native MP4s
+        shell: bash
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/stat10_2027_native_v6 qa_native
+          if ! git diff --cached --quiet; then
+            git commit -m "render: real ManimCE 0.20.1 W1-W4 native LaTeX PQH videos [skip ci]"
+            git push origin HEAD:manim/stat10-w1-w4-latex-native-v6-2027
+          fi
+      - name: Upload verified MP4 artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: statistics10-week1-week4-native-v6
+          path: |
+            published_renders/stat10_2027_native_v6/
+            qa_native/
+          retention-days: 30
+          if-no-files-found: warn
