@@ -4,6 +4,9 @@ Statistical variable meaning, anonymized observational records and ambiguous cas
 IJR Statistics 10 Week 3, 1-5 February 2027.
 Run: manim -qh stat10_week3_guided_v8.py Stat10Week3GuidedV8
 """
+import sys
+from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parent))
 from stat10_guided_v8_common import *
 
 RECORDS=[
