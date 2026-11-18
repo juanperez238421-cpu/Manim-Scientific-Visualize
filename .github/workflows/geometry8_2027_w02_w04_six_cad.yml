@@ -1,0 +1,145 @@
+name: Geometry8 2027 Weeks02-04 Six CAD Classroom Videos PQH
+
+on:
+  push:
+    branches: [geometry8-2027-p1-weeks02-04-six-videos-cad]
+    paths:
+      - '.github/workflows/geometry8_2027_w02_w04_six_cad.yml'
+      - 'lessons/geometry8_2027/weeks02_04/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render-all:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Validate Python source and original crest
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check Pillow
+          python -m py_compile lessons/geometry8_2027/weeks02_04/{cad_six_classes,qa_frames}.py
+          python - <<'PY'
+          import ast
+          from PIL import Image
+          p='lessons/geometry8_2027/weeks02_04/cad_six_classes.py'
+          root=ast.parse(open(p,encoding='utf-8').read())
+          classes={o.name for o in root.body if isinstance(o,ast.ClassDef)}
+          names={'Geometry8W02_Class01','Geometry8W02_Class02','Geometry8W03_Class01','Geometry8W03_Class02','Geometry8W04_Class01','Geometry8W04_Class02'}
+          assert names<=classes
+          im=Image.open('lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png')
+          assert im.format=='PNG' and min(im.size)>150
+          im.verify()
+          print("PASS: 6 scenes, original IJR PNG")
+          PY
+      - name: Install pinned ManimCE Docker and FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1
+      - name: Mandatory PQL all six complete scenes
+        shell: bash
+        run: |
+          set -euo pipefail
+          for scene in Geometry8W02_Class01 Geometry8W02_Class02 Geometry8W03_Class01 Geometry8W03_Class02 Geometry8W04_Class01 Geometry8W04_Class02; do
+            echo "PQL $scene"
+            docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manimhome -e SCENE="$scene" \
+              -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+                set -euo pipefail
+                mkdir -p /tmp/manimhome /tmp/manim-bin
+                printf "#!/bin/sh\nexit 0\n" > /tmp/manim-bin/xdg-open
+                chmod +x /tmp/manim-bin/xdg-open
+                export PATH="/tmp/manim-bin:$PATH"
+                manim -pql lessons/geometry8_2027/weeks02_04/cad_six_classes.py "$SCENE" --media_dir cad_pql --format mp4 --disable_caching
+              ' > "PQL_$scene.log" 2>&1 || { tail -90 "PQL_$scene.log"; exit 1; }
+            test -s "$(find cad_pql -name "$scene.mp4" -print -quit)"
+          done
+      - name: Full HD 30 FPS PQH all six complete scenes
+        shell: bash
+        run: |
+          set -euo pipefail
+          for scene in Geometry8W02_Class01 Geometry8W02_Class02 Geometry8W03_Class01 Geometry8W03_Class02 Geometry8W04_Class01 Geometry8W04_Class02; do
+            echo "PQH $scene"
+            docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manimhome -e SCENE="$scene" \
+              -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+                set -euo pipefail
+                mkdir -p /tmp/manimhome /tmp/manim-bin
+                printf "#!/bin/sh\nexit 0\n" > /tmp/manim-bin/xdg-open
+                chmod +x /tmp/manim-bin/xdg-open
+                export PATH="/tmp/manim-bin:$PATH"
+                manim -pqh lessons/geometry8_2027/weeks02_04/cad_six_classes.py "$SCENE" --fps 30 --media_dir cad_pqh --format mp4 --disable_caching
+              ' > "PQH_$scene.log" 2>&1 || { tail -90 "PQH_$scene.log"; exit 1; }
+            test -s "$(find cad_pqh -name "$scene.mp4" -print -quit)"
+          done
+      - name: FFprobe full decoding and 54 actual frame checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p delivery
+          printf 'file\tcodec\twidth\theight\tfps\tpixfmt\tduration\n' > delivery/VIDEO_QA.tsv
+          for scene in Geometry8W02_Class01 Geometry8W02_Class02 Geometry8W03_Class01 Geometry8W03_Class02 Geometry8W04_Class01 Geometry8W04_Class02; do
+            label=$(echo "$scene" | sed 's/Geometry8//')
+            mkdir -p "delivery/$label/frames"
+            src=$(find cad_pqh -name "$scene.mp4" -print -quit)
+            mp4="Geometry8_2027_$label""_CAD_FINAL_pqh.mp4"
+            cp "$src" "delivery/$mp4"
+            codec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$src")
+            w=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$src")
+            h=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$src")
+            fps=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$src")
+            pix=$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$src")
+            dur=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$src")
+            test "$codec" = h264; test "$w" = 1920; test "$h" = 1080
+            test "$fps" = 30/1; test "$pix" = yuv420p
+            python -c "import sys;assert float(sys.argv[1])>55" "$dur"
+            ffmpeg -nostdin -loglevel error -i "$src" -f null -
+            count=0
+            for fraction in 0.05 0.16 0.27 0.38 0.49 0.60 0.71 0.82 0.94; do
+              count=$((count+1))
+              index=$(printf '%02d' "$count")
+              at=$(python -c "print(float('$dur')*float('$fraction'))")
+              ffmpeg -nostdin -loglevel error -ss "$at" -i "$src" -frames:v 1 "delivery/$label/frames/frame$index.png"
+            done
+            python lessons/geometry8_2027/weeks02_04/qa_frames.py "delivery/$label/frames" "delivery/$label" "$scene"
+            sha256sum "delivery/$mp4" >> delivery/SHA256SUMS.txt
+            printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$mp4" "$codec" "$w" "$h" "$fps" "$pix" "$dur" >> delivery/VIDEO_QA.tsv
+          done
+          test "$(find delivery -maxdepth 1 -name '*CAD_FINAL_pqh.mp4' | wc -l)" -eq 6
+          echo "PASS six PQL, six PQH, six full decodes, 54 original 1080p frame samples" > delivery/STATUS.txt
+      - name: Preserve all videos and QA original frames
+        uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8_2027_Weeks02_04_SIX_PQH_VIDEOS
+          path: |
+            delivery/*.mp4
+            delivery/*.tsv
+            delivery/*.txt
+            delivery/*/contact.jpg
+            delivery/*/frame_metrics.csv
+            delivery/*/frames/*.png
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish six direct GitHub MP4 links
+        run: |
+          set -euo pipefail
+          mkdir -p published_renders/Geometry8_2027_Weeks02_04
+          cp delivery/*CAD_FINAL_pqh.mp4 published_renders/Geometry8_2027_Weeks02_04/
+          cp delivery/VIDEO_QA.tsv delivery/SHA256SUMS.txt delivery/STATUS.txt published_renders/Geometry8_2027_Weeks02_04/
+          for label in W02_Class01 W02_Class02 W03_Class01 W03_Class02 W04_Class01 W04_Class02; do
+            cp "delivery/$label/contact.jpg" "published_renders/Geometry8_2027_Weeks02_04/$label""_contact.jpg"
+          done
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/Geometry8_2027_Weeks02_04
+          git diff --cached --quiet || git commit -m "publish six Geometry8 Week02-04 final real MP4s and QA [skip ci]"
+          git fetch origin geometry8-2027-p1-weeks02-04-six-videos-cad
+          git merge --no-edit -X ours origin/geometry8-2027-p1-weeks02-04-six-videos-cad
+          git push origin HEAD:geometry8-2027-p1-weeks02-04-six-videos-cad
+          echo "SIX verified MP4s committed to published_renders/Geometry8_2027_Weeks02_04" >> "$GITHUB_STEP_SUMMARY"
