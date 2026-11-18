@@ -1,4 +1,5 @@
-week=1920 width=1080 height=30/1 fps=h264 codec=yuv420p pix=88.733333 duration=
-week=1920 width=1080 height=30/1 fps=h264 codec=yuv420p pix=81.000000 duration=
-week=1920 width=1080 height=30/1 fps=h264 codec=yuv420p pix=82.933333 duration=
-week=1920 width=1080 height=30/1 fps=h264 codec=yuv420p pix=98.733333 duration=
+week,width,height,fps,codec,pix_fmt,duration_seconds
+1,1920,1080,30/1,h264,yuv420p,88.733333
+2,1920,1080,30/1,h264,yuv420p,81.000000
+3,1920,1080,30/1,h264,yuv420p,82.933333
+4,1920,1080,30/1,h264,yuv420p,98.733333
