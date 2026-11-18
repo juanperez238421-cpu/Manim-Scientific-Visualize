@@ -422,7 +422,9 @@ class Geometry8_YearOpeningV5(Geometry8W01_Period1RoadmapV4):
         tetra.set_fill(color=SLAB,opacity=.67)
         tetra.set_stroke(color=SKETCH,width=2.7)
         tetra.move_to(cube.get_center())
-        self.play(ReplacementTransform(cube,tetra),run_time=2.0)
+        # Polyhedral meshes have different face topology/point counts.
+        # Crossfade avoids invalid point-array interpolation (Manim 0.20.1).
+        self.play(FadeOut(cube),FadeIn(tetra),run_time=2.0)
         self.register(tetra)
         self.play(Rotate(tetra,angle=PI*1.14,axis=UP,
                          about_point=tetra.get_center()),run_time=3.65,
