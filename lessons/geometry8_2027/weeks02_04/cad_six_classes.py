@@ -354,25 +354,25 @@ class Geometry8W03_Class02(CADGeometry8):
     def bisector(self):
         self.panel(1,"CONSTRUCT / BISECT","PERPENDICULAR BISECTOR OF AB",
                    "Two equal-radius pairs of arcs locate points equidistant from A and B.")
-        A=np.array([-2.50,-.62,0]);B=np.array([2.50,-.62,0])
+        A=np.array([-2.00,0,0]);B=np.array([2.00,0,0])
         L=Line(A,B,color=DARK,stroke_width=4.7)
         self.trace(L,run=1.35)
         self.show(Dot(A,radius=.13,color=SKETCH),Dot(B,radius=.13,color=SKETCH),run=.6)
-        self.appearance(self.t("A",-2.78,-1.01,30,DARK,1,True),
-             self.t("B",2.78,-1.01,30,DARK,1,True),time=.6)
-        # r=3.13 > 2.5 = half the segment; arc intersections y=±1.88
-        radius=3.13
-        h=np.sqrt(radius**2-2.5**2)
-        top=np.array([0,-.62+h,0]);bottom=np.array([0,-.62-h,0])
+        self.appearance(self.t("A",-2.28,-.37,30,DARK,1,True),
+             self.t("B",2.28,-.37,30,DARK,1,True),time=.6)
+        # r=2.3 > half AB=2.0; both intersection points are on screen:
+        # C=(0,+sqrt(2.3²-2²)), D=(0,-sqrt(2.3²-2²)).
+        radius=2.30
+        h=np.sqrt(radius**2-2.0**2)
         arcs=[]
         for c in (A,B):
-            arcs.append(Arc(radius=radius,start_angle=0,angle=TAU,
-                   arc_center=c,color=SKETCH,stroke_width=2.2))
-        # Draw 2 whole circles as simplified construction traces.
+            arcs.append(Circle(radius=radius,color=SKETCH,stroke_width=2.2).move_to(c))
         self.trace(*arcs,run=2.2)
-        mid=Line([0,-2.38,0],[0,1.70,0],color=POSITIVE,stroke_width=5)
+        self.show(Dot([0,h,0],radius=.12,color=POSITIVE),
+                  Dot([0,-h,0],radius=.12,color=POSITIVE),run=.6)
+        mid=Line([0,-2.15,0],[0,2.15,0],color=POSITIVE,stroke_width=5)
         self.trace(mid,run=1.7)
-        square=Square(side_length=.35,color=POSITIVE,stroke_width=2).move_to([.175,-.445,0])
+        square=Square(side_length=.35,color=POSITIVE,stroke_width=2).move_to([.175,.175,0])
         self.trace(square,run=.65)
         self.caption("The perpendicular bisector passes through midpoint M of segment AB.")
         self.wait(5.1)
