@@ -1,0 +1,71 @@
+Manim Community v0.20.1
+
+[11/18/26 02:43:20] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{STA                        
+                             TISTICS 10  /  2027  /                             
+                             PERIOD I  /  WEEK                                  
+                             01}\special{dvisvgm:raw                            
+                             </g>} to                                           
+                             media_low/Tex/c2a644bf36d7e                        
+                             6f4.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{WEE                        
+                             K 1: INTRODUCTION TO                               
+                             STATISTICS}\special{dvisvgm                        
+                             :raw </g>} to                                      
+                             media_low/Tex/a8afe510c9574                        
+                             1c9.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}19--22                             
+                             January 2027 | What is a                           
+                             statistical                                        
+                             question?\special{dvisvgm:r                        
+                             aw </g>} to                                        
+                             media_low/Tex/68ee90c86c121                        
+                             e8a.tex                                            
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{00}                        
+                             \special{dvisvgm:raw </g>}                         
+                             to                                                 
+                             media_low/Tex/2420c2e27d655                        
+                             beb.tex                                            
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 01}')), etc.:   0%|          | 0/28 [00:00<?, ?it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 01}')), etc.:  18%|█▊        | 5/28 [00:00<00:00, 43.66it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 01}')), etc.:  36%|███▌      | 10/28 [00:00<00:00, 45.33it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 01}')), etc.:  57%|█████▋    | 16/28 [00:00<00:00, 48.73it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 01}')), etc.:  79%|███████▊  | 22/28 [00:00<00:00, 51.10it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 01}')), etc.: 100%|██████████| 28/28 [00:00<00:00, 52.57it/s]                                                                                                                                            [11/18/26 02:43:21] INFO     Animation 0 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_low/videos/s                         
+                             tatistics10_latex_v6/1080p                         
+                             30/partial_movie_files/Sta                         
+                             tistics10Week1V6/uncached_                         
+                             00000.mp4'                                         
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\mathrm{DAT                        
+                             A}\longrightarrow\mathrm{EV                        
+                             IDENCE}\special{dvisvgm:raw                        
+                              </g>} to                                          
+                             media_low/Tex/065fedb3038df                        
+                             8d2.tex                                            
+[11/18/26 02:43:22] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 1: Write(MathTex('\\mathrm{DATA}\\longrightarrow\\mathrm{EVIDENCE}')):   0%|          | 0/63 [00:00<?, ?it/s]Animation 1: Write(MathTex('\\mathrm{DATA}\\longrightarrow\\mathrm{EVIDENCE}')):  29%|██▊       | 18/63 [00:00<00:00, 174.00it/s]Animation 1: Write(MathTex('\\mathrm{DATA}\\longrightarrow\\mathrm{EVIDENCE}')):  57%|█████▋    | 36/63 [00:00<00:00, 166.91it/s]Animation 1: Write(MathTex('\\mathrm{DATA}\\longrightarrow\\mathrm{EVIDENCE}')):  84%|████████▍ | 53/63 [00:00<00:00, 151.35it/s]                                                                                                                                                     INFO     Animation 1 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_low/videos/s                         
+                             tatistics10_latex_v6/1080p                         
+                             30/partial_movie_files/Sta                         
+                             tistics10Week1V6/uncached_                         
+                             00001.mp4'                                         
+                    INFO     Combining to Movie file.   scene_file_writer.py:753
+                    INFO                                scene_file_writer.py:904
+                             File ready at                                      
+                             '/manim/media_low/videos/s                         
+                             tatistics10_latex_v6/1080p                         
+                             30/Statistics10Week1V6.mp4                         
+                             '                                                  
+                                                                                
+                    INFO     Rendered Statistics10Week1V6           scene.py:278
+                             Played 2 animations                                
+You are using manim version v0.20.1, but version v0.22.1 is available.
+You should consider upgrading via pip install -U manim

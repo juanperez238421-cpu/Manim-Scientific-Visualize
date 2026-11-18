@@ -1,0 +1,657 @@
+Manim Community v0.20.1
+
+[11/18/26 02:46:57] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{STA                        
+                             TISTICS 10  /  2027  /                             
+                             PERIOD I  /  WEEK                                  
+                             04}\special{dvisvgm:raw                            
+                             </g>} to                                           
+                             media_high/Tex/a46ad6984663                        
+                             8818.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{WEE                        
+                             K 4: COUNTING OR                                   
+                             MEASURING?}\special{dvisvgm                        
+                             :raw </g>} to                                      
+                             media_high/Tex/d9339d0e4aa9                        
+                             f88d.tex                                           
+[11/18/26 02:46:58] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}8--12                              
+                             February 2027 | Discrete                           
+                             and                                                
+                             continuous\special{dvisvgm:                        
+                             raw </g>} to                                       
+                             media_high/Tex/ca8e7984e69e                        
+                             6ff6.tex                                           
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/28 [00:00<?, ?it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  18%|█▊        | 5/28 [00:00<00:00, 43.15it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  39%|███▉      | 11/28 [00:00<00:00, 50.94it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  61%|██████    | 17/28 [00:00<00:00, 52.53it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  82%|████████▏ | 23/28 [00:00<00:00, 54.45it/s]                                                                                                                                            [11/18/26 02:46:59] INFO     Animation 0 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00000.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 1: Write(MathTex('\\mathrm{DATA}\\longrightarrow\\mathrm{EVIDENCE}')):   0%|          | 0/63 [00:00<?, ?it/s]Animation 1: Write(MathTex('\\mathrm{DATA}\\longrightarrow\\mathrm{EVIDENCE}')):  29%|██▊       | 18/63 [00:00<00:00, 170.42it/s]Animation 1: Write(MathTex('\\mathrm{DATA}\\longrightarrow\\mathrm{EVIDENCE}')):  57%|█████▋    | 36/63 [00:00<00:00, 164.90it/s]Animation 1: Write(MathTex('\\mathrm{DATA}\\longrightarrow\\mathrm{EVIDENCE}')):  84%|████████▍ | 53/63 [00:00<00:00, 153.14it/s]                                                                                                                                 [11/18/26 02:47:00] INFO     Animation 1 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00001.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 2: Create(Line):   0%|          | 0/23 [00:00<?, ?it/s]                                                                                     INFO     Animation 2 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00002.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[11/18/26 02:47:01] INFO     Animation 3 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00003.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 4: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 4: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  40%|████      | 6/15 [00:00<00:00, 52.16it/s]Animation 4: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  80%|████████  | 12/15 [00:00<00:00, 52.32it/s]                                                                                                                                                                 INFO     Animation 4 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00004.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{FIR                        
+                             ST: WHAT KIND OF                                   
+                             VARIABLE?}\special{dvisvgm:                        
+                             raw </g>} to                                       
+                             media_high/Tex/eccc471e2939                        
+                             d408.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}Quantitativ                        
+                             e variables can represent                          
+                             counts or                                          
+                             measurements.\special{dvisv                        
+                             gm:raw </g>} to                                    
+                             media_high/Tex/922bef387f87                        
+                             df84.tex                                           
+[11/18/26 02:47:02] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 5: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/28 [00:00<?, ?it/s]Animation 5: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  21%|██▏       | 6/28 [00:00<00:00, 53.90it/s]Animation 5: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  43%|████▎     | 12/28 [00:00<00:00, 54.20it/s]Animation 5: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  64%|██████▍   | 18/28 [00:00<00:00, 50.85it/s]Animation 5: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  86%|████████▌ | 24/28 [00:00<00:00, 49.46it/s]                                                                                                                                            [11/18/26 02:47:03] INFO     Animation 5 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00005.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\text{Quant                        
+                             itative}\longrightarrow\beg                        
+                             in{cases}\text{Discrete}\\                         
+                             \text{Continuous}\end{cases                        
+                             }\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_high/Tex/c82fe2e19819                        
+                             67bf.tex                                           
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 6: Write(MathTex('\\text{Quantitative}\\longrightarrow\\begin{cases}\\text{Discrete}\\\\ \\text{Continuous}\\end{cases}')):   0%|          | 0/102 [00:00<?, ?it/s]Animation 6: Write(MathTex('\\text{Quantitative}\\longrightarrow\\begin{cases}\\text{Discrete}\\\\ \\text{Continuous}\\end{cases}')):  17%|█▋        | 17/102 [00:00<00:00, 167.49it/s]Animation 6: Write(MathTex('\\text{Quantitative}\\longrightarrow\\begin{cases}\\text{Discrete}\\\\ \\text{Continuous}\\end{cases}')):  33%|███▎      | 34/102 [00:00<00:00, 157.12it/s]Animation 6: Write(MathTex('\\text{Quantitative}\\longrightarrow\\begin{cases}\\text{Discrete}\\\\ \\text{Continuous}\\end{cases}')):  49%|████▉     | 50/102 [00:00<00:00, 147.10it/s]Animation 6: Write(MathTex('\\text{Quantitative}\\longrightarrow\\begin{cases}\\text{Discrete}\\\\ \\text{Continuous}\\end{cases}')):  64%|██████▎   | 65/102 [00:00<00:00, 130.35it/s]Animation 6: Write(MathTex('\\text{Quantitative}\\longrightarrow\\begin{cases}\\text{Discrete}\\\\ \\text{Continuous}\\end{cases}')):  77%|███████▋  | 79/102 [00:00<00:00, 118.65it/s]Animation 6: Write(MathTex('\\text{Quantitative}\\longrightarrow\\begin{cases}\\text{Discrete}\\\\ \\text{Continuous}\\end{cases}')):  90%|█████████ | 92/102 [00:00<00:00, 111.07it/s]                                                                                                                                                                                       [11/18/26 02:47:04] INFO     Animation 6 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00006.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[11/18/26 02:47:05] INFO     Animation 7 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00007.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 8: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 8: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  33%|███▎      | 5/15 [00:00<00:00, 43.03it/s]Animation 8: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 42.25it/s]Animation 8: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.: 100%|██████████| 15/15 [00:00<00:00, 42.33it/s]                                                                                                                                                                 INFO     Animation 8 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00008.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{DIS                        
+                             CRETE: COUNT THE                                   
+                             OBJECTS}\special{dvisvgm:ra                        
+                             w </g>} to                                         
+                             media_high/Tex/c4c25ef2ad2b                        
+                             203b.tex                                           
+[11/18/26 02:47:06] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}A count                            
+                             takes separated possible                           
+                             values.\special{dvisvgm:raw                        
+                             </g>} to                                           
+                             media_high/Tex/9b222fc270df                        
+                             a00d.tex                                           
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 9: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/28 [00:00<?, ?it/s]Animation 9: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  25%|██▌       | 7/28 [00:00<00:00, 65.59it/s]Animation 9: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  50%|█████     | 14/28 [00:00<00:00, 64.39it/s]Animation 9: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  75%|███████▌  | 21/28 [00:00<00:00, 64.08it/s]Animation 9: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.: 100%|██████████| 28/28 [00:00<00:00, 61.83it/s]                                                                                                                                            [11/18/26 02:47:07] INFO     Animation 9 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00009.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 10: LaggedStart(Group):   0%|          | 0/75 [00:00<?, ?it/s]Animation 10: LaggedStart(Group):  48%|████▊     | 36/75 [00:00<00:00, 346.46it/s]Animation 10: LaggedStart(Group):  95%|█████████▍| 71/75 [00:00<00:00, 336.87it/s]                                                                                                      INFO     Animation 10 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00010.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}x\in\{0,1,2                        
+                             ,3,\ldots\}\special{dvisvgm                        
+                             :raw </g>} to                                      
+                             media_high/Tex/9fea46624861                        
+                             d62f.tex                                           
+[11/18/26 02:47:08] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 11: Write(MathTex('x\\in\\{0,1,2,3,\\ldots\\}')):   0%|          | 0/60 [00:00<?, ?it/s]Animation 11: Write(MathTex('x\\in\\{0,1,2,3,\\ldots\\}')):  40%|████      | 24/60 [00:00<00:00, 231.94it/s]Animation 11: Write(MathTex('x\\in\\{0,1,2,3,\\ldots\\}')):  80%|████████  | 48/60 [00:00<00:00, 206.34it/s]                                                                                                                                INFO     Animation 11 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00011.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[11/18/26 02:47:09] INFO     Animation 12 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00012.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 13: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 13: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  40%|████      | 6/15 [00:00<00:00, 54.36it/s]Animation 13: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  80%|████████  | 12/15 [00:00<00:00, 54.14it/s]                                                                                                                                              [11/18/26 02:47:10] INFO     Animation 13 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00013.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{CON                        
+                             TINUOUS: MEASURE A                                 
+                             QUANTITY}\special{dvisvgm:r                        
+                             aw </g>} to                                        
+                             media_high/Tex/311d73850add                        
+                             44c1.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}Travel time                        
+                             can vary between two                               
+                             recorded                                           
+                             numbers.\special{dvisvgm:ra                        
+                             w </g>} to                                         
+                             media_high/Tex/b796a8b83be8                        
+                             42cc.tex                                           
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 14: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/28 [00:00<?, ?it/s]Animation 14: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  21%|██▏       | 6/28 [00:00<00:00, 54.60it/s]Animation 14: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  43%|████▎     | 12/28 [00:00<00:00, 50.79it/s]Animation 14: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  64%|██████▍   | 18/28 [00:00<00:00, 52.03it/s]Animation 14: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  86%|████████▌ | 24/28 [00:00<00:00, 53.79it/s]                                                                                                                                             [11/18/26 02:47:11] INFO     Animation 14 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00014.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}7\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_high/Tex/9babf744f1d8                        
+                             badf.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}8\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_high/Tex/2f8240ddc5f2                        
+                             7b7f.tex                                           
+[11/18/26 02:47:12] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}9\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_high/Tex/f7c8a5ee0f16                        
+                             8adf.tex                                           
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 15: Create(NumberLine), etc.:   0%|          | 0/51 [00:00<?, ?it/s]Animation 15: Create(NumberLine), etc.:  53%|█████▎    | 27/51 [00:00<00:00, 262.86it/s]                                                                                                            INFO     Animation 15 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00015.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 16: _MethodAnimation(Dot):   0%|          | 0/120 [00:00<?, ?it/s]Animation 16: _MethodAnimation(Dot):  32%|███▎      | 39/120 [00:00<00:00, 388.34it/s]Animation 16: _MethodAnimation(Dot):  66%|██████▌   | 79/120 [00:00<00:00, 392.40it/s]Animation 16: _MethodAnimation(Dot):  99%|█████████▉| 119/120 [00:00<00:00, 370.95it/s]                                                                                       [11/18/26 02:47:14] INFO     Animation 16 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00016.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}t=7.83\                            
+                             \mathrm{min}\special{dvisvg                        
+                             m:raw </g>} to                                     
+                             media_high/Tex/4b8e68ad67a0                        
+                             e866.tex                                           
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 17: Write(MathTex('t=7.83\\ \\mathrm{min}')):   0%|          | 0/42 [00:00<?, ?it/s]Animation 17: Write(MathTex('t=7.83\\ \\mathrm{min}')):  67%|██████▋   | 28/42 [00:00<00:00, 276.27it/s]                                                                                                                            INFO     Animation 17 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00017.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[11/18/26 02:47:15] INFO     Animation 18 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00018.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 19: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 19: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  33%|███▎      | 5/15 [00:00<00:00, 44.61it/s]Animation 19: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 43.07it/s]Animation 19: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.: 100%|██████████| 15/15 [00:00<00:00, 42.30it/s]                                                                                                                                              [11/18/26 02:47:16] INFO     Animation 19 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00019.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{MEA                        
+                             SURED DOES NOT MEAN                                
+                             DISCRETE}\special{dvisvgm:r                        
+                             aw </g>} to                                        
+                             media_high/Tex/f346c7767158                        
+                             e623.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}Rounding                           
+                             only changes the precision                         
+                             of the                                             
+                             record.\special{dvisvgm:raw                        
+                             </g>} to                                           
+                             media_high/Tex/2f9d062a5a0f                        
+                             6885.tex                                           
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 20: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/28 [00:00<?, ?it/s]Animation 20: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  21%|██▏       | 6/28 [00:00<00:00, 54.67it/s]Animation 20: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  43%|████▎     | 12/28 [00:00<00:00, 54.16it/s]Animation 20: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  64%|██████▍   | 18/28 [00:00<00:00, 55.32it/s]Animation 20: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  86%|████████▌ | 24/28 [00:00<00:00, 55.70it/s]                                                                                                                                             [11/18/26 02:47:17] INFO     Animation 20 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00020.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}18.4\                              
+                             \mathrm{min}\special{dvisvg                        
+                             m:raw </g>} to                                     
+                             media_high/Tex/f57996bc3753                        
+                             d22f.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\approx18\                         
+                             \mathrm{min}\special{dvisvg                        
+                             m:raw </g>} to                                     
+                             media_high/Tex/05c327c5ffa1                        
+                             dbc1.tex                                           
+[11/18/26 02:47:18] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 21: Write(MathTex('18.4\\ \\mathrm{min}')):   0%|          | 0/45 [00:00<?, ?it/s]Animation 21: Write(MathTex('18.4\\ \\mathrm{min}')):  64%|██████▍   | 29/45 [00:00<00:00, 279.65it/s]                                                                                                                          INFO     Animation 21 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00021.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 22: ReplacementTransform(MathTex('18.4\\ \\mathrm{min}')):   0%|          | 0/60 [00:00<?, ?it/s]Animation 22: ReplacementTransform(MathTex('18.4\\ \\mathrm{min}')):  43%|████▎     | 26/60 [00:00<00:00, 251.43it/s]Animation 22: ReplacementTransform(MathTex('18.4\\ \\mathrm{min}')):  87%|████████▋ | 52/60 [00:00<00:00, 242.56it/s]                                                                                                                     [11/18/26 02:47:19] INFO     Animation 22 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00022.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{The                        
+                             underlying variable remains                        
+                             continuous.}\special{dvisvg                        
+                             m:raw </g>} to                                     
+                             media_high/Tex/620eadaad4ef                        
+                             7d40.tex                                           
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 23: Write(Tex('\\textbf{The underlying variable remains continuous.}')):   0%|          | 0/38 [00:00<?, ?it/s]Animation 23: Write(Tex('\\textbf{The underlying variable remains continuous.}')):  39%|███▉      | 15/38 [00:00<00:00, 141.72it/s]Animation 23: Write(Tex('\\textbf{The underlying variable remains continuous.}')):  79%|███████▉  | 30/38 [00:00<00:00, 130.30it/s]                                                                                                                                   [11/18/26 02:47:20] INFO     Animation 23 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00023.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 24 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00024.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 25: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 25: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  33%|███▎      | 5/15 [00:00<00:00, 40.50it/s]Animation 25: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  67%|██████▋   | 10/15 [00:00<00:00, 40.15it/s]Animation 25: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.: 100%|██████████| 15/15 [00:00<00:00, 41.17it/s]                                                                                                                                              [11/18/26 02:47:21] INFO     Animation 25 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00025.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{DEC                        
+                             ISION                                              
+                             TREE}\special{dvisvgm:raw                          
+                             </g>} to                                           
+                             media_high/Tex/47785b218699                        
+                             d224.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}Interpret                          
+                             the meaning before                                 
+                             classifying.\special{dvisvg                        
+                             m:raw </g>} to                                     
+                             media_high/Tex/eccf3a5614af                        
+                             b78e.tex                                           
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 26: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/28 [00:00<?, ?it/s]Animation 26: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  29%|██▊       | 8/28 [00:00<00:00, 70.75it/s]Animation 26: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  57%|█████▋    | 16/28 [00:00<00:00, 70.74it/s]Animation 26: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  86%|████████▌ | 24/28 [00:00<00:00, 64.79it/s]                                                                                                                                             [11/18/26 02:47:22] INFO     Animation 26 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00026.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{VAL                        
+                             UE}\special{dvisvgm:raw                            
+                             </g>} to                                           
+                             media_high/Tex/53cf72fae147                        
+                             fc0b.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}What does                          
+                             it                                                 
+                             describe?\special{dvisvgm:r                        
+                             aw </g>} to                                        
+                             media_high/Tex/230f16b5d11f                        
+                             d00a.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{CAT                        
+                             EGORY}\special{dvisvgm:raw                         
+                             </g>} to                                           
+                             media_high/Tex/3e2f3c4ca501                        
+                             224b.tex                                           
+[11/18/26 02:47:23] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}Qualitative                        
+                             variable\special{dvisvgm:ra                        
+                             w </g>} to                                         
+                             media_high/Tex/38d9e0ecffb0                        
+                             f930.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{QUA                        
+                             NTITY}\special{dvisvgm:raw                         
+                             </g>} to                                           
+                             media_high/Tex/873d9efa0ab2                        
+                             81f5.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}Count or                           
+                             measurement\special{dvisvgm                        
+                             :raw </g>} to                                      
+                             media_high/Tex/13b6c444ce99                        
+                             87eb.tex                                           
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 27: GrowFromCenter(VGroup of 2 submobjects):   0%|          | 0/27 [00:00<?, ?it/s]Animation 27: GrowFromCenter(VGroup of 2 submobjects):  59%|█████▉    | 16/27 [00:00<00:00, 159.65it/s]                                                                                                       [11/18/26 02:47:24] INFO     Animation 27 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00027.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 28: Create(Line), etc.:   0%|          | 0/33 [00:00<?, ?it/s]                                                                                            INFO     Animation 28 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00028.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 29: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/39 [00:00<?, ?it/s]Animation 29: FadeIn(VGroup of 2 submobjects), etc.:  26%|██▌       | 10/39 [00:00<00:00, 90.49it/s]Animation 29: FadeIn(VGroup of 2 submobjects), etc.:  51%|█████▏    | 20/39 [00:00<00:00, 90.42it/s]Animation 29: FadeIn(VGroup of 2 submobjects), etc.:  77%|███████▋  | 30/39 [00:00<00:00, 90.41it/s]                                                                                                    [11/18/26 02:47:25] INFO     Animation 29 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00029.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[11/18/26 02:47:26] INFO     Animation 30 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00030.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 31: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 31: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  27%|██▋       | 4/15 [00:00<00:00, 36.55it/s]Animation 31: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  53%|█████▎    | 8/15 [00:00<00:00, 36.91it/s]Animation 31: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  80%|████████  | 12/15 [00:00<00:00, 37.00it/s]                                                                                                                                              [11/18/26 02:47:27] INFO     Animation 31 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00031.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{RAW                        
+                             OBSERVATIONS, NOT                                  
+                             FREQUENCIES}\special{dvisvg                        
+                             m:raw </g>} to                                     
+                             media_high/Tex/399029856546                        
+                             02b7.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}Prepare one                        
+                             row per unit for a later                           
+                             statistical                                        
+                             study.\special{dvisvgm:raw                         
+                             </g>} to                                           
+                             media_high/Tex/068adac5aa10                        
+                             3e81.tex                                           
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 32: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/28 [00:00<?, ?it/s]Animation 32: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  21%|██▏       | 6/28 [00:00<00:00, 55.46it/s]Animation 32: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  43%|████▎     | 12/28 [00:00<00:00, 54.97it/s]Animation 32: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  64%|██████▍   | 18/28 [00:00<00:00, 55.10it/s]Animation 32: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  86%|████████▌ | 24/28 [00:00<00:00, 54.88it/s]                                                                                                                                             [11/18/26 02:47:28] INFO     Animation 32 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00032.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 33: LaggedStart(Group):   0%|          | 0/105 [00:00<?, ?it/s]Animation 33: LaggedStart(Group):   7%|▋         | 7/105 [00:00<00:01, 61.82it/s]Animation 33: LaggedStart(Group):  13%|█▎        | 14/105 [00:00<00:01, 62.07it/s]Animation 33: LaggedStart(Group):  20%|██        | 21/105 [00:00<00:01, 61.42it/s]Animation 33: LaggedStart(Group):  27%|██▋       | 28/105 [00:00<00:01, 59.06it/s]Animation 33: LaggedStart(Group):  32%|███▏      | 34/105 [00:00<00:01, 58.33it/s]Animation 33: LaggedStart(Group):  38%|███▊      | 40/105 [00:00<00:01, 57.46it/s]Animation 33: LaggedStart(Group):  44%|████▍     | 46/105 [00:00<00:01, 52.96it/s]Animation 33: LaggedStart(Group):  50%|████▉     | 52/105 [00:00<00:01, 48.76it/s]Animation 33: LaggedStart(Group):  54%|█████▍    | 57/105 [00:01<00:01, 46.91it/s]Animation 33: LaggedStart(Group):  59%|█████▉    | 62/105 [00:01<00:00, 46.52it/s]Animation 33: LaggedStart(Group):  64%|██████▍   | 67/105 [00:01<00:00, 45.62it/s]Animation 33: LaggedStart(Group):  69%|██████▊   | 72/105 [00:01<00:00, 44.37it/s]Animation 33: LaggedStart(Group):  73%|███████▎  | 77/105 [00:01<00:00, 44.77it/s]Animation 33: LaggedStart(Group):  78%|███████▊  | 82/105 [00:01<00:00, 44.35it/s]Animation 33: LaggedStart(Group):  83%|████████▎ | 87/105 [00:01<00:00, 44.43it/s]Animation 33: LaggedStart(Group):  88%|████████▊ | 92/105 [00:01<00:00, 44.32it/s]Animation 33: LaggedStart(Group):  92%|█████████▏| 97/105 [00:01<00:00, 45.40it/s]Animation 33: LaggedStart(Group):  97%|█████████▋| 102/105 [00:02<00:00, 45.79it/s]                                                                                   [11/18/26 02:47:31] INFO     Animation 33 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00033.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[11/18/26 02:47:32] INFO     Animation 34 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00034.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{Do                         
+                             not construct frequency                            
+                             tables or graphs                                   
+                             yet.}\special{dvisvgm:raw                          
+                             </g>} to                                           
+                             media_high/Tex/aa6b3ef440dd                        
+                             c049.tex                                           
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 35: Write(Tex('\\textbf{Do not construct frequency tables or graphs yet.}')):   0%|          | 0/38 [00:00<?, ?it/s]Animation 35: Write(Tex('\\textbf{Do not construct frequency tables or graphs yet.}')):  37%|███▋      | 14/38 [00:00<00:00, 133.77it/s]Animation 35: Write(Tex('\\textbf{Do not construct frequency tables or graphs yet.}')):  74%|███████▎  | 28/38 [00:00<00:00, 124.89it/s]                                                                                                                                        [11/18/26 02:47:33] INFO     Animation 35 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00035.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 36 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00036.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 37: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/15 [00:00<?, ?it/s]Animation 37: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  20%|██        | 3/15 [00:00<00:00, 23.81it/s]Animation 37: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  40%|████      | 6/15 [00:00<00:00, 23.55it/s]Animation 37: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  60%|██████    | 9/15 [00:00<00:00, 23.54it/s]Animation 37: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  80%|████████  | 12/15 [00:00<00:00, 23.65it/s]Animation 37: FadeOut(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.: 100%|██████████| 15/15 [00:00<00:00, 24.04it/s]                                                                                                                                              [11/18/26 02:47:34] INFO     Animation 37 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00037.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{FIN                        
+                             AL CLASSIFICATION                                  
+                             WORKSHOP}\special{dvisvgm:r                        
+                             aw </g>} to                                        
+                             media_high/Tex/eccdf80e3112                        
+                             cf71.tex                                           
+[11/18/26 02:47:35] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}Explain                            
+                             each classification with a                         
+                             reason.\special{dvisvgm:raw                        
+                             </g>} to                                           
+                             media_high/Tex/c84820af72ec                        
+                             2f4e.tex                                           
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 38: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:   0%|          | 0/28 [00:00<?, ?it/s]Animation 38: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  25%|██▌       | 7/28 [00:00<00:00, 60.18it/s]Animation 38: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  50%|█████     | 14/28 [00:00<00:00, 59.66it/s]Animation 38: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  75%|███████▌  | 21/28 [00:00<00:00, 59.82it/s]Animation 38: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 04}')), etc.:  96%|█████████▋| 27/28 [00:00<00:00, 59.81it/s]                                                                                                                                             [11/18/26 02:47:36] INFO     Animation 38 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00038.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}Number of                          
+                             siblings: discrete                                 
+                             count\special{dvisvgm:raw                          
+                             </g>} to                                           
+                             media_high/Tex/43d779addbbb                        
+                             5099.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}Travel                             
+                             time: continuous                                   
+                             measurement\special{dvisvgm                        
+                             :raw </g>} to                                      
+                             media_high/Tex/5b901b18ef39                        
+                             4920.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}Bus route                          
+                             12: qualitative                                    
+                             identifier\special{dvisvgm:                        
+                             raw </g>} to                                       
+                             media_high/Tex/29a51ebf4097                        
+                             3e8e.tex                                           
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}Rounded                            
+                             temperature: continuous                            
+                             measurement\special{dvisvgm                        
+                             :raw </g>} to                                      
+                             media_high/Tex/f4677374fd5a                        
+                             e95c.tex                                           
+[11/18/26 02:47:37] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 39: LaggedStart(Group):   0%|          | 0/120 [00:00<?, ?it/s]Animation 39: LaggedStart(Group):   9%|▉         | 11/120 [00:00<00:01, 107.33it/s]Animation 39: LaggedStart(Group):  18%|█▊        | 22/120 [00:00<00:01, 97.95it/s] Animation 39: LaggedStart(Group):  27%|██▋       | 32/120 [00:00<00:01, 85.19it/s]Animation 39: LaggedStart(Group):  34%|███▍      | 41/120 [00:00<00:01, 74.36it/s]Animation 39: LaggedStart(Group):  41%|████      | 49/120 [00:00<00:01, 63.69it/s]Animation 39: LaggedStart(Group):  47%|████▋     | 56/120 [00:00<00:01, 56.22it/s]Animation 39: LaggedStart(Group):  52%|█████▏    | 62/120 [00:00<00:01, 51.70it/s]Animation 39: LaggedStart(Group):  57%|█████▋    | 68/120 [00:01<00:01, 49.35it/s]Animation 39: LaggedStart(Group):  62%|██████▏   | 74/120 [00:01<00:00, 47.55it/s]Animation 39: LaggedStart(Group):  66%|██████▌   | 79/120 [00:01<00:00, 46.01it/s]Animation 39: LaggedStart(Group):  70%|███████   | 84/120 [00:01<00:00, 44.78it/s]Animation 39: LaggedStart(Group):  74%|███████▍  | 89/120 [00:01<00:00, 44.26it/s]Animation 39: LaggedStart(Group):  78%|███████▊  | 94/120 [00:01<00:00, 44.21it/s]Animation 39: LaggedStart(Group):  82%|████████▎ | 99/120 [00:01<00:00, 42.65it/s]Animation 39: LaggedStart(Group):  87%|████████▋ | 104/120 [00:01<00:00, 41.69it/s]Animation 39: LaggedStart(Group):  91%|█████████ | 109/120 [00:02<00:00, 41.83it/s]Animation 39: LaggedStart(Group):  95%|█████████▌| 114/120 [00:02<00:00, 41.80it/s]Animation 39: LaggedStart(Group):  99%|█████████▉| 119/120 [00:02<00:00, 41.86it/s]                                                                                   [11/18/26 02:47:39] INFO     Animation 39 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00039.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[11/18/26 02:47:41] INFO     Animation 40 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00040.mp4'                                        
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{Cla                        
+                             ssify, justify, and record                         
+                             before                                             
+                             graphing.}\special{dvisvgm:                        
+                             raw </g>} to                                       
+                             media_high/Tex/069a04d23aeb                        
+                             b1c6.tex                                           
+[11/18/26 02:47:42] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 41: Write(Tex('\\textbf{Classify, justify, and record before graphing.}')):   0%|          | 0/38 [00:00<?, ?it/s]Animation 41: Write(Tex('\\textbf{Classify, justify, and record before graphing.}')):  34%|███▍      | 13/38 [00:00<00:00, 129.62it/s]Animation 41: Write(Tex('\\textbf{Classify, justify, and record before graphing.}')):  68%|██████▊   | 26/38 [00:00<00:00, 123.66it/s]                                                                                                                                                          INFO     Animation 41 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00041.mp4'                                        
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[11/18/26 02:47:43] INFO     Animation 42 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/partial_movie_files/St                         
+                             atistics10Week4V6/uncached                         
+                             _00042.mp4'                                        
+                    INFO     Combining to Movie file.   scene_file_writer.py:753
+                    INFO                                scene_file_writer.py:904
+                             File ready at                                      
+                             '/manim/media_high/videos/                         
+                             statistics10_latex_v6/1080                         
+                             p30/Statistics10Week4V6.mp                         
+                             4'                                                 
+                                                                                
+                    INFO     Rendered Statistics10Week4V6           scene.py:278
+                             Played 43 animations                               
+You are using manim version v0.20.1, but version v0.22.1 is available.
+You should consider upgrading via pip install -U manim
