@@ -1,0 +1,80 @@
+name: Statistics10 V9 FAST Native ManimCE Container Release
+on:
+  push:
+    branches: [manim/stat10-2027-course-intro-v9]
+    paths:
+      - .github/workflows/render-stat10-course-intro-v9-fast.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate source, pull ManimCE image without host apt installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile render_jobs/stat10_course_intro_2027_v9/stat10_course_intro_v9.py
+          mkdir -p qa_course_intro_v9_fast published_renders/stat10_2027_course_intro_v9_fast
+          docker pull manimcommunity/manim:v0.20.1
+      - name: Full PQL native test
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/stat10_course_intro_2027_v9/stat10_course_intro_v9.py
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/manim" \
+            -w /manim --entrypoint manim manimcommunity/manim:v0.20.1 -ql \
+            "$SRC" Statistics10CourseIntroV9 --fps 15 --disable_caching \
+            --media_dir media_course_v9_fast_low > qa_course_intro_v9_fast/pql.log 2>&1
+          FILE="$(find media_course_v9_fast_low -type f -name Statistics10CourseIntroV9.mp4 -print -quit)"
+          test -n "$FILE" && test -s "$FILE"
+      - name: Full PQH native render with internal Docker FFmpeg validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/stat10_course_intro_2027_v9/stat10_course_intro_v9.py
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/manim" \
+            -w /manim --entrypoint manim manimcommunity/manim:v0.20.1 -qh \
+            "$SRC" Statistics10CourseIntroV9 --fps 30 --disable_caching \
+            --media_dir media_course_v9_fast_high > qa_course_intro_v9_fast/pqh.log 2>&1
+          FILE="$(find media_course_v9_fast_high -type f -name Statistics10CourseIntroV9.mp4 -print -quit)"
+          test -n "$FILE" && test -s "$FILE"
+          OUT=published_renders/stat10_2027_course_intro_v9_fast/Statistics10_2027_Course_Introduction_V9_NATIVE_PQH.mp4
+          cp "$FILE" "$OUT"
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/manim" \
+            -w /manim --entrypoint ffmpeg manimcommunity/manim:v0.20.1 \
+            -hide_banner -loglevel error -i "$OUT" -f null - \
+            2> qa_course_intro_v9_fast/decode.log
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/manim" \
+            -w /manim --entrypoint ffprobe manimcommunity/manim:v0.20.1 \
+            -v error -select_streams v:0 -show_entries stream=codec_name,width,height,r_frame_rate,pix_fmt \
+            -show_entries format=duration,size -of default=nw=1 "$OUT" \
+            > qa_course_intro_v9_fast/VIDEO_TECHNICAL.txt
+          grep -q 'codec_name=h264' qa_course_intro_v9_fast/VIDEO_TECHNICAL.txt
+          grep -q 'width=1920' qa_course_intro_v9_fast/VIDEO_TECHNICAL.txt
+          grep -q 'height=1080' qa_course_intro_v9_fast/VIDEO_TECHNICAL.txt
+          grep -q 'r_frame_rate=30/1' qa_course_intro_v9_fast/VIDEO_TECHNICAL.txt
+          sha256sum "$OUT" > qa_course_intro_v9_fast/SHA256SUMS.txt
+      - name: Publish real video from native ManimCE runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/stat10_2027_course_intro_v9_fast qa_course_intro_v9_fast
+          git commit -m "render: native ManimCE Statistics10 annual opening V9 verified video [skip ci]"
+          git fetch origin manim/stat10-2027-course-intro-v9
+          git rebase origin/manim/stat10-2027-course-intro-v9
+          git push origin HEAD:manim/stat10-2027-course-intro-v9
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Statistics10-2027-Annual-Course-Intro-V9-FAST-NATIVE
+          path: |
+            published_renders/stat10_2027_course_intro_v9_fast/
+            qa_course_intro_v9_fast/
+          retention-days: 30
+          if-no-files-found: warn
