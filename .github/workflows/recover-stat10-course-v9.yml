@@ -1,0 +1,145 @@
+name: Recover and Publish Native Statistics10 Course Intro V9
+on:
+  push:
+    branches: [manim/stat10-2027-course-intro-v9]
+    paths: [.github/workflows/recover-stat10-course-v9.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Retrieve already-completed native ManimCE PQH MP4
+        uses: actions/download-artifact@v4
+        with:
+          name: Statistics10-2027-Annual-Course-Intro-V9-FAST-NATIVE
+          repository: juanperez238421-cpu/Manim-Scientific-Visualize
+          run-id: 44378244326
+          github-token: ${{ github.token }}
+          path: recovered
+      - name: Copy render and verify artifact presence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p published_renders/stat10_2027_course_intro_v9 qa_course_intro_v9 deliverables
+          find recovered -maxdepth 6 -type f -printf '%P %s bytes\n'
+          cp recovered/published_renders/stat10_2027_course_intro_v9_fast/Statistics10_2027_Course_Introduction_V9_NATIVE_PQH.mp4 \
+            published_renders/stat10_2027_course_intro_v9/Statistics10_2027_Course_Introduction_V9_NATIVE_PQH.mp4
+          cp -a recovered/qa_course_intro_v9_fast/. qa_course_intro_v9/
+          test -s published_renders/stat10_2027_course_intro_v9/Statistics10_2027_Course_Introduction_V9_NATIVE_PQH.mp4
+          docker pull manimcommunity/manim:v0.20.1
+      - name: Full native decode with PyAV and 16-frame composition audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm -i --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$PWD:/manim" -w /manim --entrypoint python \
+            manimcommunity/manim:v0.20.1 - <<'PY'
+          from pathlib import Path
+          import av
+          import hashlib
+          from PIL import Image
+          f=Path("published_renders/stat10_2027_course_intro_v9/Statistics10_2027_Course_Introduction_V9_NATIVE_PQH.mp4")
+          assert f.is_file() and f.stat().st_size > 1_000_000
+          container=av.open(str(f))
+          st=container.streams.video[0]
+          fps=float(st.average_rate)
+          w,h=st.codec_context.width,st.codec_context.height
+          codec=st.codec_context.name
+          pixel=st.codec_context.pix_fmt
+          assert w==1920 and h==1080,(w,h)
+          assert abs(fps-30)<0.001,fps
+          assert codec=="h264",codec
+          assert pixel=="yuv420p",pixel
+          duration=float(container.duration)/1_000_000 if container.duration else 0.0
+          targets=[.04,.10,.16,.22,.28,.34,.40,.46,.52,.58,.64,.70,.76,.82,.88,.94]
+          total=max(1,int(duration*fps))
+          indices={round(q*total):q for q in targets}
+          thumbs={}
+          frame_count=0
+          for frame in container.decode(st):
+              if frame_count in indices:
+                  thumbs[indices[frame_count]]=frame.to_image().resize((480,270))
+              frame_count+=1
+          container.close()
+          assert frame_count>=900,frame_count
+          assert len(thumbs)>=12,len(thumbs)
+          contact=Image.new("RGB",(1920,1080),"white")
+          visible=0
+          lines=[]
+          for idx,q in enumerate(targets):
+              im=thumbs.get(q)
+              if im is None:continue
+              contact.paste(im,((idx%4)*480,(idx//4)*270))
+              pixels=im.convert("L").resize((120,68)).getdata()
+              nonwhite=sum(v<215 for v in pixels)
+              visible+=nonwhite>85
+              lines.append(f"fraction={q:.2f}, nonwhite={nonwhite}")
+          assert visible>=11, f"Too many blank sampled frames: {visible}/16"
+          qa=Path("qa_course_intro_v9")
+          contact.save(qa/"ENCODED_CONTACT_SHEET.jpg",quality=90)
+          (qa/"VIDEO_TECHNICAL.txt").write_text(
+              f"codec={codec}\nresolution={w}x{h}\nfps={fps}\n"
+              f"pix_fmt={pixel}\nduration_seconds={duration:.3f}\n"
+              f"frames_decoded={frame_count}\nsize_bytes={f.stat().st_size}\n"
+              f"sha256={hashlib.sha256(f.read_bytes()).hexdigest()}\n"
+          )
+          (qa/"FRAME_QA.txt").write_text("\n".join(lines)+f"\nPASS: {visible} of {len(thumbs)} nonblank encoded samples\n")
+          print((qa/"VIDEO_TECHNICAL.txt").read_text())
+          print((qa/"FRAME_QA.txt").read_text())
+          PY
+      - name: Build reproducible project ZIP and hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile,ZIP_DEFLATED
+          files=[
+            'published_renders/stat10_2027_course_intro_v9/Statistics10_2027_Course_Introduction_V9_NATIVE_PQH.mp4',
+            'render_jobs/stat10_course_intro_2027_v9/stat10_course_intro_v9.py',
+            'render_jobs/stat10_2027_v8/stat10_guided_v8_common.py',
+            'render_jobs/stat10_2027_native_v6/statistics10_latex_v6.py',
+            'qa_course_intro_v9/VIDEO_TECHNICAL.txt',
+            'qa_course_intro_v9/FRAME_QA.txt',
+            'qa_course_intro_v9/ENCODED_CONTACT_SHEET.jpg'
+          ]
+          out=Path('deliverables/Statistics10_2027_Course_Introduction_V9_ManimCE_Project.zip')
+          with ZipFile(out,'w',compression=ZIP_DEFLATED) as z:
+              for f in files:
+                  assert Path(f).is_file() and Path(f).stat().st_size
+                  z.write(f,arcname=Path(f).name)
+          assert out.stat().st_size>1_000_000
+          with ZipFile(out) as z:
+              assert z.testzip() is None
+          print(out, out.stat().st_size)
+          PY
+          sha256sum published_renders/stat10_2027_course_intro_v9/*.mp4 \
+            deliverables/Statistics10_2027_Course_Introduction_V9_ManimCE_Project.zip \
+            > qa_course_intro_v9/SHA256SUMS.txt
+      - name: Publish video, project and verified QA evidence directly to GitHub
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/stat10_2027_course_intro_v9 \
+            qa_course_intro_v9 deliverables/Statistics10_2027_Course_Introduction_V9_ManimCE_Project.zip
+          git commit -m "deliver: native LaTeX ManimCE 2027 Statistics10 opening film with visual QA [skip ci]"
+          git fetch origin manim/stat10-2027-course-intro-v9
+          git rebase origin/manim/stat10-2027-course-intro-v9
+          git push origin HEAD:manim/stat10-2027-course-intro-v9
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Statistics10-2027-Course-Intro-V9-FINAL-NATIVE-VIDEO
+          path: |
+            published_renders/stat10_2027_course_intro_v9/
+            qa_course_intro_v9/
+            deliverables/Statistics10_2027_Course_Introduction_V9_ManimCE_Project.zip
+          retention-days: 30
+          if-no-files-found: warn
