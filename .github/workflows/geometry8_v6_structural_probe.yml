@@ -1,0 +1,38 @@
+name: Geometry8 V6 - Fast Still Frame Structural Diagnostic
+on:
+  push:
+    branches: [geometry8-2027-v6-cinematic-course-2d-3d]
+    paths:
+      - '.github/workflows/geometry8_v6_structural_probe.yml'
+      - 'lessons/geometry8_2027/week01/geometry8_course_opening_v6.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Manim CE fast complete scene traversal and still-frame smoke test
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull manimcommunity/manim:v0.20.1
+          timeout 510 docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e PHYSICS_CAD_PREVIEW=1 \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-home
+              manim -sql lessons/geometry8_2027/week01/geometry8_course_opening_v6.py Geometry8_YearOpeningV6 --media_dir v6_still_probe --disable_caching
+            ' 2>&1 | tee v6_still_probe.log
+          test -s "$(find v6_still_probe -type f -name 'Geometry8_YearOpeningV6*.png' -print -quit)"
+          echo 'PASS all scene methods executed in fast still-frame traversal'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Geometry8-V6-Structural-Still-SmokeTest
+          path: |
+            v6_still_probe.log
+            v6_still_probe/**/*.png
+          retention-days: 7
