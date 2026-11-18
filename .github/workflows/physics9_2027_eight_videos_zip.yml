@@ -1,0 +1,98 @@
+name: Package Physics9 2027 First Four Weeks - Eight MP4 ZIP
+
+on:
+  push:
+    branches:
+      - physics9-2027-week02-week04-eight-video-pack
+    paths:
+      - '.github/workflows/physics9_2027_eight_videos_zip.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout existing approved MP4s
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Package eight verified videos without transcoding
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          from zipfile import ZipFile,ZIP_STORED
+          import csv,io
+          root=Path("published_renders")
+          out=root/"Physics9_2027_Weeks_01_to_04_Eight_Videos_FINAL_PQH.zip"
+          expected=[
+            ("Week_01/01_Physics_Induction.mp4","Physics9_2027_Week01_V5_Class01_PHYSICS_COMPLEX_MOTION_FINAL_PQH.mp4","abab3681f192167f32e7fc9a982fa200f8cc290d55e1419fe0aa6d645315760c"),
+            ("Week_01/02_Observation_and_Measurement.mp4","Physics9_2027_Week01_V4_Class02_LARGE_SAFE_FINAL_PQH.mp4","927e2e683e9e4feed39716eddbc4c937bfd225d2abee9b536a9c0565225aeade"),
+            ("Week_02/03_SI_Units_and_Orders_of_Magnitude.mp4","Physics9_2027_Week02_V1_Class01_SI_Units_FINAL_pqh.mp4","2858daa2c4193153d1d1d2600027adbeacd5da607efb650eb31831e2a19748cf"),
+            ("Week_02/04_Scientific_Notation.mp4","Physics9_2027_Week02_V1_Class02_Scientific_Notation_FINAL_pqh.mp4","7c2d374008f48d989c8115c0eb8f0ca6da5aaf12543795826541c48e93045f9c"),
+            ("Week_03/05_Conversions_and_Dimensional_Consistency.mp4","Physics9_2027_Week03_V1_Class01_Conversions_FINAL_pqh.mp4","fbd8e510936d32bbce634ad43ba2b1d052a6b141818515109a91d76d2982e994"),
+            ("Week_03/06_Significant_Figures.mp4","Physics9_2027_Week03_V1_Class02_SignificantFigures_FINAL_pqh.mp4","cb3ce576b2030fd2ba05ecb12fef814338337b868c19ab705254e7146960568e"),
+            ("Week_04/07_Vernier_and_Micrometer.mp4","Physics9_2027_Week04_V1_Class01_Precision_Instruments_FINAL_pqh.mp4","616ee8224590eada7ccfa96aa84b58de6ed879025d3ab6f6bccf73056667e365"),
+            ("Week_04/08_Measurement_and_Uncertainty_Lab.mp4","Physics9_2027_Week04_V1_Class02_Uncertainty_MiniLab_FINAL_pqh.mp4","7a291cc977de0d421ba67649c9ab832fda8aaad8e8c442e6e2b685732ed2b2bf"),
+          ]
+          manifest=["Physics 9 — Instituto Jorge Robledo — Q1 2027","8 Full-HD H.264 MP4 videos, 30 FPS","Week 1: Jan 19-22 | Week 2: Jan 25-29 | Week 3: Feb 1-5 | Week 4: Feb 8-12","","The videos below are unchanged originals, sorted by teaching week.",""]
+          checks=[]
+          total=0
+          for internal,name,want in expected:
+            file=root/name
+            if not file.is_file() or file.stat().st_size < 1_000_000:
+              raise RuntimeError(f"Missing or unexpectedly small video: {file}")
+            digest=sha256(file.read_bytes()).hexdigest()
+            if digest != want:
+              raise RuntimeError(f"Source MP4 checksum mismatch: {file}: {digest} != {want}")
+            total+=file.stat().st_size
+            manifest.append(f"{internal}  ({file.stat().st_size:,} bytes)")
+            checks.append(f"{want}  {internal}")
+          manifest.extend(["","All videos rendered with ManimCE under the institutional CAD visual format.","These files preserve the original published video bytes, without transcoding.",""])
+          with ZipFile(out,"w",compression=ZIP_STORED,allowZip64=True) as archive:
+            for internal,name,digest in expected:
+              archive.write(root/name,arcname=internal)
+            archive.writestr("README.txt","\n".join(manifest)+"\n")
+            archive.writestr("VIDEO_SHA256SUMS.txt","\n".join(checks)+"\n")
+          with ZipFile(out,"r") as archive:
+            assert archive.testzip() is None, "ZIP CRC check failed"
+            files=[x for x in archive.namelist() if x.endswith(".mp4")]
+            assert len(files)==8, files
+            assert len(archive.namelist())==10
+            for internal,_,digest in expected:
+              with archive.open(internal) as stream:
+                from_archive=sha256()
+                while block:=stream.read(1024*1024):
+                  from_archive.update(block)
+              assert from_archive.hexdigest()==digest,internal
+          size=out.stat().st_size
+          assert size>total and size<95_000_000, (size,total)
+          digest=sha256(out.read_bytes()).hexdigest()
+          (root/"Physics9_2027_Weeks_01_to_04_Eight_Videos_FINAL_PQH_SHA256.txt").write_text(f"{digest}  {out.name}\n")
+          print(f"PASS: ZIP {out} ({size:,} bytes), 8 verified MP4s, all SHA-256 correct, 0 corrupt entries")
+          PY
+      - name: Upload ZIP as downloadable GitHub Actions artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9_2027_W01_W04_All_8_Videos_ZIP
+          path: |
+            published_renders/Physics9_2027_Weeks_01_to_04_Eight_Videos_FINAL_PQH.zip
+            published_renders/Physics9_2027_Weeks_01_to_04_Eight_Videos_FINAL_PQH_SHA256.txt
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish archive in GitHub repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add published_renders/Physics9_2027_Weeks_01_to_04_Eight_Videos_FINAL_PQH.zip
+          git add published_renders/Physics9_2027_Weeks_01_to_04_Eight_Videos_FINAL_PQH_SHA256.txt
+          git diff --cached --quiet || git commit -m 'pack: eight verified Physics9 2027 first-four-week MP4s ZIP [skip ci]'
+          git push origin HEAD:physics9-2027-week02-week04-eight-video-pack
