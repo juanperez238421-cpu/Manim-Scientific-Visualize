@@ -1,0 +1,10 @@
+class,frame,ink_pixels,mean_luma
+Class01,Class01-0.08.png,217,253.47
+Class01,Class01-0.20.png,670,250.92
+Class01,Class01-0.32.png,716,250.51
+Class01,Class01-0.44.png,743,250.91
+Class01,Class01-0.56.png,703,251.14
+Class01,Class01-0.68.png,734,250.82
+Class01,Class01-0.80.png,1921,248.1
+Class01,Class01-0.92.png,487,251.3
+Class01,Class01-03s.png,1065,248.55
