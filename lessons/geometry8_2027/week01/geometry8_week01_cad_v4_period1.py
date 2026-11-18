@@ -61,6 +61,40 @@ class Geometry8W01_Period1RoadmapV4(Geometry8W01_YearRoadmapV3):
         self._phase_number+=1
         return self.chapter(number,phase,title,subtitle)
 
+    def year_map(self):
+        """Three-period syllabus timeline with nonoverlapping typographic zones.
+
+        This preserves the V3 design but fixes the first V4 contact sheet,
+        where long titles (e.g., SHAPES AND RELATIONSHIPS) touched subtitles.
+        """
+        self.heading(0,"YEAR / THREE PERIODS",
+                     "THE JOURNEY THROUGH GEOMETRY",
+                     "From geometric language to shapes, measurement and solids.")
+        tracks=[
+          ("I","FOUNDATIONS","Objects, construction, angles",SKETCH,.70),
+          ("II","SHAPES AND RELATIONSHIPS","Triangles, circles, similarity",POSITIVE,-.42),
+          ("III","MEASURE AND MODEL","Areas, shaded regions, solids",DARK,-1.54),
+        ]
+        for num,title,desc,color,y in tracks:
+            start=np.array([-5.33,y-.24,0])
+            end=np.array([5.31,y-.24,0])
+            guide=Line(start,end,color=LIGHT,stroke_width=2.6)
+            circle=Circle(radius=.31,color=color,stroke_width=3,
+                          fill_color=WHITE,fill_opacity=1).move_to(start)
+            numeral=self.big_text(num,start[0],start[1],29,color,.69,True)
+            # Strictly disjoint zones: period title [-5.0,-.27], subtitle [.65,5.10].
+            name=self.big_text(title,-2.57,y+.18,34,color,4.62,True)
+            description=self.big_text(desc,2.87,y+.18,25,MID,4.34)
+            dot=Dot(start,radius=.12,color=color)
+            self.draw_stage(guide,circle,runtime=.84)
+            self.play(Write(numeral),Write(name),Write(description),
+                      run_time=1.35)
+            self.play(MoveAlongPath(dot,guide,rate_func=linear),
+                      run_time=2.12)
+            self.register(dot)
+        self.caption("The three periods follow the 2026 institutional Geometry 8 curriculum.")
+        self.watch(4.9)
+
     def construct(self):
         self._phase_number=0
         self.institutional_cover()
