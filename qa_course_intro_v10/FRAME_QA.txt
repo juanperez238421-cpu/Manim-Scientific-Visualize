@@ -1,0 +1,17 @@
+0.04: nonwhite=466
+0.10: nonwhite=392
+0.16: nonwhite=285
+0.22: nonwhite=217
+0.28: nonwhite=164
+0.34: nonwhite=233
+0.40: nonwhite=258
+0.46: nonwhite=199
+0.52: nonwhite=329
+0.58: nonwhite=407
+0.64: nonwhite=407
+0.70: nonwhite=317
+0.76: nonwhite=273
+0.82: nonwhite=381
+0.88: nonwhite=270
+0.94: nonwhite=183
+PASS: 16/16 visible sampled frames
