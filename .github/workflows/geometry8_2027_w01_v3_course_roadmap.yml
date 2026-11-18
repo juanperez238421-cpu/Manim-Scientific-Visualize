@@ -38,14 +38,15 @@ jobs:
           print("Authentic school PNG verified:",sys.argv[1])
           PY
           test -s lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png
-          # Explicit 2027 Grade 8 Week01 teaching coverage (source QA).
-          grep -q 'def course_conventions' "$SOURCE"
-          grep -q 'def plane' "$SOURCE"
-          grep -q 'def notation' "$SOURCE"
-          grep -q 'def dimension_sort' "$SOURCE"
-          grep -q 'def moving_venn' "$SOURCE"
-          grep -q 'def intersection_union' "$SOURCE"
-          grep -q 'from geometry8_week01_cad import Geometry8Base' "$SOURCE"
+          # The V3 scene inherits the already-validated V2 lesson.
+          # Verify V3's real course roadmap and its V2 inheritance explicitly.
+          grep -q 'from geometry8_week01_cad_v2 import Geometry8W01_FoundationsV2' "$SOURCE"
+          grep -q 'def year_map' "$SOURCE"
+          grep -q 'def period_one_map' "$SOURCE"
+          grep -q 'def period_two_map' "$SOURCE"
+          grep -q 'def period_three_map' "$SOURCE"
+          grep -q 'def verified_2027_four_weeks' "$SOURCE"
+          grep -q 'self.course_conventions()' "$SOURCE"
           grep -q 'class Geometry8W01_YearRoadmapV3' "$SOURCE"
           mkdir -p cad_delivery/audit_frames
           sha256sum "$SOURCE" > cad_delivery/SOURCE_SHA256SUMS.txt
