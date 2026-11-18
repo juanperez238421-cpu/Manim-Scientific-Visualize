@@ -35,7 +35,10 @@ def main():
         assert len(vs)==1,f"expected 1 video stream, got {len(vs)}"
         s=vs[0]
         fps=s.average_rate
-        assert fps is not None and Fraction(fps)==Fraction(30,1),(fps,path)
+        # average_rate uses total counted frames divided by container timestamp
+        # duration, which may drift by <1 frame even at exact CFR 30.
+        # A video exported as 30 FPS can report ~30.00029 here.
+        assert fps is not None and abs(float(fps)-30.0)<0.02,(fps,path)
         assert (s.width,s.height)==(1920,1080),(s.width,s.height)
         codec=s.codec_context.name
         assert codec=="h264",codec
