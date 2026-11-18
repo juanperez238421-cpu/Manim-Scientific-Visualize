@@ -26,7 +26,7 @@ jobs:
               mkdir -p /tmp/manim-home
               manim -sql lessons/geometry8_2027/week01/geometry8_course_opening_v5.py Geometry8_YearOpeningV5 --media_dir v5_still_probe --disable_caching
             ' 2>&1 | tee v5_still_probe.log
-          test -s "$(find v5_still_probe -type f -name 'Geometry8_YearOpeningV5.png' -print -quit)"
+          test -s "$(find v5_still_probe -type f -name 'Geometry8_YearOpeningV5*.png' -print -quit)"
           echo 'PASS all scene methods executed in fast still-frame traversal'
       - uses: actions/upload-artifact@v4
         if: always()
