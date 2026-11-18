@@ -1,0 +1,138 @@
+name: Statistics 10 2027 - Four NEW Guided Lessons V8 Native ManimCE
+on:
+  push:
+    branches: [manim/stat10-2027-guided-v8-four-videos]
+    paths: [.github/workflows/render-stat10-v8-four-guided.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  render-four-guided-v8:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate four independent Python sources and Manim environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa_v8 published_renders/stat10_2027_guided_v8 deliverables
+          python -m py_compile render_jobs/stat10_2027_v8/*.py
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg zip unzip python3-pil
+          docker pull manimcommunity/manim:v0.20.1
+          printf 'engine=ManimCE 0.20.1; format=1920x1080, H264, 30fps; 4 original lessons\n' > qa_v8/BUILD_INFO.txt
+      - name: Render each ENTIRE scene with native ManimCE in low-quality regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          for WEEK in 1 2 3 4; do
+            SRC="render_jobs/stat10_2027_v8/stat10_week$WEEK""_guided_v8.py"
+            SCENE="Stat10Week$WEEK""GuidedV8"
+            docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
+              -v "$PWD:/manim" -w /manim --entrypoint manim manimcommunity/manim:v0.20.1 \
+              -ql "$SRC" "$SCENE" --fps 15 --format=mp4 \
+              --media_dir media_v8_low --disable_caching 2>&1 | tee "qa_v8/pql_week$WEEK.log"
+            FILE="$(find media_v8_low -type f -name "$SCENE.mp4" -print -quit)"
+            test -n "$FILE" && test -s "$FILE"
+            ffmpeg -hide_banner -loglevel error -i "$FILE" -f null - 2> "qa_v8/pql_decode_week$WEEK.log"
+          done
+      - name: Native high-quality complete render, four scenes
+        shell: bash
+        run: |
+          set -euo pipefail
+          for WEEK in 1 2 3 4; do
+            SRC="render_jobs/stat10_2027_v8/stat10_week$WEEK""_guided_v8.py"
+            SCENE="Stat10Week$WEEK""GuidedV8"
+            OUT="published_renders/stat10_2027_guided_v8/Stat10_2027_Week$WEEK""_Guided_Companion_V8_NATIVE_PQH.mp4"
+            docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
+              -v "$PWD:/manim" -w /manim --entrypoint manim manimcommunity/manim:v0.20.1 \
+              -qh "$SRC" "$SCENE" --fps 30 --format=mp4 \
+              --media_dir media_v8_high --disable_caching 2>&1 | tee "qa_v8/pqh_week$WEEK.log"
+            RAW="$(find media_v8_high -type f -name "$SCENE.mp4" -print -quit)"
+            test -n "$RAW" && test -s "$RAW"
+            ffmpeg -y -hide_banner -loglevel error -i "$RAW" \
+              -c:v libx264 -crf 18 -pix_fmt yuv420p -movflags +faststart -an "$OUT"
+            ffmpeg -hide_banner -loglevel error -i "$OUT" -f null - 2> "qa_v8/decode_week$WEEK.log"
+            W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$OUT")"
+            H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$OUT")"
+            FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$OUT")"
+            CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$OUT")"
+            PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$OUT")"
+            D="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT")"
+            test "$W" = 1920 && test "$H" = 1080 && test "$FPS" = 30/1 && test "$CODEC" = h264 && test "$PIX" = yuv420p
+            printf "week=%s,codec=%s,resolution=%sx%s,fps=%s,pix_fmt=%s,duration_seconds=%s\n" "$WEEK" "$CODEC" "$W" "$H" "$FPS" "$PIX" "$D" >> qa_v8/VIDEO_TECHNICAL.txt
+            sha256sum "$OUT" >> qa_v8/SHA256SUMS.txt
+          done
+      - name: Extract and validate encoded-frame QA sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa_v8/sampled_frames
+          for WEEK in 1 2 3 4; do
+            F="published_renders/stat10_2027_guided_v8/Stat10_2027_Week$WEEK""_Guided_Companion_V8_NATIVE_PQH.mp4"
+            D="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+            for PC in 15 32 49 68 87; do
+              T="$(awk -v duration="$D" -v pct="$PC" 'BEGIN{printf "%.3f",duration*pct/100}')"
+              ffmpeg -y -hide_banner -loglevel error -ss "$T" -i "$F" -frames:v 1 \
+                -vf "scale=480:270" "qa_v8/sampled_frames/Week$WEEK""_P$PC.jpg"
+            done
+          done
+          python3 - <<'PY'
+          from PIL import Image
+          from glob import glob
+          report=[]
+          for w in range(1,5):
+              paths=sorted(glob(f'qa_v8/sampled_frames/Week{w}_P*.jpg'))
+              assert len(paths)==5,(w,paths)
+              visible=0
+              for p in paths:
+                  count=sum(v<215 for v in Image.open(p).convert('L').resize((120,68)).getdata())
+                  visible+=count>90
+                  report.append(f'{p}: nonwhite={count}')
+              assert visible>=3,(w,visible)
+              report.append(f'Week {w}: PASS {visible}/5 nonblank samples; transitions allowed')
+          open('qa_v8/FRAME_QA.txt','w').write('\n'.join(report)+'\n')
+          print('\n'.join(report))
+          PY
+          ffmpeg -y -hide_banner -loglevel error -pattern_type glob -i 'qa_v8/sampled_frames/*.jpg' \
+            -vf "tile=5x4:padding=6:margin=6:color=white" -frames:v 1 -q:v 4 qa_v8/CONTACT_SHEET.jpg
+          test -s qa_v8/CONTACT_SHEET.jpg
+      - name: Package only the 4 new MP4s, with CRC and SHA checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=deliverables/Statistics10_2027_Weeks1-4_Four_NEW_Guided_V8_NATIVE_ManimCE.zip
+          SOURCE=published_renders/stat10_2027_guided_v8
+          zip -0 -j "$OUT" \
+            "$SOURCE/Stat10_2027_Week1_Guided_Companion_V8_NATIVE_PQH.mp4" \
+            "$SOURCE/Stat10_2027_Week2_Guided_Companion_V8_NATIVE_PQH.mp4" \
+            "$SOURCE/Stat10_2027_Week3_Guided_Companion_V8_NATIVE_PQH.mp4" \
+            "$SOURCE/Stat10_2027_Week4_Guided_Companion_V8_NATIVE_PQH.mp4"
+          unzip -t "$OUT"
+          test "$(unzip -Z1 "$OUT" | wc -l)" -eq 4
+          sha256sum -c qa_v8/SHA256SUMS.txt
+          sha256sum "$OUT" > deliverables/Statistics10_2027_Weeks1-4_Four_NEW_Guided_V8_NATIVE_ManimCE.zip.sha256
+      - name: Publish four real videos and QA results to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/stat10_2027_guided_v8 deliverables/Statistics10_2027_Weeks1-4_Four_NEW_Guided_V8_NATIVE_ManimCE.zip* qa_v8
+          git commit -m "deliver: four NEW Statistics10 V8 native ManimCE guided PQH videos [skip ci]"
+          git fetch origin manim/stat10-2027-guided-v8-four-videos
+          git rebase origin/manim/stat10-2027-guided-v8-four-videos
+          git push origin HEAD:manim/stat10-2027-guided-v8-four-videos
+      - name: Upload release files
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Statistics10-2027-Four-NEW-Guided-ManimCE-V8
+          path: |
+            published_renders/stat10_2027_guided_v8/
+            deliverables/Statistics10_2027_Weeks1-4_Four_NEW_Guided_V8_NATIVE_ManimCE.zip
+            qa_v8/
+          retention-days: 30
+          if-no-files-found: warn
