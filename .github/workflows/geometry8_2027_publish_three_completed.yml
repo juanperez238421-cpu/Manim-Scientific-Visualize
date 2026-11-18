@@ -54,7 +54,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add published_renders/Geometry8_2027_Week0*_FINAL_pqh.mp4 \
                   published_renders/W0*C0*_contact.jpg \
-                  published_renders/W0*C0*_QA.tsv \
+                  published_renders/W0*C0*-QA.tsv \
                   published_renders/W0*C0*_FRAME_METRICS.csv
           git diff --cached --quiet || git commit -m "publish three independently verified 2027 Geometry8 lesson MP4s [skip ci]"
           git fetch origin geometry8-2027-w01-w04-eight-class-cad-release
