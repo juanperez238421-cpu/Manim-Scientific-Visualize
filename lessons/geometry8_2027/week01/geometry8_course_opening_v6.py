@@ -348,14 +348,14 @@ class Geometry8_YearOpeningV6(Geometry8_YearOpeningV5):
         self._phase_number+=1
         self.set_phase(number,"P3 / REAL 3D GEOMETRY",SKETCH)
         title=self._hud_fixed(self.txt(
-            "GEOMETRY BECOMES A THREE-DIMENSIONAL STRUCTURE",
+            "FROM 2D DRAWINGS TO 3D SOLIDS",
             0,2.08,37,DARK,12.6,True))
         sub=self._hud_fixed(self.txt(
-            "Observe faces, edges and vertices -- then rotate the solid.",
+            "Faces, edges and vertices reveal each solid.",
             0,1.43,26,MID,12.4))
         self.play(Write(title),Write(sub),run_time=1.35)
         self.move_camera(phi=61*DEGREES,theta=-48*DEGREES,run_time=1.5)
-        pos=LEFT*1.55+DOWN*.78
+        pos=LEFT*1.55+DOWN*1.42
         cube_wire=Cube(side_length=2.23)
         cube_wire.set_fill(opacity=0)
         cube_wire.set_stroke(color=SKETCH,width=2.8)
@@ -401,7 +401,7 @@ class Geometry8_YearOpeningV6(Geometry8_YearOpeningV5):
             self.remove_fixed_in_frame_mobjects(m)
             self.remove(m)
 
-        tetra=Tetrahedron().scale(1.45)
+        tetra=Tetrahedron().scale(1.57)
         tetra.set_fill(color=SLAB,opacity=.76)
         tetra.set_stroke(color=SKETCH,width=3.4)
         tetra.move_to(cube.get_center())
@@ -423,7 +423,7 @@ class Geometry8_YearOpeningV6(Geometry8_YearOpeningV5):
 
         # A third *Platonic* solid makes topology more than decoration.
         octa=Octahedron()
-        octa.scale(1.46)
+        octa.scale(1.59)
         octa.set_fill(color=TERRAIN,opacity=.77)
         octa.set_stroke(color=SKETCH,width=3.5)
         octa.move_to(tetra.get_center())
