@@ -75,7 +75,7 @@ class Geometry8_YearOpeningV6(Geometry8_YearOpeningV5):
         self.heading(0,"P1 / RULER AND COMPASS",
             "GEOMETRIC PRECISION FROM EQUAL DISTANCES",
             "The same-radius circles locate a perpendicular bisector.")
-        A=np.array([-1.47,-.59,0]);B=np.array([1.47,-.59,0]);R=1.96
+        A=np.array([-1.47,-.59,0]);B=np.array([1.47,-.59,0]);R=1.90
         y=np.sqrt(R*R-1.47*1.47)
         baseline=self.line(A,B,DARK,5.5)
         self.check_safe(baseline,label="construction baseline")
