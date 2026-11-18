@@ -47,6 +47,7 @@ class Geometry8_YearOpeningV5(Geometry8W01_Period1RoadmapV4):
         self.ph = self.fixed_hud()
         self.year_map()                # same approved V4 CAD timeline
         self.geometric_foundations()   # P1: point, line, plane as related objects
+        self.plane_preview()           # P1: authentic finite representation of ideal plane
         self.compass_construction()    # P1: two equal-radius arcs => exact bisector
         self.angle_transformations()   # P1: ray rotation; angle types
         self.parallel_transversal()    # P1: equal corresponding angles
@@ -99,13 +100,31 @@ class Geometry8_YearOpeningV5(Geometry8W01_Period1RoadmapV4):
         self.caption("Geometric symbols communicate infinite lines and finite segments.")
         self.wait(2.4)
 
+    def plane_preview(self):
+        self.heading(0,"P1 / GEOMETRY OF PLANES",
+            "A PLANE EXTENDS IN TWO DIMENSIONS",
+            "A finite drawing can represent part of an infinite flat plane.")
+        plane=Polygon([-4.82,-1.62,0],[3.50,-1.62,0],
+                      [4.66,.87,0],[-3.67,.87,0],
+                      stroke_color=SKETCH,stroke_width=3.6,
+                      fill_color=MODEL,fill_opacity=.34)
+        self.draw_stage(plane,runtime=1.75)
+        cross=self.line([-3.70,-.56,0],[3.31,-.56,0],POSITIVE,4.6)
+        self.draw_stage(cross,runtime=1.34)
+        p=Dot([-1.26,-.56,0],radius=.14,color=DARK)
+        self.play(FadeIn(p),run_time=.50);self.register(p)
+        name=self.txt("PLANE",4.54,-1.36,29,SKETCH,2.65,True)
+        self.appearance(name,time=.84)
+        self.caption("Points and lines can lie in a plane; the drawn edges are only symbols.")
+        self.wait(2.7)
+
     def compass_construction(self):
         self.heading(0,"P1 / RULER AND COMPASS",
             "A CONSTRUCTION IS A SEQUENCE OF REASONS",
             "Equal distances reveal the perpendicular bisector of a segment.")
-        cy=-.34
-        A=np.array([-1.55,cy,0]);B=np.array([1.55,cy,0]);R=2.05
-        h=np.sqrt(R**2-1.55**2)
+        cy=-.54
+        A=np.array([-1.35,cy,0]);B=np.array([1.35,cy,0]);R=1.80
+        h=np.sqrt(R**2-1.35**2)
         baseline=self.line(A,B,DARK,4.9)
         left=Dot(A,radius=.13,color=SKETCH)
         right=Dot(B,radius=.13,color=SKETCH)
@@ -141,7 +160,7 @@ class Geometry8_YearOpeningV5(Geometry8W01_Period1RoadmapV4):
         self.heading(0,"P1 / ANGLES",
             "ANGLES ARE MEASURES OF ROTATION",
             "The same two rays can define acute, right, obtuse and straight angles.")
-        O=np.array([-2.90,-.78,0]);r=2.22
+        O=np.array([-2.90,-1.02,0]);r=2.16
         theta=ValueTracker(32*DEGREES)
         base=Arrow(O,O+RIGHT*r,buff=0,color=DARK,stroke_width=4.8)
         mobile=always_redraw(lambda:Arrow(
@@ -154,7 +173,8 @@ class Geometry8_YearOpeningV5(Geometry8W01_Period1RoadmapV4):
                 color=POSITIVE,stroke_width=4.1))
         self.draw_stage(base,runtime=1.0)
         self.add(mobile,arc);self.register(mobile,arc)
-        self.play(FadeIn(Dot(O,radius=.13,color=DARK)),run_time=.3)
+        vertex=Dot(O,radius=.13,color=DARK)
+        self.play(FadeIn(vertex),run_time=.3);self.register(vertex)
         old=self.txt("ACUTE: 32 DEGREES",3.00,-.19,34,SKETCH,6.35,True)
         self.appearance(old,time=.9)
         for degrees,label in ((90,"RIGHT: 90 DEGREES"),(128,"OBTUSE: 128 DEGREES"),
@@ -177,7 +197,7 @@ class Geometry8_YearOpeningV5(Geometry8W01_Period1RoadmapV4):
         upper=self.line([-5.25,y1,0],[2.22,y1,0],DARK,4.4)
         lower=self.line([-5.25,y2,0],[2.22,y2,0],DARK,4.4)
         line=self.line([xu+(-2.18-y1)/np.sqrt(3),-2.18,0],
-                       [xu+(1.85-y1)/np.sqrt(3),1.85,0],SKETCH,4.9)
+                       [xu+(1.22-y1)/np.sqrt(3),1.22,0],SKETCH,4.9)
         self.draw_stage(upper,lower,runtime=1.4)
         self.draw_stage(line,runtime=1.35)
         arcs=[
@@ -214,7 +234,8 @@ class Geometry8_YearOpeningV5(Geometry8W01_Period1RoadmapV4):
         centroid=(P+Q+R)/3
         median=self.line(R,(P+Q)/2, DARK,2.2)
         self.draw_stage(median,runtime=1.45)
-        self.play(FadeIn(Dot(centroid,radius=.11,color=DARK)),run_time=.35)
+        G=Dot(centroid,radius=.11,color=DARK)
+        self.play(FadeIn(G),run_time=.35);self.register(G)
         self.appearance(self.txt("ALTITUDE",3.40,.42,35,POSITIVE,4.7,True),time=.8)
         self.appearance(self.txt("MEDIAN",3.40,-.42,35,SKETCH,4.7,True),time=.8)
         self.caption("Notable lines lead to geometric centers and triangle relationships.")
@@ -282,7 +303,7 @@ class Geometry8_YearOpeningV5(Geometry8W01_Period1RoadmapV4):
             "AN EQUATION THAT CAN BE SEEN",
             "The areas on a right triangle's legs add to the area on its hypotenuse.")
         # A right triangle with legs 3 and 4, hypotenuse 5, scaled by .42.
-        A=np.array([-2.4,-.35,0])
+        A=np.array([-2.4,-.67,0])
         B=A+np.array([4*.42,0,0])
         C=A+np.array([0,3*.42,0])
         tri=Polygon(A,B,C,color=DARK,stroke_width=4.5,
@@ -351,7 +372,7 @@ class Geometry8_YearOpeningV5(Geometry8W01_Period1RoadmapV4):
         self.heading(0,"P3 / SHADED REGIONS",
             "FIND THE AREA BY SUBTRACTION",
             "The inner disk is removed from the area enclosed by the outer circle.")
-        O=np.array([-2.72,-.35,0])
+        O=np.array([-2.72,-.60,0])
         outer=Circle(radius=1.76,color=DARK,stroke_width=4.5,
                      fill_color=MODEL,fill_opacity=.68).move_to(O)
         inner=Circle(radius=.87,color=SKETCH,stroke_width=3.6,
