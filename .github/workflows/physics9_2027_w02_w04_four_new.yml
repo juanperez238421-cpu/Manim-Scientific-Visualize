@@ -1,0 +1,168 @@
+name: Physics9 2027 Weeks02 and 04 - four new CAD PQH lessons
+
+on:
+  push:
+    branches: [physics9-2027-week02-week04-eight-video-pack]
+    paths:
+      - '.github/workflows/physics9_2027_w02_w04_four_new.yml'
+      - 'lessons/physics9_2027/week02_week04/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      SOURCE: lessons/physics9_2027/week02_week04/physics9_w02_w04_cad.py
+      QA: lessons/physics9_2027/week02_week04/qa_four_lessons.py
+      CREST: lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png
+    steps:
+      - name: Checkout exact source and four existing MP4s
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Validate Python and institutional PNG
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install -q Pillow
+          python -m py_compile "$SOURCE" "$QA"
+          python - "$SOURCE" "$CREST" <<'PY'
+          from PIL import Image
+          import ast,sys
+          p=sys.argv[1]
+          tree=ast.parse(open(p,encoding="utf-8").read())
+          names={x.name for x in tree.body if isinstance(x,ast.ClassDef)}
+          expected={"Physics9W02_SI_Units","Physics9W02_ScientificNotation","Physics9W04_Instruments","Physics9W04_UncertaintyLab"}
+          assert expected.issubset(names),expected-names
+          crest=Image.open(sys.argv[2])
+          assert crest.format=="PNG" and crest.width>=150 and crest.height>=150
+          crest.verify()
+          print("PASS: Four independent classes, canonical PNG, valid Python")
+          PY
+          test -s published_renders/Physics9_2027_Week01_V5_Class01_PHYSICS_COMPLEX_MOTION_FINAL_PQH.mp4
+          test -s published_renders/Physics9_2027_Week01_V4_Class02_LARGE_SAFE_FINAL_PQH.mp4
+          test -s published_renders/Physics9_2027_Week03_V1_Class01_Conversions_FINAL_pqh.mp4
+          test -s published_renders/Physics9_2027_Week03_V1_Class02_SignificantFigures_FINAL_pqh.mp4
+          mkdir -p four_delivery/frames
+          sha256sum "$SOURCE" "$QA" "$CREST" > four_delivery/SOURCE_SHA256SUMS.txt
+      - name: Install pinned Docker ManimCE and FFmpeg
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1
+      - name: Mandatory complete PQL rendering of four new scenes
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home -e PHYSICS_CAD_PREVIEW=1 \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+             set -euo pipefail
+             mkdir -p /tmp/manim-home /tmp/manim-bin
+             printf "#!/bin/sh\nexit 0\n" > /tmp/manim-bin/xdg-open
+             chmod +x /tmp/manim-bin/xdg-open
+             export PATH="/tmp/manim-bin:$PATH"
+             f=lessons/physics9_2027/week02_week04/physics9_w02_w04_cad.py
+             for scene in Physics9W02_SI_Units Physics9W02_ScientificNotation Physics9W04_Instruments Physics9W04_UncertaintyLab; do
+               echo "PQL: $scene"
+               manim -pql "$f" "$scene" --media_dir four_pql --format mp4 --disable_caching
+             done
+            ' 2>&1 | tee four_delivery/PQL_RENDER_LOG.txt
+          for scene in Physics9W02_SI_Units Physics9W02_ScientificNotation Physics9W04_Instruments Physics9W04_UncertaintyLab; do
+            test -s "$(find four_pql -name "$scene.mp4" -print -quit)"
+          done
+      - name: Four complete PQH Full-HD 30fps H264 renders
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+             set -euo pipefail
+             mkdir -p /tmp/manim-home /tmp/manim-bin
+             printf "#!/bin/sh\nexit 0\n" > /tmp/manim-bin/xdg-open
+             chmod +x /tmp/manim-bin/xdg-open
+             export PATH="/tmp/manim-bin:$PATH"
+             f=lessons/physics9_2027/week02_week04/physics9_w02_w04_cad.py
+             for scene in Physics9W02_SI_Units Physics9W02_ScientificNotation Physics9W04_Instruments Physics9W04_UncertaintyLab; do
+               echo "PQH: $scene"
+               manim -pqh "$f" "$scene" --fps 30 --media_dir four_pqh --format mp4 --disable_caching
+             done
+            ' 2>&1 | tee four_delivery/PQH_RENDER_LOG.txt
+          cp "$(find four_pqh -name Physics9W02_SI_Units.mp4 -print -quit)" four_delivery/Physics9_2027_Week02_V1_Class01_SI_Units_FINAL_pqh.mp4
+          cp "$(find four_pqh -name Physics9W02_ScientificNotation.mp4 -print -quit)" four_delivery/Physics9_2027_Week02_V1_Class02_Scientific_Notation_FINAL_pqh.mp4
+          cp "$(find four_pqh -name Physics9W04_Instruments.mp4 -print -quit)" four_delivery/Physics9_2027_Week04_V1_Class01_Precision_Instruments_FINAL_pqh.mp4
+          cp "$(find four_pqh -name Physics9W04_UncertaintyLab.mp4 -print -quit)" four_delivery/Physics9_2027_Week04_V1_Class02_Uncertainty_MiniLab_FINAL_pqh.mp4
+      - name: Full MP4 decode, FFprobe, SHA256 and four contact sheets
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'file\tcodec\twidth\theight\tfps\tpixel_format\tduration_sec\tbytes\n' > four_delivery/VIDEO_QA.tsv
+          for video in four_delivery/*Week02_V1_*FINAL_pqh.mp4 four_delivery/*Week04_V1_*FINAL_pqh.mp4; do
+            CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$video")"
+            W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$video")"
+            H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$video")"
+            FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$video")"
+            PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$video")"
+            DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$video")"
+            SIZE="$(stat -c%s "$video")"
+            test "$CODEC" = h264
+            test "$W" = 1920; test "$H" = 1080
+            test "$FPS" = 30/1; test "$PIX" = yuv420p
+            python -c 'import sys; assert float(sys.argv[1]) > 60' "$DUR"
+            ffmpeg -nostdin -loglevel error -i "$video" -f null -
+            case "$video" in
+             *Week02*Class01*) key=W02C01;;
+             *Week02*Class02*) key=W02C02;;
+             *Week04*Class01*) key=W04C01;;
+             *Week04*Class02*) key=W04C02;;
+             *) exit 2;;
+            esac
+            ffmpeg -nostdin -loglevel error -ss 3 -i "$video" -frames:v 1 "four_delivery/frames/$key-03s.png"
+            for pct in 0.08 0.20 0.32 0.44 0.56 0.68 0.80 0.92; do
+              t="$(python -c "print(float('$DUR')*float('$pct'))")"
+              ffmpeg -nostdin -loglevel error -ss "$t" -i "$video" -frames:v 1 "four_delivery/frames/$key-$pct.png"
+            done
+            printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$video" "$CODEC" "$W" "$H" "$FPS" "$PIX" "$DUR" "$SIZE" >> four_delivery/VIDEO_QA.tsv
+          done
+          python "$QA" four_delivery/frames four_delivery
+          sha256sum four_delivery/*Week0[24]_V1_*FINAL_pqh.mp4 > four_delivery/VIDEO_SHA256SUMS.txt
+          echo 'PASS: Four new PQH/PQL videos, full decode and 36 verified frames' > four_delivery/STATUS.txt
+      - name: Publish QA artifact with complete videos and frames
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-2027-W02-W04-Four-New-PQH-8VideoPack
+          retention-days: 30
+          if-no-files-found: error
+          path: |
+            four_delivery/*.mp4
+            four_delivery/*.jpg
+            four_delivery/*.tsv
+            four_delivery/*.csv
+            four_delivery/*SHA256SUMS.txt
+            four_delivery/STATUS.txt
+            four_delivery/frames/*.png
+            lessons/physics9_2027/week02_week04/*.py
+            lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png
+      - name: Publish four verified videos to eight-video GitHub branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p published_renders
+          cp four_delivery/*Week0[24]_V1_*FINAL_pqh.mp4 published_renders/
+          cp four_delivery/*Week0[24]_V1_*contact.jpg published_renders/
+          cp four_delivery/VIDEO_QA.tsv published_renders/Physics9_2027_Week02_04_V1_QA.tsv
+          cp four_delivery/VIDEO_SHA256SUMS.txt published_renders/Physics9_2027_Week02_04_V1_SHA256SUMS.txt
+          cp four_delivery/FRAME_METRICS.csv published_renders/Physics9_2027_Week02_04_V1_FRAME_METRICS.csv
+          cp four_delivery/STATUS.txt published_renders/Physics9_2027_Week02_04_V1_STATUS.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add published_renders/Physics9_2027_Week02_V1_* published_renders/Physics9_2027_Week04_V1_* published_renders/Physics9_2027_Week02_04_V1_*
+          git diff --cached --quiet || git commit -m 'publish: four verified PQH videos for Physics9 weeks 2 and 4 [skip ci]'
+          git push origin HEAD:physics9-2027-week02-week04-eight-video-pack
