@@ -84,7 +84,7 @@ jobs:
           ' 2>&1 | tee cad_delivery/PQH_RENDER_LOG.txt
           A="$(find cad_pqh -type f -name Geometry8_YearOpeningV5.mp4 -print -quit)"
           test -s "$A"
-          cp "$A" cad_delivery/Geometry8_2027_V5_COURSE_OPENING_2D_3D_CAD_QA_VERIFIED_pqh.mp4
+          cp "$A" cad_delivery/Geometry8_2027_V5_COURSE_OPENING_2D_3D_CAD_QA_VERIFIED_FINAL_pqh.mp4
       - name: Technical and dense-frame MP4 QA
         shell: bash
         run: |
@@ -158,4 +158,4 @@ jobs:
           git merge --no-edit -X ours origin/geometry8-2027-v5-cinematic-course-2d-3d
           git push origin HEAD:geometry8-2027-v5-cinematic-course-2d-3d
           echo "## Verified direct MP4 downloads" >> "$GITHUB_STEP_SUMMARY"
-          echo "https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/geometry8-2027-v5-cinematic-course-2d-3d/published_renders/Geometry8_2027_V5_COURSE_OPENING_2D_3D_CAD_QA_VERIFIED_pqh.mp4" >> "$GITHUB_STEP_SUMMARY"
+          echo "https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/geometry8-2027-v5-cinematic-course-2d-3d/published_renders/Geometry8_2027_V5_COURSE_OPENING_2D_3D_CAD_QA_VERIFIED_FINAL_pqh.mp4" >> "$GITHUB_STEP_SUMMARY"
