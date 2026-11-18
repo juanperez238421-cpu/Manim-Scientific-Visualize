@@ -88,8 +88,8 @@ jobs:
           SH
           chmod +x "$RUNNER_TEMP/manim-ff/"*
           echo "$RUNNER_TEMP/manim-ff" >> "$GITHUB_PATH"
-          "$RUNNER_TEMP/manim-ff/ffmpeg" -version | head -2
-          "$RUNNER_TEMP/manim-ff/ffprobe" -version | head -2
+          "$RUNNER_TEMP/manim-ff/ffmpeg" -version | sed -n '1,2p'
+          "$RUNNER_TEMP/manim-ff/ffprobe" -version | sed -n '1,2p'
       - name: Full structural smoke traverse, including real 3D
         shell: bash
         run: |
