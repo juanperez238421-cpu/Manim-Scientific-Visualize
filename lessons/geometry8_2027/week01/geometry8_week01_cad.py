@@ -172,12 +172,21 @@ class Geometry8W01_Foundations(Geometry8Base):
             else:
                 fig=Line(L,R,stroke_width=4.2,color=SKETCH)
             self.draw(fig,time=1.1)
-            if not name.startswith("LINE"):
-                first=Dot(L,radius=.13,color=POSITIVE)
-                self.play(FadeIn(first),run_time=.30);self.register(first)
-            if name.startswith("SEGMENT"):
-                last=Dot(R,radius=.13,color=POSITIVE)
-                self.play(FadeIn(last),run_time=.30);self.register(last)
+            # A/B are correctly on each object: interior points for a line,
+            # A endpoint/B interior for a ray, both endpoints for a segment.
+            if name.startswith("LINE"):
+                pA=np.array([-2.80,y,0]);pB=np.array([.35,y,0])
+            elif name.startswith("RAY"):
+                pA=L;pB=np.array([.35,y,0])
+            else:
+                pA=L;pB=R
+            markerA=Dot(pA,radius=.115,color=POSITIVE)
+            markerB=Dot(pB,radius=.115,color=POSITIVE)
+            self.play(FadeIn(markerA),FadeIn(markerB),run_time=.45)
+            self.register(markerA,markerB)
+            labelA=self.label_figure("A",pA[0]-.15,y+.29,24,SKETCH,True,1.0)
+            labelB=self.label_figure("B",pB[0]+.15,y+.29,24,SKETCH,True,1.0)
+            self.appearance(labelA,labelB,time=.52)
             a=self.label_figure(name,4.35,y+.25,26,DARK,True,3.6)
             b=self.label_figure(note,4.35,y-.18,22,MID,False,3.6)
             self.appearance(a,b,time=.88)
@@ -321,6 +330,7 @@ class Geometry8W01_Sets(Geometry8Base):
         objects=(frame,circleA,circleB,A_only,AB,B_only,neither)
         self.draw(frame,time=.65)
         self.draw(circleA,circleB,time=1.7)
+        self.appearance(A_label,B_label,time=.95)
         self.play(*[Create(o) for o in (A_only,AB,B_only,neither)],run_time=1.7)
         self.register(A_only,AB,B_only,neither)
         return objects
