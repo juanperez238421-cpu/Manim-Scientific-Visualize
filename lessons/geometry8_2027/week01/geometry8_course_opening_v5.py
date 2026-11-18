@@ -303,17 +303,17 @@ class Geometry8_YearOpeningV5(Geometry8W01_Period1RoadmapV4):
             "AN EQUATION THAT CAN BE SEEN",
             "The areas on a right triangle's legs add to the area on its hypotenuse.")
         # A right triangle with legs 3 and 4, hypotenuse 5, scaled by .42.
-        A=np.array([-2.4,-.67,0])
-        B=A+np.array([4*.42,0,0])
-        C=A+np.array([0,3*.42,0])
+        A=np.array([-2.40,-1.02,0])
+        B=A+np.array([4*.32,0,0])
+        C=A+np.array([0,3*.32,0])
         tri=Polygon(A,B,C,color=DARK,stroke_width=4.5,
                     fill_color=WHITE,fill_opacity=.0)
         self.draw_stage(tri,runtime=1.55)
         AB=B-A;AC=C-A;BC=C-B
-        leg4=Polygon(A,B,B+DOWN*4*.42,A+DOWN*4*.42,
+        leg4=Polygon(A,B,B+DOWN*4*.32,A+DOWN*4*.32,
                      stroke_color=SKETCH,stroke_width=3.6,
                      fill_color=MODEL,fill_opacity=.55)
-        leg3=Polygon(A,C,C+LEFT*3*.42,A+LEFT*3*.42,
+        leg3=Polygon(A,C,C+LEFT*3*.32,A+LEFT*3*.32,
                      stroke_color=POSITIVE,stroke_width=3.6,
                      fill_color=TERRAIN,fill_opacity=.60)
         n=np.array([BC[1],-BC[0],0])
@@ -403,9 +403,9 @@ class Geometry8_YearOpeningV5(Geometry8W01_Period1RoadmapV4):
                                        0,1.42,26,MID,12.6))
         self.play(Write(head),Write(sub),run_time=1.38)
         self.move_camera(phi=63*DEGREES,theta=-48*DEGREES,run_time=1.4)
-        cube=Cube(side_length=2.33,fill_color=MODEL,fill_opacity=.72)
+        cube=Cube(side_length=2.05,fill_color=MODEL,fill_opacity=.72)
         cube.set_stroke(color=SKETCH,width=2.7)
-        cube.shift(LEFT*.99+DOWN*.24)
+        cube.shift(LEFT*.99+DOWN*.75)
         self.play(Create(cube),run_time=2.1);self.register(cube)
         self.play(Rotate(cube,angle=PI*.88,axis=UP,about_point=cube.get_center()),
                   run_time=3.7,rate_func=smooth)
@@ -418,7 +418,7 @@ class Geometry8_YearOpeningV5(Geometry8W01_Period1RoadmapV4):
         for x in (volume,surface):
             self.remove_fixed_in_frame_mobjects(x)
             self.remove(x)
-        tetra=Tetrahedron().scale(1.45)
+        tetra=Tetrahedron().scale(1.22)
         tetra.set_fill(color=SLAB,opacity=.67)
         tetra.set_stroke(color=SKETCH,width=2.7)
         tetra.move_to(cube.get_center())
