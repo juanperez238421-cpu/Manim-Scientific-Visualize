@@ -169,15 +169,16 @@ class Geometry8W01_Period1RoadmapV4(Geometry8W01_YearRoadmapV3):
     def construction_tools_preview(self):
         self.heading(5,"P1 / RULER AND COMPASS","TWO TOOLS, TWO GEOMETRIC IDEAS",
                      "A ruler creates straight edges; a compass traces equal-radius arcs.")
-        ruler=Line([-5.68,-.70,0],[-.43,-.70,0],
-                   color=SKETCH,stroke_width=6)
-        ticks=VGroup(*[
-            Line([-5.43+i*.49,-.70,0],[-5.43+i*.49,-.70+(0.48 if i%2==0 else .28),0],
-                 color=DARK,stroke_width=2.3)
-            for i in range(10)
-        ])
-        self.draw_stage(ruler,ticks,runtime=1.80)
-        m1=self.big_text("RULER: STRAIGHT LINE",-3.13,-1.64,30,DARK,6.2,True)
+        # IJR's DBA specifies a ruler WITHOUT graduations for constructions.
+        # Distinguish the straightedge from a measuring scale.
+        ruler=RoundedRectangle(width=5.20,height=.46,corner_radius=.07,
+                stroke_color=MID,stroke_width=2.6,
+                fill_color=MODEL,fill_opacity=.34).move_to([-3.08,-.89,0])
+        edge=Line([-5.64,-.61,0],[-.52,-.61,0],
+                  color=SKETCH,stroke_width=4.3)
+        self.draw_stage(ruler,edge,runtime=1.80)
+        m1=self.big_text("UNMARKED RULER: STRAIGHT EDGE",
+                         -3.05,-1.64,28,DARK,6.35,True)
         self.appearance(m1,time=.80)
 
         c=np.array([3.20,-.55,0]);radius=1.31
@@ -269,7 +270,8 @@ class Geometry8W01_Period1RoadmapV4(Geometry8W01_YearRoadmapV3):
         eq=self.big_math(r"30^\circ+50^\circ=80^\circ",
                          3.09,.15,52,POSITIVE,6.35)
         self.appearance(eq,time=1.2)
-        note=self.big_text("AOC = AOB + BOC",3.05,-.84,29,DARK,5.8,True)
+        note=self.big_math(r"\angle AOC=\angle AOB+\angle BOC",
+                           3.05,-.84,40,DARK,6.25)
         self.appearance(note,time=.97)
         self.caption("Angle-addition postulate: parts add to the whole angle.")
         self.watch(5.9)
