@@ -4,6 +4,7 @@ on:
     branches: [geometry8-2027-v5-cinematic-course-2d-3d]
     paths:
       - '.github/workflows/geometry8_v5_structural_probe.yml'
+      - 'lessons/geometry8_2027/week01/geometry8_course_opening_v5.py'
   workflow_dispatch:
 permissions:
   contents: read
