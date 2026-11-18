@@ -4,6 +4,7 @@ on:
     branches: [geometry8-2027-v5-cinematic-course-2d-3d]
     paths:
       - '.github/workflows/geometry8_v5_structural_probe.yml'
+      - 'lessons/geometry8_2027/week01/geometry8_course_opening_v5.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -25,7 +26,7 @@ jobs:
               mkdir -p /tmp/manim-home
               manim -sql lessons/geometry8_2027/week01/geometry8_course_opening_v5.py Geometry8_YearOpeningV5 --media_dir v5_still_probe --disable_caching
             ' 2>&1 | tee v5_still_probe.log
-          test -s "$(find v5_still_probe -type f -name 'Geometry8_YearOpeningV5.png' -print -quit)"
+          test -s "$(find v5_still_probe -type f -name 'Geometry8_YearOpeningV5*.png' -print -quit)"
           echo 'PASS all scene methods executed in fast still-frame traversal'
       - uses: actions/upload-artifact@v4
         if: always()
