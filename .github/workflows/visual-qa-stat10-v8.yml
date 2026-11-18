@@ -1,0 +1,23 @@
+name: Statistics10 V8 Encoded Frame Contact Sheet Final Visual Review
+on:
+  push:
+    branches: [manim/stat10-2027-guided-v8-four-videos]
+    paths: [.github/workflows/visual-qa-stat10-v8.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show actual MP4 extracted-frame mosaic from V8 render
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s qa_v8/CONTACT_SHEET.jpg
+          echo 'V8_CONTACT_START'
+          base64 -w0 qa_v8/CONTACT_SHEET.jpg
+          echo
+          echo 'V8_CONTACT_END'
