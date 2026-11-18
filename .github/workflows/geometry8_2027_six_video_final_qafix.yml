@@ -1,0 +1,211 @@
+name: Geometry 8 2027 - Visual QA Repair Three and Final Six Video Release
+on:
+  push:
+    branches: [geometry8-2027-w01-w04-eight-class-cad-release]
+    paths:
+      - '.github/workflows/geometry8_2027_six_video_final_qafix.yml'
+      # Dedicated recovery workflow. Source is pinned by this branch.
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  render-six:
+    name: Render ${{ matrix.slug }} PQH
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - {slug: W02C02, scene: Geometry8W02_Class02_SpatialReasoning, file: Geometry8_2027_Week02_Class02_SpatialReasoning_FINAL_pqh.mp4}
+          - {slug: W03C02, scene: Geometry8W03_Class02_Constructions, file: Geometry8_2027_Week03_Class02_Constructions_FINAL_pqh.mp4}
+          - {slug: W04C01, scene: Geometry8W04_Class01_Angles, file: Geometry8_2027_Week04_Class01_Angles_FINAL_pqh.mp4}
+    env:
+      SOURCE: lessons/geometry8_2027/week02_04/geometry8_six_classes_cad.py
+      QA_SCRIPT: lessons/geometry8_2027/week02_04/qa_six_classes.py
+      SCENE: ${{ matrix.scene }}
+      SLUG: ${{ matrix.slug }}
+      FINAL: ${{ matrix.file }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python syntax, real crest, and scene audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          pip install --disable-pip-version-check Pillow
+          python -m py_compile "$SOURCE" "$QA_SCRIPT"
+          python - "$SOURCE" "$SCENE" <<'PY'
+          import ast,sys
+          from PIL import Image
+          tree=ast.parse(open(sys.argv[1],encoding='utf-8').read())
+          assert any(isinstance(x,ast.ClassDef) and x.name==sys.argv[2] for x in tree.body)
+          path='lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png'
+          with Image.open(path) as im:
+              assert im.format=='PNG' and min(im.size)>=150
+              im.verify()
+          print('PASS scene declaration and genuine PNG crest')
+          PY
+          mkdir -p delivery/audit_frames
+      - name: Docker ManimCE and FFmpeg
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v ffmpeg || { sudo apt-get update -qq; sudo apt-get install -y -qq ffmpeg; }
+          docker pull manimcommunity/manim:v0.20.1
+      - name: Mandatory complete -pql preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e PHYSICS_CAD_PREVIEW=1 \
+            -e SCENE="$SCENE" -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-home /tmp/manim-bin
+              printf "#!/bin/sh\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH="/tmp/manim-bin:$PATH"
+              manim -pql lessons/geometry8_2027/week02_04/geometry8_six_classes_cad.py "$SCENE" \
+                --format mp4 --media_dir cad_pql --disable_caching
+            ' 2>&1 | tee delivery/PQL_RENDER_LOG.txt
+          test -s "$(find cad_pql -type f -name "$SCENE.mp4" -print -quit)"
+      - name: Mandatory full-resolution -pqh render
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+            -e SCENE="$SCENE" -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-home /tmp/manim-bin
+              printf "#!/bin/sh\nexit 0\n" > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH="/tmp/manim-bin:$PATH"
+              manim -pqh lessons/geometry8_2027/week02_04/geometry8_six_classes_cad.py "$SCENE" \
+                --fps 30 --format mp4 --media_dir cad_pqh --disable_caching
+            ' 2>&1 | tee delivery/PQH_RENDER_LOG.txt
+          F=$(find cad_pqh -type f -name "$SCENE.mp4" -print -quit)
+          test -s "$F"
+          cp "$F" "delivery/$FINAL"
+      - name: Technical verification, full decode and 16 real images
+        shell: bash
+        run: |
+          set -euo pipefail
+          F="delivery/$FINAL"
+          codec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")
+          width=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")
+          height=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")
+          fps=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")
+          pix=$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")
+          dur=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")
+          test "$codec" = h264
+          test "$width" = 1920; test "$height" = 1080
+          test "$fps" = 30/1; test "$pix" = yuv420p
+          python -c 'import sys; assert float(sys.argv[1])>45' "$dur"
+          ffmpeg -nostdin -loglevel error -i "$F" -f null -
+          ffmpeg -nostdin -loglevel error -ss 3 -i "$F" -frames:v 1 "delivery/audit_frames/$SLUG-03s.png"
+          for p in 0.04 0.10 0.16 0.22 0.28 0.34 0.40 0.46 0.52 0.58 0.64 0.70 0.78 0.86 0.95; do
+            t=$(python -c "print(float('$dur')*float('$p'))")
+            ffmpeg -nostdin -loglevel error -ss "$t" -i "$F" -frames:v 1 \
+              "delivery/audit_frames/$SLUG-$p.png"
+          done
+          python "$QA_SCRIPT" delivery/audit_frames delivery --slug "$SLUG"
+          printf 'slug\tfile\tcodec\twidth\theight\tfps\tpix_fmt\tduration\tbytes\n' > "delivery/$SLUG-QA.tsv"
+          printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+             "$SLUG" "$FINAL" "$codec" "$width" "$height" "$fps" "$pix" "$dur" \
+             "$(stat -c%s "$F")" >> "delivery/$SLUG-QA.tsv"
+          sha256sum "$F" > "delivery/$SLUG-SHA256SUMS.txt"
+          echo 'PASS: complete PQL/PQH, H264 1080p 30fps, full decode, 16 frames' \
+             > "delivery/$SLUG-STATUS.txt"
+      - name: Upload independently validated MP4 and contact sheet
+        uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8-2027-${{ matrix.slug }}-PQH-verified
+          path: |
+            delivery/*.mp4
+            delivery/*.jpg
+            delivery/*.csv
+            delivery/*.tsv
+            delivery/*SHA256SUMS.txt
+            delivery/*STATUS.txt
+            delivery/audit_frames/*.png
+            delivery/*RENDER_LOG.txt
+            lessons/geometry8_2027/week02_04/*.py
+          retention-days: 30
+          if-no-files-found: error
+
+  publish-six:
+    name: Publish six visually QA-corrected Full HD lesson videos
+    needs: render-six
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download three new QA-fixed scenes
+        uses: actions/download-artifact@v4
+        with:
+          pattern: Geometry8-2027-W0*-PQH-verified
+          path: repairs
+          merge-multiple: true
+      - name: Reuse verified W02C01
+        uses: actions/download-artifact@v4
+        with:
+          name: Geometry8-2027-W02C01-PQH-verified
+          run-id: 44223382394
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: reuse/W02C01
+      - name: Reuse verified W03C01
+        uses: actions/download-artifact@v4
+        with:
+          name: Geometry8-2027-W03C01-PQH-verified
+          run-id: 44222452063
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: reuse/W03C01
+      - name: Reuse verified W04C02
+        uses: actions/download-artifact@v4
+        with:
+          name: Geometry8-2027-W04C02-PQH-verified
+          run-id: 44222452063
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: reuse/W04C02
+      - name: Normalize six tested video artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p flat
+          find repairs reuse -type f \( -name '*.mp4' -o -name '*_contact.jpg' -o -name '*-STATUS.txt' -o -name '*-QA.tsv' -o -name '*-SHA256SUMS.txt' -o -name '*_FRAME_METRICS.csv' \) -exec cp -n {} flat/ \;
+          test "$(find flat -maxdepth 1 -name '*.mp4' | wc -l)" -eq 6
+      - name: Publish immutable final six-video QA manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p published_renders
+          for slug in W02C01 W02C02 W03C01 W03C02 W04C01 W04C02; do
+            grep -q '^PASS:' "flat/$slug-STATUS.txt"
+            srcfile=$(awk 'NR==1 {print $2}' "flat/$slug-SHA256SUMS.txt" | xargs basename)
+            expected=$(awk 'NR==1 {print $1}' "flat/$slug-SHA256SUMS.txt")
+            actual=$(sha256sum "flat/$srcfile" | awk '{print $1}')
+            test "$expected" = "$actual"
+            out="${srcfile/_FINAL_pqh.mp4/_V2_QA_FINAL_pqh.mp4}"
+            test "$out" != "$srcfile"
+            cp "flat/$srcfile" "published_renders/$out"
+            cp "flat/$slug""_contact.jpg" "published_renders/$slug""_V2_QA_contact.jpg"
+            cp "flat/$slug-QA.tsv" "published_renders/$slug-V2_QA.tsv"
+            cp "flat/$slug""_FRAME_METRICS.csv" "published_renders/$slug""_V2_QA_FRAME_METRICS.csv"
+            echo "VERIFIED: $slug $out SHA256 $actual"
+          done
+          test "$(find published_renders -maxdepth 1 -name '*_V2_QA_FINAL_pqh.mp4' | wc -l)" -eq 6
+          sha256sum published_renders/*_V2_QA_FINAL_pqh.mp4 > published_renders/Geometry8_2027_W02_W04_SIX_V2_QA_SHA256SUMS.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/*_V2_QA_FINAL_pqh.mp4 \
+                  published_renders/W0*C0*_V2_QA_contact.jpg \
+                  published_renders/W0*C0*-V2_QA.tsv \
+                  published_renders/W0*C0*_V2_QA_FRAME_METRICS.csv \
+                  published_renders/Geometry8_2027_W02_W04_SIX_V2_QA_SHA256SUMS.txt
+          git diff --cached --quiet || git commit -m "publish six geometry8 videos verified with final V2 visual QA [skip ci]"
+          git fetch origin geometry8-2027-w01-w04-eight-class-cad-release
+          git merge --no-edit -X ours origin/geometry8-2027-w01-w04-eight-class-cad-release
+          git push origin HEAD:geometry8-2027-w01-w04-eight-class-cad-release
+          echo "PASS: six final visually reviewed 1080p MP4s published." >> "$GITHUB_STEP_SUMMARY"

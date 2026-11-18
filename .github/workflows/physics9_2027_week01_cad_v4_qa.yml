@@ -1,0 +1,153 @@
+name: Physics9 2027 W01 V4 - School-wide Roadmap and Magnified Measurements
+
+on:
+  push:
+    branches: [physics9-2027-week01-cad-v4-roadmap-large]
+    paths:
+      - '.github/workflows/physics9_2027_week01_cad_v4_qa.yml'
+      - 'lessons/physics9_2027/week01/cad_canonical/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SOURCE: lessons/physics9_2027/week01/cad_canonical/physics9_week01_cad.py
+      ASSET: lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png
+      QA_SCRIPT: lessons/physics9_2027/week01/cad_canonical/qa_visual_frames_v4.py
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@v4
+      - name: Python syntax and crest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check Pillow
+          python -m py_compile "$SOURCE" "$QA_SCRIPT"
+          python - "$ASSET" <<'PY'
+          from PIL import Image
+          import sys
+          im=Image.open(sys.argv[1])
+          assert im.format=="PNG" and im.width>=150 and im.height>=150
+          im.verify()
+          print("Authentic school PNG verified:",sys.argv[1])
+          PY
+          test -s lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png
+          grep -q 'class Physics9CAD_SchoolRoadmap' "$SOURCE"
+          grep -q 'class Physics9CAD_MeasurementLarge' "$SOURCE"
+          mkdir -p cad_delivery/audit_frames
+          sha256sum "$SOURCE" > cad_delivery/SOURCE_SHA256SUMS.txt
+      - name: Docker Manim 0.20.1 and FFmpeg
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1
+      - name: Mandatory PQL both full scenes
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e PHYSICS_CAD_PREVIEW=1 \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+            set -euo pipefail
+            mkdir -p /tmp/manim-home /tmp/manim-bin
+            printf "#!/bin/sh\nexit 0\n" > /tmp/manim-bin/xdg-open
+            chmod +x /tmp/manim-bin/xdg-open
+            export PATH="/tmp/manim-bin:$PATH"
+            manim -pql lessons/physics9_2027/week01/cad_canonical/physics9_week01_cad.py Physics9CAD_SchoolRoadmap --media_dir cad_pql --format mp4 --disable_caching
+            manim -pql lessons/physics9_2027/week01/cad_canonical/physics9_week01_cad.py Physics9CAD_MeasurementLarge --media_dir cad_pql --format mp4 --disable_caching
+          ' 2>&1 | tee cad_delivery/PQL_RENDER_LOG.txt
+          test -s "$(find cad_pql -type f -name 'Physics9CAD_SchoolRoadmap.mp4' -print -quit)"
+          test -s "$(find cad_pql -type f -name 'Physics9CAD_MeasurementLarge.mp4' -print -quit)"
+      - name: Literal PQH 1920x1080 final renders
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+            set -euo pipefail
+            mkdir -p /tmp/manim-home /tmp/manim-bin
+            printf "#!/bin/sh\nexit 0\n" > /tmp/manim-bin/xdg-open
+            chmod +x /tmp/manim-bin/xdg-open
+            export PATH="/tmp/manim-bin:$PATH"
+            manim -pqh lessons/physics9_2027/week01/cad_canonical/physics9_week01_cad.py Physics9CAD_SchoolRoadmap --fps 30 --media_dir cad_pqh --format mp4 --disable_caching
+            manim -pqh lessons/physics9_2027/week01/cad_canonical/physics9_week01_cad.py Physics9CAD_MeasurementLarge --fps 30 --media_dir cad_pqh --format mp4 --disable_caching
+          ' 2>&1 | tee cad_delivery/PQH_RENDER_LOG.txt
+          A="$(find cad_pqh -type f -name Physics9CAD_SchoolRoadmap.mp4 -print -quit)"
+          B="$(find cad_pqh -type f -name Physics9CAD_MeasurementLarge.mp4 -print -quit)"
+          test -s "$A"; test -s "$B"
+          cp "$A" cad_delivery/Physics9_2027_Week01_V4_Class01_SCHOOL_ROADMAP_FINAL_PQH.mp4
+          cp "$B" cad_delivery/Physics9_2027_Week01_V4_Class02_LARGE_SAFE_FINAL_PQH.mp4
+      - name: Technical and dense-frame MP4 QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'file\tcodec\twidth\theight\tfps\tpixel_format\tduration_sec\tbytes\n' > cad_delivery/VIDEO_QA.tsv
+          for f in cad_delivery/*V4*FINAL_PQH.mp4; do
+            CODEC=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$f")
+            W=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$f")
+            H=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$f")
+            FPS=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$f")
+            PIX=$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$f")
+            DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$f")
+            SIZE=$(stat -c%s "$f")
+            test "$CODEC" = h264
+            test "$W" = 1920; test "$H" = 1080
+            test "$FPS" = 30/1; test "$PIX" = yuv420p
+            python -c "import sys; assert float(sys.argv[1]) > 105.0" "$DUR"
+            ffmpeg -nostdin -loglevel error -i "$f" -f null -
+            if [[ "$f" == *Class01* ]]; then L=Class01; else L=Class02; fi
+            ffmpeg -nostdin -loglevel error -ss 3 -i "$f" -frames:v 1 "cad_delivery/audit_frames/$L-03s.png"
+            printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$f" "$CODEC" "$W" "$H" "$FPS" "$PIX" "$DUR" "$SIZE" >> cad_delivery/VIDEO_QA.tsv
+            stem="$(basename "$f" .mp4)"
+            for p in 0.08 0.20 0.32 0.44 0.56 0.68 0.80 0.92; do
+              t=$(python -c "print(float('$DUR')*float('$p'))")
+              ffmpeg -nostdin -loglevel error -ss "$t" -i "$f" -frames:v 1 \
+                "cad_delivery/audit_frames/$L-$p.png"
+            done
+          done
+          python "$QA_SCRIPT" cad_delivery/audit_frames cad_delivery
+          sha256sum cad_delivery/*V4*FINAL_PQH.mp4 > cad_delivery/VIDEO_SHA256SUMS.txt
+          echo "PASS: both PQL and PQH, FFprobe, decode, frames" > cad_delivery/STATUS.txt
+      - name: Save QA package and real videos
+        uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-2027-Week01-V4-ROADMAP-ENLARGED-DEEP-QA
+          path: |
+            cad_delivery/*.mp4
+            cad_delivery/*.tsv
+            cad_delivery/*SHA256SUMS.txt
+            cad_delivery/STATUS.txt
+            cad_delivery/audit_frames/*.png
+            cad_delivery/*contact.jpg
+            cad_delivery/FRAME_METRICS.csv
+            lessons/physics9_2027/week01/cad_canonical/qa_visual_frames_v4.py
+            lessons/physics9_2027/week01/cad_canonical/physics9_week01_cad.py
+            lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit verified MP4 binaries for direct GitHub download
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p published_renders
+          cp cad_delivery/*V4*FINAL_PQH.mp4 published_renders/
+          cp cad_delivery/*V4*contact.jpg published_renders/
+          cp cad_delivery/FRAME_METRICS.csv published_renders/Physics9_2027_Week01_V4_FRAME_METRICS.csv
+          cp cad_delivery/VIDEO_SHA256SUMS.txt published_renders/Physics9_2027_Week01_V4_SHA256SUMS.txt
+          cp cad_delivery/VIDEO_QA.tsv published_renders/Physics9_2027_Week01_V4_QA.tsv
+          cp cad_delivery/STATUS.txt published_renders/Physics9_2027_Week01_V4_STATUS.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/Physics9_2027_Week01_V4_*
+          git diff --cached --quiet || git commit -m "publish Physics 9 week01 canonical CAD style PQH [skip ci]"
+          git push origin HEAD:physics9-2027-week01-cad-v4-roadmap-large
+          echo "## Verified direct MP4 downloads" >> "$GITHUB_STEP_SUMMARY"
+          echo "https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/physics9-2027-week01-cad-v4-roadmap-large/published_renders/Physics9_2027_Week01_V4_Class01_SCHOOL_ROADMAP_FINAL_PQH.mp4" >> "$GITHUB_STEP_SUMMARY"
+          echo "https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/physics9-2027-week01-cad-v4-roadmap-large/published_renders/Physics9_2027_Week01_V4_Class02_LARGE_SAFE_FINAL_PQH.mp4" >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,62 @@
+name: Geometry8 2027 - Publish Three Completed Class Videos
+on:
+  push:
+    branches: [geometry8-2027-w01-w04-eight-class-cad-release]
+    paths:
+      - '.github/workflows/geometry8_2027_publish_three_completed.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  verify-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch existing QA-passed class artifacts (no rerender)
+        uses: actions/download-artifact@v4
+        with:
+          pattern: Geometry8-2027-W0*-PQH-verified
+          run-id: 44222452063
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: verified
+          merge-multiple: true
+      - name: Flatten validated files inside nested Actions ZIP paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p flat
+          find verified -type f \( -name '*.mp4' -o -name '*_contact.jpg' -o -name '*-STATUS.txt' -o -name '*-QA.tsv' -o -name '*-SHA256SUMS.txt' -o -name '*_FRAME_METRICS.csv' \) -exec cp -n {} flat/ \;
+          test "$(find flat -maxdepth 1 -type f -name '*.mp4' | wc -l)" -ge 3
+      - name: Publish actual completed MP4s, contact sheets and checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p published_renders
+          for slug in W02C02 W03C01 W04C01; do
+            test -s "flat/$slug-STATUS.txt"
+            grep -q '^PASS:' "flat/$slug-STATUS.txt"
+            f=$(awk 'NR==1 {print $2}' "flat/$slug-SHA256SUMS.txt" | xargs basename)
+            sha=$(awk 'NR==1 {print $1}' "flat/$slug-SHA256SUMS.txt")
+            test -s "flat/$f"
+            got=$(sha256sum "flat/$f" | awk '{print $1}')
+            test "$got" = "$sha"
+            cp "flat/$f" published_renders/
+            cp "flat/$slug""_contact.jpg" "published_renders/$slug""_contact.jpg"
+            cp "flat/$slug-QA.tsv" "published_renders/$slug-QA.tsv"
+            cp "flat/$slug""_FRAME_METRICS.csv" "published_renders/$slug""_FRAME_METRICS.csv"
+            echo "VERIFIED $f $sha"
+          done
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/Geometry8_2027_Week0*_FINAL_pqh.mp4 \
+                  published_renders/W0*C0*_contact.jpg \
+                  published_renders/W0*C0*-QA.tsv \
+                  published_renders/W0*C0*_FRAME_METRICS.csv
+          git diff --cached --quiet || git commit -m "publish three independently verified 2027 Geometry8 lesson MP4s [skip ci]"
+          git fetch origin geometry8-2027-w01-w04-eight-class-cad-release
+          git merge --no-edit -X ours origin/geometry8-2027-w01-w04-eight-class-cad-release
+          git push origin HEAD:geometry8-2027-w01-w04-eight-class-cad-release
