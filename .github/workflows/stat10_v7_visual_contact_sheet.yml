@@ -1,0 +1,23 @@
+name: Statistics10 V7 Native Visual Contact Sheet Inspection
+on:
+  push:
+    branches: [manim/stat10-2027-advanced-examples-v7]
+    paths: [.github/workflows/stat10_v7_visual_contact_sheet.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Export native encoded contact sheet for expert visual QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s qa_v7/native_encoded_contact_sheet.jpg
+          file qa_v7/native_encoded_contact_sheet.jpg
+          echo 'BEGIN_NATIVE_CONTACT_SHEET_BASE64'
+          base64 -w0 qa_v7/native_encoded_contact_sheet.jpg
+          echo
+          echo 'END_NATIVE_CONTACT_SHEET_BASE64'
