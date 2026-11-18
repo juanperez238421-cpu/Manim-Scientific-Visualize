@@ -259,7 +259,7 @@ class Geometry8_YearOpeningV6(Geometry8_YearOpeningV5):
         self.play(Write(head),Write(subtitle),run_time=1.4)
         self.move_camera(phi=65*DEGREES,theta=-50*DEGREES,run_time=1.6)
 
-        center=np.array([-1.43,-.79,0])
+        center=np.array([-1.43,-.92,-1.05])
         side=2.38;half=side/2
         # Show all actual twelve edges before any faces, then solid surfaces.
         wire=self.cube_wireframe(center,half)
@@ -269,10 +269,17 @@ class Geometry8_YearOpeningV6(Geometry8_YearOpeningV5):
         cube=Cube(side_length=side,fill_color=MODEL,fill_opacity=.74)
         cube.set_stroke(color=SKETCH,width=1.7)
         cube.move_to(center)
-        # A cube is the union of six square faces; reveal them in sequence.
-        self.play(LaggedStart(*[FadeIn(face,scale=.88)
-                   for face in cube],lag_ratio=.11),run_time=2.6)
+        # One persistent parent avoids independent faces surviving a fadeout.
+        # Facets are revealed sequentially, retaining their exact 3D geometry.
+        for face in cube:
+            face.set_fill(opacity=0)
+            face.set_stroke(opacity=0)
+        self.add(cube)
         self.register(cube)
+        self.play(LaggedStart(*[
+            face.animate.set_fill(opacity=.74).set_stroke(opacity=1)
+            for face in cube
+        ],lag_ratio=.13),run_time=2.6)
         solid=VGroup(cube,wire)
         self.play(Rotate(solid,angle=PI*.78,axis=UP+RIGHT,
                          about_point=center),run_time=4.2,rate_func=smooth)
@@ -297,8 +304,10 @@ class Geometry8_YearOpeningV6(Geometry8_YearOpeningV5):
         tetra.set_fill(SLAB,opacity=.76)
         tetra.set_stroke(SKETCH,width=3.5)
         tetra.move_to(center)
-        self.play(FadeOut(cube),FadeOut(wire),
-                  FadeIn(tetra,scale=.72),run_time=1.85)
+        self.play(FadeOut(solid),FadeIn(tetra,scale=.72),run_time=1.85)
+        # Explicit removal prevents any previous wireframe from lingering
+        # through the tetrahedron rotation and camera movement.
+        self.remove(cube,wire,solid)
         self.register(tetra)
         self.play(Rotate(tetra,angle=PI*.91,axis=UP+RIGHT,
                          about_point=center),run_time=4.2,
@@ -311,8 +320,10 @@ class Geometry8_YearOpeningV6(Geometry8_YearOpeningV5):
         # not every solid has only planar polygonal faces.
         cylinder=Cylinder(radius=1.04,height=2.34,
                           direction=OUT,resolution=(16,32),
-                          fill_color=MODEL,fill_opacity=.73)
-        cylinder.set_stroke(SKETCH,width=1.6)
+                          fill_color=SLAB,fill_opacity=.90)
+        # Suppress hundreds of mesh edge strokes that create checkerboard
+        # aliasing and moire patterns at classroom projection resolution.
+        cylinder.set_stroke(width=0)
         cylinder.move_to(center)
         self.play(FadeOut(tetra,scale=.82),
                   FadeIn(cylinder,scale=.73),run_time=1.9)
