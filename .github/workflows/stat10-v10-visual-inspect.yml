@@ -1,0 +1,23 @@
+name: Statistics10 V10 Native IQR Visual Inspection
+on:
+  push:
+    branches: [manim/stat10-2027-course-intro-v10-native-iqr-fixed]
+    paths: [.github/workflows/stat10-v10-visual-inspect.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish encoded IQR scene sample for manual inspection
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=qa_course_intro_v10/IQR_AND_FINAL_THIRD_CONTACT_SHEET.jpg
+          test -s "$F"
+          echo 'STAT10_V10_IQR_START'
+          base64 -w0 "$F"
+          echo
+          echo 'STAT10_V10_IQR_END'
