@@ -197,8 +197,8 @@ class Geometry8W01_YearRoadmapV3(Geometry8W01_FoundationsV2):
         self.play(phase.animate.set_value(1.65*TAU),
                   run_time=6.0,rate_func=linear)
         # Exact 3–4–5 right triangle with squares as visual proof motif.
-        A=np.array([.90,-1.50,0]); B=np.array([4.40,-1.50,0])
-        C=np.array([.90,.60,0])
+        A=np.array([1.10,-1.55,0]); B=np.array([4.30,-1.55,0])
+        C=np.array([1.10,.85,0])
         triangle=Polygon(A,B,C,color=DARK,stroke_width=4.5,
                          fill_color=MODEL,fill_opacity=.24)
         self.draw_stage(triangle,runtime=1.6)
@@ -259,7 +259,7 @@ class Geometry8W01_YearRoadmapV3(Geometry8W01_FoundationsV2):
                      color=POSITIVE,stroke_width=3.5,
                      fill_color=TERRAIN,fill_opacity=.75)
         self.draw_stage(front,top,side,runtime=1.95)
-        self.play(top.animate.shift(UP*.52),
+        self.play(top.animate.shift(UP*.26),
                   side.animate.shift(RIGHT*.51),
                   run_time=2.1,rate_func=smooth)
         self.caption("Area belongs to surfaces; volume describes space within a solid.")
@@ -269,10 +269,10 @@ class Geometry8W01_YearRoadmapV3(Geometry8W01_FoundationsV2):
         self.heading(7,"2027 / VERIFIED WEEKS","THE FIRST FOUR WEEKS OF 2027",
                      "Dates and topics below come directly from the 2027 class planner.")
         rows=[
-            ("W01  JAN 19–22","GEOMETRIC OBJECTS + LOGICAL SETS",SKETCH),
-            ("W02  JAN 25–29","LINES, PLANES AND RELATIONS",POSITIVE),
-            ("W03  FEB 01–05","RULER-AND-COMPASS CONSTRUCTIONS",SKETCH),
-            ("W04  FEB 08–12","ANGLE ELEMENTS, TYPES AND MEASUREMENT",POSITIVE),
+            ("W01  JAN 19-22","GEOMETRIC OBJECTS + LOGICAL SETS",SKETCH),
+            ("W02  JAN 25-29","LINES, PLANES AND RELATIONS",POSITIVE),
+            ("W03  FEB 01-05","RULER-AND-COMPASS CONSTRUCTIONS",SKETCH),
+            ("W04  FEB 08-12","ANGLE ELEMENTS, TYPES AND MEASUREMENT",POSITIVE),
         ]
         timeline=Line([-5.25,.90,0],[-5.25,-1.96,0],
                       color=LIGHT,stroke_width=3.0)
