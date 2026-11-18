@@ -4,6 +4,7 @@ on:
     branches: [manim/stat10-w1-w4-latex-native-v6-2027]
     paths:
       - published_renders/stat10_2027_native_v6/*.mp4
+      - .github/workflows/stat10_v6_native_frame_qa.yml
 
 jobs:
   visual-sampling:
