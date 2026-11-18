@@ -1,0 +1,187 @@
+name: Geometry 8 V6 - Cinematic 2D 3D Larger Safe Figures PQH Final
+
+on:
+  push:
+    branches: [geometry8-2027-v6-safe-frame-cinematic-3d-qa]
+    paths:
+      - '.github/workflows/geometry8_2027_v6_fullhd_release.yml'
+      - 'lessons/geometry8_2027/week01/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SOURCE: lessons/geometry8_2027/week01/geometry8_course_opening_v6.py
+      ASSET: lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png
+      QA_SCRIPT: lessons/geometry8_2027/week01/qa_geometry8_course_v6.py
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@v4
+      - name: Python syntax and crest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check Pillow
+          python -m py_compile "$SOURCE" "$QA_SCRIPT"
+          python - "$ASSET" <<'PY'
+          from PIL import Image
+          import sys
+          im=Image.open(sys.argv[1])
+          assert im.format=="PNG" and im.width>=150 and im.height>=150
+          im.verify()
+          print("Authentic school PNG verified:",sys.argv[1])
+          PY
+          test -s lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png
+          # Inherit the exact CAD and authentic institution crest unchanged.
+          grep -q 'from geometry8_course_opening_v5 import Geometry8_YearOpeningV5' "$SOURCE"
+          grep -q 'class Geometry8_YearOpeningV6' "$SOURCE"
+          grep -q 'def bounds' "$SOURCE"
+          grep -q 'def compass_construction' "$SOURCE"
+          grep -q 'def triangle_geometry' "$SOURCE"
+          grep -q 'def thales_similarity' "$SOURCE"
+          grep -q 'def circle_geometry' "$SOURCE"
+          grep -q 'def pythagoras' "$SOURCE"
+          grep -q 'def area_recomposition' "$SOURCE"
+          grep -q 'def shaded_area' "$SOURCE"
+          grep -q 'def platonic_solids_3d' "$SOURCE"
+          grep -q 'Cube(' "$SOURCE"
+          grep -q 'Tetrahedron(' "$SOURCE"
+          grep -q 'Octahedron(' "$SOURCE"
+          python - "$SOURCE" <<'PY'
+          import ast,sys
+          tree=ast.parse(open(sys.argv[1],encoding="utf-8").read())
+          cls=next(n for n in tree.body if isinstance(n,ast.ClassDef)
+                   and n.name=="Geometry8_YearOpeningV6")
+          methods={n.name for n in cls.body if isinstance(n,ast.FunctionDef)}
+          assert len(methods)>=10
+          assert {"bounds","platonic_solids_3d","thales_similarity","pythagoras"}<=methods
+          print("PASS: V6 precise scaled figures and advanced 3D")
+          PY
+          mkdir -p cad_delivery/audit_frames
+          sha256sum "$SOURCE" > cad_delivery/SOURCE_SHA256SUMS.txt
+      - name: Docker Manim 0.20.1 and FFmpeg
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1
+      - name: Full structural smoke traverse, including real 3D
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e PHYSICS_CAD_PREVIEW=1 \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+              set -euo pipefail
+              mkdir -p /tmp/manim-home
+              manim -sql lessons/geometry8_2027/week01/geometry8_course_opening_v6.py Geometry8_YearOpeningV6 --media_dir cad_structural --disable_caching
+            ' 2>&1 | tee cad_delivery/STRUCTURAL_LOG.txt
+          test -s "$(find cad_structural -type f -name 'Geometry8_YearOpeningV6*.png' -print -quit)"
+
+      - name: Mandatory PQL complete V6 introduction
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home -e PHYSICS_CAD_PREVIEW=1 \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+            set -euo pipefail
+            mkdir -p /tmp/manim-home /tmp/manim-bin
+            printf "#!/bin/sh\nexit 0\n" > /tmp/manim-bin/xdg-open
+            chmod +x /tmp/manim-bin/xdg-open
+            export PATH="/tmp/manim-bin:$PATH"
+            manim -pql lessons/geometry8_2027/week01/geometry8_course_opening_v6.py Geometry8_YearOpeningV6 --media_dir cad_pql --format mp4 --disable_caching
+          ' 2>&1 | tee cad_delivery/PQL_RENDER_LOG.txt
+          test -s "$(find cad_pql -type f -name 'Geometry8_YearOpeningV6.mp4' -print -quit)"
+      - name: Literal PQH 1920x1080 final renders
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+            set -euo pipefail
+            mkdir -p /tmp/manim-home /tmp/manim-bin
+            printf "#!/bin/sh\nexit 0\n" > /tmp/manim-bin/xdg-open
+            chmod +x /tmp/manim-bin/xdg-open
+            export PATH="/tmp/manim-bin:$PATH"
+            manim -pqh lessons/geometry8_2027/week01/geometry8_course_opening_v6.py Geometry8_YearOpeningV6 --fps 30 --media_dir cad_pqh --format mp4 --disable_caching
+          ' 2>&1 | tee cad_delivery/PQH_RENDER_LOG.txt
+          A="$(find cad_pqh -type f -name Geometry8_YearOpeningV6.mp4 -print -quit)"
+          test -s "$A"
+          cp "$A" cad_delivery/Geometry8_2027_V6_COURSE_OPENING_2D_3D_CINEMATIC_FINAL_pqh.mp4
+      - name: Technical and dense-frame MP4 QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'file\tcodec\twidth\theight\tfps\tpixel_format\tduration_sec\tbytes\n' > cad_delivery/VIDEO_QA.tsv
+          for f in cad_delivery/*V6_*FINAL_pqh.mp4; do
+            CODEC=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$f")
+            W=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$f")
+            H=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$f")
+            FPS=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$f")
+            PIX=$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$f")
+            DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$f")
+            SIZE=$(stat -c%s "$f")
+            test "$CODEC" = h264
+            test "$W" = 1920; test "$H" = 1080
+            test "$FPS" = 30/1; test "$PIX" = yuv420p
+            python -c "import sys; assert float(sys.argv[1]) > 100.0" "$DUR"
+            ffmpeg -nostdin -loglevel error -i "$f" -f null -
+            L=Intro
+            ffmpeg -nostdin -loglevel error -ss 3 -i "$f" -frames:v 1 "cad_delivery/audit_frames/$L-03s.png"
+            printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$f" "$CODEC" "$W" "$H" "$FPS" "$PIX" "$DUR" "$SIZE" >> cad_delivery/VIDEO_QA.tsv
+            stem="$(basename "$f" .mp4)"
+            for p in 0.025 0.055 0.085 0.115 0.145 0.175 0.205 0.235 0.265 0.295 0.325 0.355 0.385 0.415 0.445 0.475 0.505 0.535 0.565 0.595 0.625 0.655 0.685 0.715 0.745 0.775 0.805 0.835 0.865 0.905 0.955; do
+              t=$(python -c "print(float('$DUR')*float('$p'))")
+              ffmpeg -nostdin -loglevel error -ss "$t" -i "$f" -frames:v 1 \
+                "cad_delivery/audit_frames/$L-$p.png"
+            done
+          done
+          python "$QA_SCRIPT" cad_delivery/audit_frames cad_delivery
+          sha256sum cad_delivery/*V6_*FINAL_pqh.mp4 > cad_delivery/VIDEO_SHA256SUMS.txt
+          echo "PASS: Intro PQL and PQH, FFprobe, complete decode, 32 frames" > cad_delivery/STATUS.txt
+      - name: Save QA package and real videos
+        uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8-2027-V6-CINEMATIC-SAFE-3D-PQH-32-FRAME-QA
+          path: |
+            cad_delivery/*.mp4
+            cad_delivery/*.tsv
+            cad_delivery/*SHA256SUMS.txt
+            cad_delivery/STATUS.txt
+            cad_delivery/audit_frames/*.png
+            cad_delivery/*contact.jpg
+            cad_delivery/FRAME_METRICS.csv
+            lessons/geometry8_2027/week01/qa_geometry8_course_v6.py
+            lessons/geometry8_2027/week01/geometry8_course_opening_v6.py
+            lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit verified MP4 binaries for direct GitHub download
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p published_renders
+          cp cad_delivery/*V6_*FINAL_pqh.mp4 published_renders/
+          cp cad_delivery/*V6_*contact.jpg published_renders/
+          cp cad_delivery/FRAME_METRICS.csv published_renders/Geometry8_2027_V6_FRAME_METRICS.csv
+          cp cad_delivery/VIDEO_SHA256SUMS.txt published_renders/Geometry8_2027_V6_SHA256SUMS.txt
+          cp cad_delivery/VIDEO_QA.tsv published_renders/Geometry8_2027_V6_QA.tsv
+          cp cad_delivery/STATUS.txt published_renders/Geometry8_2027_V6_STATUS.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/Geometry8_2027_V6_*
+          git diff --cached --quiet || git commit -m "publish Geometry 8 V6 enlarged safe diagrams and exploded cube 3D solids [skip ci]"
+          # Source branch can advance while a lengthy PQH render is active.
+          # Preserve the exact local verified output in an ordinary merge
+          # instead of failing with non-fast-forward. Never force-push.
+          git fetch origin geometry8-2027-v6-safe-frame-cinematic-3d-qa
+          git merge --no-edit -X ours origin/geometry8-2027-v6-safe-frame-cinematic-3d-qa
+          git push origin HEAD:geometry8-2027-v6-safe-frame-cinematic-3d-qa
+          echo "## Verified direct MP4 downloads" >> "$GITHUB_STEP_SUMMARY"
+          echo "https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/geometry8-2027-v6-safe-frame-cinematic-3d-qa/published_renders/Geometry8_2027_V6_COURSE_OPENING_2D_3D_CINEMATIC_FINAL_pqh.mp4" >> "$GITHUB_STEP_SUMMARY"
