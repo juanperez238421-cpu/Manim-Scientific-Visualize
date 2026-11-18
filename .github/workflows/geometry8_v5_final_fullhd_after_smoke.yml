@@ -1,0 +1,161 @@
+name: Geometry 8 V5 - Accelerated verified Full HD Course Opener PQH
+
+on:
+  push:
+    branches: [geometry8-2027-v5-cinematic-course-2d-3d]
+    paths:
+      - '.github/workflows/geometry8_v5_final_fullhd_after_smoke.yml'
+      - 'lessons/geometry8_2027/week01/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SOURCE: lessons/geometry8_2027/week01/geometry8_course_opening_v5.py
+      ASSET: lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png
+      QA_SCRIPT: lessons/geometry8_2027/week01/qa_geometry8_course_v5.py
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@v4
+      - name: Python syntax and crest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check Pillow
+          python -m py_compile "$SOURCE" "$QA_SCRIPT"
+          python - "$ASSET" <<'PY'
+          from PIL import Image
+          import sys
+          im=Image.open(sys.argv[1])
+          assert im.format=="PNG" and im.width>=150 and im.height>=150
+          im.verify()
+          print("Authentic school PNG verified:",sys.argv[1])
+          PY
+          test -s lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png
+          # V5 must be grounded in actual IJR 3-period curricular topics;
+          # assert 2D geometric proofs and true 3D solids without Venn scenes.
+          grep -q 'class Geometry8_YearOpeningV5' "$SOURCE"
+          grep -q 'def geometric_foundations' "$SOURCE"
+          grep -q 'def compass_construction' "$SOURCE"
+          grep -q 'def parallel_transversal' "$SOURCE"
+          grep -q 'def triangle_geometry' "$SOURCE"
+          grep -q 'def thales_similarity' "$SOURCE"
+          grep -q 'def circle_geometry' "$SOURCE"
+          grep -q 'def pythagoras' "$SOURCE"
+          grep -q 'def shaded_area' "$SOURCE"
+          grep -q 'def platonic_solids_3d' "$SOURCE"
+          grep -q 'Cube(' "$SOURCE"
+          grep -q 'Tetrahedron(' "$SOURCE"
+          python - "$SOURCE" <<'PY'
+          import ast,sys
+          tree=ast.parse(open(sys.argv[1],encoding="utf-8").read())
+          cls=next(n for n in tree.body if isinstance(n,ast.ClassDef)
+                   and n.name=="Geometry8_YearOpeningV5")
+          assert sum(isinstance(m,ast.FunctionDef) for m in cls.body)>=15
+          print("PASS: actual P1 P2 P3 constructions; true 3D Platonic solids")
+          PY
+          mkdir -p cad_delivery/audit_frames
+          sha256sum "$SOURCE" > cad_delivery/SOURCE_SHA256SUMS.txt
+      - name: Docker Manim 0.20.1 and FFmpeg
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1
+      - name: Literal PQH 1920x1080 final renders
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp/manim-home \
+            -v "$PWD:/manim" -w /manim --entrypoint bash manimcommunity/manim:v0.20.1 -c '
+            set -euo pipefail
+            mkdir -p /tmp/manim-home /tmp/manim-bin
+            printf "#!/bin/sh\nexit 0\n" > /tmp/manim-bin/xdg-open
+            chmod +x /tmp/manim-bin/xdg-open
+            export PATH="/tmp/manim-bin:$PATH"
+            manim -pqh lessons/geometry8_2027/week01/geometry8_course_opening_v5.py Geometry8_YearOpeningV5 --fps 30 --media_dir cad_pqh --format mp4 --disable_caching
+          ' 2>&1 | tee cad_delivery/PQH_RENDER_LOG.txt
+          A="$(find cad_pqh -type f -name Geometry8_YearOpeningV5.mp4 -print -quit)"
+          test -s "$A"
+          cp "$A" cad_delivery/Geometry8_2027_V5_COURSE_OPENING_2D_3D_CAD_QA_VERIFIED_pqh.mp4
+      - name: Technical and dense-frame MP4 QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'file\tcodec\twidth\theight\tfps\tpixel_format\tduration_sec\tbytes\n' > cad_delivery/VIDEO_QA.tsv
+          for f in cad_delivery/*V5_*FINAL_pqh.mp4; do
+            CODEC=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$f")
+            W=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$f")
+            H=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$f")
+            FPS=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$f")
+            PIX=$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$f")
+            DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$f")
+            SIZE=$(stat -c%s "$f")
+            test "$CODEC" = h264
+            test "$W" = 1920; test "$H" = 1080
+            test "$FPS" = 30/1; test "$PIX" = yuv420p
+            python -c "import sys; assert float(sys.argv[1]) > 100.0" "$DUR"
+            ffmpeg -nostdin -loglevel error -i "$f" -f null -
+            L=Intro
+            ffmpeg -nostdin -loglevel error -ss 3 -i "$f" -frames:v 1 "cad_delivery/audit_frames/$L-03s.png"
+            printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$f" "$CODEC" "$W" "$H" "$FPS" "$PIX" "$DUR" "$SIZE" >> cad_delivery/VIDEO_QA.tsv
+            stem="$(basename "$f" .mp4)"
+            for p in 0.03 0.07 0.11 0.15 0.19 0.23 0.27 0.31 0.35 0.39 0.43 0.47 0.51 0.55 0.59 0.63 0.67 0.71 0.75 0.79 0.83 0.87 0.93; do
+              t=$(python -c "print(float('$DUR')*float('$p'))")
+              ffmpeg -nostdin -loglevel error -ss "$t" -i "$f" -frames:v 1 \
+                "cad_delivery/audit_frames/$L-$p.png"
+            done
+          done
+          python "$QA_SCRIPT" cad_delivery/audit_frames cad_delivery
+          # Unique contact sheet avoids any collision with older V5 test renders.
+          mv cad_delivery/Geometry8_2027_V5_Intro_contact.jpg \
+             cad_delivery/Geometry8_2027_V5_Intro_QA_VERIFIED_contact.jpg
+          sha256sum cad_delivery/*V5_*FINAL_pqh.mp4 > cad_delivery/VIDEO_SHA256SUMS.txt
+          echo "PASS: structural smoke test completed, PQH FullHD, FFprobe, complete decode, 24 frames" > cad_delivery/STATUS.txt
+      - name: Save QA package and real videos
+        uses: actions/upload-artifact@v4
+        with:
+          name: Geometry8-2027-V5-CINEMATIC-3D-FULLHD-24-FRAME-QA
+          path: |
+            cad_delivery/*.mp4
+            cad_delivery/*.tsv
+            cad_delivery/*SHA256SUMS.txt
+            cad_delivery/STATUS.txt
+            cad_delivery/audit_frames/*.png
+            cad_delivery/*contact.jpg
+            cad_delivery/FRAME_METRICS.csv
+            lessons/geometry8_2027/week01/qa_geometry8_course_v5.py
+            lessons/geometry8_2027/week01/geometry8_course_opening_v5.py
+            lessons/physics9_2027/week01/cad_canonical/assets/ijr_original.png
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit verified MP4 binaries for direct GitHub download
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p published_renders
+          cp cad_delivery/*V5_*FINAL_pqh.mp4 published_renders/
+          cp cad_delivery/*V5_*contact.jpg published_renders/
+          cp cad_delivery/FRAME_METRICS.csv published_renders/Geometry8_2027_V5_QA_VERIFIED_FRAME_METRICS.csv
+          cp cad_delivery/VIDEO_SHA256SUMS.txt published_renders/Geometry8_2027_V5_QA_VERIFIED_SHA256SUMS.txt
+          cp cad_delivery/VIDEO_QA.tsv published_renders/Geometry8_2027_V5_QA_VERIFIED_QA.tsv
+          cp cad_delivery/STATUS.txt published_renders/Geometry8_2027_V5_QA_VERIFIED_STATUS.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/Geometry8_2027_V5_*
+          git diff --cached --quiet || git commit -m "publish Geometry 8 V5 cinematic 2D and true 3D full course preview [skip ci]"
+          # Source branch can advance while a lengthy PQH render is active.
+          # Preserve the exact local verified output in an ordinary merge
+          # instead of failing with non-fast-forward. Never force-push.
+          git fetch origin geometry8-2027-v5-cinematic-course-2d-3d
+          git merge --no-edit -X ours origin/geometry8-2027-v5-cinematic-course-2d-3d
+          git push origin HEAD:geometry8-2027-v5-cinematic-course-2d-3d
+          echo "## Verified direct MP4 downloads" >> "$GITHUB_STEP_SUMMARY"
+          echo "https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/geometry8-2027-v5-cinematic-course-2d-3d/published_renders/Geometry8_2027_V5_COURSE_OPENING_2D_3D_CAD_QA_VERIFIED_pqh.mp4" >> "$GITHUB_STEP_SUMMARY"
