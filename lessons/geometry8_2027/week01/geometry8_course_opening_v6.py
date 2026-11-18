@@ -207,7 +207,7 @@ class Geometry8_YearOpeningV6(Geometry8_YearOpeningV5):
         self.heading(0,"P3 / SHADED REGIONS",
             "THE RING IS AN AREA DIFFERENCE",
             "Remove a disk of radius r from a disk of radius R.")
-        c=np.array([-2.75,-.57,0]);R=1.78;r=.84
+        c=np.array([-2.75,-.69,0]);R=1.78;r=.84
         outer=Circle(radius=R,stroke_color=DARK,stroke_width=5,
                      fill_color=MODEL,fill_opacity=.66).move_to(c)
         inner=Circle(radius=r,stroke_color=SKETCH,stroke_width=4,
