@@ -1,0 +1,156 @@
+name: Statistics10 V10 TRUE Native ManimCE IQR Fix
+on:
+  push:
+    branches: [manim/stat10-2027-course-intro-v10-native-iqr-fixed]
+    paths: [.github/workflows/stat10-v10-native-final.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  native-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check native source and remove four-week section
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/stat10_course_intro_2027_v10/stat10_course_intro_v10.py
+          python -m py_compile "$SRC"
+          grep -q 'class Statistics10CourseIntroV10' "$SRC"
+          ! grep -q 'first_four_weeks' "$SRC"
+          ! grep -q 'HOW WE BEGIN IN 2027' "$SRC"
+          grep -Fq 'IQR}=Q_3-Q_1=15-5=10' "$SRC"
+          mkdir -p qa_course_intro_v10 published_renders/stat10_2027_course_intro_v10
+          docker pull manimcommunity/manim:v0.20.1
+
+      - name: Render ENTIRE V10 scene natively with real LaTeX in low quality
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/stat10_course_intro_2027_v10/stat10_course_intro_v10.py
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$PWD:/manim" -w /manim --entrypoint manim \
+            manimcommunity/manim:v0.20.1 -ql "$SRC" Statistics10CourseIntroV10 \
+            --fps 15 --disable_caching --media_dir media_intro_v10_low \
+            > qa_course_intro_v10/native_pql_full.log 2>&1
+          FILE="$(find media_intro_v10_low -type f -name 'Statistics10CourseIntroV10.mp4' -print -quit)"
+          test -n "$FILE" && test -s "$FILE"
+
+      - name: Render ENTIRE V10 scene with real ManimCE PQH Full HD
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/stat10_course_intro_2027_v10/stat10_course_intro_v10.py
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$PWD:/manim" -w /manim --entrypoint manim \
+            manimcommunity/manim:v0.20.1 -qh "$SRC" Statistics10CourseIntroV10 \
+            --fps 30 --disable_caching --media_dir media_intro_v10_high \
+            > qa_course_intro_v10/native_pqh_full.log 2>&1
+          FILE="$(find media_intro_v10_high -type f -name 'Statistics10CourseIntroV10.mp4' -print -quit)"
+          test -n "$FILE" && test -s "$FILE"
+          cp "$FILE" published_renders/stat10_2027_course_intro_v10/Statistics10_2027_Course_Introduction_V10_NATIVE_PQH_FIXED.mp4
+
+      - name: Decode complete native MP4; inspect actual encoded IQR and ending frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm -i --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$PWD:/manim" -w /manim --entrypoint python \
+            manimcommunity/manim:v0.20.1 - <<'PY'
+          from pathlib import Path
+          import av, hashlib
+          from PIL import Image, ImageOps, ImageDraw
+          path=Path("published_renders/stat10_2027_course_intro_v10/Statistics10_2027_Course_Introduction_V10_NATIVE_PQH_FIXED.mp4")
+          qa=Path("qa_course_intro_v10")
+          assert path.is_file() and path.stat().st_size > 1_000_000
+          container=av.open(str(path))
+          stream=container.streams.video[0]
+          fps=float(stream.average_rate)
+          codec=stream.codec_context.name
+          pix=stream.codec_context.pix_fmt
+          width=stream.codec_context.width
+          height=stream.codec_context.height
+          assert codec=="h264" and (width,height)==(1920,1080), (codec,width,height)
+          assert abs(fps-30)<.1,fps
+          assert pix=="yuv420p",pix
+          duration=container.duration/1_000_000 if container.duration else 0
+          estimated=int(duration*fps)
+          positions=[.04,.10,.16,.22,.28,.34,.40,.46,.52,.58,.64,.70,.76,.82,.88,.94]
+          sample_indices={round(p*estimated):p for p in positions}
+          samples={}
+          count=0
+          for frame in container.decode(stream):
+              if count in sample_indices:
+                  samples[sample_indices[count]]=frame.to_image().resize((480,270))
+              count+=1
+          container.close()
+          assert count>1800,count
+          assert len(samples)>=12,len(samples)
+          sheet=Image.new("RGB",(1920,1080),"white")
+          details=[]
+          visible=0
+          for i,pos in enumerate(positions):
+              im=samples.get(pos)
+              if im is None:continue
+              sheet.paste(im,((i%4)*480,(i//4)*270))
+              dark=sum(v<210 for v in im.convert("L").resize((120,68)).getdata())
+              visible+=dark>80
+              details.append(f"{pos:.2f}: nonwhite={dark}")
+          assert visible>=11, f"nonblank frames only {visible}"
+          sheet.save(qa/"ENCODED_CONTACT_SHEET.jpg",quality=90)
+          (qa/"FRAME_QA.txt").write_text("\n".join(details)+f"\nPASS: {visible}/{len(samples)} visible sampled frames\n")
+          (qa/"VIDEO_TECHNICAL.txt").write_text(
+              f"renderer=Native ManimCE v0.20.1\n"
+              f"codec={codec}\nresolution={width}x{height}\n"
+              f"fps={fps:.4f}\npix_fmt={pix}\n"
+              f"duration_seconds={duration:.3f}\nframes_decoded={count}\n"
+              f"size_bytes={path.stat().st_size}\n"
+              f"sha256={hashlib.sha256(path.read_bytes()).hexdigest()}\n"
+          )
+          # Explicitly extract multiple frames from the final-third course
+          # where the IQR / quartile scene is located.
+          positions_extra=[.65,.68,.71,.74,.77,.80,.83,.86,.89]
+          ix={round(p*estimated):p for p in positions_extra}
+          v=av.open(str(path))
+          results={}
+          for i,frame in enumerate(v.decode(video=0)):
+              if i in ix:
+                  results[ix[i]]=frame.to_image().resize((640,360))
+          v.close()
+          extra=Image.new("RGB",(640*3,360*3),"white")
+          for i,p in enumerate(positions_extra):
+              if p in results:extra.paste(results[p],((i%3)*640,(i//3)*360))
+          extra.save(qa/"IQR_AND_FINAL_THIRD_CONTACT_SHEET.jpg",quality=92)
+          print((qa/"VIDEO_TECHNICAL.txt").read_text())
+          PY
+          test -s qa_course_intro_v10/ENCODED_CONTACT_SHEET.jpg
+          test -s qa_course_intro_v10/IQR_AND_FINAL_THIRD_CONTACT_SHEET.jpg
+
+      - name: Publish only verified TRUE native ManimCE video and QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/stat10_2027_course_intro_v10 qa_course_intro_v10
+          git commit -m "deliver: TRUE native ManimCE V10 corrected IQR and no four-week section [skip ci]"
+          git fetch origin manim/stat10-2027-course-intro-v10-native-iqr-fixed
+          git rebase origin/manim/stat10-2027-course-intro-v10-native-iqr-fixed
+          git push origin HEAD:manim/stat10-2027-course-intro-v10-native-iqr-fixed
+
+      - name: Upload original native video and audit samples
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Statistics10_V10_TRUE_NATIVE_ManimCE_IQR_FIXED
+          path: |
+            published_renders/stat10_2027_course_intro_v10/
+            qa_course_intro_v10/
+          retention-days: 30
+          if-no-files-found: warn
