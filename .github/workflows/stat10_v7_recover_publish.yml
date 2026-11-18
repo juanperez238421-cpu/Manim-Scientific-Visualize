@@ -1,0 +1,88 @@
+name: Publish Statistics10 V7 Native MP4s from Existing Artifact
+on:
+  push:
+    branches: [manim/stat10-2027-advanced-examples-v7]
+    paths: [.github/workflows/stat10_v7_recover_publish.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download REAL rendered videos from successful render stage
+        uses: actions/download-artifact@v4
+        with:
+          name: statistics10-2027-weeks1-4-advanced-native-v7
+          repository: juanperez238421-cpu/Manim-Scientific-Visualize
+          run-id: 44227373347
+          github-token: ${{ github.token }}
+          path: recovered
+      - name: Verify existing binary videos and technical QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          find recovered -maxdepth 5 -type f -printf '%P %s bytes\n' | head -60
+          mkdir -p published_renders qa_v7
+          cp -a recovered/published_renders/. published_renders/
+          cp -a recovered/qa_v7/. qa_v7/
+          sha256sum -c qa_v7/SHA256SUMS.txt
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg python3-pil
+          for WEEK in 1 2 3 4; do
+            F="published_renders/stat10_2027_advanced_v7/Statistics10_2027_Week$WEEK""_Advanced_Example_V7_NATIVE_PQH.mp4"
+            test -s "$F"
+            W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+            H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+            FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+            CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+            PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+            test "$W" = 1920 && test "$H" = 1080 && test "$FPS" = 30/1 && test "$CODEC" = h264 && test "$PIX" = yuv420p
+            ffmpeg -hide_banner -loglevel error -i "$F" -f null - 2> "qa_v7/recovery_decode_week$WEEK.log"
+          done
+      - name: Frame QA including valid intentional white transitions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from PIL import Image
+          import glob,os
+          lines=[]
+          for w in range(1,5):
+              files=sorted(glob.glob(f'qa_v7/frame_samples/W{w}_P*.jpg'))
+              assert len(files)==4,(w,files)
+              count=0
+              for f in files:
+                  im=Image.open(f).convert('L').resize((120,68))
+                  dark=sum(int(v<210) for v in im.getdata())
+                  count+=int(dark>95)
+                  lines.append(f'{os.path.basename(f)}: dark={dark}')
+              assert count>=2,f'Week {w}: only {count} of 4 frames with visible content'
+              lines.append(f'WEEK {w}: PASS {count}/4; white transition frames allowed')
+          open('qa_v7/ROBUST_FRAME_QA.txt','w').write('\n'.join(lines)+'\n')
+          print('\n'.join(lines))
+          PY
+      - name: Commit validated MP4s and QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/stat10_2027_advanced_v7 qa_v7
+          git commit -m "publish: 4 real ManimCE native 1080p LaTeX advanced videos [skip ci]"
+          git fetch origin manim/stat10-2027-advanced-examples-v7
+          git rebase origin/manim/stat10-2027-advanced-examples-v7
+          git push origin HEAD:manim/stat10-2027-advanced-examples-v7
+      - name: Upload complete real native delivery
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Statistics10-V7-FOUR-REAL-NATIVE-MP4
+          path: |
+            published_renders/stat10_2027_advanced_v7/
+            qa_v7/
+          retention-days: 30
+          if-no-files-found: warn
