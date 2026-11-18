@@ -1,0 +1,81 @@
+name: Geometry8 V4 - Publish Previously Verified MP4 Artifact
+
+on:
+  push:
+    branches: [geometry8-2027-w01-v4-period1-curricular-complete]
+    paths:
+      - '.github/workflows/geometry8_2027_w01_v4_publish.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  publish-verified:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout latest source
+        uses: actions/checkout@v4
+        with:
+          ref: geometry8-2027-w01-v4-period1-curricular-complete
+          fetch-depth: 0
+
+      - name: Download exact V4 artifact from completed PQL/PQH QA
+        uses: actions/download-artifact@v4
+        with:
+          name: Geometry8-2027-W01-V4-PERIOD1-ALL-AXES-CLASS01-PQH-24-FRAME-QA
+          run-id: 44218376120
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: verified_artifact
+
+      - name: Verify exact video, SHA-256 and 24 actual frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          MP4=$(find verified_artifact -type f -name 'Geometry8_2027_Week01_V4_Class01_PERIOD_I_FULL_CURRICULUM_FINAL_pqh.mp4' -print -quit)
+          SHA=$(find verified_artifact -type f -name 'VIDEO_SHA256SUMS.txt' -print -quit)
+          QA=$(find verified_artifact -type f -name 'VIDEO_QA.tsv' -print -quit)
+          STATE=$(find verified_artifact -type f -name 'STATUS.txt' -print -quit)
+          SHEET=$(find verified_artifact -type f -name 'Geometry8_2027_Week01_V4_Class01_contact.jpg' -print -quit)
+          test -s "$MP4"; test -s "$SHA"; test -s "$QA"; test -s "$STATE"; test -s "$SHEET"
+          EXPECTED=$(awk 'NR==1 {print $1}' "$SHA")
+          ACTUAL=$(sha256sum "$MP4" | awk '{print $1}')
+          test "$EXPECTED" = "$ACTUAL"
+          grep -q $'\th264\t1920\t1080\t30/1\tyuv420p\t' "$QA"
+          grep -q '^PASS:' "$STATE"
+          N=$(find verified_artifact -type f -name 'Class01-*.png' | wc -l)
+          test "$N" -eq 24
+          echo "PASS authentic final V4 MP4, SHA256 $ACTUAL, metadata and 24 frames."
+          echo "VERIFIED_V4_SHA256=$ACTUAL" >> "$GITHUB_ENV"
+
+      - name: Publish exact verified binary, no rerender
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p published_renders
+          FILENAME=Geometry8_2027_Week01_V4_Class01_PERIOD_I_FULL_CURRICULUM_FINAL_pqh.mp4
+          MP4=$(find verified_artifact -type f -name "$FILENAME" -print -quit)
+          SHEET=$(find verified_artifact -type f -name 'Geometry8_2027_Week01_V4_Class01_contact.jpg' -print -quit)
+          SHA=$(find verified_artifact -type f -name 'VIDEO_SHA256SUMS.txt' -print -quit)
+          QA=$(find verified_artifact -type f -name 'VIDEO_QA.tsv' -print -quit)
+          STATE=$(find verified_artifact -type f -name 'STATUS.txt' -print -quit)
+          METRICS=$(find verified_artifact -type f -name 'FRAME_METRICS.csv' -print -quit)
+          test -s "$METRICS"
+          cp "$MP4" "published_renders/$FILENAME"
+          cp "$SHEET" published_renders/Geometry8_2027_Week01_V4_Class01_contact.jpg
+          cp "$SHA" published_renders/Geometry8_2027_Week01_V4_SHA256SUMS.txt
+          cp "$QA" published_renders/Geometry8_2027_Week01_V4_QA.tsv
+          cp "$STATE" published_renders/Geometry8_2027_Week01_V4_STATUS.txt
+          cp "$METRICS" published_renders/Geometry8_2027_Week01_V4_FRAME_METRICS.csv
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/Geometry8_2027_Week01_V4_*
+          git diff --cached --quiet || git commit -m "publish verified Geometry8 V4 Period I MP4 from successful QA artifact [skip ci]"
+          git fetch origin geometry8-2027-w01-v4-period1-curricular-complete
+          git merge --no-edit -X ours origin/geometry8-2027-w01-v4-period1-curricular-complete
+          git push origin HEAD:geometry8-2027-w01-v4-period1-curricular-complete
+          echo "Verified SHA-256: $VERIFIED_V4_SHA256" >> "$GITHUB_STEP_SUMMARY"
+          echo "https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/geometry8-2027-w01-v4-period1-curricular-complete/published_renders/$FILENAME" >> "$GITHUB_STEP_SUMMARY"
