@@ -286,8 +286,8 @@ class Statistics10CourseIntroV9(ClassroomLatex):
                    "Range, class width, lower and upper limits, and class marks.")
         intervals=classroom_table(["Interval (min)","Class mark","Frequency"],
             [["[0,10)","5","1"],["[10,20)","15","8"],["[20,30)","25","3"],["Total","", "12"]],
-            widths=[4.1,3.2,3.3],height=.72,fontsize=30)
-        intervals.move_to([-3.18,-.15,0])
+            widths=[2.85,2.2,2.25],height=.72,fontsize=30)
+        intervals.move_to([-3.55,-.15,0])
         self.play(LaggedStart(*[FadeIn(r,shift=LEFT*.2) for r in intervals],
                 lag_ratio=.25),run_time=3.0)
         base_x=3.25; y0=-1.72; width=.88
@@ -361,8 +361,8 @@ class Statistics10CourseIntroV9(ClassroomLatex):
                           height=.63,stroke_width=2.4,stroke_color=INK,
                           fill_color=PALE,fill_opacity=.9)
         boxplot.move_to([(axis.n2p(q1)[0]+axis.n2p(q3)[0])/2,.48,0])
-        whiskers=VGroup(Line(axis.n2p(2)+UP*.48,boxplot.get_left(),color=INK),
-                        Line(boxplot.get_right(),axis.n2p(18)+UP*.48,color=INK))
+        whiskers=VGroup(Line([axis.n2p(2)[0],.48,0],boxplot.get_left(),color=INK),
+                        Line(boxplot.get_right(),[axis.n2p(18)[0],.48,0],color=INK))
         medline=Line([axis.n2p(q2)[0],.16,0],
                      [axis.n2p(q2)[0],.80,0],color=INK,stroke_width=3)
         self.play(Create(whiskers),GrowFromCenter(boxplot),Create(medline),
