@@ -164,6 +164,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add published_renders/Geometry8_2027_Week01_V4_*
           git diff --cached --quiet || git commit -m "publish Geometry 8 Week01 V4 exact Period I ten axes Class01 PQH [skip ci]"
+          # Source branch can advance while a lengthy PQH render is active.
+          # Preserve the exact local verified output in an ordinary merge
+          # instead of failing with non-fast-forward. Never force-push.
+          git fetch origin geometry8-2027-w01-v4-period1-curricular-complete
+          git merge --no-edit -X ours origin/geometry8-2027-w01-v4-period1-curricular-complete
           git push origin HEAD:geometry8-2027-w01-v4-period1-curricular-complete
           echo "## Verified direct MP4 downloads" >> "$GITHUB_STEP_SUMMARY"
           echo "https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/geometry8-2027-w01-v4-period1-curricular-complete/published_renders/Geometry8_2027_Week01_V4_Class01_PERIOD_I_FULL_CURRICULUM_FINAL_pqh.mp4" >> "$GITHUB_STEP_SUMMARY"
