@@ -1,0 +1,17 @@
+fraction=0.04, nonwhite=508
+fraction=0.10, nonwhite=1051
+fraction=0.16, nonwhite=336
+fraction=0.22, nonwhite=259
+fraction=0.28, nonwhite=183
+fraction=0.34, nonwhite=269
+fraction=0.40, nonwhite=289
+fraction=0.46, nonwhite=210
+fraction=0.52, nonwhite=382
+fraction=0.58, nonwhite=442
+fraction=0.64, nonwhite=488
+fraction=0.70, nonwhite=357
+fraction=0.76, nonwhite=271
+fraction=0.82, nonwhite=270
+fraction=0.88, nonwhite=372
+fraction=0.94, nonwhite=198
+PASS: 16 of 16 nonblank encoded samples

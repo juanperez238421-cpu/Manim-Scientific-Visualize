@@ -1,0 +1,8 @@
+codec=h264
+resolution=1920x1080
+fps=30.00077506962709
+pix_fmt=yuv420p
+duration_seconds=163.796
+frames_decoded=4914
+size_bytes=6129128
+sha256=61ab93e4f55aae0f3bbd6e69f68836f067338cb86080541989829badc6443a73
