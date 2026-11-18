@@ -44,3 +44,34 @@ Manual QA must verify: no clipped fonts; source-aligned ten topics; movable obje
 - Source: `lessons/geometry8_2027/week01/geometry8_week01_cad_v4_period1.py`
 - Workflow: `.github/workflows/geometry8_2027_w01_v4_period1.yml`
 - Video (available after successful CI): `published_renders/Geometry8_2027_Week01_V4_Class01_PERIOD_I_FULL_CURRICULUM_FINAL_pqh.mp4`.
+
+---
+
+## FINAL VERIFIED DELIVERY — V4 AFTER VISUAL REPAIR
+
+**Final render/publish run:** https://github.com/juanperez238421-cpu/Manim-Scientific-Visualize/actions/runs/44219912020 — SUCCESS.
+
+- **Verified direct MP4:** https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/geometry8-2027-w01-v4-period1-curricular-complete/published_renders/Geometry8_2027_Week01_V4_Class01_PERIOD_I_FULL_CURRICULUM_FINAL_pqh.mp4
+- **Duration:** 493.664388 sec (8 min 13.664 sec).
+- **Video size:** 20,574,164 bytes (~20.57 MB decimal).
+- **Video stream:** H.264, 1920×1080, 30fps, yuv420p.
+- **Final SHA-256:** `6ae5979b68e8f6b084720d6e83c4e0cb8daec269af8b2a9bef812e0abdd7dd21`.
+- **Validated source:** `lessons/geometry8_2027/week01/geometry8_week01_cad_v4_period1.py`.
+- **24 real Full HD frames:** https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/geometry8-2027-w01-v4-period1-curricular-complete/published_renders/Geometry8_2027_Week01_V4_Class01_contact.jpg
+- **FFprobe ledger:** https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/geometry8-2027-w01-v4-period1-curricular-complete/published_renders/Geometry8_2027_Week01_V4_QA.tsv
+- **Checksum ledger:** https://raw.githubusercontent.com/juanperez238421-cpu/Manim-Scientific-Visualize/geometry8-2027-w01-v4-period1-curricular-complete/published_renders/Geometry8_2027_Week01_V4_SHA256SUMS.txt
+
+### QA audit and repairs
+
+1. The first complete V4 build passed code and MP4 checks but its **three-period introductory roadmap** had overlapping long titles and descriptions at a sampled timestamp. This was detected by manually viewing the first 24-frame contact sheet.
+2. Rebuilt only that roadmap scene with disjoint typesetting zones for number, topic and description; original CAD design, school crest, all Period I animations and Week 1 lessons unchanged.
+3. Re-executed both complete low-quality preview `-pql` and final Full HD `-pqh` renders; both succeeded.
+4. Full FFmpeg decode and technical FFprobe validation PASS; 24/24 extracted 1920×1080 PNGs validated and grouped into a 4x6 contact sheet.
+5. **Second manual 24-frame inspection:** Year overview columns are separated; ten Period I topics in two 5-item sequences; large plane-and-line sketch; unmarked construction straightedge and rotating-radius compass; angle-type ray rotation; additions and parallel-line angle preview scenes; verified 2027 timeline; preserved notebook and point/line/ray/plane teaching content; authentic PNG crest on opening frame. Sampled scene starts and partially drawn symbols reflect ongoing animations.
+6. No conspicuous persistent clipping or title/description collision in inspected final frames. This is **sample-based QA** and cannot guarantee zero defects in every intermediate frame.
+
+### Correctness and provenance cautions
+
+The source `malla curricular - geometría 8° (2026)(1).docx` provides the ten Period I **2026** official syllabus axes (p.1); the 2027 calendar reference confirms only the separately displayed first four weeks. This video distinguishes illustrative course previews from lessons actually scheduled for Week 1. The distinct 2027 Week01 **Class02** video remains unchanged.
+
+The video binary was independently recovered once from a successful QA artifact due to a non-fast-forward GitHub branch publication collision. The final, visually corrected binary was **rerendered** and published by its own successful full CI run, with a different final SHA-256. No previously validated V3 or stale V4 video was relabeled as final.
