@@ -1,0 +1,63 @@
+Manim Community v0.20.1
+
+[11/18/26 03:01:41] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{STA                        
+                             TISTICS 10  /  2027  /                             
+                             PERIOD I  /  WEEK                                  
+                             02}\special{dvisvgm:raw                            
+                             </g>} to                                           
+                             media_pql_v7/Tex/a960eaeb2e                        
+                             33d7c5.tex                                         
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{WEE                        
+                             K 2  |  APPLIED                                    
+                             PROBLEM}\special{dvisvgm:ra                        
+                             w </g>} to                                         
+                             media_pql_v7/Tex/420981f54f                        
+                             d3f4d9.tex                                         
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 02}')), etc.:   0%|          | 0/28 [00:00<?, ?it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 02}')), etc.:  14%|█▍        | 4/28 [00:00<00:00, 32.03it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 02}')), etc.:  29%|██▊       | 8/28 [00:00<00:00, 33.02it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 02}')), etc.:  43%|████▎     | 12/28 [00:00<00:00, 35.57it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 02}')), etc.:  57%|█████▋    | 16/28 [00:00<00:00, 36.45it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 02}')), etc.:  71%|███████▏  | 20/28 [00:00<00:00, 37.04it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 02}')), etc.:  86%|████████▌ | 24/28 [00:00<00:00, 37.38it/s]Animation 0: FadeIn(Tex('\\textbf{STATISTICS 10  /  2027  /  PERIOD I  /  WEEK 02}')), etc.: 100%|██████████| 28/28 [00:00<00:00, 37.44it/s]                                                                                                                                            [11/18/26 03:01:42] INFO     Animation 0 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql_v7/video                         
+                             s/statistics10_advanced_v7                         
+                             /1080p30/partial_movie_fil                         
+                             es/Stat10AppliedWeek2V7/un                         
+                             cached_00000.mp4'                                  
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\textbf{WHO                        
+                             SHOULD WE                                          
+                             ASK?}\special{dvisvgm:raw                          
+                             </g>} to                                           
+                             media_pql_v7/Tex/3292e41044                        
+                             21b7ce.tex                                         
+[11/18/26 03:01:43] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 1: FadeIn(Tex('\\textbf{WHO SHOULD WE ASK?}')):   0%|          | 0/42 [00:00<?, ?it/s]Animation 1: FadeIn(Tex('\\textbf{WHO SHOULD WE ASK?}')):  24%|██▍       | 10/42 [00:00<00:00, 97.54it/s]Animation 1: FadeIn(Tex('\\textbf{WHO SHOULD WE ASK?}')):  52%|█████▏    | 22/42 [00:00<00:00, 109.18it/s]Animation 1: FadeIn(Tex('\\textbf{WHO SHOULD WE ASK?}')):  79%|███████▊  | 33/42 [00:00<00:00, 108.02it/s]                                                                                                                              INFO     Animation 1 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql_v7/video                         
+                             s/statistics10_advanced_v7                         
+                             /1080p30/partial_movie_fil                         
+                             es/Stat10AppliedWeek2V7/un                         
+                             cached_00001.mp4'                                  
+[11/18/26 03:01:44] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 2: Write(MathTex('\\mathrm{QUESTION}\\ \\longrightarrow\\ \\mathrm{REASONING}\\ \\longrightarrow\\ \\mathrm{EVIDENCE}')):   0%|          | 0/60 [00:00<?, ?it/s]Animation 2: Write(MathTex('\\mathrm{QUESTION}\\ \\longrightarrow\\ \\mathrm{REASONING}\\ \\longrightarrow\\ \\mathrm{EVIDENCE}')):  15%|█▌        | 9/60 [00:00<00:00, 86.19it/s]Animation 2: Write(MathTex('\\mathrm{QUESTION}\\ \\longrightarrow\\ \\mathrm{REASONING}\\ \\longrightarrow\\ \\mathrm{EVIDENCE}')):  35%|███▌      | 21/60 [00:00<00:00, 101.54it/s]Animation 2: Write(MathTex('\\mathrm{QUESTION}\\ \\longrightarrow\\ \\mathrm{REASONING}\\ \\longrightarrow\\ \\mathrm{EVIDENCE}')):  53%|█████▎    | 32/60 [00:00<00:00, 102.68it/s]Animation 2: Write(MathTex('\\mathrm{QUESTION}\\ \\longrightarrow\\ \\mathrm{REASONING}\\ \\longrightarrow\\ \\mathrm{EVIDENCE}')):  72%|███████▏  | 43/60 [00:00<00:00, 104.30it/s]Animation 2: Write(MathTex('\\mathrm{QUESTION}\\ \\longrightarrow\\ \\mathrm{REASONING}\\ \\longrightarrow\\ \\mathrm{EVIDENCE}')):  90%|█████████ | 54/60 [00:00<00:00, 93.23it/s]                                                                                                                                                                                    [11/18/26 03:01:45] INFO     Animation 2 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_pql_v7/video                         
+                             s/statistics10_advanced_v7                         
+                             /1080p30/partial_movie_fil                         
+                             es/Stat10AppliedWeek2V7/un                         
+                             cached_00002.mp4'                                  
+                    INFO     Combining to Movie file.   scene_file_writer.py:753
+                    INFO                                scene_file_writer.py:904
+                             File ready at                                      
+                             '/manim/media_pql_v7/video                         
+                             s/statistics10_advanced_v7                         
+                             /1080p30/Stat10AppliedWeek                         
+                             2V7.mp4'                                           
+                                                                                
+                    INFO     Rendered Stat10AppliedWeek2V7          scene.py:278
+                             Played 3 animations                                
+You are using manim version v0.20.1, but version v0.22.1 is available.
+You should consider upgrading via pip install -U manim

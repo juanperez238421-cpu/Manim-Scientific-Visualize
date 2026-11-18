@@ -1,0 +1,20 @@
+W1_P17.jpg: dark=352
+W1_P43.jpg: dark=376
+W1_P72.jpg: dark=425
+W1_P90.jpg: dark=323
+WEEK 1: PASS 4/4; white transition frames allowed
+W2_P17.jpg: dark=403
+W2_P43.jpg: dark=403
+W2_P72.jpg: dark=233
+W2_P90.jpg: dark=346
+WEEK 2: PASS 4/4; white transition frames allowed
+W3_P17.jpg: dark=385
+W3_P43.jpg: dark=393
+W3_P72.jpg: dark=211
+W3_P90.jpg: dark=310
+WEEK 3: PASS 4/4; white transition frames allowed
+W4_P17.jpg: dark=0
+W4_P43.jpg: dark=246
+W4_P72.jpg: dark=413
+W4_P90.jpg: dark=344
+WEEK 4: PASS 3/4; white transition frames allowed

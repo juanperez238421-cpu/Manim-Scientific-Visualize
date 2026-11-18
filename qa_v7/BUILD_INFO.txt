@@ -1,0 +1,2 @@
+renderer=manimcommunity/manim:v0.20.1
+mode=native
