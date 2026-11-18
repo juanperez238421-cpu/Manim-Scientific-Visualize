@@ -1,0 +1,131 @@
+name: Statistics10 V7 Four Advanced LaTeX ManimCE Videos
+on:
+  push:
+    branches: [manim/stat10-2027-advanced-examples-v7]
+    paths:
+      - .github/workflows/stat10_v7_advanced_native.yml
+      - render_jobs/stat10_2027_native_v6/statistics10_advanced_v7.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render:
+    name: Render four applied examples in native ManimCE
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+
+      - name: Source validation and required toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/stat10_2027_native_v6/statistics10_advanced_v7.py
+          python -m py_compile "$SRC"
+          grep -q 'class Stat10AppliedWeek4V7' "$SRC"
+          grep -q 'class Stat10AppliedWeek1V7' "$SRC"
+          grep -q 'from statistics10_latex_v6 import' "$SRC"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg python3-pil
+          docker pull manimcommunity/manim:v0.20.1
+          mkdir -p qa_v7 published_renders/stat10_2027_advanced_v7
+          printf "renderer=manimcommunity/manim:v0.20.1\nmode=native\n" > qa_v7/BUILD_INFO.txt
+
+      - name: Render actual first scenes in low quality, four independent tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/stat10_2027_native_v6/statistics10_advanced_v7.py
+          for WEEK in 1 2 3 4; do
+            SCENE="Stat10AppliedWeek$WEEK""V7"
+            echo "PQL native ManimCE: $SCENE"
+            docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/manim" -w /manim --entrypoint manim \
+              manimcommunity/manim:v0.20.1 -ql "$SRC" "$SCENE" --fps 15 \
+              -n 0,2 --media_dir media_pql_v7 --disable_caching 2>&1 | tee "qa_v7/pql_$WEEK.log"
+            F="$(find media_pql_v7 -type f -name "$SCENE.mp4" -print -quit)"
+            test -n "$F" && test -s "$F"
+          done
+
+      - name: Render all four COMPLETE native high-quality ManimCE lessons
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=render_jobs/stat10_2027_native_v6/statistics10_advanced_v7.py
+          for WEEK in 1 2 3 4; do
+            SCENE="Stat10AppliedWeek$WEEK""V7"
+            OUT="published_renders/stat10_2027_advanced_v7/Statistics10_2027_Week$WEEK""_Advanced_Example_V7_NATIVE_PQH.mp4"
+            echo "PQH native ManimCE: $SCENE"
+            docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/manim" -w /manim --entrypoint manim \
+              manimcommunity/manim:v0.20.1 -qh "$SRC" "$SCENE" --fps 30 \
+              --media_dir media_pqh_v7 --disable_caching 2>&1 | tee "qa_v7/pqh_$WEEK.log"
+            RAW="$(find media_pqh_v7 -type f -name "$SCENE.mp4" -print -quit)"
+            test -n "$RAW" && test -s "$RAW"
+            ffmpeg -y -hide_banner -loglevel error -i "$RAW" -c:v libx264 -crf 18 -pix_fmt yuv420p -an "$OUT"
+            ffmpeg -hide_banner -loglevel error -i "$OUT" -f null - 2> "qa_v7/decode_$WEEK.log"
+            W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$OUT")"
+            H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$OUT")"
+            FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$OUT")"
+            CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$OUT")"
+            PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$OUT")"
+            D="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT")"
+            test "$W" = 1920 && test "$H" = 1080 && test "$FPS" = 30/1 && test "$CODEC" = h264 && test "$PIX" = yuv420p
+            printf "week=%s width=%s height=%s fps=%s codec=%s pix=%s duration=%s\n" "$W" "$H" "$FPS" "$CODEC" "$PIX" "$D" | tee -a qa_v7/VIDEO_TECHNICAL.txt
+            sha256sum "$OUT" >> qa_v7/SHA256SUMS.txt
+          done
+
+      - name: Sample actual encoded output and create visual QA sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa_v7/frame_samples
+          for WEEK in 1 2 3 4; do
+            F="published_renders/stat10_2027_advanced_v7/Statistics10_2027_Week$WEEK""_Advanced_Example_V7_NATIVE_PQH.mp4"
+            D="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+            for PCT in 17 43 72 90; do
+              T="$(awk -v d="$D" -v pct="$PCT" 'BEGIN{printf "%.3f",d*pct/100}')"
+              ffmpeg -y -hide_banner -loglevel error -ss "$T" -i "$F" \
+                -frames:v 1 -vf 'scale=480:270' -q:v 3 "qa_v7/frame_samples/W$WEEK""_P$PCT.jpg"
+            done
+          done
+          ffmpeg -y -hide_banner -loglevel error -pattern_type glob \
+            -i 'qa_v7/frame_samples/*.jpg' \
+            -vf "tile=4x4:padding=6:margin=6:color=white" -frames:v 1 -q:v 3 qa_v7/native_encoded_contact_sheet.jpg
+          test -s qa_v7/native_encoded_contact_sheet.jpg
+          python3 - <<'PY'
+          import glob
+          from PIL import Image
+          files=sorted(glob.glob('qa_v7/frame_samples/*.jpg'))
+          assert len(files)==16
+          for f in files:
+              im=Image.open(f).convert('L')
+              nonwhite=sum(1 for p in im.resize((120,68)).getdata() if p<210)
+              assert nonwhite>95, f'Nearly blank sampled frame: {f}: {nonwhite}'
+          print("QA PASS: 16 sampled encoded frames contain nonwhite rendered content")
+          PY
+
+      - name: Publish four videos and QA evidence to GitHub
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add published_renders/stat10_2027_advanced_v7 qa_v7
+          git commit -m "render: 4 professional native LaTeX ManimCE statistics examples PQH V7 [skip ci]"
+          git fetch origin manim/stat10-2027-advanced-examples-v7
+          git rebase origin/manim/stat10-2027-advanced-examples-v7
+          git push origin HEAD:manim/stat10-2027-advanced-examples-v7
+
+      - name: Upload downloadable files and forensic QA artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: statistics10-2027-weeks1-4-advanced-native-v7
+          path: |
+            published_renders/stat10_2027_advanced_v7/
+            qa_v7/
+          retention-days: 30
+          if-no-files-found: warn
