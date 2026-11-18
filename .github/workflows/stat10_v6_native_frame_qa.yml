@@ -1,0 +1,38 @@
+name: QA Native Statistics10 Encoded Video Frames
+on:
+  push:
+    branches: [manim/stat10-w1-w4-latex-native-v6-2027]
+    paths:
+      - published_renders/stat10_2027_native_v6/*.mp4
+
+jobs:
+  visual-sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect four native MP4s and print encoded contact sheet for review
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          mkdir -p /tmp/stat10_frame_samples
+          for W in 1 2 3 4; do
+            F="published_renders/stat10_2027_native_v6/Stat10_2027_Week$W""_Native_ManimCE_PQH_V6.mp4"
+            test -s "$F"
+            D="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+            for P in 20 50 80; do
+              T="$(awk -v d="$D" -v p="$P" 'BEGIN{printf "%.3f",d*p/100}')"
+              ffmpeg -y -hide_banner -loglevel error -ss "$T" -i "$F" -frames:v 1 \
+                -vf "scale=500:281,drawtext=text='W$W $P%%':fontcolor=black:fontsize=26:x=9:y=7:box=1:boxcolor=white@0.8" \
+                "/tmp/stat10_frame_samples/W$W""_$P.jpg"
+            done
+          done
+          ffmpeg -y -hide_banner -loglevel error -pattern_type glob -i '/tmp/stat10_frame_samples/*.jpg' \
+            -vf "tile=3x4:padding=6:margin=6:color=white" -frames:v 1 \
+            -q:v 4 /tmp/stat10_native_contact_sheet.jpg
+          echo 'BEGIN_NATIVE_QA_JPEG_BASE64'
+          base64 -w0 /tmp/stat10_native_contact_sheet.jpg
+          echo
+          echo 'END_NATIVE_QA_JPEG_BASE64'
