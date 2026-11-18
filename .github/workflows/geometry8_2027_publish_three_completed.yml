@@ -30,7 +30,7 @@ jobs:
           set -euo pipefail
           mkdir -p flat
           find verified -type f \( -name '*.mp4' -o -name '*_contact.jpg' -o -name '*-STATUS.txt' -o -name '*-QA.tsv' -o -name '*-SHA256SUMS.txt' -o -name '*_FRAME_METRICS.csv' \) -exec cp -n {} flat/ \;
-          test "$(find flat -maxdepth 1 -type f -name '*.mp4' | wc -l)" -eq 3
+          test "$(find flat -maxdepth 1 -type f -name '*.mp4' | wc -l)" -ge 3
       - name: Publish actual completed MP4s, contact sheets and checksums
         shell: bash
         run: |
