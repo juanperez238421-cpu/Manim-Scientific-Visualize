@@ -354,8 +354,7 @@ class Statistics10Week4V6(ClassroomLatex):
     def construct(self):
         self.title_cover("COUNTING OR MEASURING?","8--12 February 2027 | Discrete and continuous")
         self.slide(1,"FIRST: WHAT KIND OF VARIABLE?","Quantitative variables can represent counts or measurements.")
-        formula=MathTex(r"\text{Quantitative}\longrightarrow
-                 \begin{cases}\text{Discrete}\\ \text{Continuous}\end{cases}",
+        formula=MathTex(r"\text{Quantitative}\longrightarrow\begin{cases}\text{Discrete}\\ \text{Continuous}\end{cases}",
                  font_size=49,color=INK)
         self.stage(formula)
         self.play(Write(formula),run_time=3.4)
