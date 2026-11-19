@@ -1,0 +1,98 @@
+        rin,rout,y0,y1=1.08,1.42,-0.35,0.35
+        cut_region=Polygon(
+            np.array([rin,y0,0]),np.array([rout,y0,0]),np.array([rout,y1,0]),np.array([rin,y1,0]),
+            stroke_color=BLACK_LINE,stroke_width=2.7,fill_color=GRAY_B,fill_opacity=0.40,
+        )
+        cut_outer=[(rout,y0),(rout,y1)]
+        cut_inner=[(rin,y0),(rin,y1)]
+        # First show front-view causality: existing body + 2D cut rectangle.
+        body_icon=shaft_before.copy().scale(0.72).move_to(RIGHT*3.4+DOWN*0.25)
+        cut2d=cut_region.copy().shift(LEFT*3.3)
+        ax2d=axis_line(-1.8,1.8).shift(LEFT*3.3)
+        labels=VGroup(self.pill("EXISTING BODY",19).move_to(RIGHT*3.4+DOWN*2.75),self.pill("CUT PROFILE",19).move_to(LEFT*3.3+DOWN*2.75))
+        self.fixed(labels)
+        self.play(FadeIn(body_icon),Create(ax2d),FadeIn(cut2d),FadeIn(labels),run_time=1.1);self.wait(2.7)
+        self.play(FadeOut(body_icon),FadeOut(labels),run_time=0.45)
+        # Center the exact cut profile while moving into 3D; bring in the existing shaft at the same center.
+        self.move_camera(
+            phi=65*DEGREES,theta=-48*DEGREES,zoom=0.90,
+            added_anims=[cut2d.animate.shift(RIGHT*3.3),ax2d.animate.shift(RIGHT*3.3)],
+            run_time=1.5,
+        )
+        self.play(FadeIn(shaft_before),run_time=0.8)
+        self.bring_to_front(cut2d)
+        result=self.sweep.animate_cut_revolve(cut2d,cut_outer,cut_inner,shaft_before,shaft_after,duration=3.6)
+        operation=self.note("BOOLEAN MEANING",["Join: swept volume becomes material.","Cut: swept volume is subtracted from the existing body."],width=5.8).to_corner(DR,buff=0.45)
+        self.fixed(operation);self.play(FadeIn(operation),run_time=0.75);self.wait(3.4)
+        self.clear_scene()
+
+    def no_calculus_check(self):
+        self.set_camera_orientation(phi=0,theta=-90*DEGREES,zoom=1)
+        h=self.section_header(10,"A SIMPLE GEOMETRY CHECK — WITHOUT INTEGRAL CALCULUS",
+                              "Use familiar formulas only as a model check. The Revolve concept itself is geometric and visual.")
+        self.fixed(h);self.play(FadeIn(h),run_time=0.7)
+        circle=Circle(radius=1.18,color=BLACK_LINE,stroke_width=2.5,fill_color=LIGHT_GRAY,fill_opacity=0.50).move_to(LEFT*4.25+DOWN*0.20)
+        rad=Line(circle.get_center(),circle.get_right(),color=BLACK_LINE,stroke_width=2.3)
+        rlab=MathTex("r",color=BLACK_TEXT,font_size=36).next_to(rad,UP,buff=0.05)
+        title=self.text("CIRCULAR BASE AREA",24,BOLD).next_to(circle,UP,buff=0.35)
+        area=MathTex(r"A=\pi r^2",color=BLACK_TEXT,font_size=48).next_to(circle,DOWN,buff=0.32)
+        self.fixed(circle,rad,rlab,title,area)
+        self.play(FadeIn(circle),Create(rad),FadeIn(rlab),FadeIn(title),run_time=1.0);self.play(Write(area),run_time=0.9);self.wait(2.4)
+        bridge=VGroup(self.pill("same base",20),self.pill("length L",20),self.pill("cylinder volume",20)).arrange(DOWN,buff=0.22).move_to(ORIGIN+DOWN*0.20)
+        self.fixed(bridge);self.play(LaggedStart(*[FadeIn(x) for x in bridge],lag_ratio=0.15),run_time=1.2);self.wait(1.8)
+        formula=MathTex(r"V=A\,L=\pi r^2L",color=BLACK_TEXT,font_size=52).move_to(RIGHT*4.25+DOWN*0.25)
+        ftitle=self.text("CYLINDER CHECK",24,BOLD).next_to(formula,UP,buff=0.35)
+        self.fixed(formula,ftitle);self.play(FadeIn(ftitle),Write(formula),run_time=1.2);self.wait(2.8)
+        footer=self.text("For tomorrow's class: understand profile + axis + operation first; calculus can be added later.",25,BOLD).to_edge(DOWN,buff=0.30)
+        self.fixed(footer);self.play(FadeIn(footer),run_time=0.8);self.wait(3.3)
+        self.clear_scene()
+
+    def final_design_challenge(self):
+        self.set_camera_orientation(phi=64*DEGREES,theta=-48*DEGREES,zoom=0.90)
+        h=self.section_header(11,"FINAL DESIGN CHALLENGE: REVERSE THE MOTION IN YOUR HEAD",
+                              "A professional CAD habit is to look at the 3D part and recover the 2D generator that must have swept around its axis.")
+        self.fixed(h);self.play(FadeIn(h),run_time=0.7)
+        prof=[(0.64,-2.0),(0.64,-1.35),(1.12,-1.35),(1.12,-0.40),(0.86,-0.40),(0.86,0.45),(1.35,0.45),(1.35,1.20),(0.78,1.20),(0.78,2.0)]
+        solid=self.sweep.final_solid(prof,opacity=0.54,caps=True,resolution=(34,22)).shift(RIGHT*2.8)
+        self.play(FadeIn(solid),run_time=1.1)
+        q=self.note("ASK IN THIS ORDER",["1. Where is the symmetry axis?","2. Where do diameters change?","3. Which radii create those bands?","4. Which closed profile would sweep them?"],width=5.9).to_corner(DL,buff=0.50).shift(UP*0.65)
+        self.fixed(q);self.play(FadeIn(q),run_time=0.75);self.wait(4.0)
+        self.play(FadeOut(q),run_time=0.4)
+        # Rather than merely fading in the answer, visually collapse the 3D logic back to its generator.
+        self.move_camera(phi=0,theta=-90*DEGREES,zoom=1.0,run_time=1.4)
+        sketch=closed_profile_polygon(prof,0.54).shift(LEFT*3.5)
+        ax=axis_line(-2.3,2.3).shift(LEFT*3.5)
+        reveal=self.text("REVERSE ENGINEERING: the shaft can be encoded by this one side profile.",25,BOLD).to_edge(DOWN,buff=0.30)
+        self.fit(reveal,13.7,0.58);self.fixed(reveal)
+        self.play(solid.animate.set_opacity(0.16),Create(ax),FadeIn(sketch),FadeIn(reveal),run_time=1.3)
+        self.wait(3.2)
+        # Finish by replaying a short sweep so the answer is verified, not merely asserted.
+        self.play(FadeOut(solid),FadeOut(reveal),run_time=0.45)
+        self.move_camera(
+            phi=62*DEGREES,theta=-48*DEGREES,zoom=0.91,
+            added_anims=[sketch.animate.shift(RIGHT*3.5),ax.animate.shift(RIGHT*3.5)],
+            run_time=1.35,
+        )
+        verified=self.sweep.animate_full_revolve(sketch,prof,duration=3.2,trace_count=8,keep_axis=ax,final_solid=self.sweep.final_solid(prof,opacity=0.54,caps=True,resolution=(34,22)))
+        verify_lab=self.text("Verified: the recovered 2D profile regenerates the same 3D shaft.",26,BOLD).to_edge(DOWN,buff=0.30)
+        self.fit(verify_lab,13.6,0.58);self.fixed(verify_lab);self.play(FadeIn(verify_lab),run_time=0.7);self.wait(3.1)
+        self.clear_scene()
+
+    def closing(self):
+        self.set_camera_orientation(phi=0,theta=-90*DEGREES,zoom=1)
+        title=self.text("PROFILE  →  SWEEP  →  SURFACE  →  SOLID",40,BOLD); self.fit(title, 14.20, 0.82)
+        sub=self.text("In Inventor, Revolve is not a magic 3D command: it is the recorded motion of a 2D generator around an axis.",26); self.fit(sub, 13.65, 0.64)
+        checklist=VGroup(
+            self.pill("closed area",19),self.pill("axis",19),self.pill("angle",19),self.pill("join / cut",19),
+        ).arrange(RIGHT,buff=0.20)
+        group=VGroup(title,sub,checklist).arrange(DOWN,buff=0.34)
+        self.fixed(group)
+        self.play(FadeIn(title),run_time=0.9);self.wait(1.3)
+        self.play(FadeIn(sub),run_time=0.8);self.wait(1.7)
+        self.play(LaggedStart(*[FadeIn(x) for x in checklist],lag_ratio=0.13),run_time=1.2);self.wait(4.0)
+        self.play(FadeOut(group),run_time=0.8)
+
+# Preview:
+# manim -pql SolidsOfRevolution_InventorProfessional_TRANSFORM_V3.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching
+# Final:
+# manim -pqh SolidsOfRevolution_InventorProfessional_TRANSFORM_V3.py SolidsOfRevolutionInventorSeniorV3 --format=mp4 --disable_caching

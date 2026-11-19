@@ -1,0 +1,210 @@
+        return VGroup(*pieces)
+
+    def hollow_solid(self, outer_profile, inner_profile, opacity=0.48, resolution=(32, 18)):
+        y0 = outer_profile[0][1]
+        y1 = outer_profile[-1][1]
+        rin0 = inner_profile[0][0]
+        rout0 = outer_profile[0][0]
+        rin1 = inner_profile[-1][0]
+        rout1 = outer_profile[-1][0]
+        return VGroup(
+            revolution_surface(outer_profile, TAU, opacity, resolution=resolution, color=GRAY_C),
+            revolution_surface(inner_profile, TAU, 0.24, resolution=resolution, color=GRAY_D),
+            annular_cap(y0, rin0, rout0, opacity=0.24),
+            annular_cap(y1, rin1, rout1, opacity=0.24),
+        )
+
+    def animate_full_revolve(
+        self,
+        region,
+        profile,
+        *,
+        angle=TAU,
+        duration=4.0,
+        trace_count=7,
+        final_solid=None,
+        surface_opacity=0.53,
+        caps=True,
+        keep_axis=None,
+        completion_pause=0.55,
+    ):
+        """Rotate the *visible* 2D region and simultaneously draw its sweep."""
+        scene = self.scene
+        traces = self.traces(profile, 0.0, angle, count=trace_count, opacity=0.44)
+        generating_curve = profile_curve(profile, stroke_width=3.5)
+        scene.add(generating_curve)
+
+        # Rotate both the filled area and its outer generator. Every orbit is
+        # drawn over the same time interval, so the geometry is temporally linked.
+        scene.play(
+            Rotate(region, angle, axis=UP, about_point=ORIGIN),
+            Rotate(generating_curve, angle, axis=UP, about_point=ORIGIN),
+            AnimationGroup(*[Create(t) for t in traces], lag_ratio=0.0),
+            run_time=duration,
+            rate_func=linear,
+        )
+        scene.wait(completion_pause)
+
+        solid = final_solid or self.final_solid(
+            profile, angle=angle, opacity=surface_opacity, caps=caps,
+        )
+        # Resolve the construction evidence into the CAD-like skin.
+        scene.play(
+            FadeIn(solid),
+            region.animate.set_opacity(0.08),
+            generating_curve.animate.set_stroke(opacity=0.20),
+            traces.animate.set_stroke(opacity=0.12),
+            run_time=1.05,
+        )
+        scene.play(FadeOut(region), FadeOut(generating_curve), FadeOut(traces), run_time=0.55)
+        if keep_axis is not None:
+            scene.bring_to_front(keep_axis)
+        return solid
+
+    def animate_angle_progression(self, region, profile, labels, durations=(1.5, 1.6, 2.1)):
+        """Continue one physical generator through 90°, 180°, then 360°."""
+        scene = self.scene
+        targets = (PI / 2, PI, TAU)
+        current = 0.0
+        surface = None
+        generating_curve = profile_curve(profile, stroke_width=3.3)
+        scene.add(generating_curve)
+        for i, (target, lab, runtime) in enumerate(zip(targets, labels, durations)):
+            delta = target - current
+            segment_traces = self.traces(profile, current, target, count=6, opacity=0.42)
+            if i == 0:
+                scene.play(FadeIn(lab), run_time=0.45)
+            else:
+                scene.play(ReplacementTransform(labels[i - 1], lab), run_time=0.45)
+            scene.play(
+                Rotate(region, delta, axis=UP, about_point=ORIGIN),
+                Rotate(generating_curve, delta, axis=UP, about_point=ORIGIN),
+                AnimationGroup(*[Create(t) for t in segment_traces], lag_ratio=0.0),
+                run_time=runtime,
+                rate_func=linear,
+            )
+            new_surface = self.final_solid(profile, angle=target, opacity=0.48, caps=(target >= TAU - 1e-6))
+            if surface is None:
+                surface = new_surface
+                scene.play(FadeIn(surface), segment_traces.animate.set_stroke(opacity=0.10), run_time=0.65)
+            else:
+                scene.play(Transform(surface, new_surface), segment_traces.animate.set_stroke(opacity=0.10), run_time=0.70)
+            scene.play(FadeOut(segment_traces), run_time=0.30)
+            scene.wait(0.70)
+            current = target
+        scene.play(FadeOut(region), FadeOut(generating_curve), run_time=0.45)
+        return surface
+
+    def animate_cut_revolve(self, cut_region, cut_profile_outer, cut_profile_inner, shaft_before, shaft_after, duration=3.2):
+        """Sweep a rectangular cut region and then apply the exact subtraction."""
+        scene = self.scene
+        all_trace_profile = [
+            cut_profile_outer[0], cut_profile_outer[-1],
+            cut_profile_inner[0], cut_profile_inner[-1],
+        ]
+        traces = VGroup(*[
+            orbit_curve(r, y, 0.0, TAU, opacity=0.46)
+            for r, y in all_trace_profile
+        ])
+        cut_volume = VGroup(
+            revolution_surface(cut_profile_outer, TAU, 0.20, resolution=(28, 14), color=GRAY_B),
+            revolution_surface(cut_profile_inner, TAU, 0.15, resolution=(28, 14), color=GRAY_D),
+            annular_cap(cut_profile_outer[0][1], cut_profile_inner[0][0], cut_profile_outer[0][0], opacity=0.18),
+            annular_cap(cut_profile_outer[-1][1], cut_profile_inner[-1][0], cut_profile_outer[-1][0], opacity=0.18),
+        )
+        scene.play(
+            Rotate(cut_region, TAU, axis=UP, about_point=ORIGIN),
+            AnimationGroup(*[Create(t) for t in traces], lag_ratio=0.0),
+            run_time=duration,
+            rate_func=linear,
+        )
+        scene.play(FadeIn(cut_volume), cut_region.animate.set_opacity(0.06), traces.animate.set_opacity(0.14), run_time=0.85)
+        scene.wait(0.65)
+        scene.play(
+            Transform(shaft_before, shaft_after),
+            FadeOut(cut_volume), FadeOut(cut_region), FadeOut(traces),
+            run_time=1.25,
+        )
+        return shaft_before
+
+
+class SolidsOfRevolutionInventorSeniorV3(JPThreeDClassroomScene):
+    def validate_lesson_data(self):
+        assert abs(TAU - 2 * PI) < 1e-12
+        assert 0 < PI / 2 < PI < TAU
+
+    def play(self, *animations, **kwargs):
+        if kwargs.get("run_time") is not None:
+            kwargs["run_time"] *= TIME_SCALE
+        return super().play(*animations, **kwargs)
+
+    def wait(self, duration=DEFAULT_WAIT_TIME, *args, **kwargs):
+        return super().wait(duration * TIME_SCALE, *args, **kwargs)
+
+    # ------------------------------------------------------------------
+    # UI helpers
+    # ------------------------------------------------------------------
+    def fixed(self, *mobs):
+        self.add_fixed_in_frame_mobjects(*mobs)
+
+    def fit(self, mob, max_w=14.5, max_h=7.5):
+        if mob.width > max_w:
+            mob.scale_to_fit_width(max_w)
+        if mob.height > max_h:
+            mob.scale_to_fit_height(max_h)
+        return mob
+
+    def section_header(self, n, title, subtitle):
+        badge = RoundedRectangle(
+            width=0.72, height=0.52, corner_radius=0.09,
+            stroke_color=BLACK_LINE, stroke_width=1.8,
+            fill_color=WHITE, fill_opacity=1,
+        )
+        num = self.text(f"{n:02d}", 22, BOLD).move_to(badge)
+        head = self.text(title, 31, BOLD)
+        self.fit(head, 13.1, 0.58)
+        row = VGroup(VGroup(badge, num), head).arrange(RIGHT, buff=0.22)
+        row.to_edge(UP, buff=0.16).to_edge(LEFT, buff=0.48)
+        rule = Line(LEFT * 7.45, RIGHT * 7.45, color=LIGHT_GRAY, stroke_width=1.8)
+        rule.next_to(row, DOWN, buff=0.06)
+        sub = self.text(subtitle, 20)
+        self.fit(sub, 14.2, 0.55)
+        sub.next_to(rule, DOWN, buff=0.08).align_to(row, LEFT)
+        return VGroup(row, rule, sub)
+
+    def pill(self, text, size=22, width=None):
+        t = self.text(text, size, BOLD)
+        w = max(t.width + 0.45, width or 0)
+        box = RoundedRectangle(
+            width=w, height=0.58, corner_radius=0.18,
+            stroke_color=BLACK_LINE, stroke_width=1.5,
+            fill_color=PAPER_GRAY, fill_opacity=1,
+        )
+        t.move_to(box)
+        return VGroup(box, t)
+
+    def note(self, title, lines, width=5.6, body_size=21):
+        h = self.text(title, 24, BOLD)
+        body = VGroup(*[self.text(x, body_size) for x in lines]).arrange(DOWN, aligned_edge=LEFT, buff=0.13)
+        content = VGroup(h, body).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        self.fit(content, width - 0.55, 3.1)
+        box = RoundedRectangle(
+            width=width, height=max(1.35, content.height + 0.54),
+            corner_radius=0.12, stroke_color=BLACK_LINE, stroke_width=1.5,
+            fill_color=WHITE, fill_opacity=0.97,
+        )
+        content.move_to(box).align_to(box, LEFT).shift(RIGHT * 0.28)
+        return VGroup(box, content)
+
+    def cad_parameter_row(self, label, value, width=5.6):
+        lab = self.text(label, 20, BOLD)
+        val = self.text(value, 20)
+        field = RoundedRectangle(
+            width=3.20, height=0.55, corner_radius=0.06,
+            stroke_color=MID_GRAY, stroke_width=1.4,
+            fill_color=WHITE, fill_opacity=1,
+        )
+        val.move_to(field).align_to(field, LEFT).shift(RIGHT * 0.17)
+        row = VGroup(lab, VGroup(field, val)).arrange(RIGHT, buff=0.24)
+        row.scale_to_fit_width(width)
+        return row

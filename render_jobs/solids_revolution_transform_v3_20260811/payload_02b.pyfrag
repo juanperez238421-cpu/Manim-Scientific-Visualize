@@ -1,0 +1,105 @@
+        explanation = self.note(
+            "THE MOTION TO LOOK FOR",
+            ["1. The area stays rigid.", "2. It rotates about the centerline.", "3. Every boundary point traces a circle."],
+            width=5.6,
+        ).move_to(RIGHT * 3.7 + DOWN * 0.15)
+        self.fixed(explanation); self.play(FadeIn(explanation), run_time=0.7); self.wait(2.3)
+        self.play(FadeOut(explanation), FadeOut(profile_lab), FadeOut(axis_lab), FadeOut(radius), FadeOut(rlab), run_time=0.5)
+
+        # One continuous transition: camera tilts while the exact sketch moves onto the 3D axis.
+        self.move_camera(
+            phi=66 * DEGREES, theta=-48 * DEGREES, zoom=0.91,
+            added_anims=[region.animate.shift(-origin_shift), ax.animate.shift(-origin_shift)],
+            run_time=1.6,
+        )
+        self.wait(0.5)
+        solid = self.sweep.animate_full_revolve(
+            region, profile, duration=4.2, trace_count=8, keep_axis=ax,
+        )
+        takeaway = self.text(
+            "This is Revolve: the 3D surface is the history of the moving 2D generator.", 27, BOLD
+        ).to_edge(DOWN, buff=0.32)
+        self.fit(takeaway, 14.0, 0.58); self.fixed(takeaway)
+        self.play(FadeIn(takeaway), run_time=0.75); self.wait(3.1)
+        self.clear_scene()
+
+    def angle_logic(self):
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1)
+        h = self.section_header(
+            2,
+            "ONE GENERATOR CONTINUES FROM 90° TO 180° TO 360°",
+            "Do not imagine three different solids: it is the same 2D area continuing farther around the same axis.",
+        )
+        self.fixed(h); self.play(FadeIn(h), run_time=0.7)
+        profile = [(1.45, -1.25), (1.45, 1.25)]
+        shift = LEFT * 3.0
+        region = closed_profile_polygon(profile, 0.52).shift(shift)
+        ax = axis_line(-1.75, 1.75).shift(shift)
+        intro = self.note("ANGLE = TRAVEL", ["90° = quarter turn", "180° = half turn", "360° = complete turn"], width=5.4).move_to(RIGHT*3.7+DOWN*0.2)
+        self.fixed(intro)
+        self.play(Create(ax), FadeIn(region), FadeIn(intro), run_time=1.0); self.wait(2.4)
+        self.play(FadeOut(intro), run_time=0.45)
+        self.move_camera(
+            phi=64*DEGREES, theta=-50*DEGREES, zoom=0.92,
+            added_anims=[region.animate.shift(-shift), ax.animate.shift(-shift)],
+            run_time=1.5,
+        )
+        labels = []
+        for deg, caption in [(90, "quarter sweep"), (180, "half sweep"), (360, "full sweep")]:
+            lab = VGroup(self.text(f"{deg}°", 34, BOLD), self.text(caption, 21)).arrange(DOWN, buff=0.05).to_corner(DL, buff=0.55)
+            self.fixed(lab); labels.append(lab)
+        surface = self.sweep.animate_angle_progression(region, profile, labels)
+        rule = self.note(
+            "IN INVENTOR",
+            ["Full / 360° closes the axisymmetric part.", "A partial angle is a deliberate design choice, not a different command."],
+            width=6.0,
+        ).to_corner(DR, buff=0.45)
+        self.fixed(rule); self.play(FadeIn(rule), run_time=0.75); self.wait(3.4)
+        self.clear_scene()
+
+    def profile_to_solid_library(self):
+        # Each example is now animated independently so the student watches
+        # the generating profile produce its own solid instead of seeing a static pair.
+        examples = [
+            ([(1.15, -1.35), (1.15, 1.35)], "RECTANGLE", "CYLINDER", True),
+            ([(1.28, -1.35), (0.0, 1.35)], "TRIANGLE", "CONE", True),
+            ([(1.25 * math.sin(t), 1.25 * math.cos(t)) for t in np.linspace(PI, 0, 18)], "SEMICIRCLE", "SPHERE", False),
+        ]
+        for index, (profile, ptitle, stitle, caps) in enumerate(examples, start=3):
+            self.set_camera_orientation(phi=0, theta=-90*DEGREES, zoom=1)
+            h = self.section_header(
+                index,
+                f"{ptitle} PROFILE → {stitle}",
+                "The silhouette of the final 3D object is already encoded in the side profile before the Revolve command is used.",
+            )
+            self.fixed(h); self.play(FadeIn(h), run_time=0.65)
+            shift = LEFT * 3.4
+            region = closed_profile_polygon(profile, 0.54).shift(shift)
+            ax = axis_line(min(y for _, y in profile)-0.35, max(y for _, y in profile)+0.35).shift(shift)
+            label = VGroup(
+                self.pill("2D CLOSED REGION", 19),
+                self.text(f"Rotate it 360° → {stitle.lower()}", 24, BOLD),
+            ).arrange(DOWN, buff=0.20).move_to(RIGHT*3.4+DOWN*0.2)
+            self.fixed(label)
+            self.play(Create(ax), FadeIn(region), FadeIn(label), run_time=1.0); self.wait(2.2)
+            self.play(FadeOut(label), run_time=0.4)
+            self.move_camera(
+                phi=64*DEGREES, theta=-48*DEGREES, zoom=0.91,
+                added_anims=[region.animate.shift(-shift), ax.animate.shift(-shift)],
+                run_time=1.45,
+            )
+            solid = self.sweep.animate_full_revolve(
+                region, profile, duration=3.5 if stitle != "SPHERE" else 4.0,
+                trace_count=7, caps=caps, keep_axis=ax,
+                surface_opacity=0.52,
+            )
+            final_lab = self.text(f"{ptitle}  →  360° REVOLVE  →  {stitle}", 28, BOLD).to_edge(DOWN, buff=0.30)
+            self.fit(final_lab, 13.5, 0.58); self.fixed(final_lab)
+            self.play(FadeIn(final_lab), run_time=0.65); self.wait(2.6)
+            self.clear_scene()
+
+        # Hollow-body example: both the outer and inner boundaries are swept.
+        self.set_camera_orientation(phi=0, theta=-90*DEGREES, zoom=1)
+        h = self.section_header(
+            6,
+            "OFFSET PROFILE → HOLLOW REVOLVED BODY",
