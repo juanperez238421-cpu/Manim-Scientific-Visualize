@@ -1,0 +1,180 @@
+            width=width, height=max(1.35, content.height + 0.54),
+            corner_radius=0.12, stroke_color=BLACK_LINE, stroke_width=1.5,
+            fill_color=WHITE, fill_opacity=0.97,
+        )
+        content.move_to(box).align_to(box, LEFT).shift(RIGHT * 0.28)
+        return VGroup(box, content)
+
+    def cad_parameter_row(self, label, value, width=5.6):
+        lab = self.text(label, 20, BOLD)
+        val = self.text(value, 20)
+        field = RoundedRectangle(
+            width=3.20, height=0.55, corner_radius=0.06,
+            stroke_color=MID_GRAY, stroke_width=1.4,
+            fill_color=WHITE, fill_opacity=1,
+        )
+        val.move_to(field).align_to(field, LEFT).shift(RIGHT * 0.17)
+        row = VGroup(lab, VGroup(field, val)).arrange(RIGHT, buff=0.24)
+        row.scale_to_fit_width(width)
+        return row
+
+    def cad_panel(self):
+        title = VGroup(self.text("REVOLVE", 25, BOLD), self.text("Inventor mental model", 18)).arrange(DOWN, buff=0.04)
+        rows = VGroup(
+            self.cad_parameter_row("Profile", "Closed sketch region"),
+            self.cad_parameter_row("Axis", "Centerline"),
+            self.cad_parameter_row("Extent", "Full"),
+            self.cad_parameter_row("Angle", "360 deg"),
+            self.cad_parameter_row("Operation", "New Solid"),
+        ).arrange(DOWN, buff=0.16, aligned_edge=LEFT)
+        ok = self.pill("OK", 20, width=1.05)
+        cancel = self.pill("Cancel", 18, width=1.35)
+        buttons = VGroup(ok, cancel).arrange(RIGHT, buff=0.18)
+        content = VGroup(title, rows, buttons).arrange(DOWN, aligned_edge=LEFT, buff=0.26)
+        box = RoundedRectangle(
+            width=6.35, height=4.55, corner_radius=0.12,
+            stroke_color=BLACK_LINE, stroke_width=1.8,
+            fill_color="#FAFAFA", fill_opacity=1,
+        )
+        content.move_to(box).align_to(box, LEFT).shift(RIGHT * 0.32)
+        return VGroup(box, content)
+
+    def clear_scene(self):
+        mobs = list(self.mobjects)
+        if mobs:
+            self.play(*[FadeOut(m) for m in mobs], run_time=0.65)
+        for m in mobs:
+            self.remove(m)
+
+    def profile_panel_2d(self, profile, title, caption, scale=0.85, x=-4.6, y=-0.30, ring_inner=None):
+        if ring_inner is None:
+            region = closed_profile_polygon(profile, 0.52)
+        else:
+            region = closed_ring_profile(profile, ring_inner, 0.50)
+        ax = axis_line(min(y for _, y in profile) - 0.35, max(y for _, y in profile) + 0.35)
+        g = VGroup(ax, region).scale(scale).move_to(np.array([x, y, 0]))
+        lab = VGroup(self.text(title, 22, BOLD), self.text(caption, 18)).arrange(DOWN, buff=0.05)
+        lab.move_to(np.array([x, -3.00, 0]))
+        self.fixed(lab)
+        return g, lab
+
+    # ------------------------------------------------------------------
+    # Lesson
+    # ------------------------------------------------------------------
+    def construct(self):
+        self.opening()
+        self.core_idea()
+        self.angle_logic()
+        self.profile_to_solid_library()
+        self.inventor_workflow()
+        self.stepped_shaft_example()
+        self.revolved_cut_example()
+        self.no_calculus_check()
+        self.final_design_challenge()
+        self.closing()
+
+    def opening(self):
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1)
+        title = self.text("SOLIDS OF REVOLUTION", 52, BOLD)
+        line = Line(LEFT * 5.7, RIGHT * 5.7, color=BLACK_LINE, stroke_width=2)
+        sub = self.text("Inventor Professional · from a 2D profile to an axisymmetric 3D part", 26)
+        promise = self.text("No integral calculus: learn the geometry and the CAD decision process first.", 25, MEDIUM)
+        route = VGroup(
+            self.pill("PROFILE", 22), self.pill("AXIS", 22), self.pill("ANGLE", 22),
+            self.pill("OPERATION", 22), self.pill("SOLID", 22),
+        ).arrange(RIGHT, buff=0.20)
+        arrows = VGroup(*[
+            arrow_between(route[i].get_right(), route[i+1].get_left()) for i in range(len(route)-1)
+        ])
+        path = VGroup(route, arrows)
+        group = VGroup(title, line, sub, promise, path).arrange(DOWN, buff=0.34)
+        self.fixed(group)
+        self.play(FadeIn(title, shift=UP * 0.12), Create(line), run_time=1.2)
+        self.play(FadeIn(sub), run_time=0.8)
+        self.wait(1.2)
+        self.play(FadeIn(promise), run_time=0.8)
+        self.wait(1.8)
+        self.play(LaggedStart(*[FadeIn(p, shift=UP * 0.08) for p in route], lag_ratio=0.12), Create(arrows), run_time=1.9)
+        self.wait(3.0)
+        self.clear_scene()
+
+    def core_idea(self):
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1)
+        h = self.section_header(1, "THE GENERATOR IS A 2D AREA — NOT A FORMULA",
+                                "A closed profile sweeps around an axis. Every point in the profile traces a circular path.")
+        self.fixed(h); self.play(FadeIn(h), run_time=0.7)
+
+        profile = [(1.55, -1.35), (1.55, 1.35)]
+        region = closed_profile_polygon(profile, 0.58).shift(LEFT * 3.2)
+        ax = axis_line(-1.85, 1.85).shift(LEFT * 3.2)
+        rline = Line(LEFT * 3.2, LEFT * 1.65, color=BLACK_LINE, stroke_width=2.2).shift(DOWN * 0.65)
+        rlab = MathTex("r", color=BLACK_TEXT, font_size=38).next_to(rline, UP, buff=0.05)
+        self.fixed(rlab)
+        area_lab = self.pill("CLOSED AREA", 20).move_to(LEFT * 3.25 + DOWN * 2.65)
+        axis_lab = self.pill("ROTATION AXIS", 20).move_to(LEFT * 0.45 + DOWN * 2.65)
+        self.fixed(area_lab, axis_lab)
+        self.play(Create(ax), FadeIn(region), run_time=1.2)
+        self.play(Create(rline), FadeIn(rlab), FadeIn(area_lab), FadeIn(axis_lab), run_time=1.0)
+        self.wait(2.6)
+
+        point = Dot(LEFT * 1.65 + UP * 0.75, radius=0.07, color=BLACK_LINE)
+        circle_path = Circle(radius=1.55, color=MID_GRAY, stroke_width=2.0).rotate(PI/2, axis=RIGHT).move_to(LEFT * 3.2 + UP * 0.75)
+        idea = self.note("KEY GEOMETRY", ["A point at radius r traces a circle.", "The entire area traces a 3D volume."], width=5.2).move_to(RIGHT * 3.8 + DOWN * 0.2)
+        self.fixed(idea)
+        self.play(FadeIn(point), Create(circle_path), FadeIn(idea), run_time=1.2)
+        self.wait(2.5)
+
+        self.play(FadeOut(idea), FadeOut(circle_path), FadeOut(point), FadeOut(area_lab), FadeOut(axis_lab), FadeOut(rlab), FadeOut(rline), run_time=0.6)
+        self.move_camera(phi=66*DEGREES, theta=-48*DEGREES, zoom=0.90, run_time=1.4)
+        self.play(region.animate.shift(RIGHT * 3.2), ax.animate.shift(RIGHT * 3.2), run_time=0.9)
+        ghost = closed_profile_polygon(profile, 0.24)
+        self.add(ghost)
+        solid = VGroup(revolution_surface(profile), revolution_cap(-1.35, 1.55), revolution_cap(1.35, 1.55))
+        self.play(Rotate(ghost, TAU, axis=UP, about_point=ORIGIN), FadeIn(solid), run_time=3.6, rate_func=smooth)
+        takeaway = self.text("The profile controls the silhouette; the axis controls the symmetry.", 27, BOLD).to_edge(DOWN, buff=0.32)
+        self.fixed(takeaway); self.play(FadeIn(takeaway), run_time=0.8); self.wait(3.2)
+        self.clear_scene()
+
+    def angle_logic(self):
+        self.set_camera_orientation(phi=65*DEGREES, theta=-50*DEGREES, zoom=0.92)
+        h = self.section_header(2, "THE ANGLE CONTROLS HOW FAR THE SWEEP TRAVELS",
+                                "360° creates the complete axisymmetric feature; partial angles create partial revolutions.")
+        self.fixed(h); self.play(FadeIn(h), run_time=0.7)
+        profile = [(1.45, -1.25), (1.45, 1.25)]
+        ax = axis_line(-1.8,1.8); self.play(Create(ax), run_time=0.7)
+        angle_arc = Arc(radius=1.95, start_angle=0, angle=PI/2, color=BLACK_LINE, stroke_width=2.5)
+        angle_arc.rotate(PI/2, axis=RIGHT).shift(UP*0.1)
+        q = revolution_surface(profile, PI/2, 0.52)
+        lab = VGroup(self.text("90°",34,BOLD), self.text("quarter sweep",21)).arrange(DOWN,buff=0.06).to_corner(DL,buff=0.55)
+        self.fixed(lab); self.play(FadeIn(q), Create(angle_arc), FadeIn(lab), run_time=1.2); self.wait(2.0)
+        half = revolution_surface(profile, PI, 0.52)
+        lab2 = VGroup(self.text("180°",34,BOLD), self.text("half sweep",21)).arrange(DOWN,buff=0.06).move_to(lab)
+        self.fixed(lab2); self.play(Transform(q,half), ReplacementTransform(lab,lab2), run_time=1.6); self.wait(2.0)
+        full = revolution_surface(profile, TAU, 0.52)
+        lab3 = VGroup(self.text("360°",34,BOLD), self.text("full sweep",21)).arrange(DOWN,buff=0.06).move_to(lab2)
+        self.fixed(lab3); self.play(Transform(q,full), FadeIn(revolution_cap(-1.25,1.45)), FadeIn(revolution_cap(1.25,1.45)), ReplacementTransform(lab2,lab3), FadeOut(angle_arc), run_time=1.8)
+        self.wait(2.5)
+        rule = self.note("IN INVENTOR", ["Extent = Full is the usual axisymmetric case.", "Angle is useful when the feature must stop early."], width=5.9).to_corner(DR,buff=0.45)
+        self.fixed(rule); self.play(FadeIn(rule), run_time=0.8); self.wait(3.4)
+        self.clear_scene()
+
+    def profile_to_solid_library(self):
+        self.set_camera_orientation(phi=62*DEGREES, theta=-48*DEGREES, zoom=0.86)
+        h = self.section_header(3, "ALWAYS READ THE 2D PROFILE BEFORE THE 3D PART",
+                                "The same Revolve command can make very different parts because the profile geometry changes.")
+        self.fixed(h); self.play(FadeIn(h), run_time=0.7)
+
+        examples = [
+            ([(1.05,-1.25),(1.05,1.25)], "RECTANGLE", "CYLINDER", None),
+            ([(1.20,-1.25),(0.0,1.25)], "TRIANGLE", "CONE", None),
+        ]
+        xpos=[-4.7,0.0]
+        for (prof,ptitle,stitle,_),x in zip(examples,xpos):
+            sketch=closed_profile_polygon(prof,0.50).scale(0.58).move_to(np.array([x-0.75,-0.20,0]))
+            a=axis_line(-1.55,1.55).scale(0.58).move_to(np.array([x-0.75,-0.20,0]))
+            arr=arrow_between(np.array([x+0.05,-0.20,0]),np.array([x+0.80,-0.20,0]))
+            parts=[revolution_surface(prof,TAU,0.48), revolution_cap(prof[0][1],prof[0][0],TAU,0.25)]
+            if ptitle=="RECTANGLE":
+                parts.append(revolution_cap(prof[-1][1],prof[-1][0],TAU,0.25))
+            solid=VGroup(*parts).scale(0.78).move_to(np.array([x+1.7,-0.05,0]))
+            labels=VGroup(self.text(ptitle,20,BOLD),self.text("→",20,BOLD),self.text(stitle,22,BOLD)).arrange(RIGHT,buff=0.10).move_to(np.array([x+0.4,-2.70,0]))
