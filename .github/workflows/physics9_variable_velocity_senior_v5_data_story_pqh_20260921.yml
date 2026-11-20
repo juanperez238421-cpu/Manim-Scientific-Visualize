@@ -1,0 +1,300 @@
+name: Physics9 Variable Velocity SENIOR V5 DATA STORY PQH 20260921
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'physics9-variable-velocity-senior-v5-data-story-20260921'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: physics9-variable-velocity-senior-v5-data-story-20260921
+
+      - name: Validate source, English-only contract and classroom style
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_variable_velocity_senior_v5_data_story_20260921
+          FILE="$JOB/physics9_variable_velocity_senior_v5_data_story.py"
+          STYLE="$JOB/jp_classroom_style.py"
+          python -m py_compile "$FILE" "$STYLE"
+          python "$JOB/tools/check_manim_style.py" "$FILE" | tee style_qa.log
+          grep -q "PASS: no structural/style issues detected." style_qa.log
+
+          python - <<'PY'
+          from pathlib import Path
+          p = Path("render_jobs/physics9_variable_velocity_senior_v5_data_story_20260921/physics9_variable_velocity_senior_v5_data_story.py")
+          s = p.read_text(encoding="utf-8")
+          required = [
+              "class Physics9VariableVelocitySeniorV5DataStory(JPMathClassroomScene)",
+              "FROM UNIFORM MOTION TO A REALISTIC TRIP",
+              "UNIFORM MOTION: EQUAL TIMES GIVE EQUAL DISTANCES",
+              "MEASURE THE TRIP: RECORD EACH CHANGE POINT",
+              "FROM THE DATA TABLE TO THE VELOCITY-TIME GRAPH",
+              "CONNECTED STORY: OBSERVE → MEASURE → MODEL → EXPLAIN",
+              "ROUTE_EVENTS",
+              "GRAPH_STEPS",
+              "simple_table(",
+              "lecture_header(",
+              "set_points_as_corners",
+              "assert_content_safe(",
+              "standard_opening(",
+              "clear_stage(",
+              "a_{\\mathrm{avg}}",
+          ]
+          missing = [item for item in required if item not in s]
+          assert not missing, f"Missing V5 data-story contract elements: {missing}"
+          import ast
+          tree = ast.parse(s)
+          graph_steps = None
+          for node in tree.body:
+              if isinstance(node, ast.Assign):
+                  if any(isinstance(t, ast.Name) and t.id == "GRAPH_STEPS" for t in node.targets):
+                      graph_steps = ast.literal_eval(node.value)
+                      break
+          assert graph_steps is not None and len(graph_steps) == 12, "Expected 12 exact velocity-time intervals"
+
+          forbidden_spanish = [
+              "FUNDAMENTOS", "CIUDAD", "VELOCIDAD DEL AUTO", "IDEA CENTRAL",
+              "ACELERA", "PARADA", "ACCIDENTE", "TRÁFICO", "RECUPERA",
+              "POSICIÓN", "TIEMPO", "CUANDO", "MODELO IDEAL", "MOVIMIENTO REAL",
+          ]
+          found = [term for term in forbidden_spanish if term.lower() in s.lower()]
+          assert not found, f"Spanish on-screen vocabulary detected: {found}"
+
+          for ch in "áéíóúñÁÉÍÓÚÑ":
+              assert ch not in s, f"Spanish accented character detected: {ch}"
+
+          print("english_scene_contract_pass")
+          PY
+
+      - name: Install verification tools and pull ManimCE
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          docker pull manimcommunity/manim:v0.20.1 >/dev/null
+          ffprobe -version | head -1
+
+      - name: Fast PQL runtime and safe-layout QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_variable_velocity_senior_v5_data_story_20260921
+          rm -rf media_pql qa_out
+          mkdir -p qa_out
+          docker run --rm --user "$(id -u):$(id -g)"             -e HOME=/tmp/manim-home             -e LESSON_TIME_SCALE=0.18             -v "$PWD:/manim" -w /manim             --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pql $JOB/physics9_variable_velocity_senior_v5_data_story.py Physics9VariableVelocitySeniorV5DataStory                 --fps 15 --format=mp4 --media_dir media_pql --disable_caching
+            " 2>&1 | tee qa_out/render_pql.log
+          PREVIEW="$(find media_pql -type f -name 'Physics9VariableVelocitySeniorV5DataStory.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$PREVIEW" && test -s "$PREVIEW"
+          cp "$PREVIEW" qa_out/Physics9_VariableVelocity_SENIOR_V5_DATA_STORY_QA_pql.mp4
+
+      - name: Final literal PQH render
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_variable_velocity_senior_v5_data_story_20260921
+          rm -rf media out
+          mkdir -p out
+          docker run --rm --user "$(id -u):$(id -g)"             -e HOME=/tmp/manim-home             -e LESSON_TIME_SCALE=1.0             -v "$PWD:/manim" -w /manim             --entrypoint bash manimcommunity/manim:v0.20.1 -c "
+              set -euo pipefail
+              mkdir -p /tmp/manim-bin
+              printf '#!/usr/bin/env bash\nexit 0\n' > /tmp/manim-bin/xdg-open
+              chmod +x /tmp/manim-bin/xdg-open
+              export PATH=/tmp/manim-bin:\$PATH
+              manim -pqh $JOB/physics9_variable_velocity_senior_v5_data_story.py Physics9VariableVelocitySeniorV5DataStory                 --fps 30 --format=mp4 --media_dir media --disable_caching
+            " 2>&1 | tee out/render_pqh.log
+          FINAL="$(find media -type f -name 'Physics9VariableVelocitySeniorV5DataStory.mp4' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$FINAL" && test -s "$FINAL"
+          cp "$FINAL" out/Physics9_VariableVelocity_SENIOR_V5_DATA_STORY_FULL_FINAL_pqh.mp4
+
+      - name: Technical QA, full decode and visual audit frames
+        shell: bash
+        run: |
+          set -euo pipefail
+          F=out/Physics9_VariableVelocity_SENIOR_V5_DATA_STORY_FULL_FINAL_pqh.mp4
+          W="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$F")"
+          H="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$F")"
+          FPS="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$F")"
+          CODEC="$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$F")"
+          PIX="$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$F")"
+          DUR="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")"
+          printf 'width\theight\tfps\tcodec\tpix_fmt\tduration\n%s\t%s\t%s\t%s\t%s\t%s\n' "$W" "$H" "$FPS" "$CODEC" "$PIX" "$DUR" > out/VIDEO_TECHNICAL.tsv
+          test "$W" = 1920
+          test "$H" = 1080
+          test "$FPS" = 30/1
+          test "$CODEC" = h264
+          test "$PIX" = yuv420p
+
+          ffmpeg -nostdin -v error -i "$F" -f null - 2> out/full_decode.log
+
+          # Automated frame-by-frame raster boundary scan.
+          # Every decoded frame is resized to 160x90 grayscale and the outer
+          # two-pixel border is checked for dark content. This catches objects
+          # that touch/escape the actual video frame.
+          python - "$F" <<'PY' | tee out/FRAME_BY_FRAME_BORDER_SCAN.txt
+          import json
+          import subprocess
+          import sys
+
+          path = sys.argv[1]
+          w, h = 320, 180
+          frame_bytes = w * h
+          proc = subprocess.Popen(
+              [
+                  "ffmpeg", "-nostdin", "-loglevel", "error", "-i", path,
+                  "-vf", f"scale={w}:{h},format=gray",
+                  "-f", "rawvideo", "-pix_fmt", "gray", "-"
+              ],
+              stdout=subprocess.PIPE,
+          )
+
+          count = 0
+          border_violations = []
+          max_dark_ratio = 0.0
+          while True:
+              raw = proc.stdout.read(frame_bytes)
+              if not raw:
+                  break
+              if len(raw) != frame_bytes:
+                  raise SystemExit(f"Partial frame read at frame {count}: {len(raw)} bytes")
+
+              dark = 0
+              total = 0
+              # Scan only the true outer raster edge. At 320x180, one
+              # sample pixel is ~6 source pixels horizontally/vertically,
+              # so legal classroom margins are not misclassified as clipping.
+              for y in (0, h - 1):
+                  start = y * w
+                  row = raw[start:start + w]
+                  dark += sum(px < 140 for px in row)
+                  total += len(row)
+              for y in range(1, h - 1):
+                  for x in (0, w - 1):
+                      dark += raw[y * w + x] < 140
+                      total += 1
+
+              ratio = dark / total
+              max_dark_ratio = max(max_dark_ratio, ratio)
+              if ratio > 0.004:
+                  border_violations.append({"frame": count, "dark_ratio": ratio})
+              count += 1
+
+          rc = proc.wait()
+          if rc != 0:
+              raise SystemExit(f"ffmpeg frame scan failed with exit code {rc}")
+          if count == 0:
+              raise SystemExit("No frames decoded during border scan")
+
+          report = {
+              "decoded_frames_scanned": count,
+              "max_outer_border_dark_ratio": max_dark_ratio,
+              "violations": border_violations[:30],
+              "violation_count": len(border_violations),
+          }
+          print(json.dumps(report, indent=2))
+          if border_violations:
+              raise SystemExit(
+                  f"Frame-boundary QA failed: {len(border_violations)} frames touch the outer border"
+              )
+          PY
+
+          mkdir -p out/audit_frames
+          for P in 0.02 0.07 0.12 0.17 0.22 0.27 0.32 0.37 0.42 0.47 0.52 0.57 0.62 0.67 0.72 0.77 0.82 0.87 0.93 0.98; do
+            T="$(python -c "print(float('$DUR')*float('$P'))")"
+            TAG="$(printf '%03d' "$(python -c "print(int(float('$P')*100))")")"
+            ffmpeg -nostdin -loglevel error -ss "$T" -i "$F" -frames:v 1 "out/audit_frames/frame_$TAG.png"
+          done
+
+          ffmpeg -nostdin -loglevel error -framerate 1 -pattern_type glob -i 'out/audit_frames/frame_*.png'             -vf 'scale=384:-1,tile=5x4' -frames:v 1 out/QA_CONTACT_SHEET.png
+
+          sha256sum "$F" > out/SHA256SUMS.txt
+
+      - name: Package full delivery and QA evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          JOB=render_jobs/physics9_variable_velocity_senior_v5_data_story_20260921
+          cp "$JOB/physics9_variable_velocity_senior_v5_data_story.py" out/
+          cp "$JOB/jp_classroom_style.py" out/
+          cp "$JOB/REFERENCE_APPROACH_ANALYSIS.md" out/
+          cp style_qa.log out/
+          cp qa_out/render_pql.log out/
+          cat > out/RENDER_INFO.txt <<'EOF'
+          Physics 9 — Variable Velocity SENIOR V5 DATA STORY
+          Source review: uploaded Class 5(3).mp4 data-story reference
+          ManimCE: 0.20.1
+          Format: JP Classroom Standard
+          Language: English-only on-screen content
+          Preview: literal -pql with LESSON_TIME_SCALE=0.18
+          Final: literal -pqh with LESSON_TIME_SCALE=1.0
+          Resolution: 1920x1080
+          FPS: 30
+          Main pedagogy:
+          1. uniform-motion baseline: equal times -> equal distances
+          2. realistic two-city trip with eight numbered road events
+          3. measurement log before graph construction
+          4. velocity-time graph constructed through all 12 exact intervals
+          5. position-time slope reconstructed from changing velocity
+          6. worked positive and negative average-acceleration examples
+          7. OBSERVE -> MEASURE -> MODEL -> EXPLAIN synthesis
+          QA:
+          py_compile + English-only contract + JP style checker +
+          runtime safe-layout assertions + PQL + PQH + ffprobe +
+          full sequential decode + every-frame boundary scan + 20 audit frames + contact sheet + SHA-256
+          EOF
+
+          cd out
+          zip -9 -r Physics9_VariableVelocity_SENIOR_V5_DATA_STORY_FULL_FINAL_PQH_Package.zip             Physics9_VariableVelocity_SENIOR_V5_DATA_STORY_FULL_FINAL_pqh.mp4             physics9_variable_velocity_senior_v5_data_story.py jp_classroom_style.py REFERENCE_APPROACH_ANALYSIS.md             VIDEO_TECHNICAL.tsv SHA256SUMS.txt RENDER_INFO.txt style_qa.log             render_pqh.log render_pql.log full_decode.log FRAME_BY_FRAME_BORDER_SCAN.txt QA_CONTACT_SHEET.png audit_frames/
+
+      - name: Publish verified V5 delivery to branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p deliveries/physics9
+          cp out/Physics9_VariableVelocity_SENIOR_V5_DATA_STORY_FULL_FINAL_pqh.mp4 deliveries/physics9/
+          cp out/Physics9_VariableVelocity_SENIOR_V5_DATA_STORY_FULL_FINAL_PQH_Package.zip deliveries/physics9/
+          cp out/QA_CONTACT_SHEET.png deliveries/physics9/Physics9_VariableVelocity_SENIOR_V5_DATA_STORY_QA_CONTACT_SHEET.png
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deliveries/physics9/
+          if git diff --cached --quiet; then
+            echo "No delivery changes to publish"
+          else
+            git commit -m "render: publish Physics9 variable velocity senior V5 data story PQH [skip ci]"
+            git push origin HEAD:physics9-variable-velocity-senior-v5-data-story-20260921
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Physics9-VariableVelocity-SENIOR-V5-DATA-STORY-FULL-FINAL-PQH
+          path: |
+            out/Physics9_VariableVelocity_SENIOR_V5_DATA_STORY_FULL_FINAL_pqh.mp4
+            out/Physics9_VariableVelocity_SENIOR_V5_DATA_STORY_FULL_FINAL_PQH_Package.zip
+            out/physics9_variable_velocity_senior_v5_data_story.py
+            out/jp_classroom_style.py
+            out/REFERENCE_APPROACH_ANALYSIS.md
+            out/VIDEO_TECHNICAL.tsv
+            out/SHA256SUMS.txt
+            out/RENDER_INFO.txt
+            out/style_qa.log
+            out/FRAME_BY_FRAME_BORDER_SCAN.txt
+            out/QA_CONTACT_SHEET.png
+            out/audit_frames/
+          if-no-files-found: error
+          retention-days: 14
