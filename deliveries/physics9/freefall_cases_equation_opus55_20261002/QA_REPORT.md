@@ -1,0 +1,16 @@
+# QA REPORT — Physics9 FreeFall OPUS55
+- resolution: 1920 x 1080
+- fps: 30/1
+- codec: h264
+- pixel format: yuv420p
+- duration: 268.900000 s
+- decoded/read frames: 8067
+- bytes: 10122622
+- py_compile: PASS
+- JP style QA: PASS
+- PQL: PASS
+- PQM: PASS
+- literal PQH: PASS
+- full FFmpeg decode: PASS
+- every-frame border scan: PASS
+- visual samples: 48
