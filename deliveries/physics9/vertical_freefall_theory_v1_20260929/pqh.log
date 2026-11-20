@@ -1,0 +1,1535 @@
+Manim Community v0.20.1
+
+[10/03/26 00:10:53] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 0: FadeIn(Text('FÍSICA 9° · CINEMÁTICA VERTICAL')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 0: FadeIn(Text('FÍSICA 9° · CINEMÁTICA VERTICAL')):  37%|███▋      | 11/30 [00:00<00:00, 100.22it/s]Animation 0: FadeIn(Text('FÍSICA 9° · CINEMÁTICA VERTICAL')):  73%|███████▎  | 22/30 [00:00<00:00, 101.25it/s]                                                                                                                                  INFO     Animation 0 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00000.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 1: Write(Text('MOVIMIENTO VERTICAL Y CAÍDA LIBRE')):   0%|          | 0/35 [00:00<?, ?it/s]Animation 1: Write(Text('MOVIMIENTO VERTICAL Y CAÍDA LIBRE')):  49%|████▊     | 17/35 [00:00<00:00, 164.46it/s]Animation 1: Write(Text('MOVIMIENTO VERTICAL Y CAÍDA LIBRE')):  97%|█████████▋| 34/35 [00:00<00:00, 139.89it/s]                                                                                                               [10/03/26 00:10:54] INFO     Animation 1 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00001.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 2: Create(Line), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 2: Create(Line), etc.:  17%|█▋        | 5/30 [00:00<00:00, 46.48it/s]Animation 2: Create(Line), etc.:  33%|███▎      | 10/30 [00:00<00:00, 45.52it/s]Animation 2: Create(Line), etc.:  50%|█████     | 15/30 [00:00<00:00, 45.22it/s]Animation 2: Create(Line), etc.:  67%|██████▋   | 20/30 [00:00<00:00, 44.80it/s]Animation 2: Create(Line), etc.:  83%|████████▎ | 25/30 [00:00<00:00, 44.79it/s]Animation 2: Create(Line), etc.: 100%|██████████| 30/30 [00:00<00:00, 44.83it/s]                                                                                [10/03/26 00:10:55] INFO     Animation 2 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00002.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 3 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00003.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 4: FadeIn(Text('MODELO FÍSICO → ECUACIONES → INTERPRETACIÓN → PRUEBA EXPERIMENTAL')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 4: FadeIn(Text('MODELO FÍSICO → ECUACIONES → INTERPRETACIÓN → PRUEBA EXPERIMENTAL')):  27%|██▋       | 8/30 [00:00<00:00, 79.35it/s]Animation 4: FadeIn(Text('MODELO FÍSICO → ECUACIONES → INTERPRETACIÓN → PRUEBA EXPERIMENTAL')):  53%|█████▎    | 16/30 [00:00<00:00, 78.29it/s]Animation 4: FadeIn(Text('MODELO FÍSICO → ECUACIONES → INTERPRETACIÓN → PRUEBA EXPERIMENTAL')):  80%|████████  | 24/30 [00:00<00:00, 77.15it/s]                                                                                                                                               [10/03/26 00:10:56] INFO     Animation 4 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00004.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 5 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00005.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 6: FadeOut(Text('FÍSICA 9° · CINEMÁTICA VERTICAL')), etc.:   0%|          | 0/13 [00:00<?, ?it/s]Animation 6: FadeOut(Text('FÍSICA 9° · CINEMÁTICA VERTICAL')), etc.:  23%|██▎       | 3/13 [00:00<00:00, 25.27it/s]Animation 6: FadeOut(Text('FÍSICA 9° · CINEMÁTICA VERTICAL')), etc.:  46%|████▌     | 6/13 [00:00<00:00, 24.90it/s]Animation 6: FadeOut(Text('FÍSICA 9° · CINEMÁTICA VERTICAL')), etc.:  69%|██████▉   | 9/13 [00:00<00:00, 24.72it/s]Animation 6: FadeOut(Text('FÍSICA 9° · CINEMÁTICA VERTICAL')), etc.:  92%|█████████▏| 12/13 [00:00<00:00, 24.72it/s]                                                                                                                    [10/03/26 00:10:57] INFO     Animation 6 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00006.mp4'                                     
+[10/03/26 00:10:58] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 7: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 7: FadeIn(VGroup of 2 submobjects):  13%|█▎        | 4/30 [00:00<00:00, 34.62it/s]Animation 7: FadeIn(VGroup of 2 submobjects):  27%|██▋       | 8/30 [00:00<00:00, 33.77it/s]Animation 7: FadeIn(VGroup of 2 submobjects):  40%|████      | 12/30 [00:00<00:00, 33.59it/s]Animation 7: FadeIn(VGroup of 2 submobjects):  53%|█████▎    | 16/30 [00:00<00:00, 33.35it/s]Animation 7: FadeIn(VGroup of 2 submobjects):  67%|██████▋   | 20/30 [00:00<00:00, 33.23it/s]Animation 7: FadeIn(VGroup of 2 submobjects):  80%|████████  | 24/30 [00:00<00:00, 33.22it/s]Animation 7: FadeIn(VGroup of 2 submobjects):  93%|█████████▎| 28/30 [00:00<00:00, 33.19it/s]                                                                                             [10/03/26 00:10:59] INFO     Animation 7 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00007.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 8 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00008.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 9: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 9: FadeIn(VGroup of 2 submobjects):  13%|█▎        | 4/30 [00:00<00:00, 38.48it/s]Animation 9: FadeIn(VGroup of 2 submobjects):  27%|██▋       | 8/30 [00:00<00:00, 37.49it/s]Animation 9: FadeIn(VGroup of 2 submobjects):  40%|████      | 12/30 [00:00<00:00, 37.13it/s]Animation 9: FadeIn(VGroup of 2 submobjects):  53%|█████▎    | 16/30 [00:00<00:00, 36.79it/s]Animation 9: FadeIn(VGroup of 2 submobjects):  67%|██████▋   | 20/30 [00:00<00:00, 36.61it/s]Animation 9: FadeIn(VGroup of 2 submobjects):  80%|████████  | 24/30 [00:00<00:00, 36.17it/s]Animation 9: FadeIn(VGroup of 2 submobjects):  93%|█████████▎| 28/30 [00:00<00:00, 36.17it/s]                                                                                             [10/03/26 00:11:01] INFO     Animation 9 : Partial      scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00009.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 10 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00010.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\text{caída                        
+                             libre                                              
+                             ideal}\;\Longrightarrow\;\s                        
+                             um \vec F=\vec W=m\vec                             
+                             g\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_final/Tex/2d9c707ae11                        
+                             9cc16.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 11: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 11: FadeIn(VGroup of 2 submobjects):  47%|████▋     | 14/30 [00:00<00:00, 137.88it/s]Animation 11: FadeIn(VGroup of 2 submobjects):  93%|█████████▎| 28/30 [00:00<00:00, 138.19it/s]                                                                                               [10/03/26 00:11:02] INFO     Animation 11 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00011.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 12 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00012.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 13: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/13 [00:00<?, ?it/s]Animation 13: FadeOut(VGroup of 2 submobjects), etc.:  15%|█▌        | 2/13 [00:00<00:00, 12.71it/s]Animation 13: FadeOut(VGroup of 2 submobjects), etc.:  31%|███       | 4/13 [00:00<00:00, 12.50it/s]Animation 13: FadeOut(VGroup of 2 submobjects), etc.:  46%|████▌     | 6/13 [00:00<00:00, 12.48it/s]Animation 13: FadeOut(VGroup of 2 submobjects), etc.:  62%|██████▏   | 8/13 [00:00<00:00, 12.48it/s]Animation 13: FadeOut(VGroup of 2 submobjects), etc.:  77%|███████▋  | 10/13 [00:00<00:00, 12.46it/s]Animation 13: FadeOut(VGroup of 2 submobjects), etc.:  92%|█████████▏| 12/13 [00:00<00:00, 12.45it/s]                                                                                                     [10/03/26 00:11:04] INFO     Animation 13 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00013.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_y>0\speci                        
+                             al{dvisvgm:raw </g>} to                            
+                             media_final/Tex/371d2ac333e                        
+                             baa9f.tex                                          
+[10/03/26 00:11:05] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}a_y=-g\spec                        
+                             ial{dvisvgm:raw </g>} to                           
+                             media_final/Tex/72048a16a83                        
+                             ac8dd.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 14: GrowArrow(Arrow), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 14: GrowArrow(Arrow), etc.:  73%|███████▎  | 22/30 [00:00<00:00, 217.83it/s]                                                                                                          INFO     Animation 14 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00014.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 15: FadeIn(Circle):   0%|          | 0/30 [00:00<?, ?it/s]                                                                                        INFO     Animation 15 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00015.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 16: FadeIn(VGroup of 2 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 16: FadeIn(VGroup of 2 submobjects), etc.:  80%|████████  | 24/30 [00:00<00:00, 237.32it/s]                                                                                                     [10/03/26 00:11:06] INFO     Animation 16 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00016.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 17 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00017.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 18: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 18: FadeIn(VGroup of 2 submobjects):  20%|██        | 6/30 [00:00<00:00, 51.94it/s]Animation 18: FadeIn(VGroup of 2 submobjects):  40%|████      | 12/30 [00:00<00:00, 48.78it/s]Animation 18: FadeIn(VGroup of 2 submobjects):  57%|█████▋    | 17/30 [00:00<00:00, 46.69it/s]Animation 18: FadeIn(VGroup of 2 submobjects):  73%|███████▎  | 22/30 [00:00<00:00, 45.51it/s]Animation 18: FadeIn(VGroup of 2 submobjects):  90%|█████████ | 27/30 [00:00<00:00, 44.91it/s]                                                                                              [10/03/26 00:11:07] INFO     Animation 18 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00018.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:11:08] INFO     Animation 19 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00019.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 20: FadeIn(Text('El signo de la velocidad puede cambiar. El signo de la aceleración gravitatoria no cambia.')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 20: FadeIn(Text('El signo de la velocidad puede cambiar. El signo de la aceleración gravitatoria no cambia.')):  23%|██▎       | 7/30 [00:00<00:00, 59.99it/s]Animation 20: FadeIn(Text('El signo de la velocidad puede cambiar. El signo de la aceleración gravitatoria no cambia.')):  43%|████▎     | 13/30 [00:00<00:00, 59.47it/s]Animation 20: FadeIn(Text('El signo de la velocidad puede cambiar. El signo de la aceleración gravitatoria no cambia.')):  63%|██████▎   | 19/30 [00:00<00:00, 59.08it/s]Animation 20: FadeIn(Text('El signo de la velocidad puede cambiar. El signo de la aceleración gravitatoria no cambia.')):  83%|████████▎ | 25/30 [00:00<00:00, 59.01it/s]                                                                                                                                                                         [10/03/26 00:11:09] INFO     Animation 20 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00020.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 21 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00021.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 22: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/13 [00:00<?, ?it/s]Animation 22: FadeOut(VGroup of 2 submobjects), etc.:  15%|█▌        | 2/13 [00:00<00:00, 18.07it/s]Animation 22: FadeOut(VGroup of 2 submobjects), etc.:  31%|███       | 4/13 [00:00<00:00, 17.84it/s]Animation 22: FadeOut(VGroup of 2 submobjects), etc.:  46%|████▌     | 6/13 [00:00<00:00, 17.69it/s]Animation 22: FadeOut(VGroup of 2 submobjects), etc.:  62%|██████▏   | 8/13 [00:00<00:00, 17.71it/s]Animation 22: FadeOut(VGroup of 2 submobjects), etc.:  77%|███████▋  | 10/13 [00:00<00:00, 17.73it/s]Animation 22: FadeOut(VGroup of 2 submobjects), etc.:  92%|█████████▏| 12/13 [00:00<00:00, 17.74it/s]                                                                                                     [10/03/26 00:11:10] INFO     Animation 22 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00022.mp4'                                     
+[10/03/26 00:11:11] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\vec                               
+                             W=m\vec                                            
+                             g\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_final/Tex/cc88307ff5f                        
+                             037f1.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 23: FadeIn(Text('DIAGRAMA DE CUERPO LIBRE')), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 23: FadeIn(Text('DIAGRAMA DE CUERPO LIBRE')), etc.:  50%|█████     | 15/30 [00:00<00:00, 149.49it/s]Animation 23: FadeIn(Text('DIAGRAMA DE CUERPO LIBRE')), etc.: 100%|██████████| 30/30 [00:00<00:00, 144.37it/s]                                                                                                                                  INFO     Animation 23 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00023.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 24: GrowArrow(Arrow), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 24: GrowArrow(Arrow), etc.:  90%|█████████ | 27/30 [00:00<00:00, 266.38it/s]                                                                                      [10/03/26 00:11:12] INFO     Animation 24 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00024.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 25 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00025.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\sum                               
+                             F_y=ma_y\special{dvisvgm:ra                        
+                             w </g>} to                                         
+                             media_final/Tex/2f979d872df                        
+                             dc5c0.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}-mg=ma_y\sp                        
+                             ecial{dvisvgm:raw </g>} to                         
+                             media_final/Tex/59fd3d6be49                        
+                             cb9c1.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}a_y=-g=-9.8                        
+                             1\,\mathrm{m/s^2}\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/04f48f7cb12                        
+                             e5757.tex                                          
+[10/03/26 00:11:13] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 26: FadeIn(VGroup of 2 submobjects):   0%|          | 0/17 [00:00<?, ?it/s]                                                                                                         INFO     Animation 26 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00026.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 27 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00027.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 28: FadeIn(VGroup of 2 submobjects):   0%|          | 0/17 [00:00<?, ?it/s]                                                                                                         INFO     Animation 28 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00028.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:11:14] INFO     Animation 29 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00029.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 30: FadeIn(VGroup of 2 submobjects):   0%|          | 0/17 [00:00<?, ?it/s]                                                                                                         INFO     Animation 30 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00030.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 31 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00031.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}a_y=\frac{-                        
+                             mg}{m}=-g\special{dvisvgm:r                        
+                             aw </g>} to                                        
+                             media_final/Tex/9841714a9b3                        
+                             b4f1b.tex                                          
+[10/03/26 00:11:15] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 32: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 32: FadeIn(VGroup of 2 submobjects):  73%|███████▎  | 22/30 [00:00<00:00, 215.97it/s]                                                                                                                   INFO     Animation 32 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00032.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 33 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00033.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 34: FadeIn(Text('En vacío, todos los cuerpos tienen la misma aceleración gravitatoria: la masa se cancela.')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 34: FadeIn(Text('En vacío, todos los cuerpos tienen la misma aceleración gravitatoria: la masa se cancela.')):  23%|██▎       | 7/30 [00:00<00:00, 62.86it/s]Animation 34: FadeIn(Text('En vacío, todos los cuerpos tienen la misma aceleración gravitatoria: la masa se cancela.')):  47%|████▋     | 14/30 [00:00<00:00, 61.53it/s]Animation 34: FadeIn(Text('En vacío, todos los cuerpos tienen la misma aceleración gravitatoria: la masa se cancela.')):  70%|███████   | 21/30 [00:00<00:00, 61.08it/s]Animation 34: FadeIn(Text('En vacío, todos los cuerpos tienen la misma aceleración gravitatoria: la masa se cancela.')):  93%|█████████▎| 28/30 [00:00<00:00, 60.81it/s]                                                                                                                                                                        [10/03/26 00:11:16] INFO     Animation 34 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00034.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:11:17] INFO     Animation 35 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00035.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 36: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/13 [00:00<?, ?it/s]Animation 36: FadeOut(VGroup of 2 submobjects), etc.:  15%|█▌        | 2/13 [00:00<00:00, 19.62it/s]Animation 36: FadeOut(VGroup of 2 submobjects), etc.:  31%|███       | 4/13 [00:00<00:00, 19.69it/s]Animation 36: FadeOut(VGroup of 2 submobjects), etc.:  46%|████▌     | 6/13 [00:00<00:00, 19.72it/s]Animation 36: FadeOut(VGroup of 2 submobjects), etc.:  62%|██████▏   | 8/13 [00:00<00:00, 19.72it/s]Animation 36: FadeOut(VGroup of 2 submobjects), etc.:  77%|███████▋  | 10/13 [00:00<00:00, 19.70it/s]Animation 36: FadeOut(VGroup of 2 submobjects), etc.:  92%|█████████▏| 12/13 [00:00<00:00, 19.71it/s]                                                                                                     [10/03/26 00:11:18] INFO     Animation 36 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00036.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}a_y=\frac{d                        
+                             v_y}{dt}=-g\special{dvisvgm                        
+                             :raw </g>} to                                      
+                             media_final/Tex/2ceac67988f                        
+                             1b10c.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}dv_y=-g\,dt                        
+                             \special{dvisvgm:raw </g>}                         
+                             to                                                 
+                             media_final/Tex/bb43ea2432e                        
+                             3cf3f.tex                                          
+[10/03/26 00:11:19] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_y(t)=v_0-                        
+                             gt\special{dvisvgm:raw                             
+                             </g>} to                                           
+                             media_final/Tex/b66394e397e                        
+                             88647.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_y=\frac{d                        
+                             y}{dt}=v_0-gt\special{dvisv                        
+                             gm:raw </g>} to                                    
+                             media_final/Tex/5e8d970f4f6                        
+                             2526d.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}dy=(v_0-gt)                        
+                             \,dt\special{dvisvgm:raw                           
+                             </g>} to                                           
+                             media_final/Tex/bbf1553e700                        
+                             81f4f.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}y(t)=y_0+v_                        
+                             0t-\frac12gt^2\special{dvis                        
+                             vgm:raw </g>} to                                   
+                             media_final/Tex/e1a1482c3ab                        
+                             77058.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 37: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 37: FadeIn(VGroup of 2 submobjects):  73%|███████▎  | 22/30 [00:00<00:00, 216.78it/s]                                                                                               [10/03/26 00:11:20] INFO     Animation 37 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00037.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 38 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00038.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 39: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 39: FadeIn(VGroup of 2 submobjects):  80%|████████  | 24/30 [00:00<00:00, 234.52it/s]                                                                                                                   INFO     Animation 39 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00039.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:11:21] INFO     Animation 40 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00040.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 41: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 41: FadeIn(VGroup of 2 submobjects):  73%|███████▎  | 22/30 [00:00<00:00, 218.13it/s]                                                                                                                   INFO     Animation 41 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00041.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 42 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00042.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 43: GrowArrow(Arrow):   0%|          | 0/30 [00:00<?, ?it/s]                                                                      [10/03/26 00:11:22] INFO     Animation 43 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00043.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 44: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 44: FadeIn(VGroup of 2 submobjects):  63%|██████▎   | 19/30 [00:00<00:00, 181.83it/s]                                                                                                                   INFO     Animation 44 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00044.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:11:23] INFO     Animation 45 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00045.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 46: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 46: FadeIn(VGroup of 2 submobjects):  73%|███████▎  | 22/30 [00:00<00:00, 209.77it/s]                                                                                                                   INFO     Animation 46 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00046.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 47 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00047.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 48: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 48: FadeIn(VGroup of 2 submobjects):  63%|██████▎   | 19/30 [00:00<00:00, 181.11it/s]                                                                                               [10/03/26 00:11:24] INFO     Animation 48 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00048.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 49 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00049.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_y^2=v_0^2                        
+                             -2g(y-y_0)\special{dvisvgm:                        
+                             raw </g>} to                                       
+                             media_final/Tex/63e3700d55f                        
+                             37a5f.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 50: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 50: FadeIn(VGroup of 2 submobjects):  60%|██████    | 18/30 [00:00<00:00, 177.97it/s]                                                                                               [10/03/26 00:11:25] INFO     Animation 50 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00050.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 51 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00051.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 52: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/13 [00:00<?, ?it/s]Animation 52: FadeOut(VGroup of 2 submobjects), etc.:  23%|██▎       | 3/13 [00:00<00:00, 22.29it/s]Animation 52: FadeOut(VGroup of 2 submobjects), etc.:  46%|████▌     | 6/13 [00:00<00:00, 24.14it/s]Animation 52: FadeOut(VGroup of 2 submobjects), etc.:  69%|██████▉   | 9/13 [00:00<00:00, 24.94it/s]Animation 52: FadeOut(VGroup of 2 submobjects), etc.:  92%|█████████▏| 12/13 [00:00<00:00, 25.27it/s]                                                                                                     [10/03/26 00:11:26] INFO     Animation 52 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00052.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_0=0\speci                        
+                             al{dvisvgm:raw </g>} to                            
+                             media_final/Tex/080ba37e5e2                        
+                             56143.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\vec                               
+                             g\special{dvisvgm:raw </g>}                        
+                             to                                                 
+                             media_final/Tex/23292e7bb85                        
+                             c5dd1.tex                                          
+[10/03/26 00:11:27] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}y=y_0+v_0t-                        
+                             \frac12gt^2\special{dvisvgm                        
+                             :raw </g>} to                                      
+                             media_final/Tex/ffc73825e54                        
+                             1728f.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\vec                               
+                             v_0\special{dvisvgm:raw                            
+                             </g>} to                                           
+                             media_final/Tex/771938b6abd                        
+                             c348a.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_0>0\speci                        
+                             al{dvisvgm:raw </g>} to                            
+                             media_final/Tex/b5a9f2e2e45                        
+                             ac277.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v_0<0\speci                        
+                             al{dvisvgm:raw </g>} to                            
+                             media_final/Tex/6bc68a2f9a1                        
+                             3225b.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 53: FadeIn(VGroup of 8 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 53: FadeIn(VGroup of 8 submobjects):  33%|███▎      | 10/30 [00:00<00:00, 93.73it/s]Animation 53: FadeIn(VGroup of 8 submobjects):  70%|███████   | 21/30 [00:00<00:00, 99.67it/s]                                                                                              [10/03/26 00:11:28] INFO     Animation 53 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00053.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 54 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00054.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 55: FadeIn(VGroup of 8 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 55: FadeIn(VGroup of 8 submobjects):  33%|███▎      | 10/30 [00:00<00:00, 93.02it/s]Animation 55: FadeIn(VGroup of 8 submobjects):  67%|██████▋   | 20/30 [00:00<00:00, 91.84it/s]Animation 55: FadeIn(VGroup of 8 submobjects): 100%|██████████| 30/30 [00:00<00:00, 91.29it/s]                                                                                              [10/03/26 00:11:29] INFO     Animation 55 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00055.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 56 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00056.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 57: FadeIn(VGroup of 8 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 57: FadeIn(VGroup of 8 submobjects):  33%|███▎      | 10/30 [00:00<00:00, 96.09it/s]Animation 57: FadeIn(VGroup of 8 submobjects):  67%|██████▋   | 20/30 [00:00<00:00, 94.62it/s]Animation 57: FadeIn(VGroup of 8 submobjects): 100%|██████████| 30/30 [00:00<00:00, 94.29it/s]                                                                                              [10/03/26 00:11:30] INFO     Animation 57 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00057.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 58 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00058.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 59: FadeIn(Text('La dirección inicial está en v₀. La gravedad entra siempre como −g porque nuestro +y apunta hacia arriba.')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 59: FadeIn(Text('La dirección inicial está en v₀. La gravedad entra siempre como −g porque nuestro +y apunta hacia arriba.')):  20%|██        | 6/30 [00:00<00:00, 54.04it/s]Animation 59: FadeIn(Text('La dirección inicial está en v₀. La gravedad entra siempre como −g porque nuestro +y apunta hacia arriba.')):  40%|████      | 12/30 [00:00<00:00, 53.04it/s]Animation 59: FadeIn(Text('La dirección inicial está en v₀. La gravedad entra siempre como −g porque nuestro +y apunta hacia arriba.')):  60%|██████    | 18/30 [00:00<00:00, 52.79it/s]Animation 59: FadeIn(Text('La dirección inicial está en v₀. La gravedad entra siempre como −g porque nuestro +y apunta hacia arriba.')):  80%|████████  | 24/30 [00:00<00:00, 52.56it/s]Animation 59: FadeIn(Text('La dirección inicial está en v₀. La gravedad entra siempre como −g porque nuestro +y apunta hacia arriba.')): 100%|██████████| 30/30 [00:00<00:00, 52.59it/s]                                                                                                                                                                                        [10/03/26 00:11:31] INFO     Animation 59 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00059.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:11:32] INFO     Animation 60 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00060.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 61: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/13 [00:00<?, ?it/s]Animation 61: FadeOut(VGroup of 2 submobjects), etc.:  15%|█▌        | 2/13 [00:00<00:00, 15.64it/s]Animation 61: FadeOut(VGroup of 2 submobjects), etc.:  31%|███       | 4/13 [00:00<00:00, 15.27it/s]Animation 61: FadeOut(VGroup of 2 submobjects), etc.:  46%|████▌     | 6/13 [00:00<00:00, 15.24it/s]Animation 61: FadeOut(VGroup of 2 submobjects), etc.:  62%|██████▏   | 8/13 [00:00<00:00, 15.23it/s]Animation 61: FadeOut(VGroup of 2 submobjects), etc.:  77%|███████▋  | 10/13 [00:00<00:00, 15.23it/s]Animation 61: FadeOut(VGroup of 2 submobjects), etc.:  92%|█████████▏| 12/13 [00:00<00:00, 15.23it/s]                                                                                                     [10/03/26 00:11:33] INFO     Animation 61 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00061.mp4'                                     
+[10/03/26 00:11:34] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v>0\special                        
+                             {dvisvgm:raw </g>} to                              
+                             media_final/Tex/3be29d2ce6e                        
+                             ca5c5.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}a=-g\specia                        
+                             l{dvisvgm:raw </g>} to                             
+                             media_final/Tex/bf5ca708d20                        
+                             19325.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 62: Create(DashedLine), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 62: Create(DashedLine), etc.:  73%|███████▎  | 22/30 [00:00<00:00, 218.74it/s]                                                                                                            INFO     Animation 62 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00062.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:11:35] INFO     Animation 63 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00063.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 64: _MethodAnimation(Circle), etc.:   0%|          | 0/48 [00:00<?, ?it/s]Animation 64: _MethodAnimation(Circle), etc.:  54%|█████▍    | 26/48 [00:00<00:00, 257.22it/s]                                                                                                                  INFO     Animation 64 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00064.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v=0\quad\te                        
+                             xt{pero}\quad                                      
+                             a=-g\special{dvisvgm:raw                           
+                             </g>} to                                           
+                             media_final/Tex/48410839dd9                        
+                             36a0b.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 65: FadeIn(MathTex('v=0\\quad\\text{pero}\\quad a=-g')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 65: FadeIn(MathTex('v=0\\quad\\text{pero}\\quad a=-g')):  87%|████████▋ | 26/30 [00:00<00:00, 249.97it/s]                                                                                                                   [10/03/26 00:11:36] INFO     Animation 65 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00065.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 66 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00066.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v<0\special                        
+                             {dvisvgm:raw </g>} to                              
+                             media_final/Tex/b4f123865a9                        
+                             ee11a.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 67: _MethodAnimation(Circle), etc.:   0%|          | 0/39 [00:00<?, ?it/s]Animation 67: _MethodAnimation(Circle), etc.:  51%|█████▏    | 20/39 [00:00<00:00, 199.46it/s]                                                                                              [10/03/26 00:11:37] INFO     Animation 67 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00067.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 68: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 68: FadeIn(VGroup of 2 submobjects):  13%|█▎        | 4/30 [00:00<00:00, 36.84it/s]Animation 68: FadeIn(VGroup of 2 submobjects):  27%|██▋       | 8/30 [00:00<00:00, 35.56it/s]Animation 68: FadeIn(VGroup of 2 submobjects):  40%|████      | 12/30 [00:00<00:00, 35.21it/s]Animation 68: FadeIn(VGroup of 2 submobjects):  53%|█████▎    | 16/30 [00:00<00:00, 35.04it/s]Animation 68: FadeIn(VGroup of 2 submobjects):  67%|██████▋   | 20/30 [00:00<00:00, 34.98it/s]Animation 68: FadeIn(VGroup of 2 submobjects):  80%|████████  | 24/30 [00:00<00:00, 34.86it/s]Animation 68: FadeIn(VGroup of 2 submobjects):  93%|█████████▎| 28/30 [00:00<00:00, 34.77it/s]                                                                                              [10/03/26 00:11:38] INFO     Animation 68 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00068.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:11:39] INFO     Animation 69 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00069.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 70: FadeIn(Text('Sin aire y al comparar la misma altura: misma rapidez al subir y al bajar, con signo opuesto.')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 70: FadeIn(Text('Sin aire y al comparar la misma altura: misma rapidez al subir y al bajar, con signo opuesto.')):  20%|██        | 6/30 [00:00<00:00, 59.55it/s]Animation 70: FadeIn(Text('Sin aire y al comparar la misma altura: misma rapidez al subir y al bajar, con signo opuesto.')):  40%|████      | 12/30 [00:00<00:00, 58.77it/s]Animation 70: FadeIn(Text('Sin aire y al comparar la misma altura: misma rapidez al subir y al bajar, con signo opuesto.')):  60%|██████    | 18/30 [00:00<00:00, 58.29it/s]Animation 70: FadeIn(Text('Sin aire y al comparar la misma altura: misma rapidez al subir y al bajar, con signo opuesto.')):  80%|████████  | 24/30 [00:00<00:00, 57.31it/s]Animation 70: FadeIn(Text('Sin aire y al comparar la misma altura: misma rapidez al subir y al bajar, con signo opuesto.')): 100%|██████████| 30/30 [00:00<00:00, 54.11it/s]                                                                                                                                                                            [10/03/26 00:11:40] INFO     Animation 70 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00070.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 71 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00071.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 72: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/13 [00:00<?, ?it/s]Animation 72: FadeOut(VGroup of 2 submobjects), etc.:  15%|█▌        | 2/13 [00:00<00:00, 14.49it/s]Animation 72: FadeOut(VGroup of 2 submobjects), etc.:  31%|███       | 4/13 [00:00<00:00, 14.38it/s]Animation 72: FadeOut(VGroup of 2 submobjects), etc.:  46%|████▌     | 6/13 [00:00<00:00, 14.28it/s]Animation 72: FadeOut(VGroup of 2 submobjects), etc.:  62%|██████▏   | 8/13 [00:00<00:00, 14.30it/s]Animation 72: FadeOut(VGroup of 2 submobjects), etc.:  77%|███████▋  | 10/13 [00:00<00:00, 14.32it/s]Animation 72: FadeOut(VGroup of 2 submobjects), etc.:  92%|█████████▏| 12/13 [00:00<00:00, 14.32it/s]                                                                                                     [10/03/26 00:11:42] INFO     Animation 72 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00072.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}y=v_0t-\fra                        
+                             c12gt^2\special{dvisvgm:raw                        
+                              </g>} to                                          
+                             media_final/Tex/f66b370fa40                        
+                             736e6.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v=v_0-gt\sp                        
+                             ecial{dvisvgm:raw </g>} to                         
+                             media_final/Tex/f72b7803cca                        
+                             18fe6.tex                                          
+[10/03/26 00:11:43] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 73: FadeIn(Axes of 2 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 73: FadeIn(Axes of 2 submobjects), etc.:  33%|███▎      | 10/30 [00:00<00:00, 94.02it/s]Animation 73: FadeIn(Axes of 2 submobjects), etc.:  67%|██████▋   | 20/30 [00:00<00:00, 93.37it/s]Animation 73: FadeIn(Axes of 2 submobjects), etc.: 100%|██████████| 30/30 [00:00<00:00, 92.81it/s]                                                                                                                      INFO     Animation 73 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00073.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 74: Create(ParametricFunction):   0%|          | 0/39 [00:00<?, ?it/s]                                                                                [10/03/26 00:11:44] INFO     Animation 74 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00074.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 75: Create(ParametricFunction):   0%|          | 0/36 [00:00<?, ?it/s]                                                                                                    INFO     Animation 75 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00075.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 76: Create(ParametricFunction):   0%|          | 0/30 [00:00<?, ?it/s]                                                                                                    INFO     Animation 76 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00076.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 77: FadeIn(VGroup of 3 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 77: FadeIn(VGroup of 3 submobjects):  60%|██████    | 18/30 [00:00<00:00, 175.08it/s]                                                                                               [10/03/26 00:11:45] INFO     Animation 77 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00077.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 78 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00078.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 79: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 79: FadeIn(VGroup of 2 submobjects):  20%|██        | 6/30 [00:00<00:00, 54.50it/s]Animation 79: FadeIn(VGroup of 2 submobjects):  40%|████      | 12/30 [00:00<00:00, 53.20it/s]Animation 79: FadeIn(VGroup of 2 submobjects):  60%|██████    | 18/30 [00:00<00:00, 53.12it/s]Animation 79: FadeIn(VGroup of 2 submobjects):  80%|████████  | 24/30 [00:00<00:00, 52.71it/s]Animation 79: FadeIn(VGroup of 2 submobjects): 100%|██████████| 30/30 [00:00<00:00, 52.39it/s]                                                                                              [10/03/26 00:11:46] INFO     Animation 79 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00079.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 80 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00080.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 81: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/13 [00:00<?, ?it/s]Animation 81: FadeOut(VGroup of 2 submobjects), etc.:  15%|█▌        | 2/13 [00:00<00:00, 18.42it/s]Animation 81: FadeOut(VGroup of 2 submobjects), etc.:  31%|███       | 4/13 [00:00<00:00, 18.15it/s]Animation 81: FadeOut(VGroup of 2 submobjects), etc.:  46%|████▌     | 6/13 [00:00<00:00, 18.06it/s]Animation 81: FadeOut(VGroup of 2 submobjects), etc.:  62%|██████▏   | 8/13 [00:00<00:00, 18.02it/s]Animation 81: FadeOut(VGroup of 2 submobjects), etc.:  77%|███████▋  | 10/13 [00:00<00:00, 17.99it/s]Animation 81: FadeOut(VGroup of 2 submobjects), etc.:  92%|█████████▏| 12/13 [00:00<00:00, 17.97it/s]                                                                                                     [10/03/26 00:11:48] INFO     Animation 81 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00081.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 82: Create(Line), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 82: Create(Line), etc.:  57%|█████▋    | 17/30 [00:00<00:00, 168.89it/s]                                                                                                      INFO     Animation 82 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00082.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}0=20-\frac1                        
+                             2gt^2\special{dvisvgm:raw                          
+                             </g>} to                                           
+                             media_final/Tex/1262bce4283                        
+                             7d478.tex                                          
+[10/03/26 00:11:49] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}t=\sqrt{\fr                        
+                             ac{2(20)}{9.81}}\approx                            
+                             2.02\,\mathrm{s}\special{dv                        
+                             isvgm:raw </g>} to                                 
+                             media_final/Tex/c6f9137eec6                        
+                             63f43.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}v=-gt\appro                        
+                             x                                                  
+                             -19.81\,\mathrm{m/s}\specia                        
+                             l{dvisvgm:raw </g>} to                             
+                             media_final/Tex/a6a55cc9da0                        
+                             94673.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}|v|\approx                         
+                             19.81\,\mathrm{m/s}\special                        
+                             {dvisvgm:raw </g>} to                              
+                             media_final/Tex/78e1a9b278f                        
+                             bd7a6.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 83: FadeIn(MathTex('0=20-\\frac12gt^2')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 83: FadeIn(MathTex('0=20-\\frac12gt^2')):  93%|█████████▎| 28/30 [00:00<00:00, 271.29it/s]                                                                                                    [10/03/26 00:11:50] INFO     Animation 83 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00083.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 84 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00084.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 85: FadeIn(MathTex('t=\\sqrt{\\frac{2(20)}{9.81}}\\approx 2.02\\,\\mathrm{s}')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 85: FadeIn(MathTex('t=\\sqrt{\\frac{2(20)}{9.81}}\\approx 2.02\\,\\mathrm{s}')):  67%|██████▋   | 20/30 [00:00<00:00, 199.55it/s]                                                                                                                                                               INFO     Animation 85 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00085.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:11:51] INFO     Animation 86 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00086.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}0\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/ab0de9a363d                        
+                             86c5f.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}.\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/85b8d98e778                        
+                             e7c96.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 87: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 87: FadeIn(VGroup of 2 submobjects):  13%|█▎        | 4/30 [00:00<00:00, 37.13it/s]Animation 87: FadeIn(VGroup of 2 submobjects):  27%|██▋       | 8/30 [00:00<00:00, 37.19it/s]Animation 87: FadeIn(VGroup of 2 submobjects):  40%|████      | 12/30 [00:00<00:00, 37.02it/s]Animation 87: FadeIn(VGroup of 2 submobjects):  53%|█████▎    | 16/30 [00:00<00:00, 37.06it/s]Animation 87: FadeIn(VGroup of 2 submobjects):  67%|██████▋   | 20/30 [00:00<00:00, 37.10it/s]Animation 87: FadeIn(VGroup of 2 submobjects):  80%|████████  | 24/30 [00:00<00:00, 37.11it/s]Animation 87: FadeIn(VGroup of 2 submobjects):  93%|█████████▎| 28/30 [00:00<00:00, 37.01it/s]                                                                                              [10/03/26 00:11:52] INFO     Animation 87 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00087.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 88: _MethodAnimation(ValueTracker):   0%|          | 0/90 [00:00<?, ?it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}2\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/92c26d21f4d                        
+                             400ae.tex                                          
+Animation 88: _MethodAnimation(ValueTracker):   2%|▏         | 2/90 [00:00<00:09,  9.62it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}4\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/b6e1e0d35a2                        
+                             2cf8a.tex                                          
+Animation 88: _MethodAnimation(ValueTracker):   3%|▎         | 3/90 [00:00<00:12,  7.10it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}7\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/9babf744f1d                        
+                             8badf.tex                                          
+[10/03/26 00:11:53] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}6\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/5353eb619e9                        
+                             288a9.tex                                          
+Animation 88: _MethodAnimation(ValueTracker):   4%|▍         | 4/90 [00:00<00:19,  4.48it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}9\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/f7c8a5ee0f1                        
+                             68adf.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}8\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/2f8240ddc5f                        
+                             27b7f.tex                                          
+Animation 88: _MethodAnimation(ValueTracker):   6%|▌         | 5/90 [00:01<00:23,  3.67it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}1\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/e6a566ad7d8                        
+                             76b8c.tex                                          
+Animation 88: _MethodAnimation(ValueTracker):   7%|▋         | 6/90 [00:01<00:20,  4.06it/s]                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}3\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/9ca76760666                        
+                             2f643.tex                                          
+Animation 88: _MethodAnimation(ValueTracker):   8%|▊         | 7/90 [00:01<00:18,  4.38it/s][10/03/26 00:11:54] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}5\special{d                        
+                             visvgm:raw </g>} to                                
+                             media_final/Tex/80535c2a913                        
+                             06081.tex                                          
+Animation 88: _MethodAnimation(ValueTracker):   9%|▉         | 8/90 [00:01<00:17,  4.62it/s]Animation 88: _MethodAnimation(ValueTracker):  16%|█▌        | 14/90 [00:01<00:05, 13.88it/s]Animation 88: _MethodAnimation(ValueTracker):  22%|██▏       | 20/90 [00:01<00:03, 22.23it/s]Animation 88: _MethodAnimation(ValueTracker):  29%|██▉       | 26/90 [00:02<00:02, 29.38it/s]Animation 88: _MethodAnimation(ValueTracker):  36%|███▌      | 32/90 [00:02<00:01, 35.32it/s]Animation 88: _MethodAnimation(ValueTracker):  42%|████▏     | 38/90 [00:02<00:01, 40.18it/s]Animation 88: _MethodAnimation(ValueTracker):  49%|████▉     | 44/90 [00:02<00:01, 43.09it/s]Animation 88: _MethodAnimation(ValueTracker):  54%|█████▍    | 49/90 [00:02<00:00, 42.55it/s]Animation 88: _MethodAnimation(ValueTracker):  60%|██████    | 54/90 [00:02<00:00, 43.01it/s]Animation 88: _MethodAnimation(ValueTracker):  66%|██████▌   | 59/90 [00:02<00:00, 43.26it/s]Animation 88: _MethodAnimation(ValueTracker):  71%|███████   | 64/90 [00:02<00:00, 43.17it/s]Animation 88: _MethodAnimation(ValueTracker):  77%|███████▋  | 69/90 [00:02<00:00, 43.42it/s]Animation 88: _MethodAnimation(ValueTracker):  82%|████████▏ | 74/90 [00:03<00:00, 43.55it/s]Animation 88: _MethodAnimation(ValueTracker):  88%|████████▊ | 79/90 [00:03<00:00, 43.79it/s]Animation 88: _MethodAnimation(ValueTracker):  93%|█████████▎| 84/90 [00:03<00:00, 43.38it/s]Animation 88: _MethodAnimation(ValueTracker):  99%|█████████▉| 89/90 [00:03<00:00, 43.66it/s]                                                                                             [10/03/26 00:11:56] INFO     Animation 88 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00088.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 89: FadeIn(MathTex('v=-gt\\approx -19.81\\,\\mathrm{m/s}')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 89: FadeIn(MathTex('v=-gt\\approx -19.81\\,\\mathrm{m/s}')):  77%|███████▋  | 23/30 [00:00<00:00, 220.37it/s]                                                                                                                                           INFO     Animation 89 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00089.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 90 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00090.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 91: FadeIn(MathTex('|v|\\approx 19.81\\,\\mathrm{m/s}')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 91: FadeIn(MathTex('|v|\\approx 19.81\\,\\mathrm{m/s}')):  83%|████████▎ | 25/30 [00:00<00:00, 240.05it/s]                                                                                                                    [10/03/26 00:11:57] INFO     Animation 91 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00091.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 92 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00092.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 93: FadeIn(Text('v es negativa porque el objeto baja; la rapidez es el valor positivo |v|.')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 93: FadeIn(Text('v es negativa porque el objeto baja; la rapidez es el valor positivo |v|.')):  27%|██▋       | 8/30 [00:00<00:00, 78.26it/s]Animation 93: FadeIn(Text('v es negativa porque el objeto baja; la rapidez es el valor positivo |v|.')):  53%|█████▎    | 16/30 [00:00<00:00, 77.17it/s]Animation 93: FadeIn(Text('v es negativa porque el objeto baja; la rapidez es el valor positivo |v|.')):  80%|████████  | 24/30 [00:00<00:00, 76.93it/s]                                                                                                                                                        [10/03/26 00:11:58] INFO     Animation 93 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00093.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 94 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00094.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 95: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/13 [00:00<?, ?it/s]Animation 95: FadeOut(VGroup of 2 submobjects), etc.:  23%|██▎       | 3/13 [00:00<00:00, 23.10it/s]Animation 95: FadeOut(VGroup of 2 submobjects), etc.:  46%|████▌     | 6/13 [00:00<00:00, 22.03it/s]Animation 95: FadeOut(VGroup of 2 submobjects), etc.:  69%|██████▉   | 9/13 [00:00<00:00, 21.88it/s]Animation 95: FadeOut(VGroup of 2 submobjects), etc.:  92%|█████████▏| 12/13 [00:00<00:00, 22.27it/s]                                                                                                     [10/03/26 00:11:59] INFO     Animation 95 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00095.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}d=\frac12gt                        
+                             ^2\special{dvisvgm:raw                             
+                             </g>} to                                           
+                             media_final/Tex/6121b7ffea3                        
+                             a5f76.tex                                          
+[10/03/26 00:12:00] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\frac{d}{t^                        
+                             2}=\frac{g}{2}=\text{consta                        
+                             nte}\special{dvisvgm:raw                           
+                             </g>} to                                           
+                             media_final/Tex/4c3c038a91b                        
+                             d600d.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 96: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 96: FadeIn(VGroup of 2 submobjects):  87%|████████▋ | 26/30 [00:00<00:00, 250.42it/s]                                                                                                                   INFO     Animation 96 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00096.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:12:01] INFO     Animation 97 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00097.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 98: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 98: FadeIn(VGroup of 2 submobjects):  63%|██████▎   | 19/30 [00:00<00:00, 189.63it/s]                                                                                                                   INFO     Animation 98 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00098.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 99 : Partial     scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00099.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 100: FadeIn(VGroup of 3 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 100: FadeIn(VGroup of 3 submobjects):  20%|██        | 6/30 [00:00<00:00, 57.18it/s]Animation 100: FadeIn(VGroup of 3 submobjects):  40%|████      | 12/30 [00:00<00:00, 56.41it/s]Animation 100: FadeIn(VGroup of 3 submobjects):  60%|██████    | 18/30 [00:00<00:00, 56.18it/s]Animation 100: FadeIn(VGroup of 3 submobjects):  80%|████████  | 24/30 [00:00<00:00, 56.24it/s]Animation 100: FadeIn(VGroup of 3 submobjects): 100%|██████████| 30/30 [00:00<00:00, 56.01it/s]                                                                                               [10/03/26 00:12:02] INFO     Animation 100 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00100.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:12:03] INFO     Animation 101 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00101.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}t^2\;[\math                        
+                             rm{s^2}]\special{dvisvgm:ra                        
+                             w </g>} to                                         
+                             media_final/Tex/2c4c2acf579                        
+                             62571.tex                                          
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}d\;[\mathrm                        
+                             {m}]\special{dvisvgm:raw                           
+                             </g>} to                                           
+                             media_final/Tex/caa70075962                        
+                             0305b.tex                                          
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 102: FadeIn(Axes of 2 submobjects), etc.:   0%|          | 0/30 [00:00<?, ?it/s]Animation 102: FadeIn(Axes of 2 submobjects), etc.:  57%|█████▋    | 17/30 [00:00<00:00, 167.96it/s]                                                                                                    [10/03/26 00:12:04] INFO     Animation 102 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00102.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 103: Create(ParametricFunction), etc.:   0%|          | 0/45 [00:00<?, ?it/s]Animation 103: Create(ParametricFunction), etc.:  76%|███████▌  | 34/45 [00:00<00:00, 328.75it/s]                                                                                                                     INFO     Animation 103 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00103.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 104 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00104.mp4'                                     
+                    INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}\text{pendi                        
+                             ente}=\frac{\Delta                                 
+                             d}{\Delta(t^2)}=\frac{g}{2}                        
+                             \special{dvisvgm:raw </g>}                         
+                             to                                                 
+                             media_final/Tex/cba4a19e36d                        
+                             c75f1.tex                                          
+[10/03/26 00:12:05] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 105: FadeIn(VGroup of 2 submobjects):   0%|          | 0/30 [00:00<?, ?it/s]Animation 105: FadeIn(VGroup of 2 submobjects):  57%|█████▋    | 17/30 [00:00<00:00, 166.80it/s]                                                                                                                    INFO     Animation 105 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00105.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 106 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00106.mp4'                                     
+[10/03/26 00:12:06] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 107: FadeIn(Text('En el laboratorio no buscamos “que dé perfecto”: buscamos si los datos apoyan esta relación dentro de la incertidumbre.')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 107: FadeIn(Text('En el laboratorio no buscamos “que dé perfecto”: buscamos si los datos apoyan esta relación dentro de la incertidumbre.')):  17%|█▋        | 5/30 [00:00<00:00, 49.59it/s]Animation 107: FadeIn(Text('En el laboratorio no buscamos “que dé perfecto”: buscamos si los datos apoyan esta relación dentro de la incertidumbre.')):  33%|███▎      | 10/30 [00:00<00:00, 48.53it/s]Animation 107: FadeIn(Text('En el laboratorio no buscamos “que dé perfecto”: buscamos si los datos apoyan esta relación dentro de la incertidumbre.')):  50%|█████     | 15/30 [00:00<00:00, 48.25it/s]Animation 107: FadeIn(Text('En el laboratorio no buscamos “que dé perfecto”: buscamos si los datos apoyan esta relación dentro de la incertidumbre.')):  67%|██████▋   | 20/30 [00:00<00:00, 47.88it/s]Animation 107: FadeIn(Text('En el laboratorio no buscamos “que dé perfecto”: buscamos si los datos apoyan esta relación dentro de la incertidumbre.')):  83%|████████▎ | 25/30 [00:00<00:00, 43.07it/s]Animation 107: FadeIn(Text('En el laboratorio no buscamos “que dé perfecto”: buscamos si los datos apoyan esta relación dentro de la incertidumbre.')): 100%|██████████| 30/30 [00:00<00:00, 43.46it/s]                                                                                                                                                                                                       [10/03/26 00:12:07] INFO     Animation 107 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00107.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 108 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00108.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 109: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/13 [00:00<?, ?it/s]Animation 109: FadeOut(VGroup of 2 submobjects), etc.:  15%|█▌        | 2/13 [00:00<00:00, 14.58it/s]Animation 109: FadeOut(VGroup of 2 submobjects), etc.:  31%|███       | 4/13 [00:00<00:00, 14.36it/s]Animation 109: FadeOut(VGroup of 2 submobjects), etc.:  46%|████▌     | 6/13 [00:00<00:00, 14.30it/s]Animation 109: FadeOut(VGroup of 2 submobjects), etc.:  62%|██████▏   | 8/13 [00:00<00:00, 14.24it/s]Animation 109: FadeOut(VGroup of 2 submobjects), etc.:  77%|███████▋  | 10/13 [00:00<00:00, 14.26it/s]Animation 109: FadeOut(VGroup of 2 submobjects), etc.:  92%|█████████▏| 12/13 [00:00<00:00, 14.20it/s]                                                                                                      [10/03/26 00:12:09] INFO     Animation 109 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00109.mp4'                                     
+[10/03/26 00:12:10] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 110: FadeIn(VGroup of 2 submobjects):   0%|          | 0/10 [00:00<?, ?it/s]Animation 110: FadeIn(VGroup of 2 submobjects):  60%|██████    | 6/10 [00:00<00:00, 59.13it/s]                                                                                                                  INFO     Animation 110 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00110.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:12:11] INFO     Animation 111 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00111.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 112: FadeIn(VGroup of 2 submobjects):   0%|          | 0/10 [00:00<?, ?it/s]Animation 112: FadeIn(VGroup of 2 submobjects):  60%|██████    | 6/10 [00:00<00:00, 58.86it/s]                                                                                                                  INFO     Animation 112 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00112.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:12:12] INFO     Animation 113 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00113.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 114: FadeIn(VGroup of 2 submobjects):   0%|          | 0/10 [00:00<?, ?it/s]Animation 114: FadeIn(VGroup of 2 submobjects):  70%|███████   | 7/10 [00:00<00:00, 68.63it/s]                                                                                                                  INFO     Animation 114 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00114.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 115 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00115.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 116: FadeIn(VGroup of 2 submobjects):   0%|          | 0/10 [00:00<?, ?it/s]Animation 116: FadeIn(VGroup of 2 submobjects):  60%|██████    | 6/10 [00:00<00:00, 54.20it/s]                                                                                              [10/03/26 00:12:13] INFO     Animation 116 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00116.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 117 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00117.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 118: FadeIn(VGroup of 2 submobjects):   0%|          | 0/10 [00:00<?, ?it/s]Animation 118: FadeIn(VGroup of 2 submobjects):  60%|██████    | 6/10 [00:00<00:00, 57.72it/s]                                                                                              [10/03/26 00:12:14] INFO     Animation 118 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00118.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 119 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00119.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 120: FadeIn(VGroup of 2 submobjects):   0%|          | 0/10 [00:00<?, ?it/s]Animation 120: FadeIn(VGroup of 2 submobjects):  80%|████████  | 8/10 [00:00<00:00, 71.20it/s]                                                                                                                  INFO     Animation 120 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00120.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:12:15] INFO     Animation 121 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00121.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 122 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00122.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 123: FadeOut(VGroup of 2 submobjects), etc.:   0%|          | 0/13 [00:00<?, ?it/s]Animation 123: FadeOut(VGroup of 2 submobjects), etc.:   8%|▊         | 1/13 [00:00<00:01,  9.80it/s]Animation 123: FadeOut(VGroup of 2 submobjects), etc.:  15%|█▌        | 2/13 [00:00<00:01,  9.52it/s]Animation 123: FadeOut(VGroup of 2 submobjects), etc.:  23%|██▎       | 3/13 [00:00<00:01,  9.43it/s]Animation 123: FadeOut(VGroup of 2 submobjects), etc.:  31%|███       | 4/13 [00:00<00:00,  9.41it/s]Animation 123: FadeOut(VGroup of 2 submobjects), etc.:  38%|███▊      | 5/13 [00:00<00:00,  9.38it/s]Animation 123: FadeOut(VGroup of 2 submobjects), etc.:  46%|████▌     | 6/13 [00:00<00:00,  9.37it/s]Animation 123: FadeOut(VGroup of 2 submobjects), etc.:  54%|█████▍    | 7/13 [00:00<00:00,  9.36it/s]Animation 123: FadeOut(VGroup of 2 submobjects), etc.:  62%|██████▏   | 8/13 [00:00<00:00,  9.38it/s]Animation 123: FadeOut(VGroup of 2 submobjects), etc.:  69%|██████▉   | 9/13 [00:00<00:00,  9.36it/s]Animation 123: FadeOut(VGroup of 2 submobjects), etc.:  77%|███████▋  | 10/13 [00:01<00:00,  9.36it/s]Animation 123: FadeOut(VGroup of 2 submobjects), etc.:  85%|████████▍ | 11/13 [00:01<00:00,  9.37it/s]Animation 123: FadeOut(VGroup of 2 submobjects), etc.:  92%|█████████▏| 12/13 [00:01<00:00,  9.38it/s]Animation 123: FadeOut(VGroup of 2 submobjects), etc.: 100%|██████████| 13/13 [00:01<00:00,  9.37it/s]                                                                                                      [10/03/26 00:12:18] INFO     Animation 123 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00123.mp4'                                     
+[10/03/26 00:12:19] INFO     Caching disabled.              cairo_renderer.py:83
+Animation 124: FadeIn(Text('MAPA DE TEORÍA → LABORATORIO')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 124: FadeIn(Text('MAPA DE TEORÍA → LABORATORIO')):  50%|█████     | 15/30 [00:00<00:00, 140.61it/s]Animation 124: FadeIn(Text('MAPA DE TEORÍA → LABORATORIO')): 100%|██████████| 30/30 [00:00<00:00, 137.89it/s]                                                                                                                                 INFO     Animation 124 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00124.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 125: LaggedStart(Group):   0%|          | 0/54 [00:00<?, ?it/s]Animation 125: LaggedStart(Group):  17%|█▋        | 9/54 [00:00<00:00, 85.35it/s]Animation 125: LaggedStart(Group):  33%|███▎      | 18/54 [00:00<00:00, 80.91it/s]Animation 125: LaggedStart(Group):  50%|█████     | 27/54 [00:00<00:00, 77.50it/s]Animation 125: LaggedStart(Group):  65%|██████▍   | 35/54 [00:00<00:00, 75.21it/s]Animation 125: LaggedStart(Group):  80%|███████▉  | 43/54 [00:00<00:00, 74.27it/s]Animation 125: LaggedStart(Group):  94%|█████████▍| 51/54 [00:00<00:00, 69.56it/s]                                                                                  [10/03/26 00:12:20] INFO     Animation 125 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00125.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 126 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00126.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 127: FadeIn(Text('La teoría no termina en una fórmula: termina en una predicción que puede medirse.')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 127: FadeIn(Text('La teoría no termina en una fórmula: termina en una predicción que puede medirse.')):  23%|██▎       | 7/30 [00:00<00:00, 67.05it/s]Animation 127: FadeIn(Text('La teoría no termina en una fórmula: termina en una predicción que puede medirse.')):  47%|████▋     | 14/30 [00:00<00:00, 65.65it/s]Animation 127: FadeIn(Text('La teoría no termina en una fórmula: termina en una predicción que puede medirse.')):  70%|███████   | 21/30 [00:00<00:00, 65.01it/s]Animation 127: FadeIn(Text('La teoría no termina en una fórmula: termina en una predicción que puede medirse.')):  93%|█████████▎| 28/30 [00:00<00:00, 64.98it/s]                                                                                                                                                                 [10/03/26 00:12:21] INFO     Animation 127 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00127.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+                    INFO     Animation 128 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00128.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 129: FadeIn(Text('SIGUIENTE: montaje, protocolo de medición, tabla de datos, gráfica d vs t² y estimación experimental de g.')):   0%|          | 0/30 [00:00<?, ?it/s]Animation 129: FadeIn(Text('SIGUIENTE: montaje, protocolo de medición, tabla de datos, gráfica d vs t² y estimación experimental de g.')):  20%|██        | 6/30 [00:00<00:00, 51.90it/s]Animation 129: FadeIn(Text('SIGUIENTE: montaje, protocolo de medición, tabla de datos, gráfica d vs t² y estimación experimental de g.')):  40%|████      | 12/30 [00:00<00:00, 50.16it/s]Animation 129: FadeIn(Text('SIGUIENTE: montaje, protocolo de medición, tabla de datos, gráfica d vs t² y estimación experimental de g.')):  60%|██████    | 18/30 [00:00<00:00, 45.50it/s]Animation 129: FadeIn(Text('SIGUIENTE: montaje, protocolo de medición, tabla de datos, gráfica d vs t² y estimación experimental de g.')):  77%|███████▋  | 23/30 [00:00<00:00, 46.93it/s]Animation 129: FadeIn(Text('SIGUIENTE: montaje, protocolo de medición, tabla de datos, gráfica d vs t² y estimación experimental de g.')):  97%|█████████▋| 29/30 [00:00<00:00, 48.29it/s]                                                                                                                                                                                          [10/03/26 00:12:22] INFO     Animation 129 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00129.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+[10/03/26 00:12:23] INFO     Animation 130 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00130.mp4'                                     
+                    INFO     Caching disabled.              cairo_renderer.py:83
+Animation 131: FadeOut(Text('MAPA DE TEORÍA → LABORATORIO')), etc.:   0%|          | 0/13 [00:00<?, ?it/s]Animation 131: FadeOut(Text('MAPA DE TEORÍA → LABORATORIO')), etc.:  23%|██▎       | 3/13 [00:00<00:00, 21.10it/s]Animation 131: FadeOut(Text('MAPA DE TEORÍA → LABORATORIO')), etc.:  46%|████▌     | 6/13 [00:00<00:00, 20.23it/s]Animation 131: FadeOut(Text('MAPA DE TEORÍA → LABORATORIO')), etc.:  69%|██████▉   | 9/13 [00:00<00:00, 19.96it/s]Animation 131: FadeOut(Text('MAPA DE TEORÍA → LABORATORIO')), etc.:  85%|████████▍ | 11/13 [00:00<00:00, 19.87it/s]Animation 131: FadeOut(Text('MAPA DE TEORÍA → LABORATORIO')), etc.: 100%|██████████| 13/13 [00:00<00:00, 19.81it/s]                                                                                                                   [10/03/26 00:12:24] INFO     Animation 131 : Partial    scene_file_writer.py:601
+                             movie file written in                              
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/partia                         
+                             l_movie_files/Physics9Vert                         
+                             icalFreeFallTheoryV1/uncac                         
+                             hed_00131.mp4'                                     
+                    INFO     Combining to Movie file.   scene_file_writer.py:753
+[10/03/26 00:12:25] INFO                                scene_file_writer.py:904
+                             File ready at                                      
+                             '/manim/media_final/videos                         
+                             /physics9_vertical_freefal                         
+                             l_theory_v1/1080p30/Physic                         
+                             s9VerticalFreeFallTheoryV1                         
+                             .mp4'                                              
+                                                                                
+                    INFO     The partial movie          scene_file_writer.py:874
+                             directory is full (> 100                           
+                             files). Therefore, manim                           
+                             has removed the 33 oldest                          
+                             file(s). You can change                            
+                             this behaviour by changing                         
+                             max_files_cached in                                
+                             config.                                            
+                    INFO     Rendered                               scene.py:278
+                             Physics9VerticalFreeFallTheoryV1                   
+                             Played 132 animations                              
+                    INFO     Previewed File at:                  file_ops.py:236
+                             '/manim/media_final/videos/physics9                
+                             _vertical_freefall_theory_v1/1080p3                
+                             0/Physics9VerticalFreeFallTheoryV1.                
+                             mp4'                                               
+You are using manim version v0.20.1, but version v0.21.0 is available.
+You should consider upgrading via pip install -U manim
