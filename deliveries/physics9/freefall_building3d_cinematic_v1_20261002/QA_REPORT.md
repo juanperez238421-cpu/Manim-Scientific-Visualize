@@ -1,0 +1,14 @@
+# QA REPORT — Physics9 FreeFall Building3D Cinematic V1
+- resolution: 1920 x 1080
+- fps: 30/1
+- codec: h264
+- pixel format: yuv420p
+- duration: 145.300000 s
+- decoded/read frames: 4359
+- bytes: 7214020
+- py_compile: PASS
+- PQL: PASS
+- PQM: PASS
+- literal PQH: PASS
+- full FFmpeg decode: PASS
+- distributed visual samples: 48
